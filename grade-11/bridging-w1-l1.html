@@ -253,6 +253,14 @@ ol.pipe li.out{background:var(--soft)}
 .scen .three .cell .seg{width:auto}
 @media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
 
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media print{
   .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
@@ -630,13 +638,13 @@ function body(a){
   case "messy":
     return `<p class="how">A student types this into both versions:</p>
       <div class="sample">“hw do i rest my pasword on the ipad?? not wrking”</div>
-      <p class="sent">The version more likely to stay consistent – giving the same right answer however the question is typed – is <span data-item="x1">${sel("x1",["Version A","Version B"],"which version?")}</span>, because <span data-item="x2">${sel("x2",["its clean-and-check stage fixes the typos and asks which device first, so messy wording does not change the answer","it is faster, so it has less time to make mistakes","it uses a bigger screen","messy input never affects an AI"],"because…")}</span>.</p>`;
+      <p class="sent">The version more likely to stay consistent – giving the same right answer however the question is typed – is <span data-item="x1">${sel("x1",["Version A","Version B"],"which version?")}</span>, because <span data-item="x2">${sel("x2",["its clean-and-check stage fixes the typos and asks which device first, so messy wording does not change the answer","it is faster, so it has less time to make mistakes","it uses a bigger screen","messy input never affects an AI"],"because…",[1,2,0,3])}</span>.</p>`;
   case "payoff":
     return `<p class="q" id="q-y0">The team will keep Version A because it is fast, and can afford ONE change. Which change has the biggest payoff?</p>${radios("y0",PAY_OPTS)}
       <p class="q">Justify it in two sentences.</p>
-      <div class="pair" data-item="y1"><span class="t">Sentence 1 – the evidence</span>${sel("y1",PAY_WHY1,"Choose…")}</div>
-      <div class="pair" data-item="y2"><span class="t">Sentence 2 – why not the alternative</span>${sel("y2",PAY_WHY2,"Choose…")}</div>
-      <div class="pair" data-item="y3"><span class="t">Its trade-off</span>${sel("y3",PAY_COST,"Choose…")}</div>`;
+      <div class="pair" data-item="y1"><span class="t">Sentence 1 – the evidence</span>${sel("y1",PAY_WHY1,"Choose…",[2,0,3,1])}</div>
+      <div class="pair" data-item="y2"><span class="t">Sentence 2 – why not the alternative</span>${sel("y2",PAY_WHY2,"Choose…",[1,3,0,2])}</div>
+      <div class="pair" data-item="y3"><span class="t">Its trade-off</span>${sel("y3",PAY_COST,"Choose…",[3,1,0,2])}</div>`;
   case "compare":
     return `<div class="worked"><b>Worked example.</b> Tag: “Version B checks before answering – slower (P) but more reliable (R).”</div>
       <p class="how">For each difference, tag <b>P</b> (performance) or <b>R</b> (reliability) and name the system part.</p>`+
@@ -644,7 +652,7 @@ function body(a){
         <div class="cell" data-item="${k}a"><span>P or R?</span>${seg(k+"a",["P – performance","R – reliability"],["P","R"],"P or R")}</div>
         <div data-item="${k}b"><span>System part</span>${sel(k+"b",UPARTS,"Choose the part…")}</div></div></div>`).join("")+
       `<p class="q" id="q-urec">Argue: complaints show that requests written in Arabic are often sent to the wrong department by Version A. Which ONE change gives the biggest payoff?</p>${radios("urec",UREC)}
-      <div class="pair" data-item="ucost" style="margin-top:10px"><span class="t">What does that change cost?</span>${sel("ucost",UCOST,"Choose the trade-off…")}</div>`;
+      <div class="pair" data-item="ucost" style="margin-top:10px"><span class="t">What does that change cost?</span>${sel("ucost",UCOST,"Choose the trade-off…",[2,0,3,1])}</div>`;
   case "check":
     return MCQ.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
       `<p class="q">4. True or false? Decide for each statement.</p>`+

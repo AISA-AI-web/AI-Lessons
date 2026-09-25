@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Evaluating Trade-offs – Grade 12 Lesson 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#A61E4D; --main2:#C2255C; --deep:#6B1533;
+  --ink:#2A1520; --muted:#6A5560; --paper:#FBF6F8; --card:#FFFFFF;
+  --line:#EFDCE3; --soft:#FBEEF2;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#F9A8C0,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#B8325A);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#2A1520,#6E3346)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#F6CFDB 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FEFAFB;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FFFBFC}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#D0436F)}
+.act-head.ws{background:linear-gradient(120deg,#2A1520,#7A3A50)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#FCEEF2}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #E6BFCB;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%23A61E4D' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #E0A3B6;border-radius:12px;padding:10px 14px;background:#FEF8FA;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(42,21,32,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#2A1520;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 12 Bridging, Term 1</span><span class="pill">Week 1 Core</span><span class="pill">About 45 minutes</span></div>
+    <h1>Evaluating trade-offs across accuracy, efficiency, usability and reliability</h1>
+    <p>Today you judge AI systems the way a designer must: not by asking which is best, but by weighing four qualities that pull against each other – accuracy, efficiency, usability and reliability – and deciding which balance serves the job at hand.</p>
+    <p class="meta"><b>Strand:</b> AI Systems Understanding &nbsp;·&nbsp; <b>Scenario:</b> two designs of one system</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 12B"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>See four qualities.</b> I can weigh accuracy, efficiency, usability and reliability against one another in an AI system and keep the four separate.</li>
+      <li><b>Balance for purpose.</b> I can map how an input becomes an output and point to where the design trades one quality for another.</li>
+      <li><b>Name a trade-off.</b> I can argue which balance of trade-offs is right for a particular strategic goal and explain my reasoning.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Four qualities, pulling in different directions</b><small>Accuracy, efficiency, usability, reliability</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>The right balance depends on the purpose</b><small>No single best design</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>The screener dossier (worksheet)</b><small>Map, score, name the trade-off, choose for purpose</small></a></li>
+      <li><span class="num">4</span><a href="#p4"><b>Compare two designs</b><small>A second dossier to practise on</small></a></li>
+      <li><span class="num">5</span><a href="#p5"><b>Quick check</b><small>Then print your results</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Part 1 of 5</span><h2>Four qualities, pulling in different directions</h2><p>Quality is not a single dial.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>Your dossier holds two designs of the same AI system. One is more accurate but slower; the other is faster and easier to use. Quality is not a single dial – you weigh four qualities against the system's purpose. <span class="illus">(Illustrative scenario.)</span></p></div>
+
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+
+    <h3 class="sub">Four qualities, pulling in different directions</h3>
+    <p>It is tempting to ask which AI system is best, as if quality were a single dial. It is not. Accuracy is how often it is right; efficiency is what it costs in time or compute; usability is how easily the real user can act on the output; reliability is whether it holds up on messy or unusual inputs.</p>
+    <p>Push one up and another often drops – an extra checking stage buys accuracy and spends efficiency. Evaluating a system means scoring all four honestly and seeing where they trade against each other, not crowning a single winner.</p>
+    <figure>
+      <svg viewBox="0 0 760 470" role="img" aria-labelledby="figT">
+        <title id="figT">An AI system in the centre with arrows to four qualities: accuracy, efficiency, usability and reliability. Curved arrows show the trade-offs: an extra check raises accuracy and lowers efficiency; more detail raises accuracy and lowers usability; shortcuts raise efficiency and lower reliability; simpler output raises usability and lowers reliability. Below, a 1 to 5 scoresheet for each quality.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2A1520"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1520">
+          <g fill="#fff" stroke="#2A1520" stroke-width="1.6">
+            <circle cx="220" cy="80" r="50"/><circle cx="540" cy="80" r="50"/><circle cx="220" cy="290" r="50"/><circle cx="540" cy="290" r="50"/>
+            <rect x="320" y="158" width="120" height="54" rx="10"/>
+          </g>
+          <g font-size="16" text-anchor="middle">
+            <text x="220" y="86">Accuracy</text><text x="540" y="86">Efficiency</text><text x="220" y="296">Usability</text><text x="540" y="296">Reliability</text>
+            <text x="380" y="191" font-weight="600">AI system</text>
+          </g>
+          <g stroke="#2A1520" stroke-width="1.5" fill="none" marker-end="url(#ah)">
+            <path d="M330 158L260 112"/><path d="M430 158L500 112"/><path d="M330 212L260 258"/><path d="M430 212L500 258"/>
+          </g>
+          <g stroke="#2A1520" stroke-width="1.5" fill="none" marker-start="url(#ah)" marker-end="url(#ah)">
+            <path d="M282 60Q380 30 478 60"/><path d="M180 128Q150 185 180 244"/><path d="M580 128Q610 185 580 244"/><path d="M282 312Q380 342 478 312"/>
+          </g>
+          <g font-size="13.5" text-anchor="middle" fill="#6A5560">
+            <text x="380" y="72">extra check:</text><text x="380" y="89">+accuracy, −efficiency</text>
+            <text x="98" y="176">more detail:</text><text x="98" y="193">+accuracy,</text><text x="98" y="210">−usability</text>
+            <text x="662" y="176">shortcuts:</text><text x="662" y="193">+efficiency,</text><text x="662" y="210">−reliability</text>
+            <text x="380" y="286">simpler output:</text><text x="380" y="303">+usability, −reliability</text>
+          </g>
+          <g font-size="12" text-anchor="middle" fill="#2A1520">
+            <g transform="translate(95 385)"><text x="60" y="0" font-size="14" font-weight="600">Accuracy</text></g>
+            <g transform="translate(265 385)"><text x="60" y="0" font-size="14" font-weight="600">Efficiency</text></g>
+            <g transform="translate(435 385)"><text x="60" y="0" font-size="14" font-weight="600">Usability</text></g>
+            <g transform="translate(605 385)"><text x="60" y="0" font-size="14" font-weight="600">Reliability</text></g>
+          </g>
+          <g><text x="107" y="408" font-size="12" text-anchor="middle">1</text><rect x="98" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/><text x="131" y="408" font-size="12" text-anchor="middle">2</text><rect x="122" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/><text x="155" y="408" font-size="12" text-anchor="middle">3</text><rect x="146" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/><text x="179" y="408" font-size="12" text-anchor="middle">4</text><rect x="170" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/><text x="203" y="408" font-size="12" text-anchor="middle">5</text><rect x="194" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/><text x="277" y="408" font-size="12" text-anchor="middle">1</text><rect x="268" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/><text x="301" y="408" font-size="12" text-anchor="middle">2</text><rect x="292" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/><text x="325" y="408" font-size="12" text-anchor="middle">3</text><rect x="316" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/><text x="349" y="408" font-size="12" text-anchor="middle">4</text><rect x="340" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/><text x="373" y="408" font-size="12" text-anchor="middle">5</text><rect x="364" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/><text x="447" y="408" font-size="12" text-anchor="middle">1</text><rect x="438" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/><text x="471" y="408" font-size="12" text-anchor="middle">2</text><rect x="462" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/><text x="495" y="408" font-size="12" text-anchor="middle">3</text><rect x="486" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/><text x="519" y="408" font-size="12" text-anchor="middle">4</text><rect x="510" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/><text x="543" y="408" font-size="12" text-anchor="middle">5</text><rect x="534" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/><text x="617" y="408" font-size="12" text-anchor="middle">1</text><rect x="608" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/><text x="641" y="408" font-size="12" text-anchor="middle">2</text><rect x="632" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/><text x="665" y="408" font-size="12" text-anchor="middle">3</text><rect x="656" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/><text x="689" y="408" font-size="12" text-anchor="middle">4</text><rect x="680" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/><text x="713" y="408" font-size="12" text-anchor="middle">5</text><rect x="704" y="415" width="18" height="18" rx="2" fill="#fff" stroke="#2A1520" stroke-width="1.3"/></g>
+          <text x="380" y="458" font-size="14.5" text-anchor="middle">No single best – only the right balance for the purpose.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> One system, four qualities that pull against each other – raising one often lowers another.</figcaption>
+    </figure>
+    <div class="call"><h4>Four qualities, pulling in different directions</h4><p>Quality is not one dial. <b>Accuracy</b> is how often the system is right; <b>efficiency</b> is the time, cost or energy it uses; <b>usability</b> is how easily people get what they need; <b>reliability</b> is whether it keeps working across many inputs. They <b>trade off</b>, so there is no single best design – only the design best suited to a stated purpose.</p></div>
+
+    <div id="a-vocab"></div>
+    <div id="a-quality"></div>
+    <div id="a-trade"></div>
+  </div>
+</section>
+
+<!-- PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Part 2 of 5</span><h2>The right balance depends on the purpose</h2><p>Name the purpose first, then decide what you can give up.</p></div>
+  <div class="part-body">
+    <p>Because the four qualities trade off, there is no single best design – only the design best suited to a purpose. A high-volume frontline service may need efficiency and usability most, accepting a little less accuracy so staff can keep pace. A safety-critical eligibility check may need accuracy and reliability above all, and pay for them with slower responses.</p>
+    <p>A strategic designer names the purpose first, then chooses which quality can be sacrificed and which cannot, and can say why. Whenever a headline figure is quoted, check how it was measured before you trust it.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>In the UAE, AI already helps route citizen service requests, screen documents and support strategic planning across government; a system that is accurate but too slow, or fast but unusable at the frontline, fails the people it serves – so weighing these trade-offs against the real purpose genuinely matters.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Mathematics · Design &amp; Technology</h4><p>Scoring designs on several qualities and comparing is <b>quantitative reasoning</b> in Mathematics. Choosing a design for a stated purpose is the <b>design brief</b> from Design &amp; Technology.</p></div>
+    <div id="a-purpose"></div>
+  </div>
+</section>
+
+<!-- PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Part 3 of 5 · Worksheet</span><h2>The screener dossier</h2><p>Two designs of the same application screener. Map them, score them, and choose for the stated purpose.</p></div>
+  <div class="part-body">
+    <h3 class="sub">How you'll work</h3>
+    <ol class="steps">
+      <li>Read both variants and find where the designs differ.</li>
+      <li>Score each variant 1–5 on accuracy, efficiency, usability and reliability.</li>
+      <li>Name one clear trade-off and choose the balance that best fits the stated purpose.</li>
+    </ol>
+    <p class="safe"><b>Stay safe:</b> no personal data – illustrative dossiers only. Judge against the stated purpose, not a single quality.</p>
+
+    <div class="ecard" id="dossier"></div>
+
+    <div id="a-map"></div>
+    <div id="a-diff"></div>
+    <div id="a-score"></div>
+    <div id="a-name"></div>
+    <div id="a-balance"></div>
+  </div>
+</section>
+
+<!-- PART 4 -->
+<section class="part" id="p4">
+  <div class="part-head"><span class="pill">Part 4 of 5 · Unplugged activity</span><h2>Compare two designs</h2><p>Score a second pair of designs on the four qualities and choose for a purpose.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>A government website adds an AI assistant to answer visitors' questions about its services. Your dossier holds two designs that trade off differently. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="ecard" id="dossier2"></div>
+    <div id="a-compare"></div>
+  </div>
+</section>
+
+<!-- PART 5 -->
+<section class="part" id="p5">
+  <div class="part-head"><span class="pill">Part 5 of 5</span><h2>Quick check</h2><p>Pick one answer for each question, then read the feedback.</p></div>
+  <div class="part-body">
+    <div id="a-check"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p6">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>No single best design – only the right balance for the purpose</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>Quality is four qualities: <b>accuracy, efficiency, usability, reliability</b>.</li>
+      <li>They <b>trade off</b> – there is no single best, only best for a purpose.</li>
+      <li>Score each design, then choose the balance that fits the stated purpose.</li>
+      <li>Name the trade-off you accept.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 12 · Week 1 Core</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- content ---------- */
+const WORDS = [
+  ["accuracy","How often the system's output is actually correct."],
+  ["efficiency","What the system costs to run, usually in time or computing power."],
+  ["usability","How easily the intended user understands and acts on the output."],
+  ["reliability","Whether the system keeps behaving well across varied and difficult inputs."],
+  ["trade-off","Improving one quality at the expense of another, because you rarely get all four at once."]
+];
+const DEF_ORDER = [3,0,4,2,1]; // shuffled order of definitions in the dropdown
+const Q4 = ["Accuracy","Efficiency","Usability","Reliability"];
+const q4 = Q4.map(q=>q.toLowerCase());
+
+const QUALITY = [
+  ["q1","Gives the correct decision 94 times in 100.",0],
+  ["q2","Uses a tenth of the computing power per request.",1],
+  ["q3","Front-desk staff can act on the result without any training.",2],
+  ["q4","Still works on blurry scans and handwritten forms.",3],
+  ["q5","Replies in 2 seconds instead of 20.",1],
+  ["q6","Explains its result in plain language the applicant understands.",2],
+  ["q7","Behaves as well on unusual cases as on common ones.",3],
+  ["q8","Its decisions match the official policy almost every time.",0]
+];
+
+const TRADES = [
+  ["t1","Add an extra checking stage after the model.",0,1],
+  ["t2","Put much more detail into every output.",0,2],
+  ["t3","Take shortcuts – skip reading the attachments.",1,3],
+  ["t4","Simplify the output to a single yes or no.",2,3]
+];
+
+const PAIRS = ["Efficiency and usability","Accuracy and reliability","Usability and reliability","Efficiency and accuracy"];
+const PURPOSES = [
+  ["u1","A high-volume frontline service where staff must keep pace with a long queue.",0],
+  ["u2","A safety-critical eligibility check where one wrong decision can harm a family.",1],
+  ["u3","A public kiosk used by people of every age, which must cope with any question they type.",2],
+  ["u4","An overnight job that screens millions of documents and flags errors for staff to review in the morning.",3]
+];
+
+const DOSSIER = [
+  {name:"Variant A · “Thorough”",rows:["The application form plus all uploaded documents (payslips, ID scans)","A large model reads everything, then a second stage cross-checks every rule against the official policy","A detailed one-page report listing each rule checked, with policy references"]},
+  {name:"Variant B · “Quick”",rows:["The form fields only","A small model, single pass, no cross-check","A one-line traffic-light result (green, amber or red) with one next step"]}
+];
+const EVID = [
+  ["Correct decisions on 100 typical applications","96 / 100","84 / 100"],
+  ["Time per application","40 seconds","3 seconds"],
+  ["Officers (out of 10) who could act on the result without help","4 / 10","10 / 10"],
+  ["Correct decisions on 100 messy applications (blurry scans, missing fields)","90 / 100","62 / 100"]
+];
+const MAP_OPTS = ["The form fields only","The form plus all uploaded documents","A small model, single pass","A large model plus a policy cross-check","A one-line traffic-light result","A detailed one-page report"];
+const MAP = [["m1","Variant A – input",1],["m2","Variant A – processing",3],["m3","Variant A – output",5],["m4","Variant B – input",0],["m5","Variant B – processing",2],["m6","Variant B – output",4]];
+const MAP_ORDER = [4,1,5,2,0,3];
+
+const DIFFS = [
+  ["x1","A reads the uploaded documents; B reads only the form fields.",1],
+  ["x2","A adds a policy cross-check stage after the model.",1],
+  ["x3","A and B screen applications for different support schemes.",0],
+  ["x4","A gives a detailed report; B gives a traffic-light result.",1],
+  ["x5","A uses a larger model than B.",1],
+  ["x6","B keeps applicants' personal data for longer than A.",0]
+];
+
+const SCORE_KEY = [[5,3],[2,5],[2,5],[5,2]]; // [A,B] per quality
+const SCORE_WHY = [
+  [["A is right 96 times in 100 and B 84, so A is clearly more accurate","B is more accurate because it answers faster","They are equally accurate","A's report is longer, so it must be more accurate"],[1,3,0,2]],
+  [["B takes 3 seconds per application and A takes 40, so B is far more efficient","A is more efficient because it reads more documents","They use the same time and computing power","Efficiency only matters for B"],[2,0,3,1]],
+  [["All 10 officers could act on B's result, but only 4 of 10 on A's report without help","A is easier to use because it gives more detail","Usability cannot be measured","Both are equally easy to act on"],[3,1,0,2]],
+  [["On messy applications A stays at 90 in 100, but B drops to 62","B is more reliable because it is simpler","Reliability is the same as speed","Both drop by the same amount"],[1,0,2,3]]
+];
+
+const NAME_CHOICE = ["the policy cross-check stage","the detailed one-page report","reading every uploaded document","the colour of the report"];
+const NAME_OK = [{up:[0,3],down:[1]},{up:[0],down:[2]},{up:[0,3],down:[1]}];
+
+const BAL_SAC = ["We sacrifice accuracy: some families will get the wrong decision.","We sacrifice efficiency and some usability: each application takes 40 seconds and officers need training to read the report.","We sacrifice nothing at all.","We sacrifice reliability on messy applications."];
+const BAL_WHY = ["Speed always matters more than being right.","Officers prefer long reports.","A wrong decision can cost a family months of support, while 200 applications at 40 seconds is only about 2 hours of computer time a day.","The purpose does not matter when choosing a design."];
+
+const DOSSIER2 = [
+  ["Correct answers on 200 typical questions","95%","85%"],
+  ["Time to answer","8 seconds","under 1 second"],
+  ["Visitors (out of 10) who found what they needed","6 / 10","9 / 10"],
+  ["Correct answers on unusual or misspelled questions","90%","70%"]
+];
+const C_KEY = [[5,3],[2,5],[3,5],[5,3]];
+const C_TRADE = ["Design A is better at everything.","Design A's larger model buys accuracy and reliability, but costs efficiency.","Accuracy and efficiency always rise together.","Design B is slower because it is smaller."];
+const C_WHY = ["Design B is always the best design.","Accuracy never matters on a government website.","Speed and ease matter most for thousands of routine questions, and a person checks anything important, so a little less accuracy is acceptable.","Design A is too accurate."];
+
+const MCQ = [
+  ["c1","Which of two designs is the best one?",
+   ["The most accurate one, always.","The one whose balance of qualities best fits the stated purpose.","The fastest one, always."],1],
+  ["c2","Adding an extra checking stage after the model usually…",
+   ["raises accuracy but lowers efficiency.","raises every quality at once.","lowers accuracy but raises efficiency."],0],
+  ["c3","A supplier says its tool is “99% accurate”. What should you do first?",
+   ["Buy it – 99% is almost perfect.","Ignore accuracy and look only at speed.","Check how that figure was measured before you trust it."],2]
+];
+const TF = [
+  ["tf1","Quality is a single dial.","F"],
+  ["tf2","Raising one quality often lowers another.","T"],
+  ["tf3","A strategic designer names the purpose before choosing which quality to sacrifice.","T"]
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const within=(v,k)=>Math.abs(+v-k)<=1;
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Part 1",title:"Match each word to its meaning",sub:"Words to know",ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"Accuracy = how often it is correct. Efficiency = what it costs in time or computing power. Usability = how easily the real user can act on the output. Reliability = keeps behaving well on varied and difficult inputs. Trade-off = improving one quality at the expense of another."},
+ {id:"quality",mount:"a-quality",section:"Part 1",title:"Which quality is it?",sub:"Objective 1 · keep the four qualities separate",ico:"🎛️",
+  fields:QUALITY.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Being right is accuracy. Time and computing cost is efficiency. Whether the real user can understand and act on it is usability. Holding up on blurry, handwritten or unusual inputs is reliability."},
+ {id:"trade",mount:"a-trade",section:"Part 1",title:"Read the trade-offs",sub:"Objective 1 · which quality rises, which falls?",ico:"↔️",
+  fields:TRADES.flatMap(([k,,u,d])=>[{k:k+"a",ok:v=>eq(v,u)},{k:k+"b",ok:v=>eq(v,d)}]),
+  explain:"From Figure 1: an extra check buys accuracy and spends efficiency; more detail buys accuracy but makes the output harder to use; shortcuts buy efficiency but hurt reliability; a simpler output is easier to use but less reliable on hard cases."},
+ {id:"purpose",mount:"a-purpose",section:"Part 2",title:"Balance for purpose",sub:"Objective 3 · which two qualities matter most?",ico:"🎯",
+  fields:PURPOSES.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A long frontline queue needs efficiency and usability. A safety-critical check needs accuracy and reliability. A public kiosk for everyone must be easy to use and cope with any input. An overnight screening job has to get through millions of documents (efficiency) and flag the right ones (accuracy) – staff review the flags, so usability matters less."},
+ {id:"map",mount:"a-map",section:"Worksheet Q1",title:"Map input, processing and output",sub:"Worksheet 1 · both variants",ico:"🗺️",cls:"ws",
+  fields:MAP.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Variant A takes the form and all documents, runs a large model plus a policy cross-check, and outputs a detailed report. Variant B takes the form fields only, runs a small single-pass model, and outputs a traffic-light result."},
+ {id:"diff",mount:"a-diff",section:"Worksheet Q2",title:"Mark every point where the designs differ",sub:"Worksheet 2 · tick the real differences",ico:"✏️",cls:"ws",
+  fields:DIFFS.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"The designs differ at every stage: the input (documents or not), the processing (larger model, extra cross-check) and the output (detailed report or traffic light). They screen the same scheme, and the dossier says nothing about storing personal data – only tick what the evidence shows."},
+ {id:"score",mount:"a-score",section:"Worksheet Q3",title:"Score each variant 1–5",sub:"Worksheet 3 · four qualities, with a reason for each",ico:"📊",cls:"ws",
+  fields:SCORE_KEY.flatMap(([a,b],i)=>[{k:`s${i}a`,ok:v=>within(v,a)},{k:`s${i}b`,ok:v=>within(v,b)},{k:`s${i}r`,ok:v=>eq(v,0)}]),
+  explain:"Accuracy: A about 5, B about 3 (96 vs 84). Efficiency: A about 2, B 5 (40 s vs 3 s). Usability: A about 2, B 5 (4 of 10 vs 10 of 10 officers). Reliability: A 5, B about 2 (90 vs 62 on messy applications). A score within one point of these counts as correct. Neither variant wins on all four – that is the trade-off."},
+ {id:"name",mount:"a-name",section:"Worksheet Q4",title:"Name one clear trade-off",sub:"Worksheet 4 · two qualities and the design choice behind them",ico:"⚖️",cls:"ws",
+  fields:[
+    {k:"n1",ok:v=>+v>=0&&+v<=2},
+    {k:"n2",ok:(v,A)=>!!NAME_OK[+A.n1]&&NAME_OK[+A.n1].up.includes(+v)},
+    {k:"n3",ok:(v,A)=>!!NAME_OK[+A.n1]&&NAME_OK[+A.n1].down.includes(+v)}],
+  explain:"Valid trade-offs in Variant A: the policy cross-check (or reading every document) raises accuracy or reliability but lowers efficiency; the detailed report raises accuracy but lowers usability. The colour of the report is not a design choice that trades qualities."},
+ {id:"balance",mount:"a-balance",section:"Worksheet Q5",title:"Choose the balance for the stated purpose",sub:"Worksheet 5 · choose, then justify in two sentences",ico:"🏛️",cls:"ws",
+  fields:[{k:"b0",radio:1,ok:v=>eq(v,0)},{k:"b1",ok:v=>eq(v,1)},{k:"b2",ok:v=>eq(v,2)}],
+  explain:"The stated purpose is a final eligibility decision where mistakes harm families, so accuracy and reliability cannot be sacrificed. Variant A pays for them in efficiency and some usability – acceptable, because 200 applications a day at 40 seconds each is only about 2 hours of computer time. For a quick front-desk triage, Variant B might be the better choice."},
+ {id:"compare",mount:"a-compare",section:"Part 4",title:"Compare two designs",sub:"Score, name the trade-off, choose for the purpose",ico:"🆚",
+  fields:[...C_KEY.flatMap(([a,b],i)=>[{k:`c${i}a`,ok:v=>within(v,a)},{k:`c${i}b`,ok:v=>within(v,b)}]),{k:"ctr",radio:1,ok:v=>eq(v,1)},{k:"cpick",radio:1,ok:v=>eq(v,1)},{k:"cwhy",ok:v=>eq(v,2)}],
+  explain:"Design A: accuracy 5, efficiency 2, usability about 3, reliability 5. Design B: accuracy about 3, efficiency 5, usability 5, reliability about 3. A's larger model buys accuracy and reliability at the cost of efficiency. For thousands of routine questions in a busy launch week, with a person checking anything important, speed and ease matter most – so Design B fits the purpose."},
+ {id:"check",mount:"a-check",section:"Part 5",title:"Quick check",sub:"3 questions and 3 true or false",ico:"✅",cls:"quiz",
+  fields:[...MCQ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...TF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: There is no single best – only the best balance for the stated purpose. 2: An extra check buys accuracy and spends efficiency. 3: Check how a headline figure was measured before you trust it. True or false: quality is not a single dial (false); raising one quality often lowers another (true); name the purpose first (true)."}
+];
+
+/* ---------- state ---------- */
+const KEY="g12-tradeoffs-bw1l1-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- static blocks ---------- */
+$("#flips").innerHTML=WORDS.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${i}" aria-pressed="${!!S.flip[i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+
+$("#dossier").innerHTML=`<header><small>Design dossier · scoresheet · illustrative</small><b>Support-scheme application screener: two designs</b></header>
+<div class="in">
+  <p class="task"><b>The system:</b> a government department uses AI to screen applications for a family support scheme and decide whether each family is eligible.</p>
+  <div class="dos">${DOSSIER.map(v=>`<div class="ver"><h4>${esc(v.name)}</h4><ol class="pipe">
+    ${["Input","Processing","Output"].map((s,i)=>`<li><b>${s}</b><span>${esc(v.rows[i])}</span></li>`).join("")}</ol></div>`).join("")}</div>
+  <h4 class="rt">Test evidence</h4>
+  <table class="t"><thead><tr><th>Test</th><th>Variant A</th><th>Variant B</th></tr></thead>
+  <tbody>${EVID.map(([t,a,b])=>`<tr><td>${esc(t)}</td><td>${esc(a)}</td><td>${esc(b)}</td></tr>`).join("")}</tbody></table>
+  <div class="purpose"><b>Stated purpose:</b> the screener makes the <b>final eligibility decision</b>. A wrong decision can cost a family months of support. The department handles about 200 applications a day.</div>
+</div>`;
+
+$("#dossier2").innerHTML=`<header><small>Design dossier · illustrative</small><b>Website help assistant: two designs</b></header>
+<div class="in">
+  <div class="dos">
+    <div class="ver"><h4>Design A</h4><p class="vdesc">A large model that searches every service page and writes a full answer with links to its sources.</p></div>
+    <div class="ver"><h4>Design B</h4><p class="vdesc">A small, fast model that gives a short, step-by-step answer from a set of common questions.</p></div>
+  </div>
+  <table class="t"><thead><tr><th>Test</th><th>Design A</th><th>Design B</th></tr></thead>
+  <tbody>${DOSSIER2.map(([t,a,b])=>`<tr><td>${esc(t)}</td><td>${esc(a)}</td><td>${esc(b)}</td></tr>`).join("")}</tbody></table>
+  <div class="purpose"><b>Stated purpose:</b> answer <b>thousands of routine questions</b> during a busy launch week for a new online service. Anything important – payments, legal decisions – is always checked by a human agent.</div>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const nums=["1","2","3","4","5"],vals=[1,2,3,4,5];
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "quality":
+    return `<p class="how">Each statement is evidence about one quality. Which one?</p>`+
+      QUALITY.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,Q4,null,t)}</div>`).join("");
+  case "trade":
+    return `<p class="how">Use Figure 1. For each design change, choose the quality that goes up and the quality that goes down.</p>`+
+      TRADES.map(([k,t],i)=>`<div class="scen"><p>${i+1}. ${esc(t)}</p><div class="two">
+        <div data-item="${k}a"><span>Goes up ▲</span>${sel(k+"a",Q4,"Choose…")}</div>
+        <div data-item="${k}b"><span>Goes down ▼</span>${sel(k+"b",Q4,"Choose…")}</div></div></div>`).join("");
+  case "purpose":
+    return `<p class="how">For each purpose, choose the two qualities that matter most – the ones you must not sacrifice.</p>`+
+      PURPOSES.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,PAIRS,"Choose the two qualities…")}</div>`).join("");
+  case "map":
+    return `<p class="how">Use the dossier. For each variant, pick its input, processing stage and output.</p>`+
+      MAP.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,MAP_OPTS,"Choose…",MAP_ORDER)}</div>`).join("");
+  case "diff":
+    return `<p class="how">Tick <b>every</b> statement that is a real difference shown in the dossier. Leave the others unticked.</p><div class="opts">`+
+      DIFFS.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+  case "score":
+    return `<p class="how">Score each variant from 1 (poor) to 5 (excellent) on each quality, then choose the reason. Use the test evidence in the dossier.</p>`+
+      Q4.map((q,i)=>`<div class="rate"><h4>${q}</h4><div class="grid3">
+        <div class="cell" data-item="s${i}a"><span>Variant A (1–5)</span>${seg(`s${i}a`,nums,vals,`Variant A ${q}`)}</div>
+        <div class="cell" data-item="s${i}b"><span>Variant B (1–5)</span>${seg(`s${i}b`,nums,vals,`Variant B ${q}`)}</div>
+        <div class="cell ev" data-item="s${i}r"><span>Reason</span>${sel(`s${i}r`,SCORE_WHY[i][0],"Choose the reason…",SCORE_WHY[i][1])}</div></div></div>`).join("");
+  case "name":
+    return `<p class="how">Build a sentence naming one trade-off in Variant A: the design choice, the quality it raises, and the quality it costs.</p>
+      <p class="sent">In Variant A, <span data-item="n1">${sel("n1",NAME_CHOICE,"which design choice?",[2,0,3,1])}</span> raises <span data-item="n2">${sel("n2",q4,"which quality?")}</span> but lowers <span data-item="n3">${sel("n3",q4,"which quality?")}</span>.</p>`;
+  case "balance":
+    return `<p class="q" id="q-b0">Read the stated purpose in the dossier. Which variant's balance fits it best?</p>${radios("b0",["Variant A – thorough","Variant B – quick"])}
+      <p class="q">Justify it in two sentences.</p>
+      <div class="pair" data-item="b1"><span class="t">Sentence 1 – what you sacrifice</span>${sel("b1",BAL_SAC,"Choose…")}</div>
+      <div class="pair" data-item="b2"><span class="t">Sentence 2 – why that is acceptable</span>${sel("b2",BAL_WHY,"Choose…")}</div>`;
+  case "compare":
+    return `<div class="worked"><b>Worked example.</b> Score 1–5: “Design A accuracy 5, efficiency 2; Design B accuracy 3, efficiency 5.”</div>
+      <p class="how">1. Score each design 1–5 on all four qualities.</p>`+
+      Q4.map((q,i)=>`<div class="rate"><h4>${q}</h4><div class="grid3">
+        <div class="cell" data-item="c${i}a"><span>Design A (1–5)</span>${seg(`c${i}a`,nums,vals,`Design A ${q}`)}</div>
+        <div class="cell" data-item="c${i}b"><span>Design B (1–5)</span>${seg(`c${i}b`,nums,vals,`Design B ${q}`)}</div></div></div>`).join("")+
+      `<p class="q" id="q-ctr">2. Name one clear trade-off.</p>${radios("ctr",C_TRADE)}
+      <p class="q" id="q-cpick">3. Choose the balance that best fits the stated purpose.</p>${radios("cpick",["Design A","Design B"])}
+      <div class="pair" data-item="cwhy" style="margin-top:10px"><span class="t">Why?</span>${sel("cwhy",C_WHY,"Choose the reason…")}</div>`;
+  case "check":
+    return MCQ.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+      `<p class="q">4. True or false? Decide for each statement.</p>`+
+      TF.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 12 Bridging · Week 1 · Evaluating trade-offs across accuracy, efficiency, usability and reliability</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
