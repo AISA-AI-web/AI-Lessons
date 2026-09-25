@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Comparing Approaches – Grade 9 Lesson 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#D7263D; --main2:#EF4444; --deep:#8A1024;
+  --ink:#2B1A14; --muted:#6B5750; --paper:#FFF7F4; --card:#FFFFFF;
+  --line:#F5DDD5; --soft:#FFEFE9;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#FDBA74,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#F0602F);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#2B1A14,#6E3A2E)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#FDD8C8 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FFFAF8;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FFFCFA}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#F59E0B)}
+.act-head.ws{background:linear-gradient(120deg,#2B1A14,#7A3F2E)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#FFF0EA}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #EFC3B3;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%23D7263D' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #F0B49E;border-radius:12px;padding:10px 14px;background:#FFF9F6;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(43,26,20,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#2B1A14;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 9 Bridging, Term 1</span><span class="pill">Week 1 Core</span><span class="pill">About 45 minutes</span></div>
+    <h1>Comparing Approaches</h1>
+    <p>When two AI approaches tackle the same problem, the way their parts work together decides which one performs better. Today you become the detective who explains why.</p>
+    <p class="meta"><b>Strand:</b> AI Systems Understanding &nbsp;·&nbsp; <b>Tool:</b> unplugged simulated-AI cards</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 9B"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>◀ Previously</small>Welcome – you know AI turns inputs into outputs; now let's find out why one approach beats another.</div>
+    <div class="box"><small>Next ▶</small>Where this leads: in the Lab you run the fair test yourself and prove which approach wins.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li>I can compare two approaches to the same problem and say which one performs better.</li>
+      <li>I can analyse how each approach's data, tools and prompts work together to shape its outcome.</li>
+      <li>I can justify to a partner, with evidence from the examples, why one approach performs better than the other.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Name the components</b><small>Data, tool and prompt in every approach</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Judge the outcomes</b><small>Compare each result against the problem</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Trace to the cause</b><small>Name the interaction that made the difference</small></a></li>
+      <li><span class="num">4</span><a href="#p4"><b>Solution Architects mission and worksheet</b><small>Compare the approaches, then explain</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Part 1 of 3</span><h2>Same problem, two ways</h2><p>What is an approach made of?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <p>Before the new unit starts, we are making one big idea rock-solid: when two AI approaches tackle the same problem, the way their parts – data, tools and prompts – work together decides which one performs better.</p>
+
+    <figure>
+      <svg viewBox="0 0 760 330" role="img" aria-labelledby="fig1T">
+        <title id="fig1T">One problem, two approaches. Approach A has messy data and a vague prompt feeding the same tool, giving a weak outcome. Approach B has clean data and a clear prompt feeding the same tool, giving a strong outcome.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <rect x="20" y="120" width="110" height="90" rx="10" fill="#1E2A4A"/>
+          <text x="75" y="171" font-size="16" font-weight="700" fill="#fff" text-anchor="middle">PROBLEM</text>
+          <path d="M130 165H150V78H178M150 165V250H178" fill="none" stroke="#1E2A4A" stroke-width="2.5" marker-end="url(#ah)"/>
+          <!-- approach A -->
+          <rect x="180" y="18" width="560" height="130" rx="12" fill="#FFF3F1" stroke="#E8A197" stroke-width="1.5"/>
+          <text x="196" y="40" font-size="13" font-weight="700" fill="#C2261D">APPROACH A</text>
+          <rect x="196" y="50" width="150" height="38" rx="8" fill="#fff" stroke="#E36A5D" stroke-width="1.8"/><text x="210" y="74" font-size="14" font-weight="700" fill="#C2261D">DATA</text><text x="330" y="74" font-size="12.5" text-anchor="end">messy</text>
+          <rect x="196" y="98" width="150" height="38" rx="8" fill="#fff" stroke="#E8912D" stroke-width="1.8"/><text x="210" y="122" font-size="14" font-weight="700" fill="#B45309">PROMPT</text><text x="330" y="122" font-size="12.5" text-anchor="end">vague</text>
+          <path d="M346 69H380V117H346M380 93H418" fill="none" stroke="#C2261D" stroke-width="1.8" marker-end="url(#ah)"/>
+          <rect x="420" y="66" width="130" height="54" rx="10" fill="#EEF3FC" stroke="#2E5AAC" stroke-width="1.8"/><text x="485" y="90" font-size="14" font-weight="700" fill="#2E5AAC" text-anchor="middle">TOOL</text><text x="485" y="108" font-size="12" text-anchor="middle">same tool</text>
+          <path d="M550 93H588" stroke="#2E5AAC" stroke-width="1.8" marker-end="url(#ah)"/>
+          <rect x="590" y="60" width="130" height="66" rx="10" fill="#fff" stroke="#E36A5D" stroke-width="1.8"/><text x="655" y="84" font-size="14" font-weight="700" fill="#C2261D" text-anchor="middle">OUTCOME</text>
+          <g fill="#F2A59C"><rect x="620" y="100" width="10" height="14"/><rect x="634" y="104" width="10" height="10"/><rect x="648" y="107" width="10" height="7"/></g>
+          <text x="668" y="113" font-size="12" fill="#C2261D">weak</text>
+          <!-- divider -->
+          <text x="460" y="170" font-size="12.5" text-anchor="middle" fill="#6B5750">— same problem, same tool – different components —</text>
+          <!-- approach B -->
+          <rect x="180" y="185" width="560" height="130" rx="12" fill="#F0FAF4" stroke="#8FD3AE" stroke-width="1.5"/>
+          <text x="196" y="305" font-size="13" font-weight="700" fill="#0F8A5F">APPROACH B</text>
+          <rect x="196" y="196" width="150" height="38" rx="8" fill="#fff" stroke="#0F8A5F" stroke-width="1.8"/><text x="210" y="220" font-size="14" font-weight="700" fill="#0F8A5F">DATA</text><text x="330" y="220" font-size="12.5" text-anchor="end">clean</text>
+          <rect x="196" y="244" width="150" height="38" rx="8" fill="#fff" stroke="#0F8A5F" stroke-width="1.8"/><text x="210" y="268" font-size="14" font-weight="700" fill="#0F8A5F">PROMPT</text><text x="330" y="268" font-size="12.5" text-anchor="end">clear</text>
+          <path d="M346 215H380V263H346M380 239H418" fill="none" stroke="#0F8A5F" stroke-width="1.8" marker-end="url(#ah)"/>
+          <rect x="420" y="212" width="130" height="54" rx="10" fill="#EEF3FC" stroke="#2E5AAC" stroke-width="1.8"/><text x="485" y="236" font-size="14" font-weight="700" fill="#2E5AAC" text-anchor="middle">TOOL</text><text x="485" y="254" font-size="12" text-anchor="middle">same tool</text>
+          <path d="M550 239H588" stroke="#2E5AAC" stroke-width="1.8" marker-end="url(#ah)"/>
+          <rect x="590" y="206" width="130" height="66" rx="10" fill="#fff" stroke="#0F8A5F" stroke-width="1.8"/><text x="655" y="230" font-size="14" font-weight="700" fill="#0F8A5F" text-anchor="middle">OUTCOME</text>
+          <g fill="#3FB27F"><rect x="624" y="250" width="10" height="10"/><rect x="638" y="243" width="10" height="17"/><rect x="652" y="236" width="10" height="24"/></g>
+          <text x="672" y="259" font-size="12" fill="#0F8A5F">strong</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> Two approaches to one problem – the same tool, but different data and prompts, so different outcomes.</figcaption>
+    </figure>
+
+    <h3 class="sub">The parts of an approach</h3>
+    <p>Give two teams the same problem and they may build different approaches to solve it. Each approach is a small system with three parts: the data it works from, the tool it runs, and the prompt that tells the tool what to do.</p>
+    <p>Those parts interact. Clean data helps a clear prompt steer the tool well, while messy data or a vague prompt holds even a strong tool back. When one approach performs better, a detective does not just say ‘I prefer it’ – they judge each outcome against the problem, then ask which parts, working together, made the difference.</p>
+    <div id="a-vocab"></div>
+    <div id="a-match"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Part 2 of 3</span><h2>Why one wins</h2><p>How do you prove it?</p></div>
+  <div class="part-body">
+    <figure>
+      <svg viewBox="0 0 760 260" role="img" aria-labelledby="fig2T">
+        <title id="fig2T">Input leads to process leads to output; the problem points at the output. An arrow underneath traces the better outcome back through the components that produced it.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker>
+          <marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#E08A00"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <g stroke-width="2" fill="#fff">
+            <rect x="40" y="40" width="130" height="100" rx="10" stroke="#2E5AAC"/><rect x="230" y="40" width="130" height="100" rx="10" stroke="#0F8A5F"/>
+            <rect x="420" y="40" width="130" height="100" rx="10" stroke="#6B46C1"/><rect x="610" y="40" width="130" height="100" rx="10" stroke="#E08A00"/>
+          </g>
+          <g font-size="16" font-weight="700" text-anchor="middle">
+            <text x="105" y="72" fill="#2E5AAC">INPUT</text><text x="295" y="72" fill="#0F8A5F">PROCESS</text><text x="485" y="72" fill="#6B46C1">OUTPUT</text><text x="675" y="72" fill="#B45309">PROBLEM</text>
+          </g>
+          <g font-size="12.5" text-anchor="middle" fill="#6B5750">
+            <text x="105" y="100">the starting</text><text x="105" y="116">information</text>
+            <text x="295" y="100">the steps and</text><text x="295" y="116">components</text>
+            <text x="485" y="108">the result</text>
+            <text x="675" y="100">what we want</text><text x="675" y="116">to explain</text>
+          </g>
+          <g stroke="#2B1A14" stroke-width="2" marker-end="url(#ah2)"><path d="M170 90H227"/><path d="M360 90H417"/><path d="M610 90H553"/></g>
+          <path d="M675 140V190H105V143M295 190V143M485 190V143" fill="none" stroke="#E08A00" stroke-width="3" marker-end="url(#ah3)"/>
+          <text x="380" y="222" font-size="15" text-anchor="middle"><tspan fill="#B45309" font-weight="700">trace it back</tspan> through the components that produced it</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> To explain a better outcome, trace it back through the components that produced it.</figcaption>
+    </figure>
+    <h3 class="sub">Trace the outcome back</h3>
+    <p>To explain why an approach performs better, trace its outcome back through its components. Did it clean the data first? Was the prompt clear and full of the right detail? Did the tool suit the job?</p>
+    <p>Usually it is not one part alone but how the parts interact that decides the result. Your task is to compare fairly, name the interaction that mattered, and say it out loud with evidence.</p>
+    <div class="call violet"><h4>Think about it</h4><p>If two approaches use the same tool but only one performs well, what does that tell you about the other components and how they interact?</p></div>
+    <div id="a-order"></div>
+    <div id="a-case2"></div>
+  </div>
+</section>
+
+<!-- PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head"><span class="pill">Part 3 of 3</span><h2>Say it with evidence</h2><p>Which claims hold up?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Justify, do not just prefer</h3>
+    <p>Comparing fairly means judging outcomes against the problem, then reasoning back through the interacting components to explain the difference. A confident-looking outcome still has to be checked before you trust it.</p>
+    <p>Remember the charter: the examples are made by your teacher, you use no personal data, and you back every claim with evidence – not a feeling.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, teams compare rival AI approaches before they build: which design best sorts hospital records, flags faults in solar-panel images, or translates between Arabic and English. Knowing how the components interact lets you judge which approach to trust and improve, instead of picking the flashiest one.</p></div>
+    <div id="a-claims"></div>
+    <div id="a-case3"></div>
+  </div>
+</section>
+
+<!-- MISSION + WORKSHEET -->
+<section class="part" id="p4">
+  <div class="part-head dark"><span class="pill">Hands-on mission · Worksheet</span><h2>Solution Architects: compare the approaches</h2><p>Investigate three comparison cards. Map how each approach's data, tool and prompt interact, then justify which one performed better and why.</p></div>
+  <div class="part-body">
+    <div class="call amber"><h4>Tool for this week: unplugged simulated-AI cards (teacher-led)</h4><p>No live tool and no logins – you reason about pre-prepared example outputs on the cards, and no personal data is used. The live tools (Teachable Machine and Scratch) are used in the matching Lab period.</p></div>
+    <h3 class="sub">Let's try it</h3>
+    <ol class="steps">
+      <li>Read the comparison card: the problem, the two approaches with their data, tool and prompt, and each outcome.</li>
+      <li>Map how each approach turns its input into its outcome, stage by stage.</li>
+      <li>Judge each outcome against the problem – which approach performed better?</li>
+      <li>Name the component interaction that best explains the difference.</li>
+      <li>Explain one comparison to your partner, pointing to that interaction as the cause.</li>
+      <li>Check each other: could luck or the input explain it, or does it have to be the components?</li>
+    </ol>
+    <div id="cards"></div>
+    <div id="a-mission"></div>
+    <div id="a-explain"></div>
+    <div id="a-toolq"></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p5">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>You became the detective who explains why one approach performs better</h2></div>
+  <div class="part-body">
+    <h3 class="sub">Key ideas to remember</h3>
+    <ul class="keys">
+      <li>An approach is a small system of three parts: data, tool and prompt.</li>
+      <li>Those parts interact – how they work together shapes the outcome.</li>
+      <li>Compare fairly by judging each outcome against the problem.</li>
+      <li>Justify with evidence by tracing the outcome back to the component that mattered.</li>
+    </ul>
+    <p><b>What to do next:</b> in the Lab you run the fair test yourself and prove which approach wins.</p>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 9 · Bridging W1 Core</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- content ---------- */
+const WORDS = [
+  ["approach","One way of solving a defined problem, built from data, a tool and a prompt."],
+  ["component","One working part of an approach: its data, its tool, or its prompt."],
+  ["interact","The way the components affect each other to shape the outcome."],
+  ["outcome","The result an approach produces for the problem."],
+  ["analyse","To break something down and reason about why it turned out the way it did."]
+];
+const DEF_ORDER = [2,4,0,3,1];
+
+const JOBS = ["the result, judged against the problem","the instruction that steers the tool","the model that does the work","what the approach works from"];
+const MATCH = [["j1","🏁 Outcome",0],["j2","🗂️ Data",3],["j3","📝 Prompt",1],["j4","⚙️ Tool",2]];
+
+const STEPS = ["Judge each outcome against the problem","Map how each approach turns its input into an outcome","Name the interaction that made the difference, with evidence","Trace the better outcome back to its components"];
+const ORDER_KEY = [1,0,3,2];
+
+const CLAIMS = [
+  ["k1","🙈","One part alone always explains the difference.",0],
+  ["k2","🏆","The flashiest-looking approach is always the best.",0],
+  ["k3","🗂️","Clean data can help a clear prompt steer the tool.",1],
+  ["k4","🎲","A confident-looking outcome never needs checking.",0],
+  ["k5","🔗","How the components interact usually decides the result.",1],
+  ["k6","⚖️","You judge each outcome against the problem, not by preference.",1]
+];
+
+const CASES = {
+  case1:{quote:"Two teams sort hospital records using the same tool. Team A cleans its data and writes a clear prompt; Team B uses messy data and a vague prompt. Team A's outcome is far better. Detective, why?",
+    clues:[["🗂️","Clean data"],["📝","Clear prompt"],["🏁","Better outcome"]],q:"Why did Team A's approach perform better?",
+    opts:["Its clean data and clear prompt worked together to steer the tool well.","Team A used fewer records, so its method must be the better one.","It simply owns a far more powerful tool than the other team does.","Team A was just lucky with its results this particular time."]},
+  case2:{quote:"Two approaches use the exact same tool, yet only one produces a good outcome. Detective, if the tool is identical, where must the difference be hiding?",
+    clues:[["⚙️","Same tool"],["🗂️","Different data"],["🏁","Different result"]],q:"If the tool is identical, where is the difference?",
+    opts:["It is simply impossible to tell from the evidence here.","The tool itself must secretly be different in some way.","In the other parts – the data or the prompt – and how they interact.","Nowhere; the identical tool must always give the identical outcome."]},
+  case3:{quote:"A pair declares approach B the winner, but when asked why, they only say ‘we prefer it’. Detective, what is missing from their justification?",
+    clues:[["🗣️","A claim"],["🔎","The evidence"],["🏁","The verdict"]],q:"What does a good justification need?",
+    opts:["Just stating that you personally prefer one approach.","Evidence from examples showing which component mattered.","The approach that happens to use the longer written prompt.","A vote from the whole class about which approach is best."]}
+};
+
+const CARDS = [
+  {id:"A",problem:"Sort 500 hospital appointment letters into the right clinic.",
+   ap:[{data:"Raw letters with duplicates, and clinic names spelled three different ways",tool:"Sorting assistant",prompt:"“Sort these.”",out:"310 of 500 sorted correctly"},
+       {data:"Duplicates removed and every clinic name written the same way",tool:"Sorting assistant (same tool)",prompt:"“Sort each letter into one of these 8 clinics. If unsure, mark it ‘check’.”",out:"470 of 500 sorted correctly; 20 marked ‘check’"}]},
+  {id:"B",problem:"Flag faulty solar panels in 2,000 drone photos.",
+   ap:[{data:"2,000 clear photos with faults labelled by engineers",tool:"A powerful, brand-new image model",prompt:"“Find problems.”",out:"55% judged correctly – dust and shadows flagged as faults"},
+       {data:"The same 2,000 labelled photos",tool:"A smaller, older image model",prompt:"“Flag cracks and burn marks only. Ignore dust and shadows.”",out:"88% judged correctly"}]},
+  {id:"C",problem:"Translate school notices from English into Arabic for parents.",
+   ap:[{data:"Past notices translated by teachers into formal school Arabic",tool:"Translation assistant",prompt:"“Translate into formal Arabic for parents. Keep every date and time exactly.”",out:"Parents understood 9 of 10 notices; all dates correct"},
+       {data:"Random phrases from the internet in a mix of dialects",tool:"Translation assistant (same tool)",prompt:"“Translate this.”",out:"Parents understood 5 of 10 notices; two dates wrong"}]}
+];
+const INTERACT = ["Clean, consistent data let a clear prompt steer the tool well","A clear, specific prompt steered a simpler tool better than a vague prompt steered a powerful one","Examples that match the task and a detailed prompt worked together","It used the newest, most powerful tool","It was just luck this time"];
+const INT_ORDER = [3,0,4,2,1];
+const MISSION_KEY = {A:[1,0],B:[1,1],C:[0,2]}; // [better approach index, interaction]
+const EVIDENCE = ["470 of 500 letters sorted correctly, against 310","88% of panels judged correctly, against 55%","9 of 10 notices understood, against 5 of 10","it looked more impressive"];
+
+const EXIT_OPTS = ["Approach 1 was better because I prefer it.","In Comparison C, Approach 1 performed better because its teacher-translated examples and detailed prompt worked together to steer the tool, so 9 of 10 parents understood.","Approach 2 lost because it was unlucky.","In Comparison B, Approach 1 won because it had the most powerful tool."];
+const EXIT_WHY = ["It is the longest sentence.","It mentions a powerful tool.","It names the approach, the interaction and the evidence.","It says who preferred it."];
+
+const CH = [["P","Clean, labelled examples · clear prompt listing the three categories · a basic tool"],["Q","Messy examples · clear prompt listing the three categories · the most powerful tool"],["R","Messy examples · vague prompt (“sort these”) · the most powerful tool"]];
+const CH_WHY = ["Q has the most powerful tool, so it must come first.","P's clean data and clear prompt work together; Q's clear prompt is held back by messy data; R has neither.","R is best because its prompt is shortest.","All three are equal because they solve the same problem."];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const cardIdx=v=>["A","B","C"][+v];
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Part 1",title:"Match each word to its meaning",sub:"Words to know",ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"An approach is one way of solving a problem, built from components – data, tool and prompt. The components interact to shape the outcome. To analyse is to break it down and reason about why it turned out that way."},
+ {id:"match",mount:"a-match",section:"Part 1",title:"Match the component to its job",sub:"Objective 2 · name the parts of an approach",ico:"🧷",
+  fields:MATCH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Data is what the approach works from. The prompt is the instruction that steers the tool. The tool is the model that does the work. The outcome is the result – and you judge it against the problem."},
+ {id:"case1",mount:"a-case1",section:"Part 1",title:"The Records Sort",sub:"Solution Architects · Case 1",ico:"🕵️",cls:"case",
+  fields:[{k:"case1",radio:1,ok:v=>eq(v,0)}],
+  explain:"Both teams used the same tool, so the tool cannot explain the difference. Team A's clean data and clear prompt worked together to steer the tool well."},
+ {id:"order",mount:"a-order",section:"Part 2",title:"The detective's compare routine",sub:"Objective 1 · compare two approaches fairly",ico:"🧭",
+  fields:ORDER_KEY.map((c,i)=>({k:"o"+i,ok:v=>eq(v,c)})),
+  explain:"First map how each approach turns its input into an outcome. Then judge each outcome against the problem. Then trace the better outcome back to its components. Finally, name the interaction that made the difference – with evidence."},
+ {id:"case2",mount:"a-case2",section:"Part 2",title:"The Shared Tool",sub:"Solution Architects · Case 2",ico:"🔬",cls:"case",
+  fields:[{k:"case2",radio:1,ok:v=>eq(v,2)}],
+  explain:"An identical tool cannot cause a different outcome on its own. The difference must be in the other components – the data or the prompt – and how they interact with the tool."},
+ {id:"claims",mount:"a-claims",section:"Part 3",title:"Which claims hold up?",sub:"Objective 3 · justify with evidence",ico:"🧩",
+  fields:CLAIMS.map(([k,,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"A good detective can defend three claims: clean data can help a clear prompt steer the tool; how the components interact usually decides the result; and you judge each outcome against the problem, not by preference. One part alone rarely explains it, flashy is not the same as best, and a confident outcome still needs checking."},
+ {id:"case3",mount:"a-case3",section:"Part 3",title:"The Weak Justification",sub:"Solution Architects · Case 3",ico:"⚖️",cls:"case",
+  fields:[{k:"case3",radio:1,ok:v=>eq(v,1)}],
+  explain:"‘We prefer it’ is a feeling, not a justification. A good justification gives evidence from the examples showing which component – and which interaction – mattered."},
+ {id:"mission",mount:"a-mission",section:"Worksheet",title:"Compare and explain",sub:"Worksheet · better approach and the interaction behind it",ico:"🗺️",cls:"ws",
+  fields:CARDS.flatMap(c=>[{k:`w${c.id}a`,ok:v=>eq(v,MISSION_KEY[c.id][0])},{k:`w${c.id}b`,ok:v=>eq(v,MISSION_KEY[c.id][1])}]),
+  explain:"A: Approach 2 – clean, consistent data let a clear prompt steer the same tool (470 vs 310). B: Approach 2 – a clear, specific prompt steered a simpler tool better than a vague prompt steered a powerful one (88% vs 55%). C: Approach 1 – teacher-translated examples and a detailed prompt worked together (9 vs 5 notices understood)."},
+ {id:"explain",mount:"a-explain",section:"Worksheet",title:"My explanation",sub:"Worksheet · explain one comparison to a reader",ico:"✍️",cls:"ws",
+  fields:[
+    {k:"e0",ok:v=>+v>=0&&+v<=2},
+    {k:"e1",ok:(v,A)=>A.e0!==undefined&&A.e0!==""&&eq(v,MISSION_KEY[cardIdx(A.e0)][0])},
+    {k:"e2",ok:(v,A)=>A.e0!==undefined&&A.e0!==""&&eq(v,MISSION_KEY[cardIdx(A.e0)][1])},
+    {k:"e3",ok:(v,A)=>eq(v,A.e0)}],
+  explain:"Any comparison works, but every part must fit it: the approach that really performed better, the interaction that explains it, and the evidence from that card's outcomes. ‘It looked more impressive’ is never evidence."},
+ {id:"toolq",mount:"a-toolq",section:"Worksheet",title:"Tool or interaction?",sub:"Worksheet · a powerful tool still performed worse",ico:"🛠️",cls:"ws",
+  fields:[{k:"g1",ok:v=>eq(v,2)},{k:"g2",ok:v=>eq(v,0)}],
+  explain:"In Comparison B, the powerful tool was told only “find problems”, so it could not know that dust and shadows are not faults. A clear prompt steered a simpler tool to 88%. The way the components interact matters more than the tool alone."},
+ {id:"exit",mount:"a-exit",section:"Exit ticket",title:"Exit ticket",sub:"One clear sentence",ico:"🎟️",
+  fields:[{k:"x1",radio:1,ok:v=>eq(v,1)},{k:"x2",ok:v=>eq(v,2)}],
+  explain:"A strong exit-ticket sentence names which approach performed better, the component interaction that made the difference, and the evidence. Preference, luck or ‘it had the best tool’ do not explain anything."},
+ {id:"chal",mount:"a-chal",section:"Challenge",title:"Challenge ⭐ Rank three approaches",sub:"Stretch · justify each placement by how the components interact",ico:"⭐",
+  fields:[{k:"r1",ok:v=>eq(v,0)},{k:"r2",ok:v=>eq(v,1)},{k:"r3",ok:v=>eq(v,2)},{k:"r4",ok:v=>eq(v,1)}],
+  explain:"P is best: clean data and a clear prompt work together, so even a basic tool performs well. Q is next: its clear prompt helps, but messy data holds it back. R is weakest: messy data and a vague prompt waste the most powerful tool."}
+];
+
+/* ---------- state ---------- */
+const KEY="g9-comparing-bw1l1-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- static blocks ---------- */
+$("#flips").innerHTML=WORDS.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${i}" aria-pressed="${!!S.flip[i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+
+$("#cards").innerHTML=CARDS.map(c=>`<div class="ecard"><header><small>Comparison card ${c.id} · illustrative</small><b>${esc(c.problem)}</b></header>
+  <div class="in"><div class="dos">${c.ap.map((a,i)=>`<div class="ver"><h4>Approach ${i+1}</h4><ol class="pipe">
+    <li><b>Data</b><span>${esc(a.data)}</span></li><li><b>Tool</b><span>${esc(a.tool)}</span></li><li><b>Prompt</b><span>${esc(a.prompt)}</span></li>
+    <li class="out"><b>Outcome</b><span>${esc(a.out)}</span></li></ol></div>`).join("")}</div></div></div>`).join("");
+
+/* ---------- activity bodies ---------- */
+function caseBody(id){
+  const c=CASES[id];
+  return `<div class="quote">“${esc(c.quote)}”</div><div class="clues" aria-hidden="true">${c.clues.map(([e,t])=>`<div class="clue">${e}<span>${esc(t)}</span></div>`).join("")}</div>
+    <p class="q" id="q-${id}">${esc(c.q)}</p>${radios(id,c.opts)}`;
+}
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "match":
+    return `<p class="how">Choose the job each component does.</p>`+
+      MATCH.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,JOBS,"Choose its job…")}</div>`).join("");
+  case "case1": case "case2": case "case3":
+    return caseBody(a.id);
+  case "order":
+    return `<p class="how">Put the detective's steps in the order you would use to compare two approaches, from first to last.</p>`+
+      ORDER_KEY.map((_,i)=>`<div class="pair" data-item="o${i}"><span class="t">Step ${i+1}</span>${sel("o"+i,STEPS,"Choose the step…")}</div>`).join("");
+  case "claims":
+    return `<p class="how">Tick the THREE claims that a good detective can defend. Leave the others unticked.</p><div class="opts">`+
+      CLAIMS.map(([k,e,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${e} ${esc(t)}</span></label>`).join("")+`</div>`;
+  case "mission":
+    return `<p class="how">For each comparison card above, judge which approach performed better and name the component interaction that explains it.</p>`+
+      CARDS.map(c=>`<div class="scen"><p>Comparison ${c.id}: ${esc(c.problem)}</p><div class="two">
+        <div data-item="w${c.id}a"><span>Better approach</span>${sel(`w${c.id}a`,["Approach 1","Approach 2"],"Which approach?")}</div>
+        <div data-item="w${c.id}b"><span>Component interaction that explains it</span>${sel(`w${c.id}b`,INTERACT,"Choose the interaction…",INT_ORDER)}</div></div></div>`).join("");
+  case "explain":
+    return `<p class="how">Pick one comparison and explain to a reader why one approach performed better than the other. Every part of your sentence must fit the comparison you pick.</p>
+      <p class="sent">In <span data-item="e0">${sel("e0",["Comparison A","Comparison B","Comparison C"],"which comparison?")}</span>, <span data-item="e1">${sel("e1",["Approach 1","Approach 2"],"which approach?")}</span> performed better. The reason: <span data-item="e2">${sel("e2",INTERACT,"which interaction?",INT_ORDER)}</span>. The evidence: <span data-item="e3">${sel("e3",EVIDENCE,"which evidence?",[3,1,0,2])}</span>.</p>`;
+  case "toolq":
+    return `<p class="how">In Comparison B, Approach 1 had the more powerful tool but still performed worse.</p>
+      <p class="sent">Approach 1 performed worse because <span data-item="g1">${sel("g1",["its tool was too old","the photos were blurry","its vague prompt did not tell the tool what counts as a fault, so dust and shadows were flagged","it was unlucky that day"],"because…")}</span>. So what matters more is <span data-item="g2">${sel("g2",["how the components interact","the power of the tool alone"],"which?")}</span>.</p>`;
+  case "exit":
+    return `<p class="q" id="q-x1">Which is the best exit-ticket sentence – naming the better approach and the interaction that made the difference?</p>${radios("x1",EXIT_OPTS)}
+      <div class="pair" data-item="x2" style="margin-top:10px"><span class="t">What makes it the strongest?</span>${sel("x2",EXIT_WHY,"Choose…")}</div>`;
+  case "chal":
+    return `<div class="quote"><b>Defined problem:</b> sort students' questions to the school library into ‘books’, ‘computers’ or ‘printing’. Three candidate approaches:</div>
+      <div class="opts" style="margin-bottom:12px">${CH.map(([k,t])=>`<div class="opt"><span class="l">${k}</span><span>${esc(t)}</span></div>`).join("")}</div>`+
+      [["r1","Best"],["r2","Middle"],["r3","Weakest"]].map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${t}</span>${sel(k,["Approach P","Approach Q","Approach R"],"Choose…")}</div>`).join("")+
+      `<div class="pair" data-item="r4"><span class="t">Justification</span>${sel("r4",CH_WHY,"Choose…")}</div>`;
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 9 Bridging · Week 1 · Comparing Approaches</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
