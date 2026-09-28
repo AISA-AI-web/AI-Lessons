@@ -30,13 +30,25 @@ header p{margin:0;color:var(--muted);max-width:56ch}
 .grade{background:var(--card);border:1.5px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
 .grade h2{margin:0;padding:16px 18px;font-size:22px;color:#fff;background:var(--c,#8A93A6);display:flex;justify-content:space-between;align-items:baseline}
 .grade h2 small{font-size:13px;font-weight:600;opacity:.9}
-.grade ul{list-style:none;margin:0;padding:10px}
+.grade ul{list-style:none;margin:0;padding:0}
+.course{padding:12px 12px 4px}
+.course+.course{border-top:1.5px dashed var(--line)}
+.course h3{margin:0 0 8px;font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.course h3::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--k)}
+.course.bridging{--k:#8A93A6}
+.course.main{--k:var(--ink)}
+.course:last-child{padding-bottom:14px}
 .grade li a{display:block;text-decoration:none;color:inherit;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px}
 .grade li a:hover{border-color:var(--c);background:color-mix(in srgb,var(--c) 7%,#fff)}
 .grade li+li{margin-top:8px}
 .grade .tag{display:block;font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--c)}
 .grade .name{font-weight:600}
-.grade .soon{padding:14px 18px 18px;color:var(--muted);font-size:15px}
+.grade .soon{margin:0 0 8px;padding:0 2px;color:var(--muted);font-size:14.5px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin:0 0 18px;padding:0;list-style:none;font-size:14.5px;color:var(--muted)}
+.legend li{display:flex;align-items:center;gap:8px}
+.legend i{width:10px;height:10px;border-radius:3px;background:#8A93A6}
+.legend i.m{background:var(--ink)}
+.legend b{color:var(--ink)}
 .grade.empty h2{background:#AEB5C4}
 
 footer{padding:0 0 40px;color:var(--muted);font-size:14px;text-align:center}
@@ -64,39 +76,87 @@ footer{padding:0 0 40px;color:var(--muted);font-size:14px;text-align:center}
 </header>
 
 <main class="wrap">
-  <!-- To add a lesson: put the file in its grade folder and add a <li> link to that grade's card. -->
+  <ul class="legend">
+    <li><i></i><span><b>Bridging course</b> – the foundation lessons before the main unit</span></li>
+    <li><i class="m"></i><span><b>Main course</b> – the full unit lessons</span></li>
+  </ul>
+  <!-- To add a lesson: put the file in its grade folder (bridging-wX-lY.html or main-wX-lY.html)
+       and add a <li> link under the right course section of that grade's card. -->
   <ul class="grid">
     <li class="grade" id="grade-6" style="--c:#E0600A">
       <h2>Grade 6 <small>1 lesson</small></h2>
-      <ul>
-        <li><a href="grade-6/bridging-w1-l1.html"><span class="tag">Bridging · Week 1 · Lesson 1</span><span class="name">Data Quality and AI Outputs</span></a></li>
-      </ul>
+        <section class="course bridging"><h3>Bridging course</h3>
+          <ul>
+            <li><a href="grade-6/bridging-w1-l1.html"><span class="tag">Week 1 · Lesson 1</span><span class="name">Data Quality and AI Outputs</span></a></li>
+          </ul>
+        </section>
+        <section class="course main"><h3>Main course</h3>
+          <p class="soon">Coming soon.</p>
+        </section>
     </li>
-    <li class="grade empty" id="grade-7"><h2>Grade 7</h2><p class="soon">Lessons coming soon.</p></li>
-    <li class="grade empty" id="grade-8"><h2>Grade 8</h2><p class="soon">Lessons coming soon.</p></li>
+    <li class="grade empty" id="grade-7">
+      <h2>Grade 7</h2>
+        <section class="course bridging"><h3>Bridging course</h3>
+          <p class="soon">Coming soon.</p>
+        </section>
+        <section class="course main"><h3>Main course</h3>
+          <p class="soon">Coming soon.</p>
+        </section>
+    </li>
+    <li class="grade" id="grade-8" style="--c:#15803D">
+      <h2>Grade 8 <small>1 lesson</small></h2>
+        <section class="course bridging"><h3>Bridging course</h3>
+          <p class="soon">Coming soon.</p>
+        </section>
+        <section class="course main"><h3>Main course</h3>
+          <ul>
+            <li><a href="grade-8/main-w1-l1.html"><span class="tag">Week 1 · Lesson 1</span><span class="name">From ‘It Works’ to ‘How Well’</span></a></li>
+          </ul>
+        </section>
+    </li>
     <li class="grade" id="grade-9" style="--c:#D7263D">
       <h2>Grade 9 <small>1 lesson</small></h2>
-      <ul>
-        <li><a href="grade-9/bridging-w1-l1.html"><span class="tag">Bridging · Week 1 · Lesson 1</span><span class="name">Comparing Approaches</span></a></li>
-      </ul>
+        <section class="course bridging"><h3>Bridging course</h3>
+          <ul>
+            <li><a href="grade-9/bridging-w1-l1.html"><span class="tag">Week 1 · Lesson 1</span><span class="name">Comparing Approaches</span></a></li>
+          </ul>
+        </section>
+        <section class="course main"><h3>Main course</h3>
+          <p class="soon">Coming soon.</p>
+        </section>
     </li>
     <li class="grade" id="grade-10" style="--c:#0F766E">
       <h2>Grade 10 <small>1 lesson</small></h2>
-      <ul>
-        <li><a href="grade-10/bridging-w1-l1.html"><span class="tag">Bridging · Week 1 · Lesson 1</span><span class="name">Design Choices Shape the Output</span></a></li>
-      </ul>
+        <section class="course bridging"><h3>Bridging course</h3>
+          <ul>
+            <li><a href="grade-10/bridging-w1-l1.html"><span class="tag">Week 1 · Lesson 1</span><span class="name">Design Choices Shape the Output</span></a></li>
+          </ul>
+        </section>
+        <section class="course main"><h3>Main course</h3>
+          <p class="soon">Coming soon.</p>
+        </section>
     </li>
     <li class="grade" id="grade-11" style="--c:#4F46E5">
       <h2>Grade 11 <small>1 lesson</small></h2>
-      <ul>
-        <li><a href="grade-11/bridging-w1-l1.html"><span class="tag">Bridging · Week 1 · Lesson 1</span><span class="name">Evaluating How Design Shapes Performance and Reliability</span></a></li>
-      </ul>
+        <section class="course bridging"><h3>Bridging course</h3>
+          <ul>
+            <li><a href="grade-11/bridging-w1-l1.html"><span class="tag">Week 1 · Lesson 1</span><span class="name">Evaluating How Design Shapes Performance and Reliability</span></a></li>
+          </ul>
+        </section>
+        <section class="course main"><h3>Main course</h3>
+          <p class="soon">Coming soon.</p>
+        </section>
     </li>
     <li class="grade" id="grade-12" style="--c:#A61E4D">
       <h2>Grade 12 <small>1 lesson</small></h2>
-      <ul>
-        <li><a href="grade-12/bridging-w1-l1.html"><span class="tag">Bridging · Week 1 · Lesson 1</span><span class="name">Evaluating Trade-offs Across Accuracy, Efficiency, Usability and Reliability</span></a></li>
-      </ul>
+        <section class="course bridging"><h3>Bridging course</h3>
+          <ul>
+            <li><a href="grade-12/bridging-w1-l1.html"><span class="tag">Week 1 · Lesson 1</span><span class="name">Evaluating Trade-offs Across Accuracy, Efficiency, Usability and Reliability</span></a></li>
+          </ul>
+        </section>
+        <section class="course main"><h3>Main course</h3>
+          <p class="soon">Coming soon.</p>
+        </section>
     </li>
   </ul>
 </main>

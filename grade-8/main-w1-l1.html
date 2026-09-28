@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>From It Works to How Well – Grade 8 Main Course Lesson 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#15803D; --main2:#22C55E; --deep:#14532D;
+  --ink:#13261B; --muted:#4F6457; --paper:#F4FAF6; --card:#FFFFFF;
+  --line:#D6EBDD; --soft:#EAF6EE;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#86EFAC,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#2FA968);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#13261B,#2E5E40)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#C8EDD4 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#F8FDF9;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FBFEFC}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#3CCB7F)}
+.act-head.ws{background:linear-gradient(120deg,#13261B,#2F6B47)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#ECF8F0}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #B7DCC3;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%2315803D' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #9FD9B4;border-radius:12px;padding:10px 14px;background:#F7FCF9;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(19,38,27,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#13261B;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 8 Main Course, Term 1</span><span class="pill">Week 1 Core</span><span class="pill">About 45 minutes</span></div>
+    <h1>From ‘It Works’ to ‘How Well’</h1>
+    <p>You already know an AI turns an input into an output. This unit asks the harder question: is that output any good, and how could we make the model better?</p>
+    <p class="meta"><b>Course:</b> Main course &nbsp;·&nbsp; <b>Tool:</b> unplugged simulated-AI cards</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 8B"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>◀ Previously</small>Welcome to Term 1 – you know AI turns input into output; now we ask the bigger question: is it any good?</div>
+    <div class="box"><small>Next ▶</small>Next in the Lab: put two real outputs side by side and use evidence to name the winner.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li>I can ask at least two good questions about how AI turns an input into an output and how we judge that output.</li>
+      <li>I can sort examples that relate to evaluating and improving AI models, and say why.</li>
+      <li>I can help write our unit success criteria and our safe, responsible-use rules for AI tools.</li>
+    </ul>
+    <p class="note">Don't worry if ‘model’ and ‘workflow’ still feel new – we unpack both fully in the very next lesson.</p>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Ask the harder question</b><small>Not ‘did it work’ but ‘how well’</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Sort output, judge, improve</b><small>Tell the three moves apart</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Agree our criteria and rules</b><small>Fair measures and safe use</small></a></li>
+      <li><span class="num">4</span><a href="#p4"><b>AI Evaluators mission and worksheet</b><small>Sort the cards, ask questions, write a rule</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Part 1 of 3</span><h2>How well does it work?</h2><p>What turns a gut feeling into a decision?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+
+    <figure>
+      <svg viewBox="0 0 790 330" role="img" aria-labelledby="fig1T">
+        <title id="fig1T">Input, a typed prompt, goes to Process, the trained model, which gives an Output. The output goes to Evaluate, which checks it against criteria: accuracy, usefulness and fairness. A dashed Improve arrow loops back from Evaluate to the Input.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#13261B"/></marker>
+          <marker id="ahb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2E5AAC"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <rect x="60" y="20" width="160" height="120" rx="12" fill="#EEF3FC" stroke="#2E5AAC" stroke-width="2"/>
+          <text x="140" y="48" font-size="18" font-weight="700" fill="#2E5AAC" text-anchor="middle">INPUT</text>
+          <rect x="82" y="62" width="116" height="62" rx="6" fill="#fff" stroke="#9DB3DC"/><text x="140" y="80" font-size="11" font-weight="700" text-anchor="middle">TYPED PROMPT</text>
+          <g stroke="#9DB3DC" stroke-width="3"><path d="M94 94H186M94 104H186M94 114H160"/></g>
+          <rect x="290" y="20" width="160" height="120" rx="12" fill="#ECF8F0" stroke="#15803D" stroke-width="2"/>
+          <text x="370" y="48" font-size="18" font-weight="700" fill="#15803D" text-anchor="middle">PROCESS</text>
+          <circle cx="370" cy="84" r="20" fill="none" stroke="#15803D" stroke-width="5" stroke-dasharray="6 4"/><rect x="361" y="75" width="18" height="18" rx="3" fill="#15803D"/>
+          <rect x="318" y="112" width="104" height="20" rx="5" fill="#fff" stroke="#15803D"/><text x="370" y="126" font-size="11" text-anchor="middle">trained model</text>
+          <rect x="520" y="20" width="160" height="120" rx="12" fill="#F4F0FC" stroke="#6B46C1" stroke-width="2"/>
+          <text x="600" y="48" font-size="18" font-weight="700" fill="#6B46C1" text-anchor="middle">OUTPUT</text>
+          <rect x="542" y="62" width="116" height="62" rx="6" fill="#fff" stroke="#B9A6E6"/><rect x="552" y="72" width="26" height="24" rx="3" fill="#8B6FD6"/>
+          <g stroke="#B9A6E6" stroke-width="3"><path d="M586 76H648M586 86H648M586 96H640M552 108H648"/></g>
+          <g stroke="#13261B" stroke-width="3" marker-end="url(#ah)"><path d="M220 80H287"/><path d="M450 80H517"/><path d="M600 140V180"/></g>
+          <path d="M600 184L672 226L600 268L528 226Z" fill="#FFF3E6" stroke="#E08A00" stroke-width="2.5"/>
+          <text x="600" y="232" font-size="16" font-weight="700" fill="#B45309" text-anchor="middle">EVALUATE</text>
+          <rect x="682" y="190" width="98" height="76" rx="8" fill="#fff" stroke="#E08A00" stroke-width="1.5"/>
+          <g font-size="11"><text x="690" y="208" font-weight="700">criteria:</text><text x="690" y="226">✓ accuracy</text><text x="690" y="243">✓ usefulness</text><text x="690" y="260">✓ fairness</text></g>
+          <path d="M528 226Q300 320 140 146" fill="none" stroke="#2E5AAC" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#ahb)"/>
+          <text x="300" y="300" font-size="17" font-weight="700" fill="#2E5AAC" text-anchor="middle">IMPROVE</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> The workflow still runs input to output – now we add a step that judges the output against clear criteria.</figcaption>
+    </figure>
+
+    <h3 class="sub">Judge against criteria</h3>
+    <p>An AI system still follows the shape you know: input, process, output. This unit adds a new job on top. Instead of just asking ‘did it give me something back’, you ask ‘is what it gave me good enough for the task’.</p>
+    <p>To answer that fairly you need criteria – clear measures like accuracy, usefulness and fairness that you agree on before you judge. Judging against criteria is called evaluating. It turns a gut feeling into a decision you can explain and defend to someone else.</p>
+    <div class="call violet"><h4>Think about it</h4><p>If two outputs both look neat, how would you decide fairly which one is actually better for the task?</p></div>
+    <div id="a-vocab"></div>
+    <div id="a-evalq"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Part 2 of 3</span><h2>Output, judge, improve</h2><p>Which part are you actually changing?</p></div>
+  <div class="part-body">
+    <figure>
+      <svg viewBox="0 0 760 200" role="img" aria-labelledby="fig2T">
+        <title id="fig2T">Three different moves: 1, making an output – create the output from the input; 2, judging an output – check the output against clear criteria; 3, improving the system behind it – make the system better so future outputs improve.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#13261B"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <rect x="20" y="20" width="220" height="160" rx="12" fill="#fff" stroke="#2E5AAC" stroke-width="2"/>
+          <rect x="270" y="20" width="220" height="160" rx="12" fill="#fff" stroke="#15803D" stroke-width="2"/>
+          <rect x="520" y="20" width="220" height="160" rx="12" fill="#fff" stroke="#6B46C1" stroke-width="2"/>
+          <g font-size="13" font-weight="700">
+            <circle cx="42" cy="44" r="12" fill="#2E5AAC"/><text x="42" y="49" fill="#fff" text-anchor="middle">1</text><text x="62" y="49" fill="#2E5AAC">MAKING AN OUTPUT</text>
+            <circle cx="292" cy="44" r="12" fill="#15803D"/><text x="292" y="49" fill="#fff" text-anchor="middle">2</text><text x="312" y="49" fill="#15803D">JUDGING AN OUTPUT</text>
+            <circle cx="542" cy="44" r="12" fill="#6B46C1"/><text x="542" y="49" fill="#fff" text-anchor="middle">3</text><text x="559" y="49" fill="#6B46C1">IMPROVING THE SYSTEM</text>
+          </g>
+          <!-- icons -->
+          <rect x="60" y="68" width="44" height="56" rx="4" fill="#EEF3FC" stroke="#2E5AAC"/><path d="M68 82H96M68 92H96M68 102H88" stroke="#2E5AAC" stroke-width="2.5"/>
+          <path d="M112 96H140" stroke="#13261B" stroke-width="2.5" marker-end="url(#ah2)"/>
+          <rect x="146" y="72" width="60" height="44" rx="4" fill="#EEF3FC" stroke="#2E5AAC"/><g fill="#2E5AAC"><rect x="158" y="96" width="8" height="12"/><rect x="170" y="88" width="8" height="20"/><rect x="182" y="80" width="8" height="28"/></g>
+          <rect x="302" y="68" width="44" height="56" rx="4" fill="#F4F0FC" stroke="#6B46C1"/><g fill="#6B46C1"><rect x="310" y="100" width="7" height="14"/><rect x="320" y="92" width="7" height="22"/><rect x="330" y="84" width="7" height="30"/></g>
+          <path d="M354 96H382" stroke="#13261B" stroke-width="2.5" marker-end="url(#ah2)"/>
+          <rect x="390" y="68" width="48" height="56" rx="4" fill="#ECF8F0" stroke="#15803D"/><path d="M398 84l4 4 7-8M398 100l4 4 7-8" stroke="#15803D" stroke-width="2.5" fill="none"/><circle cx="438" cy="116" r="11" fill="#fff" stroke="#15803D" stroke-width="2.5"/><path d="M446 124l8 8" stroke="#15803D" stroke-width="3"/>
+          <circle cx="572" cy="96" r="18" fill="none" stroke="#6B46C1" stroke-width="6" stroke-dasharray="7 5"/>
+          <path d="M600 96H628" stroke="#13261B" stroke-width="2.5" marker-end="url(#ah2)"/>
+          <path d="M638 120L660 100L676 108L706 76" fill="none" stroke="#6B46C1" stroke-width="3" marker-end="url(#ah2)"/>
+          <g font-size="12.5" text-anchor="middle" fill="#4F6457">
+            <text x="130" y="152">Create the output</text><text x="130" y="168">from the input.</text>
+            <text x="380" y="152">Check the output against</text><text x="380" y="168">clear criteria.</text>
+            <text x="630" y="152">Make the system better so</text><text x="630" y="168">future outputs improve.</text>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Three different moves: making an output, judging an output, and improving the system behind it.</figcaption>
+    </figure>
+    <h3 class="sub">Improve on purpose</h3>
+    <p>Once you can evaluate an output, you can improve the system behind it – but be precise about WHICH part you improve. You can improve the <b>input</b> (a clearer prompt or cleaner example data – the model does not change); improve the <b>workflow</b> (add or reorder steps, such as a check step – the model still does not change); or improve the <b>model</b> itself by changing its training examples and training again, which produces a new, retrained model.</p>
+    <p>Improving does not mean nagging the AI until it gives a nicer answer. It means changing something on purpose, then re-testing against the same criteria to see if the output really got better.</p>
+    <div id="a-sort"></div>
+    <div id="a-which"></div>
+    <div id="a-case2"></div>
+  </div>
+</section>
+
+<!-- PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head"><span class="pill">Part 3 of 3</span><h2>Our criteria and rules</h2><p>What makes a criterion fair, and use safe?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Measure it, and stay safe</h3>
+    <p>A fair success criterion is something you can actually measure against the task – like ‘how many of 10 answers are correct’ – not just ‘it looks nicer’. Agreeing these before you judge keeps everyone honest.</p>
+    <p>Keep the charter in mind: no real names, faces or voices go into any tool, an adult runs it for us, and a confident-looking output still has to be checked before you trust it.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, teams evaluate and improve AI every day: tuning an Arabic–English translator for government service desks, checking a smart-parking predictor in Abu Dhabi, or testing a recycling sorter until it meets a clear accuracy target. Learning to judge and improve outputs helps you understand and question the tools around you.</p></div>
+    <div class="call"><h4>Cross-curricular link · Social Studies / Moral Education</h4><p>Co-writing the class success criteria and responsible-use charter mirrors drafting a shared code of conduct in Moral Education: everyone agrees clear, fair rules in advance so any decision can be judged against them and defended, not made on personal feeling.</p></div>
+    <div id="a-fair"></div>
+    <div id="a-case3"></div>
+  </div>
+</section>
+
+<!-- MISSION + WORKSHEET -->
+<section class="part" id="p4">
+  <div class="part-head dark"><span class="pill">Hands-on mission · Worksheet</span><h2>AI Evaluators: launch the unit</h2><p>Sort example cards into outputs, ways to judge and ways to improve – then build the class vocabulary wall and safe-use charter.</p></div>
+  <div class="part-body">
+    <div class="call amber"><h4>Tool for this week: unplugged simulated-AI cards (teacher-led)</h4><p>No live tool and no logins – you reason about pre-prepared example outputs on the cards, and no personal data is used. The live tools (Teachable Machine and Scratch) are used in the matching Lab period.</p></div>
+    <h3 class="sub">Let's try it</h3>
+    <ol class="steps">
+      <li>Watch the class stimulus and note one thing you noticed and one thing you wonder.</li>
+      <li>Turn your wondering into two clear questions about judging or improving AI outputs.</li>
+      <li>With your partner, sort each card as an output, a way to judge, or a way to improve.</li>
+      <li>Write one reason for each card – why does it belong there?</li>
+      <li>Add one word and its meaning to the class vocabulary wall.</li>
+      <li>Propose one responsible-use rule for our safe-use charter.</li>
+    </ol>
+    <div id="a-ws"></div>
+    <div id="a-questions"></div>
+    <div id="a-charter"></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p5">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>You launched the unit: from ‘it works’ to ‘how well does it work’</h2></div>
+  <div class="part-body">
+    <h3 class="sub">Key ideas to remember</h3>
+    <ul class="keys">
+      <li>Evaluating means judging an output against clear criteria, not by first impression.</li>
+      <li>Making an output, judging it, and improving the system behind it are three different moves.</li>
+      <li>You can improve the input, the workflow, or the model – only retraining changes the model itself.</li>
+      <li>A fair criterion can be measured and repeated; responsible use keeps every test safe.</li>
+    </ul>
+    <h3 class="sub">Glossary</h3>
+    <dl class="gloss">
+      <dt>Criteria</dt><dd>the clear measures we agree on to judge an output, such as accuracy or usefulness.</dd>
+      <dt>Evaluate</dt><dd>to judge something fairly against the criteria, not just by how it looks.</dd>
+      <dt>Improve</dt><dd>to change the input, workflow or model on purpose so more outputs meet the criteria.</dd>
+      <dt>Responsible use</dt><dd>using AI safely and fairly, with no personal data and always checking the result.</dd>
+    </dl>
+    <p><b>What to do next:</b> in the Lab, put two real outputs side by side and use evidence to name the winner.</p>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 8 · Main Course W1 Core</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- content ---------- */
+const WORDS = [
+  ["output","What the AI system gives back after it processes your input."],
+  ["criteria","The clear measures we agree on to judge whether an output is good, such as accuracy or usefulness."],
+  ["evaluate","To judge something fairly against the criteria, not just by how it looks."],
+  ["improve","To change the input or the process on purpose so more outputs meet the criteria."],
+  ["responsible use","Using AI safely and fairly, with no personal data and always checking the result."]
+];
+const DEF_ORDER = [3,0,4,1,2];
+const MOVES = ["An output","A way to judge","A way to improve"];
+
+const EVALQ = [
+  ["q1","🎯","Does this output actually do the task it was asked to do?",1],
+  ["q2","⏱️","Did it answer quickly, so it must be right?",0],
+  ["q3","⚖️","Does it work as fairly for one group as for another?",1],
+  ["q4","📏","How accurate is this output when I check it against a trusted source?",1],
+  ["q5","🖼️","Does the output look neat and colourful on screen?",0],
+  ["q6","😊","Do I simply like this one more than the other?",0]
+];
+
+const SORT = [
+  ["s1","📄","A translated notice the tool produced",0],
+  ["s2","🪜","Adding a check step to the workflow",2],
+  ["s3","✍️","Rewriting the prompt to be clearer",2],
+  ["s4","📊","Counting how many of 10 answers are correct",1],
+  ["s5","📚","Adding better training examples and retraining",2],
+  ["s6","⚖️","Comparing the output to a trusted source",1],
+  ["s7","🏷️","The label ‘recyclable’ that the sorter returns",0]
+];
+
+const PARTS3 = ["Input","Workflow","Model"];
+const WHICH = [
+  ["p1","Rewording a messy prompt into a clear one",0],
+  ["p2","Adding a step that checks each answer before it is shown",1],
+  ["p3","Changing the training examples and training again",2],
+  ["p4","Giving the tool cleaner example data to work from, without retraining",0],
+  ["p5","Swapping the order of two steps so the check happens first",1]
+];
+
+const FAIR = [
+  ["f1","⚖️","Whether it works as well for different groups","F"],
+  ["f2","🎨","Whether the colours look nice","G"],
+  ["f3","🗣️","Whether it sounds confident","G"],
+  ["f4","✨","Whether the output feels impressive","G"],
+  ["f5","🎯","Whether the output does the exact task asked","F"],
+  ["f6","🔢","How many of 10 answers match a trusted source","F"]
+];
+
+const CASES = {
+  case1:{quote:"A UAE service desk has two AI translations of the same notice. Both read smoothly on screen. Evaluator, how should the team decide which one is better?",
+    clues:[["📥","Same task"],["⚙️","Two outputs"],["📏","One measure"]],q:"How should the team decide fairly?",
+    opts:["Judge each output against a clear criterion, such as accuracy.","Choose the longer translation, assuming more text means effort.","Pick whichever output simply looks the neatest on the screen.","Ask the team which one they personally happen to like the most."]},
+  case2:{quote:"A team reworded a messy prompt into a clear one and the output improved. They did not retrain anything. Evaluator, which part did they actually improve?",
+    clues:[["✍️","New prompt"],["⚙️","Same model"],["📥","Better output"]],q:"Which part did the team improve?",
+    opts:["The model itself, assuming it was retrained on new data.","Nothing, since none of the three stages really moved.","The output directly, by editing the answer text by hand.","The input – a clearer prompt, with the model unchanged."]},
+  case3:{quote:"A student wants to type a classmate's real name and photo into a tool to test it out. Evaluator, what should our responsible-use charter say?",
+    clues:[["🙅","No personal data"],["🧑‍🏫","Adult runs it"],["🔎","Always check"]],q:"What should the charter say here?",
+    opts:["No real names, faces or voices go into any tool you might use.","It is fine to enter a classmate's photo if the output convinces.","Enter any data you like, since the tool keeps it private anyway.","Trust confident outputs and skip checking them for any mistakes."]}
+};
+
+const WS = [
+  ["w1","A finished Arabic–English translation",0],
+  ["w2","Checking the translation for accuracy against the task",1],
+  ["w3","Giving the model a clearer input, then re-testing",2]
+];
+const REASONS = ["It is the result the model produced from the input","It checks the output against the task and criteria","It changes something on purpose, then re-tests","It looks the nicest of the three"];
+const REASON_ORDER = [2,0,3,1];
+
+const QUESTIONS = [
+  ["u1","How do we decide whether a translation is accurate enough for the task?",1],
+  ["u2","Is AI cool?",0],
+  ["u3","Which criteria should we use to judge a recycling sorter?",1],
+  ["u4","Which app has the nicest colours?",0],
+  ["u5","If we change the prompt, how do we know the output really got better?",1],
+  ["u6","Can I put my friend's photo in to test it?",0]
+];
+
+const RULES = ["Always trust an output that sounds confident.","Use any data you like if the tool says it is private.","No real names, faces or voices go into any tool.","Only the fastest student gets to use the tool."];
+const RULE_WHY = ["It protects people's privacy, because we cannot control what a tool keeps or shares.","It makes the lesson go faster.","Confident outputs are always right.","The tool will be more impressive."];
+
+const EX_EX = ["The sorted list the recycling sorter returns","Checking 20 answers against a trusted answer key","Adding a step that flags unsure answers for a person to check"];
+const EX_WHY = ["it is the result the system produced","it measures the output against a clear criterion","it changes the system on purpose so future outputs get better","it looks impressive"];
+
+const CH_CRIT = [
+  ["c1","How often the free spaces it predicts really are free",1],
+  ["c2","The colour of the app icon",0],
+  ["c3","Whether it works as well in every neighbourhood",1],
+  ["c4","How confident its messages sound",0]
+];
+const CH_FIX = ["Make the map colours brighter.","Keep asking until it gives a nicer answer.","Add example data from busy evening hours, retrain, then re-test against the same criteria.","Tell drivers to trust it more."];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Part 1",title:"Match each word to its meaning",sub:"Words to know",ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"The output is what the system gives back. Criteria are the clear measures we agree on. To evaluate is to judge against the criteria. To improve is to change the input or process on purpose. Responsible use means safe, fair use with no personal data and always checking."},
+ {id:"evalq",mount:"a-evalq",section:"Part 1",title:"Which are good evaluation questions?",sub:"Objective 1 · ask sharp questions about outputs",ico:"🔎",
+  fields:EVALQ.map(([k,,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Good evaluation questions judge how WELL the output does the task: does it do the task, is it fair to every group, and is it accurate against a trusted source? Speed, neat colours and personal taste do not tell you whether an output is good."},
+ {id:"case1",mount:"a-case1",section:"Part 1",title:"The Two Translations",sub:"AI Evaluators · Case 1",ico:"🕵️",cls:"case",
+  fields:[{k:"case1",radio:1,ok:v=>eq(v,0)}],
+  explain:"Both outputs look smooth, so looks cannot decide it. Judge each one against a clear criterion, such as accuracy, agreed before you judge."},
+ {id:"sort",mount:"a-sort",section:"Part 2",title:"Output, judge, or improve?",sub:"Objective 2 · sort the three moves",ico:"🗂️",
+  fields:SORT.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Outputs are results the tool produced (a translated notice, the ‘recyclable’ label). Ways to judge measure an output (counting correct answers, comparing to a trusted source). Ways to improve change something on purpose (a check step, a clearer prompt, better training examples)."},
+ {id:"which",mount:"a-which",section:"Part 2",title:"Which part did it change?",sub:"Objective 2 · be precise about what you improve",ico:"🎯",
+  fields:WHICH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A clearer prompt or cleaner example data improves the input. Adding or reordering steps improves the workflow. Only changing the training examples and training again changes the model itself."},
+ {id:"case2",mount:"a-case2",section:"Part 2",title:"The Clearer Prompt",sub:"AI Evaluators · Case 2",ico:"🔬",cls:"case",
+  fields:[{k:"case2",radio:1,ok:v=>eq(v,3)}],
+  explain:"Nothing was retrained, so the model did not change. Rewording the prompt improved the input – and the better input gave a better output."},
+ {id:"fair",mount:"a-fair",section:"Part 3",title:"Fair measure, or gut feeling?",sub:"Objective 3 · agree criteria we can measure",ico:"📋",
+  fields:FAIR.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Fair measures can be checked and repeated: whether it works for different groups, whether it does the exact task, and how many answers match a trusted source. Nice colours, sounding confident and feeling impressive are gut feelings."},
+ {id:"case3",mount:"a-case3",section:"Part 3",title:"The Name in the Box",sub:"AI Evaluators · Case 3",ico:"⚖️",cls:"case",
+  fields:[{k:"case3",radio:1,ok:v=>eq(v,0)}],
+  explain:"Our charter: no real names, faces or voices go into any tool. An adult runs the tool, and every output is still checked."},
+ {id:"ws",mount:"a-ws",section:"Worksheet",title:"Sort it: output, judge or improve",sub:"Worksheet · choose the column and a reason",ico:"🗺️",cls:"ws",
+  fields:WS.flatMap(([k,,c])=>[{k:k+"a",ok:v=>eq(v,c)},{k:k+"b",ok:v=>eq(v,c)}]),
+  explain:"The finished translation is an output – the result produced from the input. Checking it for accuracy against the task is a way to judge. Giving a clearer input and re-testing is a way to improve – you change something on purpose and test again."},
+ {id:"questions",mount:"a-questions",section:"Worksheet",title:"My two questions",sub:"Worksheet · questions worth investigating",ico:"❓",cls:"ws",
+  fields:QUESTIONS.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Good questions ask how outputs are made, judged or improved – and at least one should ask how we decide an output is good. ‘Is AI cool?’ and ‘nicest colours’ can't be tested, and putting a friend's photo into a tool breaks our charter."},
+ {id:"charter",mount:"a-charter",section:"Worksheet",title:"Our safe-use charter",sub:"Worksheet · one rule and why it keeps us safe",ico:"🛡️",cls:"ws",
+  fields:[{k:"h1",ok:v=>eq(v,2)},{k:"h2",ok:v=>eq(v,0)}],
+  explain:"‘No real names, faces or voices go into any tool’ protects people's privacy, because we cannot control what a tool keeps or shares. Trusting confident outputs or entering any data would make us less safe, not more."},
+ {id:"exit",mount:"a-exit",section:"Exit ticket",title:"Exit ticket",sub:"Name one example, sort it and say why",ico:"🎟️",
+  fields:[{k:"x0",ok:v=>+v>=0&&+v<=2},{k:"x1",ok:(v,A)=>A.x0!==undefined&&A.x0!==""&&eq(v,A.x0)},{k:"x2",ok:(v,A)=>A.x0!==undefined&&A.x0!==""&&eq(v,A.x0)}],
+  explain:"The sorter's list is an output – the result the system produced. Checking 20 answers against a key is a way to judge – it measures the output against a clear criterion. Adding a flagging step is a way to improve – it changes the system on purpose."},
+ {id:"chal",mount:"a-chal",section:"Challenge",title:"Challenge ⭐ A real UAE situation",sub:"Stretch · predict what a strong solution needs",ico:"⭐",
+  fields:[...CH_CRIT.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),{k:"cfix",radio:1,ok:v=>eq(v,2)}],
+  explain:"A smart-parking predictor should be judged on accuracy (are the predicted spaces really free?) and fairness (does it work in every neighbourhood?). A real improvement changes something on purpose – such as adding evening-rush data and retraining – then re-tests against the same criteria."}
+];
+
+/* ---------- state ---------- */
+const KEY="g8-howwell-mw1l1-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- static blocks ---------- */
+$("#flips").innerHTML=WORDS.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${i}" aria-pressed="${!!S.flip[i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+
+/* ---------- activity bodies ---------- */
+function caseBody(id){
+  const c=CASES[id];
+  return `<div class="quote">“${esc(c.quote)}”</div><div class="clues" aria-hidden="true">${c.clues.map(([e,t])=>`<div class="clue">${e}<span>${esc(t)}</span></div>`).join("")}</div>
+    <p class="q" id="q-${id}">${esc(c.q)}</p>${radios(id,c.opts)}`;
+}
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,e,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${e?e+" ":""}${esc(t)}</span></label>`).join("")+`</div>`;
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "evalq":
+    return boxes(EVALQ,"Tick the THREE questions that judge how WELL an output does the task. Leave the others unticked.");
+  case "case1": case "case2": case "case3":
+    return caseBody(a.id);
+  case "sort":
+    return `<p class="how">Sort each card: is it an output, a way to judge an output, or a way to improve the model?</p>`+
+      SORT.map(([k,e,t])=>`<div class="row" data-item="${k}"><span class="t">${e} ${esc(t)}</span>${seg(k,["Output","Judge","Improve"],null,t)}</div>`).join("");
+  case "which":
+    return `<p class="how">Each change improves one part of the system. Which part did it change – the input, the workflow, or the model itself?</p>`+
+      WHICH.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,PARTS3,null,t)}</div>`).join("");
+  case "fair":
+    return `<p class="how">Sort each idea: is it a criterion we can measure, or just a gut feeling?</p>`+
+      FAIR.map(([k,e,t])=>`<div class="row" data-item="${k}"><span class="t">${e} ${esc(t)}</span>${seg(k,["Fair measure","Gut feeling"],["F","G"],t)}</div>`).join("");
+  case "ws":
+    return `<p class="how">Sort each example card into the correct column and give a reason.</p>`+
+      WS.map(([k,t],i)=>`<div class="scen"><p>${i+1}. ${esc(t)}</p><div class="two">
+        <div data-item="${k}a"><span>Output, way to judge, or way to improve?</span>${sel(k+"a",MOVES,"Choose the column…")}</div>
+        <div data-item="${k}b"><span>Reason</span>${sel(k+"b",REASONS,"Choose a reason…",REASON_ORDER)}</div></div></div>`).join("");
+  case "questions":
+    return boxes(QUESTIONS.map(([k,t])=>[k,"",t]),"Tick every question that is worth investigating in this unit – questions about how AI outputs are made, judged or improved. Leave the others unticked.");
+  case "charter":
+    return `<p class="how">Choose one responsible-use rule for the class, and why it keeps us safe.</p>
+      <div class="pair" data-item="h1"><span class="t">Our rule</span>${sel("h1",RULES,"Choose a rule…")}</div>
+      <div class="pair" data-item="h2"><span class="t">Why it keeps us safe</span>${sel("h2",RULE_WHY,"Choose a reason…",[1,3,0,2])}</div>`;
+  case "exit":
+    return `<p class="how">Name one example, say whether it is an output, a way to judge, or a way to improve a model, and explain why.</p>
+      <p class="sent"><span data-item="x0">${sel("x0",EX_EX,"Choose an example…",[1,2,0])}</span> is <span data-item="x1">${sel("x1",MOVES.map(m=>m.toLowerCase()),"which move?")}</span>, because <span data-item="x2">${sel("x2",EX_WHY,"because…",[3,1,0,2])}</span>.</p>`;
+  case "chal":
+    return `<div class="quote"><b>Real UAE situation:</b> a smart-parking app in Abu Dhabi predicts which parking spaces are free.</div>`+
+      boxes(CH_CRIT.map(([k,t])=>[k,"",t]),"Tick the TWO performance criteria you would judge it against.")+
+      `<p class="q" id="q-cfix">Which ONE change would really improve it?</p>${radios("cfix",CH_FIX)}`;
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 8 Main Course · Week 1 · From ‘It Works’ to ‘How Well’</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
