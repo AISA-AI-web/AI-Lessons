@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rule-Based vs Learning Systems + Lab – Grade 6 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#E8590C; --main2:#F97316; --deep:#9A3412;
+  --ink:#2A1A10; --muted:#6E5847; --paper:#FFF8F1; --card:#FFFFFF;
+  --line:#F0DCC8; --soft:#FFF1E4;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#FDBA74,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#F59F00);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#2A1A10,#5C3317)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#FFD8B5 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FFFBF8;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FFFDFB}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#F59F00)}
+.act-head.ws{background:linear-gradient(120deg,#2A1A10,#6A3A17)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#FFF4EA}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #E5C7AC;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%23E8590C' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #F4B98A;border-radius:12px;padding:10px 14px;background:#FFFBF7;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(42,26,16,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#2A1A10;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 6 Main Course, Term 1</span><span class="pill">Week 1 Core + Week 1 Lab</span></div>
+    <h1>Rule-Based vs Learning Systems + Hands-On Exploration</h1>
+    <p>Some machines are told every single step. Others are shown lots of examples and work out the pattern themselves. This term you become a system detective – can you tell which kind you are looking at? Then, in the Lab, you get your hands on two machines – one that never changes, and one that learns from examples.</p>
+    <p class="meta"><b>Course:</b> Main course &nbsp;·&nbsp; <b>Tool:</b> unplugged system cards</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 6B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core lesson</a>, then move on to the <a href="#lab">Lab: Rule vs Learning – Hands-On Exploration</a>.</div>
+    <div class="box"><small>Next ▶</small>The two features that reveal which kind a system is – where the logic comes from, and how it handles something new.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li>I can ask at least two genuine questions about rule-based and learning systems.</li>
+      <li>I can sort systems into ‘follows fixed rules’ or ‘learns from data’ and give a reason.</li>
+      <li>I can help write our class responsible-use rules for AI tools.</li>
+      <li>Lab: I can run the rule-card machine and the learn-from-examples game, log at least three differences between them, and design a fair test that reveals whether a system follows rules or learns.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 1 Core · Rule-Based vs Learning Systems</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Two kinds of machine</b><small>Fixed rules or learned from data?</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Ask sharp questions</b><small>What a real question sounds like</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Our responsible-use rules</b><small>Judge and agree the class charter</small></a></li>
+      <li><span class="num">4</span><a href="#p4"><b>System detectives mission and worksheet</b><small>Sort, question and charter</small></a></li>
+    </ol>
+    <h3 class="rh">Week 1 Lab · Rule vs Learning – Hands-On Exploration</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Run both stations</b><small>One follows cards, one learns a pattern</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Log the differences</b><small>Record how each one behaves</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Design a fair test</b><small>A test that reveals rules or learning</small></a></li>
+      <li><span class="num">L4</span><a href="#l4"><b>Lab mission and worksheet</b><small>Two stations, one fair test</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Two kinds of machine</h2><p>Fixed rules, or learned from data?</p></div>
+  <div class="part-body">
+    <figure>
+      <svg viewBox="0 0 760 270" role="img" aria-labelledby="f1T">
+        <title id="f1T">Two kinds of system. Left: a person hands a list of steps to a gear machine – rules from a person. Right: a machine is shown labelled example cards – fruit and animal – and learns from examples.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2A1A10"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1A10">
+          <rect x="16" y="16" width="355" height="238" rx="14" fill="#EEF3FC" stroke="#2E5AAC" stroke-width="2"/>
+          <rect x="389" y="16" width="355" height="238" rx="14" fill="#ECF8F0" stroke="#15803D" stroke-width="2"/>
+          <rect x="98" y="28" width="190" height="30" rx="15" fill="#2E5AAC"/><text x="193" y="48" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">⚙️ rules from a person</text>
+          <rect x="466" y="28" width="200" height="30" rx="15" fill="#15803D"/><text x="566" y="48" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">📚 learns from examples</text>
+          <rect x="40" y="78" width="100" height="120" rx="6" fill="#fff" stroke="#2E5AAC"/><text x="90" y="98" font-size="12" font-weight="700" text-anchor="middle">STEPS</text>
+          <g font-size="11"><text x="50" y="120">1. IF red…</text><text x="50" y="140">2. THEN stop</text><text x="50" y="160">3. IF green…</text><text x="50" y="180">4. THEN go</text></g>
+          <path d="M140 138H176" stroke="#2A1A10" stroke-width="2.5" marker-end="url(#ah)"/>
+          <rect x="180" y="90" width="120" height="96" rx="12" fill="#fff" stroke="#2A1A10" stroke-width="1.8"/><text x="240" y="150" font-size="38" text-anchor="middle">⚙️</text>
+          <path d="M300 138H336" stroke="#2A1A10" stroke-width="2.5" marker-end="url(#ah)"/>
+          <rect x="190" y="206" width="100" height="28" rx="6" fill="#fff" stroke="#2A1A10"/><text x="240" y="225" font-size="13" text-anchor="middle">Output</text>
+          <g font-size="26"><text x="410" y="104">🍎</text><text x="446" y="104">🍌</text><text x="482" y="104">🍇</text><text x="410" y="150">🐶</text><text x="446" y="150">🐱</text><text x="482" y="150">🐰</text></g>
+          <rect x="520" y="80" width="62" height="26" rx="4" fill="#fff" stroke="#C92A4B"/><text x="551" y="98" font-size="12" font-weight="700" fill="#C92A4B" text-anchor="middle">FRUIT</text>
+          <rect x="520" y="126" width="62" height="26" rx="4" fill="#fff" stroke="#2E5AAC"/><text x="551" y="144" font-size="12" font-weight="700" fill="#2E5AAC" text-anchor="middle">ANIMAL</text>
+          <path d="M590 118H616" stroke="#2A1A10" stroke-width="2.5" marker-end="url(#ah)"/>
+          <rect x="620" y="76" width="110" height="96" rx="12" fill="#fff" stroke="#2A1A10" stroke-width="1.8"/><text x="675" y="120" font-size="30" text-anchor="middle">🧠</text><text x="675" y="152" font-size="11.5" text-anchor="middle">builds a model</text>
+          <rect x="625" y="206" width="100" height="28" rx="6" fill="#fff" stroke="#2A1A10"/><text x="675" y="225" font-size="13" text-anchor="middle">Output</text>
+          <path d="M675 172V202" stroke="#2A1A10" stroke-width="2.5" marker-end="url(#ah)"/>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> A rule-based system follows steps a person wrote; a learning system builds a model from examples.</figcaption>
+    </figure>
+    <h3 class="sub">Rules vs learning</h3>
+    <p>A rule-based system is like a recipe: a person writes every step and the machine follows them exactly. A Salik toll gate charges you when your car passes – a person set that rule.</p>
+    <p>A learning system is different. Nobody writes a rule for every case. Instead it is shown many examples – this is data – and it finds the pattern by itself. The pattern it builds is called a model.</p>
+    <div id="a-vocab"></div>
+    <div id="a-sort"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Ask sharp questions</h2><p>What does a real question sound like?</p></div>
+  <div class="part-body">
+    <div class="call violet"><h4>Figure 2 · A good question probes how a system decides</h4><p>Input: an apple – “Is it a fruit?” The system decides with a rule: <b>IF</b> it is a fruit <b>THEN</b> eat it, <b>ELSE</b> don't eat it. Output: “Eat”. Seeing the output is not enough – a good question asks about the rules or patterns behind the output, not just what it looks like.</p></div>
+    <h3 class="sub">Why the kind matters</h3>
+    <p>If you know which kind a system is, you can guess when it might fail. A rule-based system fails when something happens that has no rule. A learning system can fail if it was shown poor or unfair examples.</p>
+    <p>Neither kind is magic, and neither understands like a person – so a system detective asks sharp questions about how it decides.</p>
+    <div id="a-detq"></div>
+    <div id="a-case2"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head"><span class="pill">Core · Part 3 of 3</span><h2>Our responsible-use rules</h2><p>Judge and agree the class charter.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Figure 3 · What makes a strong safe-use rule?</h4><p>A strong safe-use rule is <b>① clear</b> (easy to understand and specific), <b>② keeps data private</b> (protects personal information and shares only what's needed), and <b>③ can be followed</b> (possible with the tools, time and steps we have).</p></div>
+    <h3 class="sub">What makes a good rule</h3>
+    <p>This term we build a class charter for using AI tools responsibly.</p>
+    <p>A strong rule is clear and can actually be followed – like ‘never put personal data into a prompt’ and ‘always check important outputs against a trusted source’. Some suggestions need work, and some are not safe-use rules at all.</p>
+    <div id="a-rules"></div>
+    <div id="a-case3"></div>
+  </div>
+</section>
+
+<!-- CORE MISSION + WORKSHEET -->
+<section class="part" id="p4">
+  <div class="part-head dark"><span class="pill">Core mission · Worksheet</span><h2>System detectives: sort, question, and charter</h2><p>Be a system detective. Sort three real systems, post the questions you most want answered this term, and help agree one class rule for safe AI use.</p></div>
+  <div class="part-body">
+    <h3 class="sub">Let's try it</h3>
+    <ol class="steps">
+      <li>Watch the two clips your teacher shows and spot which machine was told every step.</li>
+      <li>Sort the three cards into ‘fixed rules’ or ‘learns from data’ with your partner.</li>
+      <li>Write one reason under each card – what is your evidence?</li>
+      <li>Post at least two genuine questions on the class question wall.</li>
+      <li>Suggest one responsible-use rule and add it to the class charter.</li>
+      <li>Read one classmate's question and one charter rule aloud.</li>
+    </ol>
+    <p class="note">No clips? Read the two printed scenario cards aloud and sort using only the cards – the mission runs fully unplugged.</p>
+    <div id="a-ws"></div>
+    <div id="a-questions"></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 1 Lab</span><h2>Rule vs Learning – Hands-On Exploration</h2><p>Today you get your hands on two machines – one that never changes, and one that learns from examples. Watch closely: their differences will jump right out.</p></div>
+  <div class="part-body">
+    <div class="box lab-goals"><h2>Lab: I can…</h2><ul>
+      <li>I can run the rule-card machine and the learn-from-examples game and record what each does.</li>
+      <li>I can log at least three differences I observed between them.</li>
+      <li>I can design a fair test that would reveal whether a system follows rules or learns.</li></ul></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Two stations</h2><p>One follows cards, one learns a pattern.</p></div>
+  <div class="part-body">
+    <figure>
+      <svg viewBox="0 0 760 230" role="img" aria-labelledby="fL1T">
+        <title id="fL1T">Station B: labelled training cards (apple and banana are fruit, cat and rabbit are animals) go to the group, who look for a pattern, then sort new unlabelled cards into fruit and animal.</title>
+        <defs><marker id="ahl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2A1A10"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1A10">
+          <rect x="16" y="14" width="210" height="202" rx="12" fill="#EEF3FC" stroke="#2E5AAC" stroke-width="2"/><text x="121" y="38" font-size="15" font-weight="700" fill="#2E5AAC" text-anchor="middle">training cards</text>
+          <g font-size="22"><text x="36" y="76">🍎</text><text x="36" y="116">🍌</text><text x="36" y="160">🐱</text><text x="36" y="200">🐰</text></g>
+          <g font-size="12" font-weight="700"><text x="80" y="72" fill="#C92A4B">FRUIT</text><text x="80" y="112" fill="#C92A4B">FRUIT</text><text x="80" y="156" fill="#2E5AAC">ANIMAL</text><text x="80" y="196" fill="#2E5AAC">ANIMAL</text></g>
+          <path d="M226 115H262" stroke="#2A1A10" stroke-width="2.5" marker-end="url(#ahl)"/>
+          <rect x="266" y="14" width="210" height="202" rx="12" fill="#F4F0FC" stroke="#6B46C1" stroke-width="2"/><text x="371" y="38" font-size="15" font-weight="700" fill="#6B46C1" text-anchor="middle">pattern</text>
+          <text x="371" y="70" font-size="12.5" text-anchor="middle">The group looks for</text><text x="371" y="86" font-size="12.5" text-anchor="middle">patterns in the examples.</text>
+          <text x="371" y="160" font-size="40" text-anchor="middle">🧑‍🤝‍🧑</text>
+          <path d="M476 115H512" stroke="#2A1A10" stroke-width="2.5" marker-end="url(#ahl)"/>
+          <rect x="516" y="14" width="228" height="202" rx="12" fill="#ECF8F0" stroke="#15803D" stroke-width="2"/><text x="630" y="38" font-size="15" font-weight="700" fill="#15803D" text-anchor="middle">new cards to sort</text>
+          <g font-size="22"><text x="560" y="76">🍇</text><text x="596" y="76">🐶</text><text x="632" y="76">🍍</text><text x="668" y="76">🐹</text></g>
+          <path d="M630 88V112" stroke="#2A1A10" stroke-width="2" marker-end="url(#ahl)"/>
+          <rect x="534" y="118" width="94" height="84" rx="8" fill="#fff" stroke="#C92A4B"/><text x="581" y="138" font-size="12" font-weight="700" fill="#C92A4B" text-anchor="middle">FRUIT</text><text x="581" y="178" font-size="22" text-anchor="middle">🍇🍍</text>
+          <rect x="636" y="118" width="94" height="84" rx="8" fill="#fff" stroke="#2E5AAC"/><text x="683" y="138" font-size="12" font-weight="700" fill="#2E5AAC" text-anchor="middle">ANIMAL</text><text x="683" y="178" font-size="22" text-anchor="middle">🐶🐹</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure L1.</b> At Station B the group studies labelled training cards, builds a pattern, then uses it to sort new cards.</figcaption>
+    </figure>
+    <h3 class="sub">Two stations, two behaviours</h3>
+    <p>At Station A the rule cards never change. Feed in the same card twice and you get the same answer twice – that is a rule-based system.</p>
+    <p>At Station B nobody hands you rules. You study example cards, build a pattern, then use it to sort new cards. That is a learning system in miniature.</p>
+    <div id="a-stations"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Log the differences</h2><p>Record how each one behaves.</p></div>
+  <div class="part-body">
+    <div class="call violet"><h4>Figure L2 · A genuine difference is about behaviour</h4><p>Two red cards (an apple and a strawberry) have the same colour but are different fruits. A banana and an orange look different but follow the same rule – both are fruit. A genuine difference is about <b>how the system behaves</b>, not the colour of the cards.</p></div>
+    <h3 class="sub">What counts as a difference</h3>
+    <p>The best detectives don't just watch – they record. Note what each station does with the same input, and how it reacts to something new.</p>
+    <p>A real difference is about how the machine behaves, not how its cards look. Colour and table size are clues to nothing.</p>
+    <div id="a-realdiff"></div>
+    <div id="a-lcase2"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head"><span class="pill">Lab · Part 3 of 3</span><h2>Design a fair test</h2><p>A test that reveals rules or learning.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Figure L3 · A fair test</h4><p>Give both machines the <b>same strange input</b> – same input, same chance – then record exactly what happens at each machine and compare the results fairly.</p></div>
+    <h3 class="sub">Design a fair test</h3>
+    <p>To tell the two apart, give each machine a brand-new, unusual input. A rule-based machine reacts the same as always or simply stops. A learning system tries to match the pattern it built.</p>
+    <p>Before you start, write down exactly what you will try and what each result would mean. That is what makes the test fair.</p>
+    <div id="a-order"></div>
+    <div id="a-lcase3"></div>
+  </div>
+</section>
+
+<section class="part" id="l4">
+  <div class="part-head dark"><span class="pill">Lab mission · Worksheet</span><h2>System detectives: two stations, one fair test</h2><p>Run a fixed rule-card machine and a learn-from-examples card game, log what changes, then design a test that reveals which kind an unknown machine is.</p></div>
+  <div class="part-body">
+    <h3 class="sub">Let's try it</h3>
+    <ol class="steps">
+      <li>Take a role: feeder, recorder or tester.</li>
+      <li>At Station A, feed five inputs through the rule cards, including one strange one, and log each output.</li>
+      <li>Note whether Station A ever changed how it behaved.</li>
+      <li>At Station B, study the example cards and agree a pattern as a group.</li>
+      <li>Sort five new cards using only your pattern; log your guesses and the correct answers.</li>
+      <li>Record at least three differences between the two stations.</li>
+      <li>Design one test that would reveal whether an unknown machine follows rules or learns.</li>
+    </ol>
+    <p class="note">No printed cards? Run both stations by voice – the teacher reads fixed if-then rules for Station A and describes example items aloud for Station B while you classify by ear. Example cards show shapes and objects only – no faces or names.</p>
+    <div id="a-lcompare"></div>
+    <div id="a-ltest"></div>
+    <div id="a-llog"></div>
+    <div id="a-lexit"></div>
+    <div id="a-lchal"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>You launched the unit, investigated two machines by hand, and learned to test which kind you are facing</h2></div>
+  <div class="part-body">
+    <h3 class="sub">Key ideas to remember</h3>
+    <ul class="keys">
+      <li>A rule-based system follows steps a person wrote; it repeats itself (same input, same output) and fails when a case has no rule.</li>
+      <li>A learning system builds a model from examples (data); it can guess wrongly on very different cards, or if the examples were poor or unfair.</li>
+      <li>Neither kind is magic or understands like a person – always check what a machine tells you.</li>
+      <li>A genuine difference is about behaviour, not how the cards look.</li>
+      <li>A fair test gives a brand-new input and decides in advance what each result would mean.</li>
+      <li>A strong responsible-use rule is clear, keeps data private, and can be followed.</li>
+    </ul>
+    <h3 class="sub">Glossary</h3>
+    <dl class="gloss">
+      <dt>Rule-based system</dt><dd>a system that follows fixed steps written by a person.</dd>
+      <dt>Learning system</dt><dd>a system that finds patterns in data instead of following written rules.</dd>
+      <dt>Data</dt><dd>the examples a learning system is shown.</dd>
+      <dt>Model</dt><dd>the pattern a learning system builds from its data.</dd>
+      <dt>Fair test</dt><dd>a planned test where you decide what each result will mean before you start.</dd>
+    </dl>
+    <p><b>What to do next:</b> the two features that reveal which kind a system is – where the logic comes from, and how it handles something new.</p>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 6 · Main Course W1 Core + W1 Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- content: Core ---------- */
+const TERMS = [
+  ["rule-based system","A system that follows fixed steps written by a person."],
+  ["learning system","A system that finds patterns in data instead of following written rules."],
+  ["data","The examples a learning system is shown."],
+  ["model","The pattern a learning system builds from its data."],
+  ["fair test","A planned test where you decide what each result will mean before you start."]
+];
+const TERM_ORDER = [3,0,4,1,2];
+const RL = ["Follows fixed rules","Learns from data"];
+const SORT = [
+  ["s1","🚦","A traffic-light timer","R"],
+  ["s2","🖼️","A photo app that groups your pictures","L"],
+  ["s3","🚧","A Salik toll gate","R"],
+  ["s4","🗣️","A voice assistant that improves with use","L"],
+  ["s5","🧮","A calculator","R"],
+  ["s6","📧","A spam filter trained on many emails","L"]
+];
+const DETQ = [
+  ["q1","🔎","Does it follow fixed rules or learn from data?",1],
+  ["q2","📊","What examples was it shown, and were they fair?",1],
+  ["q3","🎨","What colour is the app's icon?",0],
+  ["q4","💰","How much did the tablet cost?",0],
+  ["q5","🚩","When would this system fail, and why?",1],
+  ["q6","⭐","Is the logo pretty?",0]
+];
+const RULES = [
+  ["r1","🔒","Never put personal data into a prompt","S"],
+  ["r2","🔎","Always check important outputs against a trusted source","S"],
+  ["r3","📰","Be careful online","W"],
+  ["r4","🤝","Ask a teacher if you are unsure","S"],
+  ["r5","📣","Share every AI answer without checking","N"],
+  ["r6","📛","Type your full name and address into prompts","N"]
+];
+const CASES = {
+  case1:{quote:"A new app sorts Rashid's holiday photos into ‘desert’ and ‘beach’ piles – and nobody ever wrote a rule listing every photo. Detective, what kind of system is this?",
+    clues:[["🖼️","Examples"],["🧠","Pattern"],["🏁","Groups"]],q:"What kind of system grouped the photos?",
+    opts:["A calculator doing ordinary sums.","Neither – the photos simply sorted themselves by pure luck.","A rule-based system, because a person typed out a rule for every single photo.","A learning system – it found the pattern from examples."]},
+  case2:{quote:"A machine handles every normal case perfectly, but the moment it meets a strange new input it has never seen, it simply breaks and stops. Which kind of system fits this clue?",
+    clues:[["⚙️","Rules"],["🚧","No rule"],["🛑","Breaks"]],q:"Which kind of system best matches the clue?",
+    opts:["A learning system that happily invents a brand-new rule all by itself on the spot.","A broken screen with no system inside it at all.","A system that fully understands meaning like a person.","A rule-based system with no rule for that case."]},
+  case3:{quote:"A classmate suggests the rule ‘Be good with AI’ for the class charter. As the charter's editor, what is the best advice?",
+    clues:[["✏️","Rule"],["🔎","Clear?"],["🏁","Charter"]],q:"What is the best advice about that rule?",
+    opts:["Replace it with everyone's full names.","Make it clearer and specific.","Delete the whole class charter.","Add it exactly as it is, because a short rule is always the very best kind of rule."]},
+  lcase1:{quote:"At Station A the group feeds the exact same card in twice, and both times the machine gives the very same answer. Nothing about the machine changed. Detective, what does that tell you?",
+    clues:[["🔁","Same input"],["📄","Same output"],["🏁","Rules"]],q:"What does the repeated, identical output tell you?",
+    opts:["It follows fixed rules – same input, same output.","It learned something new between the two tries.","It must be a learning system that quietly rebuilt its whole pattern to match the card the second time around.","It broke and gave a random answer."]},
+  lcase2:{quote:"At Station B the group built a pattern from square and triangle cards. Then a wavy blob card appeared, unlike anything they had studied, and the game sorted it into the wrong pile. Detective, why did it slip?",
+    clues:[["🌱","Pattern"],["🚩","Odd card"],["🔎","Wrong guess"]],q:"Why did the learning game guess wrongly?",
+    opts:["The learning game had secretly memorised every possible card in the world, so it should never make a single mistake.","The new card looked very unlike its example cards.","Learning systems break the instant they see anything.","It ran out of rules to follow."]},
+  lcase3:{quote:"You meet an unknown machine. You feed it a strange, brand-new input twice, and both times it gives the exact same reaction. Detective, what is the best first conclusion?",
+    clues:[["🧩","New input"],["🔁","Same twice"],["⚖️","Verdict"]],q:"What is the best first conclusion?",
+    opts:["It is definitely a learning system, because only a learning system could ever repeat the very same answer twice in a row like that.","It understands the input like a person.","It probably follows fixed rules.","The test proves nothing at all, ever."]}
+};
+const WS = [
+  ["w1","A school bell that rings at 7:45 every morning","R"],
+  ["w2","A music app that suggests songs after learning what you play","L"],
+  ["w3","A vending machine: coin + button → snack","R"]
+];
+const WS_WHY = ["A person set the exact steps, and it does the same thing every time","It found a pattern from lots of examples","It looks modern","It uses electricity"];
+const WS_ORDER = [2,0,3,1];
+const QUESTIONS = [
+  ["u1","How does a learning system find a pattern in its examples?",1],
+  ["u2","Are robots cool?",0],
+  ["u3","What happens when a rule-based system meets a case with no rule?",1],
+  ["u4","Which app has the nicest colours?",0],
+  ["u5","What if a learning system is shown unfair examples?",1],
+  ["u6","Can I type my friend's address into the app to test it?",0]
+];
+const EX_L = ["follows fixed steps a person wrote","builds its own pattern (a model) from examples","always gets everything right","understands things like a person"];
+const EX_R = ["cannot follow any steps","builds a pattern from examples","follows fixed steps a person wrote","learns something new every time"];
+const CHAL = [
+  ["c1","💦 A garden sprinkler that switches on at 6 am every day","R",["Someone set a fixed time, so it follows a rule","It learned from pictures of gardens","It is outside","It uses water"]],
+  ["c2","⌨️ A phone keyboard that suggests your next word after learning how you type","L",["It is a phone","A person wrote a rule for every sentence","It learned a pattern from lots of typing examples","It has letters on it"]]
+];
+const CHAL_KEY = {c1:0,c2:2};
+
+/* ---------- content: Lab ---------- */
+const STATIONS = [
+  ["t1","🔁","Same input always gives the same output","A"],
+  ["t2","📋","Follows fixed if-then cards","A"],
+  ["t3","🛑","Reacts the same way or stops on a strange input","A"],
+  ["t4","🌱","Builds a pattern from example cards","B"],
+  ["t5","🔎","Tries to match a new card to that pattern","B"],
+  ["t6","🚩","Can guess wrongly on a very unusual card","B"]
+];
+const REALDIFF = [
+  ["d1","🎨","Station A's cards were a prettier colour",0],
+  ["d2","🚩","Station A repeated its output; Station B sometimes guessed wrong",1],
+  ["d3","✏️","The recorder happened to use a blue pencil",0],
+  ["d4","🪑","Station B's table was a little bigger",0],
+  ["d5","🔁","Station A never changed; Station B built a new pattern",1],
+  ["d6","🧭","One followed written cards; the other learned from examples",1]
+];
+const STEPS = ["Decide what each result would mean before you start","Compare: a fixed reaction points to rules, pattern-matching points to learning","Give that same input to the machine","Pick a brand-new, unusual input","Watch and record exactly how it responds"];
+const ORDER_KEY = [3,0,2,4,1];
+const LA = ["gave the same output for the same card","changed its pattern whenever it felt like it","learned from the example cards"];
+const LB = ["it never changed at all","it was shown new example cards, or met a card unlike its examples","someone typed a new rule into it"];
+const TEST_IN = ["The same everyday card it has seen many times","A brand-new, unusual card neither machine has seen","No card at all"];
+const TEST_R = ["it reacts the same way as always, or stops","it tries to match the card to its pattern","it goes faster"];
+const TEST_L = ["it stops every time","it tries to match the card to its pattern – and may guess wrongly","it changes colour"];
+const LOG_ROWS = [
+  ["g1","Gave both a wavy blob card neither had seen",0,1],
+  ["g2","Added three more example cards",2,3],
+  ["g3","Asked: where did the decision come from?",4,5]
+];
+const LOG_OPTS = ["Stopped – it had no rule for that card","Guessed a pile using its pattern (and got it wrong)","Did not change at all","Updated its pattern","From if-then cards a person wrote","From a pattern built from examples"];
+const LOG_ORDER = [3,0,5,2,1,4];
+const LEX_IN = ["A card it has sorted many times before","A brand-new, unusual card","A blank piece of paper with nothing on it"];
+const LEX_WHY = ["a rule-based machine would react the same as always or stop, but a learning machine would try to match it to its pattern","it will make the machine faster","every machine gives the same answer to it"];
+const LCH_PAT = ["Yellow things are animals; red things are fruit","Bananas are always fruit","Every card is an animal"];
+const LCH_BAN = ["It sorts the banana as FRUIT","It sorts the banana as ANIMAL","It refuses to sort anything"];
+const LCH_FIX = ["Add a fair mix of examples – yellow fruits and animals of many colours","Remove all the yellow cards forever","Tell the group to guess faster"];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know",ico:"📖",
+  fields:TERMS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"A rule-based system follows fixed steps a person wrote. A learning system finds patterns in data – the examples it is shown – and the pattern it builds is its model. A fair test is planned: you decide what each result will mean before you start."},
+ {id:"sort",mount:"a-sort",section:"Core · Part 1",title:"Sort it: fixed rules or learns from data?",sub:"Objective 2 · classify systems and justify",ico:"🗂️",
+  fields:SORT.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A person wrote every step for the traffic-light timer, the Salik toll gate and the calculator. The photo app, the voice assistant that improves with use, and the spam filter trained on many emails learned a pattern from examples."},
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"The Grouping Machine",sub:"System Detectives · Case 1",ico:"🕵️",cls:"case",
+  fields:[{k:"case1",radio:1,ok:v=>eq(v,3)}],
+  explain:"Nobody wrote a rule for every photo, so the app must have found the pattern from examples – it is a learning system."},
+ {id:"detq",mount:"a-detq",section:"Core · Part 2",title:"Which are genuine detective questions?",sub:"Objective 1 · ask genuine questions",ico:"🧩",
+  fields:DETQ.map(([k,,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Genuine questions probe how a system decides: rules or learning, what examples it saw and whether they were fair, and when it would fail. Icon colour, price and a pretty logo tell you nothing about how it works."},
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"The Brand-New Input",sub:"System Detectives · Case 2",ico:"🔬",cls:"case",
+  fields:[{k:"case2",radio:1,ok:v=>eq(v,3)}],
+  explain:"A rule-based system works perfectly while it has a rule – and breaks or stops when a case has no rule. That matches the clue."},
+ {id:"rules",mount:"a-rules",section:"Core · Part 3",title:"Judge each proposed class rule",sub:"Objective 3 · build responsible-use rules",ico:"🛡️",
+  fields:RULES.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Strong rules are clear and can be followed: never put personal data into a prompt, always check important outputs against a trusted source, ask a teacher if you are unsure. ‘Be careful online’ needs work – it is too vague. Sharing answers without checking and typing your full name and address are not safe-use rules at all."},
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"The Charter Meeting",sub:"System Detectives · Case 3",ico:"🗝️",cls:"case",
+  fields:[{k:"case3",radio:1,ok:v=>eq(v,1)}],
+  explain:"‘Be good with AI’ is too vague to follow. A strong rule is clear and specific – for example, ‘Never put personal data into a prompt’."},
+ {id:"ws",mount:"a-ws",section:"Core worksheet",title:"Sort three systems",sub:"Worksheet · column and reason",ico:"🗺️",cls:"ws",
+  fields:WS.flatMap(([k,,c])=>[{k:k+"a",ok:v=>eq(v,c)},{k:k+"b",ok:v=>eq(v,c==="R"?0:1)}]),
+  explain:"The school bell and the vending machine follow fixed rules – a person set the exact steps, and they do the same thing every time. The music app learns from data – it found a pattern from lots of examples of what you play."},
+ {id:"questions",mount:"a-questions",section:"Core worksheet",title:"My two questions",sub:"Worksheet · questions for the question wall",ico:"❓",cls:"ws",
+  fields:QUESTIONS.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Genuine questions ask how rule-based and learning systems work or fail. ‘Are robots cool?’ and ‘nicest colours’ can't be investigated, and typing a friend's address into an app breaks our charter."},
+ {id:"exit",mount:"a-exit",section:"Core exit ticket",title:"Exit ticket",sub:"Show what you know",ico:"🎟️",
+  fields:[{k:"x1",ok:v=>eq(v,1)},{k:"x2",ok:v=>eq(v,2)}],
+  explain:"A learning system builds its own pattern (a model) from examples, while a rule-based system follows fixed steps a person wrote."},
+ {id:"chal",mount:"a-chal",section:"Core challenge",title:"Challenge ⭐ Classify and justify",sub:"Two mystery system cards",ico:"⭐",
+  fields:CHAL.flatMap(([k,,c])=>[{k:k+"a",ok:v=>eq(v,c)},{k:k+"b",ok:v=>eq(v,CHAL_KEY[k])}]),
+  explain:"The sprinkler follows a fixed time someone set – a rule. The keyboard learned a pattern from lots of typing examples – a learning system. Now invent your own card and swap with a partner!"},
+ {id:"stations",mount:"a-stations",section:"Lab · Part 1",title:"Sort it: Station A or Station B?",sub:"Objective 1 · run and record each station",ico:"🧪",
+  fields:STATIONS.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Station A (rule cards): same input, same output; fixed if-then cards; the same reaction or a stop on a strange input. Station B (learns): builds a pattern from examples, matches new cards to it, and can guess wrongly on a very unusual card."},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"The Repeating Machine",sub:"System Detectives · Lab Case 1",ico:"🕵️",cls:"case",
+  fields:[{k:"lcase1",radio:1,ok:v=>eq(v,0)}],
+  explain:"Same input, same output, and nothing changed – that is exactly how a machine following fixed rules behaves."},
+ {id:"realdiff",mount:"a-realdiff",section:"Lab · Part 2",title:"Which are real differences you could log?",sub:"Objective 2 · log genuine differences",ico:"📝",
+  fields:REALDIFF.map(([k,,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Real differences describe behaviour: A repeated itself while B sometimes guessed wrong; A never changed while B built a pattern; one followed written cards and the other learned from examples. Card colour, pencil colour and table size are clues to nothing."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"The Odd Card Out",sub:"System Detectives · Lab Case 2",ico:"🔬",cls:"case",
+  fields:[{k:"lcase2",radio:1,ok:v=>eq(v,1)}],
+  explain:"A learning system matches new cards to the pattern it built. A wavy blob looked nothing like the squares and triangles it learned from, so its best guess was wrong."},
+ {id:"order",mount:"a-order",section:"Lab · Part 3",title:"Build a fair test for a mystery machine",sub:"Objective 3 · design a fair test",ico:"🧭",
+  fields:ORDER_KEY.map((c,i)=>({k:"o"+i,ok:v=>eq(v,c)})),
+  explain:"Pick a brand-new, unusual input; decide what each result would mean before you start; give that input to the machine; watch and record exactly how it responds; then compare – a fixed reaction points to rules, pattern-matching points to learning."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"The Mystery Machine",sub:"System Detectives · Lab Case 3",ico:"🧩",cls:"case",
+  fields:[{k:"lcase3",radio:1,ok:v=>eq(v,2)}],
+  explain:"The same reaction to a brand-new input, twice, is the fingerprint of fixed rules – so ‘it probably follows fixed rules’ is the best first conclusion."},
+ {id:"lcompare",mount:"a-lcompare",section:"Lab worksheet",title:"Station comparison",sub:"Worksheet · what each station did",ico:"⚖️",cls:"ws",
+  fields:[{k:"m1",ok:v=>eq(v,0)},{k:"m2",ok:v=>eq(v,1)}],
+  explain:"Station A always gave the same output for the same card. Station B changed when it was shown new example cards, or when it met a card unlike its examples."},
+ {id:"ltest",mount:"a-ltest",section:"Lab worksheet",title:"Design a test",sub:"Worksheet · the test and what each result means",ico:"🧪",cls:"ws",
+  fields:[{k:"n1",ok:v=>eq(v,1)},{k:"n2",ok:v=>eq(v,0)},{k:"n3",ok:v=>eq(v,1)}],
+  explain:"Give the machine a brand-new, unusual card. If it reacts the same as always or stops, it follows rules. If it tries to match the card to its pattern – and may guess wrongly – it learns."},
+ {id:"llog",mount:"a-llog",section:"Lab worksheet",title:"Difference log",sub:"Worksheet · what each station did",ico:"📓",cls:"ws",
+  fields:LOG_ROWS.flatMap(([k,,a,b])=>[{k:k+"a",ok:v=>eq(v,a)},{k:k+"b",ok:v=>eq(v,b)}]),
+  explain:"The blob card: Station A stopped (no rule), Station B guessed using its pattern. More example cards: Station A did not change, Station B updated its pattern. Where decisions come from: if-then cards a person wrote, versus a pattern built from examples."},
+ {id:"lexit",mount:"a-lexit",section:"Lab exit ticket",title:"Lab exit ticket",sub:"One input for a mystery machine – and why",ico:"🎟️",
+  fields:[{k:"y1",ok:v=>eq(v,1)},{k:"y2",ok:v=>eq(v,0)}],
+  explain:"A brand-new, unusual card reveals the difference: a rule-based machine reacts the same as always or stops, while a learning machine tries to match it to its pattern."},
+ {id:"lchal",mount:"a-lchal",section:"Lab challenge",title:"Challenge ⭐ Unfair example cards",sub:"Stretch · how unfair examples change the pattern",ico:"⭐",
+  fields:[{k:"z1",ok:v=>eq(v,0)},{k:"z2",ok:v=>eq(v,1)},{k:"z3",ok:v=>eq(v,0)}],
+  explain:"The unfair examples taught the wrong pattern: yellow means animal, red means fruit. So a yellow banana is sorted as ANIMAL. The fix is a fair mix of examples – yellow fruits and animals of many colours – so colour stops being the clue."}
+];
+
+/* ---------- state ---------- */
+const KEY="g6-mw1-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- activity bodies ---------- */
+function caseBody(id){
+  const c=CASES[id];
+  return `<div class="quote">“${esc(c.quote)}”</div><div class="clues" aria-hidden="true">${c.clues.map(([e,t])=>`<div class="clue">${e}<span>${esc(t)}</span></div>`).join("")}</div>
+    <p class="q" id="q-${id}">${esc(c.q)}</p>${radios(id,c.opts)}`;
+}
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,e,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${e?e+" ":""}${esc(t)}</span></label>`).join("")+`</div>`;
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word.</p>`+
+      TERMS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,TERMS.map(w=>w[1]),"Choose the meaning…",TERM_ORDER)}</div>`).join("");
+  case "sort":
+    return `<p class="how">Ask: did a person write every step, or did the system learn a pattern from examples?</p>`+
+      SORT.map(([k,e,t])=>`<div class="row" data-item="${k}"><span class="t">${e} ${esc(t)}</span>${seg(k,RL,["R","L"],t)}</div>`).join("");
+  case "case1": case "case2": case "case3": case "lcase1": case "lcase2": case "lcase3":
+    return caseBody(a.id);
+  case "detq":
+    return boxes(DETQ,"Tick the THREE questions that really probe how a system works. Leave the others unticked.");
+  case "rules":
+    return `<p class="how">Is each proposed class rule strong, does it need work, or is it not a safe rule at all?</p>`+
+      RULES.map(([k,e,t])=>`<div class="row" data-item="${k}"><span class="t">${e} ${esc(t)}</span>${seg(k,["Strong rule","Needs work","Not a safe rule"],["S","W","N"],t)}</div>`).join("");
+  case "ws":
+    return `<p class="how">Write each system in the correct column and give one reason.</p>`+
+      WS.map(([k,t],i)=>`<div class="scen"><p>${i+1}. ${esc(t)}</p><div class="two">
+        <div class="cell" data-item="${k}a"><span>Fixed rules or learns from data?</span>${seg(k+"a",RL,["R","L"],t)}</div>
+        <div data-item="${k}b"><span>My reason</span>${sel(k+"b",WS_WHY,"Choose a reason…",WS_ORDER)}</div></div></div>`).join("");
+  case "questions":
+    return boxes(QUESTIONS.map(([k,t])=>[k,"",t]),"Tick every genuine question about rule-based and learning systems for the question wall. Leave the others unticked.");
+  case "exit":
+    return `<p class="how">In one sentence, how is a learning system different from a rule-based system?</p>
+      <p class="sent">A learning system <span data-item="x1">${sel("x1",EX_L,"choose…",[2,0,3,1])}</span>, while a rule-based system <span data-item="x2">${sel("x2",EX_R,"choose…",[1,3,0,2])}</span>.</p>`;
+  case "chal":
+    return `<p class="how">Classify each mystery system card and justify it. Then invent your own card and swap with a partner!</p>`+
+      CHAL.map(([k,t,,o])=>`<div class="scen"><p>${esc(t)}</p><div class="two">
+        <div class="cell" data-item="${k}a"><span>Fixed rules or learns from data?</span>${seg(k+"a",RL,["R","L"],t)}</div>
+        <div data-item="${k}b"><span>Because…</span>${sel(k+"b",o,"Choose…")}</div></div></div>`).join("");
+  case "stations":
+    return `<p class="how">Ask: did fixed cards decide it, or did a pattern built from examples?</p>`+
+      STATIONS.map(([k,e,t])=>`<div class="row" data-item="${k}"><span class="t">${e} ${esc(t)}</span>${seg(k,["Station A – rule cards","Station B – learns"],["A","B"],t)}</div>`).join("");
+  case "realdiff":
+    return boxes(REALDIFF,"Tick the THREE differences that describe how the stations behaved. Leave the others unticked.");
+  case "order":
+    return `<p class="how">Put the steps in order to build a test that reveals rules or learning, from first to last.</p>`+
+      ORDER_KEY.map((_,i)=>`<div class="pair" data-item="o${i}"><span class="t">Step ${i+1}</span>${sel("o"+i,STEPS,"Choose the step…")}</div>`).join("");
+  case "lcompare":
+    return `<p class="how">Log what each station did for the same kind of input.</p>
+      <p class="sent">Station A always <span data-item="m1">${sel("m1",LA,"choose…",[1,0,2])}</span>. Station B changed when <span data-item="m2">${sel("m2",LB,"choose…",[2,0,1])}</span>.</p>`;
+  case "ltest":
+    return `<p class="how">Design a test that would tell whether a system follows rules or learns, and say what each result would mean.</p>
+      <div class="pair" data-item="n1"><span class="t">The input I would give it</span>${sel("n1",TEST_IN,"Choose…")}</div>
+      <div class="pair" data-item="n2"><span class="t">It follows rules if…</span>${sel("n2",TEST_R,"Choose…",[1,2,0])}</div>
+      <div class="pair" data-item="n3"><span class="t">It learns if…</span>${sel("n3",TEST_L,"Choose…",[0,2,1])}</div>`;
+  case "llog":
+    return `<p class="how">Record what each station did for each thing you tried.</p>`+
+      LOG_ROWS.map(([k,t])=>`<div class="scen"><p>What we tried: ${esc(t)}</p><div class="two">
+        <div data-item="${k}a"><span>Station A did</span>${sel(k+"a",LOG_OPTS,"Choose…",LOG_ORDER)}</div>
+        <div data-item="${k}b"><span>Station B did</span>${sel(k+"b",LOG_OPTS,"Choose…",LOG_ORDER)}</div></div></div>`).join("");
+  case "lexit":
+    return `<p class="sent">To find out if a mystery machine learns, I would give it <span data-item="y1">${sel("y1",LEX_IN,"which input?")}</span>, because <span data-item="y2">${sel("y2",LEX_WHY,"because…",[1,0,2])}</span>.</p>`;
+  case "lchal":
+    return `<div class="quote"><b>An unfair set of example cards</b> is added to Station B: 8 red apples and strawberries labelled FRUIT, and a yellow chick, a yellow duck and a yellow canary labelled ANIMAL. Then a yellow banana card appears.</div>
+      <div class="pair" data-item="z1"><span class="t">The pattern the group learned</span>${sel("z1",LCH_PAT,"Choose…",[1,0,2])}</div>
+      <div class="pair" data-item="z2"><span class="t">What happens to the banana?</span>${sel("z2",LCH_BAN,"Choose…")}</div>
+      <div class="pair" data-item="z3"><span class="t">How to make the examples fair</span>${sel("z3",LCH_FIX,"Choose…",[2,0,1])}</div>`;
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 6 Main Course · Week 1 Core + Lab · Rule-Based vs Learning Systems + Hands-On Exploration</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
