@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>From It Works to How Well – Grade 8 Main Course Lesson 1</title>
+<title>From It Works to How Well + Two Outputs, One Verdict – Grade 8 Main Course</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -282,6 +282,17 @@ ol.pipe li.out{background:var(--soft)}
 .box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
 
 @media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media print{
   .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
@@ -292,6 +303,9 @@ ol.pipe li.out{background:var(--soft)}
   .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
   .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
   body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
 }
 </style>
 </head>
@@ -309,9 +323,9 @@ ol.pipe li.out{background:var(--soft)}
 
 <header class="hero">
   <div class="wrap">
-    <div class="pills"><span class="pill">Grade 8 Main Course, Term 1</span><span class="pill">Week 1 Core</span><span class="pill">About 45 minutes</span></div>
-    <h1>From ‘It Works’ to ‘How Well’</h1>
-    <p>You already know an AI turns an input into an output. This unit asks the harder question: is that output any good, and how could we make the model better?</p>
+    <div class="pills"><span class="pill">Grade 8 Main Course, Term 1</span><span class="pill">Week 1 Core + Week 1 Lab</span></div>
+    <h1>From ‘It Works’ to ‘How Well’ + Two Outputs, One Verdict</h1>
+    <p>You already know an AI turns an input into an output. This unit asks the harder question: is that output any good, and how could we make the model better? Then, in the Lab, you become an investigator – comparing real outputs and using evidence to say which one is better.</p>
     <p class="meta"><b>Course:</b> Main course &nbsp;·&nbsp; <b>Tool:</b> unplugged simulated-AI cards</p>
     <div class="who">
       <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
@@ -325,7 +339,7 @@ ol.pipe li.out{background:var(--soft)}
 <div class="intro">
   <div class="pn">
     <div class="box"><small>◀ Previously</small>Welcome to Term 1 – you know AI turns input into output; now we ask the bigger question: is it any good?</div>
-    <div class="box"><small>Next ▶</small>Next in the Lab: put two real outputs side by side and use evidence to name the winner.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core lesson</a>, then move on to the <a href="#lab">Lab: Two Outputs, One Verdict</a>. Next week you open up the input-model-output pipeline.</div>
   </div>
   <div class="box">
     <h2>What you will learn</h2>
@@ -333,23 +347,32 @@ ol.pipe li.out{background:var(--soft)}
       <li>I can ask at least two good questions about how AI turns an input into an output and how we judge that output.</li>
       <li>I can sort examples that relate to evaluating and improving AI models, and say why.</li>
       <li>I can help write our unit success criteria and our safe, responsible-use rules for AI tools.</li>
+      <li>Lab: I can compare two AI outputs for the same task, judge each against a simple criterion like accuracy or usefulness, and use what I observed to say what made one output better.</li>
     </ul>
     <p class="note">Don't worry if ‘model’ and ‘workflow’ still feel new – we unpack both fully in the very next lesson.</p>
   </div>
   <div class="box">
     <h2>Lesson route</h2>
+    <h3 class="rh">Week 1 Core · From ‘It Works’ to ‘How Well’</h3>
     <ol class="route">
       <li><span class="num">1</span><a href="#p1"><b>Ask the harder question</b><small>Not ‘did it work’ but ‘how well’</small></a></li>
       <li><span class="num">2</span><a href="#p2"><b>Sort output, judge, improve</b><small>Tell the three moves apart</small></a></li>
       <li><span class="num">3</span><a href="#p3"><b>Agree our criteria and rules</b><small>Fair measures and safe use</small></a></li>
       <li><span class="num">4</span><a href="#p4"><b>AI Evaluators mission and worksheet</b><small>Sort the cards, ask questions, write a rule</small></a></li>
     </ol>
+    <h3 class="rh">Week 1 Lab · Two Outputs, One Verdict</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Pick a criterion</b><small>Choose one clear measure to judge by</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Compare and judge</b><small>Meets it, partly, or fails?</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Prove your verdict</b><small>Log it, then check it holds</small></a></li>
+      <li><span class="num">L4</span><a href="#l4"><b>Lab mission and worksheet</b><small>Log three output pairs, build measurable checks</small></a></li>
+    </ol>
   </div>
 </div>
 
 <!-- PART 1 -->
 <section class="part" id="p1">
-  <div class="part-head"><span class="pill">Part 1 of 3</span><h2>How well does it work?</h2><p>What turns a gut feeling into a decision?</p></div>
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>How well does it work?</h2><p>What turns a gut feeling into a decision?</p></div>
   <div class="part-body">
     <h3 class="sub">Words to know</h3>
     <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
@@ -397,7 +420,7 @@ ol.pipe li.out{background:var(--soft)}
 
 <!-- PART 2 -->
 <section class="part" id="p2">
-  <div class="part-head"><span class="pill">Part 2 of 3</span><h2>Output, judge, improve</h2><p>Which part are you actually changing?</p></div>
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Output, judge, improve</h2><p>Which part are you actually changing?</p></div>
   <div class="part-body">
     <figure>
       <svg viewBox="0 0 760 200" role="img" aria-labelledby="fig2T">
@@ -442,7 +465,7 @@ ol.pipe li.out{background:var(--soft)}
 
 <!-- PART 3 -->
 <section class="part" id="p3">
-  <div class="part-head"><span class="pill">Part 3 of 3</span><h2>Our criteria and rules</h2><p>What makes a criterion fair, and use safe?</p></div>
+  <div class="part-head"><span class="pill">Core · Part 3 of 3</span><h2>Our criteria and rules</h2><p>What makes a criterion fair, and use safe?</p></div>
   <div class="part-body">
     <h3 class="sub">Measure it, and stay safe</h3>
     <p>A fair success criterion is something you can actually measure against the task – like ‘how many of 10 answers are correct’ – not just ‘it looks nicer’. Agreeing these before you judge keeps everyone honest.</p>
@@ -476,9 +499,120 @@ ol.pipe li.out{background:var(--soft)}
   </div>
 </section>
 
+<!-- ===================== LAB: TWO OUTPUTS, ONE VERDICT ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 1 Lab</span><h2>Two Outputs, One Verdict</h2><p>In the Core period you learned AI outputs can be judged against clear criteria. Now you become an investigator – comparing real outputs and using evidence to say which one is better.</p></div>
+  <div class="part-body">
+    <div class="box lab-goals"><h2>Lab: I can…</h2><ul>
+      <li>I can compare two AI outputs for the same task and write down how they differ.</li>
+      <li>I can judge each output against a simple criterion like accuracy or usefulness.</li>
+      <li>I can use what I observed to say what made one output better.</li></ul></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <h3 class="sub">Same task, different outputs</h3>
+    <p>Two AI outputs can be made for the same task and still come out different. Maybe one input was clearer, or the process handled it differently. On its own, ‘I like this one better’ is not enough. So you pick a criterion – say accuracy or usefulness – and judge each output against it. When you compare them side by side and trace where the difference began, you can say which output wins and prove it. That is detective work: you are finding evidence for a judgement, not guessing.</p>
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="figL1T">
+        <title id="figL1T">A clear input and a vague input go through the same process. Judged against accuracy, the clear input gives an accurate output and the vague input gives a messy, inaccurate one. The only difference is a small change at the input.</title>
+        <defs><marker id="ahL" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#13261B"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <rect x="260" y="8" width="240" height="36" rx="10" fill="#15803D"/><text x="380" y="32" font-size="16" font-weight="700" fill="#fff" text-anchor="middle">judge against: accuracy</text>
+          <path d="M260 26H130V62M500 26H630V62" fill="none" stroke="#15803D" stroke-width="2.5" marker-end="url(#ahL)"/>
+          <rect x="40" y="66" width="180" height="84" rx="10" fill="#EEF3FC" stroke="#2E5AAC" stroke-width="2"/><text x="130" y="92" font-size="15" font-weight="700" fill="#2E5AAC" text-anchor="middle">clear input</text>
+          <path d="M62 108H198M62 120H198M62 132H170" stroke="#2E5AAC" stroke-width="3"/>
+          <rect x="40" y="196" width="180" height="84" rx="10" fill="#F4F0FC" stroke="#6B46C1" stroke-width="2"/><text x="130" y="222" font-size="15" font-weight="700" fill="#6B46C1" text-anchor="middle">vague input</text>
+          <path d="M62 240q10-6 20 0t20 0 20 0 20 0 20 0 20 0M62 256q10-6 20 0t20 0 20 0 20 0" fill="none" stroke="#6B46C1" stroke-width="3"/>
+          <path d="M130 150V196" stroke="#E08A00" stroke-width="2" stroke-dasharray="4 4"/><rect x="72" y="160" width="116" height="26" rx="8" fill="#FFF3E6" stroke="#E08A00"/><text x="130" y="178" font-size="12.5" fill="#B45309" text-anchor="middle">small change here</text>
+          <g fill="none" stroke="#2E5AAC" stroke-width="7" stroke-dasharray="8 5"><circle cx="380" cy="108" r="26"/><circle cx="380" cy="238" r="26"/></g>
+          <g stroke="#13261B" stroke-width="2.5" marker-end="url(#ahL)"><path d="M220 108H340"/><path d="M420 108H536"/><path d="M220 238H340"/><path d="M420 238H536"/></g>
+          <rect x="540" y="66" width="180" height="84" rx="10" fill="#ECF8F0" stroke="#15803D" stroke-width="2"/><path d="M562 92H660M562 106H660M562 120H640" stroke="#15803D" stroke-width="3"/><circle cx="696" cy="128" r="14" fill="#15803D"/><path d="M689 128l5 5 9-10" stroke="#fff" stroke-width="3" fill="none"/>
+          <rect x="540" y="196" width="180" height="84" rx="10" fill="#FDF2F4" stroke="#C92A4B" stroke-width="2"/><path d="M562 222l30 10M600 216l40 20M566 250q20-14 40 0t40 0" fill="none" stroke="#C92A4B" stroke-width="3"/><circle cx="696" cy="258" r="14" fill="#C92A4B"/><path d="M690 252l12 12M702 252l-12 12" stroke="#fff" stroke-width="3"/>
+        </g>
+      </svg>
+      <figcaption><b>Figure L1.</b> Same process, one small change at the input – judged against accuracy, one output wins and one fails.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Engineers in the UAE constantly compare AI outputs against criteria before they trust them, whether tuning a smart-traffic system in Abu Dhabi or checking an Arabic–English translation for accuracy; learning to judge and log differences is the first step of that job.</p></div>
+    <div class="call amber"><h4>Tool for this week: evaluation-criteria card deck (unplugged)</h4><p>Fully unplugged – no devices or data. Your teacher hands out a deck of six criteria cards and curated output-pair packs. In pairs you rank the criteria, write measurable checks, then judge and log each output pair.</p></div>
+    <table class="t deck"><thead><tr><th>Criterion</th><th>How to check it</th></tr></thead><tbody>
+      <tr><td>🎯 <b>Accuracy</b></td><td>Compare the output with the correct answers.</td></tr>
+      <tr><td>🧩 <b>Usefulness</b></td><td>Does it help solve the task or answer the question?</td></tr>
+      <tr><td>💬 <b>Clarity</b></td><td>Is the output easy to understand and well organised?</td></tr>
+      <tr><td>⚖️ <b>Fairness</b></td><td>Does it treat all groups fairly, with no unfair bias?</td></tr>
+      <tr><td>🛡️ <b>Reliability</b></td><td>Does it give consistent results across repeats and similar cases?</td></tr>
+      <tr><td>⏱️ <b>Speed</b></td><td>How fast does it respond?</td></tr>
+    </tbody></table>
+    <p class="note">The six evaluation-criteria cards. We measure it, we compare it, we improve it.</p>
+    <div class="call violet"><h4>Think about it</h4><p>If you changed only the input and kept everything else the same, could you make the weaker output meet the criterion? How would you test it fairly?</p></div>
+    <div class="call"><h4>Cross-curricular link · Mathematics</h4><p>Turn the accuracy criterion into maths: score each output as a fraction like 7 out of 10, convert it to a percentage, and compare the two outputs numerically so you justify which one wins with data rather than opinion.</p></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Pick a criterion</h2><p>How do you turn a measure into a check?</p></div>
+  <div class="part-body">
+    <h3 class="sub">A measure and its check</h3>
+    <p>Two AI outputs can be made for the same task and still come out different. On its own, ‘I like this one better’ is not enough. So you pick a criterion – one clear measure like accuracy or usefulness – and judge each output against it.</p>
+    <p>A criterion is only useful if you can check it. For every measure you name, agree a plain way to test it – for example, ‘count how many of 10 answers are correct’. Then the verdict rests on evidence, not on a feeling.</p>
+    <div id="a-lmatch"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Judge each output</h2><p>Meets it, partly, or fails?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Weigh it against the measure</h3>
+    <p>When you compare two outputs side by side and judge each against the same criterion, you can say which one wins and prove it. That is detective work: you are finding evidence for a judgement, not guessing.</p>
+    <p>It helps to be more precise than ‘good’ or ‘bad’. Against a named criterion, an output can meet it fully, meet it only partly, or fail it. Naming which one keeps your log honest and your verdict defensible.</p>
+    <div id="a-ljudge"></div>
+    <div id="a-lcase2"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head"><span class="pill">Lab · Part 3 of 3</span><h2>Log it, then trust it</h2><p>Where did the difference begin?</p></div>
+  <div class="part-body">
+    <h3 class="sub">The investigator's routine</h3>
+    <p>A good investigator writes things down. In your log you note each difference, the stage it came from – input, process or output – and how it affects the criterion.</p>
+    <p>Then, before you trust a conclusion, you check it against the task: would it still be true for a new example? Remember the charter – outputs are made by the teacher, with no personal data, and a confident-looking output is still checked against a trusted source before you rely on it.</p>
+    <table class="t record"><caption><b>Figure L2.</b> A good investigation record: each difference, the stage it came from, the criterion it affects, and whether the verdict still holds.</caption>
+      <thead><tr><th>Difference</th><th>Stage it came from</th><th>Criterion affected</th><th>Verdict still holds?</th></tr></thead><tbody>
+      <tr><td>Missing key detail</td><td>Process: step 2</td><td>Complete</td><td>✅ Yes</td></tr>
+      <tr><td>Different number</td><td>Process: step 3</td><td>Accurate</td><td>❌ No</td></tr>
+      <tr><td>Different example</td><td>Input: data source</td><td>Relevant</td><td>✅ Yes</td></tr>
+      <tr><td>Different wording</td><td>Output: final text</td><td>Fair</td><td>✅ Yes</td></tr>
+    </tbody></table>
+    <div id="a-lorder"></div>
+    <div id="a-lcase3"></div>
+  </div>
+</section>
+
+<section class="part" id="l4">
+  <div class="part-head dark"><span class="pill">Lab mission · Worksheet</span><h2>AI Evaluators: rank the criteria cards</h2><p>Work through curated output-pair packs, judging each output against a named criterion and logging the differences – then rank the criteria deck you will reuse all term.</p></div>
+  <div class="part-body">
+    <h3 class="sub">Let's try it</h3>
+    <ol class="steps">
+      <li>Read the first output pair and the named criterion, and predict which output wins.</li>
+      <li>Judge each output against the criterion.</li>
+      <li>Log at least two differences and mark the stage each came from.</li>
+      <li>Rank the six criteria for a chosen everyday AI tool from most to least important.</li>
+      <li>Write one measurable check for each of your top two criteria.</li>
+      <li>Share your ranking with another pair and defend the order.</li>
+    </ol>
+    <div id="pairs"></div>
+    <div id="a-llog"></div>
+    <div id="a-lconc"></div>
+    <div id="a-lchecks"></div>
+    <div id="a-lexit"></div>
+    <div id="a-lchal"></div>
+  </div>
+</section>
+
 <!-- SUMMARY -->
 <section class="part" id="p5">
-  <div class="part-head"><span class="pill">Lesson summary</span><h2>You launched the unit: from ‘it works’ to ‘how well does it work’</h2></div>
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>You launched the unit and used evidence to reach a verdict</h2></div>
   <div class="part-body">
     <h3 class="sub">Key ideas to remember</h3>
     <ul class="keys">
@@ -486,15 +620,19 @@ ol.pipe li.out{background:var(--soft)}
       <li>Making an output, judging it, and improving the system behind it are three different moves.</li>
       <li>You can improve the input, the workflow, or the model – only retraining changes the model itself.</li>
       <li>A fair criterion can be measured and repeated; responsible use keeps every test safe.</li>
+      <li>A criterion is only useful when you pair it with a clear way to check it – and an output can meet it, partly meet it, or fail it.</li>
+      <li>Log each difference and the stage – input, process or output – it came from, then test whether your conclusion still holds on a new example.</li>
     </ul>
     <h3 class="sub">Glossary</h3>
     <dl class="gloss">
       <dt>Criteria</dt><dd>the clear measures we agree on to judge an output, such as accuracy or usefulness.</dd>
       <dt>Evaluate</dt><dd>to judge something fairly against the criteria, not just by how it looks.</dd>
       <dt>Improve</dt><dd>to change the input, workflow or model on purpose so more outputs meet the criteria.</dd>
+      <dt>Evidence</dt><dd>what you actually observed, used to back up your judgement.</dd>
+      <dt>Conclusion</dt><dd>the idea you decide on after weighing the evidence against the criterion.</dd>
       <dt>Responsible use</dt><dd>using AI safely and fairly, with no personal data and always checking the result.</dd>
     </dl>
-    <p><b>What to do next:</b> in the Lab, put two real outputs side by side and use evidence to name the winner.</p>
+    <p><b>What to do next:</b> open up the input-model-output pipeline so you can explain how any tool works.</p>
   </div>
 </section>
 
@@ -506,7 +644,7 @@ ol.pipe li.out{background:var(--soft)}
   <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
   &nbsp;|&nbsp;
   <button id="resetBtn" type="button">Clear answers for the next student</button>
-  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 8 · Main Course W1 Core</div>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 8 · Main Course W1 Core + W1 Lab</div>
 </footer>
 
 <div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
@@ -610,52 +748,148 @@ const CH_CRIT = [
 ];
 const CH_FIX = ["Make the map colours brighter.","Keep asking until it gives a nicer answer.","Add example data from busy evening hours, retrain, then re-test against the same criteria.","Tell drivers to trust it more."];
 
+/* ---------- Lab content ---------- */
+const LWORDS = [
+  ["compare","Look closely at two outputs to find how they are alike and different."],
+  ["criterion","One clear measure you judge an output against, such as accuracy or usefulness."],
+  ["difference","Something that is not the same between the two outputs."],
+  ["evidence","What you actually observed, used to back up your judgement."],
+  ["conclusion","The idea you decide on after weighing the evidence against the criterion."]
+];
+const LDEF_ORDER = [4,2,0,3,1];
+const LCHECKS = ["does it give the same answer when repeated","count how many of 10 answers are correct","does it do the exact task asked","can a reader follow it without help"];
+const LMATCH = [["lm1","🎯 Accuracy",1],["lm2","🔤 Clarity",3],["lm3","🔁 Reliability",0],["lm4","🛠️ Usefulness",2]];
+const LJUDGE = [
+  ["lj1","🔍","Correct overall, with one unclear claim","P"],
+  ["lj2","📗","All 10 checked answers are correct","M"],
+  ["lj3","➗","Most facts are right, but one date is wrong","P"],
+  ["lj4","⛔","The main claim is simply untrue","F"],
+  ["lj5","🚩","Several facts contradict the source","F"],
+  ["lj6","📘","Every fact matches the trusted source","M"]
+];
+const LSTEPS = ["Draw a conclusion about which output wins","Judge each output against that criterion","Name the criterion you will judge by","Check it against the task and a trusted source","Log each difference and the stage it came from"];
+const LORDER_KEY = [2,1,4,0,3];
+const LCASES = {
+  lcase1:{quote:"Two AI summaries of the same report sit side by side. The criterion is accuracy. Evaluator, which difference actually decides the verdict?",
+    clues:[["📄","Same report"],["⚖️","Two summaries"],["🎯","Accuracy"]],q:"Which difference decides the verdict?",
+    opts:["One summary opens with a noticeably longer first sentence.","One summary uses a larger font and a more elegant heading style.","One summary simply feels a little friendlier and warmer to read.","One summary states a wrong date the report does not support."]},
+  lcase2:{quote:"A student asks a tool for bus times to the museum. The criterion is usefulness. One output lists correct times; the other lists correct facts about the museum's history. Evaluator, which wins on usefulness?",
+    clues:[["🚌","Asked: bus times"],["🛠️","Usefulness"],["🏁","Verdict"]],q:"Which output wins on usefulness?",
+    opts:["Whichever output happens to be the longer one on the screen.","The bus-times output, because it does the exact task asked for.","The museum-history output, since it lists more interesting facts.","Neither of them, since both outputs do contain some correct facts."]},
+  lcase3:{quote:"Your log says the clearer input gave the more accurate output. Before you trust that conclusion, you reach for one more move. Evaluator, what should you do?",
+    clues:[["📓","Logged verdict"],["🔁","New example"],["🔎","Verify"]],q:"What should you do before trusting the conclusion?",
+    opts:["Test it on a fresh new example to see whether it still holds up.","Accept it at once, since it is already written down in the log.","Trust it because the output happened to sound quite confident.","Delete the log entry so that nobody can question the result later."]}
+};
+const LPAIRS = [
+  {n:1,crit:"Accuracy",task:"Summarise the school-trip letter for parents.",a:"“The trip is on 14 March. Bring AED 50.”",b:"“The trip is on 4 March. Bring AED 50.”",note:"Output B's tool was given a blurry photo of the letter, where ‘14’ looked like ‘4’. Everything else was the same."},
+  {n:2,crit:"Usefulness",task:"“What are the bus times to the museum this Saturday?”",a:"“Saturday: 9:00, 11:30 and 14:00.”",b:"“Monday–Friday: 7:45, 8:15 and 16:30.”",note:"Both tools got the same clear question. Tool B's workflow skipped the step that filters the timetable by day."},
+  {n:3,crit:"Clarity",task:"Explain the recycling rules to Grade 3 students.",a:"Three short bullet points in simple words.",b:"The same correct rules in one long paragraph full of technical words.",note:"Same input and same steps – the difference only shows up in how the final text is written."}
+];
+const LDIFF = ["B gives the wrong trip date","B lists weekday times instead of Saturday times","B is one dense paragraph of technical words","B uses a different font"];
+const LDIFF_ORDER = [3,1,0,2];
+const LCRIT = ["Accuracy","Usefulness","Clarity","Speed"];
+const LSTAGE = ["Input","Process","Output"];
+const LCONC = ["Asking the tool again until it sounds confident","Giving the tool a clear, readable input – a sharp photo of the letter – fixed the accuracy problem","Making every output longer","Using a bigger font"];
+const LVERIFY = ["Ask a friend which output they like","Trust it, because it is already in the log","Try the same change on a new letter and check the date against the original","Delete the pairs that disagree"];
+const LMEAS = [
+  ["lc1","Count how many of 10 translated sentences a fluent speaker marks as correct",1],
+  ["lc2","Decide whether the app feels clever",0],
+  ["lc3","Time how many seconds each answer takes",1],
+  ["lc4","Check whether the app looks modern",0],
+  ["lc5","Ask 5 classmates whether they could follow the instructions without help",1],
+  ["lc6","Trust the star rating in the app store",0]
+];
+const LEX_EFFECT = ["better","worse"];
+const LCH = [
+  ["lh1","One thing I will change in the input",["Give the tool a sharp photo instead of a blurry one","Change the tool and the photo at the same time","Use a bigger screen","Ask the question more politely"],0],
+  ["lh2","The criterion I will judge against",["Accuracy – is the date correct?","Which output looks nicer","How long the output is","Speed only"],0],
+  ["lh3","My prediction",["The dates will match the letter more often","Nothing will change at all","The output will get shorter","The tool will become faster"],0],
+  ["lh4","How I will compare before and after",["Run the same 10 letters before and after the change, and count the correct dates each time","Look at one output and decide","Ask the tool whether it improved","Compare two different tasks"],0]
+];
+const LCH_ORDER = [[2,0,3,1],[1,3,0,2],[3,1,0,2],[1,2,0,3]];
+
 /* ---------- activities ---------- */
 const eq=(a,b)=>String(a)===String(b);
 const ACTS = [
- {id:"vocab",mount:"a-vocab",section:"Part 1",title:"Match each word to its meaning",sub:"Words to know",ico:"📖",
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know",ico:"📖",
   fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
   explain:"The output is what the system gives back. Criteria are the clear measures we agree on. To evaluate is to judge against the criteria. To improve is to change the input or process on purpose. Responsible use means safe, fair use with no personal data and always checking."},
- {id:"evalq",mount:"a-evalq",section:"Part 1",title:"Which are good evaluation questions?",sub:"Objective 1 · ask sharp questions about outputs",ico:"🔎",
+ {id:"evalq",mount:"a-evalq",section:"Core · Part 1",title:"Which are good evaluation questions?",sub:"Objective 1 · ask sharp questions about outputs",ico:"🔎",
   fields:EVALQ.map(([k,,,c])=>({k,box:1,ok:v=>v===!!c})),
   explain:"Good evaluation questions judge how WELL the output does the task: does it do the task, is it fair to every group, and is it accurate against a trusted source? Speed, neat colours and personal taste do not tell you whether an output is good."},
- {id:"case1",mount:"a-case1",section:"Part 1",title:"The Two Translations",sub:"AI Evaluators · Case 1",ico:"🕵️",cls:"case",
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"The Two Translations",sub:"AI Evaluators · Case 1",ico:"🕵️",cls:"case",
   fields:[{k:"case1",radio:1,ok:v=>eq(v,0)}],
   explain:"Both outputs look smooth, so looks cannot decide it. Judge each one against a clear criterion, such as accuracy, agreed before you judge."},
- {id:"sort",mount:"a-sort",section:"Part 2",title:"Output, judge, or improve?",sub:"Objective 2 · sort the three moves",ico:"🗂️",
+ {id:"sort",mount:"a-sort",section:"Core · Part 2",title:"Output, judge, or improve?",sub:"Objective 2 · sort the three moves",ico:"🗂️",
   fields:SORT.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
   explain:"Outputs are results the tool produced (a translated notice, the ‘recyclable’ label). Ways to judge measure an output (counting correct answers, comparing to a trusted source). Ways to improve change something on purpose (a check step, a clearer prompt, better training examples)."},
- {id:"which",mount:"a-which",section:"Part 2",title:"Which part did it change?",sub:"Objective 2 · be precise about what you improve",ico:"🎯",
+ {id:"which",mount:"a-which",section:"Core · Part 2",title:"Which part did it change?",sub:"Objective 2 · be precise about what you improve",ico:"🎯",
   fields:WHICH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
   explain:"A clearer prompt or cleaner example data improves the input. Adding or reordering steps improves the workflow. Only changing the training examples and training again changes the model itself."},
- {id:"case2",mount:"a-case2",section:"Part 2",title:"The Clearer Prompt",sub:"AI Evaluators · Case 2",ico:"🔬",cls:"case",
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"The Clearer Prompt",sub:"AI Evaluators · Case 2",ico:"🔬",cls:"case",
   fields:[{k:"case2",radio:1,ok:v=>eq(v,3)}],
   explain:"Nothing was retrained, so the model did not change. Rewording the prompt improved the input – and the better input gave a better output."},
- {id:"fair",mount:"a-fair",section:"Part 3",title:"Fair measure, or gut feeling?",sub:"Objective 3 · agree criteria we can measure",ico:"📋",
+ {id:"fair",mount:"a-fair",section:"Core · Part 3",title:"Fair measure, or gut feeling?",sub:"Objective 3 · agree criteria we can measure",ico:"📋",
   fields:FAIR.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
   explain:"Fair measures can be checked and repeated: whether it works for different groups, whether it does the exact task, and how many answers match a trusted source. Nice colours, sounding confident and feeling impressive are gut feelings."},
- {id:"case3",mount:"a-case3",section:"Part 3",title:"The Name in the Box",sub:"AI Evaluators · Case 3",ico:"⚖️",cls:"case",
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"The Name in the Box",sub:"AI Evaluators · Case 3",ico:"⚖️",cls:"case",
   fields:[{k:"case3",radio:1,ok:v=>eq(v,0)}],
   explain:"Our charter: no real names, faces or voices go into any tool. An adult runs the tool, and every output is still checked."},
- {id:"ws",mount:"a-ws",section:"Worksheet",title:"Sort it: output, judge or improve",sub:"Worksheet · choose the column and a reason",ico:"🗺️",cls:"ws",
+ {id:"ws",mount:"a-ws",section:"Core worksheet",title:"Sort it: output, judge or improve",sub:"Worksheet · choose the column and a reason",ico:"🗺️",cls:"ws",
   fields:WS.flatMap(([k,,c])=>[{k:k+"a",ok:v=>eq(v,c)},{k:k+"b",ok:v=>eq(v,c)}]),
   explain:"The finished translation is an output – the result produced from the input. Checking it for accuracy against the task is a way to judge. Giving a clearer input and re-testing is a way to improve – you change something on purpose and test again."},
- {id:"questions",mount:"a-questions",section:"Worksheet",title:"My two questions",sub:"Worksheet · questions worth investigating",ico:"❓",cls:"ws",
+ {id:"questions",mount:"a-questions",section:"Core worksheet",title:"My two questions",sub:"Worksheet · questions worth investigating",ico:"❓",cls:"ws",
   fields:QUESTIONS.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
   explain:"Good questions ask how outputs are made, judged or improved – and at least one should ask how we decide an output is good. ‘Is AI cool?’ and ‘nicest colours’ can't be tested, and putting a friend's photo into a tool breaks our charter."},
- {id:"charter",mount:"a-charter",section:"Worksheet",title:"Our safe-use charter",sub:"Worksheet · one rule and why it keeps us safe",ico:"🛡️",cls:"ws",
+ {id:"charter",mount:"a-charter",section:"Core worksheet",title:"Our safe-use charter",sub:"Worksheet · one rule and why it keeps us safe",ico:"🛡️",cls:"ws",
   fields:[{k:"h1",ok:v=>eq(v,2)},{k:"h2",ok:v=>eq(v,0)}],
   explain:"‘No real names, faces or voices go into any tool’ protects people's privacy, because we cannot control what a tool keeps or shares. Trusting confident outputs or entering any data would make us less safe, not more."},
- {id:"exit",mount:"a-exit",section:"Exit ticket",title:"Exit ticket",sub:"Name one example, sort it and say why",ico:"🎟️",
+ {id:"exit",mount:"a-exit",section:"Core exit ticket",title:"Exit ticket",sub:"Name one example, sort it and say why",ico:"🎟️",
   fields:[{k:"x0",ok:v=>+v>=0&&+v<=2},{k:"x1",ok:(v,A)=>A.x0!==undefined&&A.x0!==""&&eq(v,A.x0)},{k:"x2",ok:(v,A)=>A.x0!==undefined&&A.x0!==""&&eq(v,A.x0)}],
   explain:"The sorter's list is an output – the result the system produced. Checking 20 answers against a key is a way to judge – it measures the output against a clear criterion. Adding a flagging step is a way to improve – it changes the system on purpose."},
- {id:"chal",mount:"a-chal",section:"Challenge",title:"Challenge ⭐ A real UAE situation",sub:"Stretch · predict what a strong solution needs",ico:"⭐",
+ {id:"chal",mount:"a-chal",section:"Core challenge",title:"Challenge ⭐ A real UAE situation",sub:"Stretch · predict what a strong solution needs",ico:"⭐",
   fields:[...CH_CRIT.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),{k:"cfix",radio:1,ok:v=>eq(v,2)}],
-  explain:"A smart-parking predictor should be judged on accuracy (are the predicted spaces really free?) and fairness (does it work in every neighbourhood?). A real improvement changes something on purpose – such as adding evening-rush data and retraining – then re-tests against the same criteria."}
+  explain:"A smart-parking predictor should be judged on accuracy (are the predicted spaces really free?) and fairness (does it work in every neighbourhood?). A real improvement changes something on purpose – such as adding evening-rush data and retraining – then re-tests against the same criteria."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each word to its meaning",sub:"Lab · words to know",ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"To compare is to look for how two outputs are alike and different. A criterion is one clear measure. A difference is something not the same. Evidence is what you actually observed. A conclusion is what you decide after weighing the evidence against the criterion."},
+ {id:"lmatch",mount:"a-lmatch",section:"Lab · Part 1",title:"Match the criterion to its check",sub:"Objective 2 · make each criterion measurable",ico:"🧷",
+  fields:LMATCH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Accuracy: count how many of 10 answers are correct. Clarity: can a reader follow it without help? Reliability: does it give the same answer when repeated? Usefulness: does it do the exact task asked?"},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"The Two Summaries",sub:"AI Evaluators · Lab Case 1",ico:"🕵️",cls:"case",
+  fields:[{k:"lcase1",radio:1,ok:v=>eq(v,3)}],
+  explain:"The criterion is accuracy, so only a difference in correctness decides it: a wrong date the report does not support. Sentence length, fonts and friendliness don't change whether a summary is accurate."},
+ {id:"ljudge",mount:"a-ljudge",section:"Lab · Part 2",title:"Judge against the criterion",sub:"Objective 2 · rate each output against the measure",ico:"🩺",
+  fields:LJUDGE.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Against accuracy: all answers correct, or every fact matching the trusted source, meets it. Correct overall with one unclear claim, or one wrong date, partly meets it. An untrue main claim, or several facts contradicting the source, fails it."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"The Useful Answer",sub:"AI Evaluators · Lab Case 2",ico:"🔬",cls:"case",
+  fields:[{k:"lcase2",radio:1,ok:v=>eq(v,1)}],
+  explain:"Usefulness asks whether the output does the task that was asked. Both outputs contain correct facts, but only the bus-times output answers the question."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 3",title:"Run the compare-and-log routine",sub:"Objective 3 · draw an evidence-based conclusion",ico:"🧭",
+  fields:LORDER_KEY.map((c,i)=>({k:"lo"+i,ok:v=>eq(v,c)})),
+  explain:"Name the criterion first, judge each output against it, log each difference and the stage it came from, draw your conclusion – and only then check it against the task and a trusted source before you trust it."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"Would It Still Hold?",sub:"AI Evaluators · Lab Case 3",ico:"⚖️",cls:"case",
+  fields:[{k:"lcase3",radio:1,ok:v=>eq(v,0)}],
+  explain:"Writing a conclusion down doesn't make it true. Test it on a fresh example: if the clearer input still gives the more accurate output, your conclusion holds."},
+ {id:"llog",mount:"a-llog",section:"Lab worksheet",title:"Comparison log",sub:"Worksheet · difference, criterion and stage for each pair",ico:"📓",cls:"ws",
+  fields:LPAIRS.flatMap((p,i)=>[{k:`lg${i}a`,ok:v=>eq(v,i)},{k:`lg${i}b`,ok:v=>eq(v,i)},{k:`lg${i}c`,ok:v=>eq(v,i)}]),
+  explain:"Pair 1: B gives the wrong date – accuracy – it began at the input (a blurry photo). Pair 2: B lists weekday times – usefulness – it began in the process (a skipped filtering step). Pair 3: B is a dense technical paragraph – clarity – it only shows up in the output's final wording."},
+ {id:"lconc",mount:"a-lconc",section:"Lab worksheet",title:"My conclusion – and verify it",sub:"Worksheet · use the log as evidence",ico:"🔎",cls:"ws",
+  fields:[{k:"lq1",radio:1,ok:v=>eq(v,1)},{k:"lq2",ok:v=>eq(v,2)}],
+  explain:"The log shows a clear input fixed Pair 1's accuracy. To verify, repeat the same change on a new example of the same task and check the result against a trusted source (the original letter)."},
+ {id:"lchecks",mount:"a-lchecks",section:"Lab worksheet",title:"Our evaluation criteria: measurable checks",sub:"Worksheet · tool log",ico:"📏",cls:"ws",
+  fields:[...LMEAS.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),{k:"lsafe",box:1,ok:v=>v===true}],
+  explain:"A measurable check is something you can count or time and repeat: sentences marked correct, seconds per answer, classmates who could follow it. ‘Feels clever’, ‘looks modern’ and a star rating are not checks. And always tick the safety check – no personal data."},
+ {id:"lexit",mount:"a-lexit",section:"Lab exit ticket",title:"Lab exit ticket",sub:"One difference, its criterion, its stage, and its effect",ico:"🎟️",
+  fields:[{k:"le0",ok:v=>+v>=0&&+v<=2},{k:"le1",ok:(v,A)=>A.le0!==undefined&&A.le0!==""&&eq(v,A.le0)},{k:"le2",ok:(v,A)=>A.le0!==undefined&&A.le0!==""&&eq(v,A.le0)},{k:"le3",ok:v=>eq(v,1)}],
+  explain:"Every difference you logged made output B worse against its criterion: the wrong date (accuracy, from the input), the weekday times (usefulness, from the process), and the dense paragraph (clarity, in the output)."},
+ {id:"lchal",mount:"a-lchal",section:"Lab challenge",title:"Challenge ⭐ Design your own fair test",sub:"Stretch · change one thing, predict, compare",ico:"⭐",
+  fields:LCH.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A fair test changes ONE thing (only the photo), names the criterion (accuracy), predicts the effect (dates match more often), and compares before and after on the same set of examples with a count. A strong UAE solution – such as a school-letter reader for parents – would need to read dates and amounts correctly every time."}
 ];
 
 /* ---------- state ---------- */
-const KEY="g8-howwell-mw1l1-v1";
+const KEY="g8-mw1-core-lab-v1";
 let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
 try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
@@ -677,9 +911,13 @@ function radios(key,opts){
 /* ---------- static blocks ---------- */
 $("#flips").innerHTML=WORDS.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${i}" aria-pressed="${!!S.flip[i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
 
+$("#flipsL").innerHTML=LWORDS.map(([t,d],i)=>`<button type="button" class="flip" data-flip="L${i}" aria-pressed="${!!S.flip["L"+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#pairs").innerHTML=LPAIRS.map(p=>`<div class="ecard"><header><small>Output pair ${p.n} · illustrative</small><b>Criterion: ${esc(p.crit)}</b></header>
+  <div class="in"><p class="task"><b>Task:</b> ${esc(p.task)}</p><div class="ab"><div><b>Output A</b>${esc(p.a)}</div><div><b>Output B</b>${esc(p.b)}</div></div><p class="note">${esc(p.note)}</p></div></div>`).join("");
+
 /* ---------- activity bodies ---------- */
 function caseBody(id){
-  const c=CASES[id];
+  const c=CASES[id]||LCASES[id];
   return `<div class="quote">“${esc(c.quote)}”</div><div class="clues" aria-hidden="true">${c.clues.map(([e,t])=>`<div class="clue">${e}<span>${esc(t)}</span></div>`).join("")}</div>
     <p class="q" id="q-${id}">${esc(c.q)}</p>${radios(id,c.opts)}`;
 }
@@ -721,6 +959,39 @@ function body(a){
     return `<div class="quote"><b>Real UAE situation:</b> a smart-parking app in Abu Dhabi predicts which parking spaces are free.</div>`+
       boxes(CH_CRIT.map(([k,t])=>[k,"",t]),"Tick the TWO performance criteria you would judge it against.")+
       `<p class="q" id="q-cfix">Which ONE change would really improve it?</p>${radios("cfix",CH_FIX)}`;
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word. Flip the cards above if you need a reminder.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lmatch":
+    return `<p class="how">Choose the way you would check each criterion.</p>`+
+      LMATCH.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,LCHECKS,"Choose how to check it…")}</div>`).join("");
+  case "lcase1": case "lcase2": case "lcase3":
+    return caseBody(a.id);
+  case "ljudge":
+    return `<p class="how">The criterion is accuracy. Does each output meet it, partly meet it, or fail it?</p>`+
+      LJUDGE.map(([k,e,t])=>`<div class="row" data-item="${k}"><span class="t">${e} ${esc(t)}</span>${seg(k,["Meets it","Partly meets","Fails it"],["M","P","F"],t)}</div>`).join("");
+  case "lorder":
+    return `<p class="how">Put the investigator's steps in the order you would work through them, from first to last.</p>`+
+      LORDER_KEY.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">Step ${i+1}</span>${sel("lo"+i,LSTEPS,"Choose the step…")}</div>`).join("");
+  case "llog":
+    return `<p class="how">For each output pair above, choose the difference you observed, the criterion it affects, and the stage where it began.</p>`+
+      LPAIRS.map((p,i)=>`<div class="scen"><p>Pair ${p.n} (criterion: ${p.crit})</p><div class="three">
+        <div data-item="lg${i}a"><span>Difference I observed</span>${sel(`lg${i}a`,LDIFF,"Choose…",LDIFF_ORDER)}</div>
+        <div data-item="lg${i}b"><span>Criterion it affects</span>${sel(`lg${i}b`,LCRIT,"Choose…")}</div>
+        <div data-item="lg${i}c"><span>Stage it began</span>${sel(`lg${i}c`,LSTAGE,"Choose…")}</div></div></div>`).join("");
+  case "lconc":
+    return `<p class="q" id="q-lq1">My conclusion: using your log as evidence, what one change most improved an output against its criterion?</p>${radios("lq1",LCONC)}
+      <div class="pair" data-item="lq2" style="margin-top:10px"><span class="t">Verify it: how could you check your conclusion is right for a new example on the same task?</span>${sel("lq2",LVERIFY,"Choose…")}</div>`;
+  case "lchecks":
+    return `<p class="how">You are building checks for a translation app. Tick every check that is truly measurable – something you can count or time and repeat. Leave the others unticked.</p><div class="opts">`+
+      LMEAS.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+
+      `</div><p class="q">Safety check</p><div class="opts"><label class="opt box" data-item="lsafe"><input type="checkbox" data-key="lsafe"${S.ans.lsafe?" checked":""}><span class="l" aria-hidden="true"></span><span>🛡️ I used no personal data (no faces, voices or names).</span></label></div>`;
+  case "lexit":
+    return `<p class="how">Name one difference you logged, the criterion it affected, the workflow stage it came from, and whether it made the output better or worse.</p>
+      <p class="sent">One difference I logged: <span data-item="le0">${sel("le0",LDIFF.slice(0,3),"which difference?",[1,2,0])}</span>. It affected <span data-item="le1">${sel("le1",LCRIT.slice(0,3),"which criterion?")}</span>, it began at the <span data-item="le2">${sel("le2",LSTAGE.map(s=>s.toLowerCase()),"which stage?")}</span> stage, and it made output B <span data-item="le3">${sel("le3",LEX_EFFECT,"better or worse?")}</span> against that criterion.</p>`;
+  case "lchal":
+    return `<div class="quote"><b>Design your own fair test</b> for the school-trip letter from Pair 1.</div>`+
+      LCH.map(([k,t,o],i)=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,o,"Choose…",LCH_ORDER[i])}</div>`).join("");
   }
 }
 function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
@@ -774,7 +1045,7 @@ function update(){
   const d=new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
   $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
     <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
-    <div>Grade 8 Main Course · Week 1 · From ‘It Works’ to ‘How Well’</div>
+    <div>Grade 8 Main Course · Week 1 Core + Lab · From ‘It Works’ to ‘How Well’ + Two Outputs, One Verdict</div>
     <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
     ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
     ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
