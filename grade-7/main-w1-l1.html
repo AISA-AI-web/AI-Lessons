@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>AI as a Workflow – Grade 7 Main Course Lesson 1</title>
+<title>How Models Learn + AI as a Workflow – Grade 7 Main Course</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -287,6 +287,9 @@ ol.pipe li.out{background:var(--soft)}
 .idea .n{flex:none;width:30px;height:30px;border-radius:9px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
 .idea h4{margin:0 0 4px;font-size:16px}
 .idea p{margin:0;font-size:15.5px}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.rh:first-of-type{margin-top:0}
+.route .num{font-size:14px}
 
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media print{
@@ -298,6 +301,9 @@ ol.pipe li.out{background:var(--soft)}
   .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
   .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
   body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:5px 14px;font-size:13px}
+  body.print-results .results .big{font-size:48px;margin:8px 0 2px}
+  body.print-results .results .top{padding:14px 18px}
 }
 </style>
 </head>
@@ -315,9 +321,9 @@ ol.pipe li.out{background:var(--soft)}
 
 <header class="hero">
   <div class="wrap">
-    <div class="pills"><span class="pill">Grade 7 Main Course, Term 1</span><span class="pill">Week 1 Core</span><span class="pill">About 45 minutes</span></div>
-    <h1>AI as a Workflow</h1>
-    <p>Something goes in, something happens, and something comes out – every AI tool follows a shape you already know. This unit you become a Systems Detective who can spot the input, the process and the output inside any tool.</p>
+    <div class="pills"><span class="pill">Grade 7 Main Course, Term 1</span><span class="pill">Week 0 Foundation + Week 1 Lesson 1</span></div>
+    <h1>How Models Learn + AI as a Workflow</h1>
+    <p>First, learn how a model learns from data before you use one. Then: something goes in, something happens, and something comes out – every AI tool follows a shape you already know. This unit you become a Systems Detective who can spot the input, the process and the output inside any tool.</p>
     <p class="meta"><b>Course:</b> Main course &nbsp;·&nbsp; <b>Tool:</b> unplugged simulated-AI cards</p>
     <div class="who">
       <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
@@ -330,12 +336,14 @@ ol.pipe li.out{background:var(--soft)}
 
 <div class="intro">
   <div class="pn">
-    <div class="box"><small>◀ Previously</small>Welcome, Systems Detective – this term you learn to see the input, process and output inside any AI tool. (Foundation lesson: <a href="main-w0-foundation.html">How Models Learn</a>.)</div>
+    <div class="box"><small>Two lessons in one</small>Start with the Week 0 foundation, <a href="#f1">How Models Learn</a>, then move on to the Week 1 lesson, <a href="#p1">AI as a Workflow</a>.</div>
     <div class="box"><small>Next ▶</small>Next you compare two AI examples side by side and log exactly where their outputs start to differ.</div>
   </div>
   <div class="box">
     <h2>What you will learn</h2>
     <ul>
+      <li>I can say whether a system follows fixed rules or has learned from examples, and why.</li>
+      <li>I can explain the difference between training a model and using it (inference), and read a confidence score.</li>
       <li>I can ask at least two good questions about how AI turns an input into an output.</li>
       <li>I can sort examples into input, process and output and say why.</li>
       <li>I can help write our unit success criteria and our safe, responsible-use rules for AI.</li>
@@ -343,6 +351,13 @@ ol.pipe li.out{background:var(--soft)}
   </div>
   <div class="box">
     <h2>Lesson route</h2>
+    <h3 class="rh">Week 0 Foundation · How Models Learn</h3>
+    <ol class="route">
+      <li><span class="num">F1</span><a href="#f1"><b>The big ideas</b><small>Five ideas about how models learn</small></a></li>
+      <li><span class="num">F2</span><a href="#f2"><b>Try it</b><small>Rule-based or learned? Training or inference?</small></a></li>
+      <li><span class="num">F3</span><a href="#f3"><b>Foundation check</b><small>Exit ticket and reflection</small></a></li>
+    </ol>
+    <h3 class="rh">Week 1 Lesson 1 · AI as a Workflow</h3>
     <ol class="route">
       <li><span class="num">1</span><a href="#p1"><b>The three-stage shape</b><small>Input, process, output inside any tool</small></a></li>
       <li><span class="num">2</span><a href="#p2"><b>Ask sharp questions</b><small>What a real workflow question sounds like</small></a></li>
@@ -352,9 +367,46 @@ ol.pipe li.out{background:var(--soft)}
   </div>
 </div>
 
+<!-- FOUNDATION PART 1 -->
+<section class="part" id="f1">
+  <div class="part-head"><span class="pill">Week 0 Foundation · Part 1 of 3</span><h2>The big ideas</h2><p>How does a model learn – and what does it keep?</p></div>
+  <div class="part-body">
+    <div class="ideas">
+      <div class="idea"><span class="n">1</span><div><h4>Rule-based vs learned</h4><p>A <b>rule-based</b> system does exactly what a person wrote: <i>if metal → Recycle</i>. A <b>learned model</b> is shown many labelled examples and adjusts numbers inside (its <b>parameters</b>) until it predicts well – nobody writes the rule by hand. Many real systems mix both.</p></div></div>
+      <div class="idea"><span class="n">2</span><div><h4>Training vs inference</h4><p><b>Training</b> is the one-off teaching phase: the model sees labelled examples and updates its parameters. <b>Inference</b> is every later use: the finished model labels a new input without changing.</p></div></div>
+      <div class="idea"><span class="n">3</span><div><h4>What a model stores</h4><p>A trained model does <b>not</b> keep copies of the training photos or sentences. It stores <b>patterns</b> as parameters. That is why it can answer about new inputs but cannot show you the originals.</p></div></div>
+      <div class="idea"><span class="n">4</span><div><h4>Determinism &amp; confidence</h4><p>A classifier is <b>deterministic</b>: the same input gives the same output and the same confidence every time. A <b>confidence score</b> (e.g. 0.90) says how sure the model is about <i>this</i> answer – it is <b>not</b> the same as accuracy, and a confident answer can still be wrong.</p></div></div>
+      <div class="idea"><span class="n">5</span><div><h4>Train/test split</h4><p>To check a model really learned (rather than memorised), hold back some labelled examples as a <b>test set</b> and measure accuracy only on those unseen items.</p></div></div>
+    </div>
+    <div id="a-vocab0"></div>
+  </div>
+</section>
+
+<!-- FOUNDATION PART 2 -->
+<section class="part" id="f2">
+  <div class="part-head"><span class="pill">Week 0 Foundation · Part 2 of 3</span><h2>Try it</h2><p>Sort the systems, then check your understanding.</p></div>
+  <div class="part-body">
+    <div id="a-rules"></div>
+    <div id="a-phase"></div>
+    <div id="a-quick"></div>
+  </div>
+</section>
+
+<!-- FOUNDATION PART 3 -->
+<section class="part" id="f3">
+  <div class="part-head dark"><span class="pill">Week 0 Foundation · Part 3 of 3</span><h2>Foundation check and reflection</h2><p>Show what you know before the Week 1 lesson.</p></div>
+  <div class="part-body">
+    <div id="a-exit0"></div>
+    <div class="call blue"><h4>Local connection · AI in the UAE</h4><p>Across the UAE, the data used to train a tool shapes the answers it gives – which is why understanding how models learn matters before you trust any AI output.</p></div>
+    <div class="call"><h4>Reflect · Responsible use &amp; human in the loop</h4><p>A model only knows the patterns in its data. A person still decides what data to use, checks the output, and makes the final call – especially on low-confidence answers.</p></div>
+    <div id="a-human"></div>
+  </div>
+</section>
+
+
 <!-- PART 1 -->
 <section class="part" id="p1">
-  <div class="part-head"><span class="pill">Part 1 of 3</span><h2>The three-stage shape</h2><p>What goes in, what happens, what comes out?</p></div>
+  <div class="part-head"><span class="pill">Week 1 · Part 1 of 3</span><h2>The three-stage shape</h2><p>What goes in, what happens, what comes out?</p></div>
   <div class="part-body">
     <h3 class="sub">Words to know</h3>
     <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
@@ -400,7 +452,7 @@ ol.pipe li.out{background:var(--soft)}
 
 <!-- PART 2 -->
 <section class="part" id="p2">
-  <div class="part-head"><span class="pill">Part 2 of 3</span><h2>Ask sharp questions</h2><p>When is an answer worth trusting?</p></div>
+  <div class="part-head"><span class="pill">Week 1 · Part 2 of 3</span><h2>Ask sharp questions</h2><p>When is an answer worth trusting?</p></div>
   <div class="part-body">
     <figure>
       <svg viewBox="0 0 760 190" role="img" aria-labelledby="fig2T">
@@ -431,7 +483,7 @@ ol.pipe li.out{background:var(--soft)}
 
 <!-- PART 3 -->
 <section class="part" id="p3">
-  <div class="part-head"><span class="pill">Part 3 of 3</span><h2>Our safe-use charter</h2><p>What makes a rule keep us safe?</p></div>
+  <div class="part-head"><span class="pill">Week 1 · Part 3 of 3</span><h2>Our safe-use charter</h2><p>What makes a rule keep us safe?</p></div>
   <div class="part-body">
     <h3 class="sub">Responsible use</h3>
     <p>Responsible use means using AI safely and fairly. We keep ourselves safe: no real names, faces or private details go into any tool, and an adult always runs the tool for us.</p>
@@ -467,10 +519,12 @@ ol.pipe li.out{background:var(--soft)}
 
 <!-- SUMMARY -->
 <section class="part" id="p5">
-  <div class="part-head"><span class="pill">Lesson summary</span><h2>You launched the unit and started thinking like a Systems Detective</h2></div>
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>You learned how models learn, launched the unit and started thinking like a Systems Detective</h2></div>
   <div class="part-body">
     <h3 class="sub">Key ideas to remember</h3>
     <ul class="keys">
+      <li>A rule-based system follows steps a person wrote; a learned model adjusts its parameters from labelled examples.</li>
+      <li>Training teaches the model once; inference is every later use. A classifier gives the same answer and confidence for the same input – and confidence is not accuracy.</li>
       <li>Every AI tool follows the same shape: input, then process, then output.</li>
       <li>The process uses a model that learned patterns from examples – it does not think like a person.</li>
       <li>A confident-looking output can still be wrong, so we verify before we trust.</li>
@@ -496,7 +550,7 @@ ol.pipe li.out{background:var(--soft)}
   <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
   &nbsp;|&nbsp;
   <button id="resetBtn" type="button">Clear answers for the next student</button>
-  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 7 · Main Course W1 Core</div>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 7 · Main Course W0 Foundation + W1 Core</div>
 </footer>
 
 <div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
@@ -510,6 +564,57 @@ ol.pipe li.out{background:var(--soft)}
 
 <script>
 /* ---------- content ---------- */
+/* Week 0 foundation */
+const TERMS = [
+  ["rule-based system","Does exactly what a person wrote, like: if metal → Recycle."],
+  ["learned model","Is shown many labelled examples and adjusts itself until it predicts well."],
+  ["parameters","The numbers inside a model that store its learned patterns."],
+  ["training","The one-off teaching phase, when the model sees labelled examples and updates its parameters."],
+  ["inference","Every later use, when the finished model labels a new input without changing."],
+  ["confidence score","How sure the model is about this one answer – not the same as accuracy."],
+  ["test set","Labelled examples held back so accuracy is measured only on unseen items."]
+];
+const TERM_ORDER = [4,1,6,0,3,5,2];
+
+const SYSTEMS = [
+  ["rb1","Vending machine: coin + choice → drink","R"],
+  ["rb2","Photo app that tells cats from dogs after seeing many labelled photos","L"],
+  ["rb3","Thermostat: if temp < 20°C, turn on heat","R"],
+  ["rb4","Spam filter trained on thousands of emails marked spam / not spam","L"],
+  ["rb5","Arabic ↔ English translator that learned from many translated sentences","L"],
+  ["rb6","Calculator following fixed arithmetic rules","R"]
+];
+
+const PHASE = [
+  ["t1","A model sees 1,000 labelled fruit photos and updates its parameters.","T"],
+  ["t2","You show the finished app a new photo and it says ‘mango, 0.91’.","I"],
+  ["t3","A spam filter checks an email that arrived this morning.","I"],
+  ["t4","Engineers feed a translator thousands of translated sentences so it can learn.","T"]
+];
+
+const MCQ = [
+  ["k1","A team writes every step by hand: ‘If the card says metal, put it in Recycle’. What is this?",
+   ["A rule-based system – a person wrote every step it follows.","A learned model, because it runs on a computer.","A learned model, because it sorts things."],0],
+  ["k2","What does a trained model actually store?",
+   ["Copies of every training example.","Learned patterns (parameters).","Nothing; it looks the answer up each time."],1],
+  ["k3","A classifier outputs ‘bottle, 0.85’. You run the SAME image again. What happens?",
+   ["The same output, 0.85 – it is deterministic.","A different, random answer.","It becomes more accurate each run."],0],
+  ["k4","Why test a model on a held-back set instead of the data it trained on?",
+   ["To check it learned patterns, not just memorised the examples.","Because testing on training data is faster.","Confidence and accuracy are the same thing."],0]
+];
+
+const RB = ["A calculator","A spam filter","A cat-or-dog photo app"];
+const LM = ["A thermostat","A vending machine","An Arabic–English translator"];
+const TELL = ["a learned model always runs on a computer","a person wrote every step of the rule-based one, but the learned one found its patterns from labelled examples","the rule-based one is always newer","the learned one never makes mistakes"];
+const TR = ["the model learns from labelled examples and updates its parameters","the model labels a new input","the model is deleted","a person writes every rule"];
+const INF = ["the model keeps changing with every answer","the finished model labels a new input without changing","the model copies its training photos","the model forgets what it learned"];
+const AGAIN = ["‘cat, 0.95’ again","a random new answer","‘cat’ with a higher confidence"];
+const AGAIN_WHY = ["the model learns from every run","a classifier is deterministic: the same input gives the same output and confidence","confidence always goes up","the photo has changed"];
+const HOLD = ["so accuracy is measured on cards the model has never seen, to show it learned patterns rather than memorised","because 12 cards is too many to test","because the test set trains the model faster","so the confidence score goes up"];
+
+const HUMAN = ["Trust it – the model gave an answer.","A person checks it and makes the final call.","Run it again until the confidence goes up.","Delete the photo and the model."];
+
+/* Week 1 lesson */
 const WORDS = [
   ["input","What you give the system to start, like a question or a photo."],
   ["process","The steps inside that change the input into something new."],
@@ -595,25 +700,43 @@ const PARK_NEED = [
 /* ---------- activities ---------- */
 const eq=(a,b)=>String(a)===String(b);
 const ACTS = [
- {id:"vocab",mount:"a-vocab",section:"Part 1",title:"Match each word to its meaning",sub:"Words to know",ico:"📖",
+ {id:"vocab0",mount:"a-vocab0",section:"Foundation",title:"Match each term to its meaning",sub:"The big ideas · key words",ico:"📖",
+  fields:TERMS.map((w,i)=>({k:"m"+i,ok:v=>eq(v,i)})),
+  explain:"Rule-based = a person wrote the steps. Learned model = adjusts itself from labelled examples. Parameters store the learned patterns. Training is the one-off teaching phase; inference is every later use. A confidence score is how sure it is about one answer – not accuracy. A test set is held back to measure accuracy on unseen items."},
+ {id:"rules",mount:"a-rules",section:"Foundation",title:"Try it: rule-based or learned?",sub:"I can tell fixed rules from learning",ico:"🗂️",
+  fields:SYSTEMS.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"The vending machine, thermostat and calculator follow fixed rules a person wrote. The photo app, spam filter and translator learned their patterns from many labelled examples."},
+ {id:"phase",mount:"a-phase",section:"Foundation",title:"Training or inference?",sub:"I can tell teaching a model from using it",ico:"🔁",
+  fields:PHASE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Seeing labelled examples and updating parameters is training. Labelling a new photo or checking a new email with the finished model is inference – the model does not change."},
+ {id:"quick",mount:"a-quick",section:"Foundation",title:"Quick check",sub:"Four questions",ico:"✅",cls:"quiz",
+  fields:MCQ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),
+  explain:"1: A person wrote every step, so it is rule-based. 2: A model stores learned patterns (parameters), not copies. 3: A classifier is deterministic – same image, same ‘bottle, 0.85’. 4: Testing on held-back examples checks it learned patterns rather than memorising."},
+ {id:"exit0",mount:"a-exit0",section:"Foundation",title:"Foundation exit ticket",sub:"Four questions",ico:"🎟️",cls:"ws",
+  fields:[{k:"e1",ok:v=>eq(v,0)},{k:"e2",ok:v=>eq(v,2)},{k:"e3",ok:v=>eq(v,1)},{k:"e4",ok:v=>eq(v,0)},{k:"e5",ok:v=>eq(v,1)},{k:"e6",ok:v=>eq(v,0)},{k:"e7",ok:v=>eq(v,1)},{k:"e8",ok:v=>eq(v,0)}],
+  explain:"1: A calculator follows rules a person wrote; a translator learned from translated sentences. 2: Training = learning from labelled examples and updating parameters; inference = the finished model labelling a new input without changing. 3: ‘cat, 0.95’ again, because a classifier is deterministic. 4: Holding back 3 cards measures accuracy on unseen items, showing whether the model learned patterns or just memorised."},
+ {id:"human",mount:"a-human",section:"Foundation",title:"Human in the loop",sub:"Responsible use",ico:"🧑‍🏫",
+  fields:[{k:"hu",radio:1,ok:v=>eq(v,1)}],
+  explain:"A low-confidence answer is exactly when a person should check the output and make the final call. Running it again gives the same answer – the classifier is deterministic."},
+ {id:"vocab",mount:"a-vocab",section:"Week 1 · Part 1",title:"Match each word to its meaning",sub:"Words to know",ico:"📖",
   fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
   explain:"Input is what goes in; the process is the steps inside; the output is what comes out. The model is the part that has learned patterns from lots of examples. Responsible use means safe, fair use with no personal data and always checking."},
- {id:"ipo",mount:"a-ipo",section:"Part 1",title:"Input, process or output?",sub:"Objective 2 · classify examples and justify",ico:"🗂️",
+ {id:"ipo",mount:"a-ipo",section:"Week 1 · Part 1",title:"Input, process or output?",sub:"Objective 2 · classify examples and justify",ico:"🗂️",
   fields:CARDS.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
   explain:"Ask: does it go IN, happen INSIDE, or come OUT? Words you type, a photo you point at a sign and a spoken question go in. A learned model matching patterns and the hidden steps are the process. A translation on screen and a returned label come out."},
- {id:"case1",mount:"a-case1",section:"Part 1",title:"The Translated Sign",sub:"Systems Detectives · Case 1",ico:"🕵️",cls:"case",
+ {id:"case1",mount:"a-case1",section:"Week 1 · Part 1",title:"The Translated Sign",sub:"Systems Detectives · Case 1",ico:"🕵️",cls:"case",
   fields:[{k:"case1",radio:1,ok:v=>eq(v,0)}],
   explain:"The photo of the Arabic sign is what the app was given to start – the input. The model matching patterns is the process, and the English words on screen are the output."},
- {id:"detq",mount:"a-detq",section:"Part 2",title:"Which are genuine detective questions?",sub:"Objective 1 · ask focused questions",ico:"🧩",
+ {id:"detq",mount:"a-detq",section:"Week 1 · Part 2",title:"Which are genuine detective questions?",sub:"Objective 1 · ask focused questions",ico:"🧩",
   fields:DETQ.map(([k,,,c])=>({k,box:1,ok:v=>v===!!c})),
   explain:"Detective questions probe the workflow: what input it needs, what the process does, and how to check the output. Cost, logo colour and store stars tell you nothing about how the tool works or when it might be wrong."},
- {id:"case2",mount:"a-case2",section:"Part 2",title:"The Confident Answer",sub:"Systems Detectives · Case 2",ico:"🔬",cls:"case",
+ {id:"case2",mount:"a-case2",section:"Week 1 · Part 2",title:"The Confident Answer",sub:"Systems Detectives · Case 2",ico:"🔬",cls:"case",
   fields:[{k:"case2",radio:1,ok:v=>eq(v,0)}],
   explain:"A confident answer can still be wrong. Verify it against the task and a trusted source before you use it – you don't need to throw the tool away, and a nice font proves nothing."},
- {id:"charter",mount:"a-charter",section:"Part 3",title:"Does it belong in our charter?",sub:"Objective 3 · agree responsible-use rules",ico:"🛡️",
+ {id:"charter",mount:"a-charter",section:"Week 1 · Part 3",title:"Does it belong in our charter?",sub:"Objective 3 · agree responsible-use rules",ico:"🛡️",
   fields:CHARTER.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
   explain:"Rules that keep us safe: never type real names, faces or private details; always check the output before we trust it; an adult runs the tool. Uploading a classmate's photo, sharing passwords and trusting confident answers do not keep anyone safe."},
- {id:"case3",mount:"a-case3",section:"Part 3",title:"The Test Photo",sub:"Systems Detectives · Case 3",ico:"⚖️",cls:"case",
+ {id:"case3",mount:"a-case3",section:"Week 1 · Part 3",title:"The Test Photo",sub:"Systems Detectives · Case 3",ico:"⚖️",cls:"case",
   fields:[{k:"case3",radio:1,ok:v=>eq(v,3)}],
   explain:"A face and a real name are personal data. The responsible choice is to use no personal data at all and let an adult run the tool."},
  {id:"ws",mount:"a-ws",section:"Worksheet",title:"Sort it: input, process or output",sub:"Worksheet · choose the column and a reason",ico:"🗺️",cls:"ws",
@@ -634,7 +757,7 @@ const ACTS = [
 ];
 
 /* ---------- state ---------- */
-const KEY="g7-workflow-mw1l1-v1";
+const KEY="g7-mw0w1-combined-v1";
 let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
 try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
@@ -664,6 +787,35 @@ function caseBody(id){
 }
 const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
   list.map(([k,e,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${e?e+" ":""}${esc(t)}</span></label>`).join("")+`</div>`;
+function body0(a){
+  switch(a.id){
+  case "vocab0":
+    return `<p class="how">Choose the meaning of each term. Use the five big ideas above.</p>`+
+      TERMS.map(([t],i)=>`<div class="pair" data-item="m${i}"><span class="t">${esc(t)}</span>${sel("m"+i,TERMS.map(w=>w[1]),"Choose the meaning…",TERM_ORDER)}</div>`).join("");
+  case "rules":
+    return `<p class="how">For each system, choose the pile: does it follow fixed rules, or did it learn from examples?</p>`+
+      SYSTEMS.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Fixed rules","Learns from examples"],["R","L"],t)}</div>`).join("");
+  case "phase":
+    return `<p class="how">Is each moment training (teaching the model) or inference (using the finished model)?</p>`+
+      PHASE.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Training","Inference"],["T","I"],t)}</div>`).join("");
+  case "quick":
+    return MCQ.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("");
+  case "exit0":
+    return `<p class="q">1. Name one rule-based system and one learned system, and say how you can tell them apart.</p>
+      <div class="pair" data-item="e1"><span class="t">A rule-based system</span>${sel("e1",RB,"Choose…",[1,0,2])}</div>
+      <div class="pair" data-item="e2"><span class="t">A learned system</span>${sel("e2",LM,"Choose…",[2,0,1])}</div>
+      <div class="pair" data-item="e3"><span class="t">How I can tell them apart</span>${sel("e3",TELL,"Choose…",[0,2,1,3])}</div>
+      <p class="q">2. In one sentence, what is the difference between training and inference?</p>
+      <p class="sent">Training is when <span data-item="e4">${sel("e4",TR,"choose…",[1,0,3,2])}</span>; inference is when <span data-item="e5">${sel("e5",INF,"choose…",[0,2,1,3])}</span>.</p>
+      <p class="q">3. A classifier gives ‘cat, 0.95’ for a photo. If you run the same photo again, what will it give – and why?</p>
+      <p class="sent">It will give <span data-item="e6">${sel("e6",AGAIN,"what?",[1,0,2])}</span>, because <span data-item="e7">${sel("e7",AGAIN_WHY,"why?",[0,2,1,3])}</span>.</p>
+      <p class="q">4. You had 12 labelled cards. Why hold back 3 as a test set instead of testing on all 12?</p>
+      <div class="pair" data-item="e8"><span class="t">Because…</span>${sel("e8",HOLD,"Choose…",[2,1,0,3])}</div>`;
+  case "human":
+    return `<p class="q" id="q-hu">A recycling classifier says ‘recycle, 0.52’ for a crumpled item. What should happen next?</p>${radios("hu",HUMAN)}`;
+  }
+}
+
 function body(a){
   switch(a.id){
   case "vocab":
@@ -697,6 +849,8 @@ function body(a){
     return `<div class="quote"><b>Real UAE situation:</b> a smart-parking app in Abu Dhabi shows drivers which parking spaces are free.</div>`+
       [["c1","Input"],["c2","Process"],["c3","Output"]].map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${t}</span>${sel(k,PARK,"Choose…",PARK_ORDER)}</div>`).join("")+
       boxes(PARK_NEED.map(([k,t])=>[k,"",t]),"Tick the TWO things a strong AI solution would need to get right.");
+  default:
+    return body0(a);
   }
 }
 function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
@@ -750,7 +904,7 @@ function update(){
   const d=new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
   $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
     <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
-    <div>Grade 7 Main Course · Week 1 · AI as a Workflow</div>
+    <div>Grade 7 Main Course · Week 0 Foundation + Week 1 Lesson 1 · How Models Learn + AI as a Workflow</div>
     <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
     ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
     ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
