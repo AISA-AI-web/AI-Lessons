@@ -69,6 +69,11 @@ Responsible User (GE). There are no
 leaderboards or class rankings. Teachers see each student's badges in their
 dashboard.
 
+**Seeing a student's view.** Teachers, SLT and owners can click a student's name
+in the progress table, or choose one from the **Student view** menu, to see that
+student's dashboard exactly as the student sees it (read-only; lesson buttons are
+switched off). Teachers can only pick students in their own sections.
+
 ## Where the data lives
 
 One Google Sheet, kept in an AISA **Shared Drive** that only the system owners

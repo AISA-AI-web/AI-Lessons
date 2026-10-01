@@ -108,7 +108,7 @@ select.jsel.tW{background:var(--s100);color:#0b0b0b}select.jsel.tO{background:va
 .journey li.done .dot{background:#0ca30c;border-color:#0ca30c}.journey li.doing .dot{border-color:#fab219;background:#fab219}
 .journey small{display:block;color:var(--text-2);font-size:12px}
 .journey b{display:block}
-.journey a{color:var(--series);font-weight:700;text-decoration:none;font-size:14px}
+.journey a,.journey .off{color:var(--series);font-weight:700;text-decoration:none;font-size:14px}
 .callouts{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0 0 10px;font-size:14px}
 .badges{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
 .badges li{display:flex;gap:10px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;align-items:flex-start}
@@ -124,6 +124,10 @@ select.jsel.tW{background:var(--s100);color:#0b0b0b}select.jsel.tO{background:va
 .badges.plain li.got .ico{background:#0ca30c;box-shadow:none;color:#fff;filter:none}
 .bcount{font-size:16px;letter-spacing:1px;white-space:nowrap}
 .note{color:var(--text-3);font-size:12.5px;margin:12px 0 30px}
+.stu{background:none;border:0;padding:0;color:inherit;font:inherit;font-weight:600;text-align:left;text-decoration:underline;text-decoration-color:var(--text-3);text-underline-offset:3px}
+.stu:hover{text-decoration-color:currentColor}
+.viewbar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;background:var(--card);border:1.5px solid var(--series);border-radius:12px;padding:10px 14px;margin:14px 0}
+.off{opacity:.55;cursor:default}
 .loading{padding:60px 0;text-align:center;color:var(--text-2)}
 .err{background:#fde7ec;color:#8a1330;border-radius:10px;padding:12px 14px;margin:20px 0}
 @media print{.filters,#exportBtn{display:none}body{background:#fff}}
@@ -148,6 +152,8 @@ var home = CFG.base + '?p=index';
 
 $('#who').innerHTML = 'Signed in as <b>' + esc(CFG.email) + '</b> · <a href="' + esc(home) + '">All lessons</a>';
 if (CFG.role === 'student') $('#title').textContent = 'My progress';
+
+var VIEW = null;   // staff: the student whose view is being previewed
 
 function load(){
   if (window.google && google.script && google.script.run)
@@ -178,17 +184,23 @@ function render(){
   var lessons = D.lessons.slice().sort(function(a, b){ return a.grade - b.grade || a.week - b.week; });
   var self = D.scope === 'self';
   if (self) return studentView();
+  if (VIEW) return studentView(VIEW);
   var html = '';
   if (!self) html += '<div class="filters">' +
     '<div><label for="fSec">Section</label><select id="fSec"><option value="">' + (D.scope === 'school' ? 'All sections' : 'All my sections') + '</option>' +
       secs.map(function(s){ return '<option' + (F.section === s ? ' selected' : '') + '>' + esc(s) + '</option>'; }).join('') + '</select></div>' +
     '<div><label for="fLes">Lesson</label><select id="fLes"><option value="">All lessons</option>' +
       lessons.map(function(l){ return '<option value="' + esc(l.id) + '"' + (F.lesson === l.id ? ' selected' : '') + '>' + esc(lessonName(l) + ' – ' + lessonTitle(l)) + '</option>'; }).join('') + '</select></div>' +
+    '<div><label for="fView">Student view</label><select id="fView"><option value="">See a student\'s dashboard…</option>' +
+      D.students.slice().sort(function(a, b){ return a.section.localeCompare(b.section, undefined, { numeric: true }) || a.name.localeCompare(b.name); })
+        .filter(function(s){ return !F.section || s.section === F.section; })
+        .map(function(s){ return '<option value="' + esc(s.email) + '">' + esc(s.name + ' · ' + s.section) + '</option>'; }).join('') + '</select></div>' +
     '<div><button type="button" id="exportBtn">Download CSV</button></div></div>';
   html += '<div id="body"></div>';
   $('#app').innerHTML = html;
   if (!self) {
-    $('#fSec').onchange = function(){ F.section = this.value; draw(); };
+    $('#fSec').onchange = function(){ F.section = this.value; render(); };
+    $('#fView').onchange = function(){ if (this.value) viewAs(this.value); };
     $('#fLes').onchange = function(){ F.lesson = this.value; draw(); };
     $('#exportBtn').onclick = exportCsv;
   }
@@ -230,6 +242,12 @@ function draw(){
        (self ? '' : 'Only the sections you teach are shown' + (D.scope === 'school' ? ' – your role can see the whole school.' : '.')) + ' Data refreshed ' + new Date(D.generatedAt).toLocaleString('en-GB') + '.</p>';
   $('#body').innerHTML = h;
   wireTips(); wireJudge();
+  document.querySelectorAll('#body .stu').forEach(function(b){ b.onclick = function(){ viewAs(b.getAttribute('data-e')); }; });
+}
+
+function viewAs(email){
+  VIEW = D.students.filter(function(s){ return s.email === email; })[0] || null;
+  render(); window.scrollTo(0, 0);
 }
 
 function rosterFor(f, l){ return f.students.filter(function(s){ return !s.grade || s.grade === l.grade; }).length; }
@@ -272,7 +290,7 @@ function progressTable(f, self){
     f.lessons.map(function(l){ return '<th class="l" title="' + esc(lessonTitle(l)) + '">' + esc(lessonName(l)) + '</th>'; }).join('') + '</tr></thead><tbody>';
   students.forEach(function(s){
     var stt = studentStats(s.email, s.grade), bs = stt.earned;
-    h += '<tr>' + (self ? '' : '<td>' + esc(s.name) + '</td><td>' + esc(s.section) + '</td><td class="c"><span class="bcount" data-tip="' +
+    h += '<tr>' + (self ? '' : '<td><button type="button" class="stu" data-e="' + esc(s.email) + '" title="See ' + esc(s.name) + '\'s dashboard">' + esc(s.name) + '</button></td><td>' + esc(s.section) + '</td><td class="c"><span class="bcount" data-tip="' +
       esc(bs.length ? '<b>' + s.name + '</b><br>' + bs.map(function(b){ return b.icon + ' ' + b.name; }).join('<br>') : s.name + ' has no badges yet') + '">' +
       (bs.length ? bs.slice(0, 4).map(function(b){ return b.icon; }).join('') + (bs.length > 4 ? ' +' + (bs.length - 4) : '') : '–') + '</span></td>' +
       STRAND_ORDER.map(function(c){ return judgeCell(s, c, stt.strands[c]); }).join(''));
@@ -450,11 +468,12 @@ function tierChip(t, judged){
 }
 
 /* ===================== student view ===================== */
-function studentView(){
-  var me = D.students[0] || { email: CFG.email, name: CFG.name, grade: 0 };
+function studentView(who){
+  var me = who || D.students[0] || { email: CFG.email, name: CFG.name, grade: 0 }, preview = !!who;
   var st = studentStats(me.email, me.grade), wk = thisWeek(), older = me.grade >= 9;
   var R = {}; st.res.forEach(function(r){ R[r.lessonId] = r; });
   var url = function(id){ return CFG.base + '?p=' + encodeURIComponent(id); };
+  var go = function(cls, id, text){ return preview ? '<span class="' + cls + ' off">' + text + '</span>' : '<a class="' + cls + '" href="' + esc(url(id)) + '">' + text + '</a>'; };
   var status = function(l){
     var r = R[l.id], m = r ? Object.keys(r.acts).reduce(function(n, k){ return n + r.acts[k][1]; }, 0) : 0;
     if (r && l.activities && r.done >= l.activities) return { cls: 'done', text: '✓ Finished · ' + pct(r.score, m) + '% first try', btn: 'Review' };
@@ -464,10 +483,11 @@ function studentView(){
     return { cls: 'todo', text: 'Not started', btn: 'Start' };
   };
   var now = st.lessons.filter(function(l){ return l.week === wk.n && l.course === 'main'; })[0];
-  var h = '<section class="hello card"><div><h2>Hi ' + esc(String(me.name).split(' ')[0]) + ' 👋</h2><p class="sub">Grade ' + esc(me.grade || '') +
+  var h = preview ? '<div class="viewbar"><span>👁 You are seeing <b>' + esc(me.name) + '</b>\'s dashboard exactly as they see it. Nothing here can be changed.</span><button type="button" id="backBtn">← Back to dashboard</button></div>' : '';
+  h += '<section class="hello card"><div><h2>Hi ' + esc(String(me.name).split(' ')[0]) + ' 👋</h2><p class="sub">Grade ' + esc(me.grade || '') +
     (me.section && me.section !== 'Unassigned' ? ' · ' + esc(me.section) : '') + ' · ' + esc(wk.label) + '</p></div>' +
     (now ? '<div class="now"><small>This week\'s lesson</small><b>' + esc(now.title) + '</b><span class="pill ' + status(now).cls + '">' + esc(status(now).text) + '</span>' +
-      '<a class="go" href="' + esc(url(now.id)) + '">' + status(now).btn + ' →</a></div>' : '<div class="now"><small>This week</small><b>No new lesson on the site yet.</b></div>') + '</section>';
+      go('go', now.id, status(now).btn + ' →') + '</div>' : '<div class="now"><small>This week</small><b>No new lesson on the site yet.</b></div>') + '</section>';
   h += '<div class="tiles">' +
     tile('Lessons finished', st.finished.filter(function(l){ return l.course === 'main'; }).length + ' / ' + st.due.length, 'Main course lessons taught so far') +
     tile('First-try score', st.firstPct === null ? '–' : st.firstPct + '%', 'across ' + st.acts + ' activities') +
@@ -488,13 +508,14 @@ function studentView(){
   h += '<section class="card"><h2>My learning journey</h2><p class="sub">Every AI lesson for your grade.</p><ol class="journey">' +
     st.lessons.map(function(l){ var s = status(l);
       return '<li class="' + s.cls + '"><span class="dot" aria-hidden="true"></span><div><small>' + (l.course === 'main' ? 'Main course · Week ' + l.week : 'Bridging · Week ' + l.week) + '</small><b>' + esc(l.title) + '</b>' +
-        '<span class="pill ' + s.cls + '">' + esc(s.text) + '</span></div><a href="' + esc(url(l.id)) + '">' + s.btn + '</a></li>'; }).join('') + '</ol></section>';
+        '<span class="pill ' + s.cls + '">' + esc(s.text) + '</span></div>' + go('', l.id, s.btn) + '</li>'; }).join('') + '</ol></section>';
   h += '<section class="card"><h2>' + (older ? 'Milestones' : 'My badges') + '</h2><p class="sub">' + (older ? 'Milestones' : 'Badges') + ' reward careful work, fixing mistakes and stretching yourself – not speed.</p>' +
     '<ul class="badges' + (older ? ' plain' : '') + '">' + st.badges.map(function(b){
       return '<li class="' + (b.earned ? 'got' : 'locked') + '"><span class="ico" aria-hidden="true">' + (older ? (b.earned ? '✓' : '○') : b.icon) + '</span><div><b>' + esc(b.name) + '</b>' +
         '<span>' + esc(b.desc) + '</span><em>' + (b.earned ? (older ? 'Reached' : 'Earned!') : esc(b.prog)) + '</em></div></li>'; }).join('') + '</ul></section>';
   h += '<p class="note">Only you, your teachers and school leaders can see this page. There are no class rankings. ✎ means your teacher set that level. Updated ' + new Date(D.generatedAt).toLocaleString('en-GB') + '.</p>';
   $('#app').innerHTML = h;
+  if (preview) $('#backBtn').onclick = function(){ VIEW = null; render(); };
   wireTips();
 }
 
