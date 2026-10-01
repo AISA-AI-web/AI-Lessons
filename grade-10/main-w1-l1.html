@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>See the Whole System + Lab – Grade 10 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#0F766E; --main2:#14897F; --deep:#0E4F4A;
+  --ink:#12302D; --muted:#4E6562; --paper:#F4FAF9; --card:#FFFFFF;
+  --line:#D3E7E3; --soft:#EAF5F3;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#5EEAD4,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#1BA394);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#12302D,#285A55)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#BFEDE6 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#F9FCFC;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FBFEFD}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#1BA394)}
+.act-head.ws{background:linear-gradient(120deg,#12302D,#2B6B64)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#E9F7F4}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #B9D8D2;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #8CCFC5;border-radius:12px;padding:10px 14px;background:#F6FCFB;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(18,48,45,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#12302D;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 10 Main Course, Term 1</span><span class="pill">Week 1 Core + Week 1 Lab</span><span class="pill">📅 Teach: week of 28 Sep – 2 Oct 2026</span></div>
+    <h1>See the Whole System + Compare, Map, and Stress-Test</h1>
+    <p>You already know a single AI tool turns an input into an output. This unit asks how several tools can be joined so the output of one becomes the input of the next, solving a problem no single tool could. Then, in the Lab, you become an investigator – comparing a single-tool attempt with a pipeline, mapping how the tools connect, and finding where the chain could break.</p>
+    <p class="meta"><b>Strand:</b> Unit Launch · Systems Thinking &nbsp;·&nbsp; <b>Scenario:</b> the bilingual service desk</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 10B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 1 of Term 1 – Monday 28 September to Friday 2 October 2026.</b> Core lesson first, then the Lab period.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: See the Whole System</a>, then move on to the <a href="#lab">Lab: Compare, Map, and Stress-Test</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Combine tools into a solution.</b> I can ask good questions about how different AI tools can be combined to solve a bigger problem together.</li>
+      <li><b>Sort and trace a pipeline.</b> I can sort examples into single-tool or multi-tool solutions and explain how one tool's output becomes the next tool's input.</li>
+      <li><b>Set our safe-use rules.</b> I can help write our unit success criteria and our safe, responsible-use rules for working with several AI tools.</li>
+      <li><b>Lab: compare, map, find the weak point.</b> I can compare a one-tool attempt with a multi-tool solution, map the pipeline, and point to the hand-off most likely to go wrong.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 1 Core · See the Whole System</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>See the whole pipeline</b><small>Narrow tools in order, each output handed on</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Every hand-off is a checkpoint</b><small>Errors flow downstream</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Map a real service and check</b><small>Unplugged activity and launch check</small></a></li>
+    </ol>
+    <h3 class="rh">Week 1 Lab · Compare, Map, and Stress-Test</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Compare, then map the chain</b><small>One tool vs an integrated pipeline</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Lab worksheet</b><small>Compare, map, find the weak point</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Compare two versions and check</b><small>Unplugged activity and investigator check</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>See the whole pipeline</h2><p>Why is one clever app not the answer?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>A municipality wants one AI-assisted workflow for its service desk. A resident leaves an <b>Arabic voice note</b>; the system transcribes it, translates it to <b>English</b> for staff, and replies with a spoken <b>Arabic</b> confirmation. No single tool does all of this – it is an integrated pipeline. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">See the whole pipeline</h3>
+    <p>It is tempting to hunt for one clever app that does everything. Systems thinking asks you to look wider. Most real AI solutions are <b>pipelines</b>: several narrow tools arranged in order, where each tool's output is handed on as the next tool's input. In the service desk, a transcription tool turns the voice note into Arabic text, a translation tool converts it to English for staff, and a text-to-speech tool voices the Arabic reply. No single tool did all three. Learning to see the tools, their order and the hand-offs between them – the whole system – is the skill this unit builds.</p>
+    <figure>
+      <svg viewBox="0 0 760 170" role="img" aria-labelledby="f1T">
+        <title id="f1T">The bilingual service desk: Arabic voice note from a resident, hand-off to Transcribe (Arabic text), hand-off to Translate (English text for staff), hand-off to Spoken reply (Arabic confirmation).</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#12302D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#12302D">
+          <text x="380" y="22" font-size="15" font-weight="700" text-anchor="middle">The bilingual service desk – one solution, four tools in order</text>
+          <g fill="#fff" stroke="#12302D" stroke-width="1.6">
+            <rect x="14" y="70" width="150" height="62" rx="10" fill="#EAF5F3"/><rect x="210" y="70" width="150" height="62" rx="10"/><rect x="406" y="70" width="150" height="62" rx="10"/><rect x="602" y="70" width="150" height="62" rx="10" fill="#EAF5F3"/>
+          </g>
+          <g font-size="15" font-weight="700" text-anchor="middle"><text x="89" y="98" font-size="13.5">Arabic voice note</text><text x="285" y="98">Transcribe</text><text x="481" y="98">Translate</text><text x="677" y="98">Spoken reply</text></g>
+          <g font-size="12" text-anchor="middle" fill="#4E6562"><text x="89" y="118">(resident)</text><text x="285" y="118">Arabic text</text><text x="481" y="118">English text for staff</text><text x="677" y="118">Arabic confirmation</text></g>
+          <g stroke="#12302D" stroke-width="2.5" marker-end="url(#ah)"><path d="M164 101H207"/><path d="M360 101H403"/><path d="M556 101H599"/></g>
+          <g font-size="12" fill="#0F766E" font-weight="600" text-anchor="middle"><text x="186" y="60">hand-off</text><text x="382" y="60">hand-off</text><text x="578" y="60">hand-off</text></g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> An integrated solution is a pipeline: each tool's output is handed on as the next tool's input. The service desk chains four steps in order.</figcaption>
+    </figure>
+    <div class="call violet"><h4>The thinking moves you are using</h4><p>Seeing a pipeline uses two computational-thinking moves you will name all term: <b>decomposition</b> – breaking a big task into ordered steps a tool can do – and <b>abstraction</b> – treating each tool as a labelled box, so you can reason about the system without worrying how each tool works inside.</p></div>
+    <div id="a-vocab"></div>
+    <div id="a-sort"></div>
+    <div id="a-order"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Every hand-off is a checkpoint</h2><p>Where can a pipeline go wrong?</p></div>
+  <div class="part-body">
+    <p>Because tools are chained, a mistake early in the pipeline flows into everything after it. If the transcription misreads one word, the translation and the spoken reply both carry that error forward. That is why an integrated solution is only as trustworthy as its <b>weakest hand-off</b>. Keep the charter in mind: an adult runs the tools, no real names, faces or voices go in, and a confident-looking output is checked against a trusted source at every step before it is passed on. More tools can mean more power, but also more places to check.</p>
+    <div class="call blue"><h4>How we label examples</h4><p>Throughout these lessons, an example marked <b>Scenario</b> is illustrative – a realistic situation to reason about. A claim about a real system is only stated as fact when it carries a <b>named source</b>. Get into the habit of asking: is this verified, or is it a scenario?</p></div>
+    <div class="call blue"><h4>Why it matters</h4><p>The AI solutions being built across the UAE are integrated pipelines – a government service that transcribes a voice note, translates it Arabic to English and summarises it for staff; a tourism app that reads a sign and speaks the translation; a smart-traffic system that senses conditions and advises. <span class="illus">(Illustrative scenarios.)</span> Learning to see how tools are combined, and where they hand off, helps you understand, design and question the solutions around you.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Design &amp; Technology · Languages · Systems Science</h4><p>In <b>Design &amp; Technology</b> you decompose a process into ordered sub-tasks and place a quality check at each interface – the exact discipline of <b>pipeline design</b>. In <b>Arabic and English</b>, the service desk depends on faithful <b>machine translation</b>, where a single mistranslated term can invert meaning – a reminder that language is data. Conceptually this is <b>systems thinking</b>: the behaviour of the whole emerges from how the parts are connected, not from any single component.</p></div>
+    <div id="a-trace"></div>
+    <div id="a-label"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3 · Unplugged</span><h2>Map a real service as a pipeline</h2><p>A UAE municipality wants an AI-assisted workflow for its call centre.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>A UAE municipality wants one AI-assisted workflow for its call centre: a resident leaves an Arabic voice note, and staff need an English summary plus a spoken Arabic reply. Design the pipeline that would do this. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> A pipeline is written as a chain: e.g. voice note → speech-to-text → translate → summarise. Each arrow is a hand-off where an error could pass on.</div>
+    <div id="a-map"></div>
+    <div id="a-quiz"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 1 Lab</span><h2>Compare, Map, and Stress-Test</h2><p>In the Core lesson you saw that an integrated solution chains several AI tools. Today you become an investigator – comparing a single-tool attempt with a pipeline, mapping how the tools connect, and finding where the chain could break.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario – continued</h4><p>Your audit pack shows the same service-desk task done two ways: by a <b>single tool</b> that tries to do everything, and by an <b>integrated pipeline</b> of tools in order. You compare them, map the chain, and find where it could break. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Compare, then map the chain</h2><p>What does combining tools add – and where could it break?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Compare, then map the chain</h3>
+    <p>A single tool can do one job; a pipeline chains several so they do more together. Each pack shows the same task done two ways – by one tool, and by an integrated pipeline. First you compare the outputs and log what the multi-tool version adds. Then you <b>map</b> the pipeline: draw each tool as a box, in order, with arrows showing the hand-offs where one tool's output becomes the next tool's input. Mapping turns ‘it uses lots of AI’ into a clear picture of which tool does what, and where the work is passed along.</p>
+    <h3 class="sub">Find the weak point</h3>
+    <p>Because the tools are chained, an error at an early hand-off flows <b>downstream</b> into every step after it – and can be invisible in the final output. So a good investigator does not just admire the pipeline; they stress-test it, asking which hand-off is most likely to fail and how they would catch it. Remember the charter: the examples are made by the teacher, with no personal data, and every output is checked against the task at each step before it is passed on. The strongest solution is not the longest one – it is the one whose hand-offs you can trust.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>Engineers building integrated AI solutions across the UAE spend much of their effort on the hand-offs – checking a transcription before it is translated for a government helpdesk, verifying a sign-reader's text before it is spoken for a tourism app, or confirming a sensor reading before a smart-traffic system advises. <span class="illus">(Illustrative scenarios.)</span> Learning to map a pipeline and find its weak point is the first step of designing a solution people can rely on.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Science · Mathematics · Design &amp; Technology</h4><p>Comparing two versions while holding everything else constant is a <b>controlled comparison</b>, the backbone of experimental method in <b>Science</b>. Logging each difference as a measured value – seconds, steps, errors in ten trials – is <b>quantitative data handling</b> in <b>Mathematics</b>. Tracing each difference back to the component that caused it is <b>fault diagnosis</b> from <b>Design &amp; Technology</b>.</p></div>
+    <div class="call amber"><h4>Tool for this week: governance &amp; decision decks (unplugged, teacher-mediated)</h4><p>Tool-capability and integration-pattern cards. 1. Read each pack: the same task done by one tool and by an integrated pipeline. 2. Place tool-capability cards in the order data would flow; add an integration-pattern card (pipeline, parallel-then-merge, checker, human-in-the-loop). 3. Draw and label every arrow as an output-to-input hand-off, then mark the weakest link. <b>Stay safe:</b> fully unplugged; no tools run and no data is entered. Use neutral example problems only; keep the reasoning your own.</p></div>
+    <div id="a-lsort"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head dark"><span class="pill">Lab · Part 2 of 3 · Worksheet</span><h2>Compare &amp; Map</h2><p>The same service-desk task, done by a single tool and by an integrated pipeline. Compare, map, and find the weak point.</p></div>
+  <div class="part-body">
+    <div class="ecard" id="audit"></div>
+    <div id="a-lcompare"></div>
+    <div id="a-lmap"></div>
+    <div id="a-lweak"></div>
+    <div id="a-lconc"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head"><span class="pill">Lab · Part 3 of 3 · Unplugged</span><h2>Compare two versions on paper</h2><p>Log the differences, tag them, and name the trade-off.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>A hospital tests two versions of an appointment chatbot. <b>Version A</b> answers in under a second but misroutes 3 in 10 requests; <b>Version B</b> is accurate but takes six seconds and costs more to run. Compare them and name the trade-off. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Log a difference like this: ‘Speed: A about 1 s, B about 6 s (dimension: efficiency; cause: bigger model in B).’</div>
+    <div id="a-lversions"></div>
+    <div id="a-lquiz"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>See the whole system – then map it and stress-test every hand-off</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>A real AI solution is usually a <b>pipeline</b>: narrow tools in order, each output handed to the next.</li>
+      <li>An integrated solution is only as trustworthy as its <b>weakest hand-off</b> – errors flow downstream.</li>
+      <li>Seeing a pipeline uses <b>decomposition</b> (ordered steps) and <b>abstraction</b> (each tool as a labelled box).</li>
+      <li>We label examples: <b>Scenario</b> = illustrative; a fact needs a <b>named source</b>.</li>
+      <li><b>Compare</b> a single-tool attempt with an integrated pipeline to see what combining tools adds, and <b>map</b> it as labelled boxes and arrows.</li>
+      <li>Add a check where an error is most likely – the strongest solution is the one whose <b>hand-offs you can trust</b>, not the longest one.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 10 · Main Course · Term 1 Week 1 (28 Sep – 2 Oct 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["integrate","To join separate tools so they work together as one solution."],
+  ["pipeline","A chain of tools where each tool's output becomes the next tool's input."],
+  ["hand-off","The moment one tool passes its output to the next tool."],
+  ["systems thinking","Looking at the whole solution and how the tools connect, not just one tool."],
+  ["workflow","The ordered steps a task moves through from start to finished output."]
+];
+const DEF_ORDER = [3,0,4,1,2];
+const SORT = [
+  ["s1","🖼️","A photo filter that blurs the background of a picture","S"],
+  ["s2","🪧","A sign-reader app: the camera reads Arabic text, translates it, then reads it aloud in English","M"],
+  ["s3","🎙️","A transcription app that turns speech into text","S"],
+  ["s4","🚦","Smart traffic: sensors detect cars, a model predicts congestion, a road sign shows advice","M"],
+  ["s5","📧","A spam filter labelling one email","S"],
+  ["s6","🧳","A tourism helper: transcribe a question, translate it, find an answer, speak it back","M"]
+];
+const STAGES = ["Arabic voice note from the resident","Transcribe into Arabic text","Translate into English text for staff","Spoken Arabic reply"];
+const STAGE_ORDER = [2,0,3,1];
+const TRACE_OPTS = ["Only the transcription is wrong – the later tools fix it automatically","The wrong word flows into the translation and the spoken reply too","The pipeline stops working completely","Nothing – a confident output is always correct"];
+const TRACE_FIX = ["Add more tools at the end","Check the transcription against the voice note before it is passed on","Make the spoken reply louder","Trust the final output because it sounds fluent"];
+const LABELS = [
+  ["b1","“A municipality's service desk transcribes and translates voice notes.” (Illustrative scenario.)","SC"],
+  ["b2","“The UAE appointed a Minister of State for AI in 2017.” (Source: UAE Government portal)","VF"],
+  ["b3","“Our pipeline is 99% accurate – trust me.”","UN"],
+  ["b4","“A tourism app reads a sign and speaks the translation.” (Illustrative scenario.)","SC"],
+  ["b5","“Every UAE hospital already uses AI chatbots.”","UN"]
+];
+const MAP_TOOLS = ["Arabic voice note","Speech-to-text (Arabic)","Translate Arabic → English","Summarise for staff"];
+const MAP_ORDER = [3,1,0,2];
+const WEAK = ["Voice note → speech-to-text","Translate → summarise","There are no hand-offs in this pipeline"];
+const WEAK_WHY = ["A misheard word at the start flows into the translation, the summary and the reply","Summaries are always wrong","It is the last step, so it matters most","The voice note is too short"];
+const SAFE = ["Type the resident's full name into every tool to test it","An adult runs the tools, no real names or voices go in, and each output is checked before it is passed on","Trust the English summary if it sounds confident","Skip the translation check when the queue is busy"];
+const QUIZ = [
+  ["q1","What makes a set of AI tools an integrated pipeline?",["The tools all run at the same time on the same input.","Each tool's output becomes the next tool's input, in order.","The tools are made by the same company as one product."],1],
+  ["q2","Why is an integrated solution only as trustworthy as its weakest hand-off?",["Because the last tool in the chain is always the least accurate one.","Because more tools always means the solution runs more slowly.","Because an error at one hand-off flows downstream into every later step."],2],
+  ["q3","You break the service-desk task into ordered steps and treat each tool as a labelled box. Which thinking moves are these?",["Decomposition and abstraction.","Prediction and classification.","Encryption and compression."],0]
+];
+const TF = [
+  ["tf1","A pipeline is trustworthy as long as its final tool is accurate.","F"],
+  ["tf2","Decomposition means breaking a big task into ordered steps a tool can do.","T"],
+  ["tf3","Two tools made by the same company always form an integrated pipeline.","F"]
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["compare","Look closely at two solutions to find how they are alike and different."],
+  ["map","Draw the tools in order as boxes and arrows to show how they connect."],
+  ["hand-off","The point where one tool passes its output to the next tool."],
+  ["downstream","The steps that come after a tool, which its output flows into."],
+  ["weak point","The hand-off most likely to carry an error into the final output."]
+];
+const LDEF_ORDER = [2,4,0,3,1];
+const PATTERNS = [
+  ["p1","Each tool's output goes straight into the next tool, in order","PL"],
+  ["p2","Two tools work on the same input at once, then their results are combined","PM"],
+  ["p3","An extra step compares an output with a trusted source before it is passed on","CK"],
+  ["p4","A person reviews low-confidence outputs before they reach the resident","HL"]
+];
+const PAT_LABELS = ["Pipeline","Parallel-then-merge","Checker","Human-in-the-loop"];
+const PAT_VALS = ["PL","PM","CK","HL"];
+const AUDIT = [
+  ["Details captured from 10 test voice notes (5 details each)","31 / 50","48 / 50"],
+  ["English summary for staff","Sometimes – often in mixed Arabic and English","Yes, every time"],
+  ["Spoken Arabic reply to the resident","No","Yes"],
+  ["Time per voice note","about 2 s","about 7 s"],
+  ["Errors carried through to the reply","–","1 in 10: a misheard street name was translated and spoken back wrongly"]
+];
+const LDIFF = [
+  ["c1","The pipeline captured far more details (48 of 50 vs 31 of 50)",1],
+  ["c2","The pipeline gives a spoken Arabic reply; the single tool gives none",1],
+  ["c3","The single tool's app icon is a nicer colour",0],
+  ["c4","The pipeline is slower (about 7 s vs 2 s per voice note)",1],
+  ["c5","The single tool must be better because it is just one app",0]
+];
+const LMAP = ["Arabic voice note","Speech-to-text tool","Translation tool","Text-to-speech tool"];
+const LMAP_LABELS = ["1 · Input","2 · Tool","3 · Tool","4 · Tool → spoken reply"];
+const LMAP_ORDER = [2,3,0,1];
+const LWEAK = ["Voice note → speech-to-text","Translation → text-to-speech","Text-to-speech → resident"];
+const LCHECK = ["Compare the transcript with the voice note, and confirm names and street names before translating","Make the reply faster","Remove the translation tool","Use a bigger screen"];
+const LCONC = ["Combining tools adds abilities no single tool had – a full English summary and a spoken Arabic reply – but adds hand-offs that must be checked","Combining tools always makes a solution faster","A single tool is always better because it is simpler","Combining tools removes every possible error"];
+const LREFL = ["Voice note → speech-to-text, because a misheard word there flows downstream into every later step","The last hand-off, because it is closest to the resident","None – the pipeline is already perfect","Translation → text-to-speech, because voices are hard"];
+const VDIFF = [
+  ["v1","Speed: A under 1 s, B about 6 s",["Accuracy","Efficiency","Usability"],1,["A bigger, more careful model in B","The colour of the chat window","The hospital's opening hours"],0],
+  ["v2","Routing: A misroutes 3 in 10 requests, B routes them correctly",["Accuracy","Efficiency","Usability"],0,["A smaller, faster model in A that skips checking","The patients typed too fast","B has a nicer font"],0]
+];
+const VTRADE = ["Version B gains accuracy and pays for it in speed and running cost","Version A is better at everything","There is no trade-off between the versions","Version B is faster and cheaper"];
+const VWHY = ["Version A, because speed is all that matters","Version B, because 3 misrouted requests in 10 cost patients and staff far more time than a 6-second wait","Neither – chatbots should never be used","Version A, because it is cheaper to run"];
+const LQUIZ = [
+  ["lq1","What does mapping a pipeline as boxes and arrows help you see?",["Which tool is the newest and most expensive to run.","Which tool does what job, and where each hand-off happens.","How to write the computer code inside each of the tools."],1],
+  ["lq2","An error at the first hand-off does not show in the final output but changes its meaning. What should you do?",["Trust the final output, since it looks correct on the surface.","Remove the final tool, since it is where the meaning changed.","Add a check at that hand-off before its output is passed on."],2],
+  ["lq3","Which pipeline is the strongest?",["The one whose hand-offs you can check and trust.","The one that chains together the largest number of tools.","The one that runs from start to finish in the least time."],0]
+];
+const LTF = [
+  ["ltf1","Recording a difference as ‘it felt faster’ is stronger evidence than a number.","F"],
+  ["ltf2","A trade-off means a gain in one dimension is paid for in another.","T"],
+  ["ltf3","Changing several parts at once makes it easy to see which change caused a difference.","F"]
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know",ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"To integrate is to join tools into one solution. A pipeline chains tools so each output becomes the next input; a hand-off is the moment one tool passes its output on. Systems thinking looks at the whole solution and its connections. A workflow is the ordered steps from start to finished output."},
+ {id:"sort",mount:"a-sort",section:"Core · Part 1",title:"Single tool or multi-tool solution?",sub:"Objective 2 · sort and justify",ico:"🗂️",
+  fields:SORT.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A photo filter, a transcription app and a spam filter each do one job. The sign-reader, smart traffic and the tourism helper chain several tools, each output handed on to the next – they are multi-tool pipelines."},
+ {id:"order",mount:"a-order",section:"Core · Part 1",title:"Put the service desk in order",sub:"Objective 2 · trace a pipeline",ico:"🔗",
+  fields:STAGES.map((_,i)=>({k:"o"+i,ok:v=>eq(v,i)})),
+  explain:"Voice note → transcribe into Arabic text → translate into English for staff → spoken Arabic reply. Each arrow is a hand-off: the output of one step is the input of the next."},
+ {id:"trace",mount:"a-trace",section:"Core · Part 2",title:"Follow the error downstream",sub:"Every hand-off is a checkpoint",ico:"🧭",
+  fields:[{k:"tr1",radio:1,ok:v=>eq(v,1)},{k:"tr2",radio:1,ok:v=>eq(v,1)}],
+  explain:"An error at an early hand-off flows into every later step – the translation and the spoken reply both carry the misheard word. The fix is a check at that hand-off: compare the transcript with the voice note before passing it on."},
+ {id:"label",mount:"a-label",section:"Core · Part 2",title:"Verified, scenario, or unverified?",sub:"How we label examples",ico:"🏷️",
+  fields:LABELS.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Examples marked ‘Illustrative scenario’ are realistic situations to reason about. A claim is stated as fact only when it carries a named source. ‘Trust me’ and sweeping claims with no source are unverified – ask: is this verified, or is it a scenario?"},
+ {id:"map",mount:"a-map",section:"Core · Part 3",title:"Map a real service as a pipeline",sub:"Unplugged activity · order, weak hand-off, safe-use rule",ico:"🗺️",cls:"ws",
+  fields:[...MAP_TOOLS.map((_,i)=>({k:"m"+i,ok:v=>eq(v,i)})),{k:"mw",ok:v=>eq(v,0)},{k:"my",ok:v=>eq(v,0)},{k:"ms",ok:v=>eq(v,1)}],
+  explain:"Voice note → speech-to-text → translate → summarise. The first hand-off is most likely to carry an error, because a misheard word flows into every later step. A good safe-use rule: an adult runs the tools, no real names or voices go in, and each output is checked before it is passed on."},
+ {id:"quiz",mount:"a-quiz",section:"Core · Part 3",title:"Launch check",sub:"Quick quiz · 3 questions and 3 true or false",ico:"✅",cls:"quiz",
+  fields:[...QUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...TF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: Each tool's output becomes the next tool's input, in order. 2: An error at one hand-off flows downstream into every later step. 3: Decomposition and abstraction. True or false: an accurate final tool can't undo an earlier error (false); decomposition is breaking a task into ordered steps (true); being from the same company doesn't make tools a pipeline (false)."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know",ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"Compare = find how two solutions are alike and different. Map = draw the tools in order as boxes and arrows. Hand-off = where one tool passes its output on. Downstream = the steps after a tool. Weak point = the hand-off most likely to carry an error into the final output."},
+ {id:"lsort",mount:"a-lsort",section:"Lab · Part 1",title:"Name the integration pattern",sub:"Integration-pattern cards",ico:"🧩",
+  fields:PATTERNS.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Pipeline: outputs flow straight on, in order. Parallel-then-merge: two tools work at once, then combine. Checker: an extra step compares an output with a trusted source. Human-in-the-loop: a person reviews uncertain outputs before they go out."},
+ {id:"lcompare",mount:"a-lcompare",section:"Lab worksheet 1",title:"Compare the two solutions",sub:"Worksheet 1 · log real differences",ico:"⚖️",cls:"ws",
+  fields:LDIFF.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Real differences come from the evidence: the pipeline captured 48 of 50 details against 31, adds a spoken Arabic reply, and is slower (7 s vs 2 s). Icon colour is irrelevant, and ‘just one app’ is an opinion, not evidence."},
+ {id:"lmap",mount:"a-lmap",section:"Lab worksheet 2",title:"Map the integrated pipeline",sub:"Worksheet 2 · boxes and arrows",ico:"🗺️",cls:"ws",
+  fields:LMAP.map((_,i)=>({k:"lm"+i,ok:v=>eq(v,i)})),
+  explain:"Input: the Arabic voice note → speech-to-text tool → translation tool → text-to-speech tool, which gives the spoken reply. Each arrow is an output-to-input hand-off."},
+ {id:"lweak",mount:"a-lweak",section:"Lab worksheet 3",title:"Mark the weak point",sub:"Worksheet 3 · the hand-off most likely to fail, and a check",ico:"🔎",cls:"ws",
+  fields:[{k:"lw1",ok:v=>eq(v,0)},{k:"lw2",ok:v=>eq(v,0)}],
+  explain:"The audit pack shows a misheard street name carried all the way to the spoken reply – so the voice note → speech-to-text hand-off is the weak point. Catch it by comparing the transcript with the voice note and confirming names before translating."},
+ {id:"lconc",mount:"a-lconc",section:"Lab worksheet 4–5",title:"Conclusion and reflection",sub:"Worksheet 4–5 · what combining tools adds",ico:"💭",cls:"ws",
+  fields:[{k:"lc1",radio:1,ok:v=>eq(v,0)},{k:"lc2",ok:v=>eq(v,0)}],
+  explain:"Combining tools adds abilities no single tool had, but every extra hand-off is another place to check. The hand-off to check first is the earliest one, because its errors flow downstream into everything after it."},
+ {id:"lversions",mount:"a-lversions",section:"Lab · Part 3",title:"Compare two versions on paper",sub:"Unplugged activity · dimension, cause and trade-off",ico:"🏥",
+  fields:[...VDIFF.flatMap(([k,,,d,,c])=>[{k:k+"a",ok:v=>eq(v,d)},{k:k+"b",ok:v=>eq(v,c)}]),{k:"vt",radio:1,ok:v=>eq(v,0)},{k:"vw",ok:v=>eq(v,1)}],
+  explain:"Speed is efficiency, caused by B's bigger model; routing is accuracy, where A's faster model skips checking. The trade-off: B gains accuracy and pays in speed and cost. For a busy clinic, misrouting 3 requests in 10 wastes far more time than a 6-second wait – so B fits."},
+ {id:"lquiz",mount:"a-lquiz",section:"Lab · Part 3",title:"Investigator check",sub:"Quick quiz · 3 questions and 3 true or false",ico:"✅",cls:"quiz",
+  fields:[...LQUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...LTF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: A map shows which tool does what and where each hand-off happens. 2: Add a check at that hand-off before its output is passed on. 3: The strongest pipeline is the one whose hand-offs you can check and trust. True or false: a number beats ‘it felt faster’ (false); a trade-off is a gain paid for elsewhere (true); change one part at a time to see the cause (false)."}
+];
+
+/* ---------- state ---------- */
+const KEY="g10-mw1-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#audit").innerHTML=`<header><small>Audit pack · illustrative</small><b>Service desk: single tool vs integrated pipeline</b></header>
+<div class="in">
+  <p class="task"><b>The task:</b> a resident leaves an Arabic voice note; staff need an English summary and the resident gets a spoken Arabic confirmation. The teacher tested both solutions on the same 10 example voice notes (no real voices).</p>
+  <div class="ab"><div><b>Solution 1 · single tool</b>One all-in-one app that listens to the voice note and writes English text.</div><div><b>Solution 2 · integrated pipeline</b>Speech-to-text → translation → text-to-speech, in order.</div></div>
+  <table class="t"><thead><tr><th>Test</th><th>Single tool</th><th>Pipeline</th></tr></thead>
+  <tbody>${AUDIT.map(([t,a,b])=>`<tr><td>${esc(t)}</td><td>${esc(a)}</td><td>${esc(b)}</td></tr>`).join("")}</tbody></table>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "sort":
+    return `<p class="how">Does each solution use one tool, or several tools chained so each output becomes the next input?</p>`+
+      SORT.map(([k,e,t])=>`<div class="row" data-item="${k}"><span class="t">${e} ${esc(t)}</span>${seg(k,["Single tool","Multi-tool pipeline"],["S","M"],t)}</div>`).join("");
+  case "order":
+    return `<p class="how">Put the service-desk pipeline from Figure 1 in order, from first to last.</p>`+
+      STAGES.map((_,i)=>`<div class="pair" data-item="o${i}"><span class="t">Step ${i+1}</span>${sel("o"+i,STAGES,"Choose the step…",STAGE_ORDER)}</div>`).join("");
+  case "trace":
+    return `<div class="quote">The transcription tool mishears the street name in a resident's voice note.</div>
+      <p class="q" id="q-tr1">What happens to the rest of the pipeline?</p>${radios("tr1",TRACE_OPTS)}
+      <p class="q" id="q-tr2">Where is the best place to catch it?</p>${radios("tr2",TRACE_FIX)}`;
+  case "label":
+    return `<p class="how">Is each statement a verified fact (it has a named source), an illustrative scenario, or an unverified claim?</p>`+
+      LABELS.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Verified fact","Scenario","Unverified"],["VF","SC","UN"],t)}</div>`).join("");
+  case "map":
+    return `<p class="q">1. Write the ordered tools in the pipeline.</p>`+
+      MAP_TOOLS.map((_,i)=>`<div class="pair" data-item="m${i}"><span class="t">${i===0?"Start":"→ then"}</span>${sel("m"+i,MAP_TOOLS,"Choose…",MAP_ORDER)}</div>`).join("")+
+      `<p class="q">2. Mark the one hand-off most likely to carry an error, and say why.</p>
+      <div class="pair" data-item="mw"><span class="t">Hand-off</span>${sel("mw",["Voice note → speech-to-text","Translate → summarise","Summarise → staff"],"Choose…",[1,0,2])}</div>
+      <div class="pair" data-item="my"><span class="t">Why</span>${sel("my",WEAK_WHY,"Choose…",[2,0,3,1])}</div>
+      <p class="q">3. Choose one safe-use rule for staff working with this pipeline.</p>
+      <div class="pair" data-item="ms"><span class="t">Safe-use rule</span>${sel("ms",SAFE,"Choose…")}</div>`;
+  case "quiz":
+    return quiz(QUIZ,TF);
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lsort":
+    return `<p class="how">Match each description to its integration-pattern card.</p>`+
+      PATTERNS.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,PAT_LABELS,PAT_VALS,t)}</div>`).join("");
+  case "lcompare":
+    return boxes(LDIFF,"Compare the single-tool output with the integrated-pipeline output in the audit pack. Tick every real difference the evidence shows. Leave the others unticked.");
+  case "lmap":
+    return `<p class="how">Map the integrated pipeline as boxes and arrows: write the tool at each stage.</p><div class="mapline">`+
+      LMAP.map((_,i)=>`<div class="pair" data-item="lm${i}"><span class="t">${LMAP_LABELS[i]}</span>${sel("lm"+i,LMAP,"Choose…",LMAP_ORDER)}</div>`).join("")+`</div>`;
+  case "lweak":
+    return `<div class="pair" data-item="lw1"><span class="t">The hand-off most likely to fail</span>${sel("lw1",LWEAK,"Choose…",[1,0,2])}</div>
+      <div class="pair" data-item="lw2"><span class="t">One check I would add there</span>${sel("lw2",LCHECK,"Choose…",[1,0,3,2])}</div>`;
+  case "lconc":
+    return `<p class="q" id="q-lc1">4. One conclusion: what does combining tools add, compared with a single tool?</p>${radios("lc1",LCONC)}
+      <div class="pair" data-item="lc2" style="margin-top:10px"><span class="t">5. My reflection: the hand-off I would check first, and why, is…</span>${sel("lc2",LREFL,"Choose…",[1,3,0,2])}</div>`;
+  case "lversions":
+    return `<p class="how">1–2. For each difference, tag the dimension and the system part that causes it.</p>`+
+      VDIFF.map(([k,t,d,,c])=>`<div class="scen"><p>${esc(t)}</p><div class="two">
+        <div data-item="${k}a"><span>Dimension</span>${sel(k+"a",d,"Choose…")}</div>
+        <div data-item="${k}b"><span>Cause</span>${sel(k+"b",c,"Choose…",[1,0,2])}</div></div></div>`).join("")+
+      `<p class="q" id="q-vt">3. State the trade-off in one sentence.</p>${radios("vt",VTRADE)}
+      <div class="pair" data-item="vw" style="margin-top:10px"><span class="t">Which version fits a busy clinic, and why?</span>${sel("vw",VWHY,"Choose…",[0,3,1,2])}</div>`;
+  case "lquiz":
+    return quiz(LQUIZ,LTF);
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 10 Main Course · Term 1 Week 1 (28 Sep – 2 Oct 2026) · Core + Lab · See the Whole System + Compare, Map, and Stress-Test</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
