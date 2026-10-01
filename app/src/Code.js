@@ -15,8 +15,10 @@ var TABS = {
   CourseMap: ['courseId', 'courseName', 'section', 'include', 'notes'],
   Lessons:   ['lessonId', 'grade', 'course', 'week', 'title', 'activities', 'maxPoints', 'updatedAt'],
   Scores:    ['timestamp', 'email', 'lessonId', 'activityId', 'activityTitle', 'part', 'firstScore', 'max'],
-  Time:      ['timestamp', 'email', 'lessonId', 'seconds']
+  Time:      ['timestamp', 'email', 'lessonId', 'seconds'],
+  Retries:   ['timestamp', 'email', 'lessonId', 'activityId', 'score', 'max']
 };
+var TERM_START = '2026-09-28';           // Monday of curriculum Week 1 (two-week timetable cycle)
 
 /* ===================== entry point ===================== */
 
@@ -97,9 +99,10 @@ function visibleSections_(me) {
 function getLessonState(lessonId) {
   var me = requireUser_();
   lessonId = cleanId_(lessonId);
-  var done = {};
+  var done = {}, latest = {};
   rows_('Scores').forEach(function (r) { if (lc_(r.email) === me.email && r.lessonId === lessonId) done[r.activityId] = Number(r.firstScore); });
-  return { done: done };
+  rows_('Retries').forEach(function (r) { if (lc_(r.email) === me.email && r.lessonId === lessonId) latest[r.activityId] = Number(r.score); });
+  return { done: done, latest: latest };
 }
 
 /**
@@ -135,6 +138,23 @@ function recordTime(lessonId, seconds) {
   if (s < 1) return { saved: 0 };
   append_('Time', [[new Date(), me.email, cleanId_(lessonId), s]]);
   return { saved: s };
+}
+
+/**
+ * Records a student's latest score on activities they have re-checked, so the
+ * dashboard can show growth ("answers fixed"). First-try scores are untouched.
+ */
+function recordLatest(lessonId, items) {
+  var me = requireUser_();
+  lessonId = cleanId_(lessonId);
+  if (!Array.isArray(items) || !items.length || items.length > 60) return { saved: 0 };
+  var now = new Date(), out = [];
+  items.forEach(function (it) {
+    var id = cleanText_(it.id, 40), max = num_(it.max, 0, 200);
+    if (id && max > 0) out.push([now, me.email, lessonId, id, num_(it.score, 0, max), max]);
+  });
+  if (out.length) append_('Retries', out);
+  return { saved: out.length };
 }
 
 function registerLesson_(lessonId, meta) {
@@ -176,6 +196,10 @@ function getDashboard() {
     c.firstAt = c.firstAt === null ? t : Math.min(c.firstAt, t); c.lastAt = Math.max(c.lastAt || 0, t);
   });
   rows_('Time').forEach(function (r) { cell(lc_(r.email), r.lessonId).seconds += Number(r.seconds) || 0; });
+  rows_('Retries').forEach(function (r) {           // rows are in time order, so the last one wins
+    var a = cell(lc_(r.email), r.lessonId).acts[r.activityId];
+    if (a) a[4] = Number(r.score);
+  });
 
   Object.keys(per).forEach(function (k) {             // people who worked but are not on the roster
     var e = per[k].email;
@@ -197,6 +221,8 @@ function getDashboard() {
     lessons: Object.keys(lessons).map(function (k) { return lessons[k]; }),
     students: outStudents,
     results: results,
+    catalog: typeof CATALOG === 'undefined' ? [] : CATALOG,
+    termStart: TERM_START,
     generatedAt: new Date().toISOString()
   };
 }
@@ -308,4 +334,4 @@ function cleanId_(v) {
 function safe_(v) { return typeof v === 'string' && /^[=+\-@]/.test(v) ? "'" + v : v; }
 
 /* exported for the local test harness only */
-if (typeof module !== 'undefined') module.exports = { doGet: doGet, getLessonState: getLessonState, recordScores: recordScores, recordTime: recordTime, getDashboard: getDashboard, syncClassroom: syncClassroom, setup: setup, currentUser_: currentUser_ };
+if (typeof module !== 'undefined') module.exports = { doGet: doGet, getLessonState: getLessonState, recordScores: recordScores, recordTime: recordTime, recordLatest: recordLatest, getDashboard: getDashboard, syncClassroom: syncClassroom, setup: setup, currentUser_: currentUser_ };

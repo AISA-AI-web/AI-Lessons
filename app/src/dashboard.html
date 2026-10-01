@@ -67,6 +67,38 @@ td.c{text-align:center;padding:4px}
 .legend i{display:inline-block;width:22px;height:12px;border-radius:3px;vertical-align:middle;margin-right:4px}
 .status{display:inline-flex;align-items:center;gap:4px;font-weight:600;font-size:12.5px}
 .tip{position:fixed;z-index:9;pointer-events:none;background:var(--text);color:var(--surface);font-size:12.5px;padding:6px 9px;border-radius:7px;max-width:280px;display:none;line-height:1.35}
+#app>section.card{margin:0 0 16px}
+.hello{display:grid;grid-template-columns:1fr minmax(240px,44%);gap:16px;align-items:center;margin:0 0 16px}
+@media (max-width:700px){.hello{grid-template-columns:1fr}}
+.hello h2{font-size:24px}
+.now{border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:4px}
+.now small{color:var(--text-2);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+.now b{font-size:16px}
+.go{justify-self:start;background:var(--series);color:#fff;border-radius:8px;padding:6px 14px;font-weight:700;text-decoration:none;margin-top:4px}
+.pill{display:inline-block;justify-self:start;font-size:12px;font-weight:600;border-radius:999px;padding:2px 10px;margin-top:2px}
+.pill.done{background:rgba(12,163,12,.12);color:#0a6e0a}.pill.doing{background:rgba(250,178,25,.18);color:#7a5200}.pill.todo{background:var(--grid);color:var(--text-2)}
+.journey{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.journey li{display:grid;grid-template-columns:22px 1fr auto;gap:12px;align-items:center;padding:10px 0;position:relative}
+.journey li+li{border-top:1px solid var(--grid)}
+.journey .dot{width:14px;height:14px;border-radius:50%;border:2.5px solid var(--text-3);background:var(--card);justify-self:center}
+.journey li.done .dot{background:#0ca30c;border-color:#0ca30c}.journey li.doing .dot{border-color:#fab219;background:#fab219}
+.journey small{display:block;color:var(--text-2);font-size:12px}
+.journey b{display:block}
+.journey a{color:var(--series);font-weight:700;text-decoration:none;font-size:14px}
+.callouts{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0 0 10px;font-size:14px}
+.badges{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.badges li{display:flex;gap:10px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;align-items:flex-start}
+.badges .ico{font-size:30px;line-height:1;flex:none;width:40px;height:40px;display:grid;place-items:center;border-radius:50%;background:var(--grid)}
+.badges li.got{border-color:var(--series);background:rgba(42,120,214,.06)}
+.badges li.got .ico{background:#fff3c4;box-shadow:0 0 0 2px #e8b400}
+.badges li.locked .ico{filter:grayscale(1);opacity:.45}
+.badges b{display:block;font-size:14.5px}
+.badges span{display:block;font-size:12.5px;color:var(--text-2);line-height:1.35}
+.badges em{display:block;font-style:normal;font-size:12px;font-weight:700;color:var(--text-3);margin-top:3px}
+.badges li.got em{color:#0a6e0a}
+.badges.plain .ico{font-size:18px;width:28px;height:28px;font-weight:700;color:var(--text-3)}
+.badges.plain li.got .ico{background:#0ca30c;box-shadow:none;color:#fff;filter:none}
+.bcount{font-size:16px;letter-spacing:1px;white-space:nowrap}
 .note{color:var(--text-3);font-size:12.5px;margin:12px 0 30px}
 .loading{padding:60px 0;text-align:center;color:var(--text-2)}
 .err{background:#fde7ec;color:#8a1330;border-radius:10px;padding:12px 14px;margin:20px 0}
@@ -121,6 +153,7 @@ function render(){
   var secs = D.sections.slice().sort(function(a, b){ return a.localeCompare(b, undefined, { numeric: true }); });
   var lessons = D.lessons.slice().sort(function(a, b){ return a.grade - b.grade || a.week - b.week; });
   var self = D.scope === 'self';
+  if (self) return studentView();
   var html = '';
   if (!self) html += '<div class="filters">' +
     '<div><label for="fSec">Section</label><select id="fSec"><option value="">' + (D.scope === 'school' ? 'All sections' : 'All my sections') + '</option>' +
@@ -210,10 +243,13 @@ function progressTable(f, self){
   var R = {}; f.res.forEach(function(r){ R[r.email + '|' + r.lessonId] = r; });
   var students = f.students.slice().sort(function(a, b){ return a.section.localeCompare(b.section, undefined, { numeric: true }) || a.name.localeCompare(b.name); });
   var h = '<div class="card" style="padding:0;border:0;background:none"><h2 style="margin:0 0 8px">' + (self ? 'My lessons' : 'Student progress') + '</h2><div class="tablewrap"><table><thead><tr>' +
-    (self ? '' : '<th>Student</th><th>Section</th>') +
+    (self ? '' : '<th>Student</th><th>Section</th><th>Badges</th>') +
     f.lessons.map(function(l){ return '<th class="l" title="' + esc(lessonTitle(l)) + '">' + esc(lessonName(l)) + '</th>'; }).join('') + '</tr></thead><tbody>';
   students.forEach(function(s){
-    h += '<tr>' + (self ? '' : '<td>' + esc(s.name) + '</td><td>' + esc(s.section) + '</td>');
+    var bs = studentStats(s.email, s.grade).earned;
+    h += '<tr>' + (self ? '' : '<td>' + esc(s.name) + '</td><td>' + esc(s.section) + '</td><td class="c"><span class="bcount" data-tip="' +
+      esc(bs.length ? '<b>' + s.name + '</b><br>' + bs.map(function(b){ return b.icon + ' ' + b.name; }).join('<br>') : s.name + ' has no badges yet') + '">' +
+      (bs.length ? bs.slice(0, 4).map(function(b){ return b.icon; }).join('') + (bs.length > 4 ? ' +' + (bs.length - 4) : '') : '–') + '</span></td>');
     f.lessons.forEach(function(l){
       if (s.grade && s.grade !== l.grade) { h += '<td class="c"><span class="cell none">n/a</span></td>'; return; }
       var r = R[s.email + '|' + l.id];
@@ -255,6 +291,144 @@ function exportCsv(){
   a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
   a.download = 'ai-progress' + (F.section ? '-' + F.section.replace(/\s+/g, '') : '') + '.csv';
   document.body.appendChild(a); a.click(); a.remove();
+}
+
+/* ===================== skills and badges (shared by student and teacher views) ===================== */
+var SKILLS = [
+  ['Safe & responsible use', /charter|safe|privacy|responsible|test photo|name in the box|class rule/],
+  ['Vocabulary', /match each (word|term|lab word)|words to know/],
+  ['Questions & evidence', /question|evidence|claim|justif|conclusion|verdict|fair test|log\b|explanation/],
+  ['Judging outputs', /criteri|judge|evaluat|quality|reliab|accura|trade-off|rate each|score each|better|weak|compare/],
+  ['Systems & workflows', /pipeline|workflow|input|process|output|hand-off|stage|design|integration|map\b|whole system/],
+  ['Data & learning', /data|learn|training|inference|model|rule|station|pattern|machine|sort/]
+];
+/* Hand-tagged skill for every activity. D data & learning · S systems & workflows ·
+   J judging outputs · Q questions & evidence · R safe & responsible use · V vocabulary.
+   Add new lessons here; untagged activities fall back to the keyword rules above. */
+var SKILL_CODES = { D: 'Data & learning', S: 'Systems & workflows', J: 'Judging outputs', Q: 'Questions & evidence', R: 'Safe & responsible use', V: 'Vocabulary' };
+var SKILL_MAP = {
+  'grade-6/bridging-w1-l1': 'sort:D case1:D match:D case2:D pick:D case3:D mission:D trace:D qq:D exit:D chal:D',
+  'grade-6/main-w1-l1': 'vocab:V sort:D case1:D detq:Q case2:D rules:R case3:R ws:D questions:Q exit:D chal:D stations:D lcase1:D realdiff:Q lcase2:D order:Q lcase3:Q lcompare:D ltest:Q llog:Q lexit:Q lchal:D',
+  'grade-7/main-w1-l1': 'vocab0:V rules:D phase:D quick:D exit0:D human:R vocab:V ipo:S case1:S detq:Q case2:Q charter:R case3:R ws:S questions:Q rule:R exit:S chal:S',
+  'grade-8/main-w1-l1': 'vocab:V evalq:Q case1:J sort:J which:S case2:S fair:J case3:R ws:J questions:Q charter:R exit:J chal:J lvocab:V lmatch:J lcase1:J ljudge:J lcase2:J lorder:Q lcase3:Q llog:Q lconc:Q lchecks:J lexit:Q lchal:Q',
+  'grade-9/bridging-w1-l1': 'vocab:V match:S case1:S order:Q case2:S claims:Q case3:Q mission:S explain:Q toolq:S exit:S chal:S',
+  'grade-10/bridging-w1-l1': 'vocab:V sort:S trace:S rate:J ws2:J ws3:S reflect:S compare:J check:J',
+  'grade-10/main-w1-l1': 'vocab:V sort:S order:S trace:S label:Q map:S quiz:S lvocab:V lsort:S lcompare:J lmap:S lweak:S lconc:Q lversions:J lquiz:S',
+  'grade-11/bridging-w1-l1': 'vocab:V pr:J stage:S map:S diff:J messy:J payoff:Q compare:J check:J',
+  'grade-12/bridging-w1-l1': 'vocab:V quality:J trade:J purpose:J map:S diff:S score:J name:J balance:Q compare:J check:J'
+};
+var SKILL_LOOKUP = {};
+Object.keys(SKILL_MAP).forEach(function(l){ SKILL_MAP[l].split(' ').forEach(function(p){ var x = p.split(':'); SKILL_LOOKUP[l + '|' + x[0]] = SKILL_CODES[x[1]]; }); });
+function skillOf(title, part, lessonId, actId){
+  if (SKILL_LOOKUP[lessonId + '|' + actId]) return SKILL_LOOKUP[lessonId + '|' + actId];
+  var t = (String(title || '') + ' ' + String(part || '')).toLowerCase();
+  for (var i = 0; i < SKILLS.length; i++) if (SKILLS[i][1].test(t)) return SKILLS[i][0];
+  return 'Applying ideas';
+}
+var SKILL_BADGES = { 'Data & learning': ['🔎', 'Data Detective'], 'Systems & workflows': ['🧭', 'Systems Thinker'],
+                     'Judging outputs': ['⚖️', 'Fair Judge'], 'Questions & evidence': ['🧪', 'Evidence Seeker'] };
+
+function catalogFor(grade){
+  return (D.catalog || []).filter(function(l){ return l.grade === grade; })
+    .sort(function(a, b){ return a.week - b.week || (a.course === 'bridging' ? -1 : 1); });
+}
+function lessonInfo(id){
+  var l = (D.catalog || []).filter(function(x){ return x.id === id; })[0] || D.lessons.filter(function(x){ return x.id === id; })[0];
+  return l || { id: id, activities: 0, week: 0, grade: 0, course: '', title: id };
+}
+
+/** Everything a student's dashboard needs, from their result rows. */
+function studentStats(email, grade){
+  var res = D.results.filter(function(r){ return r.email === email; });
+  var lessons = catalogFor(grade), skills = {}, fixed = 0, finished = [], acts = 0, pts = 0, max = 0;
+  var badges = [];
+  var fixerLesson = false, stretch = false, bull = false, safe = { n: 0, full: 0 };
+  res.forEach(function(r){
+    var info = lessonInfo(r.lessonId), wrong = 0, mended = 0;
+    if (info.activities && r.done >= info.activities) finished.push(info);
+    Object.keys(r.acts).forEach(function(k){
+      var a = r.acts[k], sk = skillOf(a[2], a[3], r.lessonId, k);
+      var o = skills[sk] || (skills[sk] = { p: 0, m: 0, n: 0 }); o.p += a[0]; o.m += a[1]; o.n++;
+      acts++; pts += a[0]; max += a[1];
+      if (a[0] < a[1]) { wrong++; if (a[4] === a[1]) { mended++; fixed++; } }
+      if (/challenge/i.test(a[2] + ' ' + a[3])) stretch = true;
+      if (sk === 'Safe & responsible use') { safe.n++; if (a[0] === a[1]) safe.full++; }
+    });
+    if (wrong && mended === wrong) fixerLesson = true;
+    var lm = Object.keys(r.acts).reduce(function(n, k){ return n + r.acts[k][1]; }, 0);
+    if (info.activities && r.done >= info.activities && pct(r.score, lm) >= 90) bull = true;
+  });
+  var weeks = {}; finished.forEach(function(l){ weeks[l.week] = 1; });
+  var run = 0, best = 0; Object.keys(weeks).map(Number).sort(function(a, b){ return a - b; }).forEach(function(w, i, arr){ run = i && arr[i - 1] === w - 1 ? run + 1 : 1; best = Math.max(best, run); });
+  var avail = lessons.length;
+  function B(icon, name, desc, earned, prog){ badges.push({ icon: icon, name: name, desc: desc, earned: !!earned, prog: prog }); }
+  B('🚀', 'First Steps', 'Finish your first lesson.', finished.length >= 1, finished.length >= 1 ? '' : '0 of 1 lessons');
+  B('🏁', 'Finisher', 'Finish every lesson for your grade so far.', avail && finished.length >= avail, finished.length + ' of ' + avail + ' lessons');
+  B('🔥', 'Week Streak', 'Finish lessons in 3 teaching weeks in a row.', best >= 3, best + ' of 3 weeks');
+  B('🛠️', 'Fixer', 'In one lesson, go back and correct every answer you got wrong first time.', fixerLesson, fixed ? fixed + ' answers fixed so far' : 'Fix your red answers and check again');
+  B('⭐', 'Stretch', 'Complete a challenge activity.', stretch, 'Try a ⭐ Challenge');
+  B('🎯', 'Bullseye', 'Score 90% or more on first tries across a whole lesson.', bull, 'Aim for 90%+ first time');
+  B('🛡️', 'Safe-Use Champion', 'Get every safe-use activity right first time (at least 2).', safe.n >= 2 && safe.full === safe.n, safe.full + ' of ' + Math.max(2, safe.n) + ' right first time');
+  Object.keys(SKILL_BADGES).forEach(function(sk){
+    var o = skills[sk] || { p: 0, m: 0, n: 0 }, sb = SKILL_BADGES[sk];
+    B(sb[0], sb[1], 'Score 80%+ on first tries in ' + sk + ' (at least 4 activities).', o.n >= 4 && pct(o.p, o.m) >= 80,
+      o.n ? pct(o.p, o.m) + '% across ' + o.n + ' activit' + (o.n === 1 ? 'y' : 'ies') : 'Not started yet');
+  });
+  return { res: res, lessons: lessons, finished: finished, skills: skills, fixed: fixed, acts: acts, firstPct: max ? pct(pts, max) : null,
+           badges: badges, earned: badges.filter(function(b){ return b.earned; }) };
+}
+
+function thisWeek(){
+  var start = new Date(D.termStart + 'T00:00:00'), now = new Date(); now.setHours(0, 0, 0, 0);
+  var n = Math.floor((now - start) / 864e5 / 7) + 1;
+  var mon = new Date(start); mon.setDate(mon.getDate() + (n - 1) * 7);
+  var fri = new Date(mon); fri.setDate(fri.getDate() + 4);
+  var f = function(d){ return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }); };
+  return { n: n, label: n >= 1 ? 'Week ' + n + ' · ' + f(mon) + ' – ' + f(fri) : 'Before term starts' };
+}
+
+/* ===================== student view ===================== */
+function studentView(){
+  var me = D.students[0] || { email: CFG.email, name: CFG.name, grade: 0 };
+  var st = studentStats(me.email, me.grade), wk = thisWeek(), older = me.grade >= 9;
+  var R = {}; st.res.forEach(function(r){ R[r.lessonId] = r; });
+  var url = function(id){ return CFG.base + '?p=' + encodeURIComponent(id); };
+  var status = function(l){
+    var r = R[l.id], m = r ? Object.keys(r.acts).reduce(function(n, k){ return n + r.acts[k][1]; }, 0) : 0;
+    if (!r) return { cls: 'todo', text: 'Not started', btn: 'Start' };
+    if (l.activities && r.done >= l.activities) return { cls: 'done', text: '✓ Finished · ' + pct(r.score, m) + '% first try', btn: 'Review' };
+    return { cls: 'doing', text: r.done + ' of ' + l.activities + ' activities · ' + pct(r.score, m) + '%', btn: 'Continue' };
+  };
+  var now = st.lessons.filter(function(l){ return l.week === wk.n && l.course === 'main'; })[0] || st.lessons.filter(function(l){ return l.week === wk.n; })[0];
+  var h = '<section class="hello card"><div><h2>Hi ' + esc(String(me.name).split(' ')[0]) + ' 👋</h2><p class="sub">Grade ' + esc(me.grade || '') +
+    (me.section && me.section !== 'Unassigned' ? ' · ' + esc(me.section) : '') + ' · ' + esc(wk.label) + '</p></div>' +
+    (now ? '<div class="now"><small>This week\'s lesson</small><b>' + esc(now.title) + '</b><span class="pill ' + status(now).cls + '">' + esc(status(now).text) + '</span>' +
+      '<a class="go" href="' + esc(url(now.id)) + '">' + status(now).btn + ' →</a></div>' : '<div class="now"><small>This week</small><b>No new lesson on the site yet.</b></div>') + '</section>';
+  h += '<div class="tiles">' +
+    tile('Lessons finished', st.finished.length + ' / ' + st.lessons.length, 'for Grade ' + (me.grade || '–')) +
+    tile('First-try score', st.firstPct === null ? '–' : st.firstPct + '%', 'across ' + st.acts + ' activities') +
+    tile('Answers fixed', st.fixed, 'wrong first time, then corrected') +
+    tile(older ? 'Milestones reached' : 'Badges earned', st.earned.length + ' / ' + st.badges.length, older ? 'see below' : 'collect them all') + '</div>';
+  h += '<section class="card"><h2>My learning journey</h2><p class="sub">Every AI lesson for your grade, in teaching order.</p><ol class="journey">' +
+    st.lessons.map(function(l){ var s = status(l);
+      return '<li class="' + s.cls + '"><span class="dot" aria-hidden="true"></span><div><small>Week ' + l.week + ' · ' + (l.course === 'main' ? 'Main course' : 'Bridging') + '</small><b>' + esc(l.title) + '</b>' +
+        '<span class="pill ' + s.cls + '">' + esc(s.text) + '</span></div><a href="' + esc(url(l.id)) + '">' + s.btn + '</a></li>'; }).join('') + '</ol></section>';
+  var sk = Object.keys(st.skills).map(function(k){ var o = st.skills[k]; return { k: k, p: pct(o.p, o.m), n: o.n }; }).sort(function(a, b){ return b.p - a.p; });
+  var solid = sk.filter(function(x){ return x.n >= 2; });
+  h += '<div class="grid2">' + card('My skills', 'Your first-try score in each skill the lessons practise.',
+      (solid.length >= 2 ? '<p class="callouts"><span>💪 Strongest: <b>' + esc(solid[0].k) + '</b></span><span>🎯 Next to work on: <b>' + esc(solid[solid.length - 1].k) + '</b></span></p>' : '') +
+      hbars(sk.map(function(x){ return { label: x.k, value: x.p, text: x.p + '%', tip: '<b>' + esc(x.k) + '</b><br>First try: ' + x.p + '%<br>' + x.n + ' activit' + (x.n === 1 ? 'y' : 'ies') }; }), 100, '%')) +
+    card('My first tries, lesson by lesson', 'Is your first-try score growing?',
+      hbars(st.lessons.filter(function(l){ return R[l.id]; }).map(function(l){ var r = R[l.id], m = Object.keys(r.acts).reduce(function(n, k){ return n + r.acts[k][1]; }, 0);
+        return { label: 'W' + l.week + ' ' + (l.course === 'main' ? 'Main' : 'Bridging'), value: pct(r.score, m), text: pct(r.score, m) + '%',
+          tip: '<b>' + esc(l.title) + '</b><br>First try: ' + r.score + ' / ' + m + '<br>Active time: ' + mins(r.seconds) + ' min' }; }), 100, '%')) + '</div>';
+  h += '<section class="card"><h2>' + (older ? 'Milestones' : 'My badges') + '</h2><p class="sub">' + (older ? 'Milestones reward careful work, fixing mistakes and stretching yourself – not speed.' : 'Badges reward careful work, fixing mistakes and stretching yourself – not speed.') + '</p>' +
+    '<ul class="badges' + (older ? ' plain' : '') + '">' + st.badges.map(function(b){
+      return '<li class="' + (b.earned ? 'got' : 'locked') + '"><span class="ico" aria-hidden="true">' + (older ? (b.earned ? '✓' : '○') : b.icon) + '</span><div><b>' + esc(b.name) + '</b>' +
+        '<span>' + esc(b.desc) + '</span><em>' + (b.earned ? (older ? 'Reached' : 'Earned!') : esc(b.prog)) + '</em></div></li>'; }).join('') + '</ul></section>';
+  h += '<p class="note">Only you, your teachers and school leaders can see this page. There are no class rankings. Time counts only while a lesson page is open and in use. Updated ' + new Date(D.generatedAt).toLocaleString('en-GB') + '.</p>';
+  $('#app').innerHTML = h;
+  wireTips();
 }
 
 load();

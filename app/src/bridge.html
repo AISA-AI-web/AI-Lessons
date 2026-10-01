@@ -25,7 +25,7 @@
   }
 
   /* 2. Scores: the lesson engine calls LessonHooks.state(S, acts) every time it updates */
-  var sent = {}, ready = false, latest = null, busy = false, status = null;
+  var sent = {}, lastSent = {}, ready = false, latest = null, busy = false, status = null;
   function setStatus(t, bad){ if (status) { status.textContent = t; status.className = 'app-save' + (bad ? ' bad' : ''); } }
   function flushScores(){
     if (!ready || !latest || busy) return;
@@ -34,6 +34,12 @@
       if (S.first[a.id] !== undefined && sent[a.id] === undefined)
         items.push({ id: a.id, title: a.title, part: a.section, score: S.first[a.id], max: a.max });
     });
+    var fixes = [];
+    acts.forEach(function(a){
+      var v = S.last && S.last[a.id], was = lastSent[a.id] !== undefined ? lastSent[a.id] : sent[a.id];
+      if (v !== undefined && was !== undefined && v !== was) fixes.push({ id: a.id, score: v, max: a.max });
+    });
+    if (fixes.length) run('recordLatest', lessonId, fixes).then(function(){ fixes.forEach(function(f){ lastSent[f.id] = f.score; }); }, function(){});
     if (!items.length) return;
     busy = true; setStatus('Saving…');
     var meta = { title: document.title, activities: acts.length, maxPoints: acts.reduce(function(n, a){ return n + a.max; }, 0) };
@@ -43,7 +49,7 @@
     }, function(){ busy = false; setStatus('Not saved yet – check your connection. It will retry.', true); setTimeout(flushScores, 15000); });
   }
   window.LessonHooks = { state: function(S, acts){ if (lessonId) { latest = { S: S, acts: acts }; flushScores(); } } };
-  if (lessonId) run('getLessonState', lessonId).then(function(st){ sent = st.done || {}; ready = true; flushScores(); }, function(){ ready = true; });
+  if (lessonId) run('getLessonState', lessonId).then(function(st){ sent = st.done || {}; lastSent = st.latest || {}; ready = true; flushScores(); }, function(){ ready = true; });
 
   /* 3. Active time: counts only while the page is visible and the student has
         interacted in the last 2 minutes; sent about once a minute */

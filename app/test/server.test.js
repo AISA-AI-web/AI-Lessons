@@ -73,4 +73,17 @@ d = dash('principal@aisa.sch.ae');
 ok(d.scope === 'school' && d.students.length === 4 && d.sections.includes('Unassigned'), 'SLT sees whole school incl. unassigned');
 d = dash('hodai@aisa.sch.ae'); ok(d.scope === 'school', 'owner sees whole school');
 d = dash('nobody@aisa.sch.ae'); ok(d.scope === 'self' && d.students.length === 0 && d.results.length === 0, 'unknown staff with no data sees nothing');
+/* final scores ("answers fixed") */
+env.as('s1@aisa.sch.ae');
+ok(env.call('recordLatest', L, [{ id: 'vocab', score: 5, max: 5 }]).saved === 1, 'latest score saved');
+env.call('recordLatest', L, [{ id: 'vocab', score: 3, max: 5 }, { id: 'vocab', score: 5, max: 5 }]);
+ok(env.call('getLessonState', L).latest.vocab === 5, 'lesson state returns latest score');
+ok(env.call('getLessonState', L).done.vocab === 4, 'first try unchanged by later scores');
+throws(() => env.call('recordLatest', '../x', [{ id: 'a', score: 1, max: 1 }]), /Unknown lesson/, 'latest: bad lesson rejected');
+d = dash('s1@aisa.sch.ae');
+const v = d.results.find(r => r.lessonId === L).acts.vocab;
+ok(v[0] === 4 && v[4] === 5, 'dashboard shows first 4 and latest 5');
+ok(d.catalog.length === 9 && d.catalog.some(c => c.id === L && c.activities === 22), 'catalog lists all 9 lessons with activity counts');
+ok(d.termStart === '2026-09-28', 'term start sent');
+env.as('t7@aisa.sch.ae'); ok(!dash('t7@aisa.sch.ae').results.some(r => r.email === 's1@aisa.sch.ae'), 'latest scores still respect teacher scope');
 console.log('All ' + n + ' server checks passed');

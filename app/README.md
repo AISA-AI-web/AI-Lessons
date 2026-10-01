@@ -13,6 +13,26 @@ Google Apps Script web app inside AISA's Google Workspace and:
 The public site (the HTML files at the top of this repository) keeps working
 exactly as before, with no sign-in and no data saved.
 
+## The student dashboard
+
+Students open **My progress** from the bar at the top of any page. They see:
+this week's lesson; their learning journey (every lesson for their grade, with
+status); first-try score, answers fixed and badges; a **skills profile** (first-try
+score per skill, with their strongest skill and the next one to work on); and
+first-try scores lesson by lesson.
+
+**Badges** (Grades 6–8) or **milestones** (Grades 9–12, plainer style) reward
+learning behaviours, never speed or time: First Steps, Finisher, Week Streak,
+Fixer (corrected every wrong answer in a lesson), Stretch (a ⭐ challenge),
+Bullseye (90%+ first try on a lesson), Safe-Use Champion, and one per skill –
+Data Detective, Systems Thinker, Fair Judge, Evidence Seeker. There are no
+leaderboards or class rankings. Teachers see each student's badges in their
+dashboard.
+
+Every activity is tagged to a skill in `SKILL_MAP` near the end of
+`src/dashboard.html`. **When you add a lesson, add a line there** (activities
+without a tag fall back to keyword rules, which are less accurate).
+
 ## Where the data lives
 
 One Google Sheet, kept in an AISA **Shared Drive** that only the system owners
@@ -27,6 +47,7 @@ student data is ever stored in this GitHub repository**, which is public.
 | Lessons | Lessons that have been used, with their activity count and points |
 | Scores | One row per student per activity: first-try score only |
 | Time | Active seconds on each lesson page |
+| Retries | A student's later score on an activity they corrected (for "answers fixed"); first tries are never changed |
 
 ## One-time setup (about 30 minutes)
 
