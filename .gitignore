@@ -1,4 +1,5 @@
 app/build/
+app/private/
 .clasp.json
 .clasprc.json
 node_modules/

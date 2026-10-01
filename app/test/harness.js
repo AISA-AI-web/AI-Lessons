@@ -36,6 +36,7 @@ function makeEnv() {
   };
   vm.createContext(ctx);
   vm.runInContext(fs.readFileSync(path.join(BUILD, 'Catalog.js'), 'utf8').replace('var CATALOG', 'CATALOG'), ctx);
+  vm.runInContext(fs.readFileSync(path.join(BUILD, 'Framework.js'), 'utf8').replace('var FRAMEWORK', 'FRAMEWORK'), ctx);
   vm.runInContext(fs.readFileSync(path.join(BUILD, 'Code.js'), 'utf8'), ctx);
   return { ctx, sheets, as: e => { activeEmail = e; }, call: (fn, ...a) => ctx[fn](...a) };
 }

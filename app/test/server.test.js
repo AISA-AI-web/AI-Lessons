@@ -86,4 +86,15 @@ ok(v[0] === 4 && v[4] === 5, 'dashboard shows first 4 and latest 5');
 ok(d.catalog.length === 9 && d.catalog.some(c => c.id === L && c.activities === 22), 'catalog lists all 9 lessons with activity counts');
 ok(d.termStart === '2026-09-28', 'term start sent');
 env.as('t7@aisa.sch.ae'); ok(!dash('t7@aisa.sch.ae').results.some(r => r.email === 's1@aisa.sch.ae'), 'latest scores still respect teacher scope');
+/* teacher judgements (tiers) */
+env.as('t6@aisa.sch.ae'); ok(env.call('setJudgement', 's1@aisa.sch.ae', 'CU', 'A', 'Showcase rubric').saved, 'teacher records a tier for own student');
+throws(() => env.call('setJudgement', 'b1@aisa.sch.ae', 'CU', 'A', ''), /students you teach/, 'teacher cannot judge another section');
+throws(() => env.call('setJudgement', 's1@aisa.sch.ae', 'XX', 'A', ''), /Unknown strand/, 'bad strand rejected');
+throws(() => env.call('setJudgement', 's1@aisa.sch.ae', 'CU', 'Z', ''), /Unknown tier/, 'bad tier rejected');
+env.as('s1@aisa.sch.ae'); throws(() => env.call('setJudgement', 's1@aisa.sch.ae', 'CU', 'A', ''), /Only teachers/, 'students cannot judge');
+d = dash('s1@aisa.sch.ae'); ok(d.judgements['s1@aisa.sch.ae|CU'].tier === 'A' && !d.canJudge, 'student sees own judgement, cannot edit');
+ok(d.framework && d.framework['6'].strands[0].code === 'CU' && /rule-based/.test(d.framework['6'].strands[0].E), 'private framework descriptors reach the dashboard');
+env.as('principal@aisa.sch.ae'); env.call('setJudgement', 's1@aisa.sch.ae', 'CU', '', 'cleared');
+ok(!dash('t6@aisa.sch.ae').judgements['s1@aisa.sch.ae|CU'], 'clearing a judgement restores the automatic tier');
+ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')), 'judgements respect teacher scope');
 console.log('All ' + n + ' server checks passed');

@@ -16,8 +16,11 @@ var TABS = {
   Lessons:   ['lessonId', 'grade', 'course', 'week', 'title', 'activities', 'maxPoints', 'updatedAt'],
   Scores:    ['timestamp', 'email', 'lessonId', 'activityId', 'activityTitle', 'part', 'firstScore', 'max'],
   Time:      ['timestamp', 'email', 'lessonId', 'seconds'],
-  Retries:   ['timestamp', 'email', 'lessonId', 'activityId', 'score', 'max']
+  Retries:   ['timestamp', 'email', 'lessonId', 'activityId', 'score', 'max'],
+  Judgements:['timestamp', 'student', 'strand', 'tier', 'teacher', 'note']
 };
+var STRAND_CODES = ['CU', 'SD', 'CE', 'GE'];
+var TIER_CODES = ['', 'W', 'E', 'P', 'A'];   // '' = clear (use the automatic tier); W = working towards Emerging
 var TERM_START = '2026-09-28';           // Monday of curriculum Week 1 (two-week timetable cycle)
 
 /* ===================== entry point ===================== */
@@ -157,6 +160,26 @@ function recordLatest(lessonId, items) {
   return { saved: out.length };
 }
 
+/**
+ * A teacher's judgement of a student's tier in one strand (e.g. from the Week 10
+ * showcase rubric). It overrides the automatic tier; '' clears it. Only the
+ * student's own teachers, SLT and owners may record one.
+ */
+function setJudgement(studentEmail, strand, tier, note) {
+  var me = requireUser_();
+  var student = lc_(studentEmail);
+  if (STRAND_CODES.indexOf(strand) < 0) throw new Error('Unknown strand.');
+  if (TIER_CODES.indexOf(tier) < 0) throw new Error('Unknown tier.');
+  if (me.role === 'student') throw new Error('Only teachers can record a judgement.');
+  var vis = visibleSections_(me);
+  if (vis !== null) {
+    var sec = rows_('Roster').filter(function (r) { return lc_(r.email) === student && r.role === 'student'; }).map(function (r) { return r.section; });
+    if (!sec.some(function (x) { return vis.indexOf(x) >= 0; })) throw new Error('You can only record judgements for students you teach.');
+  }
+  append_('Judgements', [[new Date(), student, strand, tier, me.email, cleanText_(note, 200)]]);
+  return { saved: true };
+}
+
 function registerLesson_(lessonId, meta) {
   meta = meta || {};
   var m = /^grade-(\d+)\/(main|bridging)-w(\d+)/.exec(lessonId) || [];
@@ -221,10 +244,24 @@ function getDashboard() {
     lessons: Object.keys(lessons).map(function (k) { return lessons[k]; }),
     students: outStudents,
     results: results,
+    judgements: judgementsFor_(keep),
+    framework: typeof FRAMEWORK === 'undefined' ? null : FRAMEWORK,
+    canJudge: me.role !== 'student',
     catalog: typeof CATALOG === 'undefined' ? [] : CATALOG,
     termStart: TERM_START,
     generatedAt: new Date().toISOString()
   };
+}
+
+function judgementsFor_(keep) {
+  var out = {};                                     // rows are in time order, so the latest wins
+  rows_('Judgements').forEach(function (r) {
+    var e = lc_(r.student); if (!keep[e]) return;
+    var k = e + '|' + r.strand;
+    if (r.tier === '') delete out[k];
+    else out[k] = { tier: r.tier, by: r.teacher, at: new Date(r.timestamp).toISOString(), note: r.note };
+  });
+  return out;
 }
 
 /* ===================== Google Classroom roster sync ===================== */
@@ -334,4 +371,4 @@ function cleanId_(v) {
 function safe_(v) { return typeof v === 'string' && /^[=+\-@]/.test(v) ? "'" + v : v; }
 
 /* exported for the local test harness only */
-if (typeof module !== 'undefined') module.exports = { doGet: doGet, getLessonState: getLessonState, recordScores: recordScores, recordTime: recordTime, recordLatest: recordLatest, getDashboard: getDashboard, syncClassroom: syncClassroom, setup: setup, currentUser_: currentUser_ };
+if (typeof module !== 'undefined') module.exports = { doGet: doGet, getLessonState: getLessonState, recordScores: recordScores, recordTime: recordTime, recordLatest: recordLatest, setJudgement: setJudgement, getDashboard: getDashboard, syncClassroom: syncClassroom, setup: setup, currentUser_: currentUser_ };

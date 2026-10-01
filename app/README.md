@@ -13,25 +13,61 @@ Google Apps Script web app inside AISA's Google Workspace and:
 The public site (the HTML files at the top of this repository) keeps working
 exactly as before, with no sign-in and no data saved.
 
+## Strands, tiers and the framework
+
+Progress is tracked against the **ADEK K–12 AI Fluency Framework** strands used in
+the AI Literacy Scope & Sequence – four per grade:
+**CU** AI Conceptual Understanding (Grades 6–8) / AI Systems Understanding (9–12),
+**SD** AI Solution Design & Development, **CE** Critical Evaluation & Informed
+Interaction, and **GE** the grade's ethics and governance strand.
+
+Every activity is tagged to one strand in `STRAND_MAP` in `src/dashboard.html`.
+**When you add a lesson, add a line there.** Each student gets a tier per strand,
+using the rules in `TIER_RULES` (same file – one place to change them):
+
+| Tier | Rule (provisional – to be reviewed by the head of data and assessment) |
+|---|---|
+| Not yet evidenced | No activities in the strand yet |
+| Working towards Emerging | Under 70% first try |
+| On track – needs more evidence | 70%+ first try, but fewer than 3 activities |
+| Emerging (Term 1 expected standard) | 70%+ first try on 3+ activities |
+| Proficient (year target) | Emerging, plus 85%+ on 5+ activities or 70%+ on ⭐ challenge activities |
+| Advanced | Only recorded by a teacher (e.g. from the Week 10 showcase rubric) |
+
+Teachers can set any student's tier in a strand from their dashboard (marked ✎);
+it overrides the automatic tier until they set it back to Auto. Only the
+student's own teachers, SLT and owners can do this.
+
+### Keeping the framework wording private
+
+The framework descriptors and week-by-week plan are **not** in this public
+repository. Put the Scope & Sequence HTML in `app/private/` (git-ignored) before
+running `python3 app/build.py`; the build turns it into `Framework.js`, which goes
+only into the Apps Script project in the school's Google account. Students then
+see the next tier's descriptor as their "next step", and teachers see the
+official strand names. Without the file everything still works, minus the
+descriptor wording.
+
+Bridging lessons are shown as "to be scheduled" and don't count towards
+Finisher until they are assigned; Main course lessons count from their
+teaching week (Week 1 = 28 Sep 2026, set by `TERM_START` in `src/Code.js`).
+
 ## The student dashboard
 
 Students open **My progress** from the bar at the top of any page. They see:
 this week's lesson; their learning journey (every lesson for their grade, with
-status); first-try score, answers fixed and badges; a **skills profile** (first-try
-score per skill, with their strongest skill and the next one to work on); and
+status); first-try score, answers fixed and badges; their **four strands** with
+their tier and the next tier's descriptor as a "next step"; and
 first-try scores lesson by lesson.
 
 **Badges** (Grades 6–8) or **milestones** (Grades 9–12, plainer style) reward
 learning behaviours, never speed or time: First Steps, Finisher, Week Streak,
 Fixer (corrected every wrong answer in a lesson), Stretch (a ⭐ challenge),
-Bullseye (90%+ first try on a lesson), Safe-Use Champion, and one per skill –
-Data Detective, Systems Thinker, Fair Judge, Evidence Seeker. There are no
+Bullseye (90%+ first try on a lesson), and one per strand for securing
+Emerging – AI Detective (CU), Solution Builder (SD), Fair Judge (CE),
+Responsible User (GE). There are no
 leaderboards or class rankings. Teachers see each student's badges in their
 dashboard.
-
-Every activity is tagged to a skill in `SKILL_MAP` near the end of
-`src/dashboard.html`. **When you add a lesson, add a line there** (activities
-without a tag fall back to keyword rules, which are less accurate).
 
 ## Where the data lives
 
@@ -47,6 +83,7 @@ student data is ever stored in this GitHub repository**, which is public.
 | Lessons | Lessons that have been used, with their activity count and points |
 | Scores | One row per student per activity: first-try score only |
 | Time | Active seconds on each lesson page |
+| Judgements | Tiers recorded by teachers (latest wins) |
 | Retries | A student's later score on an activity they corrected (for "answers fixed"); first tries are never changed |
 
 ## One-time setup (about 30 minutes)
@@ -65,7 +102,9 @@ You need a computer with Node.js installed, signed in to Chrome with an
    clasp login
    ```
    Choose your @aisa.sch.ae account.
-4. **Create the project and upload the code** from the repository folder:
+4. **Add the private framework file.** Copy the AI Literacy Scope & Sequence
+   HTML into `app/private/` (this folder is never committed).
+5. **Create the project and upload the code** from the repository folder:
    ```
    python3 app/build.py
    clasp create --type standalone --title "AI Curriculum" --rootDir app/build
@@ -74,15 +113,15 @@ You need a computer with Node.js installed, signed in to Chrome with an
    `clasp create` writes a `.clasp.json` file; it is ignored by git. If your
    Workspace allows it, move the new *AI Curriculum* script file into the
    Shared Drive as well.
-5. **Create the data sheet.** Run `clasp open`, choose `setup` in the function
+6. **Create the data sheet.** Run `clasp open`, choose `setup` in the function
    menu, and press **Run**. Approve the permissions. A sheet called
    *AI Curriculum – Student Data (PROTECTED)* appears in your My Drive – **move
    it into the Shared Drive** (its link stays the same).
-6. **Owners and SLT.** Open the sheet's **Roles** tab. `setup` has added you as
+7. **Owners and SLT.** Open the sheet's **Roles** tab. `setup` has added you as
    `owner`. Add the second owner, then one row per SLT member with role `slt`
    (Director, principals, vice principals, head of teaching and learning, head
    of data and assessment, head of inclusion).
-7. **Class lists from Google Classroom.** In the script editor run
+8. **Class lists from Google Classroom.** In the script editor run
    `syncClassroom`. It reads every active course, guesses the section from the
    course name (for example *Girls 6 …*) and fills **CourseMap** and
    **Roster**. Check CourseMap: fix any wrong section, set `include` to `Y` for
@@ -91,11 +130,11 @@ You need a computer with Node.js installed, signed in to Chrome with an
    *To read every course, the account running the sync needs Google Workspace
    or Classroom admin rights. Without them it only sees courses that account
    teaches – ask IT to run this step, or to grant the rights.*
-8. **Publish.** In the editor: **Deploy → New deployment → Web app**.
+9. **Publish.** In the editor: **Deploy → New deployment → Web app**.
    *Execute as:* **Me**. *Who has access:* **Anyone within AISA**. Copy the web
    app URL – that is the address students and teachers use (it works with the
    QR buttons too).
-9. **Keep rosters fresh (optional).** In the editor, **Triggers → Add
+10. **Keep rosters fresh (optional).** In the editor, **Triggers → Add
    trigger**: `syncClassroom`, time-driven, weekly.
 
 ## Updating lessons
