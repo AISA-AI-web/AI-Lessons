@@ -77,6 +77,13 @@ Responsible User (GE). There are no
 leaderboards or class rankings. Teachers see each student's badges in their
 dashboard.
 
+**Save as PDF.** Every dashboard has a **Save as PDF** button. It saves what is on
+screen – the charts, strand attainment and student table for the chosen section
+and lesson, or one student's report – as an A4 landscape report with a header
+(school, who prepared it, date, "Confidential"). In the print window choose
+**Save as PDF** as the destination. **Download data (CSV)** is still there for
+spreadsheets.
+
 **Seeing a student's view.** Teachers, SLT and owners can click a student's name
 in the progress table, or choose one from the **Student view** menu, to see that
 student's dashboard exactly as the student sees it (read-only; lesson buttons are

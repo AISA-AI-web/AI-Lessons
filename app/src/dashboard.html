@@ -130,7 +130,31 @@ select.jsel.tW{background:var(--s100);color:#0b0b0b}select.jsel.tO{background:va
 .off{opacity:.55;cursor:default}
 .loading{padding:60px 0;text-align:center;color:var(--text-2)}
 .err{background:#fde7ec;color:#8a1330;border-radius:10px;padding:12px 14px;margin:20px 0}
-@media print{.filters,#exportBtn{display:none}body{background:#fff}}
+.printhead{display:none}
+.tools{display:flex;justify-content:flex-end;gap:8px;margin:12px 0 0}
+.viewbar div{display:flex;gap:8px;flex-wrap:wrap}
+@page{size:A4 landscape;margin:10mm}
+@media print{
+  html:root{color-scheme:light;--surface:#fff;--card:#fff;--line:#d9d8d3;--grid:#ecebe7;--text:#0b0b0b;--text-2:#52514e;--text-3:#76746f;--series:#2a78d6}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff;font-size:12px}
+  .wrap{max-width:none;padding:0}
+  header,.filters,.tools,.viewbar,.tip,button:not(.stu),.go,.journey a,.journey .off{display:none!important}
+  .stu{text-decoration:none}
+  .printhead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;border-bottom:3px solid #21076C;padding:0 0 8px;margin:0 0 12px}
+  .printhead h1{font-size:20px;color:#21076C}
+  .printhead p{margin:2px 0 0;font-size:12px;color:#52514e}
+  .printhead .r{text-align:right}
+  .grid2 .card,.tile,.hello,.strand,.hb,.srow,.badges li,.journey li,tr,.legend{break-inside:avoid}
+  .card h2{break-after:avoid}
+  .grid2{grid-template-columns:1fr 1fr}
+  .tiles{grid-template-columns:repeat(4,1fr)}
+  .tablewrap{overflow:visible;border:0}
+  th{position:static}
+  th,td{padding:4px 6px}
+  select.jsel{-webkit-appearance:none;appearance:none;width:auto;border:0;padding:2px 8px;background-image:none}
+  .note{margin-bottom:0}
+}
 </style>
 </head>
 <body>
@@ -195,7 +219,8 @@ function render(){
       D.students.slice().sort(function(a, b){ return a.section.localeCompare(b.section, undefined, { numeric: true }) || a.name.localeCompare(b.name); })
         .filter(function(s){ return !F.section || s.section === F.section; })
         .map(function(s){ return '<option value="' + esc(s.email) + '">' + esc(s.name + ' · ' + s.section) + '</option>'; }).join('') + '</select></div>' +
-    '<div><button type="button" id="exportBtn">Download CSV</button></div></div>';
+    '<div><button type="button" id="pdfBtn">Save as PDF</button></div>' +
+    '<div><button type="button" id="exportBtn" title="Raw data for spreadsheets">Download data (CSV)</button></div></div>';
   html += '<div id="body"></div>';
   $('#app').innerHTML = html;
   if (!self) {
@@ -203,6 +228,7 @@ function render(){
     $('#fView').onchange = function(){ if (this.value) viewAs(this.value); };
     $('#fLes').onchange = function(){ F.lesson = this.value; draw(); };
     $('#exportBtn').onclick = exportCsv;
+    $('#pdfBtn').onclick = savePdf;
   }
   draw();
 }
@@ -240,7 +266,9 @@ function draw(){
   h += progressTable(f, self);
   h += '<p class="note">First-try scores are kept exactly as first checked; retries are for learning and don\'t change them. Time counts only while the lesson page is open, visible and in use (it pauses after 2 minutes without activity). ' +
        (self ? '' : 'Only the sections you teach are shown' + (D.scope === 'school' ? ' – your role can see the whole school.' : '.')) + ' Data refreshed ' + new Date(D.generatedAt).toLocaleString('en-GB') + '.</p>';
-  $('#body').innerHTML = h;
+  var les = F.lesson && D.lessons.filter(function(l){ return l.id === F.lesson; })[0];
+  $('#body').innerHTML = printHead('AI Literacy progress report',
+    (F.section || (D.scope === 'school' ? 'Whole school' : 'All my sections')) + ' · ' + (les ? lessonName(les) + ' – ' + lessonTitle(les) : 'All lessons')) + h;
   wireTips(); wireJudge();
   document.querySelectorAll('#body .stu').forEach(function(b){ b.onclick = function(){ viewAs(b.getAttribute('data-e')); }; });
 }
@@ -310,6 +338,25 @@ function progressTable(f, self){
     [['var(--s100)','0–19%'],['var(--s200)','20–39%'],['var(--s300)','40–59%'],['var(--s400)','60–74%'],['var(--s500)','75–89%'],['var(--s600)','90–100%']].map(function(x){ return '<span><i style="background:' + x[0] + '"></i>' + x[1] + '</span>'; }).join('') +
     '<span>· “3/9” = activities checked · “12m” = active minutes</span></div></div>';
   return h;
+}
+
+/* ---------- Save as PDF: prints the dashboard as shown, with a report header ---------- */
+function printHead(title, scope){
+  return '<div class="printhead"><div><h1>' + esc(title) + '</h1><p>' + esc(scope) + '</p></div><div class="r"><p><b>American International School in Abu Dhabi</b></p><p>Prepared by ' + esc(CFG.email) + ' · ' +
+    new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) + '</p><p>Confidential – contains student data</p></div></div>';
+}
+function fitTables(){       // shrink wide tables to the page width (A4 landscape ≈ 1040px)
+  document.querySelectorAll('.tablewrap table').forEach(function(t){
+    t.style.zoom = ''; var w = t.scrollWidth; if (w > 1040) t.style.zoom = (1040 / w).toFixed(3);
+  });
+}
+function unfitTables(){ document.querySelectorAll('.tablewrap table').forEach(function(t){ t.style.zoom = ''; }); }
+addEventListener('beforeprint', fitTables);
+addEventListener('afterprint', unfitTables);
+function savePdf(name){
+  var t = document.title, d = new Date().toISOString().slice(0, 10);
+  document.title = 'AI progress – ' + (name || F.section || (D.scope === 'school' ? 'Whole school' : 'My sections')) + ' – ' + d;
+  fitTables(); window.print(); unfitTables(); document.title = t;
 }
 
 function wireTips(){
@@ -483,7 +530,9 @@ function studentView(who){
     return { cls: 'todo', text: 'Not started', btn: 'Start' };
   };
   var now = st.lessons.filter(function(l){ return l.week === wk.n && l.course === 'main'; })[0];
-  var h = preview ? '<div class="viewbar"><span>👁 You are seeing <b>' + esc(me.name) + '</b>\'s dashboard exactly as they see it. Nothing here can be changed.</span><button type="button" id="backBtn">← Back to dashboard</button></div>' : '';
+  var h = preview ? '<div class="viewbar"><span>👁 You are seeing <b>' + esc(me.name) + '</b>\'s dashboard exactly as they see it. Nothing here can be changed.</span><div><button type="button" id="pdfBtn">Save as PDF</button><button type="button" id="backBtn">← Back to dashboard</button></div></div>'
+    : '<div class="tools"><button type="button" id="pdfBtn">Save as PDF</button></div>';
+  h += printHead('AI Literacy progress report – ' + me.name, 'Grade ' + (me.grade || '–') + (me.section && me.section !== 'Unassigned' ? ' · ' + me.section : '') + ' · ' + wk.label);
   h += '<section class="hello card"><div><h2>Hi ' + esc(String(me.name).split(' ')[0]) + ' 👋</h2><p class="sub">Grade ' + esc(me.grade || '') +
     (me.section && me.section !== 'Unassigned' ? ' · ' + esc(me.section) : '') + ' · ' + esc(wk.label) + '</p></div>' +
     (now ? '<div class="now"><small>This week\'s lesson</small><b>' + esc(now.title) + '</b><span class="pill ' + status(now).cls + '">' + esc(status(now).text) + '</span>' +
@@ -516,6 +565,7 @@ function studentView(who){
   h += '<p class="note">Only you, your teachers and school leaders can see this page. There are no class rankings. ✎ means your teacher set that level. Updated ' + new Date(D.generatedAt).toLocaleString('en-GB') + '.</p>';
   $('#app').innerHTML = h;
   if (preview) $('#backBtn').onclick = function(){ VIEW = null; render(); };
+  $('#pdfBtn').onclick = function(){ savePdf(me.name); };
   wireTips();
 }
 
