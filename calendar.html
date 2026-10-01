@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Teaching Calendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1B1F2A;--muted:#5C6475;--paper:#F6F7FA;--card:#fff;--line:#E1E5EE;--accent:#3B4CCA;--focus:#1C64F2;--ar:#0F766E;--is:#7C3AED}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:16px;line-height:1.5}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+header{padding:28px 0 14px}
+.back{color:var(--muted);text-decoration:none;font-weight:600;font-size:14px}
+.back:hover{text-decoration:underline}
+h1{margin:8px 0 4px;font-size:clamp(28px,5.5vw,40px);letter-spacing:-.02em;line-height:1.1}
+header p{margin:0;color:var(--muted)}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0 10px}
+.btn{border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:10px;padding:7px 12px;font:inherit;font-size:15px;font-weight:600;cursor:pointer}
+.btn:hover{background:var(--ink);color:#fff}
+input[type=date],select{font:inherit;font-size:15px;border:2px solid var(--line);border-radius:10px;padding:6px 10px;background:#fff;color:var(--ink)}
+.week{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:6px 0 16px}
+.day{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:8px 6px;text-align:center;cursor:pointer;font:inherit;color:inherit}
+.day b{display:block;font-size:13px;color:var(--muted);font-weight:600}
+.day span{display:block;font-size:20px;font-weight:700}
+.day small{display:block;font-size:12px;color:var(--muted)}
+.day.has small{color:var(--accent);font-weight:700}
+.day[aria-current="date"]{border-color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.day.today span::after{content:" •";color:#E0600A}
+.banner{background:var(--ink);color:#fff;border-radius:16px;padding:14px 18px;margin:0 0 14px}
+.banner h2{margin:0;font-size:20px}
+.banner p{margin:2px 0 0;opacity:.9;font-size:14.5px}
+.list{display:grid;gap:10px;margin:0 0 30px;padding:0;list-style:none}
+.slot{display:grid;grid-template-columns:118px 1fr;gap:14px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;align-items:start}
+.slot .when b{display:block;font-size:15px}
+.slot .when small{color:var(--muted);font-size:13px}
+.slot h3{margin:0 0 2px;font-size:17px}
+.subj{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:1px 9px;color:#fff;margin-left:6px;vertical-align:middle}
+.subj.Arabic{background:var(--ar)}.subj.Islamic{background:var(--is)}
+.lesson{margin-top:6px;font-size:15px}
+.lesson a{color:var(--accent);font-weight:600}
+.lesson .none{color:var(--muted)}
+.empty{background:#fff;border:1.5px dashed var(--line);border-radius:14px;padding:22px;text-align:center;color:var(--muted)}
+.note{font-size:13.5px;color:var(--muted);margin:0 0 40px}
+@media (max-width:560px){.slot{grid-template-columns:1fr;gap:4px}.week{gap:4px}.day span{font-size:17px}}
+@media print{.controls,.back{display:none}body{background:#fff}}
+</style>
+</head>
+<body>
+<header class="wrap">
+  <a class="back" href="index.html">&larr; All grades</a>
+  <h1>AI Teaching Calendar</h1>
+  <p>Pick a date to see every AI Literacy lesson that day – the time, the section, and the lesson to teach.</p>
+</header>
+<main class="wrap">
+  <div class="controls">
+    <button class="btn" id="prev" type="button" aria-label="Previous school day">&larr;</button>
+    <input type="date" id="date" aria-label="Date">
+    <button class="btn" id="next" type="button" aria-label="Next school day">&rarr;</button>
+    <button class="btn" id="today" type="button">Today</button>
+    <select id="grade" aria-label="Filter by grade"><option value="">All grades</option></select>
+  </div>
+  <div class="week" id="week"></div>
+  <div class="banner" id="banner"></div>
+  <ul class="list" id="list"></ul>
+  <p class="note">Two-week cycle starting Monday 28 September 2026 (Week 1). One AI Literacy lesson per section per week, delivered through Arabic or Islamic Studies. School holidays are not marked yet, so check the school calendar around breaks. Teacher names are kept off this public page.</p>
+</main>
+<script>
+/* Section, grade, subject, cycle week (1/2), day, period, time — from the AISA Secondary AI Literacy Timetable */
+const SCHEDULE = [["Boys 6", 6, "Arabic", 1, "Wed", 7, "2:05 - 2:55"], ["Boys 7", 7, "Arabic", 1, "Wed", 2, "8:50 - 9:40"], ["Girls 7", 7, "Islamic", 1, "Wed", 1, "7:55 - 8:45"], ["Boys 8", 8, "Arabic", 1, "Wed", 5, "11:55 - 12:45"], ["Girls 8", 8, "Islamic", 1, "Wed", 6, "1:10 - 2:00"], ["Boys 10", 10, "Islamic", 1, "Thu", 6, "1:10 - 2:00"], ["Girls 6", 6, "Arabic", 1, "Fri", 2, "8:35 - 9:25"], ["Boys 9", 9, "Arabic", 1, "Fri", 4, "10:40 - 11:30"], ["Girls 9", 9, "Arabic", 1, "Fri", 3, "9:45 - 10:35"], ["Girls 10", 10, "Arabic", 1, "Fri", 2, "8:35 - 9:25"], ["Boys 11", 11, "Arabic", 1, "Fri", 3, "9:45 - 10:35"], ["Girls 11", 11, "Islamic", 1, "Fri", 4, "10:40 - 11:30"], ["Boys 12", 12, "Arabic", 1, "Fri", 1, "7:40 - 8:30"], ["Girls 12", 12, "Arabic", 1, "Fri", 1, "7:40 - 8:30"], ["Boys 8", 8, "Islamic", 2, "Mon", 7, "2:05 - 2:55"], ["Boys 6", 6, "Islamic", 2, "Wed", 6, "1:10 - 2:00"], ["Boys 7", 7, "Islamic", 2, "Wed", 2, "8:50 - 9:40"], ["Boys 10", 10, "Arabic", 2, "Wed", 4, "11:00 - 11:50"], ["Boys 11", 11, "Islamic", 2, "Wed", 7, "2:05 - 2:55"], ["Boys 12", 12, "Islamic", 2, "Wed", 1, "7:55 - 8:45"], ["Girls 12", 12, "Islamic", 2, "Wed", 1, "7:55 - 8:45"], ["Girls 6", 6, "Islamic", 2, "Fri", 4, "10:40 - 11:30"], ["Girls 7", 7, "Arabic", 2, "Fri", 1, "7:40 - 8:30"], ["Girls 8", 8, "Arabic", 2, "Fri", 2, "8:35 - 9:25"], ["Boys 9", 9, "Islamic", 2, "Fri", 3, "9:45 - 10:35"], ["Girls 9", 9, "Islamic", 2, "Fri", 2, "8:35 - 9:25"], ["Girls 10", 10, "Islamic", 2, "Fri", 1, "7:40 - 8:30"], ["Girls 11", 11, "Arabic", 2, "Fri", 3, "9:45 - 10:35"]];
+/* Main-course lesson page for each grade and curriculum week */
+const LESSONS = {
+  1:{6:["grade-6/main-w1-l1.html","Rule-Based vs Learning Systems + Hands-On Exploration"],
+     7:["grade-7/main-w1-l1.html","How Models Learn + AI as a Workflow"],
+     8:["grade-8/main-w1-l1.html","From ‘It Works’ to ‘How Well’ + Two Outputs, One Verdict"],
+     10:["grade-10/main-w1-l1.html","See the Whole System + Compare, Map, and Stress-Test"]}
+};
+const START = new Date(2026,8,28); // Monday of Week 1
+const DAYS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const parse=s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
+const fmt=(d,o)=>d.toLocaleDateString("en-GB",o);
+function weekNo(d){return Math.floor((parse(iso(d))-START)/864e5/7)+1}
+function monday(d){const x=new Date(d);x.setDate(x.getDate()-((x.getDay()+6)%7));return x}
+function lessonsOn(d){
+  const n=weekNo(d); if(n<1) return [];
+  const cw=n%2===1?1:2, dn=DAYS[d.getDay()], g=$("#grade").value;
+  return SCHEDULE.filter(r=>r[3]===cw&&r[4]===dn&&(!g||String(r[1])===g)).sort((a,b)=>a[5]-b[5]||a[0].localeCompare(b[0]));
+}
+let cur=new Date();cur.setHours(0,0,0,0);
+if(cur.getDay()===0||cur.getDay()===6) cur.setDate(cur.getDate()+(cur.getDay()===6?2:1));
+function step(dir){do{cur.setDate(cur.getDate()+dir)}while(cur.getDay()===0||cur.getDay()===6);render()}
+function render(){
+  $("#date").value=iso(cur);
+  const today=iso(new Date()), mon=monday(cur);
+  $("#week").innerHTML=[0,1,2,3,4].map(i=>{const d=new Date(mon);d.setDate(d.getDate()+i);const c=lessonsOn(d).length;
+    return `<button type="button" class="day${c?" has":""}${iso(d)===today?" today":""}" data-d="${iso(d)}"${iso(d)===iso(cur)?' aria-current="date"':""}><b>${DAYS[d.getDay()]}</b><span>${d.getDate()}</span><small>${c?c+" lesson"+(c>1?"s":""):"–"}</small></button>`}).join("");
+  const n=weekNo(cur), items=lessonsOn(cur);
+  $("#banner").innerHTML=n<1?`<h2>${fmt(cur,{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</h2><p>Before the AI Literacy timetable starts (Monday 28 September 2026).</p>`:
+    `<h2>${fmt(cur,{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</h2><p>Curriculum Week ${n} · Timetable cycle Week ${n%2===1?1:2} · ${items.length} AI lesson${items.length===1?"":"s"}</p>`;
+  $("#list").innerHTML=items.length?items.map(([sec,gr,sub,,,per,time])=>{
+    const L=(LESSONS[n]||{})[gr];
+    return `<li class="slot"><div class="when"><b>${esc(time)}</b><small>Period ${per}</small></div><div><h3>${esc(sec)}<span class="subj ${sub}">via ${sub} Studies</span></h3>
+      <div class="lesson">${L?`Lesson: <a href="${L[0]}">Grade ${gr} Main · Week ${n} – ${esc(L[1])}</a>`:`<span class="none">Grade ${gr} Main · Week ${n} lesson is not on the site yet.</span>`}</div></div></li>`}).join(""):
+    `<li class="empty">No AI Literacy lessons${$("#grade").value?" for this grade":""} on this day.</li>`;
+}
+for(let g=6;g<=12;g++)$("#grade").insertAdjacentHTML("beforeend",`<option value="${g}">Grade ${g}</option>`);
+try{const g=localStorage.getItem("cal-grade");if(g)$("#grade").value=g}catch(e){}
+$("#grade").onchange=()=>{try{localStorage.setItem("cal-grade",$("#grade").value)}catch(e){}render()};
+$("#date").onchange=()=>{if($("#date").value){cur=parse($("#date").value);render()}};
+$("#prev").onclick=()=>step(-1);$("#next").onclick=()=>step(1);
+$("#today").onclick=()=>{cur=new Date();cur.setHours(0,0,0,0);render()};
+$("#week").onclick=e=>{const b=e.target.closest("[data-d]");if(b){cur=parse(b.dataset.d);render()}};
+render();
+</script>
+</body>
+</html>

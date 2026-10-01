@@ -25,6 +25,9 @@ h1{margin:0 0 6px;font-size:clamp(30px,6vw,44px);line-height:1.1;letter-spacing:
 header p{margin:0;color:var(--muted);max-width:56ch}
 .qrbtn{flex:none;border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:12px;padding:8px 14px;font:inherit;font-size:15px;font-weight:600;cursor:pointer}
 .qrbtn:hover{background:var(--ink);color:#fff}
+a.qrbtn{text-decoration:none;display:inline-block}
+.topbtns{display:flex;gap:8px;flex:none}
+@media (max-width:560px){.top{flex-direction:column}}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:0 0 40px;padding:0;list-style:none}
 .grade{background:var(--card);border:1.5px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
@@ -71,7 +74,7 @@ footer{padding:0 0 40px;color:var(--muted);font-size:14px;text-align:center}
       <h1>AI Lessons</h1>
       <p>AI Fluency lessons for Grades 6 to 12. Choose your grade, then open your lesson.</p>
     </div>
-    <button class="qrbtn" id="qrBtn" type="button" aria-label="Show a QR code for this page">QR code</button>
+    <div class="topbtns"><a class="qrbtn" href="calendar.html">📅 Teaching calendar</a><button class="qrbtn" id="qrBtn" type="button" aria-label="Show a QR code for this page">QR code</button></div>
   </div>
 </header>
 
@@ -92,7 +95,7 @@ footer{padding:0 0 40px;color:var(--muted);font-size:14px;text-align:center}
         </section>
         <section class="course main"><h3>Main course</h3>
           <ul>
-            <li><a href="grade-6/main-w1-l1.html"><span class="tag">Week 1 · Core + Lab · 30 Sep 2026</span><span class="name">Rule-Based vs Learning Systems + Hands-On Exploration</span></a></li>
+            <li><a href="grade-6/main-w1-l1.html"><span class="tag">Week 1 · Core + Lab · Teach 28 Sep – 2 Oct 2026</span><span class="name">Rule-Based vs Learning Systems + Hands-On Exploration</span></a></li>
           </ul>
         </section>
     </li>
@@ -103,7 +106,7 @@ footer{padding:0 0 40px;color:var(--muted);font-size:14px;text-align:center}
         </section>
         <section class="course main"><h3>Main course</h3>
           <ul>
-            <li><a href="grade-7/main-w1-l1.html"><span class="tag">Week 0 Foundation + Week 1 Lesson 1</span><span class="name">How Models Learn + AI as a Workflow</span></a></li>
+            <li><a href="grade-7/main-w1-l1.html"><span class="tag">Week 0 + Week 1 · Teach 28 Sep – 2 Oct 2026</span><span class="name">How Models Learn + AI as a Workflow</span></a></li>
           </ul>
         </section>
     </li>
@@ -114,7 +117,7 @@ footer{padding:0 0 40px;color:var(--muted);font-size:14px;text-align:center}
         </section>
         <section class="course main"><h3>Main course</h3>
           <ul>
-            <li><a href="grade-8/main-w1-l1.html"><span class="tag">Week 1 · Core + Lab</span><span class="name">From ‘It Works’ to ‘How Well’ + Two Outputs, One Verdict</span></a></li>
+            <li><a href="grade-8/main-w1-l1.html"><span class="tag">Week 1 · Core + Lab · Teach 28 Sep – 2 Oct 2026</span><span class="name">From ‘It Works’ to ‘How Well’ + Two Outputs, One Verdict</span></a></li>
           </ul>
         </section>
     </li>
