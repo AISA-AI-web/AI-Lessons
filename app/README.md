@@ -122,14 +122,27 @@ You need a computer with Node.js installed, signed in to Chrome with an
    (Director, principals, vice principals, head of teaching and learning, head
    of data and assessment, head of inclusion).
 8. **Class lists from Google Classroom.** In the script editor run
-   `syncClassroom`. It reads every active course, guesses the section from the
-   course name (for example *Girls 6 …*) and fills **CourseMap** and
-   **Roster**. Check CourseMap: fix any wrong section, set `include` to `Y` for
-   the courses that carry AI Literacy and `N` for the rest, then run
-   `syncClassroom` again.
-   *To read every course, the account running the sync needs Google Workspace
-   or Classroom admin rights. Without them it only sees courses that account
-   teaches – ask IT to run this step, or to grant the rights.*
+   `syncClassroom`. It reads active courses, guesses the section from the
+   course name (for example *Girls 6 Arabic*) and fills **CourseMap** and
+   **Roster**. Only **Arabic and Islamic Studies** courses for Grades 6–12 are
+   included automatically, because those carry AI Literacy – so teachers of
+   other subjects never see AI data. Check CourseMap: fix any wrong section,
+   set `include` to `Y` or `N` as needed, then run `syncClassroom` again.
+
+   **Seeing every class.** Google only lets an account list the courses it
+   belongs to. To read the whole school, `syncClassroom` must be run by an
+   account that is a **Google Workspace admin with Classroom privileges**
+   (a super admin, or a delegated admin role that includes Classroom). Either:
+   - ask IT to give one owner account (e.g. `bbaki@aisa.sch.ae`) an admin role
+     with Classroom privileges, then that owner runs `syncClassroom`; or
+   - ask an IT admin to run it: add them to the Shared Drive and the script
+     temporarily, they run `syncClassroom` once from the editor and add a
+     weekly trigger (step 10) under their account, then remove their Drive
+     access if you prefer (the trigger keeps working only while they keep
+     access, so the first option is simpler).
+
+   If you ran it before and got the wrong courses, **clear the CourseMap tab**
+   (keep the header row) and run it again so every course is re-checked.
 9. **Publish.** In the editor: **Deploy → New deployment → Web app**.
    *Execute as:* **Me**. *Who has access:* **Anyone within AISA**. Copy the web
    app URL – that is the address students and teachers use (it works with the

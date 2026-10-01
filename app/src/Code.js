@@ -20,6 +20,10 @@ var TABS = {
   Judgements:['timestamp', 'student', 'strand', 'tier', 'teacher', 'note']
 };
 var STRAND_CODES = ['CU', 'SD', 'CE', 'GE'];
+/* AI Literacy is delivered through these Classroom courses (see the timetable).
+   Only courses matching this are included automatically, so teachers of other
+   subjects in the same section never get access to its AI data. */
+var AI_COURSE_PATTERN = /arabic|islamic|\bai\b|ai literacy/i;
 var TIER_CODES = ['', 'W', 'E', 'P', 'A'];   // '' = clear (use the automatic tier); W = working towards Emerging
 var TERM_START = '2026-09-28';           // Monday of curriculum Week 1 (two-week timetable cycle)
 
@@ -268,9 +272,14 @@ function judgementsFor_(keep) {
 
 /**
  * Reads active Classroom courses, guesses the section for each from its name
- * (e.g. "Girls 6 ..."), and rebuilds the Roster from the courses marked
- * include = Y in the CourseMap tab. Edit CourseMap to fix any wrong guesses,
- * then run again. Owners only. Needs Classroom admin rights to see every course.
+ * (e.g. "Girls 6 Arabic"), and rebuilds the Roster from the courses marked
+ * include = Y in the CourseMap tab. Only Arabic / Islamic Studies (AI Literacy)
+ * courses for Grades 6–12 are included automatically. Edit CourseMap to fix any
+ * wrong guesses, then run again. Owners only.
+ *
+ * Google only lists the courses the running account belongs to – unless that
+ * account is a Workspace admin with Classroom privileges, which sees every
+ * course. Run it as such an account (see README) to read the whole school.
  */
 function syncClassroom() {
   if (currentUser_()) requireOwner_();  // from the editor there is no web user; from the web app, owners only
@@ -285,8 +294,11 @@ function syncClassroom() {
     if (map[c.id]) return;
     var g = /(boys|girls)\s*(?:grade\s*)?(\d{1,2})\b/i.exec(c.name + ' ' + (c.section || ''));
     var section = g ? cap_(g[1]) + ' ' + g[2] : '';
-    var row = { courseId: c.id, courseName: c.name + (c.section ? ' · ' + c.section : ''), section: section,
-                include: section && Number(g[2]) >= 6 && Number(g[2]) <= 12 ? 'Y' : 'N', notes: section ? 'auto' : 'check' };
+    var full = c.name + (c.section ? ' · ' + c.section : '');
+    var gradeOk = section && Number(g[2]) >= 6 && Number(g[2]) <= 12, aiCourse = AI_COURSE_PATTERN.test(full);
+    var row = { courseId: c.id, courseName: full, section: section,
+                include: gradeOk && aiCourse ? 'Y' : 'N',
+                notes: !section ? 'check: no section found in name' : (!gradeOk ? 'not Grades 6–12' : (aiCourse ? 'auto: AI Literacy course' : 'auto: other subject – excluded')) };
     map[c.id] = row;
     append_('CourseMap', [[row.courseId, row.courseName, row.section, row.include, row.notes]]);
   });

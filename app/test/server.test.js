@@ -11,9 +11,9 @@ sheets.Roles.push(['hodai@aisa.sch.ae', 'owner', '', ''], ['principal@aisa.sch.a
 
 /* Classroom sync */
 const C = {
-  courses: [{ id: 'c1', name: 'Girls 6 Arabic' }, { id: 'c2', name: 'Boys 7', section: 'Islamic Studies' }, { id: 'c3', name: 'Staff PD' }, { id: 'c4', name: 'Girls Grade 4' }],
+  courses: [{ id: 'c1', name: 'Girls 6 Arabic' }, { id: 'c2', name: 'Boys 7', section: 'Islamic Studies' }, { id: 'c3', name: 'Staff PD' }, { id: 'c4', name: 'Girls Grade 4 Arabic' }, { id: 'c5', name: 'Boys 9 Social Studies' }],
   students: { c1: [['s1@aisa.sch.ae', 'Sara One'], ['s2@aisa.sch.ae', 'Sara Two']], c2: [['b1@aisa.sch.ae', 'Bilal One']] },
-  teachers: { c1: [['t6@aisa.sch.ae', 'Teacher Six']], c2: [['t7@aisa.sch.ae', 'Teacher Seven']] }
+  teachers: { c1: [['t6@aisa.sch.ae', 'Teacher Six']], c2: [['t7@aisa.sch.ae', 'Teacher Seven']], c5: [['hodai@aisa.sch.ae', 'Social Studies Teacher']] }
 };
 const prof = ([e, nm]) => ({ profile: { emailAddress: e, name: { fullName: nm } } });
 ctx.Classroom = { Courses: { list: () => ({ courses: C.courses }),
@@ -25,7 +25,9 @@ ok(sync.rosterRows === 5, 'roster has 3 students + 2 teachers, got ' + sync.rost
 const cm = Object.fromEntries(sheets.CourseMap.slice(1).map(r => [r[0], r]));
 ok(cm.c1[2] === 'Girls 6' && cm.c1[3] === 'Y', 'Girls 6 mapped');
 ok(cm.c2[2] === 'Boys 7' && cm.c2[3] === 'Y', 'section from course section field');
-ok(cm.c3[3] === 'N' && cm.c4[3] === 'N', 'non-AI and out-of-range courses excluded');
+ok(cm.c3[3] === 'N' && cm.c4[3] === 'N', 'non-section and out-of-range courses excluded');
+ok(cm.c5[2] === 'Boys 9' && cm.c5[3] === 'N' && /other subject/.test(cm.c5[4]), 'other-subject course in a section is excluded');
+ok(!sheets.Roster.some(r => r[0] === 'hodai@aisa.sch.ae'), 'a Social Studies teacher does not become an AI teacher of that section');
 
 /* sign-in gate */
 for (const bad of ['', 'someone@gmail.com', 'x@notaisa.sch.ae', 'x@aisa.sch.ae.evil.com']) {
