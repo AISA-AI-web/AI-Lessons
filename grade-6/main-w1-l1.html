@@ -916,6 +916,7 @@ function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&
 
 /* ---------- results ---------- */
 function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
   const done=ACTS.filter(a=>S.first[a.id]!==undefined);
   const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
   const sc=done.reduce((n,a)=>n+S.first[a.id],0);

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<base target="_top">
+<title>AI Curriculum Dashboard</title>
+<style>
+:root{
+  color-scheme:light;
+  --surface:#fcfcfb;--card:#ffffff;--line:#e4e3df;--grid:#ecebe7;
+  --text:#0b0b0b;--text-2:#52514e;--text-3:#76746f;
+  --series:#2a78d6;
+  --s100:#cde2fb;--s200:#9ec5f4;--s300:#6da7ec;--s400:#3987e5;--s500:#256abf;--s600:#184f95;
+  --good:#0ca30c;--warning:#fab219;--critical:#d03b3b;--focus:#1C64F2;
+}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){
+  color-scheme:dark;--surface:#1a1a19;--card:#232322;--line:#3a3936;--grid:#2e2d2b;
+  --text:#ffffff;--text-2:#c3c2b7;--text-3:#9a988f;--series:#3987e5;}}
+:root[data-theme="dark"]{color-scheme:dark;--surface:#1a1a19;--card:#232322;--line:#3a3936;--grid:#2e2d2b;--text:#ffffff;--text-2:#c3c2b7;--text-3:#9a988f;--series:#3987e5}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--surface);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+header{padding:22px 0 8px;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:flex-end;justify-content:space-between}
+h1{margin:0;font-size:clamp(24px,4vw,32px);letter-spacing:-.01em}
+.who{color:var(--text-2);font-size:14px}
+.who a{color:var(--series);font-weight:600}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin:12px 0 16px}
+.filters label{display:block;font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:3px}
+select{max-width:100%}
+.filters>div{min-width:0;max-width:100%}
+select,button{font:inherit;font-size:14px;border:1.5px solid var(--line);border-radius:8px;padding:7px 10px;background:var(--card);color:var(--text)}
+button{cursor:pointer;font-weight:600}
+button:hover{border-color:var(--text-2)}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 16px}
+@media (max-width:760px){.tiles{grid-template-columns:repeat(2,1fr)}}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.tile small{display:block;color:var(--text-2);font-size:12.5px;font-weight:600}
+.tile b{display:block;font-size:30px;line-height:1.15;letter-spacing:-.02em}
+.tile span{color:var(--text-3);font-size:12.5px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 16px}
+@media (max-width:900px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.card h2{margin:0 0 2px;font-size:16px}
+.card p.sub{margin:0 0 10px;color:var(--text-2);font-size:13px}
+.hbars{display:grid;gap:6px}
+.hb{display:grid;grid-template-columns:minmax(120px,38%) 1fr;gap:10px;align-items:center;font-size:13px}
+.hb .lab{color:var(--text-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb .track{position:relative;height:22px;background:repeating-linear-gradient(90deg,transparent 0 calc(25% - 1px),var(--grid) calc(25% - 1px) 25%)}
+.hb .bar{position:absolute;left:0;top:3px;bottom:3px;background:var(--series);border-radius:0 4px 4px 0;min-width:2px}
+.hb .val{position:absolute;top:1px;font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;padding-left:6px}
+.hb .val.in{color:#fff;padding:0 6px 0 0;transform:translateX(-100%)}
+.hb .hit{position:absolute;inset:-3px 0;cursor:default}
+.axis{display:grid;grid-template-columns:minmax(120px,38%) 1fr;gap:10px;font-size:11px;color:var(--text-3)}
+.axis div:last-child{display:flex;justify-content:space-between}
+.empty{color:var(--text-2);font-size:14px;padding:12px 0}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+th{position:sticky;top:0;background:var(--card);font-size:12px;color:var(--text-2);font-weight:700;vertical-align:bottom}
+th.l{max-width:140px;white-space:normal;line-height:1.25}
+td.c{text-align:center;padding:4px}
+.cell{display:inline-block;min-width:76px;border-radius:6px;padding:3px 6px;font-weight:600;line-height:1.3}
+.cell small{display:block;font-weight:400;font-size:11px;opacity:.9}
+.cell.none{color:var(--text-3);font-weight:400;border:1px dashed var(--line)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:12.5px;color:var(--text-2);margin:10px 0 0}
+.legend i{display:inline-block;width:22px;height:12px;border-radius:3px;vertical-align:middle;margin-right:4px}
+.status{display:inline-flex;align-items:center;gap:4px;font-weight:600;font-size:12.5px}
+.tip{position:fixed;z-index:9;pointer-events:none;background:var(--text);color:var(--surface);font-size:12.5px;padding:6px 9px;border-radius:7px;max-width:280px;display:none;line-height:1.35}
+.note{color:var(--text-3);font-size:12.5px;margin:12px 0 30px}
+.loading{padding:60px 0;text-align:center;color:var(--text-2)}
+.err{background:#fde7ec;color:#8a1330;border-radius:10px;padding:12px 14px;margin:20px 0}
+@media print{.filters,#exportBtn{display:none}body{background:#fff}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div><h1 id="title">AI Curriculum Dashboard</h1><div class="who" id="who"></div></div>
+  </header>
+  <div id="app"><div class="loading">Loading progress…</div></div>
+</div>
+<div class="tip" id="tip" role="tooltip"></div>
+<script>
+var CFG = <?!= cfg ?>;
+var D = null, F = { section: '', lesson: '' };
+var $ = function(s){ return document.querySelector(s); };
+var esc = function(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]; }); };
+var pct = function(a, b){ return b ? Math.round(a / b * 100) : 0; };
+var mins = function(s){ return Math.round(s / 60); };
+var home = CFG.base + '?p=index';
+
+$('#who').innerHTML = 'Signed in as <b>' + esc(CFG.email) + '</b> · <a href="' + esc(home) + '">All lessons</a>';
+if (CFG.role === 'student') $('#title').textContent = 'My progress';
+
+function load(){
+  if (window.google && google.script && google.script.run)
+    google.script.run.withSuccessHandler(function(d){ D = d; render(); })
+      .withFailureHandler(function(e){ $('#app').innerHTML = '<div class="err">' + esc(e.message || e) + '</div>'; }).getDashboard();
+  else if (window.__MOCK) { D = window.__MOCK; render(); }
+}
+
+function lessonName(l){ return 'G' + l.grade + ' ' + (l.course === 'main' ? 'Main' : 'Bridging') + ' W' + l.week; }
+function lessonTitle(l){ return (l.title || '').replace(/ – Grade.*$/, ''); }
+
+/* one row per student × lesson with derived numbers */
+function facts(){
+  var L = {}; D.lessons.forEach(function(l){ L[l.id] = l; });
+  var S = {}; D.students.forEach(function(s){ S[s.email] = s; });
+  var students = D.students.filter(function(s){ return !F.section || s.section === F.section; });
+  var keep = {}; students.forEach(function(s){ keep[s.email] = 1; });
+  var grades = {}, anyGrade = false; students.forEach(function(s){ if (s.grade) { grades[s.grade] = 1; anyGrade = true; } });
+  var lessons = D.lessons.filter(function(l){
+    return (!F.lesson || l.id === F.lesson) && (!anyGrade || grades[l.grade]);
+  }).sort(function(a, b){ return a.grade - b.grade || a.week - b.week || a.course.localeCompare(b.course); });
+  var res = D.results.filter(function(r){ return keep[r.email] && L[r.lessonId]; });
+  return { L: L, S: S, students: students, lessons: lessons, res: res };
+}
+
+function render(){
+  var secs = D.sections.slice().sort(function(a, b){ return a.localeCompare(b, undefined, { numeric: true }); });
+  var lessons = D.lessons.slice().sort(function(a, b){ return a.grade - b.grade || a.week - b.week; });
+  var self = D.scope === 'self';
+  var html = '';
+  if (!self) html += '<div class="filters">' +
+    '<div><label for="fSec">Section</label><select id="fSec"><option value="">' + (D.scope === 'school' ? 'All sections' : 'All my sections') + '</option>' +
+      secs.map(function(s){ return '<option' + (F.section === s ? ' selected' : '') + '>' + esc(s) + '</option>'; }).join('') + '</select></div>' +
+    '<div><label for="fLes">Lesson</label><select id="fLes"><option value="">All lessons</option>' +
+      lessons.map(function(l){ return '<option value="' + esc(l.id) + '"' + (F.lesson === l.id ? ' selected' : '') + '>' + esc(lessonName(l) + ' – ' + lessonTitle(l)) + '</option>'; }).join('') + '</select></div>' +
+    '<div><button type="button" id="exportBtn">Download CSV</button></div></div>';
+  html += '<div id="body"></div>';
+  $('#app').innerHTML = html;
+  if (!self) {
+    $('#fSec').onchange = function(){ F.section = this.value; draw(); };
+    $('#fLes').onchange = function(){ F.lesson = this.value; draw(); };
+    $('#exportBtn').onclick = exportCsv;
+  }
+  draw();
+}
+
+function draw(){
+  var f = facts(), self = D.scope === 'self';
+  var byLesson = {};
+  f.lessons.forEach(function(l){ byLesson[l.id] = { l: l, started: 0, finished: 0, pts: 0, max: 0, secs: 0 }; });
+  f.res.forEach(function(r){
+    var b = byLesson[r.lessonId]; if (!b) return;
+    b.started++; if (r.done >= b.l.activities) b.finished++;
+    b.pts += r.score; b.max += Object.keys(r.acts).reduce(function(n, k){ return n + r.acts[k][1]; }, 0); b.secs += r.seconds;
+  });
+  var rows = Object.keys(byLesson).map(function(k){ return byLesson[k]; });
+  var tot = rows.reduce(function(a, b){ a.st += b.started; a.p += b.pts; a.m += b.max; a.s += b.secs; a.fin += b.finished; return a; }, { st: 0, p: 0, m: 0, s: 0, fin: 0 });
+
+  var h = '<div class="tiles">' +
+    tile(self ? 'Lessons started' : 'Students', self ? tot.st : f.students.length, self ? 'of ' + f.lessons.length + ' lessons available' : (F.section || (D.scope === 'school' ? 'whole school' : 'in my sections'))) +
+    tile('Lessons finished', tot.fin, self ? 'every activity checked' : 'student-lessons with every activity checked') +
+    tile('Average first-try score', tot.m ? pct(tot.p, tot.m) + '%' : '–', 'across activities checked') +
+    tile('Average time per lesson', tot.st ? mins(tot.s / tot.st) + ' min' : '–', 'active time on the page') + '</div>';
+
+  if (!self) {
+    h += '<div class="grid2">' +
+      card('Average first-try score by lesson', 'Mean of each student\'s first attempt, as a % of the points they attempted.',
+        hbars(rows.filter(function(b){ return b.max; }).map(function(b){ return { label: lessonName(b.l), value: pct(b.pts, b.max), text: pct(b.pts, b.max) + '%',
+          tip: '<b>' + esc(lessonName(b.l)) + '</b><br>' + esc(lessonTitle(b.l)) + '<br>Average first try: ' + pct(b.pts, b.max) + '%<br>' + b.started + ' student' + (b.started === 1 ? '' : 's') }; }), 100, '%')) +
+      card('Completion by lesson', 'Share of students who have checked every activity.',
+        hbars(rows.map(function(b){ var n = rosterFor(f, b.l); return { label: lessonName(b.l), value: pct(b.finished, n), text: b.finished + ' / ' + n,
+          tip: '<b>' + esc(lessonName(b.l)) + '</b><br>Finished: ' + b.finished + '<br>Started, not finished: ' + (b.started - b.finished) + '<br>Not started: ' + Math.max(0, n - b.started) }; }), 100, '%')) +
+      '</div>';
+    if (F.lesson) h += activityChart(f);
+  }
+  h += progressTable(f, self);
+  h += '<p class="note">First-try scores are kept exactly as first checked; retries are for learning and don\'t change them. Time counts only while the lesson page is open, visible and in use (it pauses after 2 minutes without activity). ' +
+       (self ? '' : 'Only the sections you teach are shown' + (D.scope === 'school' ? ' – your role can see the whole school.' : '.')) + ' Data refreshed ' + new Date(D.generatedAt).toLocaleString('en-GB') + '.</p>';
+  $('#body').innerHTML = h;
+  wireTips();
+}
+
+function rosterFor(f, l){ return f.students.filter(function(s){ return !s.grade || s.grade === l.grade; }).length; }
+function tile(k, v, s){ return '<div class="tile"><small>' + esc(k) + '</small><b>' + esc(v) + '</b><span>' + esc(s) + '</span></div>'; }
+function card(t, s, body){ return '<section class="card"><h2>' + esc(t) + '</h2><p class="sub">' + esc(s) + '</p>' + body + '</section>'; }
+
+function hbars(items, max, unit){
+  if (!items.length) return '<div class="empty">No results yet.</div>';
+  return '<div class="hbars">' + items.map(function(it){
+    var w = Math.max(0, Math.min(100, it.value / max * 100));
+    return '<div class="hb"><span class="lab" title="' + esc(it.label) + '">' + esc(it.label) + '</span><div class="track">' +
+      '<div class="bar" style="width:' + w + '%"></div><span class="val' + (w > 80 ? ' in' : '') + '" style="left:' + w + '%">' + esc(it.text) + '</span>' +
+      '<span class="hit" data-tip="' + esc(it.tip) + '"></span></div></div>';
+  }).join('') + '</div><div class="axis" aria-hidden="true"><div></div><div><span>0</span><span>25</span><span>50</span><span>75</span><span>100' + unit + '</span></div></div>';
+}
+
+function activityChart(f){
+  var acts = {};
+  f.res.filter(function(r){ return r.lessonId === F.lesson; }).forEach(function(r){
+    Object.keys(r.acts).forEach(function(k){ var a = r.acts[k]; var o = acts[k] || (acts[k] = { title: a[2], part: a[3], p: 0, m: 0, n: 0 }); o.p += a[0]; o.m += a[1]; o.n++; });
+  });
+  var items = Object.keys(acts).map(function(k){ var a = acts[k]; return { label: (a.part ? a.part + ': ' : '') + a.title, value: pct(a.p, a.m), text: pct(a.p, a.m) + '%',
+    tip: '<b>' + esc(a.title) + '</b><br>' + esc(a.part) + '<br>Average first try: ' + pct(a.p, a.m) + '%<br>' + a.n + ' student' + (a.n === 1 ? '' : 's') }; })
+    .sort(function(a, b){ return a.value - b.value; });
+  return card('Which activities need reteaching?', 'Average first-try score for each activity in this lesson, lowest first.', hbars(items, 100, '%'));
+}
+
+function shade(p){
+  var steps = [[90,'var(--s600)','#fff'],[75,'var(--s500)','#fff'],[60,'var(--s400)','#fff'],[40,'var(--s300)','#0b0b0b'],[20,'var(--s200)','#0b0b0b'],[0,'var(--s100)','#0b0b0b']];
+  for (var i = 0; i < steps.length; i++) if (p >= steps[i][0]) return steps[i];
+  return steps[5];
+}
+
+function progressTable(f, self){
+  if (!f.lessons.length) return '<div class="card"><div class="empty">No lessons have been started yet.</div></div>';
+  var R = {}; f.res.forEach(function(r){ R[r.email + '|' + r.lessonId] = r; });
+  var students = f.students.slice().sort(function(a, b){ return a.section.localeCompare(b.section, undefined, { numeric: true }) || a.name.localeCompare(b.name); });
+  var h = '<div class="card" style="padding:0;border:0;background:none"><h2 style="margin:0 0 8px">' + (self ? 'My lessons' : 'Student progress') + '</h2><div class="tablewrap"><table><thead><tr>' +
+    (self ? '' : '<th>Student</th><th>Section</th>') +
+    f.lessons.map(function(l){ return '<th class="l" title="' + esc(lessonTitle(l)) + '">' + esc(lessonName(l)) + '</th>'; }).join('') + '</tr></thead><tbody>';
+  students.forEach(function(s){
+    h += '<tr>' + (self ? '' : '<td>' + esc(s.name) + '</td><td>' + esc(s.section) + '</td>');
+    f.lessons.forEach(function(l){
+      if (s.grade && s.grade !== l.grade) { h += '<td class="c"><span class="cell none">n/a</span></td>'; return; }
+      var r = R[s.email + '|' + l.id];
+      if (!r) { h += '<td class="c"><span class="cell none" data-tip="' + esc(s.name + ' has not started ' + lessonName(l)) + '">Not started</span></td>'; return; }
+      var max = Object.keys(r.acts).reduce(function(n, k){ return n + r.acts[k][1]; }, 0), p = pct(r.score, max), sh = shade(p);
+      var fin = r.done >= l.activities;
+      h += '<td class="c"><span class="cell" style="background:' + sh[1] + ';color:' + sh[2] + '" data-tip="' +
+        esc('<b>' + s.name + ' · ' + lessonName(l) + '</b><br>First try: ' + r.score + ' / ' + max + ' (' + p + '%)<br>Activities checked: ' + r.done + ' of ' + l.activities + '<br>Active time: ' + mins(r.seconds) + ' min') + '">' +
+        p + '%<small>' + (fin ? '✓ done' : r.done + '/' + l.activities) + ' · ' + mins(r.seconds) + 'm</small></span></td>';
+    });
+    h += '</tr>';
+  });
+  h += '</tbody></table></div><div class="legend"><span>First-try score:</span>' +
+    [['var(--s100)','0–19%'],['var(--s200)','20–39%'],['var(--s300)','40–59%'],['var(--s400)','60–74%'],['var(--s500)','75–89%'],['var(--s600)','90–100%']].map(function(x){ return '<span><i style="background:' + x[0] + '"></i>' + x[1] + '</span>'; }).join('') +
+    '<span>· “3/9” = activities checked · “12m” = active minutes</span></div></div>';
+  return h;
+}
+
+function wireTips(){
+  var tip = $('#tip');
+  document.querySelectorAll('[data-tip]').forEach(function(el){
+    el.addEventListener('mouseenter', function(){ tip.innerHTML = el.getAttribute('data-tip'); tip.style.display = 'block'; });
+    el.addEventListener('mousemove', function(e){ tip.style.left = Math.min(e.clientX + 14, innerWidth - 290) + 'px'; tip.style.top = (e.clientY + 14) + 'px'; });
+    el.addEventListener('mouseleave', function(){ tip.style.display = 'none'; });
+  });
+}
+
+function exportCsv(){
+  var f = facts(), R = {}; f.res.forEach(function(r){ R[r.email + '|' + r.lessonId] = r; });
+  var lines = [['Student','Email','Section','Lesson','Title','First-try points','Points attempted','First-try %','Activities checked','Activities in lesson','Active minutes']];
+  f.students.forEach(function(s){ f.lessons.forEach(function(l){
+    if (s.grade && s.grade !== l.grade) return;
+    var r = R[s.email + '|' + l.id];
+    var max = r ? Object.keys(r.acts).reduce(function(n, k){ return n + r.acts[k][1]; }, 0) : 0;
+    lines.push([s.name, s.email, s.section, lessonName(l), lessonTitle(l), r ? r.score : '', r ? max : '', r ? pct(r.score, max) : '', r ? r.done : 0, l.activities, r ? mins(r.seconds) : 0]);
+  }); });
+  var csv = lines.map(function(row){ return row.map(function(v){ v = String(v); if (/^[=+\-@]/.test(v)) v = "'" + v; return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(','); }).join('\n');
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+  a.download = 'ai-progress' + (F.section ? '-' + F.section.replace(/\s+/g, '') : '') + '.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+}
+
+load();
+</script>
+</body>
+</html>

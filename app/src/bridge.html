@@ -1,0 +1,97 @@
+<script>
+/* Injected at the top of every page served by the signed-in app.
+   - keeps each signed-in user's saved answers separate on shared devices
+   - fills in the student's name from their school account
+   - sends first-try scores and active time to the protected sheet
+   - turns site links into app links */
+(function(){
+  var CFG = <?!= cfg ?>;
+  window.APP = CFG;
+  var lessonId = /^grade-/.test(CFG.page) ? CFG.page : null;
+
+  /* 1. Per-user browser storage, so the next student on the same device starts clean */
+  try {
+    var P = 'u:' + CFG.email + '|', SP = Storage.prototype, g = SP.getItem, s = SP.setItem, r = SP.removeItem;
+    SP.getItem = function(k){ return g.call(this, P + k); };
+    SP.setItem = function(k, v){ return s.call(this, P + k, v); };
+    SP.removeItem = function(k){ return r.call(this, P + k); };
+  } catch (e) {}
+
+  function run(fn){ var args = [].slice.call(arguments, 1);
+    return new Promise(function(ok, no){
+      if (!(window.google && google.script && google.script.run)) return no(new Error('offline'));
+      var c = google.script.run.withSuccessHandler(ok).withFailureHandler(no); c[fn].apply(c, args);
+    });
+  }
+
+  /* 2. Scores: the lesson engine calls LessonHooks.state(S, acts) every time it updates */
+  var sent = {}, ready = false, latest = null, busy = false, status = null;
+  function setStatus(t, bad){ if (status) { status.textContent = t; status.className = 'app-save' + (bad ? ' bad' : ''); } }
+  function flushScores(){
+    if (!ready || !latest || busy) return;
+    var S = latest.S, acts = latest.acts, items = [];
+    acts.forEach(function(a){
+      if (S.first[a.id] !== undefined && sent[a.id] === undefined)
+        items.push({ id: a.id, title: a.title, part: a.section, score: S.first[a.id], max: a.max });
+    });
+    if (!items.length) return;
+    busy = true; setStatus('Saving…');
+    var meta = { title: document.title, activities: acts.length, maxPoints: acts.reduce(function(n, a){ return n + a.max; }, 0) };
+    run('recordScores', lessonId, meta, items).then(function(){
+      items.forEach(function(it){ sent[it.id] = it.score; });
+      busy = false; setStatus('✓ Saved to your school account'); flushScores();
+    }, function(){ busy = false; setStatus('Not saved yet – check your connection. It will retry.', true); setTimeout(flushScores, 15000); });
+  }
+  window.LessonHooks = { state: function(S, acts){ if (lessonId) { latest = { S: S, acts: acts }; flushScores(); } } };
+  if (lessonId) run('getLessonState', lessonId).then(function(st){ sent = st.done || {}; ready = true; flushScores(); }, function(){ ready = true; });
+
+  /* 3. Active time: counts only while the page is visible and the student has
+        interacted in the last 2 minutes; sent about once a minute */
+  if (lessonId) {
+    var last = Date.now(), pending = 0, IDLE = 120000;
+    ['pointerdown','keydown','scroll','touchstart','input','mousemove'].forEach(function(ev){
+      addEventListener(ev, function(){ last = Date.now(); }, { passive: true, capture: true });
+    });
+    setInterval(function(){ if (document.visibilityState === 'visible' && Date.now() - last < IDLE) pending++; }, 1000);
+    var sendTime = function(){ if (pending < 5) return; var s = pending; pending = 0;
+      run('recordTime', lessonId, s).catch(function(){ pending += s; }); };
+    setInterval(sendTime, 60000);
+    document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'hidden') sendTime(); });
+    addEventListener('pagehide', sendTime);
+  }
+
+  /* 4. Page touches once the page has loaded */
+  function appUrl(p){ return CFG.base + '?p=' + encodeURIComponent(p); }
+  document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('a[href]').forEach(function(a){
+      var h = a.getAttribute('href'); if (/^(https?:|mailto:|#)/.test(h)) return;
+      var m = /^(?:\.\.\/)?([a-z0-9\-\/]+)\.html(#.*)?$/.exec(h); if (!m) return;
+      a.href = appUrl(m[1]) + (m[2] || ''); a.target = '_top';
+    });
+    var nm = document.getElementById('nm');
+    if (nm) { nm.value = CFG.name; nm.readOnly = true; nm.title = 'Filled in from your school account';
+      try { nm.dispatchEvent(new Event('input', { bubbles: true })); } catch (e) {} }
+    var bar = document.createElement('div');
+    bar.className = 'app-bar';
+    bar.innerHTML = '<span>Signed in as <b></b></span>' + (lessonId ? '<span class="app-save" aria-live="polite"></span>' : '') +
+      '<a target="_top">' + (CFG.role === 'student' ? 'My progress' : 'Dashboard') + '</a>';
+    bar.querySelector('b').textContent = CFG.email;
+    bar.querySelector('a').href = appUrl('dashboard');
+    document.body.insertBefore(bar, document.body.firstChild);
+    status = bar.querySelector('.app-save');
+    var qr = function(){ var url = appUrl(CFG.page), ov = document.getElementById('ov'); if (!ov) return;
+      document.getElementById('qrUrl').textContent = url; ov.classList.add('on');
+      var draw = function(){ var el = document.getElementById('qr'); el.innerHTML = ''; new QRCode(el, { text: url, width: 320, height: 320, correctLevel: QRCode.CorrectLevel.M }); };
+      if (window.QRCode) return draw();
+      var sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; sc.onload = draw; document.head.appendChild(sc); };
+    ['qrBtn','qrTop'].forEach(function(id){ var b = document.getElementById(id); if (b) b.onclick = qr; });
+  });
+})();
+</script>
+<style>
+.app-bar{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;justify-content:flex-end;padding:6px 16px;background:#0b0b0b;color:#fff;font:13px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.app-bar b{font-weight:600}
+.app-bar a{color:#fff;font-weight:700;text-decoration:underline}
+.app-save{color:#9be59b}.app-save.bad{color:#ffb3b3}
+@media print{.app-bar{display:none}}
+</style>
