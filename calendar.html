@@ -81,6 +81,9 @@ const LESSONS = {
 const START = new Date(2026,8,28); // Monday of Week 1
 const DAYS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 const $=s=>document.querySelector(s);
+/* Signed-in app: teachers get a "My classes" filter, and links must open as app pages */
+const MINE=(window.APP&&Array.isArray(APP.sections))?APP.sections:[];
+const link=h=>window.APP?APP.base+"?p="+encodeURIComponent(h.replace(/\.html$/,"")):h;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 const parse=s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
@@ -90,7 +93,7 @@ function monday(d){const x=new Date(d);x.setDate(x.getDate()-((x.getDay()+6)%7))
 function lessonsOn(d){
   const n=weekNo(d); if(n<1) return [];
   const cw=n%2===1?1:2, dn=DAYS[d.getDay()], g=$("#grade").value;
-  return SCHEDULE.filter(r=>r[3]===cw&&r[4]===dn&&(!g||String(r[1])===g)).sort((a,b)=>a[5]-b[5]||a[0].localeCompare(b[0]));
+  return SCHEDULE.filter(r=>r[3]===cw&&r[4]===dn&&(!g||(g==="mine"?MINE.includes(r[0]):String(r[1])===g))).sort((a,b)=>a[5]-b[5]||a[0].localeCompare(b[0]));
 }
 let cur=new Date();cur.setHours(0,0,0,0);
 if(cur.getDay()===0||cur.getDay()===6) cur.setDate(cur.getDate()+(cur.getDay()===6?2:1));
@@ -106,11 +109,12 @@ function render(){
   $("#list").innerHTML=items.length?items.map(([sec,gr,sub,,,per,time])=>{
     const L=(LESSONS[n]||{})[gr];
     return `<li class="slot"><div class="when"><b>${esc(time)}</b><small>Period ${per}</small></div><div><h3>${esc(sec)}<span class="subj ${sub}">via ${sub} Studies</span></h3>
-      <div class="lesson">${L?`Lesson: <a href="${L[0]}">Grade ${gr} Main · Week ${n} – ${esc(L[1])}</a>`:`<span class="none">Grade ${gr} Main · Week ${n} lesson is not on the site yet.</span>`}</div></div></li>`}).join(""):
-    `<li class="empty">No AI Literacy lessons${$("#grade").value?" for this grade":""} on this day.</li>`;
+      <div class="lesson">${L?`Lesson: <a href="${esc(link(L[0]))}"${window.APP?' target="_top"':""}>Grade ${gr} Main · Week ${n} – ${esc(L[1])}</a>`:`<span class="none">Grade ${gr} Main · Week ${n} lesson is not on the site yet.</span>`}</div></div></li>`}).join(""):
+    `<li class="empty">${$("#grade").value==="mine"?"None of your classes have AI Literacy on this day.":`No AI Literacy lessons${$("#grade").value?" for this grade":""} on this day.`}</li>`;
 }
 for(let g=6;g<=12;g++)$("#grade").insertAdjacentHTML("beforeend",`<option value="${g}">Grade ${g}</option>`);
-try{const g=localStorage.getItem("cal-grade");if(g)$("#grade").value=g}catch(e){}
+if(MINE.length){$("#grade").insertAdjacentHTML("afterbegin",`<option value="mine">My classes (${MINE.length})</option>`);$("#grade").value="mine"}
+try{const g=localStorage.getItem("cal-grade");if(g&&(g!=="mine"||MINE.length))$("#grade").value=g}catch(e){}
 $("#grade").onchange=()=>{try{localStorage.setItem("cal-grade",$("#grade").value)}catch(e){}render()};
 $("#date").onchange=()=>{if($("#date").value){cur=parse($("#date").value);render()}};
 $("#prev").onclick=()=>step(-1);$("#next").onclick=()=>step(1);

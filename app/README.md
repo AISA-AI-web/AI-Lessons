@@ -52,6 +52,14 @@ Bridging lessons are shown as "to be scheduled" and don't count towards
 Finisher until they are assigned; Main course lessons count from their
 teaching week (Week 1 = 28 Sep 2026, set by `TERM_START` in `src/Code.js`).
 
+## Home page by role
+
+Opening the web app link with no page chosen takes **teachers, SLT and owners**
+to the **teaching calendar on today's date**. Teachers see it filtered to
+**My classes** (their sections in the Roster tab, tutors included); they can
+switch to any grade. Owners and SLT see all grades. **Students** land on the
+grade selector. The public site is unchanged.
+
 ## The student dashboard
 
 Students open **My progress** from the bar at the top of any page. They see:

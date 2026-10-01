@@ -33,14 +33,16 @@ function doGet(e) {
   var me = currentUser_();
   if (!me) return page_('<h1>Sign in with your AISA account</h1><p>This site is only available to <b>@' + DOMAIN +
     '</b> Google accounts. Sign out of any personal account and open the link again with your school account.</p>', 'Access denied');
-  var p = String((e && e.parameter && e.parameter.p) || 'index');
+  // Staff land on today's teaching calendar; students on the grade selector.
+  var p = String((e && e.parameter && e.parameter.p) || (me.role === 'student' ? 'index' : 'calendar'));
   if (p === 'dashboard') return dashboardPage_(me);
   if (!/^(index|calendar|grade-(6|7|8|9|10|11|12)\/(main|bridging)-w\d+-[a-z0-9-]+)$/.test(p)) p = 'index';
   var html;
   try { html = HtmlService.createHtmlOutputFromFile('site/' + p).getContent(); }
   catch (err) { html = HtmlService.createHtmlOutputFromFile('site/index').getContent(); p = 'index'; }
   var bridge = HtmlService.createTemplateFromFile('bridge');
-  bridge.cfg = JSON.stringify({ email: me.email, name: me.name, role: me.role, page: p, base: ScriptApp.getService().getUrl() });
+  bridge.cfg = JSON.stringify({ email: me.email, name: me.name, role: me.role, page: p, base: ScriptApp.getService().getUrl(),
+    sections: me.role === 'teacher' ? visibleSections_(me) : [] });
   html = html.replace(/<head>/i, '<head>' + bridge.evaluate().getContent());
   return HtmlService.createHtmlOutput(html)
     .setTitle(titleOf_(html))

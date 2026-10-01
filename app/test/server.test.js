@@ -50,6 +50,13 @@ ok(/"role":"student"/.test(page.getContent()) && /"name":"Sara One"/.test(page.g
 for (const p of ['../Code', 'site/../Code', 'bridge', 'dashboard2', 'grade-6/../../x']) {
   page = env.call('doGet', { parameter: { p } }); ok(/<h1>AI Lessons<\/h1>/.test(page.getContent()), 'unknown page falls back to index: ' + p);
 }
+page = env.call('doGet', { parameter: {} }); ok(/<h1>AI Lessons<\/h1>/.test(page.getContent()), 'students land on the grade selector');
+env.as('t6@aisa.sch.ae'); page = env.call('doGet', { parameter: {} });
+ok(/AI Teaching Calendar/.test(page.getContent()) && /"sections":\["Girls 6"\]/.test(page.getContent()), 'teachers land on the calendar with their own sections');
+env.as('principal@aisa.sch.ae'); page = env.call('doGet', { parameter: {} });
+ok(/AI Teaching Calendar/.test(page.getContent()) && /"sections":\[\]/.test(page.getContent()), 'SLT land on the calendar (all grades)');
+page = env.call('doGet', { parameter: { p: 'index' } }); ok(/<h1>AI Lessons<\/h1>/.test(page.getContent()), 'staff can still open the grade selector');
+env.as('s1@aisa.sch.ae');
 page = env.call('doGet', { parameter: { p: 'dashboard' } }); ok(/AI Curriculum Dashboard/.test(page.getContent()), 'dashboard served');
 
 /* scores */
