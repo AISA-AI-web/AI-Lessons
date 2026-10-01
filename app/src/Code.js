@@ -277,6 +277,8 @@ function judgementsFor_(keep) {
  * courses for Grades 6–12 are included automatically. Edit CourseMap to fix any
  * wrong guesses, then run again. Owners only.
  *
+ * Roster rows with a blank courseId were added by hand and are kept.
+ *
  * Google only lists the courses the running account belongs to – unless that
  * account is a Workspace admin with Classroom privileges, which sees every
  * course. Run it as such an account (see README) to read the whole school.
@@ -312,10 +314,14 @@ function syncClassroom() {
     listAll_(function (t) { return Classroom.Courses.Teachers.list(id, { pageSize: 100, pageToken: t }); }, 'teachers')
       .forEach(function (s) { if (s.profile && s.profile.emailAddress) out.push([lc_(s.profile.emailAddress), s.profile.name.fullName, 'teacher', m.section, grade, id, m.courseName, now]); });
   });
+  // Rows with no courseId were added by hand (e.g. teachers from the AI timetable) – keep them.
+  var manual = rows_('Roster').filter(function (r) { return !String(r.courseId || '').trim(); })
+    .map(function (r) { return TABS.Roster.map(function (k) { return r[k] === undefined ? '' : r[k]; }); });
+  out = manual.concat(out);
   var rs = sheet_('Roster');
   if (rs.getLastRow() > 1) rs.getRange(2, 1, rs.getLastRow() - 1, TABS.Roster.length).clearContent();
   if (out.length) rs.getRange(2, 1, out.length, TABS.Roster.length).setValues(out.map(function (r) { return r.map(safe_); }));
-  return { courses: courses.length, rosterRows: out.length };
+  return { courses: courses.length, rosterRows: out.length - manual.length, keptManualRows: manual.length };
 }
 
 function listAll_(fn, key) {

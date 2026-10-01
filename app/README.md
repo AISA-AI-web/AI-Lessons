@@ -78,7 +78,7 @@ student data is ever stored in this GitHub repository**, which is public.
 | Tab | What it holds |
 |---|---|
 | Roles | Owners and SLT – edit by hand |
-| Roster | Students and teachers by section – filled from Google Classroom |
+| Roster | Students and teachers by section – from Google Classroom, plus rows added by hand (blank courseId, kept by every sync) |
 | CourseMap | Which Classroom course is which section – check after each sync |
 | Lessons | Lessons that have been used, with their activity count and points |
 | Scores | One row per student per activity: first-try score only |
@@ -140,6 +140,13 @@ You need a computer with Node.js installed, signed in to Chrome with an
      weekly trigger (step 10) under their account, then remove their Drive
      access if you prefer (the trigger keeps working only while they keep
      access, so the first option is simpler).
+
+   **Teachers from the AI timetable.** You can also add teachers by hand:
+   paste rows into **Roster** with role `teacher`, their section (e.g.
+   `Boys 9`) and grade, and leave `courseId` **blank**. A teacher gets one
+   row per section, and tutors can be added the same way. `syncClassroom`
+   keeps every row with a blank `courseId` and only replaces the rows it
+   created.
 
    If you ran it before and got the wrong courses, **clear the CourseMap tab**
    (keep the header row) and run it again so every course is re-checked.

@@ -28,6 +28,11 @@ ok(cm.c2[2] === 'Boys 7' && cm.c2[3] === 'Y', 'section from course section field
 ok(cm.c3[3] === 'N' && cm.c4[3] === 'N', 'non-section and out-of-range courses excluded');
 ok(cm.c5[2] === 'Boys 9' && cm.c5[3] === 'N' && /other subject/.test(cm.c5[4]), 'other-subject course in a section is excluded');
 ok(!sheets.Roster.some(r => r[0] === 'hodai@aisa.sch.ae'), 'a Social Studies teacher does not become an AI teacher of that section');
+sheets.Roster.push(['tut@aisa.sch.ae', 'Tutor Nine', 'teacher', 'Boys 9', 9, '', 'AI timetable – tutor', '']);
+const sync2 = env.call('syncClassroom');
+ok(sync2.rosterRows === 5 && sync2.keptManualRows === 1, 'second sync keeps hand-added rows');
+ok(sheets.Roster.filter(r => r[0] === 'tut@aisa.sch.ae' && r[3] === 'Boys 9').length === 1, 'hand-added teacher row kept once, not duplicated');
+ok(sheets.Roster.filter(r => r[0] === 's1@aisa.sch.ae').length === 1, 'synced rows are replaced, not duplicated');
 
 /* sign-in gate */
 for (const bad of ['', 'someone@gmail.com', 'x@notaisa.sch.ae', 'x@aisa.sch.ae.evil.com']) {
