@@ -143,16 +143,16 @@ You need a computer with Node.js installed, signed in to Chrome with an
    of data and assessment, head of inclusion).
 8. **Class lists from the school information system (recommended).** Ask IT for
    the AI Literacy class export (one row per student per class, with the
-   teacher's email) **including each student's school email**. In the data sheet
+   teacher's email). Student emails are built from the Student ID as
+   `{id}@aisa.sch.ae` unless the export has a *Student Email* column. In the data sheet
    add a tab called **Import**, paste the export into it (header row first), and
    run `importRoster` from the editor. It creates one Roster row per student
    (section = gender + grade, e.g. *Boys 6*; tutorial classes included) and one
    row per teacher per section they teach, and reports how many it added. Run it
    again whenever IT sends a new export – it replaces the previous import and
-   keeps rows you added by hand. If the export has no student email column but
-   emails follow a pattern, set the script property `STUDENT_EMAIL_PATTERN`
-   (Project Settings → Script properties), e.g. `{id}@aisa.sch.ae` – `{id}`,
-   `{first}` and `{last}` are filled in. Clear the Import tab afterwards.
+   keeps rows you added by hand. If the school's email pattern ever changes, set
+   the script property `STUDENT_EMAIL_PATTERN` (Project Settings → Script
+   properties) – `{id}`, `{first}` and `{last}` are filled in. Clear the Import tab afterwards.
 
    **Or from Google Classroom.** In the script editor run
    `syncClassroom`. It reads active courses, guesses the section from the
