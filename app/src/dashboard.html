@@ -181,9 +181,18 @@ var VIEW = null;   // staff: the student whose view is being previewed
 
 function load(){
   if (window.google && google.script && google.script.run)
-    google.script.run.withSuccessHandler(function(d){ D = d; render(); })
+    google.script.run.withSuccessHandler(function(d){ D = d; addCatalog(); render(); })
       .withFailureHandler(function(e){ $('#app').innerHTML = '<div class="err">' + esc(e.message || e) + '</div>'; }).getDashboard();
-  else if (window.__MOCK) { D = window.__MOCK; render(); }
+  else if (window.__MOCK) { D = window.__MOCK; addCatalog(); render(); }
+}
+
+/* Every lesson on the site, not only those someone has started – so a section
+   with no work yet still lists its students and lessons. */
+function addCatalog(){
+  var have = {}; D.lessons.forEach(function(l){ have[l.id] = 1; });
+  (D.catalog || []).forEach(function(c){
+    if (!have[c.id]) D.lessons.push({ id: c.id, grade: c.grade, course: c.course, week: c.week, title: c.title, activities: c.activities, maxPoints: 0 });
+  });
 }
 
 function lessonName(l){ return 'G' + l.grade + ' ' + (l.course === 'main' ? 'Main' : 'Bridging') + ' W' + l.week; }
