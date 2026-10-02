@@ -339,8 +339,9 @@ var SIS_ID = 'sis';
  * Needed columns (matched by name): Student ID, Student First Name, Student Last
  * Name, Student Gender (M/F), Student Grade, Email Address (the teacher's),
  * Instructor First/Last Name, Class Name. Student emails come from a column whose
- * name contains "student" and "email"; if there is none, set the script property
- * STUDENT_EMAIL_PATTERN, e.g. {id}@aisa.sch.ae ({id}, {first}, {last} are filled in).
+ * name contains "student" and "email"; if there is none they are built from the
+ * Student ID as {id}@aisa.sch.ae. Override with the script property
+ * STUDENT_EMAIL_PATTERN ({id}, {first}, {last} are filled in).
  *
  * Each student's section is their gender and grade (e.g. Boys 6). Each teacher
  * gets every section they teach a student in. Replaces earlier imported rows;
@@ -359,8 +360,7 @@ function importRoster() {
   var C = { id: col(/^student id$/, 'Student ID'), first: col(/^student first name$/, 'Student First Name'), last: col(/^student last name$/, 'Student Last Name'),
             gender: col(/^student gender$/, 'Student Gender'), grade: col(/^student grade$/, 'Student Grade'), temail: col(/^email address$/, 'Email Address'),
             tfirst: col(/^instructor first name$/), tlast: col(/^instructor last name$/), cls: col(/^class name$/), semail: col(/student.*e-?mail/) };
-  var pattern = PropertiesService.getScriptProperties().getProperty('STUDENT_EMAIL_PATTERN') || '';
-  if (C.semail < 0 && !pattern) throw new Error('No student email column. Ask IT to add one (e.g. "Student Email"), or set the script property STUDENT_EMAIL_PATTERN.');
+  var pattern = PropertiesService.getScriptProperties().getProperty('STUDENT_EMAIL_PATTERN') || '{id}@' + DOMAIN;
   var slug = function (x) { return String(x || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, ''); };
   var students = {}, teachers = {}, skipped = 0, now = new Date();
   v.slice(1).forEach(function (r) {
