@@ -351,10 +351,15 @@ function importRoster() {
   if (currentUser_()) requireOwner_();
   var sh = sheet_('Import');
   if (!sh) throw new Error('Add a tab called "Import" and paste the class export into it, header row first.');
-  var v = sh.getDataRange().getValues(), head = (v[0] || []).map(function (h) { return String(h).trim().toLowerCase(); });
+  var norm = function (h) { return String(h == null ? '' : h).replace(/[\s\u00a0\u200b\ufeff]+/g, ' ').trim().toLowerCase(); };
+  var all = sh.getDataRange().getValues(), hr = -1;
+  for (var i = 0; i < Math.min(all.length, 20) && hr < 0; i++) if (all[i].map(norm).indexOf('student id') >= 0) hr = i;
+  if (hr < 0) throw new Error('The Import tab has no header row with a "Student ID" column. Paste the export with its header row ' +
+    '(AI Course, Subject, … Student ID …). First row found: ' + ((all[0] || []).map(norm).filter(String).join(' | ') || '(empty)'));
+  var v = all.slice(hr), head = v[0].map(norm);
   var col = function (re, need) {
     for (var i = 0; i < head.length; i++) if (re.test(head[i])) return i;
-    if (need) throw new Error('The Import tab has no "' + need + '" column.');
+    if (need) throw new Error('The Import tab has no "' + need + '" column. Columns found: ' + head.filter(String).join(' | '));
     return -1;
   };
   var C = { id: col(/^student id$/, 'Student ID'), first: col(/^student first name$/, 'Student First Name'), last: col(/^student last name$/, 'Student Last Name'),

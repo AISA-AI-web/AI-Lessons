@@ -136,6 +136,11 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   ok(!R.some(r => r[0] === '404@aisa.sch.ae'), 'grades outside 6–12 are skipped');
   ok(R.some(r => r[0] === 'hand@aisa.sch.ae'), 'hand-added rows are kept');
   ok(R.find(r => r[0] === '303@aisa.sch.ae')[1].startsWith('Huda'), 'names imported');
+  const saved = sh.Import.slice();
+  sh.Import = [['AISA export'], [], saved[0].map(h => ' ' + h.replace(' ', '\u00a0') + ' ')].concat(saved.slice(1));
+  ok(E.call('importRoster').students === 3, 'header row found below a title row, with odd spaces');
+  sh.Import = [['Name', 'Grade']]; throws(() => E.call('importRoster'), /First row found: name \| grade/, 'missing header explains what was found');
+  sh.Import = saved;
   ok(R.some(r => r[0] === '202@aisa.sch.ae'), 'with no email column, student emails default to {id}@aisa.sch.ae');
   sh.Import.push(['G08AILIT1', 'Islamic', 'Three', 'Teacher', 't3@aisa.sch.ae', 'G08ISA1', 505, 5, 'New', 'Noor', 'F', 8, 'G08ISA1']);
   res = E.call('importRoster');
