@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Open the Black Box + Change One Thing – Grade 9 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#D7263D; --main2:#EF4444; --deep:#8A1024;
+  --ink:#2B1A14; --muted:#6B5750; --paper:#FFF7F4; --card:#FFFFFF;
+  --line:#F5DDD5; --soft:#FFEFE9;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#FDBA74,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#F59E0B);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#2B1A14,#6E3A2E)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#FDD8C8 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FFFAF8;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FFFCFA}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#F59E0B)}
+.act-head.ws{background:linear-gradient(120deg,#2B1A14,#7A3F2E)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#FFF0EA}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #EFC3B3;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #F0B49E;border-radius:12px;padding:10px 14px;background:#FFF9F6;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(43,26,20,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#2B1A14;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 9 Main Course, Term 1</span><span class="pill">Week 1 Core + Week 1 Lab</span><span class="pill">📅 Teach: week of 28 Sep – 2 Oct 2026</span></div>
+    <h1>Open the Black Box + Change One Thing</h1>
+    <p>You already know an AI turns an input into an output. Today you open the box and ask how the parts inside – the data, the tool and the prompt – work together to make that happen. Then, in the Lab, you become an investigator: you change one part at a time and use evidence to show how it changed the output.</p>
+    <p class="meta"><b>Strand:</b> Unit Launch · Systems Thinking &nbsp;·&nbsp; <b>Role:</b> Solution Architects</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 9B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 1 of Term 1 – Monday 28 September to Friday 2 October 2026.</b> Core lesson first, then the Lab period.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Open the Black Box</a>, then move on to the <a href="#lab">Lab: Change One Thing</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Ask good questions.</b> I can ask at least two good questions about how the parts of an AI system – data, tools and prompts – work together to turn an input into an output.</li>
+      <li><b>Sort the parts.</b> I can sort examples into data, tool or prompt components and explain how each part interacts with the others.</li>
+      <li><b>Agree our rules.</b> I can help write our unit success criteria and our safe, responsible-use rules for AI tools.</li>
+      <li><b>Lab: change one thing.</b> I can compare two AI examples for the same task, trace each difference back to the data, tool or prompt that changed, and use what I observed to say how changing one component changes the output.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 1 Core · Open the Black Box</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Open the black box</b><small>Find the data, tool and prompt inside</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Change one part</b><small>See how the output changes with it</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Agree our rules</b><small>Safe, responsible use of AI tools</small></a></li>
+    </ol>
+    <h3 class="rh">Week 1 Lab · Change One Thing</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Change one at a time</b><small>Hold the rest steady to see the effect</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Trace the difference</b><small>Back to the component that changed</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Log it, then trust it</b><small>Evidence before a conclusion · worksheet</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Open the black box</h2><p>Is an AI really just one thing?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">One system, several parts</h3>
+    <p>It is easy to think of an AI as one clever thing that answers you. Systems thinking asks you to look closer. Behind almost every output are separate <b>components</b> working together: the <b>data</b> a model learned from, the <b>tool</b> or model that does the processing, and the <b>prompt</b> you give to steer it. Together they turn an input into an output. Seeing these parts – and how they connect – instead of one lump is the skill this whole unit builds. It is the difference between using a machine and understanding one.</p>
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="f1T">
+        <title id="f1T">An AI system is not one box. An input goes into the AI system, where data, a tool or model, and a prompt interact with each other, and an output comes out.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <rect x="190" y="14" width="380" height="272" rx="16" fill="#FFEFE9" stroke="#D7263D" stroke-width="2.2"/>
+          <text x="380" y="46" font-size="20" font-weight="800" text-anchor="middle" fill="#D7263D">AI SYSTEM</text>
+          <g stroke="#2B1A14" stroke-width="1.6">
+            <rect x="14" y="120" width="130" height="62" rx="10" fill="#E2F5EC"/>
+            <rect x="616" y="120" width="130" height="62" rx="10" fill="#F4F0FC"/>
+            <rect x="204" y="70" width="158" height="66" rx="10" fill="#fff"/>
+            <rect x="398" y="70" width="158" height="66" rx="10" fill="#fff"/>
+            <rect x="310" y="196" width="140" height="66" rx="10" fill="#fff"/>
+          </g>
+          <g stroke="#2B1A14" stroke-width="2.6" fill="none" marker-end="url(#ah)"><path d="M144 151H186"/><path d="M570 151H612"/></g>
+          <g stroke="#2B1A14" stroke-width="2" fill="none" marker-start="url(#ah)" marker-end="url(#ah)"><path d="M364 103H396"/><path d="M276 140L338 192"/><path d="M484 140L422 192"/></g>
+          <g font-size="16" font-weight="700" text-anchor="middle"><text x="79" y="157">INPUT</text><text x="681" y="157">OUTPUT</text><text x="283" y="100">DATA</text><text x="477" y="100">TOOL / MODEL</text><text x="380" y="226">PROMPT</text></g>
+          <g font-size="12" text-anchor="middle" fill="#6B5750"><text x="283" y="120" font-size="11.5">examples it learned from</text><text x="477" y="120">does the processing</text><text x="380" y="246">steers the tool</text><text x="380" y="64" fill="#D7263D" font-weight="600">interact</text></g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> An AI system is not one box – data, a tool and a prompt interact to turn an input into an output.</figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-match"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Change one part</h2><p>What happens if you change just one?</p></div>
+  <div class="part-body">
+    <h3 class="sub">The parts are linked</h3>
+    <p>Because the components <b>interact</b>, changing one changes the result. Reword the prompt and the tool produces something different. Train the tool on different data and its answers shift. Swap the tool for another and the same prompt behaves in a new way. That is what ‘interact’ means – the parts are linked, not independent. Keep the charter in mind: no real names, faces or voices go into any tool, an adult runs it for us, and a confident-looking output still has to be checked against a trusted source before you trust it.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>The AI systems being built across the UAE are exactly this: data, tools and prompts interacting to solve a real problem, whether it is an Arabic-English translator for a government service desk, a smart-traffic predictor in Abu Dhabi, or a recycling sorter tuned to a target. <span class="illus">(Illustrative examples.)</span> Learning to see the components and how they interact helps you understand, design and question the systems around you.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Social Studies / Moral Education</h4><p>Treat the classroom as a system: just as an AI's data, tool and prompt interact, students co-write shared responsible-use rules and see how one agreed norm shapes the whole group's behaviour – the same rights-and-responsibilities thinking behind a community charter.</p></div>
+    <div class="call amber"><h4>Tool for this week: unplugged simulated-AI cards (teacher-led)</h4><p>1. The teacher runs a <i>simulated-AI</i> card routine on the board – no live tool, no logins. 2. Students reason about pre-prepared example outputs on the cards; no personal data is used. 3. Use the worksheet to sort or judge the cards and explain your thinking with the key vocabulary. The live tools (Teachable Machine and Scratch) are used in a later Lab.</p></div>
+    <div id="a-interact"></div>
+    <div id="a-case2"></div>
+    <div id="a-think"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3</span><h2>Agree our rules</h2><p>How do we use these tools responsibly?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Our safe-use charter</h3>
+    <p>Before we build anything, we agree how to use AI tools responsibly. <b>No real names, faces or voices</b> go into any tool, and <b>an adult runs it</b> for us. A <b>confident-looking output</b> still has to be <b>checked against a trusted source</b> before you trust it. These rules protect people and keep our investigations honest all unit.</p>
+    <div id="a-safe"></div>
+    <div id="a-case3"></div>
+    <div class="call"><h4>Solution Architects: open the black box (away from the screen)</h4><p>Watch the class stimulus and note one component you noticed and one thing you wonder. Turn your wondering into two clear questions about how the components interact. With your partner, sort each example card as data, a tool or a prompt, and write one way it interacts with another component. Add one word to the vocabulary wall and propose one responsible-use rule for our charter.</p></div>
+    <div id="a-sortcards"></div>
+    <div id="a-links"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 1 Lab</span><h2>Change One Thing</h2><p>In the Core period you learned that an AI system is made of interacting components. Today you become an investigator – changing one part at a time and using evidence to show how it changes the output.</p></div>
+  <div class="part-body">
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Change one at a time</h2><p>Why only one part?</p></div>
+  <div class="part-body">
+    <h3 class="sub">One variable at a time</h3>
+    <p>If you change everything at once, you can never tell what caused what. Good investigators change <b>one thing at a time</b>. In this Lab, each pair of examples was made for the same task, but exactly one component was changed between them – maybe the data, maybe the tool, maybe the prompt. Everything else stayed the same. That is what lets you say, with evidence, ‘this difference in the output came from that change’. It turns ‘the AI just did something different’ into an explanation you can defend.</p>
+    <figure>
+      <svg viewBox="0 0 760 290" role="img" aria-labelledby="f2T">
+        <title id="f2T">System A and System B do the same task. Data and tool are unchanged; only the prompt was changed in System B. Comparing output A with output B shows the difference traces back to that one change.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <g font-size="14" font-weight="800" text-anchor="middle"><text x="190" y="26">SYSTEM A</text><text x="570" y="26">SYSTEM B</text></g>
+          <g stroke="#2B1A14" stroke-width="1.6" fill="#fff">
+            <rect x="28" y="42" width="96" height="54" rx="8"/><rect x="142" y="42" width="96" height="54" rx="8"/><rect x="256" y="42" width="96" height="54" rx="8"/>
+            <rect x="408" y="42" width="96" height="54" rx="8"/><rect x="522" y="42" width="96" height="54" rx="8"/><rect x="636" y="42" width="96" height="54" rx="8" fill="#FDE7EC" stroke="#C92A4B" stroke-width="2.4"/>
+            <rect x="110" y="150" width="160" height="58" rx="10" fill="#E2F5EC"/><rect x="490" y="150" width="160" height="58" rx="10" fill="#FDE7EC"/>
+          </g>
+          <g font-size="13.5" font-weight="700" text-anchor="middle">
+            <text x="76" y="74">DATA</text><text x="190" y="74">TOOL</text><text x="304" y="74">PROMPT</text>
+            <text x="456" y="74">DATA</text><text x="570" y="74">TOOL</text><text x="684" y="74">PROMPT</text>
+            <text x="190" y="184">OUTPUT A</text><text x="570" y="184">OUTPUT B</text>
+          </g>
+          <g font-size="11.5" text-anchor="middle"><text x="456" y="114" fill="#0F8A5F">unchanged</text><text x="570" y="114" fill="#0F8A5F">unchanged</text><text x="684" y="114" fill="#C92A4B" font-weight="700">only this changed</text></g>
+          <g stroke="#2B1A14" stroke-width="2.2" fill="none" marker-end="url(#ah2)"><path d="M190 120V146"/><path d="M570 120V146"/></g>
+          <g stroke="#2B1A14" stroke-width="1.6" fill="none"><path d="M76 96V108H304V96"/><path d="M456 96V122H684V96"/></g>
+          <g stroke="#2B1A14" stroke-width="2" stroke-dasharray="5 4" fill="none" marker-start="url(#ah2)" marker-end="url(#ah2)"><path d="M274 179H486"/></g>
+          <rect x="276" y="232" width="208" height="38" rx="19" fill="#FFEFE9" stroke="#D7263D" stroke-width="1.6"/>
+          <text x="380" y="256" font-size="14" font-weight="700" text-anchor="middle">compare the outputs</text>
+          <path d="M380 183V228" stroke="#D7263D" stroke-width="2" marker-end="url(#ah2)"/>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Same task, one component changed – the difference in the output traces back to that change.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Engineers building AI systems in the UAE change one component at a time to see its effect, whether tuning the prompt for a government chatbot, updating the data behind a smart-traffic model in Abu Dhabi, or swapping the tool in an Arabic-English translator. <span class="illus">(Illustrative examples.)</span> Learning to change one part and trace the result is the first step of designing a system.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Science</h4><p>This is a controlled <b>fair test</b>: to see one component's effect on the output, hold the tool and data steady and change only the prompt, logging observations as evidence before drawing a conclusion – exactly how scientists isolate a single variable.</p></div>
+    <div id="a-routine"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Trace the difference</h2><p>Which component moved the output?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Trace it to the cause</h3>
+    <p>When two outputs for the same task differ, the difference has a cause: the one component that was changed. <b>Tracing</b> means following the difference back to that component – the data, the tool or the prompt. Naming which component caused a difference is the first step of systems thinking.</p>
+    <div id="a-trace"></div>
+    <div id="a-lcase2"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Part 3 of 3 · Worksheet</span><h2>Log it, then trust it</h2><p>When is a conclusion safe to trust?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Evidence before conclusion</h3>
+    <p>A good investigator writes things down. In your log you note each difference between the two outputs and trace it back to the component that changed. Then, before you trust a conclusion, you check it against the task: would it still hold for a new example? Remember the charter – the examples are made by the teacher, with no personal data, and a confident-looking output still has to be checked against a trusted source before you rely on it.</p>
+    <div id="a-evid"></div>
+    <div id="a-lcase3"></div>
+    <div class="call amber"><h4>Tool for this week: component-and-connector cards (unplugged)</h4><p>The teacher lays out pre-printed card decks and example-pair packs – account-free, no devices. In pairs, read each pack, note which single component was changed, log the differences, and trace each one to that component. Then build a labelled system map with arrow connectors and mark where a check should sit. <b>Stay safe:</b> fully unplugged – no devices or data.</p></div>
+    <div class="ecard" id="audit"></div>
+    <div id="a-log"></div>
+    <div id="a-map"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Open the black box – then change one thing and let the evidence talk</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>An AI system is not one box – it is <b>data</b>, a <b>tool</b> and a <b>prompt</b> working together.</li>
+      <li>The components <b>interact</b>: change one and the output can change.</li>
+      <li>We agreed a safe-use charter: no real names or faces, an adult runs the tool, and <b>verify before you trust</b>.</li>
+      <li>Change <b>one component at a time</b>, or you cannot tell what caused a difference.</li>
+      <li>Every difference in the output <b>traces back</b> to the component that changed.</li>
+      <li>A <b>log</b> turns ‘it looks different’ into evidence you can defend – check a conclusion against the task before you trust it.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 9 · Main Course · Term 1 Week 1 (28 Sep – 2 Oct 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["system","A set of parts that work together to do a job; an AI system is more than one thing."],
+  ["component","One part of a system, such as the data, the tool or the prompt."],
+  ["data","The examples a model learned from, or draws on, to do its job."],
+  ["prompt","The instruction or input you give that steers the tool."],
+  ["interact","The way the components affect each other; change one and the output can change."]
+];
+const DEF_ORDER = [3,0,4,1,2];
+const MATCH = [
+  ["mt1","📦 Data",2],
+  ["mt2","✒️ Prompt",3],
+  ["mt3","🧩 System",0],
+  ["mt4","⚙️ Tool",1]
+];
+const MATCH_OPTS = ["All the parts working together","The trained part that does the processing","The examples the tool learned from","The instruction that steers the tool"];
+const CASE1 = ["Only the prompt matters here; no other component plays any real part.","There is really no input and no output at all, just a plain screen.","Data, a tool and a prompt interact to turn the input into the output.","It is one clever machine that works alone, with no data, tool or prompt."];
+const INTERACT = [
+  ["i1","A confident-looking output is always correct.",0],
+  ["i2","Reword the prompt and the tool can produce something different.",1],
+  ["i3","Changing one component never affects any of the others.",0],
+  ["i4","The AI is one single thing with no separate parts inside.",0],
+  ["i5","Swap the tool and the same prompt can behave in a new way.",1],
+  ["i6","Train the tool on different data and its answers shift.",1]
+];
+const CASE2 = ["The tool must have quietly broken somewhere during this run.","The output simply changed at random, for no reason anyone could trace.","Only the data can ever change an output; the prompt cannot touch it.","The prompt is a component, and changing it changes the result."];
+const THINK = ["A lot – the prompt steers the tool, so a new prompt can change the focus, the format or even the answer","Not at all – only the data can change an output","It would change at random, with no link to the prompt","The tool would stop working until the data is changed too"];
+const SAFE = [
+  ["sf1","✏️ Add a new word to the class vocabulary wall.","S"],
+  ["sf2","🚩 Type a classmate's real name into the tool.","N"],
+  ["sf3","⛔ Upload a photo of someone's face.","N"],
+  ["sf4","🗂️ Sort the printed component cards with a partner.","S"],
+  ["sf5","📦 Use the teacher-run tool with no account.","S"],
+  ["sf6","🔍 A confident-looking output you have not verified yet.","C"],
+  ["sf7","🧭 An answer you plan to rely on for your task.","C"]
+];
+const CASE3 = ["Upload the face but simply leave the classmate's real name out of it.","Trust whatever label appears on the screen without ever checking it.","Do not use faces or names – test with objects or drawings instead.","Go ahead and upload the face and real name; a confident output is safe."];
+const CARDS = [
+  ["cd1","🖼️ A folder of labelled photos","D"],
+  ["cd2","🤖 A trained image-tagging model","T"],
+  ["cd3","💬 ‘Tag the main object in this photo’","P"],
+  ["cd4","🎙️ Thousands of recorded Arabic phrases","D"],
+  ["cd5","🔤 A speech-to-text model","T"],
+  ["cd6","🪧 ‘Translate this sign into English’","P"]
+];
+const LINKS = [
+  ["lk1","A folder of labelled photos",0],
+  ["lk2","A trained image-tagging model",1],
+  ["lk3","‘Tag the main object in this photo’",2]
+];
+const LINK_OPTS = ["The model learned from them, so they shape what it can recognise and tag","It processes the photo the prompt points it at, using what it learned from the data","It steers the model to the main object, so rewording it changes the output","It has no effect on any other part"];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["compare","Look closely at two outputs to find how they are alike and different."],
+  ["component","One part of the system: the data, the tool or the prompt."],
+  ["change one variable","Change only one component at a time so you can see its effect."],
+  ["evidence","What you actually observed, used to back up your conclusion."],
+  ["conclusion","The idea you decide on after weighing the evidence."]
+];
+const LDEF_ORDER = [2,4,0,3,1];
+const STEPS = ["Hold two components steady – do not touch them","Change only the third component","Run the same task and put the two outputs side by side","Record the difference and the component that caused it"];
+const STEP_ORDER = [2,3,1,0];
+const LCASE1 = ["Nothing went wrong; changing several parts at once is the best way to test.","They changed two components, so they cannot tell which one caused it.","The output is now guaranteed to be completely correct every time.","The task itself was really the thing that caused all of the trouble."];
+const TRACE = [
+  ["tr1","✒️ The answer is longer and in a different style",3],
+  ["tr2","🔧 The same prompt is handled in a whole new way",2],
+  ["tr3","📦 It now recognises examples it used to miss",0]
+];
+const TRACE_OPTS = ["the data","the output","the tool","the prompt"];
+const LCASE2 = ["The tool was swapped out for a completely different one here.","The prompt was reworded; that is the only thing that widens recognition.","The data – it learned from more examples, so it recognises more.","Nothing really changed at all; it was just plain luck this time."];
+const EVID = [
+  ["ev1","🪄 It looks different, so it must be better.","N"],
+  ["ev2","🎲 The AI was just being random today.","N"],
+  ["ev3","✒️ The style shifted when only the prompt was reworded.","E"],
+  ["ev4","🤷 Something changed, but we did not check what.","N"],
+  ["ev5","📝 We logged the difference and named the changed component.","E"],
+  ["ev6","📦 The output caught more items after the data changed.","E"]
+];
+const LCASE3 = ["Yes – a better-looking output proves the AI has improved on its own.","No – they must trace the difference to the component they changed.","Yes – a confident claim like this one never really needs any checking.","No – but only because the AI always behaves in a purely random way."];
+const AUDIT = [
+  ["Pair 1 · Sign translator","Prompt: ‘Translate this sign.’ → “Entry forbidden to unauthorised persons.”","Prompt: ‘Translate this sign into simple English for a tourist.’ → “Staff only – please don't go in.”"],
+  ["Pair 2 · Recycling sorter","Trained on 200 photos of waste → sorted 6 of 10 drinks cans correctly","Trained on the same 200 photos plus 300 photos of drinks cans → sorted 9 of 10 cans correctly"],
+  ["Pair 3 · Homework helper","Small, fast model → answers in about 1 second with a one-line answer","Larger model → answers in about 4 seconds with a step-by-step explanation"]
+];
+const LOG = [
+  ["g1","Pair 1 · Sign translator",3,0],
+  ["g2","Pair 2 · Recycling sorter",0,1],
+  ["g3","Pair 3 · Homework helper",2,2]
+];
+const LOG_COMP = ["The data","The output","The tool","The prompt"];
+const LOG_EFF = ["Simpler, friendlier wording that fits a tourist better","Recognises more cans, so it fits the sorting task better","Slower, but explains each step","No effect at all – the outputs are the same"];
+const CONC = ["Changing one component changes the output in a way you can trace: the prompt changed the wording, the data changed what it recognised, and the tool changed the speed and detail","The AI improves on its own, so the components don't matter","Only the tool can ever change an output","Every difference was random, so no conclusion is possible"];
+const VERIFY = ["Run a new example on the same task, again changing only that one component, and check the same difference appears","Trust it because the output looks confident","Change all three components at once to be sure","Ask the AI whether the conclusion is right"];
+const MAPC = [
+  ["mp1","Data",0],["mp2","Tool / model",1],["mp3","Prompt",2],["mp4","Check",3],["mp5","Output",4]
+];
+const MAP_OPTS = ["Photos of labelled waste items","An image-recognition model","‘Sort this item: paper, plastic or metal?’","A person spot-checks 1 in 10 sorted items","The bin each item goes into"];
+const CHECK_AT = ["Between the tool's answer and the bin – check before the item is sorted","Before any data is collected","There is no need for a check anywhere","Only after the bins are emptied at the end of the week"];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know",ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"A system is a set of parts working together; a component is one of those parts. Data is the examples a model learned from. A prompt is the instruction that steers the tool. Interact means the parts affect each other – change one and the output can change."},
+ {id:"match",mount:"a-match",section:"Core · Part 1",title:"Match the component to what it is",sub:"Objective 2 · name the components",ico:"🧷",
+  fields:MATCH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Data = the examples the tool learned from. Prompt = the instruction that steers the tool. System = all the parts working together. Tool = the trained part that does the processing."},
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"Case 1 · The Translation Desk",sub:"Solution Architects",ico:"🕵️",
+  fields:[{k:"c1",radio:1,ok:v=>eq(v,2)}],
+  explain:"Seeing it as a system means naming the parts: data (the language examples), a tool (the translation model) and a prompt (the question) interact to turn the Arabic question into an English answer."},
+ {id:"interact",mount:"a-interact",section:"Core · Part 2",title:"Which show components interacting?",sub:"Objective 1 · see how parts interact",ico:"🧩",
+  fields:INTERACT.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Rewording the prompt, swapping the tool and training on different data all change the output – because the parts are linked. A confident output is not always correct, components do affect each other, and an AI is not one single thing."},
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"Case 2 · The Reworded Prompt",sub:"Solution Architects",ico:"🔬",
+  fields:[{k:"c2",radio:1,ok:v=>eq(v,3)}],
+  explain:"The tool and data stayed the same, so the change came from the prompt. The prompt is a component, and changing it changes the result."},
+ {id:"think",mount:"a-think",section:"Core · Part 2",title:"Think about it",sub:"Same tool, same data, new prompt",ico:"💭",
+  fields:[{k:"th",radio:1,ok:v=>eq(v,0)}],
+  explain:"The prompt steers the tool, so changing only the prompt can change a lot – what the tool focuses on, the format, and sometimes the answer itself."},
+ {id:"safe",mount:"a-safe",section:"Core · Part 3",title:"Safe, check first, or not allowed?",sub:"Objective 3 · build our safe-use rules",ico:"🩺",
+  fields:SAFE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Adding a word, sorting printed cards and using the teacher-run tool are safe. A real name or a photo of someone's face is never allowed. A confident output you haven't verified, or an answer you plan to rely on, must be checked first against a trusted source."},
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"Case 3 · The Face Test",sub:"Solution Architects",ico:"⚖️",
+  fields:[{k:"c3",radio:1,ok:v=>eq(v,2)}],
+  explain:"Our charter says no real faces or names go into any tool – even without the name, a face is personal data. Test with objects or drawings instead."},
+ {id:"sortcards",mount:"a-sortcards",section:"Core worksheet",title:"Sort it: data, tool or prompt",sub:"Worksheet · sort the example cards",ico:"🗂️",cls:"ws",
+  fields:CARDS.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Labelled photos and recorded phrases are data – the examples a tool learns from. The image-tagging model and the speech-to-text model are tools. ‘Tag the main object’ and ‘Translate this sign’ are prompts – instructions that steer the tool."},
+ {id:"links",mount:"a-links",section:"Core worksheet",title:"How does each part interact?",sub:"Worksheet · one way each card interacts with another",ico:"🔗",cls:"ws",
+  fields:LINKS.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"The labelled photos shape what the model can recognise. The model processes whatever photo the prompt points it at, using what it learned. The prompt steers the model, so rewording it changes the output. Every part affects another."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know",ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"Compare = find how two outputs are alike and different. Component = one part: data, tool or prompt. Change one variable = change only one component so you can see its effect. Evidence = what you actually observed. Conclusion = the idea you decide on after weighing the evidence."},
+ {id:"routine",mount:"a-routine",section:"Lab · Part 1",title:"Run the change-one routine",sub:"Objective 1 · change one variable at a time",ico:"🧭",
+  fields:STEPS.map((_,i)=>({k:"rt"+i,ok:v=>eq(v,i)})),
+  explain:"Hold two components steady → change only the third → run the same task and put the outputs side by side → record the difference and the component that caused it."},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"Case 1 · The Double Change",sub:"Solution Architects",ico:"🕵️",
+  fields:[{k:"lc1",radio:1,ok:v=>eq(v,1)}],
+  explain:"They changed the data and the prompt at once, so they can't tell which one caused the difference. Change one component at a time."},
+ {id:"trace",mount:"a-trace",section:"Lab · Part 2",title:"Match the difference to the cause",sub:"Objective 2 · trace each difference to a component",ico:"🧷",
+  fields:TRACE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A longer answer in a new style comes from the prompt. The same prompt handled in a whole new way comes from the tool. Recognising examples it used to miss comes from the data. The output is the result, not a cause."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"Case 2 · The Wider Recogniser",sub:"Solution Architects",ico:"🔬",
+  fields:[{k:"lc2",radio:1,ok:v=>eq(v,2)}],
+  explain:"The prompt and tool were identical, so the data changed – it learned from more examples, so it recognises more."},
+ {id:"evid",mount:"a-evid",section:"Lab · Part 3",title:"Evidence, or not evidence?",sub:"Objective 3 · back a conclusion with evidence",ico:"📦",
+  fields:EVID.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Evidence traces a difference to a component: the style shifting when only the prompt changed, a logged difference with a named component, more items caught after the data changed. ‘Looks better’, ‘random today’ and ‘we didn't check’ are guesses."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"Case 3 · The Untraced Claim",sub:"Solution Architects",ico:"⚖️",
+  fields:[{k:"lc3",radio:1,ok:v=>eq(v,1)}],
+  explain:"No – the AI didn't improve itself. They changed the data, so they must log it and trace the difference to that component before trusting the conclusion."},
+ {id:"log",mount:"a-log",section:"Lab worksheet",title:"Comparison log, conclusion and verify it",sub:"Worksheet · component changed, effect, conclusion",ico:"📝",cls:"ws",
+  fields:[...LOG.flatMap(([k,,c,e])=>[{k:k+"c",ok:v=>eq(v,c)},{k:k+"e",ok:v=>eq(v,e)}]),{k:"cn",radio:1,ok:v=>eq(v,0)},{k:"vf",ok:v=>eq(v,0)}],
+  explain:"Pair 1: the prompt changed, giving simpler, friendlier wording. Pair 2: the data changed, so it recognises more cans. Pair 3: the tool changed – slower, but it explains each step. Conclusion: each change traces to one component. Verify it by running a new example and changing only that one component again."},
+ {id:"map",mount:"a-map",section:"Lab worksheet",title:"Our system map",sub:"Worksheet · components and where a check sits",ico:"🗺️",cls:"ws",
+  fields:[...MAPC.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"ck",ok:v=>eq(v,0)}],
+  explain:"Data: photos of labelled waste. Tool: the image-recognition model. Prompt: ‘Sort this item…’. Check: a person spot-checks sorted items. Output: the bin. The check sits between the tool's answer and the bin, so a mistake is caught before it counts."}
+];
+
+/* ---------- state ---------- */
+const KEY="g9-mw1-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#audit").innerHTML=`<header><small>Example-pair pack · illustrative</small><b>Same task, one component changed</b></header>
+<div class="in">
+  <p class="task"><b>How to read it:</b> each pair was made by the teacher for the same task, and exactly one component – the data, the tool or the prompt – was changed between Version A and Version B. Everything else stayed the same. No personal data.</p>
+  <table class="t"><thead><tr><th>Example pair</th><th>Version A</th><th>Version B</th></tr></thead>
+  <tbody>${AUDIT.map(([t,a,b])=>`<tr><td>${esc(t)}</td><td>${esc(a)}</td><td>${esc(b)}</td></tr>`).join("")}</tbody></table>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "match":
+    return `<p class="how">Match each component to what it is.</p>`+
+      MATCH.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,MATCH_OPTS,"Choose what it is…",[1,3,0,2])}</div>`).join("");
+  case "case1":
+    return `<div class="quote">A government service desk uses a tool that takes an Arabic question and returns an English answer. Architect, which description sees it as a system of components rather than one box? <span class="illus">(Illustrative scenario.)</span></div><p class="q" id="q-c1">Which description sees it as a system?</p>${radios("c1",CASE1)}`;
+  case "interact":
+    return boxes(INTERACT,"Tick the THREE statements that correctly show how changing one component changes the output.");
+  case "case2":
+    return `<div class="quote">A team keeps the same tool and the same data but rewords the prompt, and the output changes. Architect, why did that happen?</div><p class="q" id="q-c2">Why did the output change?</p>${radios("c2",CASE2)}`;
+  case "think":
+    return `<p class="q" id="q-th">If you kept the tool and the data the same but changed only the prompt, how much could the output change, and why?</p>${radios("th",THINK)}`;
+  case "safe":
+    return `<p class="how">Sort each action into safe to do, check first, or not allowed under our charter.</p>`+
+      SAFE.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["✅ Safe","❓ Check first","⛔ Not allowed"],["S","C","N"],t)}</div>`).join("");
+  case "case3":
+    return `<div class="quote">A group wants to test the tool by uploading a photo of a classmate's face to see what label appears. Architect, what does our charter say?</div><p class="q" id="q-c3">What should the group do?</p>${radios("c3",CASE3)}`;
+  case "sortcards":
+    return `<p class="how">Sort each example card into the right component column.</p>`+
+      CARDS.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Data","Tool","Prompt"],["D","T","P"],t)}</div>`).join("");
+  case "links":
+    return `<p class="how">For each worksheet card, choose one way it interacts with another component.</p>`+
+      LINKS.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,LINK_OPTS,"Choose…",[1,3,2,0])}</div>`).join("");
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "routine":
+    return `<p class="how">Put the investigator's steps in the order that lets you see one component's effect, from first to last.</p>`+
+      STEPS.map((_,i)=>`<div class="pair" data-item="rt${i}"><span class="t">Step ${i+1}</span>${sel("rt"+i,STEPS,"Choose the step…",STEP_ORDER)}</div>`).join("");
+  case "lcase1":
+    return `<div class="quote">A pair changed both the data and the prompt at once, and the output looked different. Architect, what went wrong with their test?</div><p class="q" id="q-lc1">What went wrong with their test?</p>${radios("lc1",LCASE1)}`;
+  case "trace":
+    return `<p class="how">For each difference in the output, choose the component that was changed to cause it.</p>`+
+      TRACE.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,TRACE_OPTS,"Choose the component…",[1,3,0,2])}</div>`).join("");
+  case "lcase2":
+    return `<div class="quote">Two versions of a recycling sorter run the same task. The prompt and tool are identical, but the second version now recognises drinks cans it used to miss. Architect, which component changed?</div><p class="q" id="q-lc2">Which component changed?</p>${radios("lc2",LCASE2)}`;
+  case "evid":
+    return `<p class="how">Sort each statement: does it trace a difference to a component, or does it just guess?</p>`+
+      EVID.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Backed by evidence","Not evidence"],["E","N"],t)}</div>`).join("");
+  case "lcase3":
+    return `<div class="quote">A pair writes, ‘The second output is better because the AI improved itself.’ They changed the data but never logged it. Architect, is their conclusion safe to trust?</div><p class="q" id="q-lc3">Is their conclusion safe to trust?</p>${radios("lc3",LCASE3)}`;
+  case "log":
+    return `<p class="how">Use the example-pair pack above. For each pair, name the component that changed and its effect on the output.</p>`+
+      LOG.map(([k,t])=>`<div class="scen"><p>${esc(t)}</p><div class="two">
+        <div data-item="${k}c"><span>Component changed</span>${sel(k+"c",LOG_COMP,"Choose…")}</div>
+        <div data-item="${k}e"><span>Effect on the output</span>${sel(k+"e",LOG_EFF,"Choose…",[3,1,0,2])}</div></div></div>`).join("")+
+      `<p class="q" id="q-cn">My conclusion: use your log as evidence. How did changing one component change the output?</p>${radios("cn",CONC)}
+      <div class="pair" data-item="vf" style="margin-top:10px"><span class="t">Verify it: how could you check your conclusion for a new example?</span>${sel("vf",VERIFY,"Choose…",[1,0,2,3])}</div>`;
+  case "map":
+    return `<p class="how">Build a system map for a recycling sorter. What is each component in this system?</p>`+
+      MAPC.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,MAP_OPTS,"Choose…",[2,4,0,3,1])}</div>`).join("")+
+      `<div class="pair" data-item="ck" style="margin-top:10px"><span class="t">Where should the check (evaluation) sit?</span>${sel("ck",CHECK_AT,"Choose…",[1,3,0,2])}</div>`;
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 9 Main Course · Term 1 Week 1 (28 Sep – 2 Oct 2026) · Core + Lab · Open the Black Box + Change One Thing</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
