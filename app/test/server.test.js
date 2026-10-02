@@ -113,4 +113,41 @@ ok(d.framework && d.framework['6'].strands[0].code === 'CU' && /rule-based/.test
 env.as('principal@aisa.sch.ae'); env.call('setJudgement', 's1@aisa.sch.ae', 'CU', '', 'cleared');
 ok(!dash('t6@aisa.sch.ae').judgements['s1@aisa.sch.ae|CU'], 'clearing a judgement restores the automatic tier');
 ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')), 'judgements respect teacher scope');
+/* roster import from the school information system (fresh environment) */
+{
+  const E = makeEnv(), sh = E.sheets;
+  E.as('bbaki@aisa.sch.ae'); E.call('setup');
+  const H = ['AI Course', 'Subject', 'Instructor Last Name', 'Instructor First Name', 'Email Address', 'Class Name', 'Student ID', 'ESIS Number', 'Student Last Name', 'Student First Name', 'Student Gender', 'Student Grade', 'Course Number'];
+  sh.Import = [H,
+    ['B06AILIT1', 'Arabic', 'One', 'Teacher', 'T1@aisa.sch.ae', 'B06ASL', 101, 1, 'Ali', 'Omar', 'M', 6, 'B06ASL'],
+    ['B06AILIT2', 'Islamic', 'Two', 'Teacher', 't2@aisa.sch.ae', 'B06ISA1', 101, 1, 'Ali', 'Omar', 'M', 6, 'B06ISA1'],
+    ['B12AILIT1', 'Arabic', 'One', 'Teacher', 't1@aisa.sch.ae', '12ASL', 202, 2, 'Saeed', 'Mariam', 'F', 12, '12ASL'],
+    ['G07AILIT1', 'Islamic', 'Three', 'Teacher', 't3@aisa.sch.ae', 'G07TUT', 303, 3, '=cmd', 'Huda', 'F', 7, 'G07TUT'],
+    ['X', 'Arabic', 'Four', 'Teacher', 't4@aisa.sch.ae', 'K', 404, 4, 'Small', 'Kid', 'M', 4, 'K']];
+  E.as('s1@aisa.sch.ae'); throws(() => E.call('importRoster'), /owners/, 'students cannot import');
+  E.as('bbaki@aisa.sch.ae');
+  throws(() => E.call('importRoster'), /student email/, 'import asks for student emails when there is no column or pattern');
+  E.ctx.PropertiesService.getScriptProperties().setProperty('STUDENT_EMAIL_PATTERN', '{id}@aisa.sch.ae');
+  sh.Roster.push(['hand@aisa.sch.ae', 'Hand Added', 'teacher', 'Boys 9', 9, '', 'AI timetable', '']);
+  let res = E.call('importRoster');
+  ok(res.students === 3 && res.teachers === 3 && res.skipped === 1 && res.keptOtherRows === 1, 'import counts students, teachers, skipped rows: ' + JSON.stringify(res));
+  const R = sh.Roster.slice(1).filter(r => r[0]);
+  ok(R.some(r => r[0] === '101@aisa.sch.ae' && r[2] === 'student' && r[3] === 'Boys 6' && r[1] === 'Omar Ali' && r[6] === 'B06ASL, B06ISA1'), 'student gets one row with section and both classes');
+  ok(R.filter(r => r[0] === 't1@aisa.sch.ae').map(r => r[3]).sort().join() === 'Boys 6,Girls 12', 'teacher email lower-cased; sections come from the students they teach (mixed class adds Girls 12)');
+  ok(R.some(r => r[0] === '303@aisa.sch.ae' && r[3] === 'Girls 7') && R.some(r => r[0] === 't3@aisa.sch.ae' && r[3] === 'Girls 7'), 'tutorial classes are included');
+  ok(!R.some(r => r[0] === '404@aisa.sch.ae'), 'grades outside 6–12 are skipped');
+  ok(R.some(r => r[0] === 'hand@aisa.sch.ae'), 'hand-added rows are kept');
+  ok(R.find(r => r[0] === '303@aisa.sch.ae')[1].startsWith('Huda'), 'names imported');
+  sh.Import.push(['G08AILIT1', 'Islamic', 'Three', 'Teacher', 't3@aisa.sch.ae', 'G08ISA1', 505, 5, 'New', 'Noor', 'F', 8, 'G08ISA1']);
+  res = E.call('importRoster');
+  ok(res.students === 4 && sh.Roster.slice(1).filter(r => r[0] === '101@aisa.sch.ae').length === 1, 're-import replaces earlier imported rows instead of duplicating');
+  sh.Import[0] = H.concat(['Student Email']); sh.Import.slice(1).forEach((r, i) => r[13] = 'pupil' + i + '@aisa.sch.ae');
+  res = E.call('importRoster');
+  ok(sh.Roster.slice(1).some(r => r[0] === 'pupil0@aisa.sch.ae') && !sh.Roster.slice(1).some(r => r[0] === '101@aisa.sch.ae'), 'a Student Email column wins over the pattern');
+  E.as('t3@aisa.sch.ae'); ok(E.ctx.currentUser_().role === 'teacher', 'imported teacher signs in as a teacher');
+  E.as('pupil0@aisa.sch.ae'); ok(E.ctx.currentUser_().role === 'student' && E.ctx.currentUser_().name === 'Omar Ali', 'imported student signs in with their name');
+  E.ctx.Classroom = { Courses: { list: () => ({ courses: [] }), Students: { list: () => ({}) }, Teachers: { list: () => ({}) } } };
+  E.as('bbaki@aisa.sch.ae'); E.call('syncClassroom');
+  ok(sh.Roster.slice(1).some(r => r[0] === 'pupil0@aisa.sch.ae'), 'syncClassroom keeps imported rows');
+}
 console.log('All ' + n + ' server checks passed');

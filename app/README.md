@@ -98,7 +98,7 @@ student data is ever stored in this GitHub repository**, which is public.
 | Tab | What it holds |
 |---|---|
 | Roles | Owners and SLT – edit by hand |
-| Roster | Students and teachers by section – from Google Classroom, plus rows added by hand (blank courseId, kept by every sync) |
+| Roster | Students and teachers by section – from `importRoster` (courseId `sis`), Google Classroom, or added by hand (blank courseId) |
 | CourseMap | Which Classroom course is which section – check after each sync |
 | Lessons | Lessons that have been used, with their activity count and points |
 | Scores | One row per student per activity: first-try score only |
@@ -141,7 +141,20 @@ You need a computer with Node.js installed, signed in to Chrome with an
    `owner`. Add the second owner, then one row per SLT member with role `slt`
    (Director, principals, vice principals, head of teaching and learning, head
    of data and assessment, head of inclusion).
-8. **Class lists from Google Classroom.** In the script editor run
+8. **Class lists from the school information system (recommended).** Ask IT for
+   the AI Literacy class export (one row per student per class, with the
+   teacher's email) **including each student's school email**. In the data sheet
+   add a tab called **Import**, paste the export into it (header row first), and
+   run `importRoster` from the editor. It creates one Roster row per student
+   (section = gender + grade, e.g. *Boys 6*; tutorial classes included) and one
+   row per teacher per section they teach, and reports how many it added. Run it
+   again whenever IT sends a new export – it replaces the previous import and
+   keeps rows you added by hand. If the export has no student email column but
+   emails follow a pattern, set the script property `STUDENT_EMAIL_PATTERN`
+   (Project Settings → Script properties), e.g. `{id}@aisa.sch.ae` – `{id}`,
+   `{first}` and `{last}` are filled in. Clear the Import tab afterwards.
+
+   **Or from Google Classroom.** In the script editor run
    `syncClassroom`. It reads active courses, guesses the section from the
    course name (for example *Girls 6 Arabic*) and fills **CourseMap** and
    **Roster**. Only **Arabic and Islamic Studies** courses for Grades 6–12 are

@@ -279,7 +279,7 @@ function judgementsFor_(keep) {
  * courses for Grades 6–12 are included automatically. Edit CourseMap to fix any
  * wrong guesses, then run again. Owners only.
  *
- * Roster rows with a blank courseId were added by hand and are kept.
+ * Roster rows with a blank courseId (added by hand) or 'sis' (from importRoster) are kept.
  *
  * Google only lists the courses the running account belongs to – unless that
  * account is a Workspace admin with Classroom privileges, which sees every
@@ -316,14 +316,83 @@ function syncClassroom() {
     listAll_(function (t) { return Classroom.Courses.Teachers.list(id, { pageSize: 100, pageToken: t }); }, 'teachers')
       .forEach(function (s) { if (s.profile && s.profile.emailAddress) out.push([lc_(s.profile.emailAddress), s.profile.name.fullName, 'teacher', m.section, grade, id, m.courseName, now]); });
   });
-  // Rows with no courseId were added by hand (e.g. teachers from the AI timetable) – keep them.
-  var manual = rows_('Roster').filter(function (r) { return !String(r.courseId || '').trim(); })
+  // Rows with no courseId were added by hand (e.g. teachers from the AI timetable), and rows marked
+  // 'sis' came from importRoster – keep both.
+  var manual = rows_('Roster').filter(function (r) { var c = String(r.courseId || '').trim(); return !c || c === SIS_ID; })
     .map(function (r) { return TABS.Roster.map(function (k) { return r[k] === undefined ? '' : r[k]; }); });
   out = manual.concat(out);
   var rs = sheet_('Roster');
   if (rs.getLastRow() > 1) rs.getRange(2, 1, rs.getLastRow() - 1, TABS.Roster.length).clearContent();
   if (out.length) rs.getRange(2, 1, out.length, TABS.Roster.length).setValues(out.map(function (r) { return r.map(safe_); }));
   return { courses: courses.length, rosterRows: out.length - manual.length, keptManualRows: manual.length };
+}
+
+/* ===================== roster import from the school information system ===================== */
+
+var SIS_ID = 'sis';
+
+/**
+ * Builds the Roster from the school's AI Literacy class export. Paste the export
+ * (with its header row) into a tab called "Import" in the data sheet, then run
+ * this from the editor. Owners only.
+ *
+ * Needed columns (matched by name): Student ID, Student First Name, Student Last
+ * Name, Student Gender (M/F), Student Grade, Email Address (the teacher's),
+ * Instructor First/Last Name, Class Name. Student emails come from a column whose
+ * name contains "student" and "email"; if there is none, set the script property
+ * STUDENT_EMAIL_PATTERN, e.g. {id}@aisa.sch.ae ({id}, {first}, {last} are filled in).
+ *
+ * Each student's section is their gender and grade (e.g. Boys 6). Each teacher
+ * gets every section they teach a student in. Replaces earlier imported rows;
+ * keeps rows added by hand and rows from syncClassroom.
+ */
+function importRoster() {
+  if (currentUser_()) requireOwner_();
+  var sh = sheet_('Import');
+  if (!sh) throw new Error('Add a tab called "Import" and paste the class export into it, header row first.');
+  var v = sh.getDataRange().getValues(), head = (v[0] || []).map(function (h) { return String(h).trim().toLowerCase(); });
+  var col = function (re, need) {
+    for (var i = 0; i < head.length; i++) if (re.test(head[i])) return i;
+    if (need) throw new Error('The Import tab has no "' + need + '" column.');
+    return -1;
+  };
+  var C = { id: col(/^student id$/, 'Student ID'), first: col(/^student first name$/, 'Student First Name'), last: col(/^student last name$/, 'Student Last Name'),
+            gender: col(/^student gender$/, 'Student Gender'), grade: col(/^student grade$/, 'Student Grade'), temail: col(/^email address$/, 'Email Address'),
+            tfirst: col(/^instructor first name$/), tlast: col(/^instructor last name$/), cls: col(/^class name$/), semail: col(/student.*e-?mail/) };
+  var pattern = PropertiesService.getScriptProperties().getProperty('STUDENT_EMAIL_PATTERN') || '';
+  if (C.semail < 0 && !pattern) throw new Error('No student email column. Ask IT to add one (e.g. "Student Email"), or set the script property STUDENT_EMAIL_PATTERN.');
+  var slug = function (x) { return String(x || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, ''); };
+  var students = {}, teachers = {}, skipped = 0, now = new Date();
+  v.slice(1).forEach(function (r) {
+    if (r.join('') === '') return;
+    var grade = Number(r[C.grade]), g = String(r[C.gender]).trim().toUpperCase();
+    if (!(grade >= 6 && grade <= 12) || (g !== 'M' && g !== 'F')) { skipped++; return; }
+    var section = (g === 'M' ? 'Boys ' : 'Girls ') + grade;
+    var email = C.semail >= 0 ? lc_(r[C.semail]) :
+      lc_(pattern.replace('{id}', String(r[C.id]).trim()).replace('{first}', slug(r[C.first])).replace('{last}', slug(r[C.last])));
+    if (email.slice(-(DOMAIN.length + 1)) !== '@' + DOMAIN) { skipped++; return; }
+    var cls = C.cls >= 0 ? String(r[C.cls]).trim() : '';
+    var s = students[email] || (students[email] = { name: cleanText_(r[C.first], 60) + ' ' + cleanText_(r[C.last], 60), section: section, grade: grade, classes: {} });
+    if (cls) s.classes[cls] = 1;
+    var te = lc_(r[C.temail]);
+    if (te.slice(-(DOMAIN.length + 1)) === '@' + DOMAIN) {
+      var t = teachers[te] || (teachers[te] = { name: C.tfirst >= 0 ? cleanText_(r[C.tfirst], 60) + ' ' + cleanText_(r[C.tlast], 60) : '', sections: {} });
+      var ts = t.sections[section] || (t.sections[section] = { grade: grade, classes: {} });
+      if (cls) ts.classes[cls] = 1;
+    }
+  });
+  var out = [];
+  Object.keys(students).sort().forEach(function (e) { var s = students[e];
+    out.push([e, s.name, 'student', s.section, s.grade, SIS_ID, Object.keys(s.classes).sort().join(', '), now]); });
+  Object.keys(teachers).sort().forEach(function (e) { var t = teachers[e];
+    Object.keys(t.sections).sort().forEach(function (sec) {
+      out.push([e, t.name, 'teacher', sec, t.sections[sec].grade, SIS_ID, Object.keys(t.sections[sec].classes).sort().join(', '), now]); }); });
+  var keep = rows_('Roster').filter(function (r) { return String(r.courseId || '').trim() !== SIS_ID; })
+    .map(function (r) { return TABS.Roster.map(function (k) { return r[k] === undefined ? '' : r[k]; }); });
+  var all = keep.concat(out), rs = sheet_('Roster');
+  if (rs.getLastRow() > 1) rs.getRange(2, 1, rs.getLastRow() - 1, TABS.Roster.length).clearContent();
+  if (all.length) rs.getRange(2, 1, all.length, TABS.Roster.length).setValues(all.map(function (r) { return r.map(safe_); }));
+  return { students: Object.keys(students).length, teachers: Object.keys(teachers).length, rows: out.length, keptOtherRows: keep.length, skipped: skipped };
 }
 
 function listAll_(fn, key) {
@@ -391,4 +460,4 @@ function cleanId_(v) {
 function safe_(v) { return typeof v === 'string' && /^[=+\-@]/.test(v) ? "'" + v : v; }
 
 /* exported for the local test harness only */
-if (typeof module !== 'undefined') module.exports = { doGet: doGet, getLessonState: getLessonState, recordScores: recordScores, recordTime: recordTime, recordLatest: recordLatest, setJudgement: setJudgement, getDashboard: getDashboard, syncClassroom: syncClassroom, setup: setup, currentUser_: currentUser_ };
+if (typeof module !== 'undefined') module.exports = { doGet: doGet, getLessonState: getLessonState, recordScores: recordScores, recordTime: recordTime, recordLatest: recordLatest, setJudgement: setJudgement, getDashboard: getDashboard, syncClassroom: syncClassroom, importRoster: importRoster, setup: setup, currentUser_: currentUser_ };
