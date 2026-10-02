@@ -97,7 +97,9 @@ throws(() => env.call('recordLatest', '../x', [{ id: 'a', score: 1, max: 1 }]), 
 d = dash('s1@aisa.sch.ae');
 const v = d.results.find(r => r.lessonId === L).acts.vocab;
 ok(v[0] === 4 && v[4] === 5, 'dashboard shows first 4 and latest 5');
-ok(d.catalog.length === 9 && d.catalog.some(c => c.id === L && c.activities === 22), 'catalog lists all 9 lessons with activity counts');
+const lessonFiles = require('fs').readdirSync(require('path').join(__dirname, '..', '..')).filter(f => /^grade-\d+$/.test(f))
+  .flatMap(g => require('fs').readdirSync(require('path').join(__dirname, '..', '..', g)).filter(f => /^(main|bridging)-w\d+-.+\.html$/.test(f)));
+ok(d.catalog.length === lessonFiles.length && d.catalog.some(c => c.id === L && c.activities === 22), 'catalog lists every lesson (' + lessonFiles.length + ') with activity counts');
 ok(d.termStart === '2026-09-28', 'term start sent');
 env.as('t7@aisa.sch.ae'); ok(!dash('t7@aisa.sch.ae').results.some(r => r.email === 's1@aisa.sch.ae'), 'latest scores still respect teacher scope');
 /* teacher judgements (tiers) */
