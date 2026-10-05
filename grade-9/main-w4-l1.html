@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Judging Outputs + The Evaluation Clinic – Grade 9 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#D7263D; --main2:#EF4444; --deep:#8A1024;
+  --ink:#2B1A14; --muted:#6B5750; --paper:#FFF7F4; --card:#FFFFFF;
+  --line:#F5DDD5; --soft:#FFEFE9;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#FDBA74,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#F59E0B);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#2B1A14,#6E3A2E)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#FDD8C8 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FFFAF8;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FFFCFA}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#F59E0B)}
+.act-head.ws{background:linear-gradient(120deg,#2B1A14,#7A3F2E)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#FFF0EA}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #EFC3B3;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #F0B49E;border-radius:12px;padding:10px 14px;background:#FFF9F6;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(43,26,20,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#2B1A14;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+@media (max-width:560px){
+  .scen .two{grid-template-columns:minmax(0,1fr)}
+  .scen .cell .seg button{padding:8px 4px;min-width:0;font-size:13.5px}
+  table.t.stack thead{display:none}
+  table.t.stack,table.t.stack tbody,table.t.stack tr,table.t.stack td{display:block;width:100%}
+  table.t.stack tr{border:1px solid var(--line);border-radius:10px;margin-bottom:8px;overflow:hidden}
+  table.t.stack td{border:0;border-top:1px solid var(--line)}
+  table.t.stack td:first-child{border-top:0;background:var(--soft)}
+  table.t.stack td[data-h]::before{content:attr(data-h);display:block;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 9 Main Course, Term 1</span><span class="pill">Week 4 Core + Week 4 Lab</span><span class="pill">📅 Teach: week of 26 – 30 Oct 2026</span></div>
+    <h1>Judging Outputs + The Evaluation Clinic</h1>
+    <p>Today you become an evaluator of AI systems. Instead of trusting an answer because it sounds sure, you decide whether it is correct, incorrect or unclear – and you prove your decision with evidence. Then, in the Lab, you run an evaluation clinic: you compare a whole set, rank it best to worst, and fix the weakest output by mending the component that caused its fault.</p>
+    <p class="meta"><b>Strand:</b> Critical Evaluation · Judging Outputs &nbsp;·&nbsp; <b>Role:</b> Solution Architects</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 9B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 4 of Term 1 – Monday 26 to Friday 30 October 2026.</b> Grade 9 has one AI period a week, on Friday (30 October): Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Judging Outputs</a>, then move on to the <a href="#lab">Lab: The Evaluation Clinic</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Spot the fault.</b> I can tell when an AI output is incorrect or unclear and say which criterion it fails.</li>
+      <li><b>Prove and trace it.</b> I can judge an output against agreed criteria, back each judgement with evidence, and trace the fault to a component of the system.</li>
+      <li><b>Use the words.</b> I can use words like criteria, evidence, accuracy and reliability correctly, and link a judgement to improving a solution.</li>
+      <li><b>Lab: rank, then fix.</b> I can rank a larger, messier set of outputs best to worst, justify each placement with evidence, weigh accuracy, reliability and usefulness, and propose one improvement that fixes the right component.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 4 Core · Judging Outputs</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Incorrect vs unclear</b><small>Two different faults</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Back it with evidence</b><small>Point to the proof, then trace the fault</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Clear can still be wrong</b><small>Why that is dangerous · worksheet</small></a></li>
+    </ol>
+    <h3 class="rh">Week 4 Lab · The Evaluation Clinic</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Verdicts to a ranking</b><small>Order them best to worst</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Break the tie</b><small>Weigh accuracy, reliability and usefulness</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Fix the weakest</b><small>Name and mend a component · worksheet</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Incorrect vs unclear</h2><p>Is it wrong, or just unclear?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>Last week (Week 3) you built and chained a workflow and proved it solves your problem reliably. Now you judge what a system produces – like a real evaluator, with <b>criteria</b> and <b>evidence</b>.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">Two different faults</h3>
+    <p>When you judge an AI output, two different faults can appear. An output is <b>incorrect</b> when it states something false – you can check it against a <b>trusted source</b> and show it is wrong. An output is <b>unclear</b> when you simply cannot tell what it means or whether it is right.</p>
+    <p>The fixes differ: an incorrect output needs the fact corrected, while an unclear one needs the meaning, or the prompt behind it, made sharper. Naming which fault you found is the first move of a good evaluator.</p>
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="f1T">
+        <title id="f1T">An AI output is checked against a trusted source. If the source disagrees, the output is incorrect and the fix is to correct the fact. If you cannot tell what it claims, the output is unclear and the fix is to sharpen the meaning or the prompt.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <rect x="14" y="116" width="132" height="68" rx="12" fill="#F4F0FC" stroke="#2B1A14" stroke-width="1.6"/>
+          <text x="80" y="146" font-size="16" font-weight="700" text-anchor="middle">AI OUTPUT</text>
+          <text x="80" y="167" font-size="13" text-anchor="middle" fill="#6B5750">sounds sure</text>
+          <rect x="192" y="104" width="184" height="92" rx="12" fill="#FFEFE9" stroke="#D7263D" stroke-width="2"/>
+          <text x="284" y="136" font-size="16" font-weight="800" text-anchor="middle" fill="#D7263D">CHECK IT</text>
+          <text x="284" y="158" font-size="13" text-anchor="middle">against a</text>
+          <text x="284" y="176" font-size="13" text-anchor="middle">trusted source</text>
+          <rect x="452" y="14" width="294" height="122" rx="12" fill="#FDE7EC" stroke="#C92A4B" stroke-width="2"/>
+          <text x="599" y="46" font-size="17" font-weight="800" text-anchor="middle" fill="#C92A4B">⛔ INCORRECT</text>
+          <text x="599" y="72" font-size="14" text-anchor="middle">false when you check it</text>
+          <text x="599" y="94" font-size="14" text-anchor="middle">e.g. ‘Sydney is the capital’</text>
+          <text x="599" y="120" font-size="14" font-weight="700" text-anchor="middle">Fix: correct the fact</text>
+          <rect x="452" y="164" width="294" height="122" rx="12" fill="#FFF3D6" stroke="#B45309" stroke-width="2"/>
+          <text x="599" y="196" font-size="17" font-weight="800" text-anchor="middle" fill="#B45309">❓ UNCLEAR</text>
+          <text x="599" y="222" font-size="14" text-anchor="middle">too vague to judge at all</text>
+          <text x="599" y="244" font-size="14" text-anchor="middle">e.g. ‘It depends, really’</text>
+          <text x="599" y="270" font-size="14" font-weight="700" text-anchor="middle">Fix: sharpen meaning or prompt</text>
+          <g stroke="#2B1A14" stroke-width="2.4" fill="none" marker-end="url(#ah)"><path d="M146 150H188"/><path d="M376 132L448 84"/><path d="M376 168L448 216"/></g>
+          <text x="392" y="88" font-size="13" text-anchor="middle" fill="#C92A4B" font-weight="700">disagrees</text>
+          <text x="392" y="226" font-size="13" text-anchor="middle" fill="#B45309" font-weight="700">can't tell</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> An output can be incorrect (false against a source) or unclear (too vague to judge) – and the fixes differ.</figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-verdict"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Back it with evidence – then trace it</h2><p>Which component caused it?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Trace the fault to a component</h3>
+    <p>An AI system is made of components that interact – the <b>data</b> it draws on, the <b>prompt</b> you write, and the <b>tool</b> that runs it. When an output is incorrect or unclear, the fault usually sits in one of these, not in some mysterious brain.</p>
+    <p>A vague prompt, a weak or biased data source, or the wrong tool can each spoil the result. So after you judge an output and point to your <b>evidence</b> – the exact word, fact or step – ask which component caused it. Fixing the right component improves the whole system, instead of just running it again and hoping.</p>
+    <figure>
+      <svg viewBox="0 0 760 310" role="img" aria-labelledby="f2T">
+        <title id="f2T">Three components – data (a weak or biased source), prompt (a vague instruction) and tool (wrong for the job) – all feed into an output that is incorrect or unclear. A dashed arrow traces the fault back from the output to the component that caused it.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <g stroke="#2B1A14" stroke-width="1.6" fill="#fff">
+            <rect x="14" y="14" width="220" height="64" rx="10"/>
+            <rect x="14" y="104" width="220" height="64" rx="10"/>
+            <rect x="14" y="194" width="220" height="64" rx="10"/>
+          </g>
+          <g font-size="16" font-weight="800" text-anchor="middle"><text x="124" y="41">🗂️ DATA</text><text x="124" y="131">🖊️ PROMPT</text><text x="124" y="221">⚙️ TOOL</text></g>
+          <g font-size="13" text-anchor="middle" fill="#6B5750"><text x="124" y="62">weak or biased source</text><text x="124" y="152">vague instruction</text><text x="124" y="242">wrong tool for the job</text></g>
+          <rect x="530" y="96" width="216" height="80" rx="12" fill="#FDE7EC" stroke="#C92A4B" stroke-width="2.2"/>
+          <text x="638" y="128" font-size="16" font-weight="800" text-anchor="middle" fill="#C92A4B">🚩 OUTPUT</text>
+          <text x="638" y="152" font-size="13" text-anchor="middle">incorrect or unclear</text>
+          <g stroke="#2B1A14" stroke-width="2" fill="none" marker-end="url(#ah2)"><path d="M234 46L526 118"/><path d="M234 136H526"/><path d="M234 226L526 154"/></g>
+          <path d="M638 176V286H124V262" stroke="#D7263D" stroke-width="2.4" stroke-dasharray="7 5" fill="none" marker-end="url(#ah2)"/>
+          <rect x="248" y="272" width="298" height="28" rx="14" fill="#FFEFE9" stroke="#D7263D" stroke-width="1.4"/>
+          <text x="397" y="291" font-size="14" font-weight="700" text-anchor="middle" fill="#D7263D">trace the fault back – fix that part</text>
+          <text x="380" y="115" font-size="14" font-weight="700" text-anchor="middle" fill="#6B5750">which one?</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> When an output is incorrect or unclear, trace the fault back to the component that caused it – data, prompt or tool.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, people rely on AI to draft reports, translate and answer questions in seconds – but a wrong figure in a government form or an unclear medical instruction matters. Judging whether an output is correct, clear and reliable before you use it keeps you, not the tool, in charge of the result.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · English</h4><p>Evaluate a piece of writing against agreed success criteria, citing the exact word or fact as evidence for each judgement and separating a factual error from merely unclear, ambiguous expression – the same incorrect-versus-unclear distinction you use on AI outputs.</p></div>
+    <div class="call amber"><h4>Tool for this week: unplugged simulated-AI cards (teacher-led)</h4><p>This week is account-free, with no student logins. 1. The teacher runs a <i>simulated-AI</i> card routine on the board – no live tool. 2. Students reason about pre-prepared example outputs on the cards; no personal data is used. 3. Use the worksheet to sort or judge the cards and explain your thinking with the key vocabulary. The live tools (Teachable Machine and Scratch) are used in a later Lab.</p></div>
+    <div id="a-order"></div>
+    <div id="a-case2"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3 · Worksheet</span><h2>Clear can still be wrong</h2><p>Why is that dangerous?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Fluent is not the same as accurate</h3>
+    <p>A model generates text by predicting likely words, not by knowing what is true, so a fluent, confident answer can still be wrong or vague. An output can be <b>perfectly clear and still be incorrect</b> – which is exactly why you verify the fact.</p>
+    <p>Skilled evaluators do two things: they cite specific evidence for every judgement, and they trace the fault back to the component that caused it, so the whole system can be improved rather than merely re-run.</p>
+    <div id="a-truths"></div>
+    <div id="a-case3"></div>
+    <div class="call"><h4>Solution Architects: the evaluation panel (away from the screen)</h4><p>Act as an evaluation panel. As a class, agree the criteria: accuracy, clarity and reliability. Read the task the outputs were meant to do. For each output decide if it is correct, incorrect or unclear, judged against every criterion, and write one piece of evidence for every verdict – the exact word, fact or step. Verify one output against a trusted source, then name the component behind each fault – data, prompt or tool. <b>No display?</b> Sort the printed cards into correct, incorrect and unclear piles with an evidence note and a component tag on each.</p></div>
+    <div class="ecard" id="panel"></div>
+    <div id="a-grid"></div>
+    <div id="a-faulty"></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 4 Lab</span><h2>The Evaluation Clinic</h2><p>Welcome to the evaluation clinic. Today you do not judge one output – you compare a whole set, decide which are incorrect or unclear, rank them best to worst, and prove every placement with evidence.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In the Core lesson you judged single outputs against criteria and traced each fault to a component. Now you rank a whole messy set – and fix the weakest one.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Verdicts to a ranking</h2><p>How do you turn judgements into an order?</p></div>
+  <div class="part-body">
+    <h3 class="sub">From verdicts to a ranking</h3>
+    <p>Judging one output is a start; a clinic compares many. To <b>rank</b> them, line up your verdicts and ask which output is stronger against the criteria. Often two are close – one is accurate but thin, another fuller but slightly incorrect or unclear.</p>
+    <p>That is when you use a <b>tie-breaker</b>: which one is more <b>useful</b> for the actual task? Because every placement rests on evidence, your ranking is not an opinion – someone else could follow your evidence and reach the same order.</p>
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="f3T">
+        <title id="f3T">Four output cards with verdicts – A correct and useful, B correct but thin, C unclear, D incorrect – are compared against the criteria, with usefulness breaking ties, to make a ranking strip from 1 (A) to 4 (D), each place backed by evidence.</title>
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <text x="124" y="26" font-size="14" font-weight="800" text-anchor="middle" fill="#6B5750">VERDICTS</text>
+          <g stroke="#2B1A14" stroke-width="1.4">
+            <rect x="14" y="40" width="220" height="50" rx="9" fill="#E2F5EC"/>
+            <rect x="14" y="102" width="220" height="50" rx="9" fill="#E2F5EC"/>
+            <rect x="14" y="164" width="220" height="50" rx="9" fill="#FFF3D6"/>
+            <rect x="14" y="226" width="220" height="50" rx="9" fill="#FDE7EC"/>
+          </g>
+          <g font-size="14" text-anchor="middle"><text x="124" y="70">A · correct, useful</text><text x="124" y="132">B · correct but thin</text><text x="124" y="194">C · unclear</text><text x="124" y="256">D · incorrect</text></g>
+          <rect x="284" y="96" width="196" height="124" rx="12" fill="#FFEFE9" stroke="#D7263D" stroke-width="2"/>
+          <text x="382" y="128" font-size="16" font-weight="800" text-anchor="middle" fill="#D7263D">COMPARE</text>
+          <text x="382" y="152" font-size="13" text-anchor="middle">against the criteria,</text>
+          <text x="382" y="172" font-size="13" text-anchor="middle">two at a time;</text>
+          <text x="382" y="198" font-size="13" text-anchor="middle" font-weight="700">tie? → usefulness</text>
+          <g stroke="#2B1A14" stroke-width="2.2" fill="none" marker-end="url(#ah3)"><path d="M240 158H280"/><path d="M484 158H524"/></g>
+          <text x="638" y="26" font-size="14" font-weight="800" text-anchor="middle" fill="#6B5750">RANKING STRIP</text>
+          <g stroke="#2B1A14" stroke-width="1.4" fill="#fff">
+            <rect x="530" y="40" width="216" height="50" rx="9"/><rect x="530" y="102" width="216" height="50" rx="9"/><rect x="530" y="164" width="216" height="50" rx="9"/><rect x="530" y="226" width="216" height="50" rx="9"/>
+          </g>
+          <g fill="#D7263D"><rect x="530" y="40" width="44" height="50" rx="9"/><rect x="530" y="102" width="44" height="50" rx="9"/><rect x="530" y="164" width="44" height="50" rx="9"/><rect x="530" y="226" width="44" height="50" rx="9"/></g>
+          <g font-size="17" font-weight="800" text-anchor="middle" fill="#fff"><text x="552" y="71">1</text><text x="552" y="133">2</text><text x="552" y="195">3</text><text x="552" y="257">4</text></g>
+          <g font-size="14" text-anchor="middle"><text x="660" y="70">A + evidence</text><text x="660" y="132">B + evidence</text><text x="660" y="194">C + evidence</text><text x="660" y="256">D + evidence</text></g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> Ranking lines up your verdicts and asks which output is stronger against the criteria – every place backed by evidence.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>In UAE workplaces and schools, people often get several AI drafts and must choose one fast. Ranking outputs with evidence and improving the weakest by fixing the right component is exactly what keeps the final choice accurate, reliable and genuinely useful.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Arabic</h4><p>Rank several sample Arabic paragraphs or translations from best to worst against agreed criteria, justifying each placement with evidence from the text and using usefulness as a tie-breaker – the same evidence-based ranking you apply to AI outputs.</p></div>
+    <div id="a-lorder"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Strong, mixed, weak</h2><p>How do the outputs sort into tiers?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Weigh the criteria together</h3>
+    <p>Outputs fail in different ways – one is incorrect, another merely unclear, a third accurate but not useful – so you must decide which criteria carry most weight for the task. <b>Accuracy</b> asks whether the content is true; <b>reliability</b> asks whether the result is dependable rather than a fluke; <b>usefulness</b> asks whether it actually helps.</p>
+    <p>These can conflict, so a ranking is a reasoned trade-off. Sorting a set into strong, mixed and weak is the first pass before you order them exactly.</p>
+    <figure>
+      <svg viewBox="0 0 760 290" role="img" aria-labelledby="f4T">
+        <title id="f4T">Three tiers. Strong: accurate, clear, reliable and useful. Mixed: accurate but thin, or mostly right with one unclear line. Weak: incorrect against the source, or too vague to help. Underneath, accuracy, reliability and usefulness are weighed together as a reasoned trade-off.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <rect x="14" y="14" width="236" height="186" rx="12" fill="#E2F5EC" stroke="#0F8A5F" stroke-width="2"/>
+          <rect x="262" y="14" width="236" height="186" rx="12" fill="#FFF3D6" stroke="#B45309" stroke-width="2"/>
+          <rect x="510" y="14" width="236" height="186" rx="12" fill="#FDE7EC" stroke="#C92A4B" stroke-width="2"/>
+          <g font-size="17" font-weight="800" text-anchor="middle"><text x="132" y="46" fill="#0F8A5F">🎯 STRONG</text><text x="380" y="46" fill="#B45309">❓ MIXED</text><text x="628" y="46" fill="#C92A4B">⛔ WEAK</text></g>
+          <g font-size="14" text-anchor="middle">
+            <text x="132" y="84">accurate and clear</text><text x="132" y="116">checks out against</text><text x="132" y="136">the source</text><text x="132" y="166">reliable and useful</text>
+            <text x="380" y="84">accurate but thin –</text><text x="380" y="104">helps only a little</text><text x="380" y="146">mostly right, but</text><text x="380" y="166">one line is unclear</text>
+            <text x="628" y="84">states a figure the</text><text x="628" y="104">source contradicts</text><text x="628" y="146">so vague it does</text><text x="628" y="166">not help the task</text>
+          </g>
+          <rect x="14" y="222" width="732" height="54" rx="27" fill="#FFEFE9" stroke="#D7263D" stroke-width="1.6"/>
+          <text x="380" y="248" font-size="15" font-weight="700" text-anchor="middle">weigh together: accuracy · reliability · usefulness</text>
+          <text x="380" y="267" font-size="13" text-anchor="middle" fill="#6B5750">they can conflict, so a ranking is a reasoned trade-off</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 4.</b> Accuracy, reliability and usefulness can conflict, so a ranking is a reasoned trade-off, not a preference.</figcaption>
+    </figure>
+    <div id="a-ltier"></div>
+    <div id="a-lcase2"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Part 3 of 3 · Worksheet</span><h2>Fix the weakest</h2><p>Which component do you fix?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Improve the weakest by fixing a component</h3>
+    <p>When an output ranks low, do not just blame it. An AI system is made of components that interact – the data, the prompt and the tool – and the fault usually sits in one of them. Trace it back: was the prompt vague, the data weak or biased, the tool wrong for the job?</p>
+    <p>Then propose a fix to that <b>component</b>. A good clinic does not only sort outputs; it improves the system that made them, so the next result is more likely to be correct and clear.</p>
+    <div id="a-lfix"></div>
+    <div id="a-lcase3"></div>
+    <div class="call amber"><h4>Tool for this week: pre-generated output packs (unplugged)</h4><p>The teacher lays out pre-printed card decks and output packs – account-free, no devices. <b>Roles:</b> systems architect (maps the components), data lead (prepares and checks inputs), evaluator (tests and scores outputs), scribe (records the trace and decisions). Agree the criteria, mark each output correct, unclear or incorrect with a reason, decide which component most likely caused each fault, tally the faults by component, and recommend one component-level fix for the most common fault. <b>Stay safe:</b> all outputs are teacher-curated; students touch no live tool and use no personal data.</p></div>
+    <div class="call"><h4>Solution Architects: rank, then fix a component (away from the screen)</h4><p>Lay out the wider set of outputs and re-read the task. Judge each against accuracy, clarity and reliability, then rank them best to worst on your ranking strip, writing the evidence beside each placement and using usefulness to break any ties. Verify the top-ranked output against a trusted source before you confirm its place. Take the weakest output, name the component behind its fault, and propose one improvement. <b>No display?</b> Slide the printed cards into a top-to-bottom order, clip an evidence note and a component tag to each, then move one card up after writing its fix.</p></div>
+    <div class="ecard" id="clinic"></div>
+    <div id="a-lstrip"></div>
+    <div id="a-lclose"></div>
+    <div class="ecard" id="pack"></div>
+    <div id="a-ltool"></div>
+    <div id="a-lsafe"></div>
+    <div id="a-lexit"></div>
+    <div id="a-lchal"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Judge with evidence – then rank, and fix the weakest by its component</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li><b>Incorrect</b> means false against a trusted source; <b>unclear</b> means you cannot tell.</li>
+      <li>Every judgement points to specific <b>evidence</b>, not a general impression – and a clear, confident output can still be wrong.</li>
+      <li>A fault usually sits in a <b>component</b> – data, prompt or tool – not a mysterious brain.</li>
+      <li>Ranking is a reasoned trade-off, not a preference; <b>usefulness</b> breaks the tie when two outputs seem equal.</li>
+      <li>Accuracy, reliability and usefulness can conflict, so you weigh them for the task.</li>
+      <li>Improve the weakest output by fixing the component that caused its fault. Next week (Week 5) you meet risk – how bias and errors hide inside a system's parts.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 9 · Main Course · Term 1 Week 4 (26 – 30 Oct 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- strand + concept tags ---------- */
+const CE_E="CE · identifies incorrect or unclear outputs";
+const CE_P="CE · evaluates outputs for accuracy, bias and usefulness";
+const CE_A="CE · explains limitations and suggests targeted improvements";
+const GE_E="GE · identifies risks in AI-generated content";
+const GE_P="GE · explains bias, misinformation and misuse";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["criteria","The agreed things you judge an output against, such as accuracy, clarity and reliability."],
+  ["incorrect","The output is factually false when you check it against a trusted source."],
+  ["unclear","The output is so vague or ambiguous that you cannot tell whether it is right."],
+  ["evidence","The exact word, fact or step you point to that proves your judgement."],
+  ["reliability","Whether the same system would give a dependable result again, not a one-off fluke."]
+];
+const DEF_ORDER = [2,4,0,3,1];
+const VERDICT = [
+  ["vd1","🎯 ‘The translation matches the source text word for word.’","C"],
+  ["vd2","🚫 ‘2 + 2 = 5’ – false when you check it.","I"],
+  ["vd3","📋 ‘Sales rose to 4,200 units’ – and the trusted source confirms 4,200.","C"],
+  ["vd4","🌫️ ‘It depends on a few things, really’ – you cannot tell what it means.","U"],
+  ["vd5","🚩 ‘The capital of Australia is Sydney’ – the source says Canberra.","I"],
+  ["vd6","❔ ‘The result is somewhat better than before’ – better by how much?","U"],
+  ["vd7","🧾 ‘The report lists all three figures and each checks out against the source.’","C"]
+];
+const CASE1 = ["It is unclear, since it sounds confident and detailed.","It cannot be judged against any source at all here.","It is correct, because it sounds so sure of itself.","It is false, checked against a trusted source."];
+const STEPS = ["🔎 Judge the output: correct, unclear or incorrect","📏 Name the criterion it fails – accuracy, clarity or reliability","🧷 Point to the evidence – the exact word, fact or step","🧭 Trace the fault to a component – data, prompt or tool"];
+const STEP_ORDER = [3,0,2,1];
+const CASE2 = ["The data – it must have been incomplete or biased.","The prompt – it was too vague to steer the tool.","The tool – it must simply be faulty in some way.","No component – the output is just random noise here."];
+const TRUTHS = [
+  ["tt1","🎯 An output can be perfectly clear and still be incorrect.",1],
+  ["tt2","🧍 The fault always sits in the tool alone.",0],
+  ["tt3","🔁 Re-running the tool is enough to fix a fault.",0],
+  ["tt4","🧷 Every verdict should point to specific evidence.",1],
+  ["tt5","🔧 Fixing the right component improves the whole system.",1],
+  ["tt6","🪄 A fluent, confident answer is always accurate.",0]
+];
+const CASE3 = ["It is not dangerous, since a clear output must be true.","It is dangerous because clear outputs are slow to make.","It reads as trustworthy, so a false fact slips past.","It is dangerous because it is too vague to use at all."];
+const GRID = [
+  ["A","ga",["M","M","M"],0],
+  ["B","gb",["F","M","F"],1],
+  ["C","gc",["Q","F","F"],2]
+];
+const CRIT = ["🎯 Accuracy","🔍 Clarity","🔁 Reliability"];
+const COMP = ["No fault","Data","Prompt","Tool"];
+const FHOW = ["You cannot tell exactly what it claims, so there is no clear fact to check or disprove","It is shorter than Output A, so it must be unclear","It sounds unsure of itself, so it must be false","The textbook says it is wrong, so it is unclear"];
+const VSRC = ["Ask the same helper whether it is sure","The class science textbook","Output B, because it gives a different number","Whichever answer sounds the most confident"];
+const EXIT = ["Output C · correct · it uses friendly, easy words.","Output A · unclear · it is only one line long.","Output B · incorrect · evidence: it says 90 °C, but the textbook says water boils at 100 °C at sea level.","Output B · incorrect · because I simply prefer Output A."];
+const CHAL = ["It fails accuracy – every tip is false, so swap the tool.","Nothing is wrong – accurate and clear means it is the best possible output.","It is accurate and clear, but biased towards one group and not useful for many students – change the data, adding tips from sources written for every student.","It fails clarity – change the prompt so it writes longer sentences."];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["rank","To put outputs in order from best to worst against your criteria."],
+  ["usefulness","How well an output actually helps someone complete the task."],
+  ["reliability","Whether the result is dependable if the system is run again, not a one-off."],
+  ["tie-breaker","The extra reason you use to choose between two outputs that seem equal."],
+  ["component","A part of the AI system – the data, the prompt or the tool – where a fault can sit."]
+];
+const LDEF_ORDER = [3,0,4,2,1];
+const LSTEPS = ["📋 Re-read the task the outputs were meant to do","🔎 Judge each output against the criteria","⚖️ Compare the outputs two at a time","🧷 Break close ties with usefulness","🏁 Write the final order, best to worst"];
+const LSTEP_ORDER = [4,1,3,0,2];
+const LCASE1 = ["Pick whichever draft happens to be the longer one.","Choose the one that simply sounds more confident.","Ask which one is more useful for the actual task.","Just flip a coin and take whichever side lands up."];
+const TIERS = [
+  ["ti1","🔗 Clear and reliable across two datasets.","S"],
+  ["ti2","🌫️ Mostly right, but one line is unclear.","M"],
+  ["ti3","🚩 States a figure the source contradicts.","W"],
+  ["ti4","💤 So vague it does not help the task at all.","W"],
+  ["ti5","🧾 Accurate, clear, and confirmed against the source.","S"],
+  ["ti6","📄 Accurate but thin – it helps only a little.","M"],
+  ["ti7","🎯 Correct and useful for the task, with evidence to back it.","S"]
+];
+const LCASE2 = ["The longer draft, since detail makes it more useful.","The short, accurate one – accuracy beats length.","They rank exactly equally, so either one will do.","Whichever draft happened to be produced first here."];
+const LFIX = [["lf1","🔁 Fluke result",1],["lf2","🖊️ Vague instruction",2],["lf3","⚙️ Wrong task fit",3],["lf4","🗂️ Skewed facts",0]];
+const LFIX_OPTS = ["⚠️ improve the data source","🛡️ test on more data","🧭 sharpen the prompt","🔀 swap the tool"];
+const LCASE3 = ["Discard all three and rebuild the system from scratch.","Just re-run the same tool again without any changes.","Improve the data, though the facts were already fine.","Sharpen the prompt – one fix cures the shared fault."];
+const CLINIC = [
+  ["P","“Museum visit Thu 12 Nov: bus leaves 8:00, back 14:00. Bring water and a packed lunch. Cost: 60 AED.”","Every detail matches the notice; the same on 3 re-runs.","The notice as data, a clear prompt, a summary tool."],
+  ["Q","“Museum visit Thu 12 Nov. Bus 8:00, back 14:00.”","Accurate, but thin: no water, lunch or cost.","A headline tool that cuts every text to 10 words."],
+  ["R","“The museum trip is next Thursday! Arrive early and we'll be back after lunch. Bring water, lunch and the fee.”","Fuller and friendly, but unclear: which Thursday? How early? When after lunch?","The prompt said only ‘make it fun and chatty’."],
+  ["S","“Museum visit Thu 19 Nov: bus leaves 9:00. Cost: 80 AED.”","Sounds sure, but the date, time and cost contradict the notice.","Last year's trip notice was used as the data."]
+];
+const OUTS = ["Output P","Output Q","Output R","Output S"];
+const LCOMP = [0,3,2,1];
+const LTIE = ["R – it is longer and friendlier, so it is more useful","Q – it is thinner, but it gives the exact date and times parents most need; R's ‘next Thursday’ and ‘after lunch’ leave them guessing","Neither – they are exactly equal, so flip a coin","R – it sounds more confident, so parents will trust it"];
+const LWFIX = ["Make it longer and chattier","Give the tool this year's notice as its data, then check the date, time and cost against it","Re-run the same tool on the same old notice","Move S up the ranking so it is not last"];
+const PACK = [
+  ["1","At what temperature does water boil at sea level?","“100 °C.”","Textbook data, a clear prompt, a question-answer tool.","C",0],
+  ["2","How long does the Earth take to orbit the Sun?","“About 30 days.”","An old notes file that mixes up the Moon and the Earth.","I",1],
+  ["3","Why do we see lightning before we hear thunder?","“Storms can be quite something, in a way.”","The prompt sent was only ‘say something about storms’.","U",2],
+  ["4","How many planets are in our Solar System?","“Nine.”","The same old notes file.","I",1],
+  ["5","Which gas do plants take in for photosynthesis?","“Carbon dioxide.”","Textbook data, a clear prompt, a question-answer tool.","C",0],
+  ["6","Which is faster, light or sound – and why?","“1.”","A number-only calculator tool, not built for text.","U",3]
+];
+const PWEAK = ["Data","Prompt","Tool","No component – the faults are random"];
+const PFIX = ["Ask every question twice and keep the longer answer","Replace the old notes file with the class textbook as the data source","Swap every tool for a calculator","Make the prompts more confident"];
+const LSAFE = [
+  ["sf1","Use only the teacher-curated output packs",1],
+  ["sf2","Log in to a live AI tool to make extra outputs",0],
+  ["sf3","Use no personal data – no faces, voices or names",1],
+  ["sf4","Add a classmate's real name to an output to make it realistic",0],
+  ["sf5","Back every verdict with evidence from the output itself",1],
+  ["sf6","Rank an output last just because you dislike its style",0]
+];
+const LEXIT = ["Best: R, because it is the longest and friendliest. Worst: Q, because it is short.","Best: S, because it sounds the most sure. Worst: P, because I read it first.","Best: P – every detail matches the notice. Worst: S – it is unclear, because it is short.","Best: P – evidence: 12 Nov, 8:00, 14:00 and 60 AED all match the notice. Worst: S – incorrect, not unclear; evidence: it says 19 Nov and 80 AED, but the notice says 12 Nov and 60 AED."];
+const LCHAL = ["R would now win, because its friendly style is the least biased","P would lose, because weighting bias always changes the top place; fix S by making it longer","P still wins – it is accurate, reliable, useful and treats every family the same, so extra weight on bias cannot push it down; the single fix for S is to give the tool this year's notice as its data","S would win once bias counts most, because it is short; no fix is needed"];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CE_P,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"Criteria are the agreed things you judge against. Incorrect means false when checked against a trusted source; unclear means so vague you cannot tell whether it is right. Evidence is the exact word, fact or step that proves your judgement. Reliability is whether the system would give a dependable result again, not a one-off fluke."},
+ {id:"verdict",mount:"a-verdict",section:"Core · Part 1",title:"Give each output a verdict",sub:"Objective 1 · tell incorrect from unclear · "+CE_E,ico:"🩺",
+  fields:VERDICT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Correct: the word-for-word translation, the 4,200 figure the source confirms, and the report whose three figures all check out. Unclear: ‘it depends on a few things’ and ‘somewhat better’ – you cannot tell what they claim. Incorrect: ‘2 + 2 = 5’ and ‘Sydney is the capital’ – you can check them and show they are false."},
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"Case 1 · The Confident Wrong Answer",sub:"Solution Architects · "+CE_E,ico:"🕵️",
+  fields:[{k:"c1",radio:1,ok:v=>eq(v,3)}],
+  explain:"It is false, checked against a trusted source. Confidence does not make it true – sounding sure is not evidence. It is not unclear either: you can tell exactly what it claims, and the source shows it is wrong."},
+ {id:"order",mount:"a-order",section:"Core · Part 2",title:"Order the evaluator's moves",sub:"Objective 2 · judge with evidence, then trace · "+CE_P,ico:"🧭",
+  fields:STEPS.map((_,i)=>({k:"or"+i,ok:v=>eq(v,i)})),
+  explain:"Judge the output (correct, unclear or incorrect) → name the criterion it fails → point to the evidence → trace the fault to a component. Judge, name, prove, then trace."},
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"Case 2 · The Wandering Answer",sub:"Solution Architects · "+CE_A,ico:"🔬",
+  fields:[{k:"c2",radio:1,ok:v=>eq(v,1)}],
+  explain:"The prompt – ‘tell me about it’ was too vague to steer the tool, so the output wandered off task. The data was solid and the tool suited the job, and the output is not random noise: trace it to the vague prompt."},
+ {id:"truths",mount:"a-truths",section:"Core · Part 3",title:"Which statements are true?",sub:"Objective 3 · use the vocabulary correctly · "+CE_P,ico:"🧩",
+  fields:TRUTHS.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"True: a clear output can still be incorrect; every verdict should point to specific evidence; fixing the right component improves the whole system. False: the fault does not always sit in the tool, re-running without a fix repeats the fault, and a fluent, confident answer is not always accurate."},
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"Case 3 · The Clear but False Line",sub:"Solution Architects · "+GE_E,ico:"⚖️",
+  fields:[{k:"c3",radio:1,ok:v=>eq(v,2)}],
+  explain:"It reads as trustworthy, so a false fact slips past. Clarity is not accuracy – a clear output can still state something false, and it is not vague. Speed has nothing to do with it. That is why you verify the fact."},
+ {id:"grid",mount:"a-grid",section:"Core worksheet",title:"Evaluation grid",sub:"Worksheet · judge every criterion, name the component · "+CE_P,ico:"📝",cls:"ws",
+  fields:GRID.flatMap(([,p,ans,c])=>[...ans.map((v0,j)=>({k:p+(j+1),ok:v=>eq(v,v0)})),{k:p+"c",ok:v=>eq(v,c)}]),
+  explain:"A meets all three criteria and has no fault. B is clear, but fails accuracy (the textbook says 100 °C) and reliability (wrong on 3 of 5 re-runs); the fault sits in the data – old notes with a typo. C fails clarity, so its accuracy cannot even be checked (can't tell), and it gives a different vague line each time (fails reliability); the fault sits in the prompt – ‘tell me about boiling’."},
+ {id:"faulty",mount:"a-faulty",section:"Core worksheet",title:"Incorrect or unclear? Verify one fact",sub:"Worksheet · "+CE_E,ico:"🔁",cls:"ws",
+  fields:[{k:"fy1",ok:v=>eq(v,"I")},{k:"fy2",ok:v=>eq(v,"U")},{k:"fhow",ok:v=>eq(v,0)},{k:"vsrc",ok:v=>eq(v,1)},{k:"vh1",ok:v=>eq(v,"H")},{k:"vh2",ok:v=>eq(v,"N")}],
+  explain:"B is incorrect – it makes a clear claim (90 °C) that the source disproves. C is unclear – you cannot tell what it claims, so there is nothing to check. Verify against a source you already trust, the textbook: Output A's 100 °C holds up; Output B's 90 °C does not. Asking the helper whether it is sure, or picking the most confident answer, is not verifying."},
+ {id:"exit",mount:"a-exit",section:"Core worksheet",title:"Exit ticket",sub:"Explain it · "+CE_P,ico:"🎫",
+  fields:[{k:"ex",radio:1,ok:v=>eq(v,2)}],
+  explain:"A complete exit ticket names the output, says whether it is correct, incorrect or unclear, and gives the single piece of evidence that decided it – here the 90 °C claim against the textbook's 100 °C. Friendly words, length and preference are not evidence."},
+ {id:"chal",mount:"a-chal",section:"Core worksheet",title:"Challenge · four criteria",sub:"Stretch · "+GE_P,ico:"⭐",
+  fields:[{k:"ch",radio:1,ok:v=>eq(v,2)}],
+  explain:"Every tip is true and clearly written, so it passes accuracy and clarity – but it assumes every student has a tutor and a quiet room, so it is biased towards one group and not useful for many students. The fault sits in the data (articles written only for one kind of family), so change the data."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+CE_P,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"Rank = order outputs best to worst against your criteria. Usefulness = how well an output actually helps with the task. Reliability = dependable if run again, not a one-off. Tie-breaker = the extra reason that decides between two outputs that seem equal. Component = the data, the prompt or the tool, where a fault can sit."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 1",title:"Order the ranking steps",sub:"Objective 2 · rank with evidence · "+CE_P,ico:"🧭",
+  fields:LSTEPS.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"Re-read the task → judge each output against the criteria → compare the outputs two at a time → break close ties with usefulness → write the final order. A ranking built on evidence is one someone else could repeat."},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"Case 1 · The Two Close Drafts",sub:"Solution Architects · "+CE_P,ico:"🕵️",
+  fields:[{k:"lc1",radio:1,ok:v=>eq(v,2)}],
+  explain:"Ask which one is more useful for the actual task – usefulness is the tie-breaker when two outputs seem equal. Length is not usefulness, confidence is not evidence, and a ranking rests on evidence, not chance."},
+ {id:"ltier",mount:"a-ltier",section:"Lab · Part 2",title:"Sort the set into tiers",sub:"Objective 1 · pick out incorrect and unclear · "+CE_E,ico:"🩺",
+  fields:TIERS.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Strong: clear and reliable across two datasets; accurate, clear and confirmed against the source; correct and useful with evidence. Mixed: mostly right with one unclear line; accurate but thin. Weak: a figure the source contradicts (incorrect); so vague it does not help (unclear). Tiers first, exact order next."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"Case 2 · The Fuller but False Draft",sub:"Solution Architects · "+CE_P,ico:"🔬",
+  fields:[{k:"lc2",radio:1,ok:v=>eq(v,1)}],
+  explain:"The short, accurate one – a false figure sinks a draft however full it reads. Detail cannot rescue a false figure, they do not rank equally, and the order they were produced in is not a criterion."},
+ {id:"lfix",mount:"a-lfix",section:"Lab · Part 3",title:"Match the fault to its fix",sub:"Objective 3 · propose a component-level fix · "+CE_A,ico:"🧷",
+  fields:LFIX.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A fluke result points to reliability – test it on more data. A vague instruction points to the prompt – sharpen it. A wrong task fit points to the tool – swap it. Skewed facts point to the data – improve the source. Fixing the right component improves every output it caused."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"Case 3 · The Repeated Vague Answer",sub:"Solution Architects · "+CE_A,ico:"⚖️",
+  fields:[{k:"lc3",radio:1,ok:v=>eq(v,3)}],
+  explain:"Sharpen the prompt – one fix cures the shared fault, because all three trace back to the same vague instruction. The facts were fine, so the data is not the cause; re-running without a fix repeats the fault; and you do not need to rebuild everything."},
+ {id:"lstrip",mount:"a-lstrip",section:"Lab worksheet",title:"Ranking strip",sub:"Worksheet · rank, then name each component · "+CE_P,ico:"📝",cls:"ws",
+  fields:[...[0,1,2,3].map(i=>({k:"lst"+(i+1),ok:v=>eq(v,i)})),...LCOMP.map((c,i)=>({k:"lsc"+(i+1),ok:v=>eq(v,c)}))],
+  explain:"P is accurate, complete and reliable – rank 1, no fault. Q is accurate but thin; its fault is the tool (a headline tool that cuts everything to 10 words) – rank 2. R is fuller but unclear on exactly when; its fault is the prompt (‘fun and chatty’) – rank 3. S is incorrect – wrong date, time and cost from last year's notice, so its fault is the data – rank 4."},
+ {id:"lclose",mount:"a-lclose",section:"Lab worksheet",title:"Break the tie · improve the weakest",sub:"Worksheet · "+CE_A,ico:"⚖️",cls:"ws",
+  fields:[{k:"ltie",ok:v=>eq(v,1)},{k:"lwc",ok:v=>eq(v,"D")},{k:"lwf",ok:v=>eq(v,1)}],
+  explain:"Usefulness breaks the Q–R tie: parents most need to know when to drop off and collect, and Q gives the exact date and times while R leaves them guessing. S's fault sits in the data – last year's notice – so the targeted fix is to give the tool this year's notice and check every figure against it, not to make it chattier, re-run it or simply move it."},
+ {id:"ltool",mount:"a-ltool",section:"Lab worksheet",title:"Tool log: fault-trace grid",sub:"Worksheet · tool log · "+CE_A,ico:"🗂️",cls:"ws",
+  fields:[...PACK.flatMap(([n,,,,v0,c])=>[{k:"pv"+n,ok:v=>eq(v,v0)},{k:"pc"+n,ok:v=>eq(v,c)}]),{k:"pweak",ok:v=>eq(v,0)},{k:"pfix",ok:v=>eq(v,1)}],
+  explain:"Correct: 1 (100 °C) and 5 (carbon dioxide). Incorrect: 2 (the Earth takes about 365 days) and 4 (there are eight planets) – both from the old notes file, so the data. Unclear: 3 (a vague line from a vague prompt) and 6 (‘1.’ from a number-only tool not built for text). Data causes the most faults, so the component-level fix is to replace the old notes file with the textbook."},
+ {id:"lsafe",mount:"a-lsafe",section:"Lab worksheet",title:"Safe and fair evaluation",sub:"Safety check · "+GE_E,ico:"🛡️",
+  fields:LSAFE.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Use only the teacher-curated packs, use no personal data, and back every verdict with evidence. Students touch no live tool this week, never add a real person's details, and never rank an output down for style alone."},
+ {id:"lexit",mount:"a-lexit",section:"Lab worksheet",title:"Exit ticket",sub:"Explain it · "+CE_P,ico:"🎫",
+  fields:[{k:"le",radio:1,ok:v=>eq(v,3)}],
+  explain:"A complete answer names the best and worst output, says whether the worst is incorrect or unclear, and gives evidence for each placement. S makes clear claims that the notice disproves, so it is incorrect, not unclear. Length, confidence and reading order are not evidence."},
+ {id:"lchal",mount:"a-lchal",section:"Lab worksheet",title:"Challenge · weigh bias more heavily",sub:"Stretch · "+CE_A,ico:"⭐",
+  fields:[{k:"lch",radio:1,ok:v=>eq(v,2)}],
+  explain:"P has no fault on accuracy, reliability, bias or usefulness, so weighting bias more heavily cannot push it down – the ranking is repeatable. S's fault sits in the data, so the single fix that most improves it is giving the tool this year's notice."}
+];
+
+/* ---------- state ---------- */
+const KEY="g9-mw4-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#panel").innerHTML=`<header><small>Evaluation panel · simulated-AI cards · illustrative</small><b>A science revision helper: “At what temperature does water boil at sea level?”</b></header>
+<div class="in">
+  <p class="task"><b>The task:</b> give one clear, correct fact for a Grade 9 revision card. Each output was checked against the class science textbook (the trusted source: water boils at 100 °C at sea level), then the same set-up was re-run 5 more times.</p>
+  <table class="t stack"><thead><tr><th>Output</th><th>What it said</th><th>Checks</th><th>How it was made</th></tr></thead>
+  <tbody><tr><td data-h="Output"><b>A</b></td><td data-h="What it said">“Water boils at 100 °C at sea level.”</td><td data-h="Checks">Textbook: agrees<br>Re-runs: same answer 5 of 5</td><td data-h="How it was made">Textbook data, a clear prompt, a question-answer tool</td></tr>
+  <tr><td data-h="Output"><b>B</b></td><td data-h="What it said">“Water boils at 90 °C at sea level.”</td><td data-h="Checks">Textbook: contradicts – 100 °C<br>Re-runs: 90 °C again on 3 of 5</td><td data-h="How it was made">Same prompt and tool, but its data was a page of old class notes with a typo</td></tr>
+  <tr><td data-h="Output"><b>C</b></td><td data-h="What it said">“It boils once it gets hot enough – it depends on a few things.”</td><td data-h="Checks">Textbook: you cannot tell what it claims<br>Re-runs: a different vague line each time</td><td data-h="How it was made">Textbook data and the same tool, but the prompt only said ‘tell me about boiling’</td></tr></tbody></table>
+  <p class="note"><b>Criteria card.</b> Accuracy: ✔ meets = the source agrees · ✖ fails = the source contradicts it · ? can't tell = too vague to check. Clarity: ✔ you can tell exactly what it claims · ✖ you cannot. Reliability: ✔ the same correct answer on 5 of 5 re-runs · ✖ it changes or goes wrong on re-runs.</p>
+</div>`;
+$("#clinic").innerHTML=`<header><small>Evaluation clinic · curated output set · illustrative</small><b>A reminder writer: “Turn the trip notice into a short reminder for parents.”</b></header>
+<div class="in">
+  <p class="task"><b>Trusted source – the school's trip notice:</b> museum visit on Thursday 12 November 2026; the bus leaves at 8:00 and returns at 14:00; bring water and a packed lunch; cost 60 AED. <b>Purpose:</b> parents most need to know exactly when to drop off and collect their child. No real names or personal details are used.</p>
+  <table class="t stack"><thead><tr><th>Output</th><th>What it said</th><th>What the clinic found</th><th>How it was made</th></tr></thead>
+  <tbody>${CLINIC.map(([o,s,f,m])=>`<tr><td data-h="Output"><b>${o}</b></td><td data-h="What it said">${esc(s)}</td><td data-h="What the clinic found">${esc(f)}</td><td data-h="How it was made">${esc(m)}</td></tr>`).join("")}</tbody></table>
+</div>`;
+$("#pack").innerHTML=`<header><small>Pre-generated output pack · teacher-curated · illustrative</small><b>A revision-card helper answering six Grade 9 science questions</b></header>
+<div class="in">
+  <p class="task"><b>Trusted source:</b> the class science textbook – water boils at 100 °C at sea level; the Earth takes about 365 days to orbit the Sun; we see lightning first because light travels much faster than sound; there are eight planets in our Solar System; plants take in carbon dioxide for photosynthesis.</p>
+  <table class="t stack"><thead><tr><th>#</th><th>Question</th><th>Output</th><th>How it was made</th></tr></thead>
+  <tbody>${PACK.map(([n,q,o,m])=>`<tr><td data-h="Output"><b>${n}</b></td><td data-h="Question">${esc(q)}</td><td data-h="What it said">${esc(o)}</td><td data-h="How it was made">${esc(m)}</td></tr>`).join("")}</tbody></table>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "verdict":
+    return `<p class="how">Sort each output into correct, unclear or incorrect.</p>`+
+      VERDICT.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🎯 Correct","❓ Unclear","⛔ Incorrect"],["C","U","I"],t)}</div>`).join("");
+  case "case1":
+    return `<div class="quote">An output states a figure with total confidence, but the trusted source shows a different number. Architect, what is your verdict?</div><div class="clues"><div class="clue">🧾<span>CONFIDENT OUTPUT</span></div><div class="clue">📚<span>TRUSTED SOURCE</span></div><div class="clue">🚩<span>MISMATCH</span></div></div><p class="q" id="q-c1">What is your verdict?</p>${radios("c1",CASE1)}`;
+  case "order":
+    return `<p class="how">Put the steps in the order a skilled evaluator works through them, from first to last.</p>`+
+      STEPS.map((_,i)=>`<div class="pair" data-item="or${i}"><span class="t">Step ${i+1}</span>${sel("or"+i,STEPS,"Choose the step…",STEP_ORDER)}</div>`).join("");
+  case "case2":
+    return `<div class="quote">The data was solid and the tool was right for the job, but the instruction just said ‘tell me about it.’ The output wandered off task. Architect, which component caused it?</div><div class="clues"><div class="clue">🗂️<span>GOOD DATA</span></div><div class="clue">🖊️<span>VAGUE PROMPT</span></div><div class="clue">📤<span>OFF-TASK OUTPUT</span></div></div><p class="q" id="q-c2">Which component caused the fault?</p>${radios("c2",CASE2)}`;
+  case "truths":
+    return boxes(TRUTHS,"Tick the THREE true statements about evaluating outputs. Leave the others unticked.");
+  case "case3":
+    return `<div class="quote">An instruction reads clearly and simply – anyone could follow it – yet the fact inside it is wrong. Architect, why is this the dangerous kind of fault?</div><div class="clues"><div class="clue">📄<span>CLEAR OUTPUT</span></div><div class="clue">🚩<span>FALSE FACT</span></div><div class="clue">⚠️<span>RISK</span></div></div><p class="q" id="q-c3">Why is a clear-but-incorrect output dangerous?</p>${radios("c3",CASE3)}`;
+  case "grid":
+    return `<p class="how">Use the evaluation panel above and its criteria card. Judge every output against every criterion, then name the component behind any fault.</p>`+
+      GRID.map(([o,p])=>`<div class="scen"><p>Output ${o}</p>`+CRIT.map((c,j)=>`<div class="row" data-item="${p}${j+1}"><span class="t">${c}</span>${seg(p+(j+1),["✔ Meets","✖ Fails","? Can't tell"],["M","F","Q"],"Output "+o+" "+c)}</div>`).join("")+
+        `<div class="pair" data-item="${p}c"><span class="t">🧩 Component at fault</span>${sel(p+"c",COMP,"Choose…",[2,0,3,1])}</div></div>`).join("");
+  case "faulty":
+    return `<p class="how">Pick out the faulty outputs from the panel. Is each one incorrect or unclear? Then verify one fact.</p>
+      <div class="row" data-item="fy1"><span class="t">Output B: “Water boils at 90 °C at sea level.”</span>${seg("fy1",["Incorrect","Unclear"],["I","U"],"Output B")}</div>
+      <div class="row" data-item="fy2"><span class="t">Output C: “It boils once it gets hot enough – it depends on a few things.”</span>${seg("fy2",["Incorrect","Unclear"],["I","U"],"Output C")}</div>
+      <div class="pair" data-item="fhow"><span class="t">How can you tell Output C is unclear rather than incorrect?</span>${sel("fhow",FHOW,"Choose…",[2,0,3,1])}</div>
+      <div class="pair" data-item="vsrc"><span class="t">Verify one fact: which trusted source do you check it against?</span>${sel("vsrc",VSRC,"Choose…",[0,2,1,3])}</div>
+      <div class="row" data-item="vh1"><span class="t">Output A's ‘100 °C’, checked against that source</span>${seg("vh1",["Held up","Did not hold up"],["H","N"],"Output A")}</div>
+      <div class="row" data-item="vh2"><span class="t">Output B's ‘90 °C’, checked against that source</span>${seg("vh2",["Held up","Did not hold up"],["H","N"],"Output B")}</div>`;
+  case "exit":
+    return `<p class="q" id="q-ex">Choose one output, say whether it is correct, incorrect or unclear, and write the single piece of evidence that decided it. Which exit ticket does all of that?</p>${radios("ex",EXIT)}`;
+  case "chal":
+    return `<div class="quote">Re-evaluate using four criteria – <b>accuracy, clarity, bias and usefulness</b>. A study-tips helper gives Grade 9 students five revision tips. Every tip is true and clearly written, but every one assumes the student has a private tutor and a quiet study room at home. It was built from a set of articles written only for families who pay for tutoring. <span class="illus">(Illustrative scenario.)</span></div><p class="q" id="q-ch">How can it be accurate yet still fall short – and which component would you change?</p>${radios("ch",CHAL)}`;
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lorder":
+    return `<p class="how">Put the steps in the order you build a defensible ranking, from first to last.</p>`+
+      LSTEPS.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">Step ${i+1}</span>${sel("lo"+i,LSTEPS,"Choose the step…",LSTEP_ORDER)}</div>`).join("");
+  case "lcase1":
+    return `<div class="quote">Two drafts sit side by side: one is accurate but thin, the other fuller but slightly unclear. They seem equal. Architect, how do you break the tie?</div><div class="clues"><div class="clue">📄<span>ACCURATE BUT THIN</span></div><div class="clue">📃<span>FULLER BUT UNCLEAR</span></div><div class="clue">⚖️<span>TIE</span></div></div><p class="q" id="q-lc1">How do you break the tie?</p>${radios("lc1",LCASE1)}`;
+  case "ltier":
+    return `<p class="how">Sort each output into a strong, mixed or weak tier.</p>`+
+      TIERS.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🎯 Strong","❓ Mixed","⛔ Weak"],["S","M","W"],t)}</div>`).join("");
+  case "lcase2":
+    return `<div class="quote">One draft is long, detailed and pleasant to read, but it contains a figure the trusted source contradicts. Another is short but every word checks out. Architect, which ranks higher?</div><div class="clues"><div class="clue">📃<span>LONG BUT FALSE</span></div><div class="clue">📄<span>SHORT BUT TRUE</span></div><div class="clue">🏆<span>RANK</span></div></div><p class="q" id="q-lc2">Which output ranks higher?</p>${radios("lc2",LCASE2)}`;
+  case "lfix":
+    return `<p class="how">Match each fault to the fix that mends the right component.</p>`+
+      LFIX.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,LFIX_OPTS,"Choose the fix…",[2,0,3,1])}</div>`).join("");
+  case "lcase3":
+    return `<div class="quote">Three of the weakest outputs all wandered off task in the same way, and each traces back to the same vague instruction. Architect, what is the best fix?</div><div class="clues"><div class="clue">🚩<span>WEAK OUTPUTS</span></div><div class="clue">🧭<span>SAME CAUSE</span></div><div class="clue">🔧<span>ONE FIX</span></div></div><p class="q" id="q-lc3">What is the best fix?</p>${radios("lc3",LCASE3)}`;
+  case "lstrip":
+    return `<p class="how">Use the clinic set above. Fill the ranking strip from best (1) to worst (4), then name the component behind each output's fault.</p>`+
+      [0,1,2,3].map(i=>`<div class="pair" data-item="lst${i+1}"><span class="t">Rank ${i+1}${i===0?" (best)":i===3?" (worst)":""}</span>${sel("lst"+(i+1),OUTS,"Choose…",[[2,0,3,1],[3,1,0,2],[3,1,2,0],[0,2,1,3]][i])}</div>`).join("")+
+      `<p class="q">Component at fault</p>`+
+      OUTS.map((o,i)=>`<div class="pair" data-item="lsc${i+1}"><span class="t">${o}</span>${sel("lsc"+(i+1),COMP,"Choose…",[2,0,3,1])}</div>`).join("");
+  case "lclose":
+    return `<p class="how">Q and R were the close call. Then improve your lowest-ranked output, S.</p>
+      <div class="pair" data-item="ltie"><span class="t">Break the tie: which is more useful for parents, and why?</span>${sel("ltie",LTIE,"Choose…",[2,0,3,1])}</div>
+      <div class="row" data-item="lwc"><span class="t">Improve the weakest: which component does S's fault sit in?</span>${seg("lwc",["Data","Prompt","Tool"],["D","P","T"],"Output S component")}</div>
+      <div class="pair" data-item="lwf"><span class="t">One specific fix for S</span>${sel("lwf",LWFIX,"Choose…",[0,2,1,3])}</div>`;
+  case "ltool":
+    return `<p class="how">Use the output pack above. For each output, mark it correct, unclear or incorrect and name the component at fault. Then tally the faults and recommend one fix.</p>`+
+      PACK.map(([n,,o])=>`<div class="scen"><p>${n} · ${esc(o)}</p><div class="two">
+        <div class="cell" data-item="pv${n}"><span>Verdict</span>${seg("pv"+n,["Correct","Unclear","Incorrect"],["C","U","I"],"Output "+n+" verdict")}</div>
+        <div data-item="pc${n}"><span>Component at fault</span>${sel("pc"+n,COMP,"Choose…",[2,0,3,1])}</div></div></div>`).join("")+
+      `<div class="pair" data-item="pweak"><span class="t">Tally: which component caused the most faults?</span>${sel("pweak",PWEAK,"Choose…",[1,3,0,2])}</div>
+      <div class="pair" data-item="pfix"><span class="t">Recommend one component-level fix for the most common fault</span>${sel("pfix",PFIX,"Choose…",[0,3,1,2])}</div>`;
+  case "lsafe":
+    return boxes(LSAFE,"Safety check: tick the THREE things a safe, fair evaluator does this week.");
+  case "lexit":
+    return `<p class="q" id="q-le">Name your best and worst output from the clinic set, say whether the worst is incorrect or unclear, and give one piece of evidence for each placement. Which answer does all of that?</p>${radios("le",LEXIT)}`;
+  case "lchal":
+    return `<div class="quote">Re-rank the clinic set using four criteria – <b>accuracy, reliability, bias and usefulness</b> – and suppose bias is weighted more heavily than before.</div><p class="q" id="q-lch">Would your top output still win, and which single component fix would most improve your bottom output?</p>${radios("lch",LCHAL)}`;
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 9 Main Course · Term 1 Week 4 (26 – 30 Oct 2026) · Core + Lab · Judging Outputs + The Evaluation Clinic</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
