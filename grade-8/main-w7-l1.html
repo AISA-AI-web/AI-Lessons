@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Architect the Plan + Prototype and Pressure-Test – Grade 8 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#15803D; --main2:#22C55E; --deep:#14532D;
+  --ink:#13261B; --muted:#4F6457; --paper:#F4FAF6; --card:#FFFFFF;
+  --line:#D6EBDD; --soft:#EAF6EE;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#86EFAC,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#3CCB7F);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#13261B,#2E5E40)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#C8EDD4 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#F8FDF9;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FBFEFC}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#3CCB7F)}
+.act-head.ws{background:linear-gradient(120deg,#13261B,#2F6B47)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#ECF8F0}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #B7DCC3;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #9FD9B4;border-radius:12px;padding:10px 14px;background:#F7FCF9;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(19,38,27,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#13261B;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 8 Main Course, Term 1</span><span class="pill">Week 7 Core + Week 7 Lab</span><span class="pill">📅 Teach: week of 16 – 20 Nov 2026</span></div>
+    <h1>Architect the Plan + Prototype and Pressure-Test</h1>
+    <p>Today you become the architect of your signature solution. Before you build anything, you plan how it works and set the exact bar it must clear to count as good. Then, in the Lab, your plan meets reality: you run it as a prototype, try to break it on purpose, and make it safer when the output misses your bar.</p>
+    <p class="meta"><b>Focus:</b> Plan your signature solution – all four strands &nbsp;·&nbsp; <b>Role:</b> AI Evaluators</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 8B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 7 of Term 1 – Monday 16 to Friday 20 November 2026.</b> Core lesson first, then the Lab period.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Architect the Plan</a>, then move on to the <a href="#lab">Lab: Prototype and Pressure-Test</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Architect the plan.</b> I can write a clear goal and set out my solution as ordered input-process-output steps with a check step at the end.</li>
+      <li><b>Name the resources.</b> I can name the inputs, the teacher-operated tool and the non-personal data my solution needs.</li>
+      <li><b>Set the bar.</b> I can state one performance criterion, name one risk, and show the check step that measures the output and catches the risk.</li>
+      <li><b>Lab: prototype and pressure-test.</b> I can walk my workflow through once to the check step, test it with a hard input and measure the output against my criterion, and add a fallback path for when the output misses the bar.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 7 Core · Architect the Plan</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Architect the plan</b><small>Goal, then ordered input-process-output steps</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Set the bar</b><small>A measurable performance criterion</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Place the check step</b><small>Measure the output, catch one risk · worksheet</small></a></li>
+    </ol>
+    <h3 class="rh">Week 7 Lab · Prototype and Pressure-Test</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Walk it through</b><small>Trace one input to the check step</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Try to break it</b><small>Feed a tricky input and measure</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Add a fallback</b><small>A safer move when the output misses · prototype log</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Architect first, set the bar second</h2><p>Where do you begin – build or plan?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>Last week (Week 6) you ran the loop end to end. Now you move from guided practice to designing your own project: plan a <b>signature solution</b> and set the bar it must clear.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">Goal and structure</h3>
+    <p>A <b>signature solution</b> is a small workflow that finishes one task using input, process and output steps. Planning it means designing the whole chain <b>before</b> you build, and deciding how good the output has to be. You write a clear <b>goal</b>, order your steps, and name what each step needs – the inputs, the teacher-operated tool, and non-personal data only.</p>
+    <p>Then you set a <b>performance criterion</b>: a measurable bar, such as 8 correct labels out of 10. A criterion you can measure is what lets you improve your solution on purpose later, instead of just hoping it works.</p>
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="f1T">
+        <title id="f1T">A signature-solution plan. On top: the goal (the one task to finish) and the performance criterion (a measurable bar, such as at least 8 of 10 correct). Below: an ordered chain – input, process, output – ending in a check step that measures the output against the criterion. A risk, a confident but wrong output, points to the check step that catches it.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#13261B"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <g stroke="#13261B" stroke-width="1.6">
+            <rect x="14" y="16" width="350" height="68" rx="12" fill="#EAF6EE" stroke="#15803D" stroke-width="2.2"/>
+            <rect x="396" y="16" width="350" height="68" rx="12" fill="#EAF6EE" stroke="#15803D" stroke-width="2.2"/>
+            <rect x="14" y="140" width="150" height="70" rx="10" fill="#fff"/>
+            <rect x="207" y="140" width="150" height="70" rx="10" fill="#fff"/>
+            <rect x="400" y="140" width="150" height="70" rx="10" fill="#fff"/>
+            <rect x="593" y="140" width="153" height="70" rx="10" fill="#13261B"/>
+            <rect x="372" y="250" width="226" height="38" rx="19" fill="#FDE7EC" stroke="#C92A4B"/>
+          </g>
+          <g font-size="16" font-weight="800" text-anchor="middle"><text x="189" y="44" fill="#15803D">🎯 GOAL</text><text x="571" y="44" fill="#15803D">📏 PERFORMANCE CRITERION</text></g>
+          <g font-size="13" text-anchor="middle"><text x="189" y="68">the one task the solution must finish</text><text x="571" y="68">a measurable bar: at least 8 of 10 correct</text></g>
+          <g stroke="#13261B" stroke-width="2.4" fill="none" marker-end="url(#ah)"><path d="M164 175H203"/><path d="M357 175H396"/><path d="M550 175H589"/></g>
+          <path d="M89 84V136" stroke="#15803D" stroke-width="2.2" stroke-dasharray="6 4" fill="none" marker-end="url(#ah)"/>
+          <path d="M669 84V136" stroke="#15803D" stroke-width="2.2" stroke-dasharray="6 4" fill="none" marker-end="url(#ah)"/>
+          <g font-size="12" fill="#15803D" font-weight="700"><text x="98" y="115">drives the steps</text><text x="660" y="115" text-anchor="end">the bar to measure against</text></g>
+          <g font-size="16" font-weight="700" text-anchor="middle"><text x="89" y="172">📥 INPUT</text><text x="282" y="172">⚙️ PROCESS</text><text x="475" y="172">📤 OUTPUT</text><text x="669" y="172" fill="#fff">🔎 CHECK</text></g>
+          <g font-size="12" text-anchor="middle" fill="#4F6457"><text x="89" y="194">non-personal data</text><text x="282" y="194">teacher-operated tool</text><text x="475" y="194">label or prediction</text><text x="669" y="194" fill="#D6F5E0">measures vs the bar</text></g>
+          <path d="M598 269H669V214" stroke="#C92A4B" stroke-width="2.2" fill="none" marker-end="url(#ah)"/>
+          <text x="485" y="274" font-size="13" font-weight="700" text-anchor="middle" fill="#C92A4B">🚩 RISK: confident but wrong</text>
+          <g font-size="12.5" text-anchor="middle" fill="#4F6457"><text x="180" y="256">Plan before you build.</text><text x="180" y="276">The check measures – not just ‘did it run?’</text></g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> A signature-solution plan: goal and performance criterion on top, an input-process-output chain, with a check step measuring the output and catching one risk.</figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-order"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Name the job</h2><p>Which piece of the plan does which job?</p></div>
+  <div class="part-body">
+    <h3 class="sub">The parts of a plan</h3>
+    <p>A strong plan has parts that each do one job. The <b>goal</b> names the task. The <b>structure</b> is the ordered chain of steps. The <b>performance criterion</b> is the measurable bar. The <b>check step</b> measures the output against that bar.</p>
+    <p>Naming the job of each part is what lets you spot a plan with a hole in it – for example, a plan that sets a bar but never measures against it.</p>
+    <figure>
+      <svg viewBox="0 0 760 214" role="img" aria-labelledby="f2T">
+        <title id="f2T">Four parts of a plan, each with one job: the goal names the task; the structure is the ordered input-process-output steps; the performance criterion is a measurable bar; the check step measures the output against the bar. Together they form the design. A bar with no check step is a hole in the plan.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <g stroke="#15803D" stroke-width="1.8" fill="#fff">
+            <rect x="18" y="16" width="172" height="112" rx="12"/><rect x="202" y="16" width="172" height="112" rx="12"/><rect x="386" y="16" width="172" height="112" rx="12"/><rect x="570" y="16" width="172" height="112" rx="12" fill="#EAF6EE" stroke-width="2.6"/>
+          </g>
+          <g font-size="24" text-anchor="middle"><text x="104" y="48">🎯</text><text x="288" y="48">🗂️</text><text x="472" y="48">📏</text><text x="656" y="48">🔎</text></g>
+          <g font-size="15" font-weight="800" text-anchor="middle" fill="#15803D"><text x="104" y="76">GOAL</text><text x="288" y="76">STRUCTURE</text><text x="472" y="76">CRITERION</text><text x="656" y="76">CHECK STEP</text></g>
+          <g font-size="12.5" text-anchor="middle"><text x="104" y="98">names the one</text><text x="104" y="115">task to finish</text><text x="288" y="98">the ordered input-</text><text x="288" y="115">process-output steps</text><text x="472" y="98">a measurable bar</text><text x="472" y="115">for a good output</text><text x="656" y="98">measures the</text><text x="656" y="115">output vs the bar</text></g>
+          <path d="M28 142V152H732V142" stroke="#13261B" stroke-width="1.8" fill="none"/>
+          <text x="380" y="172" font-size="14" font-weight="700" text-anchor="middle">Together they form the design</text>
+          <text x="380" y="198" font-size="12.5" text-anchor="middle" fill="#C92A4B">A hole in the plan: a bar is set, but no check step ever measures against it</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Each part of the plan has one job – goal, structure, criterion and check – and together they form the design.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, engineers judge smart systems – from traffic sensors in Abu Dhabi to farm-monitoring tools – against clear numbers before anyone relies on them. Setting a measurable bar is what lets a team improve an AI solution instead of guessing.</p></div>
+    <div id="a-match"></div>
+    <div id="a-case2"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3 · Worksheet</span><h2>Catch the risk</h2><p>So can you trust an output on sight?</p></div>
+  <div class="part-body">
+    <p>This year the <b>check step</b> does more than ask ‘did it run?’. It <b>measures</b> your output against your performance criterion – counting, comparing or scoring – because an AI output can look confident and still be wrong. Never trust it on sight.</p>
+    <p>Think about one <b>risk</b> in your plan, then place a check step that would catch it by measuring the output against your bar and a trusted source. If you want to go further, add a <b>fallback</b>: what your solution does when the output misses the bar.</p>
+    <div id="a-truths"></div>
+    <div id="a-case3"></div>
+    <div class="call violet"><h4>Cross-curricular link · Art &amp; Design</h4><p>Like writing a <b>design brief</b> before making a product, you set a clear goal and success criteria first, plan the make-stages in order, and build in a review checkpoint that tests the outcome against the specification.</p></div>
+    <div class="call amber"><h4>Tool for this week: unplugged simulated-AI cards (teacher-led)</h4><p>This is an unplugged concept lesson: the teacher runs a simulated-AI card routine on the board – no live tool, no logins. Students reason about pre-prepared example outputs on the cards (no personal data), sort the cards as input, process or output, and explain their thinking with the key vocabulary. No demo tool? A sealed envelope of pre-written response cards that a partner draws from lets the plan still be measured against the criterion with no device. The live tools (Teachable Machine and Scratch) are used in the Lab period.</p></div>
+    <div class="call"><h4>Hands-on mission · architect the plan (in pairs)</h4>
+      <ol class="steps">
+        <li>Write your goal in one sentence: what task will your solution complete?</li>
+        <li>Draw three boxes – Input, Process, Output – and write the ordered steps inside them.</li>
+        <li>Under the boxes, list the inputs, the teacher-operated tool and the non-personal data each step needs.</li>
+        <li>Set one measurable performance criterion, stated as a number or a comparison.</li>
+        <li>Add a check step after the output that measures the result against your criterion.</li>
+        <li>Name one risk and draw an arrow from it to the check step that catches it.</li>
+      </ol></div>
+    <div class="ecard" id="audit"></div>
+    <div id="a-wsplan"></div>
+    <div id="a-wsstruct"></div>
+    <div id="a-think"></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 7 Lab</span><h2>Prototype and Pressure-Test</h2><p>You planned your solution and set its bar. Today you run it as a prototype, try to break it on purpose, and make it safer when the output misses your bar.</p></div>
+  <div class="part-body">
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>A plan is only a guess</h2><p>Does the chain really hold together?</p></div>
+  <div class="part-body">
+    <p>Your Core plan looks neat on paper, but paper hides gaps. A <b>prototype</b> is the first time you actually run it: you take one real, non-personal <b>test input</b> and <b>walk it through</b> every step in order until it reaches the output and the check step. Say each step out loud.</p>
+    <p>At the check step, <b>measure</b> the output against your performance criterion. Where the input gets stuck, or a step does not do what you expected, you have found a <b>gap</b> – and finding it now, by hand, is exactly the point. Prototyping turns a guess into something you have seen work.</p>
+    <figure>
+      <svg viewBox="0 0 760 248" role="img" aria-labelledby="f3T">
+        <title id="f3T">A prototype walk-through: one test input is traced through every step in order – input, process, output – to the check step, saying each step aloud. At the check step the output is measured against the criterion: 9 of 10 correct against a bar of 8, so it passes. If the input gets stuck at a step, that is a gap to note.</title>
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#13261B"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <text x="380" y="24" font-size="14" font-weight="800" text-anchor="middle" fill="#15803D">ONE TEST INPUT, WALKED THROUGH BY HAND</text>
+          <g fill="#15803D"><circle cx="89" cy="56" r="14"/><circle cx="282" cy="56" r="14"/><circle cx="475" cy="56" r="14"/><circle cx="669" cy="56" r="14"/></g>
+          <g font-size="14" font-weight="800" text-anchor="middle" fill="#fff"><text x="89" y="61">1</text><text x="282" y="61">2</text><text x="475" y="61">3</text><text x="669" y="61">4</text></g>
+          <g stroke="#13261B" stroke-width="1.6">
+            <rect x="14" y="80" width="150" height="66" rx="10" fill="#fff"/><rect x="207" y="80" width="150" height="66" rx="10" fill="#fff"/><rect x="400" y="80" width="150" height="66" rx="10" fill="#fff"/><rect x="593" y="80" width="153" height="66" rx="10" fill="#13261B"/>
+          </g>
+          <g stroke="#13261B" stroke-width="2.4" fill="none" marker-end="url(#ah3)"><path d="M164 113H203"/><path d="M357 113H396"/><path d="M550 113H589"/></g>
+          <g font-size="16" font-weight="700" text-anchor="middle"><text x="89" y="110">📥 INPUT</text><text x="282" y="110">⚙️ PROCESS</text><text x="475" y="110">📤 OUTPUT</text><text x="669" y="110" fill="#fff">🔎 CHECK</text></g>
+          <g font-size="12" text-anchor="middle" fill="#4F6457"><text x="89" y="131">one clear leaf photo</text><text x="282" y="131">say it aloud</text><text x="475" y="131">label: ‘healthy’</text><text x="669" y="131" fill="#D6F5E0">measure vs the bar</text></g>
+          <rect x="593" y="164" width="153" height="34" rx="17" fill="#E2F5EC" stroke="#0F8A5F" stroke-width="1.6"/>
+          <text x="669" y="186" font-size="13" font-weight="700" text-anchor="middle" fill="#0A5E41">9 of 10 ≥ 8 → pass</text>
+          <path d="M282 146V170" stroke="#C92A4B" stroke-width="2" stroke-dasharray="5 4" fill="none"/>
+          <text x="282" y="188" font-size="13" font-weight="700" text-anchor="middle" fill="#C92A4B">⚠️ stuck here? That is a gap –</text>
+          <text x="282" y="206" font-size="13" font-weight="700" text-anchor="middle" fill="#C92A4B">note it on the prototype log</text>
+          <text x="380" y="238" font-size="12" text-anchor="middle" fill="#4F6457">The walk-through ends at the measured check, not at the output</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> A prototype walk-through: one input traced through every step, in order, to the output and the check step.</figcaption>
+    </figure>
+    <div id="a-lorder"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Try to break it</h2><p>Can your check catch a bad output?</p></div>
+  <div class="part-body">
+    <p>Anyone can pass an easy test. To really trust your solution, <b>pressure-test</b> it: feed it a tricky input designed to fool it – a blurry photo, a strange example – then measure the output at your check step.</p>
+    <p>Did the output still meet your criterion, or did the check catch a result below the bar? Sorting each result honestly is how you find out whether your check step is strong enough or needs tightening. If a poor output slipped through, <b>tighten the check</b>.</p>
+    <figure>
+      <svg viewBox="0 0 760 250" role="img" aria-labelledby="f4T">
+        <title id="f4T">Pressure-testing: a tricky input, such as a blurry photo, is fed in on purpose and runs through the process to an output. The check step asks whether the output reaches at least 8 of 10. If yes, the output is passed on. If no, the fallback path fires: flag it for a human, reroute to a safer step, or return to the input.</title>
+        <defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#13261B"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <g stroke="#13261B" stroke-width="1.6">
+            <rect x="14" y="60" width="130" height="66" rx="10" fill="#FFF7E8" stroke="#E8890C" stroke-width="2.2"/>
+            <rect x="176" y="60" width="124" height="66" rx="10" fill="#fff"/>
+            <rect x="332" y="60" width="120" height="66" rx="10" fill="#fff"/>
+            <path d="M562 30L642 93L562 156L482 93Z" fill="#13261B"/>
+            <rect x="600" y="186" width="146" height="52" rx="10" fill="#E2F5EC" stroke="#0F8A5F"/>
+            <rect x="14" y="170" width="462" height="68" rx="10" fill="#FDE7EC" stroke="#C92A4B"/>
+          </g>
+          <g stroke="#13261B" stroke-width="2.4" fill="none" marker-end="url(#ah4)"><path d="M144 93H172"/><path d="M300 93H328"/><path d="M452 93H478"/></g>
+          <path d="M642 93H700V182" stroke="#0F8A5F" stroke-width="2.4" fill="none" marker-end="url(#ah4)"/>
+          <path d="M562 156V204H480" stroke="#C92A4B" stroke-width="2.4" fill="none" marker-end="url(#ah4)"/>
+          <g font-size="14.5" font-weight="700" text-anchor="middle"><text x="79" y="90" fill="#B45309">🌀 TRICKY</text><text x="238" y="90">⚙️ PROCESS</text><text x="392" y="90">📤 OUTPUT</text></g>
+          <g font-size="12" text-anchor="middle" fill="#4F6457"><text x="79" y="110">a blurry photo</text><text x="238" y="110">same chain</text><text x="392" y="110">confident label</text></g>
+          <g text-anchor="middle" fill="#fff" font-weight="700"><text x="562" y="88" font-size="14">🔎 CHECK</text><text x="562" y="108" font-size="13">≥ 8 of 10?</text></g>
+          <g font-size="13" font-weight="800"><text x="710" y="140" fill="#0F8A5F">yes</text><text x="552" y="194" fill="#C92A4B" text-anchor="end">no</text></g>
+          <text x="673" y="209" font-size="13" font-weight="700" text-anchor="middle" fill="#0A5E41">✅ meets the bar:</text>
+          <text x="673" y="227" font-size="12.5" text-anchor="middle" fill="#0A5E41">pass it on</text>
+          <text x="245" y="196" font-size="14" font-weight="800" text-anchor="middle" fill="#C92A4B">🛟 FALLBACK PATH</text>
+          <text x="245" y="222" font-size="12.5" text-anchor="middle">flag for a human · reroute to a safer step · return to the input</text>
+          <text x="190" y="30" font-size="13" font-weight="700" text-anchor="middle" fill="#B45309">Fed in on purpose to try to break it</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 4.</b> Pressure-testing: a tricky input is fed in on purpose, the check step measures the output against the bar, and a miss triggers the fallback path.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Engineers testing self-driving features or medical tools in the UAE deliberately try to break their systems, and measure the results against strict numbers, before people rely on them. Pressure-testing and fallbacks are how a smart solution earns trust.</p></div>
+    <div id="a-lbin"></div>
+    <div id="a-lcase2"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Part 3 of 3 · Worksheet</span><h2>Fail safely: add a fallback</h2><p>What happens when the output misses?</p></div>
+  <div class="part-body">
+    <p>If a poor output slipped through, first tighten the check. Then build a <b>fallback path</b>: decide exactly what your solution does the moment the output misses the criterion – rerouting to a safer step, flagging it for a human, or returning to the input.</p>
+    <p>A fallback is not giving up; it is how real engineers make a solution fail safely instead of trusting a bad output. A good fallback is <b>defined in advance</b> and always safer than passing the weak result on.</p>
+    <div id="a-lfall"></div>
+    <div id="a-lcase3"></div>
+    <div class="call violet"><h4>Cross-curricular link · Physical Education</h4><p>As in sport, you rehearse your game plan, then deliberately test it against a tough opponent or scenario and prepare a <b>plan B</b> – a fallback – for when it breaks down under pressure.</p></div>
+    <div class="call amber"><h4>Today's tool: plan cards + Scratch storyboard – plan an evaluate-improve project (teacher-operated)</h4><p>1. Lay out the plan cards and fill each one for your signature solution. 2. Write your performance criteria as numbers you can measure. 3. Decide exactly how you will test and score the solution. 4. Name one improvement you expect to make and how you will check it worked. 5. Sketch the solution as Scratch blocks on the storyboard: an input block (ask), the process step (a rule or an ML block, e.g. classify) and an output block (say); the green flag runs it and the red button stops it. The teacher opens Scratch on the board (offline app or scratch.mit.edu) – no account needed, and work saves as a local .sb3 file to reopen next week. <b>Stay safe:</b> planning only – no live tool or data today; teacher-operated on the board; students never log in; non-personal data only (no names, faces or voices). No device? Run the whole prototype on paper: a partner draws pre-written response cards, including one deliberately poor card, so the pressure-test and fallback still work.</p></div>
+    <div class="ecard" id="tmpack"></div>
+    <div id="a-llog"></div>
+    <div id="a-lpress"></div>
+    <div id="a-ltool"></div>
+    <div id="a-lsafe"></div>
+    <div id="a-lexit"></div>
+    <div id="a-lchal"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Plan it, set the bar – then try to break it and fail safely</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>A plan states a clear <b>goal</b> and an ordered <b>input-process-output</b> structure, using a teacher-operated tool and non-personal data.</li>
+      <li>A <b>performance criterion</b> is a measurable bar – a number or a comparison, such as at least 8 of 10 correct.</li>
+      <li>The <b>check step</b> measures the output against the criterion, not just that the tool ran. Name one risk and place a check that catches it, using a trusted source.</li>
+      <li>A <b>prototype</b> is a hand-run walk-through that reveals the gaps the paper plan hid.</li>
+      <li><b>Pressure-testing</b> feeds a tricky input on purpose; an output measured below the bar is a signal to tighten the check.</li>
+      <li>A <b>fallback path</b> is a defined, safer action for when the output misses the criterion. Next week (Week 8) you build the solution for real, run it on test inputs, and improve it with evidence.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 8 · Main Course · Term 1 Week 7 (16 – 20 Nov 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- scope & sequence concepts (Grade 8, Week 7: Plan the signature solution – all four strands) ---------- */
+const CU_E="CU · how AI processes inputs and generates outputs";
+const CU_P="CU · how factors (data, inputs, design) affect performance";
+const SD_E="SD · develops AI-powered solutions for specific tasks";
+const SD_P="SD · structured workflows of multiple steps";
+const SD_A="SD · designs and refines solutions considering how components interact";
+const CE_E="CE · limitations in outputs – verify";
+const CE_P="CE · evaluates using criteria: accuracy, bias, reliability";
+const CE_A="CE · refines systematically and justifies improvements with evidence";
+const GE_E="GE · ethical concerns in AI use";
+const GE_A="GE · proposes mitigations and explains their impact";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["goal","The one task your solution is built to complete."],
+  ["structure","The ordered steps of your workflow: input, process, output."],
+  ["performance criterion","A measurable bar for a good output, such as at least 8 of 10 correct."],
+  ["check step","A step that measures the output against your criterion, not just that the tool ran."],
+  ["risk","Something that could go wrong, such as a confident but wrong answer."]
+];
+const DEF_ORDER = [2,4,0,3,1];
+const PLAN = ["🎯 Write one clear goal – the single task the solution must finish","🗂️ Order the input-process-output steps of the workflow","📥 List the inputs, the teacher-operated tool and the non-personal data each step needs","📊 Set a measurable performance criterion for a good output","🔎 Add a check step that measures the output against the criterion"];
+const PLAN_ORDER = [3,0,4,2,1];
+const CASE1 = ["Trust the tool because it already produces some output.","Keep building it exactly as it is and hope the outputs are good.","Set a measurable criterion for the output before building.","Delete the goal and simply add more steps to the process."];
+const MATCH = [["mt1","📊 Performance criterion",2],["mt2","🔎 Check step",3],["mt3","🎯 Goal",0],["mt4","🗂️ Structure",1]];
+const MATCH_OPTS = ["🏁 the one task to finish","🧱 the ordered input-process-output steps","📏 a measurable bar for a good output","⚖️ measures the output against the bar"];
+const CASE2 = ["The input, which this kind of solution never really needs.","The goal, which has not actually been written down yet.","Nothing, since a plan with a goal and a criterion is complete now.","A check step that measures the output against the criterion."];
+const TRUTHS = [
+  ["t1","🏁 If the tool produced any output at all, the task is finished.",0],
+  ["t2","📏 A performance criterion states a number or a comparison you can measure.",1],
+  ["t3","💬 ‘It works well’ is a measurable performance criterion.",0],
+  ["t4","🔎 A check step measures the output against your criterion, not just that the tool ran.",1],
+  ["t5","🪄 The check step only needs to confirm the tool ran.",0],
+  ["t6","🚩 A confident output can still be wrong, so you never trust it on sight.",1]
+];
+const CASE3 = ["Before any input arrives, deciding the answer in advance.","Right after the output, measured against the criterion.","Only inside the process, where no one can ever see it.","Nowhere, since a confident output is always correct enough."];
+const GOALS = ["Make it work well.","Label each photo of a school-garden leaf as ‘healthy’ or ‘dry’.","Use AI on the school garden somehow.","Build something impressive with Teachable Machine."];
+const CRITS = ["It works well most of the time.","At least 8 of 10 test leaf photos are labelled correctly, checked against the answer key.","The labels look confident.","The tool runs without crashing."];
+const RISKS = ["A confident but wrong label on a blurry or shadowy leaf photo","The tool ran, so nothing can go wrong","The goal sentence is too short","The label appears in a different font"];
+const REDUCE = ["It counts the correct labels against the trusted answer key, so a confident but wrong label is caught and the score shows whether it clears the bar","It confirms the tool ran, so the output must be fine","It deletes any label that sounds unsure, without counting anything","It trusts every label above 90% confidence without checking"];
+const STRUCT_ROWS = [["Input","si1","sn1"],["Process","si2","sn2"],["Output","si3","sn3"],["Check step","si4","sn4"]];
+const HAPPENS = ["One photo of a garden leaf is taken and loaded","The model compares the photo with patterns it learned and picks a label","The label ‘healthy’ or ‘dry’ is shown with its confidence","10 labels are compared with the answer key and the correct ones are counted"];
+const NEEDS = ["Leaf photos only – non-personal data (no faces, voices or names)","The teacher-operated tool, trained on labelled leaf photos","A record sheet to write each label down","A trusted answer key and the bar: at least 8 of 10"];
+const THINK = ["Pass it on anyway – the tool did produce an output","Lower the bar until the output passes","Take a fallback path – flag it for a person, reroute to a safer step or ask for a clearer input – and log the miss","Remove the check step so it stops failing"];
+const EXIT = ["My leaf checker works well and uses AI, so I will see if it runs.","My leaf checker labels garden-leaf photos; it is good if the labels sound sure, and my check step confirms the tool ran.","My leaf checker labels garden-leaf photos as ‘healthy’ or ‘dry’; it is good enough if at least 8 of 10 test labels are correct, and my check step counts them against the answer key.","At least 8 of 10 is my criterion, and my check step counts the labels."];
+const CHAL = [
+  ["ch1","🛑 Stop the weak label from being passed on as an answer",1],
+  ["ch2","🔠 Show the label anyway, in a bigger font",0],
+  ["ch3","🙋 Flag the photo for a person to check",1],
+  ["ch4","📉 Lower the bar to 5 of 10 so more outputs pass",0],
+  ["ch5","🔁 Ask for a clearer photo and run it again",1],
+  ["ch6","🗑️ Switch off the check step so it stops failing",0]
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["prototype","A first working version you walk through by hand to see if it holds together."],
+  ["walk-through","Tracing one input through every step, in order, to the output and the check step."],
+  ["pressure-test","Feeding a hard or tricky input on purpose to see if your check catches an output that misses the criterion."],
+  ["fallback path","What your solution does when the output misses the criterion, instead of trusting it."],
+  ["test input","The example, non-personal input you use to try your workflow."]
+];
+const LDEF_ORDER = [3,0,4,1,2];
+const LSTEPS = ["📥 Choose one normal, non-personal test input","🗣️ Walk it through every step in order, saying each step aloud","📤 Follow it until it reaches the output","📊 At the check step, measure the output against your criterion","🧷 Mark the walk-through as passed, or note where it got stuck"];
+const LSTEP_ORDER = [4,1,3,0,2];
+const LCASE1 = ["Yes, the output looked confident enough to count as done.","No, but they should skip the check step just to save time.","Yes, reaching an output means nothing is left to measure.","No – they must measure the output against the criterion."];
+const LBIN = [
+  ["lb1","📈 8 of 10 correct and matched your trusted source","A"],
+  ["lb2","📷 3 of 10 correct on the blurry photo","C"],
+  ["lb3","🟩 9 of 10 correct on the normal input","A"],
+  ["lb4","🌀 4 of 10 correct on the strange example","C"],
+  ["lb5","❔ 8 of 10, yet the source you trust disagreed once","B"],
+  ["lb6","🟨 8 of 10, but two labels were close guesses","B"],
+  ["lb7","🎯 10 of 10 correct on a clear example","A"]
+];
+const LCASE2 = ["Nothing at all, since tricky inputs never really matter.","The output missed the bar, so tighten the check and log it.","The check step is broken and should simply be removed.","The label sounded so sure that the low score can be ignored."];
+const LFALL = [
+  ["lf1","🔁 Return to the input and try a clearer one","Y"],
+  ["lf2","🗑️ Delete the check step so nothing can fail","N"],
+  ["lf3","🙋 Flag the output for a human to review","Y"],
+  ["lf4","🧭 Reroute to a safer, simpler step","Y"],
+  ["lf5","📣 Announce the answer more loudly to sound confident","N"],
+  ["lf6","🤞 Pass the weak output on and hope no one notices","N"]
+];
+const LCASE3 = ["Ignore it, since odd inputs simply never happen at all.","Send the failing output to the user anyway, as some answer.","Turn off the check step so that it can no longer fail.","Flag it for a human and ask them to check the input."];
+const LOG = [
+  ["pl1","📥 Input · one clear photo of a mint leaf, loaded from the class set","P"],
+  ["pl2","⚙️ Process · the plan never said which card envelope matches which photo, so the pair got stuck for two minutes","F"],
+  ["pl3","📤 Output · the label ‘healthy’ was said aloud and written down","P"],
+  ["pl4","🔎 Check step · 9 of 10 normal photos correct against the answer key (bar: 8 of 10)","P"]
+];
+const GAP = ["The output step – the label was said aloud","The process step – the plan did not say how a photo is matched to a response card","The check step – 9 of 10 is below the bar","There was no gap – every step passed"];
+const PMET = ["Yes – the labels sounded confident","Yes – an output was produced for every photo","No – 5 of 10 is below the bar of 8 of 10","It cannot be judged without more confident labels"];
+const PTIGHT = ["Only test clear photos from now on, so the score goes up","Add blurry and shadowy photos to the test set, so the check measures them on every run","Stop counting and trust any label above 90% confidence","Remove the answer key so nothing can disagree"];
+const PFALL = ["Pass the label on – most labels are right","Delete the blurry photos from the test set","If the score is below 8 of 10 or a photo is blurry, do not pass the label on: flag it for a person and ask for a clearer photo","Say the label more loudly so it sounds sure"];
+const CARDS = [["pc1","🎯 Goal"],["pc2","📏 Performance criteria"],["pc3","🧪 How we test and score"],["pc4","🔧 Expected improvement + how we check it"],["pc5","🧩 Scratch storyboard"]];
+const DECIDE = ["Label garden-leaf photos as ‘healthy’ or ‘dry’","At least 8 of 10 test photos correct, and no blurry photo passed on unflagged","Run 10 normal and 10 tricky non-personal photos; count the correct labels against the answer key","Add clearer shadow photos to the examples, then re-run the same 20 tests and compare the scores","ask for a photo → classify → say the label → if the score is below 8, say ‘flag for a person’"];
+const LSAFE = [
+  ["sf1","Planning only – no live tool or data today",1],
+  ["sf2","The teacher operates Scratch on the board; students never log in",1],
+  ["sf3","Use photos of classmates' faces as the tricky inputs",0],
+  ["sf4","Use non-personal test inputs, such as leaf or object photos",1],
+  ["sf5","Create a Scratch account for each student",0],
+  ["sf6","Record students' voices reading out the labels",0]
+];
+const LEXIT = ["The prototype worked, so no fallback is needed.","The labels sounded confident, so we removed the check step.","Our walk-through showed blurry photos got confident but wrong labels, so we added a fallback: below 8 of 10, the photo is flagged for a person to review.","We found a gap, so we will pass weak outputs on and fix them later."];
+const CH_FB = ["Flag the label for a person and do not pass it on","Ask for a new, clearer photo before the process runs","Pass the output on anyway","No fallback – stop the whole lesson"];
+const CH_TRIG = ["The check after the output (score below 8 of 10)","An input check before the process (is there a usable photo?)","No check – wait for a user to complain"];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+SD_P,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"The goal is the one task to complete; the structure is the ordered input-process-output steps; a performance criterion is a measurable bar; a check step measures the output against it; a risk is something that could go wrong, such as a confident but wrong answer."},
+ {id:"order",mount:"a-order",section:"Core · Part 1",title:"Plan the solution in order",sub:"Objective 1 · "+SD_P,ico:"🧭",
+  fields:PLAN.map((_,i)=>({k:"o"+i,ok:v=>eq(v,i)})),
+  explain:"A good architect writes one clear goal first, orders the input-process-output steps, lists what each step needs, sets a measurable performance criterion, and finally adds a check step that measures the output against that criterion."},
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"Case 1 · The Fuzzy Goal",sub:"AI Evaluators · "+CE_P,ico:"🕵️",
+  fields:[{k:"c1",radio:1,ok:v=>eq(v,2)}],
+  explain:"Set a measurable criterion before building – a measurable bar is what lets them evaluate and improve on purpose. Hoping is not measuring, more steps do not help, and an output that exists is not the same as an output that is good enough."},
+ {id:"match",mount:"a-match",section:"Core · Part 2",title:"Match the part to its job",sub:"Objective 2 · "+SD_A,ico:"🧷",
+  fields:MATCH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Goal = the one task to finish. Structure = the ordered input-process-output steps. Performance criterion = a measurable bar for a good output. Check step = measures the output against the bar."},
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"Case 2 · The Missing Check",sub:"AI Evaluators · "+SD_A,ico:"🔬",
+  fields:[{k:"c2",radio:1,ok:v=>eq(v,3)}],
+  explain:"The check step is missing – a bar with no check step is never actually measured. The goal is already there, inputs are always needed, and a criterion only helps if a check step measures the output against it."},
+ {id:"truths",mount:"a-truths",section:"Core · Part 3",title:"Which statements are true?",sub:"Objective 3 · "+CE_E,ico:"🧩",
+  fields:TRUTHS.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"True: a criterion states a number or comparison you can measure; a check step measures the output against the criterion; a confident output can still be wrong. ‘It works well’ cannot be measured, and an output that merely exists – or a tool that merely ran – does not finish the task."},
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"Case 3 · The Confident Label",sub:"AI Evaluators · "+CE_E,ico:"⚖️",
+  fields:[{k:"c3",radio:1,ok:v=>eq(v,1)}],
+  explain:"Right after the output, measured against the criterion – that is exactly where a check catches a confident but wrong label. You cannot measure an output that does not exist yet, the check should sit in the open, and confidence is not correctness."},
+ {id:"wsplan",mount:"a-wsplan",section:"Core worksheet",title:"My signature solution: goal, criterion, risk and check",sub:"Worksheet · "+CE_P,ico:"📝",cls:"ws",
+  fields:[{k:"wg",ok:v=>eq(v,1)},{k:"wc",ok:v=>eq(v,1)},{k:"wr",ok:v=>eq(v,0)},{k:"wk",ok:v=>eq(v,0)}],
+  explain:"A clear goal names one task (label each leaf photo as ‘healthy’ or ‘dry’). A performance criterion must be measurable (at least 8 of 10 correct against the answer key). The real risk is a confident but wrong label, and the check reduces it by counting correct labels against a trusted source – not by confirming the tool ran."},
+ {id:"wsstruct",mount:"a-wsstruct",section:"Core worksheet",title:"My workflow structure",sub:"Worksheet · "+CU_E,ico:"🗂️",cls:"ws",
+  fields:STRUCT_ROWS.flatMap(([,a,b],i)=>[{k:a,ok:v=>eq(v,i)},{k:b,ok:v=>eq(v,i)}]),
+  explain:"Input: a leaf photo goes in (non-personal data only). Process: the teacher-operated tool compares it with learned patterns and picks a label. Output: the label and its confidence. Check step: compare 10 labels with the trusted answer key and count them against the bar of 8 of 10."},
+ {id:"think",mount:"a-think",section:"Core worksheet",title:"Think about it",sub:"Reflect · "+CE_A,ico:"💭",
+  fields:[{k:"th",radio:1,ok:v=>eq(v,2)}],
+  explain:"When the check shows a miss, the solution should not trust the output: it takes a fallback path – flag it, reroute to a safer step, or try a clearer input – and the miss is logged so the plan can be improved. Lowering the bar or removing the check only hides the problem."},
+ {id:"exit",mount:"a-exit",section:"Core exit ticket",title:"Exit ticket",sub:"Link goal, criterion and check · "+CE_P,ico:"🎫",
+  fields:[{k:"ex",radio:1,ok:v=>eq(v,2)}],
+  explain:"Only C links all three: a clear goal (label leaf photos), a measurable criterion (at least 8 of 10 correct) and a check step that measures the output against it. The others leave out the goal, use an unmeasurable bar, or only check that the tool ran."},
+ {id:"chal",mount:"a-chal",section:"Core challenge",title:"Challenge ⭐ Design a fallback path",sub:"Stretch · "+GE_A,ico:"⭐",
+  fields:CHAL.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"A good fallback stops the weak output, sends it to a person, or reroutes to a safer step such as asking for a clearer photo. Showing it anyway, lowering the bar or switching off the check would let a wrong output through."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+SD_P,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"Prototype = a first working version you walk through by hand. Walk-through = tracing one input through every step to the check. Pressure-test = a tricky input on purpose. Fallback path = what happens when the output misses. Test input = the non-personal example you try."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 1",title:"Run the walk-through in order",sub:"Objective 1 · "+CU_E,ico:"🪜",
+  fields:LSTEPS.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"Choose one normal, non-personal input; walk it through every step aloud; follow it to the output; measure the output at the check step; then mark it as passed or note where it got stuck."},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"Case 1 · The Skipped Measure",sub:"AI Evaluators · "+CE_P,ico:"🕵️",
+  fields:[{k:"lc1",radio:1,ok:v=>eq(v,3)}],
+  explain:"No – reaching the output is only halfway; the walk-through ends at the measured check. Skipping the check is exactly what hides gaps, and a confident-looking output is not a measured one."},
+ {id:"lbin",mount:"a-lbin",section:"Lab · Part 2",title:"Measure each output at the check",sub:"Objective 2 · "+CE_P,ico:"🩺",
+  fields:LBIN.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"The bar is at least 8 of 10. 8, 9 or 10 correct that agree with your trusted source meet the bar. 8 of 10 with close guesses, or with a source that disagreed, is borderline – recheck. 3 or 4 of 10 on blurry or strange inputs is below the bar."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"Case 2 · The Slipped Result",sub:"AI Evaluators · "+CE_A,ico:"🔬",
+  fields:[{k:"lc2",radio:1,ok:v=>eq(v,1)}],
+  explain:"The output missed the bar, so tighten the check and log it – a result below the criterion shows exactly what to strengthen. The check did its job by catching it, tricky inputs matter most, and a confident label is not a measured score."},
+ {id:"lfall",mount:"a-lfall",section:"Lab · Part 3",title:"Is it a good fallback?",sub:"Objective 3 · "+SD_A,ico:"🛟",
+  fields:LFALL.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Good fallbacks: return to the input and try a clearer one, flag the output for a human, or reroute to a safer step. Deleting the check, sounding more confident or passing a weak output on are not fallbacks – they hide the problem."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"Case 3 · The No-Match Input",sub:"AI Evaluators · "+GE_A,ico:"⚖️",
+  fields:[{k:"lc3",radio:1,ok:v=>eq(v,3)}],
+  explain:"Flag it for a human and ask them to check the input – a defined, safer action beats passing on a result you cannot trust. Odd inputs do happen, removing the check hides the problem, and always giving an answer is how a weak output does harm."},
+ {id:"llog",mount:"a-llog",section:"Lab worksheet",title:"Prototype log",sub:"Worksheet · walk-through · "+SD_A,ico:"📓",cls:"ws",
+  fields:[...LOG.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"pgap",ok:v=>eq(v,1)}],
+  explain:"Input, output and check passed – 9 of 10 clears the bar of 8. The process step failed: the plan never said how a photo is matched to a response card, so the pair got stuck. That is the gap the prototype revealed, found by hand before building."},
+ {id:"lpress",mount:"a-lpress",section:"Lab worksheet",title:"Pressure-test and fallback path",sub:"Worksheet · "+CE_A,ico:"🌀",cls:"ws",
+  fields:[{k:"pm",ok:v=>eq(v,2)},{k:"pt",ok:v=>eq(v,1)},{k:"pf",ok:v=>eq(v,2)}],
+  explain:"5 of 10 is below the bar, however confident the labels sounded. Tighten the check by adding blurry and shadowy photos to the test set so they are measured every run, and define the fallback in advance: below the bar, or a blurry photo, means flag it for a person and ask for a clearer photo."},
+ {id:"ltool",mount:"a-ltool",section:"Lab worksheet",title:"Plan cards + Scratch storyboard",sub:"Worksheet · tool log · "+SD_E,ico:"🧩",cls:"ws",
+  fields:CARDS.map(([k],i)=>({k,ok:v=>eq(v,i)})),
+  explain:"Goal: label leaf photos. Criteria as numbers: at least 8 of 10, and no blurry photo passed on unflagged. Test and score: 10 normal and 10 tricky photos against the answer key. Improvement: clearer shadow examples, then re-run the same tests and compare. Storyboard: ask → classify → say, with a fallback when the score is low."},
+ {id:"lsafe",mount:"a-lsafe",section:"Lab worksheet",title:"Safety check",sub:"Safety check · "+GE_E,ico:"🛡️",
+  fields:LSAFE.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Today is planning only, the teacher operates Scratch and students never log in, and test inputs are non-personal (leaves, objects). Faces, voices and student accounts are personal data – never use them."},
+ {id:"lexit",mount:"a-lexit",section:"Lab exit ticket",title:"Lab exit ticket",sub:"One gap and its fallback · "+CE_A,ico:"🎟️",
+  fields:[{k:"le",radio:1,ok:v=>eq(v,2)}],
+  explain:"A strong exit ticket names a real gap the prototype revealed (blurry photos got confident but wrong labels) and a defined, safer fallback for it (below 8 of 10, flag it for a person). ‘It worked’, removing the check or passing weak outputs on are not fallbacks."},
+ {id:"lchal",mount:"a-lchal",section:"Lab challenge",title:"Challenge ⭐ Two fallback paths",sub:"Stretch · "+GE_A,ico:"⭐",
+  fields:[{k:"cf1",ok:v=>eq(v,0)},{k:"ct1",ok:v=>eq(v,0)},{k:"cf2",ok:v=>eq(v,1)},{k:"ct2",ok:v=>eq(v,1)}],
+  explain:"An output below the criterion is caught by the check after the output, and the fallback flags it for a person instead of passing it on. A missing or unusable input is caught by an input check before the process, and the fallback asks for a new, clearer photo."}
+];
+
+/* ---------- state ---------- */
+const KEY="g8-mw7-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#audit").innerHTML=`<header><small>Worked example · a pair's planning notes · illustrative</small><b>Signature solution: the school-garden leaf checker</b></header>
+<div class="in">
+  <p class="task"><b>The idea:</b> the class looks after a school garden. A pair wants a small AI workflow that tells them which plants need water by looking at photos of leaves – leaves only, never people.</p>
+  <table class="t"><thead><tr><th>Their rough notes</th><th>Still to decide</th></tr></thead>
+  <tbody><tr><td>🎯 “Make it work well.”</td><td>A goal that names one task</td></tr>
+  <tr><td>⚙️ Teacher-operated Teachable Machine, trained on labelled leaf photos (‘healthy’, ‘dry’)</td><td>The order of the steps and what each one needs</td></tr>
+  <tr><td>📏 “It should be good.”</td><td>A bar they can measure, checked against the class answer key</td></tr>
+  <tr><td>🚩 Some photos are blurry or in shadow</td><td>The risk – and the check step that catches it</td></tr></tbody></table>
+</div>`;
+$("#tmpack").innerHTML=`<header><small>Prototype log · illustrative paper prototype with simulated-AI cards</small><b>Leaf checker: walk-through and pressure-test</b></header>
+<div class="in">
+  <p class="task"><b>Set-up:</b> the pair's Core plan, a partner drawing pre-written response cards as the ‘process’, and the class answer key. Bar: at least 8 of 10 correct. Leaf photos only – no personal data.</p>
+  <table class="t"><thead><tr><th>Step</th><th>What happened (normal input)</th></tr></thead>
+  <tbody><tr><td>📥 Input</td><td>One clear photo of a mint leaf, loaded from the class set</td></tr>
+  <tr><td>⚙️ Process</td><td>The plan never said which card envelope matches which photo, so the pair got stuck for two minutes</td></tr>
+  <tr><td>📤 Output</td><td>The label ‘healthy’ was said aloud and written down</td></tr>
+  <tr><td>🔎 Check step</td><td>9 of 10 normal photos correct against the answer key</td></tr></tbody></table>
+  <p class="note"><b>Pressure-test:</b> 10 blurry photos taken in shadow. Every card came back with a confident label, but the check counted only <b>5 of 10</b> correct.</p>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "order":
+    return `<p class="how">Put the planning moves in the order a good architect works through them, from first to last.</p>`+
+      PLAN.map((_,i)=>`<div class="pair" data-item="o${i}"><span class="t">Step ${i+1}</span>${sel("o"+i,PLAN,"Choose the step…",PLAN_ORDER)}</div>`).join("");
+  case "case1":
+    return `<div class="quote">A design team writes their goal as ‘make it work well’ and starts building straight away. Evaluator, what should they fix before they build anything else?</div><div class="clues"><div class="clue">🎯<span>FUZZY GOAL</span></div><div class="clue">🗂️<span>NO ORDER</span></div><div class="clue">🏁<span>BUILDS ANYWAY</span></div></div><p class="q" id="q-c1">What should the team fix first?</p>${radios("c1",CASE1)}`;
+  case "match":
+    return `<p class="how">Match each part of the plan to the job it does.</p>`+
+      MATCH.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,MATCH_OPTS,"Choose its job…",[2,0,3,1])}</div>`).join("");
+  case "case2":
+    return `<div class="quote">One plan lists a clear goal, ordered steps and a criterion of 8 correct labels out of 10 – but nothing measures the output. Evaluator, which job is missing?</div><div class="clues"><div class="clue">🎯<span>GOAL SET</span></div><div class="clue">📊<span>BAR SET</span></div><div class="clue">🔎<span>NO CHECK</span></div></div><p class="q" id="q-c2">Which job is missing from the plan?</p>${radios("c2",CASE2)}`;
+  case "truths":
+    return boxes(TRUTHS,"Tick the THREE true statements about criteria and check steps. Leave the others unticked.");
+  case "case3":
+    return `<div class="quote">A team names one risk in their plan: a confident but wrong label. Evaluator, where should a check step sit to catch that risk?</div><div class="clues"><div class="clue">📤<span>OUTPUT</span></div><div class="clue">🔎<span>CHECK</span></div><div class="clue">⚖️<span>JUDGE</span></div></div><p class="q" id="q-c3">Where does the check step belong?</p>${radios("c3",CASE3)}`;
+  case "wsplan":
+    return `<p class="how">Turn the pair's rough notes (above) into a strong plan. Choose the best entry for each line.</p>
+      <div class="pair" data-item="wg"><span class="t">🎯 Goal in one sentence</span>${sel("wg",GOALS,"Choose a goal…",[0,2,1,3])}</div>
+      <div class="pair" data-item="wc"><span class="t">📏 One measurable performance criterion</span>${sel("wc",CRITS,"Choose a criterion…",[2,0,3,1])}</div>
+      <div class="pair" data-item="wr"><span class="t">🚩 One risk in the plan</span>${sel("wr",RISKS,"Choose a risk…",[1,3,0,2])}</div>
+      <div class="pair" data-item="wk"><span class="t">🔎 How the check step measures the output and reduces the risk</span>${sel("wk",REDUCE,"Choose…",[3,1,0,2])}</div>`;
+  case "wsstruct":
+    return `<p class="how">Complete the structure table for the leaf checker: what happens at each step, and what it needs. Non-personal data only.</p>`+
+      STRUCT_ROWS.map(([s,a,b],i)=>`<div class="scen"><p>Step ${i+1} · ${s}</p><div class="two">
+        <div data-item="${a}"><span>What happens</span>${sel(a,HAPPENS,"Choose…",[[2,0,3,1],[3,2,1,0],[1,3,0,2],[0,2,1,3]][i])}</div>
+        <div data-item="${b}"><span>What it needs (input / tool / data)</span>${sel(b,NEEDS,"Choose…",[[3,1,0,2],[0,2,3,1],[0,1,3,2],[1,3,2,0]][i])}</div></div></div>`).join("");
+  case "think":
+    return `<p class="q" id="q-th">If your check step showed the output missed your criterion, what should your solution do next instead of trusting it?</p>${radios("th",THINK)}`;
+  case "exit":
+    return `<p class="q" id="q-ex">Which ONE sentence links a goal, a performance criterion and a check step – what the solution is for, and how you will measure whether its output is good?</p>${radios("ex",EXIT)}`;
+  case "chal":
+    return boxes(CHAL,"Stretch: when the leaf checker's check step shows an output misses the criterion, what should its fallback path do? Tick the THREE safer moves. Leave the others unticked.");
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lorder":
+    return `<p class="how">Put the walk-through moves in the order you run them by hand.</p>`+
+      LSTEPS.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">Step ${i+1}</span>${sel("lo"+i,LSTEPS,"Choose the step…",LSTEP_ORDER)}</div>`).join("");
+  case "lcase1":
+    return `<div class="quote">A pair traces their input all the way to the output, then stops and says ‘done’. Evaluator, have they really finished the walk-through?</div><div class="clues"><div class="clue">📥<span>INPUT IN</span></div><div class="clue">📤<span>OUTPUT OUT</span></div><div class="clue">🔎<span>STOPPED SHORT</span></div></div><p class="q" id="q-lc1">Have they finished the walk-through?</p>${radios("lc1",LCASE1)}`;
+  case "lbin":
+    return `<p class="how">The bar is at least 8 of 10 correct. Sort each measured output into the right bin.</p>`+
+      LBIN.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["✅ Meets","❓ Recheck","⛔ Below"],["A","B","C"],t)}</div>`).join("");
+  case "lcase2":
+    return `<div class="quote">A tricky input runs through and returns a confident label, but the check step scored it 5 of 10 against a bar of 8. Evaluator, what does this tell the team?</div><div class="clues"><div class="clue">🌀<span>TRICKY INPUT</span></div><div class="clue">📤<span>CONFIDENT LABEL</span></div><div class="clue">📉<span>5 OF 10</span></div></div><p class="q" id="q-lc2">What should the team conclude?</p>${radios("lc2",LCASE2)}`;
+  case "lfall":
+    return `<p class="how">Sort each action: is it a good fallback for when the output misses the bar?</p>`+
+      LFALL.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🛟 Good fallback","🚫 Not a fallback"],["Y","N"],t)}</div>`).join("");
+  case "lcase3":
+    return `<div class="quote">A team feeds in an input their solution was never built for, and the output misses the bar. Evaluator, which fallback should fire?</div><div class="clues"><div class="clue">❔<span>NO-MATCH INPUT</span></div><div class="clue">📉<span>MISSES BAR</span></div><div class="clue">🛟<span>FALLBACK</span></div></div><p class="q" id="q-lc3">Which fallback should the solution take?</p>${radios("lc3",LCASE3)}`;
+  case "llog":
+    return `<p class="how">Use the prototype log above. Mark each step of the normal walk-through as a pass or a fail, then name the gap.</p>`+
+      LOG.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["✅ Pass","❌ Fail"],["P","F"],t)}</div>`).join("")+
+      `<div class="pair" data-item="pgap" style="margin-top:10px"><span class="t">Where is the gap the prototype revealed?</span>${sel("pgap",GAP,"Choose…",[0,3,1,2])}</div>`;
+  case "lpress":
+    return `<p class="how">Use the pressure-test line in the log above: 10 blurry photos in shadow, confident labels, 5 of 10 correct.</p>
+      <div class="pair" data-item="pm"><span class="t">Did the tricky input meet the criterion?</span>${sel("pm",PMET,"Choose…",[1,3,2,0])}</div>
+      <div class="pair" data-item="pt"><span class="t">How would you tighten the check?</span>${sel("pt",PTIGHT,"Choose…",[2,0,3,1])}</div>
+      <div class="pair" data-item="pf"><span class="t">Fallback path: what does the solution do when the output misses the criterion?</span>${sel("pf",PFALL,"Choose…",[1,0,3,2])}</div>`;
+  case "ltool":
+    return `<p class="how">Plan summary: lay out the plan cards for the leaf checker and choose the decision that belongs on each card.</p>`+
+      CARDS.map(([k,t],i)=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,DECIDE,"Choose the decision…",[3,0,4,2,1])}</div>`).join("");
+  case "lsafe":
+    return boxes(LSAFE,"Safety check: tick every rule that keeps today's planning safe. Leave the others unticked.");
+  case "lexit":
+    return `<p class="q" id="q-le">Which sentence describes one gap a prototype revealed AND the fallback path added to handle it?</p>${radios("le",LEXIT)}`;
+  case "lchal":
+    return `<p class="how">Stretch: design two fallback paths for two different failures, and say which check step triggers each.</p>
+      <div class="scen"><p>Failure 1 · the output is below the criterion</p><div class="two">
+        <div data-item="cf1"><span>Fallback path</span>${sel("cf1",CH_FB,"Choose…",[2,1,0,3])}</div>
+        <div data-item="ct1"><span>Triggered by</span>${sel("ct1",CH_TRIG,"Choose…",[1,2,0])}</div></div></div>
+      <div class="scen"><p>Failure 2 · the input is missing or unusable (no photo, or a black image)</p><div class="two">
+        <div data-item="cf2"><span>Fallback path</span>${sel("cf2",CH_FB,"Choose…",[0,3,2,1])}</div>
+        <div data-item="ct2"><span>Triggered by</span>${sel("ct2",CH_TRIG,"Choose…",[2,0,1])}</div></div></div>`;
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 8 Main Course · Term 1 Week 7 (16 – 20 Nov 2026) · Core + Lab · Architect the Plan + Prototype and Pressure-Test</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
