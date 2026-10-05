@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>One Model, Four Strands + Run It End to End – Grade 8 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#15803D; --main2:#22C55E; --deep:#14532D;
+  --ink:#13261B; --muted:#4F6457; --paper:#F4FAF6; --card:#FFFFFF;
+  --line:#D6EBDD; --soft:#EAF6EE;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#86EFAC,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#3CCB7F);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#13261B,#2E5E40)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#C8EDD4 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#F8FDF9;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FBFEFC}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#3CCB7F)}
+.act-head.ws{background:linear-gradient(120deg,#13261B,#2F6B47)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#ECF8F0}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #B7DCC3;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #9FD9B4;border-radius:12px;padding:10px 14px;background:#F7FCF9;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(19,38,27,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#13261B;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 8 Main Course, Term 1</span><span class="pill">Week 6 Core + Week 6 Lab</span><span class="pill">📅 Teach: week of 9 – 13 Nov 2026</span></div>
+    <h1>One Model, Four Strands + Run It End to End</h1>
+    <p>Today you bring together everything from this term – understanding, building, evaluating and using AI responsibly – to test one classifier against a clear target, then make one change to improve it. Then, in the Lab, you run the whole evaluate-and-improve workflow from start to finish, log every score, add one new rule and re-test to see how your model copes.</p>
+    <p class="meta"><b>Strands:</b> all four – Understanding, Solution Design, Critical Evaluation, Ethics &amp; Governance &nbsp;·&nbsp; <b>Role:</b> AI Evaluators</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 8B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 6 of Term 1 – Monday 9 to Friday 13 November 2026.</b> Core lesson first, then the Lab period.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: One Model, Four Strands</a>, then move on to the <a href="#lab">Lab: Run It End to End</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Use all four strands.</b> I can complete a guided task that uses all four strands to test and improve a model.</li>
+      <li><b>Connect the workflow.</b> I can explain how the parts of my workflow connect to make a result and check it against a target.</li>
+      <li><b>Choose responsibly.</b> I can name one responsible choice I made while doing the task.</li>
+      <li><b>Lab: run it end to end.</b> I can run the whole evaluate-and-improve workflow, log every score, say how reliably the model met the target and where it went wrong, then add a new rule or risk and re-test it responsibly.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 6 Core · One Model, Four Strands</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Four skills, one model</b><small>The strands click together</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>A score you can trust</b><small>Test set, then compare to target</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Find and fix</b><small>Aim one change, stay responsible · worksheet</small></a></li>
+    </ol>
+    <h3 class="rh">Week 6 Lab · Run It End to End</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>One card to a full test</b><small>Run every card, log every score</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Evidence, not a feeling</b><small>The log turns it into proof</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Add a constraint</b><small>Adapt the model, then re-test · tool log</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Four skills, one model</h2><p>How do the strands fit together?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>Last week you audited risks. Now combine understanding, building, evaluating and ethics on one task.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">Nothing new, all at once</h3>
+    <p>Until now you have practised four skills in separate lessons: <b>understanding</b> how a classifier works, <b>building</b> the steps, <b>evaluating</b> an output, and <b>using AI responsibly</b>. Today they click together on a single model. You set a target, run a test set whose answers you already know, score how many the model got right, and compare that score with the target.</p>
+    <p>Nothing here is brand new – you are using all four skills at once, which is exactly how real AI solutions are judged and improved. Joining several skills into one working task is called <b>integration</b>.</p>
+    <figure>
+      <svg viewBox="0 0 640 318" role="img" aria-labelledby="f1T">
+        <title id="f1T">Four strands act on one task. Understand: know how the classifier works. Build: set up the steps and run the test set. Evaluate: score the output against a target. Use responsibly: fruit photos only, no faces. All four point at one date classifier in the middle.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <g stroke="#15803D" stroke-width="2.4" stroke-dasharray="6 5" fill="none"><path d="M236 70L262 128"/><path d="M404 70L378 128"/><path d="M236 248L262 190"/><path d="M404 248L378 190"/></g>
+          <g stroke="#13261B" stroke-width="1.6" fill="#fff">
+            <rect x="12" y="20" width="224" height="92" rx="12"/>
+            <rect x="404" y="20" width="224" height="92" rx="12"/>
+            <rect x="12" y="206" width="224" height="92" rx="12"/>
+            <rect x="404" y="206" width="224" height="92" rx="12"/>
+          </g>
+          <rect x="246" y="124" width="148" height="70" rx="14" fill="#15803D"/>
+          <g font-size="18" font-weight="700"><text x="28" y="52">🧠 Understand</text><text x="420" y="52">🧱 Build</text><text x="28" y="238">📊 Evaluate</text><text x="420" y="238">🛡️ Responsibly</text></g>
+          <g font-size="14" fill="#4F6457"><text x="28" y="76">know how the</text><text x="28" y="96">classifier works</text>
+            <text x="420" y="76">set up the steps,</text><text x="420" y="96">run the test set</text>
+            <text x="28" y="262">score the output</text><text x="28" y="282">against a target</text>
+            <text x="420" y="262">fruit photos only –</text><text x="420" y="282">never a face</text></g>
+          <g text-anchor="middle" fill="#fff" font-weight="700"><text x="320" y="154" font-size="15">ONE DATE</text><text x="320" y="176" font-size="15">CLASSIFIER</text></g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> Four strands act on one task: understand, build, evaluate and use responsibly – clicked together on a single model.</figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-match"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>A score you can trust</h2><p>Why does the test set matter?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Sure is not correct</h3>
+    <p>A classifier gives every date a label, and it can sound very sure. Sure is not the same as correct. That is why the <b>test set</b> matters: because you already know the true label of each card, you can mark every prediction right or wrong and count the <b>accuracy</b>. Then you compare that accuracy with the <b>performance criterion</b> – the target the model must reach, such as eight correct out of ten.</p>
+    <p>If the score misses the target, you look at which kind of date failed most and add one rule aimed at that, then re-test to see if the score rises.</p>
+    <figure>
+      <svg viewBox="0 0 640 300" role="img" aria-labelledby="f2T">
+        <title id="f2T">A test set of ten date cards with known true labels goes through the classifier. Each prediction is marked right or wrong against the true label: seven ticks and three crosses. Accuracy is 7 out of 10, or 70 percent, compared with a target of 8 out of 10, or 80 percent – below target, so find the kind of date that failed most.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#13261B"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <g stroke="#13261B" stroke-width="1.6" fill="#fff">
+            <rect x="12" y="16" width="176" height="82" rx="12"/>
+            <rect x="232" y="16" width="176" height="82" rx="12" fill="#EAF6EE" stroke="#15803D" stroke-width="2.4"/>
+            <rect x="452" y="16" width="176" height="82" rx="12"/>
+          </g>
+          <g stroke="#13261B" stroke-width="2.4" fill="none" marker-end="url(#ah)"><path d="M188 57H228"/><path d="M408 57H448"/></g>
+          <g font-size="16" font-weight="700" text-anchor="middle"><text x="100" y="48">🗂️ Test set</text><text x="320" y="48" fill="#15803D">⚙️ Classifier</text><text x="540" y="48">✅ Mark it</text></g>
+          <g font-size="13" text-anchor="middle" fill="#4F6457"><text x="100" y="74">10 cards, true</text><text x="100" y="90">label on the back</text><text x="320" y="74">predicts a label –</text><text x="320" y="90">and may sound sure</text><text x="540" y="74">prediction vs</text><text x="540" y="90">true label</text></g>
+          <g font-size="17" font-weight="700" text-anchor="middle">
+            <g stroke-width="1.6">
+              <rect x="14" y="126" width="54" height="50" rx="8" fill="#E2F5EC" stroke="#0F8A5F"/><rect x="76" y="126" width="54" height="50" rx="8" fill="#FDE7EC" stroke="#C92A4B"/><rect x="138" y="126" width="54" height="50" rx="8" fill="#E2F5EC" stroke="#0F8A5F"/><rect x="200" y="126" width="54" height="50" rx="8" fill="#E2F5EC" stroke="#0F8A5F"/><rect x="262" y="126" width="54" height="50" rx="8" fill="#E2F5EC" stroke="#0F8A5F"/>
+              <rect x="324" y="126" width="54" height="50" rx="8" fill="#FDE7EC" stroke="#C92A4B"/><rect x="386" y="126" width="54" height="50" rx="8" fill="#E2F5EC" stroke="#0F8A5F"/><rect x="448" y="126" width="54" height="50" rx="8" fill="#E2F5EC" stroke="#0F8A5F"/><rect x="510" y="126" width="54" height="50" rx="8" fill="#FDE7EC" stroke="#C92A4B"/><rect x="572" y="126" width="54" height="50" rx="8" fill="#E2F5EC" stroke="#0F8A5F"/>
+            </g>
+            <g fill="#0F8A5F"><text x="41" y="158">✓</text><text x="165" y="158">✓</text><text x="227" y="158">✓</text><text x="289" y="158">✓</text><text x="413" y="158">✓</text><text x="475" y="158">✓</text><text x="599" y="158">✓</text></g>
+            <g fill="#C92A4B"><text x="103" y="158">✗</text><text x="351" y="158">✗</text><text x="537" y="158">✗</text></g>
+          </g>
+          <text x="320" y="200" font-size="13" text-anchor="middle" fill="#4F6457">the three ✗ cards are all dark ripe dates</text>
+          <g stroke-width="1.6">
+            <rect x="12" y="218" width="290" height="66" rx="12" fill="#fff" stroke="#13261B"/>
+            <rect x="338" y="218" width="290" height="66" rx="12" fill="#EAF6EE" stroke="#15803D" stroke-width="2.4"/>
+          </g>
+          <g text-anchor="middle"><text x="157" y="246" font-size="17" font-weight="700">Accuracy 7/10 = 70%</text><text x="157" y="270" font-size="13" fill="#C92A4B" font-weight="700">below target → find the failing kind</text>
+          <text x="483" y="246" font-size="17" font-weight="700" fill="#15803D">🎯 Target 8/10 = 80%</text><text x="483" y="270" font-size="13" fill="#4F6457">the performance criterion</text></g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> A test set with known answers lets you mark every prediction right or wrong and count real accuracy – then compare it with the target.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, date growers and sorting lines are trialling classifiers to grade fruit quickly – and they only help if their accuracy is tested against a clear target and their data is handled responsibly, just like in your task. <span class="illus">(Illustrative example.)</span></p></div>
+    <div class="call violet"><h4>Cross-curricular link · Mathematics</h4><p>In <b>Mathematics</b>, express the model's score as a <b>fraction and percentage</b> (8 out of 10 = 80%) against the 80% target, then break the ten results down by date type to find which category scores lowest.</p></div>
+    <div id="a-order"></div>
+    <div id="a-case2"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3 · Worksheet</span><h2>Find and fix</h2><p>Is the overall score the whole story?</p></div>
+  <div class="part-body">
+    <p>An overall accuracy score can hide a weak group. <b>Error analysis</b> asks which kind of date the model gets wrong most, so your improvement is <b>aimed</b> rather than guessed: add one rule aimed at that group, then re-run those cards and see if the score rises. You keep the task safe by using only fruit photos – never a person's face – so evaluating and improving stay responsible from the start.</p>
+    <div id="a-judge"></div>
+    <div id="a-case3"></div>
+    <div class="call amber"><h4>Tool for this week: unplugged simulated-AI cards (teacher-led)</h4><p>This is an unplugged concept lesson: the teacher runs a simulated-AI card routine on the board – no live tool, no logins. Students reason about pre-prepared example outputs on the cards – no personal data is used – and use the worksheet to sort or judge the cards, explaining their thinking with the key vocabulary. <b>No board tool?</b> The cards already carry true labels on the back – score the ten by hand, which is the same test, score and improve routine. The live tools (Teachable Machine and Scratch) are used in the matching Lab period.</p></div>
+    <div class="ecard" id="sheet"></div>
+    <div id="a-map"></div>
+    <div id="a-score"></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 6 Lab</span><h2>Run It End to End</h2><p>In the Core you tested one classifier against a target. Today you run the whole loop properly, record every score, then add one new rule and re-test.</p></div>
+  <div class="part-body">
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>From one card to a full test</h2><p>How do you turn a run into evidence?</p></div>
+  <div class="part-body">
+    <p>In the Core lesson you scored the model on a few cards. Today you run it <b>end-to-end</b> on twelve or more, and you write down every score in a <b>results log</b>. That log is powerful: it turns ‘it seemed to work’ into real evidence. You can total how many predictions were right, compare that with the criterion, and spot patterns – maybe dark ripe dates trip it up most.</p>
+    <figure>
+      <svg viewBox="0 0 640 290" role="img" aria-labelledby="f3T">
+        <title id="f3T">Twelve to fifteen fruit-only date cards each run through the classifier. Every prediction lands in the results log next to its true label, marked right or wrong, and the log is totalled: 11 out of 15 correct.</title>
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#13261B"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <g stroke="#13261B" stroke-width="1.6" fill="#fff"><rect x="28" y="62" width="120" height="150" rx="10"/><rect x="20" y="70" width="120" height="150" rx="10"/><rect x="12" y="78" width="120" height="150" rx="10"/></g>
+          <g text-anchor="middle"><text x="72" y="140" font-size="30">🌴</text><text x="72" y="176" font-size="15" font-weight="700">15 cards</text><text x="72" y="198" font-size="13" fill="#4F6457">fruit only</text></g>
+          <rect x="182" y="104" width="120" height="84" rx="12" fill="#EAF6EE" stroke="#15803D" stroke-width="2.4"/>
+          <g text-anchor="middle"><text x="242" y="140" font-size="15" font-weight="700" fill="#15803D">⚙️ Classifier</text><text x="242" y="164" font-size="13" fill="#4F6457">every card</text></g>
+          <g stroke="#13261B" stroke-width="2.4" fill="none" marker-end="url(#ah3)"><path d="M144 146H178"/><path d="M302 146H336"/></g>
+          <text x="484" y="34" font-size="15" font-weight="700" text-anchor="middle">🧾 Results log</text>
+          <g stroke="#13261B" stroke-width="1.2" fill="#fff"><rect x="340" y="46" width="288" height="210" rx="8"/></g>
+          <rect x="341" y="47" width="286" height="32" rx="7" fill="#EAF6EE"/>
+          <g stroke="#D6EBDD" stroke-width="1.2"><path d="M340 80H628M340 112H628M340 144H628M340 176H628M340 208H628"/><path d="M388 46V208M490 46V208M584 46V208"/></g>
+          <g font-size="12" font-weight="700" text-anchor="middle"><text x="364" y="68">Card</text><text x="439" y="68">Prediction</text><text x="537" y="68">True label</text><text x="606" y="68">✓?</text></g>
+          <g font-size="13" text-anchor="middle"><text x="364" y="101">1</text><text x="439" y="101">Ripe</text><text x="537" y="101">Ripe</text><text x="606" y="101" fill="#0F8A5F" font-weight="700">✓</text>
+            <text x="364" y="133">2</text><text x="439" y="133">Unripe</text><text x="537" y="133">Ripe</text><text x="606" y="133" fill="#C92A4B" font-weight="700">✗</text>
+            <text x="364" y="165">3</text><text x="439" y="165">Unripe</text><text x="537" y="165">Unripe</text><text x="606" y="165" fill="#0F8A5F" font-weight="700">✓</text>
+            <text x="364" y="197">…</text><text x="439" y="197">…</text><text x="537" y="197">…</text><text x="606" y="197">…</text></g>
+          <text x="484" y="238" font-size="15" font-weight="700" text-anchor="middle" fill="#15803D">Total: 11 out of 15</text>
+          <text x="170" y="270" font-size="13" text-anchor="middle" fill="#4F6457">run every card · log every score</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> Every card runs through the classifier and every score lands in the log – a full end-to-end test.</figcaption>
+    </figure>
+    <div id="a-lorder"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Evidence, not a feeling</h2><p>What makes a reliability claim trustworthy?</p></div>
+  <div class="part-body">
+    <p>Your log lets you total how many predictions were right and compare that with the criterion. That total is your model's <b>reliability</b>, and it tells you exactly how far it is from the target and where to aim your improvement. A reliability claim is only trustworthy when it comes from the recorded scores – not from a feeling that the model seemed accurate today.</p>
+    <figure>
+      <svg viewBox="0 0 640 250" role="img" aria-labelledby="f4T">
+        <title id="f4T">Left, just a feeling: ‘It seemed to work today’ – no count, so it is not evidence. Right, evidence from the log: 11 out of 15 counted, against a target of 12 – one short. Reliability is a counted total from the log.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <text x="160" y="26" font-size="15" font-weight="800" text-anchor="middle" fill="#C92A4B">🌫️ JUST A FEELING</text>
+          <text x="480" y="26" font-size="15" font-weight="800" text-anchor="middle" fill="#15803D">🧾 EVIDENCE FROM THE LOG</text>
+          <rect x="20" y="44" width="280" height="110" rx="40" fill="#fff" stroke="#13261B" stroke-width="1.6" stroke-dasharray="6 5"/>
+          <g text-anchor="middle" font-size="16"><text x="160" y="94">“It seemed to</text><text x="160" y="118">work today.”</text></g>
+          <rect x="340" y="44" width="280" height="110" rx="12" fill="#EAF6EE" stroke="#15803D" stroke-width="2.4"/>
+          <g text-anchor="middle"><text x="480" y="84" font-size="15">counted right: <tspan font-weight="700">11 / 15</tspan></text><text x="480" y="110" font-size="15">target: <tspan font-weight="700">12 / 15</tspan></text><text x="480" y="136" font-size="14" font-weight="700" fill="#C92A4B">one short of the target</text></g>
+          <g text-anchor="middle" font-size="13" fill="#4F6457"><text x="160" y="182">no count, no true labels –</text><text x="160" y="202" font-weight="700" fill="#C92A4B">not evidence</text>
+          <text x="480" y="182">every prediction next to its label –</text><text x="480" y="202" font-weight="700" fill="#15803D">a reliability you can prove</text></g>
+          <text x="320" y="238" font-size="13" text-anchor="middle" fill="#4F6457">Reliability is counted out of the total – not felt</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 4.</b> Reliability is a counted total from the log – not an impression of how the run felt.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Date growers and sorting lines in the UAE keep improving their grading systems by logging errors and testing each change against a clear target – exactly the run, evaluate and improve loop you are practising today. <span class="illus">(Illustrative example.)</span></p></div>
+    <div class="call violet"><h4>Cross-curricular link · Geography</h4><p>Mirror a <b>Geography fieldwork log</b>: tabulate repeated observations across many trials, then compare the ‘before’ and ‘after’ of one method change to spot which conditions, such as time of day, produce the most errors.</p></div>
+    <div id="a-lsort"></div>
+    <div id="a-lcase2"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Part 3 of 3 · Worksheet</span><h2>Add a constraint, then re-test</h2><p>How do you improve without starting over?</p></div>
+  <div class="part-body">
+    <p>A real model rarely stays the same – you improve it as you learn. Today you make one aimed change, then add one <b>constraint</b>: either a second criterion, like also labelling each date bruised or not, or a risk rule, like flagging any date that might be mouldy. Then you re-score only the cards the new rule touches and check your accuracy before against accuracy after. Notice you do not start over – you <b>adapt</b> the model you already have. This cycle of test, analyse errors, change one thing and re-test is called <b>iteration</b>. All the while you keep the safe rules: only fruit photos go in, and every prediction is verified against its true label before you trust it.</p>
+    <div id="a-lmatch"></div>
+    <div id="a-lcase3"></div>
+    <div class="ecard" id="rlog"></div>
+    <div id="a-llog"></div>
+    <div class="call amber"><h4>Today's tool: Teachable Machine + Scratch – build, evaluate, improve loop (teacher-operated)</h4><p>1. Train the model in Teachable Machine: name the classes, add balanced examples, click Train, then test in Preview. 2. Open Scratch (account-free) and add the machine-learning blocks so the trained model becomes the <b>process</b> step. 3. Wire the workflow: input (what you feed in) → model (classifies) → output (what Scratch shows), and click the green flag to run it end to end. 4. Run five inputs and record the outputs; evaluate them against the criteria and score them. 5. Make one improvement (add cleaner examples, or add a check in Scratch), re-run the same five inputs and re-score. Save the Scratch project as an .sb3 file. <b>Stay safe:</b> the teacher operates the tool on the board and students never log in; Teachable Machine trains in the browser and the samples stay on the teacher's device; use objects, hand gestures or drawings only – never faces, voices or names; clear the project at the end of the lesson; reuse only the non-personal model. <b>No board tool?</b> Run the whole test set by hand against the true labels – the same end-to-end evaluation, results log and re-test.</p></div>
+    <div class="ecard" id="tlog"></div>
+    <div id="a-ltool"></div>
+    <div id="a-lsafe"></div>
+    <div id="a-lexit"></div>
+    <div id="a-lchal"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Join the four strands – then run it end to end and prove the change</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li><b>Integration</b> means all four strands – understand, build, evaluate, use responsibly – act on one task at once.</li>
+      <li>A <b>test set</b> with known answers lets you count real accuracy and compare it with a target.</li>
+      <li><b>Sure is not correct</b> – a confident label must still be checked against the true label.</li>
+      <li><b>Error analysis</b> aims your improvement at the group that fails most.</li>
+      <li>Running <b>end-to-end</b> scores every item, and a <b>results log</b> turns ‘it seemed to work’ into counted evidence of <b>reliability</b>.</li>
+      <li>You <b>adapt</b> the model and re-test what changed – you do not start over – and you keep the safe rules: fruit photos only, no faces, voices or names.</li>
+    </ul>
+    <p class="note"><b>Next:</b> in Week 7 you become the architect of your own signature solution, planning it before you build.</p>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 8 · Main Course · Term 1 Week 6 (9 – 13 Nov 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- scope & sequence concepts (Grade 8, Week 6: Integrate – all four strands) ---------- */
+const CU_E="CU · how AI processes inputs and generates outputs";
+const CU_P="CU · how factors (data, inputs, design) affect performance";
+const SD_E="SD · develops AI-powered solutions for specific tasks";
+const SD_P="SD · structured workflows of multiple steps";
+const SD_A="SD · designs and refines solutions considering how components interact";
+const CE_E="CE · limitations in outputs – verify";
+const CE_P="CE · evaluates using criteria: accuracy, bias, reliability";
+const CE_A="CE · refines systematically and justifies improvements with evidence";
+const GE_E="GE · ethical concerns in AI use";
+const GE_P="GE · structured evaluation of risks (bias, privacy, misuse)";
+const GE_A="GE · proposes mitigations and explains their impact";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["test set","A group of items whose correct answers are already known, used to score a model."],
+  ["accuracy","How many predictions the model got right out of the total."],
+  ["performance criterion","The target a model must reach, such as eight correct out of ten."],
+  ["error analysis","Looking at which kinds of item a model gets wrong so you can aim an improvement."],
+  ["integration","Joining several skills into one working task."]
+];
+const DEF_ORDER = [2,4,0,3,1];
+const MATCH = [["m1","🧠 Understand",0],["m2","🧱 Build",1],["m3","📊 Evaluate",2],["m4","🛡️ Use responsibly",3]];
+const MATCH_OPTS = ["🔍 know how the classifier works","⚙️ set up the steps and run the test set","🎯 score the output against a target","🍇 keep the data non-personal"];
+const CASE1 = ["Just watch the classifier run and decide it feels accurate enough.","Skip the target and simply trust whatever the model tells you.","Test it just once on a single card and call the whole job done.","Set a target, run the test set, score it, use only fruit photos."];
+const STEPS = ["🎯 Set the target – at least eight correct out of ten","📥 Run the test set of known date cards","📊 Score each prediction right or wrong","🧭 Compare your accuracy with the target","🔧 Add one aimed rule, then re-test"];
+const STEP_ORDER = [3,1,4,0,2];
+const CASE2 = ["Yes, a very high confidence score guarantees a correct answer.","No – sure is not the same as correct; check the true label.","No, because confidence scores are never real numbers anyway.","Yes, confidence always equals accuracy for this kind of model."];
+const JUDGE = [
+  ["j1","🔬 We looked at which kind of date failed most before adding a rule.","A"],
+  ["j2","🍇 We used only fruit photos, never a person's face.","A"],
+  ["j3","🤔 The model sounded sure, so we skipped checking it.","C"],
+  ["j4","🎲 We changed three rules at once and hoped the score rose.","B"],
+  ["j5","📈 We reported nine out of ten but never checked the dark ripe dates.","B"],
+  ["j6","📸 We added photos of students' faces to the test set.","C"],
+  ["j7","🎯 We compared each prediction with the true label on the back.","A"]
+];
+const CASE3 = ["It hides the ripe dates, so go and fix those ones first.","Nothing is hidden by the average, so just celebrate the high score.","The score is fine, so just change the fruit that you use.","It hides the weak group – target your rule at dark ripe dates."];
+const MAP = [["mp1","🎯 Target (criterion)",0],["mp2","📥 Test set (input)",1],["mp3","⚙️ Classifier (process)",2],["mp4","📤 Score vs target (output)",3]];
+const MAP_OPTS = ["At least 8 correct out of 10 (80%)","Ten fruit-only date cards with the true label on the back","The model's rules that predict Ripe or Unripe for each card","Accuracy counted from the right/wrong marks, compared with 80%"];
+const SC_TOTAL = ["7 out of 10","10 out of 10","6 out of 10","3 out of 10"];
+const SC_PCT = ["70% – 10 points below the 80% target","70% – meets the 80% target","30% – far below the target","80% – exactly on the target"];
+const SC_WEAK = ["Dark ripe dates – 3 of 4 wrong","Light-brown dates","Yellow unripe dates","No pattern – the misses were random"];
+const SC_RULE = ["If the skin is dark and glossy, label it Ripe – then re-run cards 2, 5, 6 and 9","Change three rules at once and re-run everything","Take the dark dates out of the test set","Label every date Ripe"];
+const SC_AFTER = ["9 out of 10 = 90% – meets the target","8 out of 10 = 80% – still below the target","9 out of 10 = 90% – below the target","10 out of 10 – perfect"];
+const SC_RESP = ["We used only fruit photos – no faces or names","We kept the model's answer because it sounded sure","We added classmates' photos to make it realistic","We skipped the true labels to save time"];
+const EXIT = [
+  "The classifier seemed accurate and sounded sure, so it met the target and nothing needed changing.",
+  "I changed several rules at once until it reached 10 out of 10, so the workflow must be right now.",
+  "Ten known cards went through the classifier and scored 7/10 against an 8/10 target; one dark-date rule raised it to 9/10, and I used only fruit photos.",
+  "It scored 9 out of 10 because it was 98% sure about every card it labelled."
+];
+const CHAL = [
+  "Start again with a brand-new model that only checks for bruises.",
+  "Keep the ripeness rules, add a bruised-or-not rule, then re-score the cards against both targets.",
+  "Drop the ripeness target so that only the new bruise target counts.",
+  "Add the bruise rule but keep reporting the old ripeness score as the result."
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["end-to-end","Running every stage of the evaluation in order on a full test set."],
+  ["results log","A table where you record each prediction, its true label, and whether it was right."],
+  ["reliability","How well the model met the target, counted out of the total."],
+  ["constraint","A new rule or limit you add, such as a second criterion or a risk to watch for."],
+  ["iteration","Improving a model by testing it, analysing errors, changing one thing, and re-testing."]
+];
+const LDEF_ORDER = [3,0,4,2,1];
+const LSTEPS = ["🗃️ Choose twelve or more fruit-only date cards","📥 Run every card and log its prediction","📊 Flip to the true label and mark right or wrong","🧮 Total your accuracy before any change","🎯 Compare it with the criterion"];
+const LSTEP_ORDER = [2,4,1,3,0];
+const LCASE1 = ["It is not stronger, since three cards already prove everything.","It logs every prediction and true label as counted evidence.","It is stronger because logs can never contain any mistakes.","It is stronger only because a long table looks more impressive."];
+const LSORT = [
+  ["ls1","📈 We got 11 out of 15 correct, recorded row by row.","E"],
+  ["ls2","🌫️ It seemed to work well today.","F"],
+  ["ls3","🗃️ Every prediction is written next to its true label.","E"],
+  ["ls4","💬 Someone said it looked accurate.","F"],
+  ["ls5","🎲 I think it is probably fine.","F"],
+  ["ls6","🔬 Dark ripe dates were wrong 4 times out of 5 in our tally.","E"]
+];
+const LCASE2 = ["Assume the 11 is now a 12 without bothering to re-test it here.","Just announce it worked, since you put real effort into that new rule.","Delete the cards it got wrong so the score simply looks better.","Re-score the affected cards and compare accuracy before and after."];
+const LMATCH = [["lm1","🧾 Results log",0],["lm2","🚧 Constraint",1],["lm3","🔁 End-to-end",2],["lm4","🔧 Iteration",3]];
+const LMATCH_OPTS = ["🗃️ record each prediction and its true label","➕ a new rule such as ‘flag possible mould’","📥 score every item in the test set","🪜 change one thing, then re-test"];
+const LCASE3 = ["Adapt the model you have, then re-score the cards the rule touches.","Add the new rule but never actually go back and re-test it at all now.","Flag every single date as mouldy just to be on the safe side.","Throw the whole model away and retrain it on photos with faces."];
+const LG_BEFORE = ["11 out of 15 (about 73%)","12 out of 15 (80%)","14 out of 15 (about 93%)","1 out of 5 (20%)"];
+const LG_MEET = ["No – one short of the 12 needed","Yes – 11 is close enough to count","Yes – it got most of them right"];
+const LG_WEAK = ["Dark ripe dates – only 1 of 5 right","Light-brown ripe dates","Yellow unripe dates","Every kind failed equally"];
+const LG_AFTER = ["14 out of 15 (about 93%) – meets the criterion","11 out of 15 – no change","15 out of 15 – perfect","14 out of 15 – still below the criterion"];
+const LG_MOULD = ["Only the cards the mould rule touches – checking both spotted dates are flagged and no clean date is","All 15 cards again, after throwing the model away and starting over","None – a new rule does not need testing","Only the cards the model already got right"];
+const TL_WIRE = ["The process step – between the input and the output","The input – it is what you feed in","The output – it is what Scratch shows","Outside the workflow – it is not connected"];
+const TL_BEFORE = ["3 out of 5","5 out of 5","2 out of 5","4 out of 5"];
+const TL_FIX = ["Added cleaner, well-lit examples of dark ripe dates, then retrained","Renamed the classes","Added photos of students holding the dates","Nothing – just ran it again and hoped"];
+const TL_AFTER = ["5 out of 5 – inputs 1 and 3 are now right","3 out of 5 – no change","5 out of 5 – because new, easier inputs were used"];
+const TL_SAME = ["So the before and after scores are a fair comparison","To make the score look higher","Because new inputs are not allowed in Scratch","It does not matter which inputs you use"];
+const LSAFE = [
+  ["sf1","The teacher operates the tool; students never log in",1],
+  ["sf2","Use objects, hand gestures or drawings only",1],
+  ["sf3","Train on classmates' faces so the test is realistic",0],
+  ["sf4","Samples stay on the teacher's device; clear the project at the end",1],
+  ["sf5","Record students' voices saying the class names",0],
+  ["sf6","Reuse only the non-personal model",1],
+  ["sf7","Add each student's name to the class labels",0]
+];
+const LEXIT = [
+  "The model felt more reliable after the change, and I was careful with it.",
+  "I deleted the cards it got wrong, so accuracy rose to 15 out of 15 and it now meets the target.",
+  "I added faces to the test set so the mould rule would be more realistic, then re-ran everything.",
+  "Before: 11/15, below the 12 target; after a dark-date rule: 14/15, which meets it. Weak spot: dark ripe dates. I added a flag-mould rule, re-scored only the cards it touched, and used fruit photos only."
+];
+const LCHAL = [
+  "Add both constraints at once and look only at the final score.",
+  "Predict which matters more, then add one constraint at a time, re-score after each and compare the changes.",
+  "Skip the prediction and just keep whichever constraint sounds better.",
+  "Throw away the first constraint so only the second one is tested."
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CE_P,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"A test set has known answers; accuracy is how many predictions were right out of the total; the performance criterion is the target, such as 8 out of 10; error analysis looks at which kinds of item fail most; integration joins several skills into one task."},
+ {id:"match",mount:"a-match",section:"Core · Part 1",title:"Match the strand to its job",sub:"Objective 1 · "+SD_A,ico:"🧩",
+  fields:MATCH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Understanding means knowing how the classifier turns an input into a label. Building means setting up the workflow steps and running the test set. Evaluating means scoring the output against a target. Using AI responsibly means keeping the data non-personal. Four strands, one task – that is integration."},
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"Case 1 · All Four At Once",sub:"AI Evaluators · "+SD_A,ico:"🕵️",
+  fields:[{k:"c1",radio:1,ok:v=>eq(v,3)}],
+  explain:"Set a target, run the test set, score it and use only fruit photos – that joins understanding, building, evaluating and responsible use. Watching it run is not evaluating, one card is too small to judge, and without a target you cannot judge the score."},
+ {id:"order",mount:"a-order",section:"Core · Part 2",title:"Order the evaluate-and-improve loop",sub:"Objective 2 · "+SD_P,ico:"🧭",
+  fields:STEPS.map((_,i)=>({k:"o"+i,ok:v=>eq(v,i)})),
+  explain:"Set the target first, run the test set of known cards, score each prediction right or wrong, compare your accuracy with the target – and only then add one aimed rule and re-test."},
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"Case 2 · 98% Sure",sub:"AI Evaluators · "+CE_E,ico:"🔬",
+  fields:[{k:"c2",radio:1,ok:v=>eq(v,1)}],
+  explain:"No – sure is not the same as correct. Confidence is a real number, but it is not a guarantee: only the known true label tells you whether the prediction is right."},
+ {id:"judge",mount:"a-judge",section:"Core · Part 3",title:"Sound, needs care, or unsound?",sub:"Objective 3 · "+GE_P,ico:"🩺",
+  fields:JUDGE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Sound: looking at which kind failed most before adding a rule, using only fruit photos, and comparing each prediction with the true label. Needs care: changing three rules at once (you can't tell which helped) and reporting 9/10 without checking the dark ripe dates. Unsound: skipping the check because the model sounded sure, and adding students' faces – that is personal data."},
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"Case 3 · The Hidden Weakness",sub:"AI Evaluators · "+CE_A,ico:"🔎",
+  fields:[{k:"c3",radio:1,ok:v=>eq(v,3)}],
+  explain:"The overall score hides the weak group: the dark ripe dates (4 out of 10). Error analysis aims your rule at the group that failed most. The ripe dates already pass, and changing the fruit avoids the real weakness in the model."},
+ {id:"map",mount:"a-map",section:"Core worksheet",title:"My target and workflow map",sub:"Worksheet · "+CU_E,ico:"🗺️",cls:"ws",
+  fields:MAP.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"The target is the criterion (8 out of 10). The test set of known cards is the input; the classifier's rules are the process; the accuracy counted from the marks and compared with 80% is the output of the evaluation."},
+ {id:"score",mount:"a-score",section:"Core worksheet",title:"My score sheet, improvement and responsible choice",sub:"Worksheet · "+CE_P,ico:"📝",cls:"ws",
+  fields:[{k:"sc1",ok:v=>eq(v,0)},{k:"sc2",ok:v=>eq(v,0)},{k:"sc3",ok:v=>eq(v,0)},{k:"sc4",ok:v=>eq(v,0)},{k:"sc5",ok:v=>eq(v,0)},{k:"sc6",ok:v=>eq(v,0)}],
+  explain:"Cards 2, 6 and 9 were wrong, so 7 out of 10 = 70%, one card short of the 80% target. All three misses were dark ripe dates (3 of 4 wrong), so the aimed rule targets dark, glossy skin and you re-run the four dark-date cards. Two now pass: 9 out of 10 = 90%, which meets the target. Using only fruit photos was the responsible choice."},
+ {id:"exit",mount:"a-exit",section:"Core worksheet",title:"Exit ticket",sub:"Explain it · "+CE_A,ico:"🎫",
+  fields:[{k:"ex",radio:1,ok:v=>eq(v,2)}],
+  explain:"A complete answer says how the workflow made a result (known cards through the classifier), checks it against the target, gives the score before and after the change, and names a responsible choice. Feeling sure, changing many rules at once, or relying on confidence is not evidence."},
+ {id:"chal",mount:"a-chal",section:"Core worksheet",title:"Challenge · add a constraint",sub:"Stretch · "+SD_A,ico:"⭐",
+  fields:[{k:"ch",radio:1,ok:v=>eq(v,1)}],
+  explain:"Adapting an approach means keeping what works and adding the new criterion, then re-scoring against both targets. Starting again, dropping the first target, or reporting an old score does not show how the constraint changed your workflow and accuracy."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+CE_P,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"End-to-end = every stage on the full test set. Results log = each prediction, its true label and whether it was right. Reliability = how well the model met the target, counted out of the total. Constraint = a new rule or limit. Iteration = test, analyse errors, change one thing, re-test."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 1",title:"Order the end-to-end run",sub:"Objective 1 · "+SD_P,ico:"🧭",
+  fields:LSTEPS.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"Choose twelve or more fruit-only cards, run every card and log its prediction, flip to the true label and mark it, total your accuracy before any change, then compare it with the criterion. A full run plus a full log turns a hunch into evidence."},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"Case 1 · Three Cards Is Not Proof",sub:"AI Evaluators · "+CE_P,ico:"🕵️",
+  fields:[{k:"lc1",radio:1,ok:v=>eq(v,1)}],
+  explain:"A full log records every prediction and its true label as counted evidence, not an impression. Three cards is too small to judge reliability; logs can contain mistakes, and length alone is not evidence – the counted right-and-wrong is what matters."},
+ {id:"lsort",mount:"a-lsort",section:"Lab · Part 2",title:"Evidence or just a feeling?",sub:"Objective 2 · "+CE_P,ico:"🧾",
+  fields:LSORT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Evidence: 11 out of 15 recorded row by row, every prediction next to its true label, and a tally showing dark ripe dates wrong 4 times out of 5. Just a feeling: ‘it seemed to work’, ‘someone said it looked accurate’ and ‘I think it is probably fine’."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"Case 2 · Eleven Out Of Fifteen",sub:"AI Evaluators · "+CE_A,ico:"🔬",
+  fields:[{k:"lc2",radio:1,ok:v=>eq(v,3)}],
+  explain:"Re-score the affected cards and compare accuracy before and after – that comparison is the proof. Assuming, announcing or deleting the hard cards gives no evidence the rule helped; deleting cards hides errors instead of measuring the change."},
+ {id:"lmatch",mount:"a-lmatch",section:"Lab · Part 3",title:"Match the term to its meaning",sub:"Objective 3 · "+SD_A,ico:"🧩",
+  fields:LMATCH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A results log records each prediction and its true label. A constraint is a new rule such as ‘flag possible mould’. End-to-end means scoring every item in the test set. Iteration means changing one thing, then re-testing to see if accuracy rose."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"Case 3 · Flag The Mould",sub:"AI Evaluators · "+GE_A,ico:"🚧",
+  fields:[{k:"lc3",radio:1,ok:v=>eq(v,0)}],
+  explain:"Adapt the model you have and re-score the cards the rule touches, keeping the safe rules. An untested rule is not evidence, flagging everything makes the constraint useless, and starting over with faces breaks the responsible-use rules."},
+ {id:"llog",mount:"a-llog",section:"Lab worksheet",title:"Full results log: accuracy before and after",sub:"Worksheet · "+CE_A,ico:"🧮",cls:"ws",
+  fields:[{k:"lg1",ok:v=>eq(v,0)},{k:"lg2",ok:v=>eq(v,0)},{k:"lg3",ok:v=>eq(v,0)},{k:"lg4",ok:v=>eq(v,0)},{k:"lg5",ok:v=>eq(v,0)}],
+  explain:"Before: 5 + 5 + 1 = 11 out of 15 (about 73%), one short of the 12 needed. Dark ripe dates were the weak spot (1 of 5). After the aimed rule, 4 of the 5 dark dates pass: 14 out of 15 (about 93%), which meets the criterion. For the mould rule you re-score only the cards it touches and check it flags the spotted dates without flagging clean ones."},
+ {id:"ltool",mount:"a-ltool",section:"Lab worksheet",title:"Tool log: Teachable Machine + Scratch",sub:"Worksheet · tool log · "+SD_E,ico:"🤖",cls:"ws",
+  fields:[{k:"tl1",ok:v=>eq(v,0)},{k:"tl2",ok:v=>eq(v,0)},{k:"tl3",ok:v=>eq(v,0)},{k:"tl4",ok:v=>eq(v,0)},{k:"tl5",ok:v=>eq(v,0)}],
+  explain:"In Scratch the trained model is the process step between input and output. Before the change 3 of the 5 inputs were right; inputs 1 and 3 (dark dates) failed, so cleaner, well-lit dark-date examples were added and the model retrained. Re-running the same five inputs gave 5 out of 5 – the same inputs make the before-and-after comparison fair."},
+ {id:"lsafe",mount:"a-lsafe",section:"Lab worksheet",title:"Safety check",sub:"Safety check · "+GE_E,ico:"🛡️",
+  fields:LSAFE.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"The teacher operates the tool and students never log in; use objects, hand gestures or drawings only; samples stay on the teacher's device and the project is cleared at the end; reuse only the non-personal model. Faces, voices and names are personal data – never use them."},
+ {id:"lexit",mount:"a-lexit",section:"Lab worksheet",title:"Exit ticket",sub:"Explain it · "+CE_A,ico:"🎫",
+  fields:[{k:"le",radio:1,ok:v=>eq(v,3)}],
+  explain:"A complete exit ticket gives accuracy before and after, says whether each meets the criterion, names a weak spot, describes the constraint and how it was re-tested, and says how the task stayed responsible. A feeling, deleting hard cards or adding faces is not responsible evidence."},
+ {id:"lchal",mount:"a-lchal",section:"Lab worksheet",title:"Challenge · two constraints",sub:"Stretch · "+CU_P,ico:"⭐",
+  fields:[{k:"lch",radio:1,ok:v=>eq(v,1)}],
+  explain:"Predict first, then change one thing at a time: add one constraint, re-score, add the next, re-score again. Only then can you say which change affected accuracy more and how to adapt the model further."}
+];
+
+/* ---------- state ---------- */
+const KEY="g8-mw6-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#sheet").innerHTML=`<header><small>Score sheet · simulated-AI cards · illustrative</small><b>A date-ripeness classifier · target: at least 8 out of 10</b></header>
+<div class="in">
+  <p class="task"><b>On the board:</b> ten fruit-only date cards, each with its true label on the back. The classifier predicts Ripe or Unripe for each one. Mark each row right or wrong in your head, then answer below.</p>
+  <table class="t"><thead><tr><th>Card</th><th>Kind of date</th><th>Prediction</th><th>True label</th></tr></thead>
+  <tbody><tr><td>1</td><td>light-brown</td><td>Ripe</td><td>Ripe</td></tr><tr><td>2</td><td>dark ripe</td><td>Unripe</td><td>Ripe</td></tr><tr><td>3</td><td>yellow</td><td>Unripe</td><td>Unripe</td></tr><tr><td>4</td><td>light-brown</td><td>Ripe</td><td>Ripe</td></tr><tr><td>5</td><td>dark ripe</td><td>Ripe</td><td>Ripe</td></tr><tr><td>6</td><td>dark ripe</td><td>Unripe</td><td>Ripe</td></tr><tr><td>7</td><td>yellow</td><td>Unripe</td><td>Unripe</td></tr><tr><td>8</td><td>light-brown</td><td>Ripe</td><td>Ripe</td></tr><tr><td>9</td><td>dark ripe</td><td>Unripe</td><td>Ripe</td></tr><tr><td>10</td><td>light-brown</td><td>Ripe</td><td>Ripe</td></tr></tbody></table>
+  <p class="note"><b>After one aimed rule</b> (‘dark, glossy skin → Ripe’) the four dark-date cards are re-run: cards 2 and 6 are now right; card 9 is still wrong.</p>
+</div>`;
+$("#rlog").innerHTML=`<header><small>Results log · simulated classifier · illustrative class results</small><b>15 fruit-only date cards · criterion: at least 12 out of 15</b></header>
+<div class="in">
+  <p class="task"><b>The run:</b> every card went through the classifier and every prediction was logged next to its true label. Here are the totals by kind of date.</p>
+  <table class="t"><thead><tr><th>Kind of date</th><th>Cards</th><th>Right before</th><th>Right after the aimed rule</th></tr></thead>
+  <tbody><tr><td>light-brown ripe</td><td>5</td><td>5</td><td>5 (not re-run)</td></tr><tr><td>yellow unripe</td><td>5</td><td>5</td><td>5 (not re-run)</td></tr><tr><td>dark ripe</td><td>5</td><td>1</td><td>4 (re-run)</td></tr></tbody></table>
+  <p class="note"><b>Constraint added:</b> a risk rule – ‘flag any date with white or grey fuzzy spots as possible mould’. Two cards (7 and 13) have spots.</p>
+</div>`;
+$("#tlog").innerHTML=`<header><small>Tool log · Teachable Machine + Scratch · illustrative</small><b>Ripe or unripe? Five inputs, before and after one improvement</b></header>
+<div class="in">
+  <p class="task"><b>Set-up:</b> classes ‘ripe’ and ‘unripe’, trained on photos of real dates (objects only – no faces, voices or names). In Scratch: input (camera image) → model (classifies) → output (the sprite says the label).</p>
+  <table class="t"><thead><tr><th>Input</th><th>True label</th><th>Output before</th><th>Output after</th></tr></thead>
+  <tbody><tr><td>1 · dark date on a white plate</td><td>ripe</td><td>unripe ✗</td><td>ripe ✓</td></tr><tr><td>2 · pale yellow date</td><td>unripe</td><td>unripe ✓</td><td>unripe ✓</td></tr><tr><td>3 · dark date in dim light</td><td>ripe</td><td>unripe ✗</td><td>ripe ✓</td></tr><tr><td>4 · light-brown date</td><td>ripe</td><td>ripe ✓</td><td>ripe ✓</td></tr><tr><td>5 · green date</td><td>unripe</td><td>unripe ✓</td><td>unripe ✓</td></tr></tbody></table>
+  <p class="note"><b>Change made between runs:</b> 10 cleaner, well-lit photos of dark ripe dates added to the ‘ripe’ class, then the model was retrained.</p>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const pairs=(rows,opts,ph,order)=>rows.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,opts,ph,order)}</div>`).join("");
+const ask=(k,q,opts,order)=>`<div class="pair" data-item="${k}"><span class="t">${esc(q)}</span>${sel(k,opts,"Choose…",order)}</div>`;
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "match":
+    return `<p class="how">Match each strand to the job it does on this one task.</p>`+pairs(MATCH,MATCH_OPTS,"Choose its job…",[2,0,3,1]);
+  case "case1":
+    return `<div class="quote">Your team must test a date classifier and keep it responsible. Evaluator, which single move brings all four strands together on this one task?</div><p class="q" id="q-c1">Which move brings all four strands together?</p>${radios("c1",CASE1)}`;
+  case "order":
+    return `<p class="how">Put the steps into the order you test one classifier and improve it, from first to last.</p>`+
+      STEPS.map((_,i)=>`<div class="pair" data-item="o${i}"><span class="t">Step ${i+1}</span>${sel("o"+i,STEPS,"Choose the step…",STEP_ORDER)}</div>`).join("");
+  case "case2":
+    return `<div class="quote">The classifier labels a date ‘ripe’ and reports it is 98 percent sure. Evaluator, does that high confidence prove the label is right?</div><p class="q" id="q-c2">Does high confidence prove it is right?</p>${radios("c2",CASE2)}`;
+  case "judge":
+    return `<p class="how">Judge each move in the evaluation: is it sound, does it need care, or is it unsound?</p>`+
+      JUDGE.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["✅ Sound","❓ Needs care","⛔ Unsound"],["A","B","C"],t)}</div>`).join("");
+  case "case3":
+    return `<div class="quote">A classifier scores nine out of ten on ripe dates but only four out of ten on dark ripe dates. Evaluator, what does the overall score hide, and what do you fix first?</div><p class="q" id="q-c3">What does the overall score hide, and what do you fix first?</p>${radios("c3",CASE3)}`;
+  case "map":
+    return `<p class="how">Fill in what goes in each stage of your evaluate-and-improve task. Use the score sheet above.</p>`+pairs(MAP,MAP_OPTS,"Choose what goes here…",[2,0,3,1]);
+  case "score":
+    return `<p class="how">Use the score sheet above. Total the accuracy, compare it with the target, then aim one improvement.</p>`+
+      ask("sc1","Total correct out of 10",SC_TOTAL,[2,0,3,1])+
+      ask("sc2","Accuracy compared with the 80% target",SC_PCT,[1,3,0,2])+
+      ask("sc3","The kind of date it missed most",SC_WEAK,[1,2,0,3])+
+      ask("sc4","The one aimed rule to add",SC_RULE,[1,0,2,3])+
+      ask("sc5","Re-score after the rule",SC_AFTER,[3,1,0,2])+
+      ask("sc6","One responsible choice we made",SC_RESP,[1,2,0,3]);
+  case "exit":
+    return `<p class="q" id="q-ex">Which sentence explains how the workflow made a result, checked it against the target, gives the score before and after, and names a responsible choice?</p>${radios("ex",EXIT)}`;
+  case "chal":
+    return `<div class="quote">Stretch: you add a second criterion – also label each date bruised or not. How should you adapt your approach?</div><p class="q" id="q-ch">Which is the best way to add the constraint?</p>${radios("ch",CHAL)}`;
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lorder":
+    return `<p class="how">Put the end-to-end run into the order you actually work through it.</p>`+
+      LSTEPS.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">Step ${i+1}</span>${sel("lo"+i,LSTEPS,"Choose the step…",LSTEP_ORDER)}</div>`).join("");
+  case "lcase1":
+    return `<div class="quote">Your partner ran three cards, saw two correct, and said ‘it works’. Evaluator, why is a full results log stronger evidence than that?</div><p class="q" id="q-lc1">Why is a full results log stronger evidence?</p>${radios("lc1",LCASE1)}`;
+  case "lsort":
+    return `<p class="how">Sort each statement: is it evidence from the log, or just a feeling?</p>`+
+      LSORT.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🧾 Evidence","🌫️ Feeling"],["E","F"],t)}</div>`).join("");
+  case "lcase2":
+    return `<div class="quote">Your model gets 11 out of 15 right, but the target is 12. You add one rule to close the gap. Evaluator, how do you prove the rule actually helped?</div><p class="q" id="q-lc2">How do you prove the rule helped?</p>${radios("lc2",LCASE2)}`;
+  case "lmatch":
+    return `<p class="how">Match each term to the meaning that fits it.</p>`+pairs(LMATCH,LMATCH_OPTS,"Choose the meaning…",[3,1,0,2]);
+  case "lcase3":
+    return `<div class="quote">You want your model to also flag any date that might be mouldy. Evaluator, what is the responsible way to add this constraint?</div><p class="q" id="q-lc3">What is the responsible way to add the constraint?</p>${radios("lc3",LCASE3)}`;
+  case "llog":
+    return `<p class="how">Use the results log above.</p>`+
+      ask("lg1","Accuracy before any change",LG_BEFORE,[2,0,3,1])+
+      ask("lg2","Does it meet the criterion (12 out of 15) before the change?",LG_MEET,[1,2,0])+
+      ask("lg3","The weakest kind of date",LG_WEAK,[1,3,0,2])+
+      ask("lg4","Accuracy after the aimed rule",LG_AFTER,[3,1,0,2])+
+      ask("lg5","Which cards do you re-score for the mould rule?",LG_MOULD,[2,0,3,1]);
+  case "ltool":
+    return `<p class="how">Use the tool log above.</p>`+
+      ask("tl1","In Scratch, where does the trained model sit?",TL_WIRE,[1,0,2,3])+
+      ask("tl2","Score before the change",TL_BEFORE,[3,1,0,2])+
+      ask("tl3","The one improvement made",TL_FIX,[1,3,0,2])+
+      ask("tl4","Score after the change",TL_AFTER,[1,2,0])+
+      ask("tl5","Why re-run the same five inputs?",TL_SAME,[2,0,3,1]);
+  case "lsafe":
+    return boxes(LSAFE,"Safety check: tick every rule that keeps our Teachable Machine and Scratch work safe – I used no personal data (no faces, voices or names). Leave the others unticked.");
+  case "lexit":
+    return `<p class="q" id="q-le">Which exit ticket gives accuracy before and after, whether each meets the criterion, one weak spot, the constraint added and how the task stayed responsible?</p>${radios("le",LEXIT)}`;
+  case "lchal":
+    return `<div class="quote">Stretch: you want to add a second constraint on top of the first – a bruised-or-not criterion and a flag-mould risk rule – and find out which change affects accuracy more.</div><p class="q" id="q-lch">How should you test it?</p>${radios("lch",LCHAL)}`;
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 8 Main Course · Term 1 Week 6 (9 – 13 Nov 2026) · Core + Lab · One Model, Four Strands + Run It End to End</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
