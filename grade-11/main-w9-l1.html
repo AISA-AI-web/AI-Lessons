@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Refining &amp; Finishing + Lock It and Rehearse – Grade 11 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#4F46E5; --main2:#6366F1; --deep:#312E81;
+  --ink:#1E1B3A; --muted:#585670; --paper:#F6F6FD; --card:#FFFFFF;
+  --line:#DCDCF3; --soft:#EEEEFC;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#A5B4FC,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#7C74F0);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#1E1B3A,#433D7A)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#D6D6FB 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FAFAFE;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FBFBFF}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#7C74F0)}
+.act-head.ws{background:linear-gradient(120deg,#1E1B3A,#4A447F)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#EEEEFD}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #C4C4EE;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #A9A6F0;border-radius:12px;padding:10px 14px;background:#F8F8FE;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(30,27,58,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#1E1B3A;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 11 Main Course, Term 1</span><span class="pill">Week 9 Core + Week 9 Lab</span><span class="pill">📅 Teach: week of 30 Nov – 4 Dec 2026</span></div>
+    <h1>Refining &amp; Finishing + Lock It and Rehearse</h1>
+    <p>Today you finish your AI solution and prove it is good enough to share. Finishing is not adding more – it is optimising: making one smart change, naming what it trades off, and measuring that your solution still meets the agreed criteria for efficiency, usability and performance. Then, in the Lab, you lock your final build and rehearse showing it well: a demo that owns the trade-offs you made, shows the checks that make it trustworthy, and holds up when a stakeholder asks a hard question.</p>
+    <p class="meta"><b>Strand:</b> Signature Solution · Refine &nbsp;·&nbsp; <b>Scenario:</b> finishing, locking and rehearsing your signature solution</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 11B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 9 of Term 1 – week of Monday 30 November to Friday 4 December 2026.</b> Grade 11 has one AI period a week. <b>Boys 11</b> and <b>Girls 11:</b> both on Friday 4 December. Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Refining &amp; Finishing</a>, then move on to the <a href="#lab">Lab: Lock It and Rehearse</a>. Next week (Week 10) is your showcase, assessment and reflection.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Finish to criteria.</b> I can finish my AI solution so it meets our success criteria, balancing efficiency, usability and performance.</li>
+      <li><b>Evaluate three ways.</b> I can evaluate it for accuracy, usefulness and risk using measurable evidence and an impact check.</li>
+      <li><b>Justify one change.</b> I can justify one change that improved it, citing the checks and the trade-off it resolved.</li>
+      <li><b>Lab: final iteration, lock, rehearse, defend.</b> I can run one final iteration, confirm no criterion regressed and version-lock the build I will show; rehearse a demo that explains the trade-offs I made and the checks I ran; and justify that my solution is trustworthy and low-risk under a tough question.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 9 Core · Refining &amp; Finishing</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Finishing is optimising, not adding</b><small>Three goals, one lever, a named trade-off</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Accurate, useful and responsible</b><small>Judge three ways and run an impact check</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Core worksheet</b><small>Tag, adjust one lever, re-measure, justify</small></a></li>
+      <li><span class="num">4</span><a href="#p4"><b>Finish by balancing, on paper</b><small>Unplugged activity and refine check</small></a></li>
+    </ol>
+    <h3 class="rh">Week 9 Lab · Lock It and Rehearse</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Lock it, do not add to it</b><small>One final iteration, no regression, version-lock</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Own the trade-offs and the checks</b><small>Then defend them under a hard question</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Lab worksheet</b><small>Lock, demo sentences, defend, justify</small></a></li>
+      <li><span class="num">L4</span><a href="#l4"><b>Lock and rehearse, on paper</b><small>Unplugged activity and lock check</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 4</span><h2>Finishing is optimising, not adding</h2><p>Why is a finished solution balanced, not maximal?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>Last week (Week 8) you built your solution, ran it start to finish, kept an evaluation log and documented each fix. Now you finish it – by optimising, not by adding.</p></div>
+    <div class="call"><h4>Scenario</h4><p>You finish your solution – not by adding features, but by balancing it. You adjust one lever, re-measure against a trusted source, and run an impact check so the solution is accurate, useful and responsible. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">Finishing is optimising, not adding</h3>
+    <p>A finished AI solution is <b>balanced, not maximal</b>. It has three goals that pull against each other: <b>efficiency</b> (speed, cost and steps), <b>usability</b> (how easily a real user gets a good result) and <b>performance</b> (accuracy and reliability). Improving one often costs another – a faster process can miss edge cases; a more accurate one can be slower or harder to use. So when you refine, adjust <b>one lever</b> at a time – the data, the prompt or the structure – <b>predict the trade-off</b>, then re-run the whole solution and re-measure it against your fixed success criteria. If you change several levers at once, you cannot tell which one helped or what it cost. Adding an untested feature at the end usually unbalances what already works. Small, measured, honestly-traded changes are how real AI solutions get finished.</p>
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="f1T">
+        <title id="f1T">The optimising loop: 1 adjust one lever (data, prompt or structure); 2 predict the trade-off; 3 re-run the whole solution; 4 measure against your fixed criteria. If a criterion is not met yet, go round again with the next lever, one at a time. Underneath: efficiency, usability and performance pull against each other.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1E1B3A"/></marker>
+        <marker id="ahM" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#4F46E5"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#1E1B3A">
+          <text x="380" y="24" font-size="15" font-weight="700" text-anchor="middle">Optimise: one lever, one named trade-off, then measure</text>
+          <g stroke="#1E1B3A" stroke-width="1.6">
+            <rect x="12" y="44" width="160" height="80" rx="10" fill="#EEEEFC" stroke="#4F46E5" stroke-width="2.4"/>
+            <rect x="204" y="44" width="160" height="80" rx="10" fill="#fff"/>
+            <rect x="396" y="44" width="160" height="80" rx="10" fill="#fff"/>
+            <rect x="588" y="44" width="160" height="80" rx="10" fill="#fff"/>
+          </g>
+          <g font-size="15" font-weight="700" text-anchor="middle"><text x="92" y="70" fill="#4F46E5">1 · One lever</text><text x="284" y="70">2 · Trade-off</text><text x="476" y="70">3 · Re-run</text><text x="668" y="70">4 · Measure</text></g>
+          <g font-size="13" text-anchor="middle" fill="#585670"><text x="92" y="92">data, prompt</text><text x="92" y="110">or structure</text><text x="284" y="92">predict what</text><text x="284" y="110">you give up</text><text x="476" y="92">the whole</text><text x="476" y="110">solution</text><text x="668" y="92">against your</text><text x="668" y="110">fixed criteria</text></g>
+          <g stroke="#1E1B3A" stroke-width="2.5" marker-end="url(#ah)"><path d="M172 84H201"/><path d="M364 84H393"/><path d="M556 84H585"/></g>
+          <path d="M668 126V150H92V129" fill="none" stroke="#4F46E5" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#ahM)"/>
+          <text x="380" y="172" font-size="13" font-weight="600" text-anchor="middle" fill="#4F46E5">A criterion not met yet? Go round again – the next lever, one at a time.</text>
+          <g stroke="#1E1B3A" stroke-width="1.4" fill="#fff">
+            <rect x="40" y="206" width="200" height="64" rx="12"/><rect x="280" y="206" width="200" height="64" rx="12"/><rect x="520" y="206" width="200" height="64" rx="12"/>
+          </g>
+          <g font-size="14" font-weight="700" text-anchor="middle" fill="#312E81"><text x="140" y="232">EFFICIENCY</text><text x="380" y="232">USABILITY</text><text x="620" y="232">PERFORMANCE</text></g>
+          <g font-size="13" text-anchor="middle" fill="#585670"><text x="140" y="254">speed · cost · steps</text><text x="380" y="254">real users succeed</text><text x="620" y="254">accurate · consistent</text></g>
+          <g font-size="18" font-weight="700" text-anchor="middle" fill="#4F46E5"><text x="260" y="244">↔</text><text x="500" y="244">↔</text></g>
+          <text x="380" y="292" font-size="13" text-anchor="middle" fill="#585670">The three goals pull against each other – a finished solution balances them.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> Optimising a solution: adjust one lever, name the trade-off, re-run, then measure against your criteria.</figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-eup"></div>
+    <div id="a-onelever"></div>
+    <div id="a-predict"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 4</span><h2>Accurate, useful and responsible</h2><p>What makes a finished solution trustworthy?</p></div>
+  <div class="part-body">
+    <p>A finished solution is judged three ways. <b>Accuracy:</b> is it correct when you check it against a trusted source? A confident output can still be wrong. <b>Usefulness:</b> does it actually complete the task for its real user? <b>Risk:</b> could a wrong output mislead, exclude or expose someone, and does it meet the governance expectations set for it? Before you share, run an <b>impact check</b> – name who could be affected, how you would catch a mistake, and which governance rule your solution must respect. Because you enter no personal data and every model step is teacher-run, you are optimising the data, prompts and process, not people's information. That is what makes a solution trustworthy – not how polished it looks.</p>
+    <figure>
+      <svg viewBox="0 0 760 290" role="img" aria-labelledby="f2T">
+        <title id="f2T">Three tests of a finished solution: accurate (correct when checked against a trusted source), useful (completes the task for its real user) and responsible (could it mislead, exclude or expose someone?). Underneath, the impact check before you share: who could be affected, how would you catch a mistake, and which governance rule applies.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#1E1B3A">
+          <text x="380" y="24" font-size="15" font-weight="700" text-anchor="middle">Judge the finished solution three ways</text>
+          <g stroke="#1E1B3A" stroke-width="1.6" fill="#fff">
+            <rect x="15" y="40" width="230" height="92" rx="12"/><rect x="265" y="40" width="230" height="92" rx="12"/><rect x="515" y="40" width="230" height="92" rx="12"/>
+          </g>
+          <g font-size="15" font-weight="700" text-anchor="middle" fill="#4F46E5"><text x="130" y="68">✓ ACCURATE</text><text x="380" y="68">✓ USEFUL</text><text x="630" y="68">✓ RESPONSIBLE</text></g>
+          <g font-size="13" text-anchor="middle" fill="#585670"><text x="130" y="92">correct when checked</text><text x="130" y="112">against a trusted source</text><text x="380" y="92">completes the task</text><text x="380" y="112">for its real user</text><text x="630" y="92">could it mislead, exclude</text><text x="630" y="112">or expose someone?</text></g>
+          <rect x="15" y="152" width="730" height="104" rx="14" fill="#EEEEFC" stroke="#4F46E5" stroke-width="1.8"/>
+          <text x="380" y="176" font-size="15" font-weight="700" text-anchor="middle" fill="#312E81">IMPACT CHECK – before you share</text>
+          <g stroke="#4F46E5" stroke-width="1.2" fill="#fff"><rect x="35" y="190" width="216" height="52" rx="10"/><rect x="272" y="190" width="216" height="52" rx="10"/><rect x="509" y="190" width="216" height="52" rx="10"/></g>
+          <g font-size="13.5" text-anchor="middle"><text x="143" y="212">Who could be</text><text x="143" y="231">affected?</text><text x="380" y="212">How would you</text><text x="380" y="231">catch a mistake?</text><text x="617" y="212">Which governance</text><text x="617" y="231">rule applies?</text></g>
+          <text x="380" y="280" font-size="13" text-anchor="middle" fill="#585670">Trustworthy comes from these checks – not from how polished the output looks.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> A finished solution must be accurate, useful and responsible – and an impact check comes before you share it.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, teams finishing an AI service – a hospital triage assistant, a public-service chatbot, a logistics optimiser – must balance speed, usability and accuracy and prove it meets governance and impact rules before launch. Learning to optimise, measure and evaluate honestly is a real workplace skill.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Mathematics · Moral Education</h4><p>Balancing competing goals against criteria is <b>optimisation</b> in <b>Mathematics</b>. Running an impact check before calling a solution finished is <b>responsibility</b> from <b>Moral Education</b>.</p></div>
+    <div class="call amber"><h4>Tool for this week: spreadsheet (performance metrics + charts) + the school-approved generative assistant – teacher-mediated</h4><p>1. Read your success criteria and tag each as efficiency, usability or performance. 2. Pick one lever – data, prompt or structure – and adjust only that. 3. Re-measure against a trusted source, run the impact check, and justify the change. <b>Stay safe:</b> teacher-operated tool; non-personal data only. Verify the new output against a trusted source before accepting it.</p></div>
+    <div id="a-judge"></div>
+    <div id="a-impact"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 · WORKSHEET -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 4 · Worksheet</span><h2>Refining &amp; Finishing</h2><p>Your brief: tag your criteria, adjust one lever, re-measure against a trusted source, run the impact check and justify the change.</p></div>
+  <div class="part-body">
+    <p>Work through the worksheet using the project file below – an example signature solution at the same stage as yours. Then do the same for your own solution.</p>
+    <div class="ecard" id="proj"></div>
+    <div id="a-wscrit"></div>
+    <div id="a-wslever"></div>
+    <div id="a-wsmeasure"></div>
+    <div id="a-wsimpact"></div>
+    <div id="a-wsjust"></div>
+  </div>
+</section>
+
+<!-- CORE PART 4 · UNPLUGGED -->
+<section class="part" id="p4">
+  <div class="part-head"><span class="pill">Core · Part 4 of 4 · Unplugged</span><h2>Finish by balancing, on paper</h2><p>Tag the criteria, pick one lever, predict its effect three ways, plan the impact check.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>Your solution works but is not balanced. Working on paper, pick one lever and predict its effect on the three qualities. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Record: ‘Lever: shorten the prompt. Predicted: usability up, accuracy slightly down – re-measure.’</div>
+    <div id="a-balance"></div>
+    <div id="a-quiz"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 9 Lab</span><h2>Lock It and Rehearse</h2><p>Today you lock your final build and rehearse showing it well. A great demo does not just show the answer – it owns the trade-offs you made between speed, usability and accuracy, shows the checks that make it trustworthy, and holds up when a stakeholder asks a hard question.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In the Core you adjusted one lever, named its trade-off, re-measured against a trusted source and ran an impact check. Now lock that build and rehearse showing it.</p></div>
+    <div class="call"><h4>Scenario</h4><p>You run one final optimisation, confirm no criterion has regressed, then version-lock the build – no more changes – and rehearse a demo that owns your key trade-off and the checks that make the solution trustworthy. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 4</span><h2>Lock it, do not add to it</h2><p>Why not add one more feature?</p></div>
+  <div class="part-body">
+    <p>Right before a showcase, the temptation is to add one more feature. Do not. A last-minute change is untested, and because your solution's goals trade against each other, it can <b>regress</b> a criterion you already passed – quietly costing accuracy or usability just when you need them. Instead, run <b>one final optimisation</b>, re-measure every criterion to confirm none regressed, then <b>version-lock</b>: pick the build you can reproduce on demand and freeze it. A locked, reproducible build is one you can show with confidence, because you know exactly how it behaves, what it trades off, and which checks it passed.</p>
+    <figure>
+      <svg viewBox="0 0 760 250" role="img" aria-labelledby="f3T">
+        <title id="f3T">The road to the showcase: 1 final optimisation, 2 re-measure so no criterion regressed, 3 version-lock a reproducible build, 4 rehearse and own the trade-off. A last-minute extra feature is blocked because it is untested and can make a criterion you passed regress.</title>
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1E1B3A"/></marker>
+        <marker id="ah3r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#C92A4B"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#1E1B3A">
+          <text x="380" y="24" font-size="15" font-weight="700" text-anchor="middle">The road to the showcase – lock, then rehearse</text>
+          <g stroke="#1E1B3A" stroke-width="1.6">
+            <rect x="11" y="44" width="150" height="70" rx="10" fill="#fff"/>
+            <rect x="207" y="44" width="150" height="70" rx="10" fill="#fff"/>
+            <rect x="403" y="44" width="150" height="70" rx="10" fill="#4F46E5" stroke="#312E81"/>
+            <rect x="599" y="44" width="150" height="70" rx="10" fill="#EEEEFC"/>
+          </g>
+          <g font-size="15" font-weight="700" text-anchor="middle"><text x="86" y="72">1 · Final run</text><text x="282" y="72">2 · Re-measure</text><text x="478" y="72" fill="#fff" font-size="14">3 · Version-lock</text><text x="674" y="72">4 · Rehearse</text></g>
+          <g font-size="13" text-anchor="middle" fill="#585670"><text x="86" y="96">one optimisation</text><text x="282" y="96">nothing regressed</text><text x="478" y="96" fill="#fff">reproducible build</text><text x="674" y="96">own the trade-off</text></g>
+          <g stroke="#1E1B3A" stroke-width="2.5" marker-end="url(#ah3)"><path d="M161 79H204"/><path d="M357 79H400"/><path d="M553 79H596"/></g>
+          <rect x="300" y="170" width="200" height="56" rx="10" fill="#FDE7EC" stroke="#C92A4B" stroke-width="1.8" stroke-dasharray="6 4"/>
+          <text x="400" y="194" font-size="14" font-weight="700" text-anchor="middle" fill="#C92A4B">+ one more feature?</text>
+          <text x="400" y="214" font-size="13" text-anchor="middle" fill="#8A1330">untested, the night before</text>
+          <path d="M455 170L470 122" stroke="#C92A4B" stroke-width="2.2" marker-end="url(#ah3r)"/>
+          <g stroke="#C92A4B" stroke-width="3.2"><path d="M452 136L478 156"/><path d="M478 136L452 156"/></g>
+          <g font-size="13" fill="#585670"><text x="520" y="184">Goals trade off, so it can</text><text x="520" y="202">make a criterion you</text><text x="520" y="220">already passed regress.</text></g>
+          <g font-size="13" fill="#585670"><text x="14" y="184">Lock = the build you can</text><text x="14" y="202">reproduce on demand –</text><text x="14" y="220">and no further changes.</text></g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> Run one final optimisation, confirm no criterion regressed, then version-lock a reproducible build and rehearse. A last-minute extra is blocked: it is untested and can make a criterion you already passed regress.</figcaption>
+    </figure>
+    <div id="a-lsort"></div>
+    <div id="a-lregress"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 4</span><h2>Own the trade-offs and the checks, then defend them</h2><p>What turns ‘it works’ into a justification?</p></div>
+  <div class="part-body">
+    <p>A strong demo narrates your workflow – <b>task, input, process, output</b> – and then <b>owns your key trade-off</b>: what you gave up in efficiency, usability or performance to meet the criteria, and why that was the right call. Then it shows evidence: the checks you ran. To <b>justify</b> that your solution is trustworthy and low-risk, cite two specific checks – you verified the output against a trusted source, and your impact check named who could be affected and how you would catch a mistake. Then <b>defend</b> it: if a stakeholder asks how you know it is not misleading or excluding anyone, point to your checks and your trade-off reasoning. ‘It works’ is not a justification; owned, defendable trade-offs backed by checks are.</p>
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="f4T">
+        <title id="f4T">The demo spine: task, input, process and output, joined by arrows. Then own your key trade-off: what you gave up and why it was right. Underneath, two checks: an accuracy check, verified against a trusted source, and an impact check naming who could be affected and how a mistake is caught. A hard question is answered by pointing to the checks and the trade-off reasoning.</title>
+        <defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1E1B3A"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#1E1B3A">
+          <text x="380" y="24" font-size="15" font-weight="700" text-anchor="middle">The demo spine – workflow, trade-off, checks</text>
+          <g stroke="#1E1B3A" stroke-width="1.6" fill="#fff">
+            <rect x="11" y="42" width="150" height="56" rx="10"/><rect x="207" y="42" width="150" height="56" rx="10"/><rect x="403" y="42" width="150" height="56" rx="10"/><rect x="599" y="42" width="150" height="56" rx="10" fill="#EEEEFC"/>
+          </g>
+          <g font-size="15" font-weight="700" text-anchor="middle"><text x="86" y="67">Task</text><text x="282" y="67">Input</text><text x="478" y="67">Process</text><text x="674" y="67">Output</text></g>
+          <g font-size="13" text-anchor="middle" fill="#585670"><text x="86" y="87">who it is for</text><text x="282" y="87">no personal data</text><text x="478" y="87">the steps it runs</text><text x="674" y="87">the locked build</text></g>
+          <g stroke="#1E1B3A" stroke-width="2.5" marker-end="url(#ah4)"><path d="M161 70H204"/><path d="M357 70H400"/><path d="M553 70H596"/></g>
+          <rect x="11" y="116" width="738" height="44" rx="12" fill="#FFF7E8" stroke="#E8890C" stroke-width="1.8"/>
+          <text x="380" y="144" font-size="14" font-weight="700" text-anchor="middle" fill="#B45309">Own the key trade-off: what you gave up – and why that was the right call</text>
+          <rect x="11" y="176" width="360" height="66" rx="12" fill="#EEEEFC" stroke="#4F46E5" stroke-width="1.8"/>
+          <rect x="389" y="176" width="360" height="66" rx="12" fill="#F4F0FC" stroke="#6B46C1" stroke-width="1.8"/>
+          <text x="191" y="200" font-size="15" font-weight="700" text-anchor="middle" fill="#4F46E5">✓ Accuracy check</text>
+          <text x="191" y="224" font-size="13" text-anchor="middle">verified against a trusted source</text>
+          <text x="569" y="200" font-size="15" font-weight="700" text-anchor="middle" fill="#6B46C1">✓ Impact check</text>
+          <text x="569" y="224" font-size="13" text-anchor="middle">who is affected, how a mistake is caught</text>
+          <rect x="100" y="254" width="560" height="38" rx="19" fill="#1E1B3A"/>
+          <text x="380" y="278" font-size="13.5" font-weight="600" text-anchor="middle" fill="#fff">Hard question? Point to a check and your trade-off reasoning.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 4.</b> The demo spine: show your workflow, own your key trade-off, and cite the checks that make it defendable.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>When a UAE team demos a new AI service to leaders, they are judged on the trade-offs they can defend and the checks they can show under hard questions, not on how polished it looks. Rehearsing an evidence-based, defendable demo builds exactly that professional skill.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Design &amp; Technology · Moral Education</h4><p>Freezing a tested version before release is <b>configuration control</b> from <b>Design &amp; Technology</b>. Honestly owning what you traded away is <b>integrity</b> from <b>Moral Education</b>.</p></div>
+    <div class="call amber"><h4>Tool for this week: spreadsheet (performance metrics + charts) + the school-approved generative assistant – teacher-mediated</h4><p>1. Run one final optimisation and confirm no success criterion has regressed. 2. Version-lock the reproducible build and agree no further changes. 3. Write and rehearse your demo sentences – task, input, process, output – and your trade-off justification. <b>Stay safe:</b> teacher-operated tool; non-personal data only. Lock the tested version; do not add untested features before the demo.</p></div>
+    <div id="a-lorder"></div>
+    <div id="a-lchecks"></div>
+    <div id="a-ldefend"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Part 3 of 4 · Worksheet</span><h2>Refining &amp; Finishing – Lab worksheet</h2><p>Your brief: run one final optimisation, version-lock the build, and rehearse a demo that owns your trade-off.</p></div>
+  <div class="part-body">
+    <p>Use the lock log below – the same example solution from the Core worksheet, one final iteration later. Then do the same for your own solution.</p>
+    <div class="ecard" id="lock"></div>
+    <div id="a-llock"></div>
+    <div id="a-lspine"></div>
+    <div id="a-lhard"></div>
+  </div>
+</section>
+
+<section class="part" id="l4">
+  <div class="part-head"><span class="pill">Lab · Part 4 of 4 · Unplugged</span><h2>Lock and rehearse, on paper</h2><p>Check for regression, write the demo sentences, state the trade-off you will own.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>You are one lesson from your showcase. Working on paper, check no criterion regressed, then write your demo script. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Check regression: ‘Usability 8/10 before and after – no regression, safe to lock.’</div>
+    <div id="a-lpaper"></div>
+    <div id="a-lquiz"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Balance it with one lever – then lock it and defend it</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>Finishing is <b>balancing</b> competing goals – efficiency, usability and performance – not adding features.</li>
+      <li>Adjust <b>one lever</b> – data, prompt or structure – predict the <b>trade-off</b>, then re-measure against your fixed criteria.</li>
+      <li>Judge the finished solution three ways: <b>accurate, useful and responsible</b>.</li>
+      <li>Verify against a <b>trusted source</b> and run an <b>impact check</b> before calling it done.</li>
+      <li>Run a final iteration and confirm no criterion has <b>regressed</b>; then <b>version-lock</b> the tested build – no more untested changes.</li>
+      <li>Rehearse a demo that <b>owns the trade-off</b> and the checks behind it. Trustworthy means low-risk and defensible, backed by evidence. Next week (Week 10): the showcase.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 11 · Main Course · Term 1 Week 9 (30 Nov – 4 Dec 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- strand + concept tags ---------- */
+const CU_A="CU · trade-offs: accuracy, efficiency, usability, reliability";
+const SD_P="SD · structured multi-step solutions addressing user needs";
+const SD_A="SD · optimises solutions for efficiency, usability and performance";
+const CE_P="CE · evaluates using multiple criteria and evidence";
+const CE_A="CE · justifies improvements using data and structured reasoning";
+const GE_P="GE · structured analysis of ethical and societal implications";
+const GE_A="GE · proposes responsible-use approaches considering broader impact";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["optimise","To improve a solution against its goals by balancing trade-offs, not by adding features."],
+  ["efficiency","How fast, cheap or few-stepped your solution is for the user."],
+  ["usability","How reliably a real user reaches a good result with it."],
+  ["performance","How accurate and consistent the output is on the task."],
+  ["trade-off","What you give up in one goal to gain in another."],
+  ["risk","The chance the output could mislead, exclude, expose or otherwise harm someone."]
+];
+const DEF_ORDER = [3,5,0,4,2,1];
+const GOALS = ["Efficiency","Usability","Perform\u00ADance"];
+const EUP = [
+  ["eu1","⏱️ Answers arrive in under 5 seconds","E"],
+  ["eu2","🎯 At least 18 of 20 test items match the trusted source","P"],
+  ["eu3","🙋 8 in 10 first-time users reach a good result without help","U"],
+  ["eu4","🔁 The same input gives the same answer on three re-runs","P"],
+  ["eu5","🧮 The process uses no more than 3 steps","E"],
+  ["eu6","📱 The answer fits on one phone screen in plain language","U"]
+];
+const ONE = [
+  ["ol1","Shorten the prompt only, then re-run the whole solution and re-measure","O"],
+  ["ol2","Swap the data sheet, rewrite the prompt and add a step in one go","M"],
+  ["ol3","Add five missing rows to the data sheet only, then re-measure every criterion","O"],
+  ["ol4","Change the prompt and switch to a different assistant at the same time","M"],
+  ["ol5","Rebuild the whole process the night before you measure it","M"]
+];
+const PRED = [
+  ["pr1","Lever: shorten the prompt so answers are one line",0],
+  ["pr2","Lever: add a ‘double-check against the guide’ step to the process",1],
+  ["pr3","Lever: add many more worked examples to the prompt",2]
+];
+const PRED_OPTS = [
+  "Usability and speed up – accuracy may dip slightly as detail is cut",
+  "Accuracy up – but slower, with one more step for every answer",
+  "Accuracy on tricky inputs up – but longer to run and costlier per answer",
+  "All three goals go up, with nothing given up"
+];
+const JUDGE = [
+  ["j1","The bin colours in the answers match the council's published recycling guide","A"],
+  ["j2","A resident can act on the answer without phoning anyone","U"],
+  ["j3","A wrong answer about batteries could cause a fire in a recycling truck","R"],
+  ["j4","No personal data is typed in, and each answer says AI helped write it","R"],
+  ["j5","Test users say the one-line answer is quick to follow","U"],
+  ["j6","20 held-out items are checked against the guide, item by item","A"]
+];
+const IK1 = ["Nobody – it is only a helper","The company that made the assistant","Residents who put a hazardous item in the wrong bin because of a wrong answer","The council's website"];
+const IK2 = ["Trust answers that sound confident","Ask the assistant whether it is sure","Answer faster so mistakes are fixed sooner","Hazardous items always end with ‘check the council guide’, and answers are spot-checked against the guide"];
+const IK3 = ["No personal data is typed in, and AI use is disclosed on every answer","Answers must be as long as possible","Use the newest model available","Answers must sound formal"];
+
+/* Core worksheet (project file: recycling-bin helper, illustrative) */
+const WCRIT = [
+  ["wc1","C1 · Answers in under 5 seconds","E"],
+  ["wc2","C2 · At least 8 of 10 test users choose the right bin without help","U"],
+  ["wc3","C3 · At least 18 of 20 held-out items match the council guide","P"],
+  ["wc4","C4 · No more than 3 steps in the process","E"]
+];
+const WMET = [
+  ["wt1","C1 – baseline answer time 4 s",1],
+  ["wt2","C2 – baseline 6 of 10 users chose the right bin",0],
+  ["wt3","C3 – baseline 19 of 20 held-out items correct",1],
+  ["wt4","C4 – baseline process has 3 steps",1]
+];
+const WL1 = ["Swap the data sheet, rewrite the prompt and add a photo step together","Switch to a bigger model, because bigger is always better","The prompt – put the bin colour first, in one line, with at most one tip","Add a voice-input feature"];
+const WL2 = ["Nothing will be given up","Usability and speed up; accuracy may dip slightly because tips get cut","Accuracy will rise and usability will fall","Every criterion will fail"];
+const WK = ["Only the after figures, because they are newer","Both runs on the same 20 held-out items and the same 10 test users, with their figures","Whichever run looked better in the demo","The before run only, so nothing changes"];
+const WM_PB = ["19%","90%","95%","100%"];
+const WM_PA = ["18%","85%","90%","95%"];
+const WM_UC = ["+3 percentage points","+30 percentage points","+50 percent of the original score","−30 percentage points"];
+const WM_TO = [
+  "No – accuracy fell, so the change failed",
+  "No – nothing changed at all",
+  "Yes – usability rose, and accuracy dipped by 5 percentage points but still meets C3",
+  "Yes – and accuracy rose too"
+];
+const WIMP = [
+  ["wi1","Who: residents who put a battery or paint tin in the wrong bin because of a wrong answer",1],
+  ["wi2","Catch: hazardous items always end with ‘check the council guide’, and the teacher spot-checks answers against it",1],
+  ["wi3","Rule: no personal data is typed in, test items are teacher-made, and AI use is disclosed",1],
+  ["wi4","The answers sound confident, so mistakes are unlikely",0],
+  ["wi5","It is faster now, so it must be safer",0]
+];
+const WJ1 = ["adding a photo-recognition step","rewriting the prompt so the bin colour comes first, in one line","switching to a bigger model","adding more test users"];
+const WJ2 = ["nothing","a little speed","the council guide","a small dip in accuracy (19 → 18 of 20)"];
+const WJ3 = ["usability (6 → 9 of 10 users choosing the right bin)","fewer steps","a more polished look","a longer answer"];
+const WJ4 = ["it felt quicker in practice","the answers now look more professional","every criterion is now met, measured on the same held-out items and test users","the assistant said it was better"];
+
+/* Core unplugged (library book-finder, illustrative) */
+const BAL = [
+  ["ba1","Finds the right shelf for at least 9 of 10 test titles","P"],
+  ["ba2","Answers in under 3 seconds","E"],
+  ["ba3","A Grade 7 student can use it without help","U"],
+  ["ba4","Uses no more than 2 steps","E"]
+];
+const BLEVER = ["All three goals go up automatically","Nothing changes, so there is no need to re-measure","Performance up on tricky titles; efficiency may dip a little (a longer prompt) – re-measure","Usability falls to zero"];
+const BIMPACT = ["Ask a friend whether it looks finished","Check only that it runs without errors","Add one more feature, then decide","Name who could be affected, how you would catch a mistake and which rule it must respect – then re-measure"];
+const QUIZ = [
+  ["q1","What does it mean that “finishing is optimising, not adding”?",["You should add as many features as time allows.","A finished solution is balanced across competing goals, not stuffed with more features.","Finishing means removing all the checks."],1],
+  ["q2","When refining, how many levers should you adjust at once?",["All of them, to save time before the showcase.","None – a finished solution should never be changed.","One, so you can measure whether that change actually helped."],2],
+  ["q3","A finished solution is judged three ways. Which set is right?",["Accuracy (correct against a trusted source), usability, and responsible impact.","Only how fast it runs.","Only how confident the output sounds."],0]
+];
+const TF = [
+  ["tf1","Finishing means adding as many features as possible.","F"],
+  ["tf2","You should adjust one lever at a time when refining.","T"],
+  ["tf3","A finished solution is judged only on speed.","F"]
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["iteration","One round of changing and re-measuring your solution."],
+  ["version-lock","Choosing the reproducible build you will show and freezing it."],
+  ["regress","When a change accidentally makes a criterion you already passed worse again."],
+  ["trade-off","What you gave up in one goal to gain in another."],
+  ["justify","To back a claim with specific evidence, not just assert it."],
+  ["trustworthy","Deserving belief because it has been checked and can be defended, not because it sounds confident."]
+];
+const LDEF_ORDER = [2,5,0,3,1,4];
+const LSORT = [
+  ["ls1","Run one final optimisation and re-measure every criterion","S"],
+  ["ls2","Add a photo-recognition step the evening before the showcase","R"],
+  ["ls3","Save the exact data sheet, prompt and settings of the build you will show","S"],
+  ["ls4","Swap to a newer model “because it might be better”","R"],
+  ["ls5","Re-run the locked build to confirm it gives the same output","S"],
+  ["ls6","Tweak the prompt live during the demo to make it look smarter","R"]
+];
+const REG = [
+  ["rg1","Efficiency: answers in under 5 s","2 s","3 s","H"],
+  ["rg2","Usability: at least 8 of 10 users choose the right bin","9 / 10","5 / 10","R"],
+  ["rg3","Performance: at least 18 of 20 held-out items correct","18 / 20","19 / 20","H"],
+  ["rg4","Efficiency: no more than 3 steps","3","3","H"]
+];
+const RSAFE = ["Yes – three criteria out of four is good enough","Yes – performance went up, and that is all that matters","No – usability regressed; undo or fix the change and re-measure every criterion before locking","No – throw the solution away and start again"];
+const SPINE = ["Task: who the solution helps, and with what","Input: the non-personal data it starts from","Process: the steps it runs, in order","Output: what the user gets from the locked build","Trade-off: what we gave up, and why it was the right call","Checks: our accuracy check and our impact check"];
+const SPINE_ORDER = [3,1,5,0,4,2];
+const CHECKS = [
+  ["ck1","20 held-out items checked against the council guide: 19 correct","A"],
+  ["ck2","Impact check: who could be affected and how a mistake would be caught","I"],
+  ["ck3","The demo slides look polished","N"],
+  ["ck4","Every bin colour in the test answers verified against the published guide","A"],
+  ["ck5","Hazardous-item answers always point to the guide; no personal data is used","I"],
+  ["ck6","“It works – trust us.”","N"]
+];
+const DEF_Q = ["How do you know it is not misleading anyone?","Your answers are so short – aren't you leaving things out?","Could it harm or exclude anyone?","Why didn't you add photo recognition?"];
+const DEF_A = [
+  "Every answer was checked against the council guide: 19 of 20 held-out items correct",
+  "That is our trade-off: one-line answers lifted users from 6 to 9 of 10 for one dropped tip – and accuracy still meets the criterion",
+  "Our impact check: hazardous items are the main risk, so those answers always point to the guide, and no personal data is used",
+  "We version-locked: an untested step could make a criterion we already passed regress"
+];
+const DEF_ORDER2 = [2,0,3,1];
+const LK1 = ["Version 5 – the newest idea is always the best","Version 4 – every criterion passed after the final run and it gave the same output on two re-runs","Version 2 – an earlier version is always safer","No version – keep improving it during the demo"];
+const LK2 = ["It felt fine in practice","Nobody has changed it for an hour","Every criterion re-measured after the final run still passes: 2 s, 9 of 10, 19 of 20, 3 steps","Accuracy went up, so the others must be fine"];
+const LK3 = ["It worked once in practice","We re-ran it twice and got the same output both times","The assistant said it was finished","It has the newest prompt"];
+const SP1 = ["“It uses AI, so it is smart.”","“It answers instantly and never makes mistakes.”","“It identifies the material, looks up the rule in the council guide sheet, then writes a one-line answer with the bin colour first.”","“We added lots of features.”"];
+const SP2 = ["“The answers sound confident.”","“We checked 20 held-out items against the council guide: 19 were correct.”","“The demo ran smoothly in rehearsal.”","“We used the newest model.”"];
+const SP3 = ["“Our solution has no trade-offs.”","“We chose one-line answers: users went from 6 to 9 of 10, and we gave up one preparation tip – accuracy still meets 18 of 20.”","“We made it as fast as possible, whatever the cost.”","“We added a photo step at the last minute.”"];
+const LH1 = ["The demo looked polished, so it must be fine","How quickly it runs","The accuracy check against the council guide, plus hazardous items always pointing to the guide","The number of steps in the process"];
+const LR1 = ["it looks professional","19 of 20 held-out answers were verified against the council guide","it uses the newest tools","it worked once in practice"];
+const LR2 = ["the impact check names who could be affected and how a mistake is caught, and no personal data is used","it has never been wrong","the answers are short","it runs on a school laptop"];
+const LR3 = ["saying it works","hiding the dropped tip","the re-measured numbers: usability 6 → 9 of 10 while accuracy still met 18 of 20","how long we spent on it"];
+const LPREG = [
+  ["pg1","Usability: 8 / 10 before, 8 / 10 after","H"],
+  ["pg2","Accuracy: 19 / 20 before, 16 / 20 after (criterion: at least 18)","R"],
+  ["pg3","Efficiency: 3 s before, 2 s after (criterion: under 5 s)","H"]
+];
+const PAPER = [
+  ["pp1","“We help visitors find the right exhibit room at a science fair.”","T"],
+  ["pp2","“We start from a teacher-made map list – no personal data.”","I"],
+  ["pp3","“The assistant matches the topic to a room, then checks the map list before replying.”","P"],
+  ["pp4","“Visitors get one short line: the room number and the floor.”","O"]
+];
+const PTRADE = ["We have no trade-offs","Our solution is the best at everything","We added a last-minute feature so the demo looks better","We added the map-list check: replies take a second longer, but wrong rooms dropped from 3 to 0 in 20"];
+const LQUIZ = [
+  ["lq1","Why version-lock your solution before the showcase?",["Because adding features late always improves a solution.","A last-minute change is untested and can make another criterion regress.","Because the teacher forbids all demos."],1],
+  ["lq2","What does “regress” mean here?",["The solution runs faster than before.","You go back to an earlier lesson.","A criterion that was met gets worse after a change."],2],
+  ["lq3","What should a strong final demo do besides show the solution?",["Own the key trade-off and the checks that make it trustworthy.","Hide any weaknesses from the audience.","Add a new feature live on stage."],0]
+];
+const LTF = [
+  ["ltf1","Adding one more feature just before the showcase is safe.","F"],
+  ["ltf2","Version-locking freezes the tested build with no further changes.","T"],
+  ["ltf3","A strong demo owns its key trade-off and the checks behind it.","T"]
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CU_A,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"To optimise is to improve against goals by balancing trade-offs, not adding features. Efficiency is how fast, cheap or few-stepped it is. Usability is how reliably a real user reaches a good result. Performance is how accurate and consistent the output is. A trade-off is what you give up in one goal to gain in another. Risk is the chance an output could mislead, exclude, expose or harm someone."},
+ {id:"eup",mount:"a-eup",section:"Core · Part 1",title:"Efficiency, usability or performance?",sub:"Objective 1 · tag each success criterion · "+CU_A,ico:"🗂️",
+  fields:EUP.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Speed and number of steps are efficiency. First-time users succeeding and a plain answer on one screen are usability. Matching a trusted source and giving the same answer on re-runs are performance – accuracy and consistency."},
+ {id:"onelever",mount:"a-onelever",section:"Core · Part 1",title:"One lever or too many?",sub:"Adjust one lever at a time · "+SD_A,ico:"🎯",
+  fields:ONE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Changing only the prompt, or only the data sheet, is one lever – you can measure whether it helped and what it cost. Changing several levers at once, or rebuilding the process, means you cannot tell which change helped or what it traded away."},
+ {id:"predict",mount:"a-predict",section:"Core · Part 1",title:"Predict the trade-off",sub:"Name what each lever gives up · "+CU_A,ico:"⚖️",
+  fields:PRED.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A shorter prompt usually helps usability and speed but can cut useful detail. An extra checking step can raise accuracy but adds time and a step. More worked examples can help tricky inputs but make every run longer and costlier. ‘Everything goes up with nothing given up’ is almost never true – that is why you predict, then re-measure."},
+ {id:"judge",mount:"a-judge",section:"Core · Part 2",title:"Accurate, useful or a risk?",sub:"Judge the solution three ways · "+CE_P,ico:"🔭",
+  fields:JUDGE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Accuracy is about being correct against a trusted source (the council guide, checked item by item). Usefulness is about the real user completing the task (acting without phoning; a quick one-line answer). Risk covers who could be harmed and whether governance rules are met – a battery in the wrong bin, personal data and disclosure."},
+ {id:"impact",mount:"a-impact",section:"Core · Part 2",title:"Run an impact check",sub:"Who, how caught, which rule · "+GE_P,ico:"🛡️",
+  fields:[{k:"ik1",ok:v=>eq(v,2)},{k:"ik2",ok:v=>eq(v,3)},{k:"ik3",ok:v=>eq(v,0)}],
+  explain:"An impact check names who could be affected (residents who act on a wrong answer about a hazardous item), how you would catch a mistake (hazardous items always point to the guide, and answers are spot-checked against it) and which governance rule applies (no personal data; AI use disclosed). A confident tone or a faster answer is not a check."},
+ {id:"wscrit",mount:"a-wscrit",section:"Core worksheet 1",title:"Tag the criteria and find what is already met",sub:"Worksheet task 1 · "+CE_P,ico:"🏷️",cls:"ws",
+  fields:[...WCRIT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),...WMET.map(([k,,c])=>({k,box:1,ok:v=>v===!!c}))],
+  explain:"C1 (time) and C4 (steps) are efficiency; C2 (users choosing the right bin) is usability; C3 (held-out items matching the guide) is performance. The baseline already meets C1 (4 s), C3 (19 of 20) and C4 (3 steps). C2 is not met – only 6 of 10 users chose the right bin – so that is the goal to optimise."},
+ {id:"wslever",mount:"a-wslever",section:"Core worksheet 2–3",title:"Pick one lever, predict, keep the evidence",sub:"Worksheet tasks 2 and 3 · "+SD_A,ico:"🔧",cls:"ws",
+  fields:[{k:"wl1",ok:v=>eq(v,2)},{k:"wl2",ok:v=>eq(v,1)},{k:"wk",radio:1,ok:v=>eq(v,1)}],
+  explain:"The user log shows 3 of the 4 wrong choices came from users who stopped reading before the bin colour – so the one lever is the prompt: bin colour first, in one line. Predict the trade-off: usability and speed up, accuracy may dip as tips are cut. Keep both runs, on the same held-out items and the same test users, so before and after are a fair comparison."},
+ {id:"wsmeasure",mount:"a-wsmeasure",section:"Core worksheet 4",title:"Measure against the trusted source",sub:"Worksheet task 4 · "+CE_A,ico:"📊",cls:"ws",
+  fields:[{k:"wn1",ok:v=>eq(v,2)},{k:"wn2",ok:v=>eq(v,2)},{k:"wn3",ok:v=>eq(v,1)},{k:"wn4",ok:v=>eq(v,2)}],
+  explain:"Performance before: 19 ÷ 20 = 95%; after: 18 ÷ 20 = 90% – a dip of 5 percentage points, but still at least 18 of 20, so C3 holds. Usability rose from 6 of 10 (60%) to 9 of 10 (90%) – a rise of 30 percentage points, so C2 is now met. The trade-off you predicted really happened, and it was worth it."},
+ {id:"wsimpact",mount:"a-wsimpact",section:"Core worksheet 5",title:"Impact check before you call it finished",sub:"Worksheet task 5 · "+GE_A,ico:"🧯",cls:"ws",
+  fields:WIMP.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"A complete impact check names who could be affected, how a mistake would be caught (hazardous items always point to the guide; spot-checks against the guide) and which rule applies (no personal data; teacher-made items; AI use disclosed). Sounding confident or being faster is not evidence of low risk."},
+ {id:"wsjust",mount:"a-wsjust",section:"Core worksheet 5",title:"Justify the change",sub:"Worksheet task 5 · two sentences · "+CE_A,ico:"💭",cls:"ws",
+  fields:[{k:"wj1",ok:v=>eq(v,1)},{k:"wj2",ok:v=>eq(v,3)},{k:"wj3",ok:v=>eq(v,0)},{k:"wj4",ok:v=>eq(v,2)}],
+  explain:"A strong justification names the one change (bin colour first, in one line), the trade-off honestly (a small accuracy dip, 19 → 18 of 20) and what it bought (usability 6 → 9 of 10), and proves it with criteria re-measured on the same held-out items and test users. A feeling, a polished look or the assistant's opinion is not evidence."},
+ {id:"balance",mount:"a-balance",section:"Core · Part 4",title:"Finish by balancing, on paper",sub:"Unplugged activity · tag, predict, impact check · "+SD_A,ico:"⚖️",
+  fields:[...BAL.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"bl",ok:v=>eq(v,2)},{k:"bi",radio:1,ok:v=>eq(v,3)}],
+  explain:"Finding the right shelf is performance; answer time and number of steps are efficiency; a Grade 7 student using it unaided is usability. Adding more example titles to the prompt should help tricky titles but makes the prompt longer, so efficiency may dip – re-measure. Before calling it finished, run the impact check (who, how caught, which rule) and re-measure."},
+ {id:"quiz",mount:"a-quiz",section:"Core · Part 4",title:"Refine check",sub:"Quick quiz · 3 questions and 3 true or false · "+SD_A,ico:"✅",cls:"quiz",
+  fields:[...QUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...TF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: You balance efficiency, usability and performance rather than maximise features. 2: One lever at a time keeps cause and effect clear. 3: Accurate, useful and responsible together define finished. True or false: finishing is not adding features (false); one lever, then re-measure (true); a finished solution is judged on more than speed (false)."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+SD_A,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"An iteration is one round of changing and re-measuring. To version-lock is to choose the reproducible build you will show and freeze it. To regress is when a change makes a criterion you already passed worse again. A trade-off is what you gave up in one goal to gain in another. To justify is to back a claim with specific evidence. Trustworthy means checked and defensible, not just confident-sounding."},
+ {id:"lsort",mount:"a-lsort",section:"Lab · Part 1",title:"Lock it or risk it?",sub:"Objective 1 · version-lock the build · "+SD_A,ico:"🔒",
+  fields:LSORT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Safe moves confirm or preserve a tested build: one final optimisation with every criterion re-measured, saving the exact data, prompt and settings, and re-running the locked build to show it reproduces. Adding a step, swapping the model or tweaking the prompt at the last minute are untested changes that can make a criterion you already passed regress."},
+ {id:"lregress",mount:"a-lregress",section:"Lab · Part 1",title:"Check for regression before you lock",sub:"Final iteration · did any criterion slip? · "+CE_A,ico:"📉",
+  fields:[...REG.map(([k,,,,c])=>({k,ok:v=>eq(v,c)})),{k:"rgs",ok:v=>eq(v,2)}],
+  explain:"Efficiency (3 s is still under 5 s), performance (19 of 20) and steps (3) held. But usability regressed from 9 of 10 to 5 of 10 – the long safety paragraph pushed the bin colour down again. It is not safe to lock: undo or fix that change, then re-measure every criterion."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 2",title:"Build the demo spine",sub:"Objective 2 · task, input, process, output, trade-off, checks · "+SD_P,ico:"🪜",
+  fields:SPINE.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"A strong demo narrates the workflow in order – task, input, process, output – then owns the key trade-off, and finally shows the evidence: the accuracy check and the impact check."},
+ {id:"lchecks",mount:"a-lchecks",section:"Lab · Part 2",title:"Accuracy check, impact check, or no check?",sub:"Two specific checks · "+CE_P,ico:"🧷",
+  fields:CHECKS.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Accuracy checks verify outputs against a trusted source – held-out items and bin colours checked against the council guide. Impact checks show responsibility – who could be affected, how a mistake is caught, hazardous items pointing to the guide and no personal data. Polished slides and ‘trust us’ are assertions, not checks."},
+ {id:"ldefend",mount:"a-ldefend",section:"Lab · Part 2",title:"Defend it under a hard question",sub:"Objective 3 · point to a check or your trade-off reasoning · "+GE_A,ico:"🗣️",
+  fields:DEF_Q.map((_,i)=>({k:"df"+i,ok:v=>eq(v,i)})),
+  explain:"Each hard question is answered by pointing to the evidence that addresses it: misleading anyone → the accuracy check against the guide; short answers → the owned trade-off with its re-measured numbers; harm or exclusion → the impact check; a missing feature → the version-lock, because an untested step could make a passed criterion regress."},
+ {id:"llock",mount:"a-llock",section:"Lab worksheet 1–2",title:"Run one final iteration, then lock",sub:"Worksheet tasks 1 and 2 · "+SD_A,ico:"🔐",cls:"ws",
+  fields:[{k:"lk1",radio:1,ok:v=>eq(v,1)},{k:"lk2",ok:v=>eq(v,2)},{k:"lk3",ok:v=>eq(v,1)}],
+  explain:"Version 4 is the final iteration: after the final run every criterion still passes (2 s, 9 of 10, 19 of 20, 3 steps), so nothing regressed, and it gave the same output on two re-runs – so it is reproducible. Lock it. Version 5 adds an untested step on showcase morning, so it is not safe to show."},
+ {id:"lspine",mount:"a-lspine",section:"Lab worksheet 3",title:"Write your demo sentences",sub:"Worksheet task 3 · process, check, trade-off · "+CU_A,ico:"🎤",cls:"ws",
+  fields:[{k:"sp1",ok:v=>eq(v,2)},{k:"sp2",ok:v=>eq(v,1)},{k:"sp3",ok:v=>eq(v,1)}],
+  explain:"The process line names the steps in order (identify, look up in the guide sheet, write a one-line answer). The check line cites a specific accuracy check against a trusted source. The trade-off line owns what you gave up (one preparation tip) for what you gained (users 6 → 9 of 10), with evidence that accuracy still meets the criterion."},
+ {id:"lhard",mount:"a-lhard",section:"Lab worksheet 4–5",title:"Defend and justify",sub:"Worksheet tasks 4 and 5 · reflection · "+GE_A,ico:"💬",cls:"ws",
+  fields:[{k:"lh1",radio:1,ok:v=>eq(v,2)},{k:"lr1",ok:v=>eq(v,1)},{k:"lr2",ok:v=>eq(v,0)},{k:"lr3",ok:v=>eq(v,2)}],
+  explain:"‘How do you know it is not misleading anyone?’ is answered by the accuracy check against the council guide, plus hazardous items always pointing to the guide. Trustworthy because 19 of 20 held-out answers were verified; low-risk because the impact check names who could be affected and how a mistake is caught, with no personal data; and the trade-off is defended with the re-measured numbers."},
+ {id:"lpaper",mount:"a-lpaper",section:"Lab · Part 4",title:"Lock and rehearse, on paper",sub:"Unplugged activity · regression, demo sentences, trade-off · "+SD_P,ico:"📝",
+  fields:[...LPREG.map(([k,,c])=>({k,ok:v=>eq(v,c)})),...PAPER.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"pt",radio:1,ok:v=>eq(v,3)}],
+  explain:"Usability held (8 → 8) and efficiency held (2 s is still under 5 s), but accuracy regressed from 19 to 16 of 20, below the criterion of 18 – fix it before you lock. The four demo sentences are task (who it helps), input (non-personal data), process (the steps) and output (what the user gets). A strong demo owns its trade-off honestly: a slightly slower reply in exchange for far fewer wrong rooms."},
+ {id:"lquiz",mount:"a-lquiz",section:"Lab · Part 4",title:"Lock check",sub:"Quick quiz · 3 questions and 3 true or false · "+CE_A,ico:"✅",cls:"quiz",
+  fields:[...LQUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...LTF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: A last-minute change is untested and can make another criterion regress. 2: Regress means a criterion that was met gets worse after a change. 3: A strong demo owns the key trade-off and the checks that make it trustworthy. True or false: a late feature is not safe (false); version-locking freezes the tested build (true); a strong demo owns its trade-off and its checks (true)."}
+];
+
+
+/* ---------- state ---------- */
+const KEY="g11-mw9-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#proj").innerHTML=`<header><small>Project file · illustrative</small><b>Recycling-bin helper</b></header>
+<div class="in">
+  <p class="task"><b>The brief:</b> residents type the name of an item and the helper tells them which bin it goes in, following the council's published recycling guide (the trusted source). Every model step is teacher-run; all test items are teacher-made – no personal data.</p>
+  <ol class="pipe"><li><b>Input</b>A typed item name, e.g. ‘glass jar’</li><li><b>1 · Identify</b>Name the material (prompt)</li><li><b>2 · Look up</b>Find the rule in the guide sheet (data)</li><li><b>3 · Write</b>Draft the answer for the resident</li><li class="out"><b>Output</b>The bin colour and any preparation tip</li></ol>
+  <table class="t record"><caption><b>Same test set both runs:</b> 20 held-out items never used while tuning, and the same 10 test users.</caption><thead><tr><th>Criterion</th><th>Baseline</th><th>After one change</th></tr></thead>
+  <tbody><tr><td>C1 · Answers in under 5 s</td><td>4 s</td><td>2 s</td></tr>
+  <tr><td>C2 · At least 8 of 10 users choose the right bin</td><td>6 of 10</td><td>9 of 10</td></tr>
+  <tr><td>C3 · At least 18 of 20 held-out items match the guide</td><td>19 of 20</td><td>18 of 20</td></tr>
+  <tr><td>C4 · No more than 3 steps</td><td>3</td><td>3</td></tr></tbody></table>
+  <p class="note"><b>User log (baseline):</b> answers were about 120 words long, with the bin colour in the last line; 3 of the 4 users who chose the wrong bin stopped reading before they reached it. <b>The one change:</b> the prompt now says ‘Start with the bin colour in one line, then give at most one preparation tip.’ <b>After:</b> one more held-out item was marked wrong – the answer for ‘glass jar’ dropped ‘rinse it first’.</p>
+</div>`;
+$("#lock").innerHTML=`<header><small>Lock log · illustrative</small><b>Recycling-bin helper – final iteration</b></header>
+<div class="in">
+  <p class="task">Criteria: C1 under 5 s · C2 at least 8 of 10 users · C3 at least 18 of 20 held-out items · C4 no more than 3 steps.</p>
+  <table class="t record"><thead><tr><th>Version</th><th>What changed</th><th>Criteria after the run</th><th>Re-run twice</th></tr></thead>
+  <tbody><tr><td>3</td><td>Bin colour first, in one line (the Core change)</td><td>2 s · 9/10 · 18/20 · 3 steps – all pass</td><td>Same output ✓</td></tr>
+  <tr><td>4</td><td>Final optimisation (data lever): added the five most-missed items to the guide sheet</td><td>2 s · 9/10 · 19/20 · 3 steps – all pass</td><td>Same output ✓</td></tr>
+  <tr><td>5</td><td>Idea on showcase morning: add a photo-recognition step</td><td>Not tested</td><td>–</td></tr></tbody></table>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+const pair=(k,label,opts,order)=>`<div class="pair" data-item="${k}"><span class="t">${label}</span>${sel(k,opts,"Choose…",order)}</div>`;
+const segRows=(list,labels,vals)=>list.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,labels,vals,t)}</div>`).join("");
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "eup":
+    return `<p class="how">Tag each success criterion with the goal it measures. <span class="illus">(Illustrative criteria.)</span></p>`+segRows(EUP,GOALS,["E","U","P"]);
+  case "onelever":
+    return `<p class="how">Is each refinement plan one lever, or too many changes at once to tell which one helped?</p>`+segRows(ONE,["One lever","Too many at once"],["O","M"]);
+  case "predict":
+    return `<p class="how">Using Figure 1, predict the most likely trade-off for each lever before you re-run.</p>`+
+      PRED.map(([k,t])=>pair(k,esc(t),PRED_OPTS,[3,1,0,2])).join("");
+  case "judge":
+    return `<p class="how">The recycling-bin helper (see the Core worksheet) is being judged before it is shared. Is each statement about accuracy, usefulness or risk?</p>`+segRows(JUDGE,["Accuracy","Useful\u00ADness","Risk"],["A","U","R"]);
+  case "impact":
+    return `<p class="how">Complete the impact check for the recycling-bin helper before it is shared.</p>`+
+      pair("ik1","Who could be affected?",IK1,[1,2,0,3])+pair("ik2","How would you catch a mistake?",IK2,[0,3,2,1])+pair("ik3","Which governance rule must it respect?",IK3,[2,1,0,3]);
+  case "wscrit":
+    return `<p class="q">1a. Tag each of the project's success criteria as efficiency, usability or performance.</p>`+segRows(WCRIT,GOALS,["E","U","P"])+
+      `<p class="q">1b. Using the baseline column, tick every criterion the solution already meets with evidence. Leave the others unticked.</p><div class="opts">`+
+      WMET.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+  case "wslever":
+    return `<p class="q">2. Pick ONE lever to adjust, and predict the trade-off.</p>`+
+      pair("wl1","The one lever",WL1,[1,0,2,3])+pair("wl2","Predicted trade-off",WL2,[0,2,1,3])+
+      `<p class="q" id="q-wk">3. What should you keep when the teacher re-runs the solution?</p>${radios("wk",WK)}`;
+  case "wsmeasure":
+    return `<p class="how">4. Measure the new output against the trusted source, using the project file. Accuracy = correct ÷ total.</p>`+
+      pair("wn1","Performance before (19 ÷ 20)",WM_PB,[1,3,0,2])+pair("wn2","Performance after (18 ÷ 20)",WM_PA,[3,0,2,1])+
+      pair("wn3","Change in usability (6 of 10 → 9 of 10)",WM_UC,[2,0,3,1])+pair("wn4","Did the trade-off you predicted really happen?",WM_TO,[0,2,1,3]);
+  case "wsimpact":
+    return boxes(WIMP,"5a. Impact check: tick every statement that belongs in a good impact check for the helper – who could be affected, how you would catch a mistake, and which governance rule applies. Leave the others unticked.");
+  case "wsjust":
+    return `<p class="how">5b. Complete the two sentences about the project's change.</p><p class="sent">The one change was <span data-item="wj1">${sel("wj1",WJ1,"Choose…",[2,0,1,3])}</span>. It traded <span data-item="wj2">${sel("wj2",WJ2,"Choose…",[1,3,0,2])}</span> for better <span data-item="wj3">${sel("wj3",WJ3,"Choose…",[2,1,0,3])}</span>, and I know it improved the solution because <span data-item="wj4">${sel("wj4",WJ4,"Choose…",[0,3,2,1])}</span>.</p>`;
+  case "balance":
+    return `<p class="q">1. A library book-finder assistant: tag each criterion as efficiency, usability or performance. <span class="illus">(Illustrative.)</span></p>`+segRows(BAL,GOALS,["E","U","P"])+
+      `<p class="q">2. Lever: add five more example titles to the prompt. Predict its effect on all three.</p>`+pair("bl","Prediction",BLEVER,[0,2,1,3])+
+      `<p class="q" id="q-bi">3. Which impact check would you describe before calling it finished?</p>${radios("bi",BIMPACT)}`;
+  case "quiz":
+    return quiz(QUIZ,TF);
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lsort":
+    return `<p class="how">The showcase is next lesson. Is each move safe before a showcase, or a risky last-minute change?</p>`+segRows(LSORT,["Safe to do","Risky last-minute"],["S","R"]);
+  case "lregress":
+    return `<div class="quote">Suppose the helper's final change had been <b>‘add a long safety paragraph to every answer’</b>. Compare each criterion before and after that change. <span class="illus">(Illustrative data.)</span></div>`+
+      REG.map(([k,t,b,af])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)} – before ${esc(b)}, after ${esc(af)}</span>${seg(k,["Held","Regressed"],["H","R"],t)}</div>`).join("")+
+      pair("rgs","Is it safe to lock?",RSAFE,[0,2,1,3]);
+  case "lorder":
+    return `<p class="how">Put the parts of the demo in the order you would say them, following Figure 4.</p>`+
+      SPINE.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">${i+1}${i===4?" · then":i===5?" · finally":""}</span>${sel("lo"+i,SPINE,"Choose…",SPINE_ORDER)}</div>`).join("");
+  case "lchecks":
+    return `<p class="how">Which of these is an accuracy check, an impact check – or not a check at all?</p>`+segRows(CHECKS,["Accuracy","Impact","Not a check"],["A","I","N"]);
+  case "ldefend":
+    return `<p class="how">A stakeholder at the showcase asks four hard questions. Match each one to the answer you would give.</p>`+
+      DEF_Q.map((q,i)=>`<div class="pair" data-item="df${i}"><span class="t">“${esc(q)}”</span>${sel("df"+i,DEF_A,"Choose…",DEF_ORDER2)}</div>`).join("");
+  case "llock":
+    return `<p class="q" id="q-lk1">1–2. Using the lock log, which version do you lock?</p>${radios("lk1",LK1)}`+
+      `<div style="margin-top:10px">${pair("lk2","How do you know nothing regressed?",LK2,[0,2,3,1])}${pair("lk3","How do you know it is reproducible?",LK3,[2,0,3,1])}</div>`;
+  case "lspine":
+    return `<p class="how">3. Choose the strongest line for each part of your demo script.</p>`+
+      pair("sp1","Process line",SP1,[0,2,1,3])+pair("sp2","One check",SP2,[2,1,0,3])+pair("sp3","The trade-off you own",SP3,[0,2,1,3]);
+  case "lhard":
+    return `<p class="q" id="q-lh1">4. Your partner asks: “How do you know it is not misleading anyone?” What do you point to?</p>${radios("lh1",LH1)}
+      <p class="q">5. My justification</p><p class="sent">My solution is trustworthy because <span data-item="lr1">${sel("lr1",LR1,"Choose…",[0,3,1,2])}</span>, it is low-risk because <span data-item="lr2">${sel("lr2",LR2,"Choose…",[2,1,0,3])}</span>, and I defended my trade-off with <span data-item="lr3">${sel("lr3",LR3,"Choose…",[0,2,3,1])}</span>.</p>`;
+  case "lpaper":
+    return `<p class="q">1. A team's final change – did any criterion regress? <span class="illus">(Illustrative data.)</span></p>`+segRows(LPREG,["Held","Regressed"],["H","R"])+
+      `<p class="q">2. Tag each sentence of a science-fair demo script as task, input, process or output. <span class="illus">(Illustrative script.)</span></p>`+segRows(PAPER,["Task","Input","Process","Output"],["T","I","P","O"])+
+      `<p class="q" id="q-pt">3. Which states a trade-off you would honestly own in the demo?</p>${radios("pt",PTRADE)}`;
+  case "lquiz":
+    return quiz(LQUIZ,LTF);
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 11 Main Course · Term 1 Week 9 (30 Nov – 4 Dec 2026) · Core + Lab · Refining &amp; Finishing + Lock It and Rehearse</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
