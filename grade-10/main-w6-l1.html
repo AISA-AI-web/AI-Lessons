@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bringing the Strands Together + Run It End-to-End – Grade 10 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#0F766E; --main2:#14897F; --deep:#0E4F4A;
+  --ink:#12302D; --muted:#4E6562; --paper:#F4FAF9; --card:#FFFFFF;
+  --line:#D3E7E3; --soft:#EAF5F3;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#5EEAD4,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#1BA394);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#12302D,#285A55)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#BFEDE6 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#F9FCFC;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FBFEFD}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#1BA394)}
+.act-head.ws{background:linear-gradient(120deg,#12302D,#2B6B64)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#E9F7F4}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #B9D8D2;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #8CCFC5;border-radius:12px;padding:10px 14px;background:#F6FCFB;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(18,48,45,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#12302D;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.flip{min-width:0}.flip .term{overflow-wrap:anywhere;hyphens:auto}
+/* Week 6: three-stage check cells */
+.st3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.st3 .cell>span{display:block;font-size:14px;line-height:1.35;margin-bottom:6px}
+.st3 .cell>span i{color:var(--muted)}
+@media (max-width:640px){.st3{grid-template-columns:1fr}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 10 Main Course, Term 1</span><span class="pill">Week 6 Core + Week 6 Lab</span><span class="pill">📅 Teach: week of 9 – 13 Nov 2026</span></div>
+    <h1>Bringing the Strands Together + Run It End-to-End</h1>
+    <p>Today the four strands click together on one pipeline. You build a small integrated solution, check the outcome at every hand-off, and – for the first time – measure how well it works with a number you define and compute. Then, in the Lab, you run the whole pipeline from start to finish, inspect the data it depends on, record a check at every interface, measure its accuracy, then add one rule and re-run to see how your system copes.</p>
+    <p class="meta"><b>Strand:</b> Integrated · all four strands &nbsp;·&nbsp; <b>Scenario:</b> the Ne'ma food-surplus matcher</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 10B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 6 of Term 1 – Monday 9 to Friday 13 November 2026.</b> Grade 10 has one AI period a week: <b>Boys 10 on Wednesday 11 November</b>, <b>Girls 10 on Friday 13 November</b>. Work through the Core first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Bringing the Strands Together</a>, then move on to the <a href="#lab">Lab: Run It End-to-End</a>. <span class="illus">Previously, in Weeks 2–5, you practised each strand on its own. Next, in Week 7, you architect your own signature solution.</span></div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Build one integrated pipeline.</b> I can complete a guided task that uses all four strands to build and check one small multi-tool pipeline.</li>
+      <li><b>Check every interface.</b> I can explain how the tools connect at each interface and how I check the outcome.</li>
+      <li><b>Measure with a metric.</b> I can define a metric, compute it before and after a change, and name one responsible-use choice I made.</li>
+      <li><b>Lab: run end-to-end and inspect the data.</b> I can run every tool and interface in order, record a check at each one, and inspect the data for missing values, wrong labels and representativeness.</li>
+      <li><b>Lab: measure and adapt.</b> I can measure accuracy, judge reliability across a bigger set, add a new rule, and re-run while keeping the governance rules.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 6 Core · Bringing the Strands Together</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Four strands, one integrated pipeline</b><small>Classify, match, draft – governed by a human gate</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Define your metric, then compute it</b><small>Evidence, not a feeling</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Systems thinking: the parts interact</b><small>One early error propagates</small></a></li>
+      <li><span class="num">4</span><a href="#p4"><b>Core worksheet</b><small>Run ten item cards and compute your metric</small></a></li>
+      <li><span class="num">5</span><a href="#p5"><b>Run a request through a pipeline</b><small>Unplugged activity and integration check</small></a></li>
+    </ol>
+    <h3 class="rh">Week 6 Lab · Run It End-to-End</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Inspect the data before you trust the result</b><small>Missing values, wrong labels, representativeness</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>From a few cards to a full run</b><small>Checks log, accuracy and reliability</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Adapt one part, add a constraint, re-run</b><small>Keep the governance rules</small></a></li>
+      <li><span class="num">L4</span><a href="#l4"><b>Lab worksheet</b><small>Inspect, measure, adapt</small></a></li>
+      <li><span class="num">L5</span><a href="#l5"><b>Inspect the data, then measure</b><small>Unplugged activity and end-to-end check</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 5</span><h2>Four strands, one integrated pipeline</h2><p>What happens when you use all four strands at once?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>The UAE's <b>Ne'ma</b> initiative aims to halve food loss and waste <span class="illus">(source: nema.ae)</span>. Inspired by it, a restaurant logs its surplus dishes; a matcher <b>classifies</b> each item, <b>matches</b> it to a charity by a rule sheet, and <b>drafts</b> a pickup action. Only items go in – no personal data. <span class="illus">(Illustrative scenario; the Ne'ma goal is a cited fact.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">Four strands, one integrated pipeline</h3>
+    <p>Until now you practised four strands in separate lessons: <b>understanding a system</b>, <b>designing a solution</b>, <b>evaluating an output</b>, and <b>governing responsibly</b>. Today they click together on one pipeline. You classify each surplus item with one tool, pass that result to a second tool that matches it to a charity by the rule sheet, then to a third that drafts the pickup action – and you check the outcome at every hand-off before a human gate signs it off. Nothing here is new; you are using all four strands at once, which is exactly how real integrated solutions are designed, run and governed.</p>
+    <figure>
+      <svg viewBox="0 0 760 296" role="img" aria-labelledby="f1T">
+        <title id="f1T">Four strands feed one pipeline. Understand: how the parts connect. Design: build the pipeline. Evaluate: check and measure. Govern: items only, human gate. The pipeline runs item card (dish only), Classify (food type), Match (rule sheet), Draft (pickup), Human gate (sign-off), Logged (outcome), with a check against the trusted key at every hand-off.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#12302D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#12302D">
+          <text x="380" y="24" font-size="15" font-weight="700" text-anchor="middle">The surplus matcher – four strands, one integrated pipeline</text>
+          <g stroke="#0F766E" stroke-width="1.6">
+            <rect x="14" y="42" width="170" height="58" rx="10" fill="#EAF5F3"/><rect x="202" y="42" width="170" height="58" rx="10" fill="#EAF5F3"/><rect x="390" y="42" width="170" height="58" rx="10" fill="#EAF5F3"/><rect x="578" y="42" width="170" height="58" rx="10" fill="#EAF5F3"/>
+          </g>
+          <g font-size="14" font-weight="700" text-anchor="middle" fill="#0E4F4A"><text x="99" y="66">Understand</text><text x="287" y="66">Design</text><text x="475" y="66">Evaluate</text><text x="663" y="66">Govern</text></g>
+          <g font-size="13" text-anchor="middle" fill="#4E6562"><text x="99" y="88">how parts connect</text><text x="287" y="88">build the pipeline</text><text x="475" y="88">check and measure</text><text x="663" y="88">keep a human gate</text></g>
+          <g stroke="#0F766E" stroke-width="2" marker-end="url(#ah)"><path d="M99 100V138"/><path d="M287 100V138"/><path d="M475 100V138"/><path d="M663 100V138"/></g>
+          <g fill="#fff" stroke="#12302D" stroke-width="1.6">
+            <rect x="14" y="146" width="104" height="58" rx="10" fill="#F4FAF9"/><rect x="140" y="146" width="104" height="58" rx="10"/><rect x="266" y="146" width="104" height="58" rx="10"/><rect x="392" y="146" width="104" height="58" rx="10"/><rect x="518" y="146" width="104" height="58" rx="10" fill="#FFF7E8" stroke="#B45309"/><rect x="644" y="146" width="104" height="58" rx="10" fill="#F4FAF9"/>
+          </g>
+          <g font-size="14" font-weight="700" text-anchor="middle"><text x="66" y="171">Item card</text><text x="192" y="171">Classify</text><text x="318" y="171">Match</text><text x="444" y="171">Draft</text><text x="570" y="171">Human gate</text><text x="696" y="171">Logged</text></g>
+          <g font-size="13" text-anchor="middle" fill="#4E6562"><text x="66" y="192">dish only</text><text x="192" y="192">food type</text><text x="318" y="192">rule sheet</text><text x="444" y="192">pickup</text><text x="570" y="192">sign-off</text><text x="696" y="192">outcome</text></g>
+          <g stroke="#12302D" stroke-width="2.2" marker-end="url(#ah)"><path d="M118 175H137"/><path d="M244 175H263"/><path d="M370 175H389"/><path d="M496 175H515"/><path d="M622 175H641"/></g>
+          <g font-size="13" font-weight="600" fill="#0F766E" text-anchor="middle"><text x="129" y="228">✓ check</text><text x="255" y="228">✓ check</text><text x="381" y="228">✓ check</text><text x="507" y="228">✓ check</text><text x="633" y="228">✓ check</text></g>
+          <text x="380" y="270" font-size="13.5" text-anchor="middle" fill="#12302D">Check every hand-off against the trusted key – one early error propagates downstream.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> One integrated pipeline exercises all four strands: classify, match and draft, checked at each hand-off and governed by a human gate.</figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-strands"></div>
+    <div id="a-order"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 5</span><h2>Define your metric, then compute it</h2><p>‘It seemed to work’ is not evidence.</p></div>
+  <div class="part-body">
+    <p>Before you optimise, <b>define your metric</b> – three things:</p>
+    <ul class="steps">
+      <li><b>What is counted:</b> matches that pass the rule sheet.</li>
+      <li><b>Over what set of inputs:</b> the matches the system proposed.</li>
+      <li><b>In what unit:</b> a percentage.</li>
+    </ul>
+    <p>So <b>match accuracy = matches passing the rule sheet ÷ matches proposed</b>. Compute it once, then add a constraint – say a halal or allergen rule – and compute it again. If it went from 6 of 10 (60%) to 9 of 10 (90%), you have evidence the constraint helped, not a feeling.</p>
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="f2T">
+        <title id="f2T">Checking one item card. Item card, then: is the class right? If no, re-classify. If yes: does the match pass the rule sheet? If no, refine the match. If yes: is it a safety item such as an allergen or spoilage? If yes, route to the human gate, a named person. If no, draft the pickup and log it. Score right divided by total; below the criterion of 8 of 10, refine one part and re-run. Confident is not the same as correct.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#12302D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#12302D">
+          <text x="380" y="24" font-size="15" font-weight="700" text-anchor="middle">Check one item card through the pipeline</text>
+          <g stroke-width="1.6">
+            <rect x="14" y="52" width="100" height="58" rx="10" fill="#F4FAF9" stroke="#12302D"/>
+            <rect x="140" y="52" width="130" height="58" rx="29" fill="#EEF3FC" stroke="#2E5AAC"/>
+            <rect x="296" y="52" width="160" height="58" rx="29" fill="#EEF3FC" stroke="#2E5AAC"/>
+            <rect x="482" y="52" width="130" height="58" rx="29" fill="#EEF3FC" stroke="#2E5AAC"/>
+            <rect x="638" y="52" width="110" height="58" rx="10" fill="#E2F5EC" stroke="#0F8A5F"/>
+            <rect x="140" y="178" width="130" height="50" rx="10" fill="#FDE7EC" stroke="#C92A4B"/>
+            <rect x="296" y="178" width="160" height="50" rx="10" fill="#FDE7EC" stroke="#C92A4B"/>
+            <rect x="482" y="178" width="130" height="50" rx="10" fill="#FFF7E8" stroke="#B45309"/>
+          </g>
+          <g font-size="14" font-weight="700" text-anchor="middle">
+            <text x="64" y="86">Item card</text>
+            <text x="205" y="86">Class right?</text>
+            <text x="376" y="77">Match passes</text><text x="376" y="96">rule sheet?</text>
+            <text x="547" y="77">Safety item?</text><text x="547" y="96" font-size="13" font-weight="400" fill="#4E6562">e.g. allergen</text>
+            <text x="693" y="77">Draft</text><text x="693" y="96" font-size="13" font-weight="400" fill="#4E6562">pickup + log</text>
+            <text x="205" y="208">Re-classify</text>
+            <text x="376" y="208">Refine the match</text>
+            <text x="547" y="199">Human gate</text><text x="547" y="218" font-size="13" font-weight="400" fill="#4E6562">named person</text>
+          </g>
+          <g stroke="#12302D" stroke-width="2.2" marker-end="url(#ah2)"><path d="M114 81H137"/><path d="M270 81H293"/><path d="M456 81H479"/><path d="M612 81H635"/><path d="M205 110V175"/><path d="M376 110V175"/><path d="M547 110V175"/></g>
+          <g font-size="13" font-weight="700" fill="#0F8A5F" text-anchor="middle"><text x="282" y="46">yes</text><text x="468" y="46">yes</text></g>
+          <text x="624" y="46" font-size="13" font-weight="700" fill="#C92A4B" text-anchor="middle">no</text>
+          <g font-size="13" font-weight="700" fill="#C92A4B"><text x="212" y="148">no</text><text x="383" y="148">no</text></g>
+          <text x="554" y="148" font-size="13" font-weight="700" fill="#0F8A5F">yes</text>
+          <text x="380" y="262" font-size="13.5" text-anchor="middle">Score right ÷ total. Below the criterion (8 of 10)? Refine one part and re-run.</text>
+          <text x="380" y="284" font-size="13" text-anchor="middle" fill="#4E6562">Confident is not the same as correct – compare every outcome with the trusted key.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Check each item card through the pipeline – is the class right, does the match pass the rule sheet, is it a safety item to route to a human – and refine if the run scores below the criterion.</figcaption>
+    </figure>
+    <div class="call violet"><h4>Mathematics you will use</h4><p>A proportion written as a percentage: <b>correct ÷ total × 100</b>. You will compute the same metric before and after a change and compare – and remember that a difference between two percentages (60% to 90%) is a rise of <b>30 percentage points</b>.</p></div>
+    <div id="a-metric"></div>
+    <div id="a-compute"></div>
+    <div id="a-route"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head"><span class="pill">Core · Part 3 of 5</span><h2>Systems thinking: the parts interact</h2><p>Why check at every hand-off, not only at the end?</p></div>
+  <div class="part-body">
+    <p>A pipeline is a system, so its parts affect each other through their interfaces. If the first tool mislabels an item, the second matches it wrongly and the third drafts the wrong action – one early error <b>propagates</b> all the way through. That is why you check the outcome at every hand-off, not only at the end, comparing it with a trusted key. If the pipeline misses the target, you do not blame one tool – you find which tool or interface caused the misses, change one thing, and re-run. And you <b>govern from the start</b>: only non-personal items go in, safety issues route to a named person, and every action is logged for accountability.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>Ne'ma's national goal is to halve food loss and waste <span class="illus">(source: nema.ae)</span>. Across the UAE, smart-city and service teams chain several AI tools into one pipeline to sort and route thousands of requests – and it only helps if the outcome is checked at every stage against a clear target, measured with a number, and governed responsibly, just like in your task.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Mathematics · Civics · Systems Science</h4><p>Tracking accuracy at each interface and reasoning about how an early error propagates is <b>error analysis</b> in <b>Mathematics</b> and <b>Systems Science</b>. Routing sensitive outcomes through a human sign-off before action is an <b>accountability and due-process</b> principle from <b>Civics</b>.</p></div>
+    <div class="call amber"><h4>Tool for this week: surplus-request and integrated-evaluation cards (unplugged, teacher-mediated)</h4><p>1. Write your problem, target and governance gate: handle ten items correctly at every stage, meet at least eight of ten, route every safety issue to a named person. 2. Pass ten item cards (dishes only, no people) through Classify, Match, Draft, recording the output at each stage. 3. Flip each card to its true key, mark right or wrong, compute your match-accuracy metric, then change one component and re-compute. <b>Stay safe:</b> fully unplugged; no personal data – items only. Verify each outcome against the trusted key, and log every action for accountability.</p></div>
+    <div id="a-prop"></div>
+  </div>
+</section>
+
+<!-- CORE PART 4: WORKSHEET -->
+<section class="part" id="p4">
+  <div class="part-head dark"><span class="pill">Core · Part 4 of 5 · Worksheet</span><h2>Bringing the Strands Together</h2><p>The Ne'ma-inspired food-surplus matcher – classify, match, draft – measured with a metric you define and compute.</p></div>
+  <div class="part-body">
+    <div class="ecard" id="rules"></div>
+    <div id="a-ws1"></div>
+    <div id="a-ws2"></div>
+    <div id="a-ws3"></div>
+    <div id="a-ws4"></div>
+    <div id="a-ws5"></div>
+  </div>
+</section>
+
+<!-- CORE PART 5: UNPLUGGED -->
+<section class="part" id="p5">
+  <div class="part-head"><span class="pill">Core · Part 5 of 5 · Unplugged</span><h2>Run a request through a pipeline</h2><p>Mark where a check is needed – and what needs a person.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>A smart-city team connects three tools – <b>Classify, Route, Draft</b> – to handle public-service requests. Working on paper, run one request through and mark where a check is needed. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Trace it: ‘Classify → Route → Draft. Check accuracy at each arrow; a misclassify at step 1 routes it wrongly.’</div>
+    <div id="a-unplug"></div>
+    <div id="a-gate"></div>
+    <div id="a-quiz"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 6 Lab</span><h2>Run It End-to-End</h2><p>Today you run your whole pipeline from start to finish, inspect the data it depends on, record a check at every interface, measure its accuracy, then add one rule and re-run to see how your system copes.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario – continued</h4><p>Your matcher worked on ten items – but the data it relies on may be messy. Today you inspect the surplus-item dataset, run the pipeline end-to-end on a bigger set, measure its accuracy, judge its reliability, and add a constraint. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 5</span><h2>Inspect the data before you trust the result</h2><p>Rubbish in, rubbish out.</p></div>
+  <div class="part-body">
+    <p>A pipeline is only as good as the data it runs on. Before the full run, inspect the surplus-item dataset for three problems – the same checks a data scientist makes:</p>
+    <ul class="steps">
+      <li><b>Missing values</b> – an item with no category or quantity.</li>
+      <li><b>Wrong labels</b> – an item filed under the wrong food type.</li>
+      <li><b>Representativeness</b> – does the set include a fair range (hot dishes, bread, fruit), or mostly one kind?</li>
+    </ul>
+    <p>Fix or flag each issue, and note how a data problem could change the pipeline's result. Rubbish in, rubbish out.</p>
+    <div id="a-ldata"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 5</span><h2>From a few cards to a full run</h2><p>Turn ‘it seemed to work’ into evidence.</p></div>
+  <div class="part-body">
+    <p>In the Core lesson you ran ten cards; today you run end-to-end on twelve or more and record a check at every tool and interface in a <b>checks log</b> – was the input clean, did the classification match, was the match right at the hand-off, did the action pass the rules and the human gate. That log turns ‘it seemed to work’ into evidence. Total how many items were right at every stage, compare with the target, and spot where errors propagate. That total is your pipeline's <b>accuracy</b> on this set. Checking whether that accuracy holds across a bigger, varied set and a re-run is what we mean by <b>reliability</b> – and it tells you exactly where to aim your next change.</p>
+    <figure>
+      <svg viewBox="0 0 760 330" role="img" aria-labelledby="f3T">
+        <title id="f3T">Run end to end and log every check. Pipeline: 1 inspect data, 2 classify, 3 match, 4 draft, 5 human gate. A checks log for 15 cards, illustrative: card 1 right at every stage; card 3 wrong class, so match and draft are wrong too; card 5 right class but wrong match; card 14 wrong draft. Totals: classify 13 of 15, match 10 of 15, draft 9 of 15, right at every stage 9 of 15. Bar chart: before, 9 of 15, 60 percent; after refining Match, 12 of 15, 80 percent. Re-run only cards 5, 9 and 11.</title>
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#12302D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#12302D">
+          <text x="380" y="24" font-size="15" font-weight="700" text-anchor="middle">Run end to end, log every check, measure before and after</text>
+          <g fill="#fff" stroke="#12302D" stroke-width="1.6">
+            <rect x="14" y="42" width="140" height="44" rx="10" fill="#F4FAF9"/><rect x="178" y="42" width="110" height="44" rx="10"/><rect x="312" y="42" width="110" height="44" rx="10" fill="#FDE7EC" stroke="#C92A4B"/><rect x="446" y="42" width="110" height="44" rx="10"/><rect x="580" y="42" width="166" height="44" rx="10" fill="#FFF7E8" stroke="#B45309"/>
+          </g>
+          <g font-size="14" font-weight="700" text-anchor="middle"><text x="84" y="69">1 Inspect data</text><text x="233" y="69">2 Classify</text><text x="367" y="69">3 Match</text><text x="501" y="69">4 Draft</text><text x="663" y="69">5 Human gate</text></g>
+          <g stroke="#12302D" stroke-width="2.2" marker-end="url(#ah3)"><path d="M154 64H175"/><path d="M288 64H309"/><path d="M422 64H443"/><path d="M556 64H577"/></g>
+          <text x="14" y="122" font-size="14" font-weight="700">Checks log · 15 cards (illustrative)</text>
+          <g stroke="#D3E7E3" stroke-width="1.2" fill="#fff">
+            <rect x="14" y="134" width="376" height="168" fill="#fff"/>
+            <rect x="14" y="134" width="376" height="28" fill="#EAF5F3"/>
+            <rect x="14" y="274" width="376" height="28" fill="#EAF5F3"/>
+            <path d="M14 190H390M14 218H390M14 246H390M84 134V302M164 134V302M244 134V302M316 134V302"/>
+          </g>
+          <g font-size="13" font-weight="700" text-anchor="middle"><text x="49" y="153">Card</text><text x="124" y="153">Classify</text><text x="204" y="153">Match</text><text x="280" y="153">Draft</text><text x="353" y="153">All</text></g>
+          <g font-size="13" text-anchor="middle">
+            <text x="49" y="181">1</text><text x="49" y="209">3</text><text x="49" y="237">5</text><text x="49" y="265">14</text>
+            <g fill="#0F8A5F" font-weight="700"><text x="124" y="181">✓</text><text x="204" y="181">✓</text><text x="280" y="181">✓</text><text x="353" y="181">✓</text><text x="124" y="237">✓</text><text x="124" y="265">✓</text><text x="204" y="265">✓</text></g>
+            <g fill="#C92A4B" font-weight="700"><text x="124" y="209">✗</text><text x="204" y="209">✗</text><text x="280" y="209">✗</text><text x="353" y="209">✗</text><text x="204" y="237">✗</text><text x="280" y="237">✗</text><text x="353" y="237">✗</text><text x="280" y="265">✗</text><text x="353" y="265">✗</text></g>
+            <g font-weight="700"><text x="49" y="293">Total</text><text x="124" y="293">13/15</text><text x="204" y="293">10/15</text><text x="280" y="293">9/15</text><text x="353" y="293">9/15</text></g>
+          </g>
+          <text x="420" y="122" font-size="14" font-weight="700">Right at every stage</text>
+          <text x="420" y="152" font-size="13">Before: 9 of 15 · 60%</text>
+          <rect x="420" y="160" width="180" height="26" rx="6" fill="#9FD8CF"/>
+          <text x="420" y="214" font-size="13">After refining Match: 12 of 15 · 80%</text>
+          <rect x="420" y="222" width="240" height="26" rx="6" fill="#0F766E"/>
+          <path d="M420 256H720" stroke="#4E6562" stroke-width="1"/>
+          <g font-size="13" fill="#4E6562" text-anchor="middle"><text x="420" y="272">0</text><text x="720" y="272">15</text></g>
+          <text x="420" y="296" font-size="13" fill="#0E4F4A" font-weight="600">Re-run only cards 5, 9 and 11.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> Run the whole pipeline end to end, log every check, measure before and after, then refine the weakest tool or interface and re-run only the affected cases. <span class="illus">(Illustrative data.)</span></figcaption>
+    </figure>
+    <div id="a-llog"></div>
+    <div id="a-lrel"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head"><span class="pill">Lab · Part 3 of 5</span><h2>Adapt one part, add a constraint, re-run</h2><p>You do not rebuild from scratch – you adapt what you have.</p></div>
+  <div class="part-body">
+    <p>A pipeline is only as reliable as its <b>weakest interface</b>, and one early fault can cascade. Find that weak part, make one aimed change, then add one <b>constraint</b> – a second criterion (a consistency check) or a risk rule (flag any ambiguous item for a person). Re-run only the cards the change touches and compare your accuracy before and after. You do not rebuild from scratch – you adapt what you have. All the while you keep the governance rules: only non-personal items go in, every safety issue routes to a named person, and every outcome is verified against a trusted key.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>Smart-city and service teams in the UAE keep improving their multi-tool pipelines by inspecting their data, logging where each interface fails, and testing every change against a clear target – under governance rules that keep a human in the loop. <span class="illus">(Illustrative scenarios.)</span> That is the run, analyse and adapt loop you practise today.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Mathematics · Environmental Science · Data Science</h4><p>Totalling correct outcomes over a set and comparing before and after a change is <b>applied statistics</b>. Inspecting a dataset for missing values, wrong labels and representativeness is core <b>data science</b> practice. Reducing food loss and waste ties the task to sustainability in <b>Environmental Science</b>.</p></div>
+    <div class="call amber"><h4>Tool for this week: spreadsheet (accuracy tally + trade-off matrix) with integrated-evaluation cards (teacher-mediated)</h4><p>1. Run twelve to fifteen item cards through the full pipeline; log the check at each tool and interface. 2. Total your accuracy (right at every stage) and compare with the target; name the interface that failed most. 3. Refine that part, add one constraint, re-run the affected cards through the governance gate, and record accuracy after. <b>Stay safe:</b> no personal data – items only. Verify each outcome against the trusted key; weigh the impact of your recommended change.</p></div>
+    <div id="a-lorder"></div>
+    <div id="a-lcons"></div>
+  </div>
+</section>
+
+<section class="part" id="l4">
+  <div class="part-head dark"><span class="pill">Lab · Part 4 of 5 · Worksheet</span><h2>Run It End-to-End</h2><p>Inspect the surplus-item data, run the matcher end-to-end, measure accuracy, and adapt.</p></div>
+  <div class="part-body">
+    <div class="ecard" id="dataset"></div>
+    <div id="a-lws1"></div>
+    <div id="a-lws2"></div>
+    <div id="a-lws3"></div>
+    <div id="a-lws4"></div>
+    <div id="a-lws5"></div>
+  </div>
+</section>
+
+<section class="part" id="l5">
+  <div class="part-head"><span class="pill">Lab · Part 5 of 5 · Unplugged</span><h2>Inspect the data, then measure</h2><p>Printed data rows, a small run, and one question about reliability.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>A food-surplus matcher will run on a dataset of donated items. Working on paper, inspect the sample for data-quality problems, then compute a simple accuracy from a small run. <span class="illus">(Illustrative scenario, using printed data rows.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Accuracy = items right ÷ total items. If 15 of 20 items were matched correctly, accuracy = 15/20 = 75%.</div>
+    <div id="a-lunplug"></div>
+    <div id="a-lquiz"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Bring the strands together – then run it end to end and measure it</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>Four strands click together on one pipeline: <b>classify, match, draft</b>, checked and governed.</li>
+      <li><b>Define your metric</b> (what is counted, over what inputs, in what unit), then compute it before and after.</li>
+      <li>A rise from 60% to 90% is <b>30 percentage points</b> – measured evidence, not a feeling.</li>
+      <li>An early error <b>propagates</b>, so check every interface and keep a human gate.</li>
+      <li><b>Inspect the data</b> first: missing values, wrong labels, representativeness. Then run <b>end-to-end</b> and log a check at every interface.</li>
+      <li><b>Accuracy</b> is the total right at every stage over the total; <b>reliability</b> is whether that accuracy holds across a bigger set and a re-run.</li>
+      <li>Trace an error to its <b>source</b>, adapt one part, add a constraint, and keep the human gate.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 10 · Main Course · Term 1 Week 6 (9 – 13 Nov 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- strand + concept tags ---------- */
+const CU_P="CU · how components interact as a system";
+const CU_A="CU · how system design affects performance and reliability";
+const SD_P="SD · multi-step solutions combining tools and data";
+const SD_A="SD · selects and structures tools strategically to improve performance";
+const CE_P="CE · evaluates solutions using criteria (accuracy, fairness, usefulness)";
+const CE_A="CE · refines solutions and explains the impact of improvements";
+const GE_P="GE · structured evaluation of risks (bias, privacy, misuse)";
+const GE_A="GE · proposes mitigations and explains their effectiveness";
+
+/* display order helper: never show the correct option first */
+const ord=(base,i)=>base[0]===i?[...base.slice(1),base[0]]:base;
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["integrated solution","Several AI tools connected so the output of one becomes the input of the next."],
+  ["interface (hand-off)","The point where one tool's output is passed to the next tool as its input."],
+  ["metric","A number you define and compute to measure how well the solution works."],
+  ["governance gate","A human sign-off and accountability check before any AI action is trusted."],
+  ["systems thinking","Judging the whole system and how its parts interact, not each tool alone."]
+];
+const DEF_ORDER = [3,0,4,1,2];
+const STRANDS = ["Understanding the system","Designing the solution","Evaluating the output","Governing responsibly"];
+const STRAND_JOBS = [
+  "See how Classify, Match and Draft connect, and where an error could pass on",
+  "Build the three-tool pipeline and the rule sheet it follows",
+  "Check every hand-off against the trusted key and compute the metric",
+  "Only items go in, safety issues go to a named person, every action is logged"
+];
+const STRAND_ORDER = [2,3,1,0];
+const STEPS = [
+  "The restaurant logs a surplus item (dish only, no personal data)",
+  "Classify the item by food type",
+  "Match it to a charity by the rule sheet",
+  "Draft the pickup action",
+  "A named person signs it off at the human gate"
+];
+const STEP_ORDER = [3,0,4,2,1];
+const METRIC = [
+  ["mc1","What is counted?",["How fast the matcher runs","Matches that pass the rule sheet","How many charities are on the list"],1,[0,1,2]],
+  ["mc2","Over what set of inputs?",["Every dish the restaurant has ever cooked","Only the matches that looked right","The matches the system proposed"],2,[0,2,1]],
+  ["mc3","In what unit?",["A percentage","Seconds per item","Kilograms of food"],0,[2,0,1]]
+];
+const COMPUTE = [
+  ["cp1","Match accuracy before",["13%","65%","20%","35%"],1,[0,1,2,3]],
+  ["cp2","Match accuracy after",["90%","18%","85%","75%"],0,[2,0,1,3]],
+  ["cp3","The change",["A rise of 5 percentage points (five more matches)","A rise of 25 percentage points (65% to 90%)","A rise of 38 percentage points (5 ÷ 13 of the old score)"],1,[0,2,1]],
+  ["cp4","What it shows",["Evidence that the allergen rule helped on this set","Proof that the matcher is now perfect","Nothing – two percentages cannot be compared"],0,[1,0,2]]
+];
+const ROUTE = [
+  ["r1","📦","Sealed box of dates – Classify says Fruit (key: Fruit), the match passes, no allergen","D"],
+  ["r2","🦐","Prawn curry (shellfish allergen) – the class and the match are both right","H"],
+  ["r3","🥖","Tray of bread rolls – Classify says Cooked dish (key: Bakery)","C"],
+  ["r4","🍮","Rice pudding – class right, but matched to a charity that takes fruit only","M"]
+];
+const ROUTE_LABELS = ["Draft pickup","Human gate","Re-classify","Refine match"];
+const ROUTE_VALS = ["D","H","C","M"];
+const PROP1 = ["Only the Classify output is wrong – Match and Draft correct it automatically","It is matched to the wrong charity and the drafted pickup is wrong too – the error propagates","The pipeline stops and refuses to run","Nothing – a confident label is always right"];
+const PROP2 = ["Blame the Draft tool, because the final output was wrong","Change all three tools at once and re-run","Find which tool or interface caused the misses, change one thing, and re-run","Add a fourth tool at the end to tidy the output"];
+const PROP3 = ["From the start: non-personal items only, safety issues to a named person, every action logged","Only after the pipeline reaches its target","Only if something goes wrong in the final output"];
+
+/* Core worksheet: illustrative run of item cards */
+const STAGE_NAMES = ["Classify","Match","Draft"];
+const WS1 = [
+  ["i1","🍛","Tray of chicken biryani (cooked today)",[["Cooked dish","Cooked dish"],["Community kitchen","Community kitchen"],["Pickup today, keep hot","Pickup today, keep hot"]]],
+  ["i2","🍞","12 loaves of bread",[["Cooked dish","Bakery"],["Community kitchen","Food bank"],["Pickup today, keep hot","Pickup within 24 h"]]],
+  ["i3","🥭","Box of mangoes",[["Fruit","Fruit"],["Food bank","Food bank"],["Pickup within 24 h","Pickup within 24 h"]]],
+  ["i4","🍰","Walnut cake (contains nuts)",[["Bakery","Bakery"],["Food bank","Human gate – allergen"],["Pickup within 24 h","Hold for the duty manager"]]],
+  ["i5","🍲","Pot of lentil soup",[["Cooked dish","Cooked dish"],["Community kitchen","Community kitchen"],["Pickup next week","Pickup today, keep hot"]]]
+];
+const WS2 = [
+  ["w2a","Accuracy before the constraint",["7%","70%","10%","30%"],1,[0,1,2,3]],
+  ["w2b","Accuracy after adding the constraint",["90%","9%","80%","20%"],0,[1,0,2,3]],
+  ["w2c","The change, in percentage points",["A rise of 2 percentage points","A rise of 20 percentage points","A rise of 29 percentage points"],1,[0,2,1]]
+];
+const WS3A = ["Item 2: Classify called the bread a cooked dish, so the match and the draft were wrong too","Item 5: the Draft chose the wrong day","Item 3: the mangoes","Nowhere – every miss started at the Draft"];
+const WS3B = ["The Draft tool","The Classify → Match interface: a wrong class was passed on unchecked","The human gate"];
+const RESP = [
+  ["rp1","Only dishes go in – no donor, customer or staff names",1],
+  ["rp2","Every allergen item is routed to the duty manager before pickup",1],
+  ["rp3","Every action is logged with the role of the person who approved it",1],
+  ["rp4","Let the Draft tool book pickups automatically to save time",0],
+  ["rp5","Add each customer's phone number so the charity can call them",0],
+  ["rp6","Skip the key check when the run looks confident",0]
+];
+const REFL = [
+  "Improve the Draft tool first, because it is last and only the final output matters",
+  "Improve the Classify tool first, because one wrong class at the start propagates into the match and the draft",
+  "Improve nothing – the target was met, so the pipeline is finished",
+  "Trust Classify most because it comes first, and improve the human gate"
+];
+
+/* Core unplugged */
+const UNPLUG = [
+  ["u1","Classify → Route hand-off",1],
+  ["u2","Route → Draft hand-off",1],
+  ["u3","Draft → reply sent to the resident",1],
+  ["u4","Nowhere – each tool is accurate on its own",0]
+];
+const DOWN = ["Only step 1 is affected – Route and Draft fix it","It is routed to the wrong team and the drafted reply answers the wrong problem","The request is deleted","The resident is asked to resubmit automatically"];
+const GATE = [
+  ["g1","💡","A streetlight is out on a quiet residential road","P"],
+  ["g2","⚠️","A resident reports a gas smell near a school gate","H"],
+  ["g3","♻️","A request for an extra recycling bin","P"],
+  ["g4","⚡","A fallen power cable is sparking on a pavement","H"]
+];
+const GATE_WHY = ["Because people are always faster than AI tools","Because a safety issue needs a named, accountable person – a wrong automatic route could put someone in danger","Because the pipeline cannot read requests about gas","Because every request should skip the pipeline"];
+const QUIZ = [
+  ["q1","Why define a metric before you try to improve the pipeline?",["Because a metric makes the pipeline run faster overall.","So ‘better’ is evidence you can compute, not just a feeling.","Because the rule sheet cannot be used without a metric."],1],
+  ["q2","Match accuracy goes from 6 of 10 to 9 of 10 after adding a constraint. The change is:",["A rise of 30 percent of the original score.","A rise of 3 percent, because three more matched.","A rise of 30 percentage points (from 60% to 90%)."],2],
+  ["q3","The first tool mislabels an item. Why check at every interface, not only at the end?",["Because an early error propagates into every later tool.","Because the final tool is always the least reliable one.","Because checking the end is against the governance rules."],0]
+];
+const TF = [
+  ["tf1","If each tool works well alone, the connected system is guaranteed to work.","F"],
+  ["tf2","A human governance gate keeps a person accountable for sensitive outcomes.","T"],
+  ["tf3","You should verify only at the final output of an integrated system.","F"]
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["end-to-end","Running every tool and interface of the pipeline in order on a full data set."],
+  ["checks log","A table where you record the check you made at each tool and interface for every item."],
+  ["representativeness","Whether the data includes a fair range of cases, not just one kind."],
+  ["accuracy","The proportion of items the pipeline gets right, counted out of the total (right at every stage ÷ total)."],
+  ["constraint","A new criterion or risk rule you add to test how the system adapts."]
+];
+const LDEF_ORDER = [2,4,0,3,1];
+const LDATA = [
+  ["d1","A row for vegetable samosas has an empty category box","M"],
+  ["d2","Labneh tubs are filed under Bakery","W"],
+  ["d3","38 of the 40 rows are rice dishes – there is no bread or fruit","R"],
+  ["d4","A tray of grilled fish has no quantity","M"],
+  ["d5","A box of dates is filed under Cooked dish","W"],
+  ["d6","Every row came from one lunch shift on one day","R"]
+];
+const LLOG = [
+  ["ll1","Classify accuracy (13 of 15 right)",["13%","87%","15%","67%"],1,[0,1,2,3]],
+  ["ll2","Match accuracy (10 of 15 right)",["67%","10%","50%","33%"],0,[1,0,2,3]],
+  ["ll3","Whole pipeline (right at every stage)",["60%","90%","40%","9%"],0,[3,1,0,2]]
+];
+const LREL = [
+  ["la1","9 of 15 cards were right at every stage on today's set","A"],
+  ["la2","The same 60% held when the pipeline was re-run on 30 new, varied cards","R"],
+  ["la3","Right ÷ total, counted on this one set","A"],
+  ["la4","Whether the result holds across a bigger set and a re-run","R"]
+];
+const LSTEPS = [
+  "Find the weakest tool or interface in the checks log",
+  "Make one aimed change to that part",
+  "Add one constraint (a consistency check or a risk rule)",
+  "Re-run only the cards the change touches",
+  "Compare accuracy before and after"
+];
+const LSTEP_ORDER = [2,4,0,3,1];
+const LCONS = [
+  ["lc1","Flag any ambiguous item (such as a mixed platter) for the duty manager",1],
+  ["lc2","Add a consistency check: the charity must accept that food type on the rule sheet",1],
+  ["lc3","Keep every safety item routed to a named person during the re-run",1],
+  ["lc4","Add donors' phone numbers so the charity can call them",0],
+  ["lc5","Let the pipeline skip the human gate when it is 90% sure",0],
+  ["lc6","Throw the pipeline away and rebuild it with three new tools",0]
+];
+const DATASET = [
+  ["1","Chicken machboos","Cooked dish","4 trays"],
+  ["2","Croissants","Fruit","30"],
+  ["3","Lamb ouzi","Cooked dish","2 trays"],
+  ["4","Vegetable biryani","Cooked dish","3 trays"],
+  ["5","Hummus tubs","–","12"],
+  ["6","Chicken shawarma platter","Cooked dish","5 trays"],
+  ["7","Mujaddara (rice and lentils)","Cooked dish","2 trays"],
+  ["8","Fish curry","Cooked dish","1 tray"]
+];
+const ROWS = ["Row 1","Row 2","Row 5","Row 8"];
+const REPR = ["Yes – 40 rows is plenty of data","No – it is mostly hot dishes, so results for bread and fruit cannot be trusted","Yes – every row is a real dish"];
+const LWS2 = [
+  ["lb1","Accuracy before the change (9 of 15)",["60%","45%","90%"],0,[2,0,1]],
+  ["lb2","Accuracy after the change (12 of 15)",["12%","80%","75%"],1,[0,1,2]],
+  ["lb3","The change",["A rise of 3 percentage points","A rise of 20 percentage points","A rise of 33 percentage points"],1,[0,2,1]]
+];
+const LMOST = ["The Classify tool – it caused 2 new misses","The Match tool – it caused 3 new misses even when the class was right","The Draft tool – it caused 1 new miss","The human gate"];
+const LPROP = ["Card 14: the Draft chose the wrong pickup time","Cards 3 and 8: a wrong class from Classify flowed into the match and the draft","Cards 5, 9 and 11: the class was wrong","Nowhere – no error moved downstream"];
+const LCHANGE = ["It made the pipeline run faster","Ambiguous items such as a mixed platter are now flagged for the duty manager, and the consistency check fixed cards 5, 9 and 11 – accuracy rose from 60% to 80%","It removed the need for the human gate","Nothing changed, so the constraint was a mistake"];
+const LREFL = ["The Draft tool, because it is last in the chain","The Match tool – the consistency check and the ambiguous-item flag fixed three misses, lifting accuracy by 20 percentage points","The size of the dataset, because more rows always fix errors","The human gate, because it slowed the run down"];
+const LPRINT = [
+  ["lu1","Bananas · Fruit · 1 box","OK"],
+  ["lu2","Margherita pizza · Fruit · 3 boxes","W"],
+  ["lu3","Za'atar manakeesh · Bakery · (blank quantity)","M"]
+];
+const LACC = ["15%","75%","20%","5%"];
+const LHOLD = ["Yes – 75% is guaranteed on any set","Not necessarily – 20 items is a small set; re-run on a bigger, more varied set to judge reliability","No – accuracy always falls on bigger sets"];
+const LQUIZ = [
+  ["lq1","Why inspect the dataset before running the pipeline on it?",["Because inspecting data makes the pipeline run more quickly.","Because a data problem – missing values or wrong labels – changes the result.","Because the governance rules forbid running on any real data."],1],
+  ["lq2","Your accuracy is 11 of 15, and one early mislabel caused three of the misses. Is refining a later tool enough?",["Yes – fixing any tool will always raise the total accuracy.","Yes – accuracy only depends on the final tool in the chain.","No – the early mislabel is the real cause, so fix where the error started."],2],
+  ["lq3","What does a checks log give you that ‘it seemed to work’ does not?",["Evidence: a per-stage record you can total and compare.","A guarantee that the pipeline will never fail again.","Permission to skip the human governance gate."],0]
+];
+const LTF = [
+  ["ltf1","‘Accuracy’ on one test set is the same thing as long-term ‘reliability’.","F"],
+  ["ltf2","A missing value or wrong label in the data can change the pipeline's result.","T"],
+  ["ltf3","After optimising the weakest measure, you can ignore the other measures.","F"]
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CU_P,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"An integrated solution connects several tools so one output becomes the next input. The interface (hand-off) is where that output is passed on. A metric is a number you define and compute. A governance gate is a human sign-off before any AI action is trusted. Systems thinking judges the whole system and how its parts interact."},
+ {id:"strands",mount:"a-strands",section:"Core · Part 1",title:"Four strands, one pipeline",sub:"Objective 1 · connect the four strands · "+CU_P,ico:"🧷",
+  fields:STRANDS.map((_,i)=>({k:"st"+i,ok:v=>eq(v,i)})),
+  explain:"Understanding the system means seeing how the tools connect and where an error could pass on. Designing builds the pipeline and its rule sheet. Evaluating checks every hand-off against the key and computes the metric. Governing keeps personal data out, sends safety issues to a named person and logs every action."},
+ {id:"order",mount:"a-order",section:"Core · Part 1",title:"Put the matcher in order",sub:"Objective 1 · build one integrated pipeline · "+SD_P,ico:"🔗",
+  fields:STEPS.map((_,i)=>({k:"o"+i,ok:v=>eq(v,i)})),
+  explain:"Log the item (dish only) → Classify → Match by the rule sheet → Draft the pickup → a named person signs it off at the human gate. Each arrow is an interface where you check the outcome before passing it on."},
+ {id:"metric",mount:"a-metric",section:"Core · Part 2",title:"Define your metric",sub:"Objective 3 · define a metric · "+CE_P,ico:"📏",
+  fields:METRIC.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A metric has three parts: what is counted (matches that pass the rule sheet), over what set of inputs (the matches the system proposed) and in what unit (a percentage). Match accuracy = matches passing ÷ matches proposed × 100."},
+ {id:"compute",mount:"a-compute",section:"Core · Part 2",title:"Compute it before and after",sub:"Objective 3 · measure with a metric · "+CE_A,ico:"🧮",
+  fields:COMPUTE.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"13 ÷ 20 × 100 = 65%. 18 ÷ 20 × 100 = 90%. 90% − 65% = 25 percentage points – not ‘5’ (that counts matches) and not ‘38’ (that is the rise as a share of the old score). On this set, that is evidence the allergen rule helped – not proof the matcher is perfect."},
+ {id:"route",mount:"a-route",section:"Core · Part 2",title:"Walk each card through Figure 2",sub:"Objective 2 · check every interface · "+GE_P,ico:"🚦",
+  fields:ROUTE.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Dates: every check passes, so draft the pickup. Prawn curry: the class and match are right, but a shellfish allergen is a safety item – route it to the human gate. Bread rolls: the class is wrong, so re-classify before anything is passed on. Rice pudding: the match breaks the rule sheet, so refine the match."},
+ {id:"prop",mount:"a-prop",section:"Core · Part 3",title:"Follow the error downstream",sub:"Systems thinking · "+CU_A,ico:"🧭",
+  fields:[{k:"pr1",radio:1,ok:v=>eq(v,1)},{k:"pr2",radio:1,ok:v=>eq(v,2)},{k:"pr3",radio:1,ok:v=>eq(v,0)}],
+  explain:"A wrong class propagates: the match and the drafted pickup are wrong too. When the run misses the target, you do not blame one tool – find which tool or interface caused the misses, change one thing and re-run. Governance starts from the start: non-personal items only, safety to a named person, every action logged."},
+ {id:"ws1",mount:"a-ws1",section:"Core worksheet 1",title:"Run the item cards: tick each stage",sub:"Worksheet 1 · check every stage against the key · "+CE_P,ico:"📝",cls:"ws",
+  fields:WS1.flatMap(([k,,,st])=>st.map(([o,t],j)=>({k:k+"cmd"[j],ok:v=>eq(v,o===t?"R":"W")}))),
+  explain:"Compare each output with the true key. Item 1 and item 3 are right at every stage. Item 2: the wrong class (Cooked dish, not Bakery) makes the match and the draft wrong too. Item 4: the class is right but the match missed the allergen rule, so the draft is wrong. Item 5: only the draft is wrong – soup must be picked up today."},
+ {id:"ws2",mount:"a-ws2",section:"Core worksheet 2",title:"Compute your metric",sub:"Worksheet 2 · before and after the constraint · "+CE_A,ico:"🧮",cls:"ws",
+  fields:WS2.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"7 ÷ 10 = 70% before; 9 ÷ 10 = 90% after. 90% − 70% = 20 percentage points. ‘2’ counts matches, not percentage points; ‘29’ is the rise as a share of the old score (2 ÷ 7)."},
+ {id:"ws3",mount:"a-ws3",section:"Core worksheet 3",title:"Where did an early error propagate?",sub:"Worksheet 3 · trace the misses · "+CU_A,ico:"🔎",cls:"ws",
+  fields:[{k:"w3a",radio:1,ok:v=>eq(v,0)},{k:"w3b",ok:v=>eq(v,1)}],
+  explain:"Item 2's wrong class at the start flowed into the match and the draft – three wrong stages from one early error. So the Classify → Match interface caused the most misses: a wrong class was passed on unchecked. Check that hand-off before the match runs."},
+ {id:"ws4",mount:"a-ws4",section:"Core worksheet 4",title:"Responsible-use choices",sub:"Worksheet 4 · my responsible-use choice · "+GE_P,ico:"🛡️",cls:"ws",
+  fields:RESP.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Responsible choices: items only (no names), allergen items to the duty manager before pickup, and every action logged with who approved it. Automatic bookings skip the human gate, phone numbers are personal data, and skipping the key check trusts confidence instead of evidence."},
+ {id:"ws5",mount:"a-ws5",section:"Core worksheet 5",title:"My reflection",sub:"Worksheet 5 · which part to improve first · "+SD_A,ico:"💭",cls:"ws",
+  fields:[{k:"w5",ok:v=>eq(v,1)}],
+  explain:"Improve where errors start: one wrong class at the start propagates into the match and the draft, so fixing Classify lifts every later stage. The last tool is not automatically the problem, and meeting the target once does not mean the pipeline is finished."},
+ {id:"unplug",mount:"a-unplug",section:"Core · Part 5",title:"Run a request through a pipeline",sub:"Unplugged activity · mark the checks · "+CU_A,ico:"🗺️",
+  fields:[...UNPLUG.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),{k:"u5",radio:1,ok:v=>eq(v,1)}],
+  explain:"Verify at every arrow: Classify → Route, Route → Draft, and before the reply is sent. If the first tool misclassifies a request, it is routed to the wrong team and the drafted reply answers the wrong problem – the error propagates downstream."},
+ {id:"gate",mount:"a-gate",section:"Core · Part 5",title:"What goes through the human gate?",sub:"Unplugged activity · route safety to a person · "+GE_A,ico:"🛡️",
+  fields:[...GATE.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),{k:"g5",ok:v=>eq(v,1)}],
+  explain:"A gas smell near a school and a sparking power cable are safety issues: a named, accountable person must act, because a wrong automatic route could put someone in danger. A broken streetlight and a recycling-bin request can be routed by the pipeline – and are still logged."},
+ {id:"quiz",mount:"a-quiz",section:"Core · Part 5",title:"Integration check",sub:"Quick quiz · 3 questions and 3 true or false · "+CU_A,ico:"✅",cls:"quiz",
+  fields:[...QUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...TF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: A defined metric lets you compare before and after with a real number. 2: 90% minus 60% is a 30 percentage-point rise. 3: Checking each hand-off catches an early error before it spreads and hides. True or false: errors hide in the hand-offs, so good tools alone guarantee nothing (false); the gate keeps a person accountable (true); verify at every hand-off, not only at the end (false)."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+CE_P,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"End-to-end = every tool and interface in order on a full set. A checks log records the check at each tool and interface for every item. Representativeness = a fair range of cases. Accuracy = right at every stage ÷ total. A constraint is a new criterion or risk rule you add to test how the system adapts."},
+ {id:"ldata",mount:"a-ldata",section:"Lab · Part 1",title:"Which data problem is it?",sub:"Objective 2 · inspect the data · "+CE_P,ico:"🗂️",
+  fields:LDATA.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"An empty category or quantity is a missing value. Labneh under Bakery and dates under Cooked dish are wrong labels. A set that is nearly all rice dishes, or all from one lunch shift, is not representative – the pipeline's result would not tell you how it copes with bread, fruit or other days."},
+ {id:"llog",mount:"a-llog",section:"Lab · Part 2",title:"Read the checks log",sub:"Objective 1 · total the checks log · "+CE_P,ico:"🧮",
+  fields:LLOG.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Classify: 13 ÷ 15 ≈ 87%. Match: 10 ÷ 15 ≈ 67%. Whole pipeline: only 9 of 15 cards were right at every stage, so accuracy is 60% – never higher than the weakest stage."},
+ {id:"lrel",mount:"a-lrel",section:"Lab · Part 2",title:"Accuracy or reliability?",sub:"Objective 3 · judge reliability · "+CU_A,ico:"⚖️",
+  fields:LREL.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Accuracy is right ÷ total on this one set (9 of 15 today). Reliability is whether that accuracy holds across a bigger, varied set and a re-run – such as the same 60% on 30 new cards."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 3",title:"Order the adapt loop",sub:"Objective 3 · adapt and re-run · "+SD_A,ico:"🔁",
+  fields:LSTEPS.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"Find the weakest part in the log → make one aimed change → add one constraint → re-run only the affected cards → compare accuracy before and after. You adapt what you have; you do not rebuild from scratch."},
+ {id:"lcons",mount:"a-lcons",section:"Lab · Part 3",title:"A good constraint keeps the rules",sub:"Objective 3 · add a constraint responsibly · "+GE_A,ico:"🚧",
+  fields:LCONS.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"A risk rule (flag ambiguous items for a person) and a second criterion (a consistency check) are good constraints, and safety items still go to a named person. Phone numbers are personal data, skipping the gate when ‘90% sure’ removes accountability, and rebuilding from scratch is not adapting."},
+ {id:"lws1",mount:"a-lws1",section:"Lab worksheet 1",title:"Inspect the dataset",sub:"Worksheet 1 · missing value, wrong label, representativeness · "+CE_P,ico:"🔍",cls:"ws",
+  fields:[{k:"ls1",ok:v=>eq(v,2)},{k:"ls2",ok:v=>eq(v,1)},{k:"ls3",radio:1,ok:v=>eq(v,1)}],
+  explain:"Row 5 (hummus) has no category – a missing value. Row 2 files croissants under Fruit – a wrong label. With 35 hot dishes, 3 bread items and 2 fruit in 40 rows, the set is not representative, so results for bread and fruit cannot be trusted."},
+ {id:"lws2",mount:"a-lws2",section:"Lab worksheet 2",title:"Total your accuracy, before and after",sub:"Worksheet 2 · accuracy before and after the change · "+CE_A,ico:"🧮",cls:"ws",
+  fields:LWS2.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"9 ÷ 15 = 60% before; 12 ÷ 15 = 80% after. 80% − 60% = 20 percentage points. ‘3’ counts cards; ‘33’ is the rise as a share of the old score (3 ÷ 9)."},
+ {id:"lws3",mount:"a-lws3",section:"Lab worksheet 3",title:"What failed most, and what propagated?",sub:"Worksheet 3 · trace the misses to their source · "+CU_A,ico:"🔎",cls:"ws",
+  fields:[{k:"lt1",radio:1,ok:v=>eq(v,1)},{k:"lt2",ok:v=>eq(v,1)}],
+  explain:"Count where each miss started: Match caused 3 new misses (cards 5, 9, 11), Classify 2, Draft 1 – so Match failed most and is the part to refine. The early errors on cards 3 and 8 began at Classify and flowed into the match and the draft."},
+ {id:"lws4",mount:"a-lws4",section:"Lab worksheet 4",title:"What did the constraint change?",sub:"Worksheet 4 · add one constraint · "+SD_A,ico:"🚧",cls:"ws",
+  fields:[{k:"lk",radio:1,ok:v=>eq(v,1)}],
+  explain:"The consistency check fixed the three Match misses and the risk rule sends ambiguous items to the duty manager, so accuracy rose from 60% to 80% – while the human gate stays in place."},
+ {id:"lws5",mount:"a-lws5",section:"Lab worksheet 5",title:"My reflection",sub:"Worksheet 5 · explain the impact of the change · "+CE_A,ico:"💭",cls:"ws",
+  fields:[{k:"lr",ok:v=>eq(v,1)}],
+  explain:"The Match tool let the pipeline down most; refining it and adding the constraint fixed three misses, a rise of 20 percentage points. Being last in the chain, a bigger dataset or a slower gate are not the cause the log shows."},
+ {id:"lunplug",mount:"a-lunplug",section:"Lab · Part 5",title:"Inspect the data, then measure",sub:"Unplugged activity · data rows, accuracy and reliability · "+CE_P,ico:"🧾",
+  fields:[...LPRINT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"lua",ok:v=>eq(v,1)},{k:"luh",radio:1,ok:v=>eq(v,1)}],
+  explain:"Bananas under Fruit is fine; pizza under Fruit is a wrong label; manakeesh with no quantity is a missing value. 15 ÷ 20 = 75%. That accuracy may not hold: 20 items is a small set, so re-run on a bigger, more varied set to judge reliability."},
+ {id:"lquiz",mount:"a-lquiz",section:"Lab · Part 5",title:"End-to-end check",sub:"Quick quiz · 3 questions and 3 true or false · "+CE_A,ico:"✅",cls:"quiz",
+  fields:[...LQUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...LTF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: Rubbish in, rubbish out – bad data quietly spoils a good pipeline. 2: Trace the error to its source; fixing a later tool leaves the cause in place. 3: The log turns an impression into a measurable, locatable result. True or false: accuracy on one set is not reliability (false); a missing value or wrong label can change the result (true); lifting one measure can lower others, so check them all (false)."}
+];
+
+/* ---------- state ---------- */
+const KEY="g10-mw6-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#rules").innerHTML=`<header><small>Rule sheet · illustrative</small><b>The Ne'ma-inspired surplus matcher</b></header>
+<div class="in">
+  <p class="task"><b>Problem, target and governance gate:</b> handle ten item cards correctly at every stage; meet at least <b>8 of 10</b>; route every safety issue to a named person (the duty manager). Only items go in – no personal data.</p>
+  <table class="t"><thead><tr><th>Food type</th><th>Charity</th><th>Pickup action</th></tr></thead>
+  <tbody><tr><td>Cooked dish</td><td>Community kitchen</td><td>Pickup today, keep hot</td></tr>
+  <tr><td>Bakery, fruit or vegetables</td><td>Food bank</td><td>Pickup within 24 h</td></tr>
+  <tr><td>Any allergen (nuts, shellfish) or past safe storage</td><td>Human gate – duty manager decides</td><td>Hold for the duty manager</td></tr></tbody></table>
+</div>`;
+$("#dataset").innerHTML=`<header><small>Surplus-item dataset · illustrative sample</small><b>Eight of the forty rows</b></header>
+<div class="in">
+  <table class="t"><thead><tr><th>Row</th><th>Item</th><th>Category</th><th>Quantity</th></tr></thead>
+  <tbody>${DATASET.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>
+  <p class="note">The full set has 40 rows: <b>35 hot dishes</b>, 3 bread items and 2 fruit. A dash (–) means the box was left empty.</p>
+</div>`;
+
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+const selq=list=>list.map(([k,t,o,,order])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,o,"Choose…",order)}</div>`).join("");
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",ord(DEF_ORDER,i))}</div>`).join("");
+  case "strands":
+    return `<p class="how">Each strand has a job in the surplus matcher. Match each strand to the job it does today.</p>`+
+      STRANDS.map((t,i)=>`<div class="pair" data-item="st${i}"><span class="t">${esc(t)}</span>${sel("st"+i,STRAND_JOBS,"Choose the job…",ord(STRAND_ORDER,i))}</div>`).join("");
+  case "order":
+    return `<p class="how">Put the matcher's steps in order, from first to last (Figure 1).</p>`+
+      STEPS.map((_,i)=>`<div class="pair" data-item="o${i}"><span class="t">Step ${i+1}</span>${sel("o"+i,STEPS,"Choose the step…",ord(STEP_ORDER,i))}</div>`).join("");
+  case "metric":
+    return `<p class="how">Define the match-accuracy metric: three things.</p>`+selq(METRIC);
+  case "compute":
+    return `<div class="sample">Run 1: 20 matches proposed · 13 pass the rule sheet<br>Add an allergen rule, re-run<br>Run 2: 20 matches proposed · 18 pass the rule sheet</div><p class="how">Illustrative numbers. Use correct ÷ total × 100.</p>`+selq(COMPUTE);
+  case "route":
+    return `<p class="how">Follow Figure 2 for each item card. Where does it end up?</p>`+
+      ROUTE.map(([k,e,t])=>`<div class="row" data-item="${k}"><span class="t">${e} ${esc(t)}</span>${seg(k,ROUTE_LABELS,ROUTE_VALS,t)}</div>`).join("");
+  case "prop":
+    return `<p class="q" id="q-pr1">1. Classify labels a tray of cheese sambousek as ‘Fruit’. What happens next?</p>${radios("pr1",PROP1)}
+      <p class="q" id="q-pr2">2. Your run scores 6 of 10 – below the target of 8. What do you do?</p>${radios("pr2",PROP2)}
+      <p class="q" id="q-pr3">3. When does governance start?</p>${radios("pr3",PROP3)}`;
+  case "ws1":
+    return `<p class="how">1. Run the item cards through Classify → Match → Draft. For each stage, compare what the tool said with the true key, then mark it right or wrong. <span class="illus">(Illustrative cards, using the rule sheet above.)</span></p>`+
+      WS1.map(([k,e,t,st],n)=>`<div class="scen"><p>${e} Item ${n+1} · ${esc(t)}</p><div class="st3">`+
+        st.map(([o,key],j)=>`<div class="cell" data-item="${k}${"cmd"[j]}"><span><b>${STAGE_NAMES[j]}</b> said: ${esc(o)}<br><i>Key: ${esc(key)}</i></span>${seg(k+"cmd"[j],["✓ Right","✗ Wrong"],["R","W"],STAGE_NAMES[j]+" for item "+(n+1))}</div>`).join("")+
+      `</div></div>`).join("");
+  case "ws2":
+    return `<p class="how">2. Compute your metric. Match accuracy = matches passing the rule sheet ÷ matches proposed, as a percentage.</p>
+      <table class="t record"><thead><tr><th></th><th>Matches passing</th><th>Matches proposed</th></tr></thead><tbody><tr><td>Before the constraint</td><td>7</td><td>10</td></tr><tr><td>After adding the allergen rule</td><td>9</td><td>10</td></tr></tbody><caption>Illustrative totals for all ten cards.</caption></table>`+selq(WS2);
+  case "ws3":
+    return `<p class="q" id="q-w3a">3. Where did an early error propagate?</p>${radios("w3a",WS3A)}
+      <div class="pair" data-item="w3b" style="margin-top:10px"><span class="t">The tool or interface that caused most misses</span>${sel("w3b",WS3B,"Choose…",[0,2,1])}</div>`;
+  case "ws4":
+    return boxes(RESP,"4. Which of these are responsible-use choices for the matcher? Tick every one. Leave the others unticked.");
+  case "ws5":
+    return `<div class="pair" data-item="w5"><span class="t">5. My reflection: the tool or interface I would improve first is…</span>${sel("w5",REFL,"Choose…",[0,3,1,2])}</div>`;
+  case "unplug":
+    return boxes(UNPLUG,"1. A request runs through Classify → Route → Draft. Tick every place you would verify the outcome.")+
+      `<p class="q" id="q-u5">2. What happens downstream if the first tool misclassifies a request?</p>${radios("u5",DOWN)}`;
+  case "gate":
+    return `<p class="how">3. Which requests must route through the human gate?</p>`+
+      GATE.map(([k,e,t])=>`<div class="row" data-item="${k}"><span class="t">${e} ${esc(t)}</span>${seg(k,["Human gate","Pipeline can route it"],["H","P"],t)}</div>`).join("")+
+      `<div class="pair" data-item="g5"><span class="t">Why?</span>${sel("g5",GATE_WHY,"Choose…",[0,2,1,3])}</div>`;
+  case "quiz":
+    return quiz(QUIZ,TF);
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",ord(LDEF_ORDER,i))}</div>`).join("");
+  case "ldata":
+    return `<p class="how">Which data check finds each problem – a missing value, a wrong label, or a skewed set that is not representative? <span class="illus">(Illustrative rows.)</span></p>`+
+      LDATA.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Missing value","Wrong label","Skewed set"],["M","W","R"],t)}</div>`).join("");
+  case "llog":
+    return `<p class="how">Use the checks log in Figure 3. Accuracy = right ÷ total, rounded to the nearest whole percent.</p>`+selq(LLOG);
+  case "lrel":
+    return `<p class="how">Is each statement about accuracy or reliability?</p>`+
+      LREL.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Accuracy","Reliability"],["A","R"],t)}</div>`).join("");
+  case "lorder":
+    return `<p class="how">Put the adapt loop in order, from first to last.</p>`+
+      LSTEPS.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">Step ${i+1}</span>${sel("lo"+i,LSTEPS,"Choose the step…",ord(LSTEP_ORDER,i))}</div>`).join("");
+  case "lcons":
+    return boxes(LCONS,"Which of these are good constraints or changes for the re-run – ones that keep the governance rules? Tick every one.");
+  case "lws1":
+    return `<p class="how">1. Inspect the dataset above.</p>
+      <div class="pair" data-item="ls1"><span class="t">One missing value is in…</span>${sel("ls1",ROWS,"Choose…")}</div>
+      <div class="pair" data-item="ls2"><span class="t">One wrong label is in…</span>${sel("ls2",ROWS,"Choose…",[0,2,1,3])}</div>
+      <p class="q" id="q-ls3">Is the set representative?</p>${radios("ls3",REPR)}`;
+  case "lws2":
+    return `<p class="how">2. Run the full set and total your accuracy (items right at every stage) out of the total. Use Figure 3: 9 of 15 before, 12 of 15 after refining Match.</p>`+selq(LWS2);
+  case "lws3":
+    return `<div class="quote">Full checks log (illustrative): Classify missed cards 3 and 8. Match also missed cards 5, 9 and 11, where the class was right. Draft also missed card 14.</div>
+      <p class="q" id="q-lt1">3. Which tool or interface failed most?</p>${radios("lt1",LMOST)}
+      <div class="pair" data-item="lt2" style="margin-top:10px"><span class="t">Where did an early error propagate?</span>${sel("lt2",LPROP,"Choose…",[0,2,1,3])}</div>`;
+  case "lws4":
+    return `<p class="q" id="q-lk">4. You add a consistency check (the charity must accept that food type) and a risk rule (flag any ambiguous item for the duty manager), then re-run cards 5, 9 and 11. What did it change?</p>${radios("lk",LCHANGE)}`;
+  case "lws5":
+    return `<div class="pair" data-item="lr"><span class="t">5. My reflection: the part that let my pipeline down most, and the change that helped, was…</span>${sel("lr",LREFL,"Choose…",[0,2,1,3])}</div>`;
+  case "lunplug":
+    return `<p class="how">1. Inspect three printed rows (item · category · quantity).</p>`+
+      LPRINT.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["OK","Missing value","Wrong label"],["OK","M","W"],t)}</div>`).join("")+
+      `<div class="pair" data-item="lua"><span class="t">2. A run of 20 items with 15 correct. Accuracy =</span>${sel("lua",LACC,"Choose…",[0,2,1,3])}</div>
+      <p class="q" id="q-luh">3. Would that accuracy likely hold on a bigger, more varied set?</p>${radios("luh",LHOLD)}`;
+  case "lquiz":
+    return quiz(LQUIZ,LTF);
+  }
+}
+
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 10 Main Course · Term 1 Week 6 (9 – 13 Nov 2026) · Core + Lab · Bringing the Strands Together + Run It End-to-End</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
