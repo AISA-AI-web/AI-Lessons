@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Designing a Solution + Build, Test, Improve – Grade 11 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#4F46E5; --main2:#6366F1; --deep:#312E81;
+  --ink:#1E1B3A; --muted:#585670; --paper:#F6F6FD; --card:#FFFFFF;
+  --line:#DCDCF3; --soft:#EEEEFC;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#A5B4FC,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#7C74F0);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#1E1B3A,#433D7A)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#D6D6FB 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FAFAFE;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FBFBFF}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#7C74F0)}
+.act-head.ws{background:linear-gradient(120deg,#1E1B3A,#4A447F)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#EEEEFD}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #C4C4EE;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #A9A6F0;border-radius:12px;padding:10px 14px;background:#F8F8FE;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(30,27,58,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#1E1B3A;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 11 Main Course, Term 1</span><span class="pill">Week 3 Core + Week 3 Lab</span><span class="pill">📅 Teach: week of 19 – 23 Oct 2026</span></div>
+    <h1>Designing a Solution</h1>
+    <p>Today you become a solution designer. You take a real-world task, work out exactly what a good solution must do, then design and build a workflow whose components meet those requirements – and test whether it really holds. Then, in the Lab, you get real build time: you optimise your solution one step at a time and grow it into a multi-step solution that truly serves its users.</p>
+    <p class="meta"><b>Strand:</b> AI Solution Design &amp; Development &nbsp;·&nbsp; <b>Scenario:</b> a service-desk request screener</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 11B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 3 of Term 1 – Monday 19 to Friday 23 October 2026.</b> Monday and Tuesday are PD days. Boys 11 and Girls 11: Friday 23 October. Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Designing a Solution</a>, then move on to the <a href="#lab">Lab: Build, Test, Improve</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Design from requirements.</b> I can design an AI-powered solution for a real-world task, setting out its requirements, its components and the workflow that links them.</li>
+      <li><b>Build and verify components.</b> I can build and run my design and justify why each component produced the result it did.</li>
+      <li><b>Use design vocabulary.</b> I can use requirement, component, workflow, constraint and tool correctly to explain how my solution fits together.</li>
+      <li><b>Lab: optimise, structure, justify.</b> I can find the step that lets my solution down, change one thing at a time, and grow it into a multi-step solution that addresses my user's needs reliably.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 3 Core · Designing a Solution</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Start with the requirements, not the tool</b><small>Requirements and constraints drive every design choice</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Build as interacting components, then verify</b><small>Data, prompt, tool, output – and a trusted source</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Core worksheet</b><small>Design, build and evaluate the request screener</small></a></li>
+      <li><span class="num">4</span><a href="#p4"><b>Design from requirements on paper and check</b><small>Unplugged activity and designer check</small></a></li>
+    </ol>
+    <h3 class="rh">Week 3 Lab · Build, Test, Improve</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Optimise one step, then structure for the user</b><small>The optimisation loop · multi-step solutions and hand-offs</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Lab worksheet</b><small>Weak step, one change, a second step, two scenarios</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Optimise on paper and check</b><small>Unplugged activity and builder check</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 4</span><h2>Start with the requirements, not the tool</h2><p>What must the solution do, for whom, and within what limits?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In Week 2 you traced how the parts of a system interact and changed one part to see the effect across the whole system. Now you design and build a solution of your own.</p></div>
+    <div class="call"><h4>Scenario</h4><p>A government service desk wants an AI helper that <b>screens incoming requests</b> and <b>drafts a first reply</b>. Before choosing any tool, the team writes what it must do, for whom, and within what limits – the requirements – then builds it as parts that interact. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">Start with the requirements, not the tool</h3>
+    <p>A real-world solution starts with a clear question: what must this actually do, for whom, and within what limits? Those answers are your <b>requirements</b>, and they decide everything else – the data you need, what the prompt must ask for, and what a correct output looks like. Only then do you choose and connect the <b>components</b>. If you pick a tool before you know the requirements, you often build something clever that does not solve the task. Naming the requirements first is what turns a nice demo into a solution someone could actually rely on.</p>
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="f1T">
+        <title id="f1T">Requirements come first: a Requirements box at the top decides each of four components in a row – Data, Prompt, Tool (the AI step) and Output. A dashed arrow runs from the Output back to the Requirements: verify the output against them.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1E1B3A"/></marker><marker id="ahv" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#4F46E5"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#1E1B3A">
+          <rect x="200" y="30" width="360" height="74" rx="12" fill="#4F46E5" stroke="#312E81" stroke-width="1.6"/>
+          <text x="380" y="60" font-size="17" font-weight="800" text-anchor="middle" fill="#fff">REQUIREMENTS</text>
+          <text x="380" y="86" font-size="13.5" text-anchor="middle" fill="#fff">what it must do · for whom · within what limits</text>
+          <g stroke="#1E1B3A" stroke-width="2" fill="none" marker-end="url(#ah)"><path d="M250 106L104 164"/><path d="M335 106L290 164"/><path d="M425 106L470 164"/><path d="M510 106L656 164"/></g>
+          <text x="14" y="134" font-size="13" font-weight="600" fill="#4F46E5">decide each part</text>
+          <g stroke="#1E1B3A" stroke-width="1.6">
+            <rect x="14" y="170" width="156" height="80" rx="10" fill="#EEEEFC"/>
+            <rect x="206" y="170" width="156" height="80" rx="10" fill="#fff"/>
+            <rect x="398" y="170" width="156" height="80" rx="10" fill="#312E81"/>
+            <rect x="590" y="170" width="156" height="80" rx="10" fill="#EEEEFC"/>
+          </g>
+          <g font-size="15" font-weight="700" text-anchor="middle"><text x="92" y="196">Data</text><text x="284" y="196">Prompt</text><text x="476" y="196" fill="#fff">Tool (AI step)</text><text x="668" y="196">Output</text></g>
+          <g font-size="13" text-anchor="middle" fill="#585670">
+            <text x="92" y="217">requests with no</text><text x="92" y="234">personal data</text>
+            <text x="284" y="217">team list, format,</text><text x="284" y="234">next step</text>
+            <text x="476" y="217" fill="#fff">approved</text><text x="476" y="234" fill="#fff">assistant</text>
+            <text x="668" y="217">team label +</text><text x="668" y="234">draft reply</text>
+          </g>
+          <g stroke="#1E1B3A" stroke-width="2.4" marker-end="url(#ah)"><path d="M171 210H202"/><path d="M363 210H394"/><path d="M555 210H586"/></g>
+          <path d="M747 210H752V67H566" fill="none" stroke="#4F46E5" stroke-width="2.4" stroke-dasharray="7 5" marker-end="url(#ahv)"/>
+          <text x="660" y="96" font-size="13" font-weight="600" text-anchor="middle" fill="#4F46E5">verify the output</text>
+          <text x="660" y="113" font-size="13" font-weight="600" text-anchor="middle" fill="#4F46E5">against them</text>
+          <text x="380" y="284" font-size="13.5" text-anchor="middle">Change one component and the others feel it – so re-check after every change.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> Requirements come first and drive the design: they decide the data, prompt, tool and output that follow – and the output is verified against them.</figcaption>
+    </figure>
+    <div class="call amber"><h4>Requirements drive every design choice</h4><p>A requirement is what the finished solution must achieve, plus the <b>constraints</b> it works under (for example, no personal data, or a fixed reply format). Requirements come first because they decide the data you use, the prompt you write, the tool you pick and the output you accept. Design from the requirement, not from a tool you happen to like.</p></div>
+    <div id="a-vocab"></div>
+    <div id="a-comp"></div>
+    <div id="a-drive"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 4</span><h2>Build as interacting components, then verify</h2><p>A strong tool cannot rescue a vague prompt or messy data.</p></div>
+  <div class="part-body">
+    <p>You build a solution by composing components so they interact – you supply <b>data</b>, you write a <b>prompt</b> that directs the <b>tool</b>, the tool does the work, and you evaluate the <b>output</b> against your requirements. The interactions are the point: a vague prompt gives the tool nothing useful to do, and messy data gives a messy output no matter how strong the tool is. Because the components interact, a change in one ripples to the others, so you re-check after every change. Even a confident output can be wrong, so you <b>verify</b> it against the requirements and a trusted source rather than trusting how polished it sounds.</p>
+    <div class="ecard" id="run1"></div>
+    <div id="a-trace"></div>
+    <div id="a-truths"></div>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, teams build AI-powered solutions to triage messages, screen documents and plan services – always designed from clear requirements, built as interacting components, and tested before anyone relies on or governs them. Learning to design and evaluate one now means you can shape these solutions responsibly, not just use them.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Design &amp; Technology · Mathematics · Business Studies</h4><p>Designing from requirements and constraints is the <b>design brief</b> of <b>Design &amp; Technology</b>. Writing a criterion you can count is a <b>measurable target</b> in <b>Mathematics</b>. Defining who the solution serves is <b>requirements analysis</b> from <b>Business Studies</b>.</p></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 4 · Worksheet</span><h2>Design and build the request screener</h2><p>Requirements first, then data and prompt, then the tool – then evaluate the output.</p></div>
+  <div class="part-body">
+    <div class="call amber"><h4>Tool for this week: school-approved generative assistant (prompt engineering + iterative build, teacher-mediated)</h4><p>1. Choose a real-world task and write two clear requirements and one constraint. 2. Specify your data and write a prompt that directs the tool to meet the requirements. 3. Run it, then evaluate the output against each requirement and a trusted source. <b>Stay safe:</b> teacher-operated assistant; no personal data – use illustrative requests. Verify every output before you accept it.</p></div>
+    <div id="a-safe"></div>
+    <div id="a-wsreq"></div>
+    <div id="a-wscon"></div>
+    <div id="a-wsprompt"></div>
+    <div id="a-wstool"></div>
+    <div class="ecard" id="run2"></div>
+    <div id="a-wseval"></div>
+  </div>
+</section>
+
+<!-- CORE PART 4 -->
+<section class="part" id="p4">
+  <div class="part-head"><span class="pill">Core · Part 4 of 4 · Unplugged</span><h2>Design from requirements, on paper</h2><p>No devices needed – design the helper from what it must do.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>A service desk wants an AI helper that screens requests and drafts a reply. Working on paper, design it from the requirements. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> A measurable criterion: ‘At least 8 of 10 drafts need no correction by staff.’</div>
+    <div id="a-ureq"></div>
+    <div id="a-ucheck"></div>
+    <div id="a-quiz"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 3 Lab</span><h2>Build, Test, Improve</h2><p>In the lab you get real build time. You test the solution you designed, fix its weakest step, then grow it into a multi-step solution that truly addresses a user's needs – and prove it holds reliably across more than one scenario.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario – continued</h4><p>Your request screener works, but not well enough. You optimise it the tester's way: run it on a fresh request, find the one step that weakens the output, change only that, and test again – then add a second step justified by a real user need. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Optimise one step, then structure for the user</h2><p>How do you make a build better – and prove it?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Optimise by changing one thing at a time</h3>
+    <p>The fastest way to improve a solution is not to rebuild it. You test it on a fresh scenario, find the one step that weakens the output – often a prompt or the data it is given – and change only that. Because the steps interact, that single change ripples to the others, so keeping it to one change is how you know which interaction helped and whether the solution became more usable or more efficient. Then you run it again and compare against the user's needs. Notes of before and after turn guessing into evidence. This is <b>optimisation</b>: a controlled loop that makes your build better for the user and lets you justify exactly why.</p>
+    <figure>
+      <svg viewBox="0 0 760 214" role="img" aria-labelledby="f2T">
+        <title id="f2T">The optimisation loop: run on a fresh scenario, judge against the user's needs, find the one weak step, change only that step, run again and note before and after – then repeat, testing on two or more scenarios.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1E1B3A"/></marker><marker id="ah2v" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#4F46E5"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#1E1B3A">
+          <text x="380" y="24" font-size="15" font-weight="700" text-anchor="middle">The optimisation loop – change one thing, then test again</text>
+          <g stroke="#1E1B3A" stroke-width="1.6" fill="#fff">
+            <rect x="8" y="46" width="134" height="76" rx="10"/><rect x="160" y="46" width="134" height="76" rx="10"/><rect x="313" y="46" width="134" height="76" rx="10" fill="#EEEEFC"/><rect x="466" y="46" width="134" height="76" rx="10" fill="#312E81"/><rect x="618" y="46" width="134" height="76" rx="10"/>
+          </g>
+          <g font-size="14" font-weight="700" text-anchor="middle">
+            <text x="75" y="80">Run on a fresh</text><text x="75" y="99">scenario</text>
+            <text x="227" y="80">Judge against</text><text x="227" y="99">user needs</text>
+            <text x="380" y="80">Find the one</text><text x="380" y="99">weak step</text>
+            <text x="533" y="80" fill="#fff">Change only</text><text x="533" y="99" fill="#fff">that step</text>
+            <text x="685" y="80">Run again:</text><text x="685" y="99">before + after</text>
+          </g>
+          <g stroke="#1E1B3A" stroke-width="2.4" marker-end="url(#ah2)"><path d="M143 84H157"/><path d="M295 84H310"/><path d="M448 84H463"/><path d="M601 84H615"/></g>
+          <path d="M685 123V160H75V126" fill="none" stroke="#4F46E5" stroke-width="2.4" stroke-dasharray="7 5" marker-end="url(#ah2v)"/>
+          <rect x="170" y="147" width="420" height="26" rx="13" fill="#fff"/>
+          <text x="380" y="165" font-size="13.5" font-weight="600" text-anchor="middle" fill="#4F46E5">repeat – and test on two or more scenarios</text>
+          <text x="380" y="200" font-size="13.5" text-anchor="middle">One change at a time shows which interaction helped – evidence, not guessing.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Optimisation is a controlled loop: change one step, run again, and compare before and after against the user's needs.</figcaption>
+    </figure>
+    <div id="a-lorder"></div>
+    <div id="a-lone"></div>
+    <h3 class="sub">Structure it as steps that serve the user</h3>
+    <p>A <b>multi-step solution</b> does more than one job by chaining steps. The output of the first step becomes the input of the second – that join is the <b>hand-off</b>, and it depends on the first step returning something the second can use. Add a step only when it meets a real <b>user need</b>, not just because you can. So when you test the solution you check three things: does each step do its part, does the hand-off hold, and does the whole solution address the user's needs. A solution is <b>reliable</b> only when it holds across more than one scenario, so always test with at least two, and verify each output before you trust it.</p>
+    <figure>
+      <svg viewBox="0 0 760 256" role="img" aria-labelledby="f3T">
+        <title id="f3T">A multi-step request screener: Data (requests with no personal data) feeds Step A (screen and draft: team label and draft reply), whose output is handed off to Step B (reply in the resident's language), which produces the Output. Each step has its own prompt. Step B was added to meet a user need.</title>
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1E1B3A"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#1E1B3A">
+          <g stroke="#4F46E5" stroke-width="1.4" fill="#EEEEFC"><rect x="226" y="14" width="110" height="30" rx="15"/><rect x="418" y="14" width="110" height="30" rx="15"/></g>
+          <g font-size="13" font-weight="600" text-anchor="middle" fill="#4F46E5"><text x="281" y="34">prompt A</text><text x="473" y="34">prompt B</text></g>
+          <g stroke="#4F46E5" stroke-width="2" marker-end="url(#ah3)"><path d="M281 45V68"/><path d="M473 45V68"/></g>
+          <g stroke="#1E1B3A" stroke-width="1.6">
+            <rect x="14" y="72" width="150" height="80" rx="10" fill="#EEEEFC"/>
+            <rect x="206" y="72" width="150" height="80" rx="10" fill="#312E81"/>
+            <rect x="398" y="72" width="150" height="80" rx="10" fill="#312E81"/>
+            <rect x="590" y="72" width="156" height="80" rx="10" fill="#fff"/>
+          </g>
+          <g font-size="15" font-weight="700" text-anchor="middle"><text x="89" y="99">Data</text><text x="281" y="99" fill="#fff">Step A</text><text x="473" y="99" fill="#fff">Step B</text><text x="668" y="99">Output</text></g>
+          <g font-size="13" text-anchor="middle">
+            <text x="89" y="120" fill="#585670">requests, no</text><text x="89" y="137" fill="#585670">personal data</text>
+            <text x="281" y="120" fill="#fff">screen + draft:</text><text x="281" y="137" fill="#fff">team + reply</text>
+            <text x="473" y="120" fill="#fff">reply in the</text><text x="473" y="137" fill="#fff">resident's language</text>
+            <text x="668" y="120" fill="#585670">label + reply</text><text x="668" y="137" fill="#585670">for staff to check</text>
+          </g>
+          <g stroke="#1E1B3A" stroke-width="2.4" marker-end="url(#ah3)"><path d="M165 112H202"/><path d="M357 112H394"/><path d="M549 112H586"/></g>
+          <path d="M376 114V178" stroke="#4F46E5" stroke-width="1.6" stroke-dasharray="4 3"/>
+          <rect x="108" y="178" width="272" height="30" rx="8" fill="#fff" stroke="#4F46E5" stroke-width="1.6"/>
+          <text x="244" y="198" font-size="13" font-weight="600" text-anchor="middle" fill="#4F46E5">hand-off: A's output = B's input</text>
+          <path d="M520 153V178" stroke="#4F46E5" stroke-width="1.6" stroke-dasharray="4 3"/>
+          <rect x="394" y="178" width="290" height="30" rx="8" fill="#EEEEFC" stroke="#4F46E5" stroke-width="1.6"/>
+          <text x="539" y="198" font-size="13" font-weight="600" text-anchor="middle" fill="#312E81">Step B: added to meet a user need</text>
+          <text x="380" y="242" font-size="13.5" text-anchor="middle">Test each step, the hand-off and the whole – on at least two scenarios.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> A multi-step solution: the output of the first step becomes the input of the second, which was added to serve a user need.</figcaption>
+    </figure>
+    <div id="a-lmap"></div>
+    <div id="a-lthree"></div>
+    <div class="call blue"><h4>Why it matters</h4><p>Real UAE solutions – screening documents, routing customer requests, planning logistics – are built as structured multi-step solutions that serve real users, optimised for efficiency and usability, and tested across many scenarios before anyone trusts or governs them. Building and optimising one now is exactly this professional skill in miniature.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Design &amp; Technology · Mathematics</h4><p>Test, change one thing, test again is the <b>iterative design cycle</b> from <b>Design &amp; Technology</b>. Comparing before-and-after outputs is a <b>controlled comparison</b> in <b>Mathematics</b>.</p></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head dark"><span class="pill">Lab · Part 2 of 3 · Worksheet</span><h2>Optimise the request screener</h2><p>Judge it against the user's needs, change one step, add a second step, and test on two scenarios.</p></div>
+  <div class="part-body">
+    <div class="call amber"><h4>Tool for this week: school-approved generative assistant (prompt engineering + iterative build, teacher-mediated)</h4><p>1. Run your Core solution on a fresh scenario and judge the output against the user need. 2. Mark the one step that weakens it, change only that, and run again – record the output before and after. 3. Add a second step justified by a user need, then run the whole multi-step solution on two scenarios. <b>Stay safe:</b> teacher-operated assistant; illustrative scenarios only, no personal data. Verify each output before trusting it.</p></div>
+    <div class="ecard" id="optlog"></div>
+    <div id="a-lfresh"></div>
+    <div id="a-lweak"></div>
+    <div id="a-lchange"></div>
+    <div id="a-ladd"></div>
+    <div id="a-ltwo"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head"><span class="pill">Lab · Part 3 of 3 · Unplugged</span><h2>Optimise one step, on paper</h2><p>No devices needed – change one step, then add a second step a user needs.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>Your request screener works but not well enough: staff notice that its drafts often promise repair and refund times that the service guide does not give. Working on paper, optimise it by changing one step, then add a second step justified by a user need. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Record: ‘Weak step: prompt. Change: add an example. Before: vague. After: specific.’</div>
+    <div id="a-lup1"></div>
+    <div id="a-lup2"></div>
+    <div id="a-lquiz"></div>
+    <div class="call"><h4>Next</h4><p>In Week 4 you judge what an AI solution produces like a real evaluator – Judging Outputs in the Core, then Rank and Defend in the Lab.</p></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Design from requirements – then optimise one step at a time and build for the user</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>A solution is designed from <b>requirements</b> – what it must do, for whom, within what limits.</li>
+      <li><b>Constraints</b> (such as no personal data) bound the design alongside the requirements.</li>
+      <li>You build by composing <b>components</b> – data, prompt, tool, output – so they interact.</li>
+      <li>Always <b>verify</b> the output against each requirement and a trusted source.</li>
+      <li>Improve by <b>changing one thing at a time</b>, then testing again – not by rebuilding.</li>
+      <li>Record the output <b>before and after</b> so an improvement is evidence.</li>
+      <li>A <b>multi-step solution</b> chains steps; the <b>hand-off</b> passes one step's output to the next.</li>
+      <li>Add a step only when a real <b>user need</b> justifies it – and test on at least two scenarios before calling it <b>reliable</b>.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 11 · Main Course · Term 1 Week 3 (19 – 23 Oct 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- strand + concept tags ---------- */
+const CU_P="CU · interactions between data, tools and users";
+const SD_E="SD · designs AI-powered solutions for real-world tasks";
+const SD_P="SD · structured multi-step solutions addressing user needs";
+const SD_A="SD · optimises solutions for efficiency, usability and performance";
+const CE_E="CE · identifies limitations in solutions";
+const CE_P="CE · evaluates using multiple criteria and evidence";
+const CE_A="CE · justifies improvements using data and structured reasoning";
+const GE_E="GE · identifies potential impacts of AI solutions";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["requirement","What the finished solution must achieve for the real-world task, and the constraints it works under."],
+  ["component","One part of the solution, such as the data, the prompt, the tool or the output."],
+  ["workflow","The ordered set of components and steps that turns the data into the output."],
+  ["constraint","A limit the solution must respect, such as no personal data or a fixed output format."],
+  ["tool","The AI step that carries out the task using your data and prompt."]
+];
+const DEF_ORDER = [3,0,4,1,2];
+const CTYPES = ["Requirement","Constraint","Data","Prompt","Tool","Output"];
+const COMP = [
+  ["cp1","🎯 Every request reaches the correct team",0],
+  ["cp2","🔒 No names, ID numbers or phone numbers may reach the AI step",1],
+  ["cp3","📥 Today's incoming requests, with personal details removed",2],
+  ["cp4","🖊️ ‘Choose one of the four teams for this request, then draft a reply …’",3],
+  ["cp5","⚙️ The approved generative assistant that carries out the task",4],
+  ["cp6","📤 A team label plus a draft reply for staff to check",5]
+];
+const DRIVE_OPTS = [
+  "Prompt: list the four teams and ask for exactly one team label",
+  "Data: remove names, ID numbers and phone numbers before the AI step",
+  "Output: a reply under 80 words in a fixed format – greeting, answer, next step",
+  "Tool: pick the biggest model available, then see what it can do"
+];
+const DRIVE = [
+  ["dr1","Requirement: every request reaches the correct team (one of four)",0],
+  ["dr2","Constraint: no personal data reaches the AI step",1],
+  ["dr3","Requirement: staff can check and send a draft in under a minute",2]
+];
+const DFIRST = ["The tool – then look for a task it can do","The requirements – they decide the data, prompt, tool and output","The output format you like the look of","Whatever the assistant suggests first"];
+const RUN1 = [
+  ["Data (one request, details removed)","‘My trade-licence renewal payment went through twice on Sunday. Please refund one of them.’ <i>[name and phone number removed]</i>"],
+  ["Prompt","‘Reply to this request.’"],
+  ["Tool","The approved assistant – it ran without any error."],
+  ["Output","<i>No team label.</i> ‘Thank you for contacting us! Trade licences can be renewed online at any time through the portal, and renewal usually takes two working days. We hope this helps!’"],
+  ["Service guide (trusted source)","Duplicate payments → Payments team. The extra payment is refunded to the original card within 10 working days."]
+];
+const TR1 = ["Both – it ran without error and sounds polished","Neither – there is no team label, and the reply answers a question the resident did not ask","Only ‘every request reaches the correct team’","Only ‘the reply gives the correct next step’"];
+const TR2 = ["The tool – it must be too weak for the task","The data – the request was unclear","The prompt – ‘Reply to this request’ never asks for a team or says what a good reply must contain","The output – it was too polite"];
+const TR3 = ["Swap to a bigger tool and trust what it writes","Rewrite only the prompt from the requirements (team list, format, next step), run again and check against the service guide","Change the data, the prompt and the tool all at once","Accept it – the confident tone shows it is right"];
+const TRUTHS = [
+  ["t1","🌫️ A vague prompt gives the tool nothing useful to do, however strong the tool is.",1],
+  ["t2","🧺 Messy data gives a messy output, however strong the tool is.",1],
+  ["t3","🔁 Because components interact, a change to one can ripple to the others – so re-check after every change.",1],
+  ["t4","🧱 Once each component works on its own, the whole solution must work.",0],
+  ["t5","✨ A polished, confident output has already been verified.",0],
+  ["t6","🔎 Even a confident output can be wrong, so check it against the requirements and a trusted source.",1]
+];
+const SAFE = [
+  ["sf1","🛡️ Use only the teacher-operated, approved assistant.",1],
+  ["sf2","🚩 Paste a real resident's request, name and phone number included, to make it realistic.",0],
+  ["sf3","📂 Use illustrative requests with no personal data.",1],
+  ["sf4","👍 Accept the output once it reads well.",0],
+  ["sf5","🔎 Verify every output before you accept it.",1],
+  ["sf6","🏠 Try the build at home on a personal chatbot account.",0]
+];
+const REQS = [
+  ["rq1","🎯 Each request is sent to the correct team.",1],
+  ["rq2","🧭 Each draft reply tells the resident the correct next step, in plain language.",1],
+  ["rq3","🚀 It uses the newest, most powerful model.",0],
+  ["rq4","🎬 It looks impressive in a demo.",0]
+];
+const CHECKS = [
+  "Run 10 sample requests and count how many team labels match the team staff would choose",
+  "Compare each reply's next step with the service guide, and count how many match",
+  "Ask the assistant whether it did a good job",
+  "Read one output and decide by feel"
+];
+const CONS = [
+  ["cs1","No names, ID numbers or phone numbers may reach the AI step.","K"],
+  ["cs2","Each request reaches the correct team.","R"],
+  ["cs3","Use whichever chatbot is most popular this month.","T"],
+  ["cs4","Every reply follows a fixed format: greeting, answer, next step.","K"],
+  ["cs5","Staff can send most drafts without corrections.","R"]
+];
+const WD = ["Real requests copied from residents' emails","Illustrative requests with names, ID numbers and phone numbers removed","Last year's complaints only, whatever their topic","No data – the tool can imagine some requests"];
+const WP = ["‘Reply to this request.’","‘Be helpful and smart.’","‘Choose one team – Licences, Payments, Faults & Complaints or General enquiries. Then draft a reply under 80 words: greeting, answer, next step. Use only the service guide. Include no personal details.’","‘Write the best reply you can, as long as you need.’"];
+const WTR = ["The desk's published service guide","The assistant's own explanation of its answer","A post on social media","Whichever answer sounds most confident"];
+const TOOLS = ["Image generator – makes pictures from a description","Speech-to-text transcriber – turns phone calls into text","Generative text assistant – reads a request and writes a team label and a draft reply","Spreadsheet calculator – adds up columns of numbers"];
+const TPOS = ["Before the data – it collects the requests","After the data and prompt, before the output – it does the work using them","After the output – it checks the reply","Anywhere – the order does not matter"];
+const RUN2 = [
+  ["A","‘I paid my trade-licence renewal twice on Sunday – please refund one payment.’","Payments","‘Thank you for telling us. The duplicate payment will be refunded to your original card within 10 working days. You do not need to do anything else.’","Duplicate payments → Payments. Refund to the original card within 10 working days."],
+  ["B","‘The streetlight outside our building has been off for a week.’","Faults & Complaints","‘Thank you – we have logged the fault and a crew will repair it within 3 working days.’","Streetlight faults → Faults & Complaints. Repair within 5 working days."],
+  ["C","‘Can I pay my parking fine in instalments?’","Licences","‘Yes – parking fines can be split into up to three instalments on the Payments page.’","Fines and fees → Payments. Up to three instalments on the Payments page."]
+];
+const EVAL = [
+  ["ev1","A · team label","M"],["ev2","A · reply and next step","M"],
+  ["ev3","B · team label","M"],["ev4","B · reply and next step","N"],
+  ["ev5","C · team label","N"],["ev6","C · reply and next step","M"]
+];
+const FXB = ["Tool – swap to a bigger model","Data – give the tool the service guide's timeframes, so it does not guess","Output – make the reply longer","Nothing – the reply sounds confident"];
+const FXC = ["Prompt – add the guide's rule that fines and fees go to Payments","Data – delete the word ‘parking’","Tool – use an image generator","Nothing – the reply was right, so the team label does not matter"];
+const UREQ = [
+  ["ur1","At least 8 of 10 drafts need no correction by staff.","C"],
+  ["ur2","No personal data is used at any step.","K"],
+  ["ur3","The replies should be nice.","V"],
+  ["ur4","At least 9 of 10 requests reach the team staff would choose.","C"],
+  ["ur5","Replies are drafts only – a staff member sends every one.","K"],
+  ["ur6","The helper should feel modern.","V"]
+];
+const UC = [
+  "Give staff 10 drafts made from sample requests and count how many they send unchanged",
+  "Have staff label 10 sample requests, then count how many of the helper's team labels match",
+  "Inspect the data and the prompt before every run and confirm no names, ID numbers or phone numbers are present",
+  "Ask the assistant to score itself out of 10"
+];
+const UCHK = [
+  ["uc1","At least 8 of 10 drafts need no correction by staff.",0,[3,1,0,2]],
+  ["uc2","At least 9 of 10 requests reach the team staff would choose.",1,[0,3,2,1]],
+  ["uc3","No personal data is used at any step.",2,[1,2,3,0]]
+];
+const QUIZ = [
+  ["q1","Where should the design of an AI solution start?",["From the most powerful tool you can find.","From the requirements – what it must do, for whom, and within what limits.","From the output format you would like to see."],1],
+  ["q2","What is a constraint in a solution design?",["A feature that makes the solution run faster.","The trained model at the centre of the solution.","A limit the solution must respect, such as no personal data or a fixed output format."],2],
+  ["q3","You build the solution as interacting components. What must you do before trusting the output?",["Evaluate it against each requirement and a trusted source.","Assume it is correct because the components ran without error.","Add more components until it looks impressive."],0]
+];
+const TF = [
+  ["tf1","Design should start from the most powerful tool available.","F"],
+  ["tf2","A constraint is a limit the design must respect.","T"],
+  ["tf3","Running without errors proves the output meets the requirements.","F"]
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["optimise","To test, change one thing, and test again until the solution serves the user better."],
+  ["user needs","What the person using the solution actually requires it to do for them."],
+  ["multi-step solution","A solution with more than one step, where the output of one step feeds the next."],
+  ["hand-off","The point where the output of one step becomes the input of the next."],
+  ["reliable","The solution addresses the user's needs across more than one scenario, not just once."]
+];
+const LDEF_ORDER = [2,4,0,3,1];
+const LSTEPS = ["Run the solution on a fresh scenario","Judge the output against the user's needs","Find the one step that weakens the output","Change only that step","Run again and note the output before and after"];
+const LSTEP_ORDER = [3,4,1,2,0];
+const ON1 = ["Team X – more changes means more improvement","Both equally – the replies improved either way","Team Y – with one change, they know which interaction helped","Neither – an improvement can never be explained"];
+const ON2 = ["To make the log look longer","Because the tool needs the notes as its input","So the improvement is evidence, not a guess","To prove the tool never makes mistakes"];
+const MP = [
+  "Incoming requests with personal details removed",
+  "Screen and draft: a team label and a draft reply",
+  "Reply in the resident's language: translate the draft into Arabic when the request was in Arabic",
+  "A team label and a reply in the resident's language, for staff to check",
+  "Residents' names and phone numbers"
+];
+const LMAP = [["mp1","Data",0,[4,1,0,3,2]],["mp2","Step A",1,[3,0,2,1,4]],["mp3","Step B",2,[0,4,3,2,1]],["mp4","Output",3,[1,2,4,0,3]]];
+const HO = ["Where the resident sends the request","Where staff read the final reply","Where Step A's draft reply becomes Step B's input","Nowhere – the two steps work separately"];
+const UN = ["Two steps look more advanced than one","Many residents write in Arabic and need a reply they can read","Two steps always run faster than one","The tool needs more work to do"];
+const THREE = [
+  ["th1","Step A gives exactly one team label for each test request.","P"],
+  ["th2","Step B receives Step A's whole draft, with nothing cut off.","H"],
+  ["th3","For two different scenarios, staff get a correct, verified reply they can send.","W"],
+  ["th4","Step A's draft arrives in the format Step B's prompt expects.","H"],
+  ["th5","Step B's Arabic says the same as Step A's English draft.","P"],
+  ["th6","Residents who wrote in Arabic get a reply they can read.","W"]
+];
+const OPTLOG = [
+  ["Run 1 · Core solution (one step) · fresh scenario 1","‘I was charged a late fee on my trade-licence renewal, but I renewed before the expiry date. What should I do?’","Team: <b>Payments</b> · Reply: <b>190 words</b> restating every late-fee rule; no next step.","✗ Staff need a short draft; the resident needs a next step. Guide: fee disputes → fee-review form on the Payments page within 30 days."],
+  ["Run 2 · changed only the prompt (added one example reply: greeting, answer, next step, under 80 words) · scenario 1","Same request","Team: <b>Payments</b> · Reply: <b>64 words</b> – ‘…please submit the fee-review form on the Payments page within 30 days…’","✓ Short, and gives the guide's next step."],
+  ["Run 3 · added Step B (reply in the resident's language) – staff say many residents write in Arabic · scenario 1","Same request (written in English)","Step A: Payments + the 64-word draft → Step B: passed on in English, unchanged.","✓ Matches the guide."],
+  ["Run 3 · scenario 2","A request written in Arabic: ‘Building work next door blocks the pavement outside our home every day. Who can stop it?’","Step A: <b>Licences</b> + ‘…apply for a building permit on the Licences page.’ → Step B: a fluent Arabic version of that draft.","✗ Guide: a blocked pavement → Faults &amp; Complaints; report it on the faults form, and an inspector visits within 2 working days."]
+];
+const FRESH = [
+  ["fr1","Send the request to the correct team","M"],
+  ["fr2","A short draft staff can check and send quickly","N"],
+  ["fr3","Tell the resident the correct next step","N"],
+  ["fr4","No personal data in the prompt or the output","M"]
+];
+const LW1 = ["The data – the request was too long","The tool – it needs replacing","The prompt – it never shows what a short reply with a next step looks like","The team label"];
+const LW2 = ["Rewrite the prompt, swap the tool and clean the data together","Rebuild the whole solution from scratch","Add one example reply to the prompt and change nothing else","Add three more steps"];
+const CH1 = ["The tool","The data","The prompt – one example reply added","Nothing"];
+const OUTS = ["190 words restating the rules, with no next step","64 words, with the fee-review next step","No reply at all","A reply sent to the wrong team"];
+const CH4 = ["The resident's question changed","The tool was upgraded","The example in the prompt shaped the length and format of the tool's output","The team label changed"];
+const AD1 = ["A step that rewrites every reply as a poem","A step that replies in Arabic when the request is in Arabic, because many residents write in Arabic","A second assistant, so the solution looks more advanced","A step that saves residents' phone numbers for later"];
+const AD2 = ["The resident's name and phone number","Nothing – Step B starts from scratch","Step A's checked draft reply and team label","The whole service guide"];
+const TW3 = [
+  "Reliable – scenario 1 worked perfectly.",
+  "Reliable – both runs finished without errors and the Arabic is fluent.",
+  "Not yet – it holds on scenario 1 but not on scenario 2, so find the weak step for scenario 2, change one thing and re-test both scenarios.",
+  "Unreliable – throw it away and start again."
+];
+const TW4 = ["Step B – the translation was poor","The data – the request was written in Arabic","Step A – its wrong team and next step crossed the hand-off, and Step B translated them faithfully","The output – it was too short"];
+const U1 = ["The residents – they should write shorter requests","The output – the replies are too polite","The data – the tool is never given the service guide's timeframes, so it guesses","Every step at once"];
+const U2 = ["Swap the tool, rewrite the prompt and clean the data together","Remove the reply step altogether","Tell staff to stop checking replies","Add the service guide's timeframes to the data the tool receives, and change nothing else"];
+const U3 = ["Before: vague. After: better.","After: it felt more accurate.","Before and after were the same, so it improved.","Before: 6 of 10 drafts gave a wrong timeframe. After: 0 of 10 – with nothing else changed."];
+const JUST = [
+  ["j1","📋 A step that lists which document is missing, because staff asked to know what to request back",1],
+  ["j2","🎨 A step that turns each reply into a rhyming poem",0],
+  ["j3","🚨 A step that flags urgent safety requests, because staff need to answer those first",1],
+  ["j4","🤖 A second AI tool just to make the solution look more advanced",0],
+  ["j5","🗄️ A step that stores residents' ID numbers in a shared file for later",0],
+  ["j6","🧑‍💼 A staff review step for requests the screener is unsure about, because wrong routing upsets residents",1]
+];
+const LQUIZ = [
+  ["lq1","What is the fastest way to improve a working solution?",["Rebuild the whole solution from scratch.","Find the one step that weakens the output, change only that, and test again.","Add as many steps as possible."],1],
+  ["lq2","In a multi-step solution, what is a hand-off?",["The moment a human takes over from the AI.","The final answer the user receives.","The point where the output of one step becomes the input of the next."],2],
+  ["lq3","Why add a second step ‘justified by a user need’?",["So the extra step serves the person using the solution, not just added complexity.","Because more steps always make a solution more reliable.","Because two steps always run faster than one."],0]
+];
+const LTF = [
+  ["ltf1","Rebuilding from scratch is the fastest way to improve a solution.","F"],
+  ["ltf2","A hand-off passes one step's output to the next as its input.","T"],
+  ["ltf3","You add a second step only when a real user need justifies it.","T"]
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const tick=list=>list.map(([k,,c])=>({k,box:1,ok:v=>v===!!c}));
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+SD_E,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"A requirement is what the finished solution must achieve, and the constraints it works under. A component is one part, such as the data, prompt, tool or output. A workflow is the ordered set of components and steps that turns data into output. A constraint is a limit to respect, such as no personal data. The tool is the AI step that does the task using your data and prompt."},
+ {id:"comp",mount:"a-comp",section:"Core · Part 1",title:"Name each part of the screener's design",sub:"Objective 3 · requirement, constraint, data, prompt, tool, output · "+SD_E,ico:"🧩",
+  fields:COMP.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Reaching the correct team is a requirement – what the solution must achieve. Keeping personal data away from the AI step is a constraint – a limit. The cleaned requests are the data, the instruction is the prompt, the approved assistant is the tool, and the team label plus draft is the output."},
+ {id:"drive",mount:"a-drive",section:"Core · Part 1",title:"Requirements decide the design",sub:"Objective 1 · design from requirements · "+SD_E,ico:"🎯",
+  fields:[...DRIVE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"dr4",ok:v=>eq(v,1)}],
+  explain:"Each requirement decides a component: reaching the right team decides what the prompt must ask for; the no-personal-data constraint decides how the data is prepared; a draft staff can send in a minute decides the output format. Picking the biggest tool first is designing from a tool, not from the requirements – so the design starts from the requirements."},
+ {id:"trace",mount:"a-trace",section:"Core · Part 2",title:"Why did the first build let the desk down?",sub:"Objective 2 · justify each component's result · "+CU_P,ico:"🧭",
+  fields:[{k:"tr1",radio:1,ok:v=>eq(v,1)},{k:"tr2",radio:1,ok:v=>eq(v,2)},{k:"tr3",radio:1,ok:v=>eq(v,1)}],
+  explain:"The output meets neither requirement: there is no team label, and the reply talks about renewing a licence when the resident asked for a refund. The data was clear and the tool ran fine – the vague prompt gave the tool nothing useful to do. Rewrite only the prompt from the requirements, run again and check the output against the service guide, not against how polished it sounds."},
+ {id:"truths",mount:"a-truths",section:"Core · Part 2",title:"How do the components interact?",sub:"Build as interacting components · "+CU_P,ico:"🔗",
+  fields:tick(TRUTHS),
+  explain:"True: a vague prompt or messy data spoils the output however strong the tool is; a change to one component ripples to the others; a confident output can still be wrong. False: parts that work alone can still fail together, and a polished output has not been verified until you check it against the requirements and a trusted source."},
+ {id:"safe",mount:"a-safe",section:"Core worksheet",title:"Stay safe with the approved assistant",sub:"Tool for this week · safe-use rules · "+GE_E,ico:"🛡️",
+  fields:tick(SAFE),
+  explain:"Use only the teacher-operated assistant, illustrative requests with no personal data, and verify every output before you accept it. Never paste a real resident's details, never accept an output just because it reads well, and never move the build to a personal chatbot account."},
+ {id:"wsreq",mount:"a-wsreq",section:"Core worksheet 1",title:"Two requirements and how to check them",sub:"Worksheet 1 · requirement and check · "+SD_E,ico:"📋",cls:"ws",
+  fields:[...tick(REQS),{k:"rc1",ok:v=>eq(v,0)},{k:"rc2",ok:v=>eq(v,1)}],
+  explain:"Requirements say what a good solution must achieve for the task: the correct team, and a correct next step in plain language. The newest model is a tool choice and looking impressive is not a task need. Check each requirement by counting against something trusted: labels staff would choose, and next steps in the service guide – never by asking the assistant or by feel."},
+ {id:"wscon",mount:"a-wscon",section:"Core worksheet 2",title:"Requirement, constraint or tool choice?",sub:"Worksheet 2 · add a constraint · "+SD_E,ico:"🚧",cls:"ws",
+  fields:CONS.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"No personal data and a fixed reply format are constraints – limits the design must respect. Reaching the correct team and drafts staff can send are requirements – what it must achieve. ‘Whichever chatbot is most popular’ is a tool choice, and choosing a tool is not where design starts."},
+ {id:"wsprompt",mount:"a-wsprompt",section:"Core worksheet 3",title:"Specify the data and write the prompt",sub:"Worksheet 3 · data, prompt, trusted source · "+SD_P,ico:"🖊️",cls:"ws",
+  fields:[{k:"wd",ok:v=>eq(v,1)},{k:"wp",ok:v=>eq(v,2)},{k:"wtr",ok:v=>eq(v,0)}],
+  explain:"The data is illustrative requests with personal details removed – that keeps the constraint. The prompt tells the tool exactly what meets the requirements: one team from the list, a reply under 80 words with a next step, using only the service guide and no personal details. The trusted source for checking is the desk's published service guide, not the assistant's own explanation."},
+ {id:"wstool",mount:"a-wstool",section:"Core worksheet 4",title:"Place the matching tool card",sub:"Worksheet 4 · the AI step · "+SD_E,ico:"🃏",cls:"ws",
+  fields:[{k:"tc",radio:1,ok:v=>eq(v,2)},{k:"tpos",ok:v=>eq(v,1)}],
+  explain:"The task is reading typed requests and writing a team label and a reply, so the matching tool card is a generative text assistant. It sits after the data and prompt and before the output – it does the work using what you give it."},
+ {id:"wseval",mount:"a-wseval",section:"Core worksheet 5",title:"Evaluate the run and fix a component",sub:"Worksheet 5 · each requirement against a trusted source · "+CE_P,ico:"🔎",cls:"ws",
+  fields:[...EVAL.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"fxb",ok:v=>eq(v,1)},{k:"fxc",ok:v=>eq(v,0)}],
+  explain:"A meets both requirements. B goes to the right team, but its ‘3 working days’ contradicts the guide's 5 – a confident, made-up detail, so the tool needs the guide's timeframes as data. C's reply is right, but fines belong to Payments, not Licences – add that routing rule to the prompt. Check every requirement for every request, against the guide."},
+ {id:"ureq",mount:"a-ureq",section:"Core · Part 4",title:"Criterion, constraint, or too vague?",sub:"Unplugged activity 1 · measurable success criteria · "+SD_P,ico:"📏",
+  fields:UREQ.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A success criterion can be counted: 8 of 10 drafts need no correction; 9 of 10 requests reach the right team. A constraint is a limit: no personal data; staff send every reply. ‘Nice’ and ‘feel modern’ are too vague to check."},
+ {id:"ucheck",mount:"a-ucheck",section:"Core · Part 4",title:"How would you check each one?",sub:"Unplugged activity 3 · check the output against each criterion · "+CE_P,ico:"✔️",
+  fields:UCHK.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Check each criterion with evidence from people or sources you trust: staff count how many drafts they send unchanged; staff labels are compared with the helper's labels; the data and prompt are inspected for personal details before every run. An assistant scoring itself is not evidence."},
+ {id:"quiz",mount:"a-quiz",section:"Core · Part 4",title:"Designer check",sub:"Quick quiz · 3 questions and 3 true or false · "+SD_E,ico:"✅",cls:"quiz",
+  fields:[...QUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...TF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: Requirements drive the data, prompt, tool and output – choosing a tool first ignores what the solution must do. 2: A constraint is a limit to respect, not a speed feature or the model. 3: Verify the output against the requirements and a trusted source – running without error does not mean it meets them. True or false: design starts from the requirements (false); constraints bound the design (true); running is not meeting the requirements (false)."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+SD_P,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"Optimise = test, change one thing, test again until it serves the user better. User needs = what the person using it actually requires. Multi-step solution = more than one step, each output feeding the next. Hand-off = where one step's output becomes the next step's input. Reliable = it addresses the user's needs across more than one scenario."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 1",title:"Order the optimisation loop",sub:"Objective 2 · change one thing at a time · "+SD_A,ico:"🔁",
+  fields:LSTEPS.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"Run on a fresh scenario → judge against the user's needs → find the one weak step → change only that step → run again and note before and after. Then repeat, testing on two or more scenarios."},
+ {id:"lone",mount:"a-lone",section:"Lab · Part 1",title:"Why only one change?",sub:"Optimise with evidence · "+SD_A,ico:"☝️",
+  fields:[{k:"on1",radio:1,ok:v=>eq(v,2)},{k:"on2",radio:1,ok:v=>eq(v,2)}],
+  explain:"Team X changed three things, so nobody knows which one helped – or whether one made things worse. Team Y changed one thing, so they can justify exactly why the replies improved. Noting the output before and after turns the improvement into evidence."},
+ {id:"lmap",mount:"a-lmap",section:"Lab · Part 1",title:"Map Figure 3 onto the request screener",sub:"Structure it as steps that serve the user · "+SD_P,ico:"🧩",
+  fields:[...LMAP.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"mp5",ok:v=>eq(v,2)},{k:"mp6",ok:v=>eq(v,1)}],
+  explain:"Data is the requests with personal details removed. Step A screens and drafts; Step B replies in the resident's language; the output is a label and reply for staff to check. The hand-off is where Step A's draft becomes Step B's input. Step B earns its place because many residents write in Arabic – a real user need. Names and phone numbers never belong in the build."},
+ {id:"lthree",mount:"a-lthree",section:"Lab · Part 1",title:"Step, hand-off, or user's needs?",sub:"Test the three things · "+CE_P,ico:"🔬",
+  fields:THREE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A step's part: one team label from Step A; an accurate Arabic version from Step B. The hand-off: Step B gets the whole draft, in the format its prompt expects. The user's needs: a correct, verified reply across two scenarios; residents who wrote in Arabic can read the reply."},
+ {id:"lfresh",mount:"a-lfresh",section:"Lab worksheet 1",title:"Judge Run 1 against the user's needs",sub:"Worksheet 1 · fresh scenario · "+CE_E,ico:"🧪",cls:"ws",
+  fields:FRESH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Run 1 reached the right team and kept personal data out, but a 190-word reply is too long for staff to check quickly, and it never tells the resident what to do next. Two needs are not met."},
+ {id:"lweak",mount:"a-lweak",section:"Lab worksheet 2",title:"Mark the weak step and change only that",sub:"Worksheet 2 · one change · "+SD_A,ico:"🎯",cls:"ws",
+  fields:[{k:"lw1",ok:v=>eq(v,2)},{k:"lw2",ok:v=>eq(v,2)}],
+  explain:"The team was right, so the tool and data are working; the long reply with no next step comes from the prompt, which never shows what a good reply looks like. Change only the prompt – add one example reply – and nothing else, so you know what helped."},
+ {id:"lchange",mount:"a-lchange",section:"Lab worksheet 3",title:"Record before and after",sub:"Worksheet 3 · step changed, before, after, interaction · "+SD_A,ico:"📝",cls:"ws",
+  fields:[{k:"ch1",ok:v=>eq(v,2)},{k:"ch2",ok:v=>eq(v,0)},{k:"ch3",ok:v=>eq(v,1)},{k:"ch4",ok:v=>eq(v,2)}],
+  explain:"Only the prompt changed: one example reply was added. Before: 190 words with no next step. After: 64 words with the fee-review next step. The interaction that changed is prompt → tool: the example shaped the length and format of what the tool wrote."},
+ {id:"ladd",mount:"a-ladd",section:"Lab worksheet 4",title:"Add a second step a user needs",sub:"Worksheet 4 · a justified step and its hand-off · "+SD_P,ico:"➕",cls:"ws",
+  fields:[{k:"ad1",radio:1,ok:v=>eq(v,1)},{k:"ad2",ok:v=>eq(v,2)}],
+  explain:"A reply in Arabic for requests written in Arabic meets a real user need. A poem or a showy extra assistant adds cost and failure points, and storing phone numbers breaks the no-personal-data rule. Across the hand-off, Step A's checked draft and team label become Step B's input."},
+ {id:"ltwo",mount:"a-ltwo",section:"Lab worksheet 5",title:"Two scenarios: is it reliable?",sub:"Worksheet 5 · verify each output against a trusted source · "+CE_A,ico:"🛡️",cls:"ws",
+  fields:[{k:"tw1",ok:v=>eq(v,"Y")},{k:"tw2",ok:v=>eq(v,"N")},{k:"tw3",radio:1,ok:v=>eq(v,2)},{k:"tw4",ok:v=>eq(v,2)}],
+  explain:"Scenario 1 matches the guide. Scenario 2 does not: Step A sent a blocked-pavement report to Licences with a permit next step, and Step B translated that wrong draft faithfully – the hand-off depends on the previous output being right. Fluent and error-free is not reliable; find the weak step for scenario 2, change one thing, and re-test both scenarios."},
+ {id:"lup1",mount:"a-lup1",section:"Lab · Part 3",title:"Change one step on paper",sub:"Unplugged activity 1–2 · weak step, change, before and after · "+SD_A,ico:"📄",
+  fields:[{k:"u1",ok:v=>eq(v,2)},{k:"u2",ok:v=>eq(v,3)},{k:"u3",ok:v=>eq(v,3)}],
+  explain:"The tool keeps inventing timeframes because it is never given the guide's real ones – the weak step is the data. Change only that: add the guide's timeframes. Record before and after as counts with nothing else changed, not ‘vague’ or ‘felt more accurate’."},
+ {id:"lup2",mount:"a-lup2",section:"Lab · Part 3",title:"Which second steps are justified?",sub:"Unplugged activity 3 · a step needs a user need · "+SD_P,ico:"🧑‍💼",
+  fields:tick(JUST),
+  explain:"Add a step only when a real user need justifies it: naming the missing document (staff asked), flagging urgent safety requests (staff must answer them first) and staff review of unsure cases (wrong routing upsets residents). A poem or a showy extra tool helps nobody, and storing ID numbers breaks the no-personal-data rule."},
+ {id:"lquiz",mount:"a-lquiz",section:"Lab · Part 3",title:"Builder check",sub:"Quick quiz · 3 questions and 3 true or false · "+SD_A,ico:"✅",cls:"quiz",
+  fields:[...LQUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...LTF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: Targeted, one-at-a-time change is faster and clearer than rebuilding. 2: The hand-off joins steps and depends on the previous output being right. 3: Steps should earn their place by meeting a real user need. True or false: rebuilding hides which change helped (false); a hand-off passes one step's output to the next (true); a second step needs a user need (true)."}
+];
+
+/* ---------- state ---------- */
+const KEY="g11-mw3-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#run1").innerHTML=`<header><small>Build log · illustrative</small><b>Request screener · first build</b></header>
+<div class="in">
+  <p class="task"><b>The requirements:</b> every request reaches the correct team (Licences, Payments, Faults &amp; Complaints or General enquiries), and every draft reply gives the resident the correct next step. <b>Constraint:</b> no personal data reaches the AI step. The teacher ran the first build on one made-up request.</p>
+  <table class="t"><thead><tr><th>Component</th><th>What it was</th></tr></thead>
+  <tbody>${RUN1.map(([a,b])=>`<tr><td><b>${esc(a)}</b></td><td>${b}</td></tr>`).join("")}</tbody></table>
+</div>`;
+$("#run2").innerHTML=`<header><small>Run log · illustrative</small><b>Request screener · your design, run on three requests</b></header>
+<div class="in">
+  <p class="task"><b>Worksheet 5:</b> the design above (cleaned data, the new prompt, the text assistant) was run on three made-up requests. Check each output against the desk's service guide – the trusted source.</p>
+  <table class="t"><thead><tr><th>Request and output</th><th>Service guide says</th></tr></thead>
+  <tbody>${RUN2.map(([n,r,t,d,g])=>`<tr><td><b>Request ${n}:</b> <span class="illus">${esc(r)}</span><br>Team: <b>${esc(t)}</b><br>${esc(d)}</td><td>${esc(g)}</td></tr>`).join("")}</tbody></table>
+</div>`;
+$("#optlog").innerHTML=`<header><small>Optimisation log · illustrative</small><b>Request screener: test, change one thing, add a step, test again</b></header>
+<div class="in">
+  <p class="task"><b>The user needs:</b> staff need the correct team and a short draft they can check and send quickly; residents need the correct next step, in a language they can read. Every run was checked against the desk's service guide (the trusted source). Made-up requests only – no personal data.</p>
+  <table class="t"><thead><tr><th>Run and request</th><th>Output · checked against the guide</th></tr></thead>
+  <tbody>${OPTLOG.map(([a,b,c,d])=>`<tr><td><b>${esc(a)}</b><br><span class="illus">Request: ${esc(b)}</span></td><td>${c}<br><b>${d}</b></td></tr>`).join("")}</tbody></table>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "comp":
+    return `<p class="how">Here is the screener's design, piece by piece. Is each piece a requirement, a constraint, or one of the four components in Figure 1?</p>`+
+      COMP.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,CTYPES,"Choose…",[2,5,0,3,1,4])}</div>`).join("");
+  case "drive":
+    return `<p class="how">Requirements come first and decide the design. Which design choice does each one decide?</p>`+
+      DRIVE.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,DRIVE_OPTS,"Choose the design choice…",[3,1,2,0])}</div>`).join("")+
+      `<div class="pair" data-item="dr4" style="margin-top:10px"><span class="t">So where does the design start?</span>${sel("dr4",DFIRST,"Choose…",[0,2,1,3])}</div>`;
+  case "trace":
+    return `<p class="how">Use the build log above. Judge the output against the requirements and the service guide.</p>
+      <p class="q" id="q-tr1">1. Which requirements does the output meet?</p>${radios("tr1",TR1)}
+      <p class="q" id="q-tr2">2. Which component let the solution down?</p>${radios("tr2",TR2)}
+      <p class="q" id="q-tr3">3. What should the team do next?</p>${radios("tr3",TR3)}`;
+  case "truths":
+    return boxes(TRUTHS,"Tick every statement that is true about building with interacting components. Leave the others unticked.");
+  case "safe":
+    return boxes(SAFE,"Tick every action that follows this week's safe-use rules for the approved assistant.");
+  case "wsreq":
+    return boxes(REQS,"1. The task: screen service-desk requests and draft a first reply. Tick the two statements that are real requirements – things a good solution must achieve for the task.")+
+      `<p class="q">How will you check each requirement is met?</p>
+      <div class="pair" data-item="rc1"><span class="t">Each request is sent to the correct team.</span>${sel("rc1",CHECKS,"Choose the check…",[2,1,0,3])}</div>
+      <div class="pair" data-item="rc2"><span class="t">Each draft gives the correct next step.</span>${sel("rc2",CHECKS,"Choose the check…",[0,3,2,1])}</div>`;
+  case "wscon":
+    return `<p class="how">2. Before you add your constraint, sort these statements: a requirement (what it must achieve), a constraint (a limit it must respect), or just a tool choice?</p>`+
+      CONS.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Requirement","Constraint","Tool choice"],["R","K","T"],t)}</div>`).join("");
+  case "wsprompt":
+    return `<p class="how">3. Specify your data and write your prompt so the tool knows exactly what to do to meet the requirements. Then name the trusted source you will check against.</p>
+      <div class="pair" data-item="wd"><span class="t">📥 Data</span>${sel("wd",WD,"Choose…")}</div>
+      <div class="pair" data-item="wp"><span class="t">🖊️ Prompt</span>${sel("wp",WP,"Choose…",[0,2,3,1])}</div>
+      <div class="pair" data-item="wtr"><span class="t">📘 Trusted source</span>${sel("wtr",WTR,"Choose…",[2,0,3,1])}</div>`;
+  case "wstool":
+    return `<p class="q" id="q-tc">4. Which tool card matches the AI step of this task?</p>${radios("tc",TOOLS)}
+      <div class="pair" data-item="tpos" style="margin-top:10px"><span class="t">Where does the tool card go in the workflow?</span>${sel("tpos",TPOS,"Choose…",[0,2,1,3])}</div>`;
+  case "wseval":
+    return `<p class="how">5. Use the run log above. Is each requirement met for each request, according to the service guide?</p>`+
+      EVAL.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Met","Not met"],["M","N"],t)}</div>`).join("")+
+      `<p class="q">Fix the component that let the solution down.</p>
+      <div class="pair" data-item="fxb"><span class="t">Request B's made-up repair time</span>${sel("fxb",FXB,"Choose…",[0,2,1,3])}</div>
+      <div class="pair" data-item="fxc"><span class="t">Request C's wrong team</span>${sel("fxc",FXC,"Choose…",[2,3,0,1])}</div>`;
+  case "ureq":
+    return `<p class="how">1. Sort each statement about the service-desk helper: a measurable success criterion, a constraint, or too vague to check?</p>`+
+      UREQ.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Criterion","Constraint","Too vague"],["C","K","V"],t)}</div>`).join("");
+  case "ucheck":
+    return `<p class="how">3. Say how you would check the output against each criterion and the constraint.</p>`+
+      UCHK.map(([k,t,,o])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,UC,"Choose the check…",o)}</div>`).join("");
+  case "quiz":
+    return quiz(QUIZ,TF);
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lorder":
+    return `<p class="how">Put the optimisation loop from Figure 2 in order, from first to last.</p>`+
+      LSTEPS.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">Step ${i+1}</span>${sel("lo"+i,LSTEPS,"Choose the step…",LSTEP_ORDER)}</div>`).join("");
+  case "lone":
+    return `<p class="how">Two teams improved the same request screener <span class="illus">(illustrative)</span>. Team X changed the prompt, the data and the tool all at once. Team Y changed only the prompt. Both got better replies.</p>
+      <p class="q" id="q-on1">1. Whose improvement can be justified?</p>${radios("on1",ON1)}
+      <p class="q" id="q-on2">2. Why note the output before and after each change?</p>${radios("on2",ON2)}`;
+  case "lmap":
+    return `<p class="how">Figure 3 shows the request screener as a multi-step solution. Choose what each part is.</p>`+
+      LMAP.map(([k,t,,o])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,MP,"Choose…",o)}</div>`).join("")+
+      `<div class="pair" data-item="mp5"><span class="t">The hand-off is…</span>${sel("mp5",HO,"Choose…",[0,2,1,3])}</div>
+      <div class="pair" data-item="mp6"><span class="t">The user need that justifies Step B</span>${sel("mp6",UN,"Choose…",[0,1,3,2])}</div>`;
+  case "lthree":
+    return `<p class="how">When you test a multi-step solution you check three things. Which does each test check?</p>`+
+      THREE.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["A step's part","The hand-off","User's needs"],["P","H","W"],t)}</div>`).join("");
+  case "lfresh":
+    return `<p class="how">1. Use Run 1 in the optimisation log. Judge the output against each of the user's needs.</p>`+
+      FRESH.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Met","Not met"],["M","N"],t)}</div>`).join("");
+  case "lweak":
+    return `<p class="how">2. Mark the one step that weakens Run 1, then change only that step.</p>
+      <div class="pair" data-item="lw1"><span class="t">The step that weakens the output</span>${sel("lw1",LW1,"Choose…",[0,2,1,3])}</div>
+      <div class="pair" data-item="lw2"><span class="t">The change you make</span>${sel("lw2",LW2,"Choose…",[1,0,2,3])}</div>`;
+  case "lchange":
+    return `<p class="how">3. Record Run 1 → Run 2 in the table: the step changed, the output before and after, and the interaction that changed.</p>
+      <div class="pair" data-item="ch1"><span class="t">Step changed</span>${sel("ch1",CH1,"Choose…",[0,2,1,3])}</div>
+      <div class="pair" data-item="ch2"><span class="t">Output before</span>${sel("ch2",OUTS,"Choose…",[2,0,1,3])}</div>
+      <div class="pair" data-item="ch3"><span class="t">Output after</span>${sel("ch3",OUTS,"Choose…",[0,3,1,2])}</div>
+      <div class="pair" data-item="ch4"><span class="t">The interaction that changed</span>${sel("ch4",CH4,"Choose…",[1,2,0,3])}</div>`;
+  case "ladd":
+    return `<p class="q" id="q-ad1">4. Run 3 adds a second step. Which second step is justified by a user need?</p>${radios("ad1",AD1)}
+      <div class="pair" data-item="ad2" style="margin-top:10px"><span class="t">What crosses the hand-off into Step B?</span>${sel("ad2",AD2,"Choose…",[0,2,1,3])}</div>`;
+  case "ltwo":
+    return `<p class="how">5. Run 3 tested the whole multi-step solution on two different scenarios. Verify each output against the service guide.</p>
+      <div class="row" data-item="tw1"><span class="t">Scenario 1 (late fee, in English)</span>${seg("tw1",["Meets the needs","Does not"],["Y","N"],"Scenario 1")}</div>
+      <div class="row" data-item="tw2"><span class="t">Scenario 2 (blocked pavement, in Arabic)</span>${seg("tw2",["Meets the needs","Does not"],["Y","N"],"Scenario 2")}</div>
+      <p class="q" id="q-tw3">Is the solution reliable yet?</p>${radios("tw3",TW3)}
+      <div class="pair" data-item="tw4" style="margin-top:10px"><span class="t">Where did scenario 2 go wrong?</span>${sel("tw4",TW4,"Choose…",[0,2,1,3])}</div>`;
+  case "lup1":
+    return `<div class="pair" data-item="u1"><span class="t">1. The one step I would change</span>${sel("u1",U1,"Choose…",[0,2,1,3])}</div>
+      <div class="pair" data-item="u2"><span class="t">The change I would make</span>${sel("u2",U2,"Choose…",[0,3,2,1])}</div>
+      <div class="pair" data-item="u3"><span class="t">2. The output before and after</span>${sel("u3",U3,"Choose…",[0,1,3,2])}</div>`;
+  case "lup2":
+    return boxes(JUST,"3. Tick every second step that is justified by a real user need. Leave the others unticked.");
+  case "lquiz":
+    return quiz(LQUIZ,LTF);
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 11 Main Course · Term 1 Week 3 (19 – 23 Oct 2026) · Core + Lab · Designing a Solution + Build, Test, Improve</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
