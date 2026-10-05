@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Judge with Criteria + The Evaluation Clinic – Grade 8 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#15803D; --main2:#22C55E; --deep:#14532D;
+  --ink:#13261B; --muted:#4F6457; --paper:#F4FAF6; --card:#FFFFFF;
+  --line:#D6EBDD; --soft:#EAF6EE;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#86EFAC,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#3CCB7F);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#13261B,#2E5E40)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#C8EDD4 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#F8FDF9;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FBFEFC}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#3CCB7F)}
+.act-head.ws{background:linear-gradient(120deg,#13261B,#2F6B47)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#ECF8F0}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #B7DCC3;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #9FD9B4;border-radius:12px;padding:10px 14px;background:#F7FCF9;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(19,38,27,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#13261B;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 8 Main Course, Term 1</span><span class="pill">Week 4 Core + Week 4 Lab</span><span class="pill">📅 Teach: week of 26 – 30 Oct 2026</span></div>
+    <h1>Judge with Criteria + The Evaluation Clinic</h1>
+    <p>Today you become an evaluator. Instead of trusting an AI output because it sounds sure, you name its limitations, judge it against agreed criteria and prove every decision with evidence. Then, in the Lab, you run an evaluation clinic: rank a whole set of outputs from best to worst and improve the weakest.</p>
+    <p class="meta"><b>Strand:</b> AI Critical Evaluation &nbsp;·&nbsp; <b>Role:</b> AI Evaluators</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 8B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 4 of Term 1 – Monday 26 to Friday 30 October 2026.</b> Core lesson first, then the Lab period.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Judge with Criteria</a>, then move on to the <a href="#lab">Lab: The Evaluation Clinic</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Name the limitation.</b> I can name the limitations in an AI output instead of assuming it is correct.</li>
+      <li><b>Judge with evidence.</b> I can judge an output against agreed criteria and back my decision with evidence.</li>
+      <li><b>Use the words.</b> I can use words like criteria, evidence, accuracy and reliability correctly when I explain a judgement.</li>
+      <li><b>Lab: rank and improve.</b> I can apply criteria to a larger, messier set of outputs, rank them best to worst with evidence, weigh accuracy, reliability and bias, and suggest one way to improve a weak output.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 4 Core · Judge with Criteria</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Criteria, not gut feeling</b><small>Agree what everyone checks for</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Confident is not reliable</b><small>Verify before you trust</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>A limitation is a pattern</b><small>Evaluation, not opinion · worksheet</small></a></li>
+    </ol>
+    <h3 class="rh">Week 4 Lab · The Evaluation Clinic</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Verdicts to a ranking</b><small>Order outputs by their limitations</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>The lenses pull apart</b><small>Accuracy, reliability and bias</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Improve the weakest</b><small>Name the limitation, target a fix · output-pack log</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Criteria, not gut feeling</h2><p>What turns an opinion into a judgement?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>Last week you fixed a workflow's failing step. Now judge outputs like a real evaluator – with <b>criteria</b> and <b>evidence</b>.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">Judge with criteria</h3>
+    <p>When two outputs look different, it is tempting to pick the one you like. That is not evaluation. First you agree <b>criteria</b> – the things everyone will check for, such as <b>accuracy</b>, <b>relevance</b> and <b>reliability</b>. Then you judge each output against every criterion and give a verdict.</p>
+    <p>Because everyone uses the same criteria, your judgements are fair and someone else can check them. Liking an output is an opinion; naming a <b>limitation</b> against a criterion, with <b>evidence</b>, is evaluation – and it is the first step to improving the solution.</p>
+    <figure>
+      <svg viewBox="0 0 640 270" role="img" aria-labelledby="f1T">
+        <title id="f1T">Two outputs, A and B, are each judged against the same three agreed criteria: accuracy (is it true against a trusted source?), relevance (does it answer the task?) and reliability (does it hold up on many inputs?). Each gets a verdict: meets, partly or fails. Saying "I like B more" is an opinion; a criterion plus evidence is evaluation.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <text x="320" y="24" font-size="14" font-weight="700" text-anchor="middle">THE SAME CRITERIA FOR EVERY OUTPUT</text>
+          <g stroke="#15803D" stroke-width="2" fill="#EAF6EE">
+            <rect x="154" y="40" width="150" height="62" rx="10"/><rect x="316" y="40" width="150" height="62" rx="10"/><rect x="478" y="40" width="150" height="62" rx="10"/>
+          </g>
+          <g font-size="14" font-weight="700" text-anchor="middle" fill="#15803D"><text x="229" y="66">🎯 ACCURACY</text><text x="391" y="66">🧭 RELEVANCE</text><text x="553" y="66">📶 RELIABILITY</text></g>
+          <g font-size="12" text-anchor="middle" fill="#4F6457"><text x="229" y="88">true vs a source?</text><text x="391" y="88">answers the task?</text><text x="553" y="88">holds up widely?</text></g>
+          <g stroke="#13261B" stroke-width="1.6" fill="#fff"><rect x="12" y="116" width="130" height="44" rx="10"/><rect x="12" y="172" width="130" height="44" rx="10"/></g>
+          <g font-size="15" font-weight="700" text-anchor="middle"><text x="77" y="143">📄 Output A</text><text x="77" y="199">📄 Output B</text></g>
+          <g stroke-width="1.6">
+            <rect x="174" y="123" width="110" height="30" rx="15" fill="#E2F5EC" stroke="#0F8A5F"/><rect x="336" y="123" width="110" height="30" rx="15" fill="#E2F5EC" stroke="#0F8A5F"/><rect x="498" y="123" width="110" height="30" rx="15" fill="#FFF3D6" stroke="#B45309"/>
+            <rect x="174" y="179" width="110" height="30" rx="15" fill="#FDE7EC" stroke="#C92A4B"/><rect x="336" y="179" width="110" height="30" rx="15" fill="#E2F5EC" stroke="#0F8A5F"/><rect x="498" y="179" width="110" height="30" rx="15" fill="#E2F5EC" stroke="#0F8A5F"/>
+          </g>
+          <g font-size="13" font-weight="600" text-anchor="middle"><text x="229" y="143">🟢 meets</text><text x="391" y="143">🟢 meets</text><text x="553" y="143">🟡 partly</text><text x="229" y="199">🔴 fails</text><text x="391" y="199">🟢 meets</text><text x="553" y="199">🟢 meets</text></g>
+          <line x1="12" y1="232" x2="628" y2="232" stroke="#D6EBDD" stroke-width="1.6"/>
+          <text x="160" y="258" font-size="14" font-weight="700" text-anchor="middle" fill="#C92A4B">💭 “I like B more” → opinion</text>
+          <text x="470" y="258" font-size="14" font-weight="700" text-anchor="middle" fill="#15803D">🏷️ criterion + evidence → evaluation</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> Agreed criteria – accuracy, relevance, reliability – that everyone checks each output against. Every output gets a verdict for every criterion.</figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-match"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Confident is not reliable</h2><p>Can a sure-sounding output still be wrong?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Verify before you trust</h3>
+    <p>AI outputs often sound smart and sure. But a model works by <b>predicting likely patterns</b>, not by knowing the truth, so a neat, confident answer can still be wrong. That is why you <b>verify</b> before you trust: check the key fact against a source you already trust.</p>
+    <p>Judge each output against every criterion and give it a verdict – <b>meets</b>, <b>partly</b> or <b>fails</b> – with evidence for the verdict.</p>
+    <figure>
+      <svg viewBox="0 0 640 250" role="img" aria-labelledby="f2T">
+        <title id="f2T">An input question, "Which planet is closest to the Sun?", goes into a model that predicts a likely pattern, not the truth. The output, "It is definitely Venus!", sounds sure. Verifying it against a trusted source – the textbook says Mercury – shows it fails accuracy. Sounding sure is not the same as being correct.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#13261B"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <text x="320" y="24" font-size="14" font-weight="700" text-anchor="middle">A MODEL PREDICTS PATTERNS, NOT TRUTH</text>
+          <g stroke="#13261B" stroke-width="1.6">
+            <rect x="12" y="42" width="170" height="86" rx="10" fill="#fff"/>
+            <rect x="235" y="42" width="170" height="86" rx="10" fill="#EAF6EE" stroke="#15803D" stroke-width="2.4"/>
+            <rect x="458" y="42" width="170" height="86" rx="10" fill="#fff"/>
+          </g>
+          <g stroke="#13261B" stroke-width="2.4" fill="none" marker-end="url(#ah)"><path d="M182 85H231"/><path d="M405 85H454"/><path d="M543 128V164"/></g>
+          <g font-size="15" font-weight="700" text-anchor="middle"><text x="97" y="68">❓ INPUT</text><text x="320" y="68" fill="#15803D">⚙️ MODEL</text><text x="543" y="68">💬 OUTPUT</text></g>
+          <g font-size="12.5" text-anchor="middle" fill="#4F6457">
+            <text x="97" y="92">“Which planet is</text><text x="97" y="110">closest to the Sun?”</text>
+            <text x="320" y="92">predicts a likely</text><text x="320" y="110">pattern – not truth</text>
+            <text x="543" y="92">“It is definitely</text><text x="543" y="110">Venus!” – sounds sure</text>
+          </g>
+          <rect x="300" y="168" width="328" height="64" rx="10" fill="#FDE7EC" stroke="#C92A4B" stroke-width="2"/>
+          <text x="464" y="194" font-size="13.5" font-weight="700" text-anchor="middle">🔎 VERIFY against a trusted source</text>
+          <text x="464" y="217" font-size="12.5" text-anchor="middle" fill="#8A1330">textbook says Mercury → fails accuracy</text>
+          <text x="148" y="198" font-size="17" font-weight="800" text-anchor="middle" fill="#C92A4B">sounds sure ≠ correct</text>
+          <text x="148" y="220" font-size="12.5" text-anchor="middle" fill="#4F6457">check the key fact first</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> A model predicts likely patterns, not truth – so a neat, confident answer can still fail the task. Verify the key fact before you trust it.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, people use AI to draft messages, translate and answer questions in seconds – but a wrong figure in a school report or a solution that only works on easy cases can cause real problems. Naming an output's limitations before you use it keeps you in charge of the result.</p></div>
+    <div id="a-verdict"></div>
+    <div id="a-case2"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3 · Worksheet</span><h2>A limitation is a pattern</h2><p>When is a weakness worth naming?</p></div>
+  <div class="part-body">
+    <p>A <b>limitation</b> is more than one slip – it is a weakness you can see <b>repeat</b>. So test the solution on more than one input: if it works on easy cases but fails on unusual ones, <b>reliability</b> is a limitation you can name and, later, improve.</p>
+    <p>Naming a limitation against a criterion, with evidence, is evaluation. It keeps you in charge of the result – and it is the first step to improving the solution.</p>
+    <div class="call violet"><h4>Cross-curricular link · English</h4><p>In <b>English</b>, you evaluate a piece of writing against agreed criteria – accuracy, relevance, clarity – and quote the exact word or line as <b>evidence</b> for each judgement, just as you prove a limitation in an AI output here.</p></div>
+    <div id="a-evalpick"></div>
+    <div id="a-case3"></div>
+    <div class="call amber"><h4>Tool for this week: unplugged simulated-AI cards (teacher-led)</h4><p>This is an unplugged concept lesson – account-free, no student logins. The teacher runs a simulated-AI card routine on the board (no live tool). Students reason about pre-prepared example outputs on the cards – no personal data is used – and use the worksheet to judge the cards, explaining their thinking with the key vocabulary. <b>Hands-on mission · Evaluation Panel:</b> in pairs, agree the three criteria, read the task, give each output a verdict (meets, partly or fails) for every criterion with one piece of evidence, verify one output against a trusted source, then decide whether each limitation is a one-off slip or a repeating weakness. No board display? Sort the printed cards into meets, partly and fails piles with an evidence note on each.</p></div>
+    <div class="ecard" id="panel"></div>
+    <div id="a-grid"></div>
+    <div id="a-slip"></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 4 Lab</span><h2>The Evaluation Clinic</h2><p>Welcome to the evaluation clinic. Today you do not just judge one output – you compare a whole set, rank them best to worst, and prove every placement with evidence about its limitations.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In the Core lesson you judged outputs against criteria. Today you rank a whole messy set – with evidence.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Verdicts to a ranking</h2><p>How do separate verdicts become an order?</p></div>
+  <div class="part-body">
+    <p>Judging one output is a start; a clinic compares many. To <b>rank</b> them, line up your verdicts and ask which output has the <b>less serious limitation</b> against the criteria. Often two are close – one is accurate but unreliable, another fuller but slightly biased.</p>
+    <p>That is when you use a <b>deciding lens</b>: for this task, does reliability or bias matter more? Because every placement rests on evidence, your ranking is not just an opinion – someone else could follow your evidence and reach the same order.</p>
+    <figure>
+      <svg viewBox="0 0 640 292" role="img" aria-labelledby="f3T">
+        <title id="f3T">A ranking strip with four numbered slots, best at the top. 1: accurate, reliable and fair – holds up on every input. 2: accurate but a little shaky – reliability on odd inputs. 3: fuller, with a mild unfair assumption – bias. 4: confident but with a wrong fact – a trusted source disagrees. A close call is settled by a deciding lens: reliability or bias.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <text x="320" y="24" font-size="14" font-weight="700" text-anchor="middle">RANKING STRIP · BEST TO WORST</text>
+          <g font-size="11" font-weight="700" fill="#4F6457"><text x="56" y="40">OUTPUT</text><text x="370" y="40">EVIDENCE FOR THIS PLACE</text></g>
+          <g fill="#15803D"><circle cx="28" cy="70" r="16"/><circle cx="28" cy="126" r="16" opacity=".8"/><circle cx="28" cy="182" r="16" opacity=".6"/><circle cx="28" cy="238" r="16" fill="#C92A4B"/></g>
+          <g font-size="15" font-weight="800" fill="#fff" text-anchor="middle"><text x="28" y="75">1</text><text x="28" y="131">2</text><text x="28" y="187">3</text><text x="28" y="243">4</text></g>
+          <g stroke="#13261B" stroke-width="1.4" fill="#fff"><rect x="54" y="48" width="302" height="44" rx="10" fill="#EAF6EE"/><rect x="54" y="104" width="302" height="44" rx="10"/><rect x="54" y="160" width="302" height="44" rx="10"/><rect x="54" y="216" width="302" height="44" rx="10"/></g>
+          <g stroke-width="1.4"><rect x="368" y="54" width="260" height="32" rx="16" fill="#E2F5EC" stroke="#0F8A5F"/><rect x="368" y="110" width="260" height="32" rx="16" fill="#FFF3D6" stroke="#B45309"/><rect x="368" y="166" width="260" height="32" rx="16" fill="#FFF3D6" stroke="#B45309"/><rect x="368" y="222" width="260" height="32" rx="16" fill="#FDE7EC" stroke="#C92A4B"/></g>
+          <g font-size="14" font-weight="600"><text x="68" y="75">🥇 Accurate, reliable and fair</text><text x="68" y="131">🥈 Accurate, a little shaky</text><text x="68" y="187">🥉 Fuller, one unfair bit</text><text x="68" y="243">🏳️ Confident, wrong fact</text></g>
+          <g font-size="12.5" text-anchor="middle"><text x="498" y="75">✓ holds up on every input</text><text x="498" y="131">reliability: odd inputs</text><text x="498" y="187">bias: one unfair assumption</text><text x="498" y="243">accuracy: source disagrees</text></g>
+          <text x="320" y="278" font-size="12.5" text-anchor="middle" fill="#15803D" font-weight="700">Close call between 2 and 3? A deciding lens – reliability or bias – settles it.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> A ranking strip: outputs lined up best to worst, each placement resting on evidence.</figcaption>
+    </figure>
+    <div id="a-lrank"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>The lenses pull apart</h2><p>Is the longest output the best one?</p></div>
+  <div class="part-body">
+    <p>The best output is not always the longest or the most detailed. A short answer that is fair and holds up across inputs can beat a long one that hides a wrong or unfair result. So you weigh three lenses: <b>accuracy</b> (is it correct?), <b>reliability</b> (does it hold up across inputs?) and <b>bias</b> (is it fair to all cases?).</p>
+    <p>As you read each output, mark it <b>correct</b>, <b>unclear</b> or <b>incorrect</b>, and name the limitation you can see.</p>
+    <figure>
+      <svg viewBox="0 0 640 252" role="img" aria-labelledby="f4T">
+        <title id="f4T">Three lenses – accuracy (is it correct?), reliability (does it hold up widely?) and bias (is it fair to all cases?) – applied to two outputs. The long, detailed output hides an error, so it fails accuracy even though it passes the other two lenses. The short, fair output passes all three, so it ranks higher.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <text x="320" y="24" font-size="14" font-weight="700" text-anchor="middle">THREE LENSES CAN DISAGREE</text>
+          <g stroke="#15803D" stroke-width="2" fill="#EAF6EE"><rect x="196" y="40" width="136" height="60" rx="10"/><rect x="344" y="40" width="136" height="60" rx="10"/><rect x="492" y="40" width="136" height="60" rx="10"/></g>
+          <g font-size="13.5" font-weight="700" text-anchor="middle" fill="#15803D"><text x="264" y="65">🎯 ACCURACY</text><text x="412" y="65">📶 RELIABILITY</text><text x="560" y="65">⚖️ BIAS</text></g>
+          <g font-size="11.5" text-anchor="middle" fill="#4F6457"><text x="264" y="86">is it correct?</text><text x="412" y="86">holds up widely?</text><text x="560" y="86">fair to all cases?</text></g>
+          <g stroke="#13261B" stroke-width="1.6" fill="#fff"><rect x="12" y="114" width="172" height="46" rx="10"/><rect x="12" y="172" width="172" height="46" rx="10"/></g>
+          <g font-size="14" font-weight="700" text-anchor="middle"><text x="98" y="142">📜 Long, detailed</text><text x="98" y="200">✏️ Short and fair</text></g>
+          <g stroke-width="1.6">
+            <rect x="204" y="122" width="120" height="30" rx="15" fill="#FDE7EC" stroke="#C92A4B"/><rect x="352" y="122" width="120" height="30" rx="15" fill="#E2F5EC" stroke="#0F8A5F"/><rect x="500" y="122" width="120" height="30" rx="15" fill="#E2F5EC" stroke="#0F8A5F"/>
+            <rect x="204" y="180" width="120" height="30" rx="15" fill="#E2F5EC" stroke="#0F8A5F"/><rect x="352" y="180" width="120" height="30" rx="15" fill="#E2F5EC" stroke="#0F8A5F"/><rect x="500" y="180" width="120" height="30" rx="15" fill="#E2F5EC" stroke="#0F8A5F"/>
+          </g>
+          <g font-size="12.5" font-weight="600" text-anchor="middle"><text x="264" y="142">✗ hidden error</text><text x="412" y="142">✓ holds up</text><text x="560" y="142">✓ fair</text><text x="264" y="200">✓ correct</text><text x="412" y="200">✓ holds up</text><text x="560" y="200">✓ fair</text></g>
+          <text x="320" y="244" font-size="14" font-weight="700" text-anchor="middle" fill="#15803D">Short, fair and correct outranks long and wrong.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 4.</b> Three lenses that can disagree – accuracy, reliability and bias – applied to every output. Length is not a criterion.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>In UAE workplaces and schools, people often get several AI drafts and must choose one fast. The skill of ranking outputs by their limitations and improving the weakest is exactly what keeps the final choice accurate, reliable and fair.</p></div>
+    <div id="a-lmark"></div>
+    <div id="a-lcase2"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Part 3 of 3 · Worksheet</span><h2>Improve the weakest</h2><p>What do you do with the lowest-ranked output?</p></div>
+  <div class="part-body">
+    <p>When an output ranks low, do not just reject it – <b>name the limitation</b> and trace it back to the solution. An <b>improvement</b> is a specific change that targets a named limitation: adding harder examples or fixing an unfair rule can lift the whole result.</p>
+    <p>Because every placement rests on evidence, your ranking is not just an opinion – it is a judgement someone else could repeat, and a plan for what to improve next.</p>
+    <div class="call violet"><h4>Cross-curricular link · Arabic</h4><p>In <b>Arabic</b> literature, you rank several essays or poems from best to worst against a shared rubric, weighing competing qualities and quoting lines as evidence for each placement – the same evidence-based ranking you use on the AI output packs.</p></div>
+    <div id="a-lfix"></div>
+    <div id="a-lcase3"></div>
+    <div class="call amber"><h4>Today's tool: pre-generated output packs – find and measure limitations (unplugged)</h4><p>The teacher lays out a pre-printed card deck or output pack (account-free, no devices). 1. Agree the evaluation criteria (reuse the Core lesson's cards). 2. Read each output and mark it correct, unclear or incorrect, naming the limitation. 3. Score the pack: count how many meet the criteria. 4. Sort the limitations into types – wrong fact, unclear, unfair, incomplete. 5. Choose the most common limitation and say what change would reduce it. <b>You will make:</b> a scored pack, a limitations-by-type tally and one targeted improvement idea. <b>Stay safe:</b> all outputs are teacher-curated; students touch no live tool and use no personal data (no faces, voices or names). <b>Hands-on mission · Evaluation Clinic:</b> in pairs, judge about eight curated outputs, rank them on a ranking strip with evidence beside each placement, verify the top output against a trusted source, then propose one improvement to the weakest.</p></div>
+    <div class="ecard" id="clinic"></div>
+    <div id="a-lstrip"></div>
+    <div id="a-lclose"></div>
+    <div class="ecard" id="pack"></div>
+    <div id="a-ltool"></div>
+    <div id="a-lsafe"></div>
+    <div id="a-lexit"></div>
+    <div id="a-lchal"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Judge with criteria – then rank, and improve the weakest</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>Evaluation judges against <b>agreed criteria</b> – not gut feeling.</li>
+      <li><b>Confident is not reliable</b>: verify the key fact against a trusted source before you trust it.</li>
+      <li>A <b>limitation</b> is a weakness that repeats, not a single slip – and every verdict points to one piece of <b>evidence</b>.</li>
+      <li><b>Ranking</b> is relative evaluation: order outputs by how serious their limitations are, using a deciding lens for close calls.</li>
+      <li>Accuracy, reliability and <b>bias</b> can pull apart – the longest output is not always the best.</li>
+      <li>Each limitation points to a targeted <b>improvement</b>. Next week (Week 5) you learn that an accurate solution can still be unfair – time to weigh the ethics.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 8 · Main Course · Term 1 Week 4 (26 – 30 Oct 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- scope & sequence concepts (Grade 8, Week 4: AI Critical Evaluation) ---------- */
+const CE_E="CE · limitations in outputs – verify";
+const CE_P="CE · evaluates using criteria: accuracy, bias, reliability";
+const CE_A="CE · refines systematically and justifies improvements with evidence";
+const GE_E="GE · ethical concerns in AI use";
+const GE_P="GE · structured evaluation of risks (bias, privacy, misuse)";
+const GE_A="GE · proposes mitigations and explains their impact";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["limitation","A weakness in an output you can name and evidence, such as a wrong fact or an answer that only works sometimes."],
+  ["criteria","The agreed things you check an output against, like accuracy, relevance and reliability."],
+  ["evidence","The exact word, fact or step you point to that proves your judgement."],
+  ["accuracy","Whether the output is actually correct when you check it against a trusted source."],
+  ["reliability","Whether an output or solution holds up across different inputs, not just the easy ones."]
+];
+const DEF_ORDER = [2,4,0,3,1];
+const MATCH = [["m1","🔎 Evidence",1],["m2","📶 Reliability",0],["m3","🎯 Accuracy",3],["m4","🧭 Relevance",2]];
+const MATCH_OPTS = ["🔁 does it hold up across different inputs?","🖊️ the exact word or fact you point to","🗒️ does it actually answer the task?","📗 is it correct against a trusted source?"];
+const CASE1 = ["Yes, simply liking one output is reason enough to pick it.","No, two different outputs can never really be compared.","Yes, whichever output reads more nicely is the stronger one.","No – judge every output against the same agreed criteria."];
+const VERDICT = [
+  ["vd1","📚 Holds up correctly across several different inputs","M"],
+  ["vd2","🧾 Mostly right, but one detail stays vague","P"],
+  ["vd3","🚩 States a figure that a trusted source contradicts","F"],
+  ["vd4","🎯 Stays on the exact task that was asked","M"],
+  ["vd5","🗯️ Sounds confident but drifts off the task","F"],
+  ["vd6","🌫️ Correct on easy inputs but shaky on unusual ones","P"],
+  ["vd7","📗 Every fact checks out against a trusted source","M"]
+];
+const CASE2 = ["No, neatly written answers are always wrong somewhere.","Yes, an answer that sounds sure has surely been checked.","No – verify the key fact against a trusted source first.","Yes, confident answers always turn out to be correct here."];
+const EVALPICK = [
+  ["e1","📏 Judging by length – the longest output must be best.",0],
+  ["e2","🏷️ Naming a limitation against a criterion, with evidence.",1],
+  ["e3","🔁 Seeing a weakness repeat across several inputs.",1],
+  ["e4","💗 Picking the output you simply like more.",0],
+  ["e5","🗯️ Trusting an answer because it sounds confident.",0],
+  ["e6","📗 Checking a key fact against a source you already trust.",1]
+];
+const CASE3 = ["Accuracy, because the tool was correct on one input.","Only bad luck, never a limitation you could name here.","Reliability – a weakness that repeats across many inputs.","Nothing, one correct input proves the whole tool works fine."];
+const GRID = [
+  ["A","ga",["M","M","M"]],
+  ["B","gb",["F","M","F"]],
+  ["C","gc",["M","P","P"]]
+];
+const CRIT = ["🎯 Accuracy","🧭 Relevance","📶 Reliability"];
+const GEV = ["It sounds very sure of itself","‘Venus is the closest planet’ – the textbook says Mercury","It is only one sentence long","I prefer Output A, so B must be worse"];
+const SVER = ["Ask the same helper whether it is sure","Output A sounds confident, so it held up","The class science textbook says Mercury – it held up","Count the words – a short answer is a safe answer"];
+const EXIT = ["Output B is the worst because I just don't like it.","Output B · limitation: says Venus is closest · criterion: accuracy · evidence: the textbook says Mercury.","Output C · it is too long, so it breaks every criterion.","Output A · accuracy · it sounds sure, so it must be wrong."];
+const CHAL = ["Accuracy – every fact it gives is wrong","Relevance – it never answers the question","Bias – it treats one group of questions unfairly, even though its facts are correct","No limitation – the football facts are correct"];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["rank","To put outputs in order from best to worst against your criteria."],
+  ["reliability","How well an output or solution holds up across different inputs, not just easy ones."],
+  ["bias","When a solution treats some cases or groups unfairly, even if some facts are correct."],
+  ["evidence","The exact fact, output or step you point to that justifies a placement."],
+  ["improvement","A specific change that targets a named limitation in the solution."]
+];
+const LDEF_ORDER = [3,0,4,2,1];
+const LRANK = ["🥇 Accurate, reliable and fair across all inputs","🥈 Accurate, but slightly unreliable on odd inputs","🥉 A fuller answer, but with a mild unfair assumption","🏳️ Confident, but states a fact a trusted source contradicts"];
+const LRANK_ORDER = [2,0,3,1];
+const LCASE1 = ["Pick the longer output, since more detail means a better answer.","Pick whichever of the two you happened to read first.","Use a deciding lens – does reliability or bias matter more?","Flip a coin, since the two outputs are basically equal."];
+const LMARK = [
+  ["lm1","📚 Correct and clear on every input tried","A"],
+  ["lm2","🌫️ Vague wording you cannot fully judge","B"],
+  ["lm3","⚖️ Treats one group unfairly in its result","C"],
+  ["lm4","🎯 Answers the task cleanly and correctly","A"],
+  ["lm5","🚩 States a wrong fact you can disprove","C"],
+  ["lm6","📗 Every fact matches the trusted source","A"],
+  ["lm7","❔ Missing a step, so the result stays uncertain","B"]
+];
+const LCASE2 = ["No, long answers are always wrong and belong at the bottom.","No – a short, reliable answer can outrank a long, wrong one.","Yes, the output with the most detail clearly deserves top place.","Yes, the longest output is always the best of the group."];
+const LFIX = [["lf1","📶 Only works on easy inputs",3],["lf2","⚖️ Treats some cases unfairly",0],["lf3","🌫️ Answer is confusing to read",2],["lf4","🚩 States a wrong fact",1]];
+const LFIX_OPTS = ["🔧 fix the rule that treats groups differently","📗 check it against a trusted source and correct it","🖊️ rewrite the output in a clearer form","🧪 add harder examples and re-test"];
+const LCASE3 = ["Reject it outright without giving any reason at all here.","Reject it and drop it from the set, as it can teach nothing.","Name the limitation and propose a fix for the unfair rule.","Rank it at the very top just to be kind to its author."];
+const CLUB = ["Output P","Output Q","Output R","Output S"];
+const LIMS = ["No serious limitation","Reliability – shaky on unusual inputs","Bias – treats some students unfairly","Accuracy – states clubs that do not exist"];
+const LCLOSE = ["Length – R is longer, so it should be higher","Bias – R steers a student by who they are","Reading order – Q was read first","Nothing – Q and R are equal"];
+const LWEAK = ["Accuracy","Reliability","Bias"];
+const LWIMP = ["Make its answers longer and more confident","Only allow clubs on the school's club list","Move it up the ranking so it is not last","Delete the task and start again"];
+const PACK = [
+  ["lt1","1 · “The UAE is made up of seven emirates.”",0],
+  ["lt2","2 · “The capital of the UAE is Dubai.”",1],
+  ["lt3","3 · “The UAE was formed in December 1971.”",0],
+  ["lt4","4 · “National Day is sometime in winter, probably.”",2],
+  ["lt5","5 · “Abu Dhabi is the smallest emirate by area.”",1],
+  ["lt6","6 · Same question: full answer in English, one vague line in Arabic",3],
+  ["lt7","7 · “The seven emirates are Abu Dhabi, Dubai, Sharjah, Ajman and Fujairah.”",4]
+];
+const LTYPES = ["✅ Meets the criteria","🚩 Wrong fact","🌫️ Unclear","⚖️ Unfair","🧩 Incomplete"];
+const LTS = ["1 of 7","2 of 7","4 of 7","7 of 7"];
+const LTM = ["Unclear","Unfair","Wrong fact","Incomplete"];
+const LTC = ["Check every fact against the fact sheet first","Ask the helper to sound more confident","Make every answer twice as long","Remove the fact sheet so nothing is wrong"];
+const LSAFE = [
+  ["sf1","Use only the teacher-curated output pack",1],
+  ["sf2","Log in to a live AI tool to make extra outputs",0],
+  ["sf3","Use no personal data – no faces, voices or names",1],
+  ["sf4","Add a classmate's real details to the pack to make it realistic",0],
+  ["sf5","Back every mark with evidence from the output itself",1],
+  ["sf6","Give a low mark to an output just because you dislike its style",0]
+];
+const LEXIT = ["Best: R, because it is the longest. Worst: Q, because I read it last.","Best: P – matched every profile's interests, verified against the club list. Worst: S – limitation: accuracy; evidence: three of its clubs are not on the school's list.","Best: S, because it sounds the most sure. Worst: P, because it is short.","Best and worst do not matter – every output is just an opinion."];
+const LCHAL = ["No – once bias is weighted most, R would win because it is the fullest","Yes – P is accurate, reliable and fair on all six profiles, so weighting bias cannot push it down; Q's reliability would rise most by adding harder, mixed-interest profiles and re-testing","Yes – P wins because it is the shortest; make Q longer to raise its reliability","No – weighting changes everything, so the ranking cannot be repeated"];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CE_P,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"A limitation is a weakness you can name and evidence; criteria are the agreed things you check; evidence is the exact word, fact or step that proves a judgement; accuracy is whether the output is correct against a trusted source; reliability is whether it holds up across different inputs."},
+ {id:"match",mount:"a-match",section:"Core · Part 1",title:"Match the word to what it checks",sub:"Objective 3 · use the vocabulary correctly · "+CE_P,ico:"🧷",
+  fields:MATCH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Each criterion is a question you ask every output – with evidence for your answer. Evidence is the exact word or fact you point to; reliability asks whether it holds up across different inputs; accuracy asks whether it is correct against a trusted source; relevance asks whether it actually answers the task."},
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"Case 1 · The Favourite Answer",sub:"AI Evaluators · "+CE_P,ico:"🕵️",
+  fields:[{k:"c1",radio:1,ok:v=>eq(v,3)}],
+  explain:"No – judge every output against the same agreed criteria. Liking an output, or how nicely it reads, is an opinion; shared criteria and evidence make a judgement fair and checkable. Two different outputs can be compared – against the same criteria."},
+ {id:"verdict",mount:"a-verdict",section:"Core · Part 2",title:"Give each output a verdict",sub:"Objective 2 · judge against criteria with evidence · "+CE_P,ico:"🩺",
+  fields:VERDICT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Meets: holds up across several inputs, stays on the exact task, every fact checks out. Partly: mostly right with one vague detail, or correct on easy inputs but shaky on unusual ones. Fails: a figure that a trusted source contradicts, or confident but off the task."},
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"Case 2 · The Neat Figure",sub:"AI Evaluators · "+CE_E,ico:"🔬",
+  fields:[{k:"c2",radio:1,ok:v=>eq(v,2)}],
+  explain:"Verify the key fact against a trusted source first. A model predicts patterns, not truth, so a neat, sure answer can still be wrong – but neatness doesn't make it wrong either. Confident does not mean correct."},
+ {id:"evalpick",mount:"a-evalpick",section:"Core · Part 3",title:"Which are real evaluation?",sub:"Objective 1 · name limitations, not opinions · "+CE_E,ico:"🧩",
+  fields:EVALPICK.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Real evaluation: naming a limitation against a criterion with evidence, seeing a weakness repeat across several inputs, and checking a key fact against a trusted source. Length, liking and confidence are not criteria."},
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"Case 3 · The Repeating Weakness",sub:"AI Evaluators · "+CE_P,ico:"⚖️",
+  fields:[{k:"c3",radio:1,ok:v=>eq(v,2)}],
+  explain:"Reliability – a failure that repeats across inputs is a limitation you can name, not bad luck. It was accurate on one input, but one correct input does not clear a weakness that repeats across the others."},
+ {id:"grid",mount:"a-grid",section:"Core worksheet",title:"Limitations grid",sub:"Worksheet · "+CE_P,ico:"📝",cls:"ws",
+  fields:[...GRID.flatMap(([,p,ans])=>ans.map((c,j)=>({k:p+(j+1),ok:v=>eq(v,c)}))),{k:"gev",ok:v=>eq(v,1)}],
+  explain:"A meets all three criteria. B fails accuracy (the textbook says Mercury), is on task, and fails reliability (2 of 5). C is accurate but drifts off the task (partly relevant) and got 4 of 5 (partly reliable). The evidence for B's limitation is the exact claim ‘Venus is the closest planet’ checked against the textbook – not how sure it sounds or which one you prefer."},
+ {id:"slip",mount:"a-slip",section:"Core worksheet",title:"Slip or limitation? Verify one fact",sub:"Worksheet · "+CE_E,ico:"🔁",cls:"ws",
+  fields:[{k:"sl1",ok:v=>eq(v,"L")},{k:"sl2",ok:v=>eq(v,"S")},{k:"sver",ok:v=>eq(v,2)}],
+  explain:"Output B went wrong on its first answer and again on 3 of 5 re-runs – a weakness that repeats is a limitation. One misspelt word in six otherwise perfect answers is a one-off slip. To verify, check the fact against a source you already trust – the textbook – not the helper's own confidence."},
+ {id:"exit",mount:"a-exit",section:"Core worksheet",title:"Exit ticket",sub:"Explain it · "+CE_P,ico:"🎫",
+  fields:[{k:"ex",radio:1,ok:v=>eq(v,1)}],
+  explain:"A complete exit ticket names the output, its clearest limitation, the criterion it breaks and the single piece of evidence that decided it. ‘I don't like it’, ‘too long’ and ‘sounds sure’ are not evidence."},
+ {id:"chal",mount:"a-chal",section:"Core worksheet",title:"Challenge · add bias as a fourth criterion",sub:"Stretch · "+GE_P,ico:"⭐",
+  fields:[{k:"ch",radio:1,ok:v=>eq(v,2)}],
+  explain:"Its facts are correct, so this is not an accuracy limitation – it is bias: it treats questions about girls' teams unfairly compared with boys' teams. The evidence is the same kind of question getting a full answer for one group and a vague one for the other."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+CE_P,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"Rank = order outputs best to worst against your criteria. Reliability = holds up across different inputs. Bias = treats some cases or groups unfairly, even if some facts are correct. Evidence = what you point to that justifies a placement. Improvement = a specific change that targets a named limitation."},
+ {id:"lrank",mount:"a-lrank",section:"Lab · Part 1",title:"Rank the outputs",sub:"Objective 2 · rank best to worst with evidence · "+CE_P,ico:"🧭",
+  fields:LRANK.map((_,i)=>({k:"lr"+(i+1),ok:v=>eq(v,i)})),
+  explain:"Best: accurate, reliable and fair. Then accurate but slightly unreliable, then fuller but with a mild unfair assumption, and last the confident output whose fact a trusted source contradicts – the most serious limitation."},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"Case 1 · The Close Call",sub:"AI Evaluators · "+CE_P,ico:"🕵️",
+  fields:[{k:"lc1",radio:1,ok:v=>eq(v,2)}],
+  explain:"Use a deciding lens – for this task, does reliability or bias matter more? A deciding lens backed by evidence breaks a close call fairly. Length and reading order are not evidence, and the two are not equal once you weigh their limitations."},
+ {id:"lmark",mount:"a-lmark",section:"Lab · Part 2",title:"Mark the output pack",sub:"Objective 1 · name each limitation · "+CE_E,ico:"🩺",
+  fields:LMARK.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Correct: clear on every input, answers the task cleanly, every fact matches the trusted source. Unclear: vague wording, or a missing step that leaves the result uncertain. Incorrect: a wrong fact you can disprove, or a result that treats one group unfairly."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"Case 2 · The Long Answer",sub:"AI Evaluators · "+CE_P,ico:"🔬",
+  fields:[{k:"lc2",radio:1,ok:v=>eq(v,1)}],
+  explain:"No – a short, reliable answer can outrank a long, wrong one. Length is not a criterion either way: the limitations decide the rank, so a long answer that hides a wrong result should not rank above a fair, correct one."},
+ {id:"lfix",mount:"a-lfix",section:"Lab · Part 3",title:"Match limitation to fix",sub:"Objective 3 · suggest one improvement · "+CE_A,ico:"🧷",
+  fields:LFIX.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Only works on easy inputs → add harder examples and re-test. Treats some cases unfairly → fix the rule that treats groups differently. Confusing to read → rewrite it in a clearer form. Wrong fact → check it against a trusted source and correct it."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"Case 3 · The Weakest Output",sub:"AI Evaluators · "+GE_A,ico:"⚖️",
+  fields:[{k:"lc3",radio:1,ok:v=>eq(v,2)}],
+  explain:"Name the limitation and propose a fix for the unfair rule. A low rank is where improvement starts; rejecting without evidence is not evaluation, and kindness is not a criterion."},
+ {id:"lstrip",mount:"a-lstrip",section:"Lab worksheet",title:"Ranking strip",sub:"Worksheet · "+CE_P,ico:"📝",cls:"ws",
+  fields:[...[0,1,2,3].map(i=>({k:"lst"+(i+1),ok:v=>eq(v,i)})),...[0,1,2,3].map(i=>({k:"lli"+(i+1),ok:v=>eq(v,i)}))],
+  explain:"P matched every profile and is on the club list – no serious limitation, rank 1. Q is accurate but shaky on unusual mixes of interests (reliability), rank 2. R is the fullest but steers one profile by who the student is, not their interests (bias), rank 3. S sounds sure but three of its clubs are not on the school's list (accuracy), rank 4."},
+ {id:"lclose",mount:"a-lclose",section:"Lab worksheet",title:"Decide the close call · improve the weakest",sub:"Worksheet · "+CE_A,ico:"⚖️",cls:"ws",
+  fields:[{k:"lcl",ok:v=>eq(v,1)},{k:"lwl",ok:v=>eq(v,0)},{k:"lwi",ok:v=>eq(v,1)}],
+  explain:"Q and R are close; bias decides it, because a recommender that steers students by who they are is unfair, while Q's misses on odd profiles are a smaller, fixable reliability limitation. S fails on accuracy, so the targeted improvement is to check every suggestion against the school's club list – not to make it longer, more confident or simply move it."},
+ {id:"ltool",mount:"a-ltool",section:"Lab worksheet",title:"Tool log: score and tally the output pack",sub:"Worksheet · tool log · "+CE_A,ico:"🗂️",cls:"ws",
+  fields:[...PACK.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"lts",ok:v=>eq(v,1)},{k:"ltm",ok:v=>eq(v,2)},{k:"ltc",ok:v=>eq(v,0)}],
+  explain:"Outputs 1 and 3 meet the criteria (2 of 7). Wrong facts: 2 (the capital is Abu Dhabi) and 5 (Abu Dhabi is the largest emirate). Unclear: 4 (National Day is 2 December). Unfair: 6 treats Arabic questions worse. Incomplete: 7 names only five of the seven emirates. Wrong fact is the most common type, so add a step that checks every fact against the trusted fact sheet."},
+ {id:"lsafe",mount:"a-lsafe",section:"Lab worksheet",title:"Safe and fair evaluation",sub:"Safety check · "+GE_E,ico:"🛡️",
+  fields:LSAFE.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Use only the teacher-curated pack, use no personal data, and back every mark with evidence. Students touch no live tool this week, never add a real person's details, and never mark an output down for style alone."},
+ {id:"lexit",mount:"a-lexit",section:"Lab worksheet",title:"Exit ticket",sub:"Explain it · "+CE_P,ico:"🎫",
+  fields:[{k:"le",radio:1,ok:v=>eq(v,1)}],
+  explain:"A complete answer names the best and worst output with one piece of evidence for each placement, including the limitation of the worst. Length, reading order and confidence are not evidence."},
+ {id:"lchal",mount:"a-lchal",section:"Lab worksheet",title:"Challenge · weigh bias most heavily",sub:"Stretch · "+CE_A,ico:"⭐",
+  fields:[{k:"lch",radio:1,ok:v=>eq(v,1)}],
+  explain:"P has no limitation on accuracy, reliability or bias, so no weighting can push it down – the ranking is repeatable. Q's limitation is reliability on unusual profiles, so the targeted improvement is harder, mixed-interest test profiles, then re-test."}
+];
+
+/* ---------- state ---------- */
+const KEY="g8-mw4-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#panel").innerHTML=`<header><small>Evaluation panel · simulated-AI cards · illustrative</small><b>A revision helper: “Which planet is closest to the Sun?”</b></header>
+<div class="in">
+  <p class="task"><b>The task:</b> answer the question for a Grade 8 science revision sheet. Each output was checked against the class science textbook (the trusted source), then the same helper was re-run on 5 more planet questions, including some unusual ones.</p>
+  <table class="t"><thead><tr><th>Output</th><th>What it said</th><th>Checks</th></tr></thead>
+  <tbody><tr><td><b>A</b></td><td>“Mercury is the planet closest to the Sun.”</td><td>Textbook: agrees<br>Re-run: 5 of 5 correct</td></tr>
+  <tr><td><b>B</b></td><td>“Venus is the closest planet to the Sun – and it is the hottest, too.”</td><td>Textbook: contradicts – Mercury is closest<br>Re-run: 2 of 5 correct</td></tr>
+  <tr><td><b>C</b></td><td>“Mercury is closest. The Sun is a star, and sailors once used stars to find their way at sea, so stars are very useful.”</td><td>Textbook: agrees<br>Re-run: 4 of 5 correct</td></tr></tbody></table>
+  <p class="note"><b>Criteria card.</b> Accuracy: meets = the source agrees · fails = the source contradicts it. Relevance: meets = answers only the task · partly = answers, then drifts. Reliability: meets = 5 of 5 · partly = 3 or 4 · fails = 2 or fewer.</p>
+</div>`;
+$("#clinic").innerHTML=`<header><small>Evaluation clinic · curated output set · illustrative</small><b>A club recommender: “Suggest an after-school club for this student.”</b></header>
+<div class="in">
+  <p class="task"><b>The task:</b> from a short description of a student's interests, suggest one club the school actually runs. Each output was tried on the same six made-up student profiles (no real names or details) and checked against the school's club list.</p>
+  <table class="t"><thead><tr><th>Output</th><th>What the clinic found</th></tr></thead>
+  <tbody><tr><td><b>P</b></td><td>Short. Suggests a club that matches the stated interests for all 6 profiles; every club is on the school's list.</td></tr>
+  <tr><td><b>Q</b></td><td>Correct clubs for the 4 simple profiles, but for unusual mixes of interests (art + coding) it suggests a club that doesn't match.</td></tr>
+  <tr><td><b>R</b></td><td>The longest and most detailed. Right for 5 profiles, but for one it ignores the student's stated coding interest and suggests the art club because the student is a girl.</td></tr>
+  <tr><td><b>S</b></td><td>Sounds very sure, but 3 of its 6 suggestions are clubs that are not on the school's club list.</td></tr></tbody></table>
+</div>`;
+$("#pack").innerHTML=`<header><small>Pre-generated output pack · teacher-curated · illustrative</small><b>A homework helper writing a Grade 8 fact sheet about the UAE</b></header>
+<div class="in">
+  <p class="task"><b>Trusted source:</b> the teacher's fact sheet – the UAE has seven emirates (Abu Dhabi, Dubai, Sharjah, Ajman, Umm Al Quwain, Ras Al Khaimah and Fujairah); it was formed on 2 December 1971, which is National Day; Abu Dhabi is the capital and the largest emirate.</p>
+  <p class="note">Read the seven outputs in the activity below, mark each one, then score and tally the pack.</p>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "match":
+    return `<p class="how">Match each word to the check it stands for.</p>`+
+      MATCH.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,MATCH_OPTS,"Choose what it checks…",[2,0,3,1])}</div>`).join("");
+  case "case1":
+    return `<div class="quote">Two outputs for the same task look different, and a student picks the one they simply like better. Evaluator, is that evaluation?</div><p class="q" id="q-c1">Is picking the one you like evaluation?</p>${radios("c1",CASE1)}`;
+  case "verdict":
+    return `<p class="how">Judge each output against the criteria: does it meet them, partly meet them, or fail?</p>`+
+      VERDICT.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🟢 Meets","🟡 Partly","🔴 Fails"],["M","P","F"],t)}</div>`).join("");
+  case "case2":
+    return `<div class="quote">A tidy, confident output states a precise figure for a school report. Evaluator, do you trust it as it is?</div><p class="q" id="q-c2">Do you trust the figure as it is?</p>${radios("c2",CASE2)}`;
+  case "evalpick":
+    return boxes(EVALPICK,"Tick the THREE actions that are real evaluation, not opinion. Leave the others unticked.");
+  case "case3":
+    return `<div class="quote">An output is correct on one input but fails on several others. Evaluator, what limitation can you name here?</div><p class="q" id="q-c3">What limitation can you name?</p>${radios("c3",CASE3)}`;
+  case "grid":
+    return `<p class="how">Use the evaluation panel above and its criteria card. Give every output a verdict for every criterion, then choose the evidence.</p>`+
+      GRID.map(([o,p])=>`<div class="scen"><p>Output ${o}</p>`+CRIT.map((c,j)=>`<div class="row" data-item="${p}${j+1}"><span class="t">${c}</span>${seg(p+(j+1),["🟢 Meets","🟡 Partly","🔴 Fails"],["M","P","F"],"Output "+o+" "+c)}</div>`).join("")+`</div>`).join("")+
+      `<div class="pair" data-item="gev"><span class="t">Evidence: which proves Output B's accuracy limitation?</span>${sel("gev",GEV,"Choose…",[2,0,3,1])}</div>`;
+  case "slip":
+    return `<p class="how">A limitation repeats; a slip happens once. Decide for each, then verify one fact.</p>
+      <div class="row" data-item="sl1"><span class="t">Output B is wrong on its first answer and again on 3 of its 5 re-runs.</span>${seg("sl1",["One-off slip","Repeating limitation"],["S","L"],"Output B")}</div>
+      <div class="row" data-item="sl2"><span class="t">Output A misspells one word once; its other five answers are perfect.</span>${seg("sl2",["One-off slip","Repeating limitation"],["S","L"],"Output A")}</div>
+      <div class="pair" data-item="sver"><span class="t">Verify one fact: how do you check Output A, and did it hold up?</span>${sel("sver",SVER,"Choose…",[1,2,3,0])}</div>`;
+  case "exit":
+    return `<p class="q" id="q-ex">Choose one output, name its clearest limitation, state the criterion it breaks and the single piece of evidence that decided it. Which exit ticket does all of that?</p>${radios("ex",EXIT)}`;
+  case "chal":
+    return `<div class="quote">Add <b>bias</b> as a fourth criterion. A sports helper gives full, accurate answers to questions about boys' football teams, but gives short, vague answers whenever the question is about girls' teams. Every fact it does give is correct.</div><p class="q" id="q-ch">Which criterion names its clearest limitation?</p>${radios("ch",CHAL)}`;
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lrank":
+    return `<p class="how">Put the four outputs in rank order, best first.</p>`+
+      LRANK.map((_,i)=>`<div class="pair" data-item="lr${i+1}"><span class="t">${["1st (best)","2nd","3rd","4th (worst)"][i]}</span>${sel("lr"+(i+1),LRANK,"Choose the output…",LRANK_ORDER)}</div>`).join("");
+  case "lcase1":
+    return `<div class="quote">Two outputs are close – one is accurate but unreliable, the other fuller but slightly biased. Evaluator, how do you decide the order?</div><p class="q" id="q-lc1">How do you decide the order?</p>${radios("lc1",LCASE1)}`;
+  case "lmark":
+    return `<p class="how">Read each output and mark it correct, unclear or incorrect.</p>`+
+      LMARK.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🟢 Correct","🟡 Unclear","🔴 Incorrect"],["A","B","C"],t)}</div>`).join("");
+  case "lcase2":
+    return `<div class="quote">The longest, most detailed output in the pack quietly hides a wrong result. Evaluator, should its length put it at the top?</div><p class="q" id="q-lc2">Should its length put it top?</p>${radios("lc2",LCASE2)}`;
+  case "lfix":
+    return `<p class="how">Match each limitation to the improvement that targets it.</p>`+
+      LFIX.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,LFIX_OPTS,"Choose the fix…",[2,0,3,1])}</div>`).join("");
+  case "lcase3":
+    return `<div class="quote">Your lowest-ranked output fails on bias – it treats one group unfairly. Evaluator, what do you do with it?</div><p class="q" id="q-lc3">What do you do with it?</p>${radios("lc3",LCASE3)}`;
+  case "lstrip":
+    return `<p class="how">Use the clinic results above. Fill the ranking strip from best (1) to worst (4), then name the limitation that decided each output's place.</p>`+
+      [0,1,2,3].map(i=>`<div class="pair" data-item="lst${i+1}"><span class="t">Rank ${i+1}${i===0?" (best)":i===3?" (worst)":""}</span>${sel("lst"+(i+1),CLUB,"Choose…",[[2,0,3,1],[3,1,0,2],[3,1,2,0],[0,2,1,3]][i])}</div>`).join("")+
+      `<p class="q">Limitation that decided each place</p>`+
+      CLUB.map((c,i)=>`<div class="pair" data-item="lli${i+1}"><span class="t">${c}</span>${sel("lli"+(i+1),LIMS,"Choose…",[3,1,0,2])}</div>`).join("");
+  case "lclose":
+    return `<p class="how">Q and R were the close call. Then improve your lowest-ranked output, S.</p>
+      <div class="pair" data-item="lcl"><span class="t">Q ranks above R. Which lens decided it?</span>${sel("lcl",LCLOSE,"Choose…",[2,0,3,1])}</div>
+      <div class="pair" data-item="lwl"><span class="t">Tick the limitation S fails on</span>${sel("lwl",LWEAK,"Choose…",[2,1,0])}</div>
+      <div class="pair" data-item="lwi"><span class="t">One specific improvement to the solution</span>${sel("lwi",LWIMP,"Choose…",[0,2,1,3])}</div>`;
+  case "ltool":
+    return `<p class="how">Use the fact sheet above. Mark each output as meeting the criteria or name its limitation type, then score and tally the pack.</p>`+
+      PACK.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,LTYPES,"Choose…",[2,0,4,1,3])}</div>`).join("")+
+      `<div class="pair" data-item="lts"><span class="t">Score the pack: how many meet the criteria?</span>${sel("lts",LTS,"Choose…",[2,0,3,1])}</div>
+      <div class="pair" data-item="ltm"><span class="t">Most common limitation type</span>${sel("ltm",LTM,"Choose…",[1,3,2,0])}</div>
+      <div class="pair" data-item="ltc"><span class="t">What change would reduce it?</span>${sel("ltc",LTC,"Choose…",[1,0,3,2])}</div>`;
+  case "lsafe":
+    return boxes(LSAFE,"Safety check: tick every rule that keeps today's evaluation safe and fair. Leave the others unticked.");
+  case "lexit":
+    return `<p class="q" id="q-le">Name your best and worst output from the clinic, with one piece of evidence for each placement, including the limitation of the worst. Which answer does that?</p>${radios("le",LEXIT)}`;
+  case "lchal":
+    return `<p class="q" id="q-lch">If bias were weighted most heavily, would P still win – and what one improvement would most raise Q's reliability?</p>${radios("lch",LCHAL)}`;
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 8 Main Course · Term 1 Week 4 (26 – 30 Oct 2026) · Core + Lab · Judge with Criteria + The Evaluation Clinic</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
