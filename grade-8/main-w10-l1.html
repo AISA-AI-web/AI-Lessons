@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Showcase and Reflect + Review, Measure, Aim – Grade 8 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#15803D; --main2:#22C55E; --deep:#14532D;
+  --ink:#13261B; --muted:#4F6457; --paper:#F4FAF6; --card:#FFFFFF;
+  --line:#D6EBDD; --soft:#EAF6EE;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#86EFAC,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#3CCB7F);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#13261B,#2E5E40)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#C8EDD4 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#F8FDF9;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FBFEFC}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#3CCB7F)}
+.act-head.ws{background:linear-gradient(120deg,#13261B,#2F6B47)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#ECF8F0}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #B7DCC3;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #9FD9B4;border-radius:12px;padding:10px 14px;background:#F7FCF9;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(19,38,27,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#13261B;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 8 Main Course, Term 1</span><span class="pill">Week 10 Core + Week 10 Lab</span><span class="pill">📅 Teach: week of 4 – 8 Jan 2027</span></div>
+    <h1>Showcase and Reflect + Review, Measure, Aim</h1>
+    <p>Today you show what you built this term and prove it works: you present your AI solution, justify your best choices with evidence, and set a goal for what comes next. Then, in the Lab, you become a reviewer: judge other solutions fairly against shared criteria, use the feedback on your own work to make it stronger, and set one clear goal for next term.</p>
+    <p class="meta"><b>Strand:</b> All four strands – showcase and reflect &nbsp;·&nbsp; <b>Role:</b> AI Evaluators</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 8B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 10 of Term 1 – Monday 4 to Friday 8 January 2027, the first week back after Winter Break.</b> Core lesson first, then the Lab period.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Showcase and Reflect</a>, then move on to the <a href="#lab">Lab: Review, Measure, Aim</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Show the evidence.</b> I can show my solution to the class and explain two decisions I made, saying why each one improved it.</li>
+      <li><b>Sample four strands.</b> I can answer a short task that samples all four strands – concept, design, evaluation and ethics.</li>
+      <li><b>Reflect, then aim.</b> I can name one thing I learned this term and write one clear goal for next term.</li>
+      <li><b>Lab: review fairly.</b> I can review a peer's solution against clear criteria and give one strength and one specific, kind next step.</li>
+      <li><b>Lab: sharpen my evidence.</b> I can take the feedback I received and make my justification of my choices clearer and better evidenced.</li>
+      <li><b>Lab: one measurable goal.</b> I can turn my reflections into a single measurable Term-2 goal and name the first step I will take.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 10 Core · Showcase and Reflect</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Show the evidence</b><small>Two choices, each measured</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Sample four strands</b><small>Concept, design, evaluation, ethics</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Reflect, then aim</b><small>One goal, specific and measurable · worksheet</small></a></li>
+    </ol>
+    <h3 class="rh">Week 10 Lab · Review, Measure, Aim</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Fair, not just nice</b><small>Anchor feedback to a criterion</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Check before trust</b><small>Compare two groups fairly</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>One measurable goal</b><small>Consolidate, then name a first step · worksheet and tool log</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Show the evidence, not just the result</h2><p>Is a finished-looking solution enough?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In Week 9 you locked your version and your demo. Now showcase it – and prove your best choices with evidence.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">Prove each choice</h3>
+    <p>A strong <b>showcase</b> is more than a solution that looks finished. It is you explaining two real choices you made and proving each one helped. For every choice, name the <b>performance criterion</b> it was meant to improve, say what you measured, and compare the result <b>before and after</b> the change.</p>
+    <p>Then be honest: name one <b>limitation</b> that still remains. A builder who admits what is not yet perfect is trusted more, not less, because it shows you evaluated your own work instead of just hoping it was good.</p>
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="f1T">
+        <title id="f1T">A showcase panel. The goal is to sort recycling into the right bin, judged on accuracy and on wrong items reaching the bin. Choice 1, more well-lit training photos and retraining, improved accuracy on 10 held-back photos from 6 out of 10 to 9 out of 10. Choice 2, a person checking low-confidence labels, cut wrong items reaching the bin from 4 out of 20 to 1 out of 20. One limitation still remains: crushed cans are often labelled plastic.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#13261B"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <rect x="20" y="12" width="720" height="56" rx="10" fill="#EAF6EE" stroke="#15803D" stroke-width="2"/>
+          <text x="380" y="36" font-size="16" font-weight="700" text-anchor="middle" fill="#14532D">🎯 GOAL: sort recycling into the right bin</text>
+          <text x="380" y="57" font-size="13" text-anchor="middle" fill="#4F6457">criteria: accuracy on 10 held-back photos · wrong items reaching the bin</text>
+          <g font-size="12" font-weight="700" text-anchor="middle" fill="#4F6457"><text x="135" y="92">DESIGN CHOICE</text><text x="370" y="92">CRITERION IT IMPROVED</text><text x="540" y="92">BEFORE</text><text x="685" y="92">AFTER</text></g>
+          <g stroke="#13261B" stroke-width="1.6">
+            <rect x="20" y="102" width="230" height="58" rx="10" fill="#fff"/><rect x="280" y="102" width="180" height="58" rx="10" fill="#fff"/><rect x="490" y="102" width="100" height="58" rx="10" fill="#fff"/><rect x="630" y="102" width="110" height="58" rx="10" fill="#EAF6EE" stroke="#15803D" stroke-width="2.4"/>
+            <rect x="20" y="172" width="230" height="58" rx="10" fill="#fff"/><rect x="280" y="172" width="180" height="58" rx="10" fill="#fff"/><rect x="490" y="172" width="100" height="58" rx="10" fill="#fff"/><rect x="630" y="172" width="110" height="58" rx="10" fill="#EAF6EE" stroke="#15803D" stroke-width="2.4"/>
+          </g>
+          <g stroke="#13261B" stroke-width="2.2" fill="none" marker-end="url(#ah)"><path d="M250 131H276"/><path d="M460 131H486"/><path d="M590 131H626"/><path d="M250 201H276"/><path d="M460 201H486"/><path d="M590 201H626"/></g>
+          <g font-size="13" text-anchor="middle">
+            <text x="135" y="126" font-weight="700">🔧 Choice 1: more well-lit</text><text x="135" y="146">training photos, retrained</text>
+            <text x="370" y="126">accuracy on 10</text><text x="370" y="146">held-back photos</text>
+            <text x="135" y="196" font-weight="700">🔧 Choice 2: a person checks</text><text x="135" y="216">low-confidence labels</text>
+            <text x="370" y="196">wrong items that</text><text x="370" y="216">reach the bin</text>
+          </g>
+          <g font-size="21" font-weight="800" text-anchor="middle"><text x="540" y="139">6 / 10</text><text x="540" y="209">4 / 20</text><text x="685" y="139" fill="#15803D">9 / 10</text><text x="685" y="209" fill="#15803D">1 / 20</text></g>
+          <rect x="20" y="246" width="720" height="42" rx="10" fill="#FDE7EC" stroke="#C92A4B" stroke-width="1.6" stroke-dasharray="6 4"/>
+          <text x="380" y="272" font-size="13.5" text-anchor="middle"><tspan font-weight="700" fill="#C92A4B">🚩 LIMITATION STILL REMAINING:</tspan> crushed cans are often labelled plastic</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> A showcase panel: each design choice links to a criterion and a before-and-after measurement, with one limitation named. (Illustrative class results.)</figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-order"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Four strands, one answer each</h2><p>Does your work touch every part of AI?</p></div>
+  <div class="part-body">
+    <p>This term wove together four strands, and the short assessment task samples all of them. <b>Concept:</b> name the input, process and output of a workflow. <b>Design:</b> plan the ordered steps that solve one task. <b>Evaluation:</b> judge an output against a measurable criterion.</p>
+    <p><b>Ethics:</b> name a risk and who it could affect. A complete answer touches every strand – accuracy alone is not the whole picture, because a solution can be correct and still be unfair or unsafe.</p>
+    <figure>
+      <svg viewBox="0 0 760 262" role="img" aria-labelledby="f2T">
+        <title id="f2T">The four-strand task: Concept – name the input, process and output. Design – plan the ordered steps for one task. Evaluation – judge an output against a measurable criterion. Ethics – name a risk and who it could affect. One answer each; a solution can be accurate and still be unfair or unsafe.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <g stroke="#13261B" stroke-width="1.6" fill="#fff">
+            <rect x="20" y="14" width="310" height="92" rx="12"/><rect x="430" y="14" width="310" height="92" rx="12"/>
+            <rect x="20" y="130" width="310" height="92" rx="12"/><rect x="430" y="130" width="310" height="92" rx="12" fill="#EAF6EE" stroke="#15803D" stroke-width="2.4"/>
+          </g>
+          <circle cx="380" cy="118" r="44" fill="#15803D"/>
+          <g font-size="12" font-weight="800" text-anchor="middle" fill="#fff"><text x="380" y="108">ONE</text><text x="380" y="123">ANSWER</text><text x="380" y="138">EACH</text></g>
+          <g font-size="16" font-weight="800" text-anchor="middle" fill="#14532D"><text x="175" y="46">🧠 CONCEPT</text><text x="585" y="46">🧩 DESIGN</text><text x="175" y="162">📊 EVALUATION</text><text x="585" y="162">⚖️ ETHICS</text></g>
+          <g font-size="13" text-anchor="middle">
+            <text x="175" y="72">name the input, process</text><text x="175" y="90">and output of a workflow</text>
+            <text x="585" y="72">plan the ordered steps</text><text x="585" y="90">that solve one task</text>
+            <text x="175" y="188">judge an output against</text><text x="175" y="206">a measurable criterion</text>
+            <text x="585" y="188">name a risk and</text><text x="585" y="206">who it could affect</text>
+          </g>
+          <text x="380" y="248" font-size="12.5" text-anchor="middle" fill="#4F6457">a solution can be accurate and still be unfair or unsafe – accuracy alone is not the whole picture</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> The four-strand task samples concept, design, evaluation and ethics – one answer each.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, teams building AI for hospitals, transport and government must present and defend their systems with evidence before anyone relies on them. Showing your reasoning and admitting limits is exactly how real AI work earns trust.</p></div>
+    <div id="a-match"></div>
+    <div id="a-case2"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3 · Worksheet</span><h2>Reflect, then aim</h2><p>What makes a goal worth setting?</p></div>
+  <div class="part-body">
+    <p><b>Reflection</b> is a skill, not a formality. Look back honestly: what is one thing you genuinely learned, and one thing that was hard? Then turn that into a goal for next term.</p>
+    <p>A weak goal is ‘get better at AI’. A strong goal is <b>specific and measurable</b> – ‘improve my solution's accuracy on the hardest category’, or ‘learn to test for fairness across groups’. Remember the rules that kept your work safe all term: the tool stayed <b>teacher-operated</b>, <b>no personal data</b> ever went in, and <b>every output was checked</b> before you trusted it.</p>
+    <div id="a-goals"></div>
+    <div id="a-case3"></div>
+    <div class="call violet"><h4>Cross-curricular link · Social Studies / Moral Education</h4><p>Like presenting and defending a civic decision, you justify two choices with before-and-after evidence and honestly admit one limitation – practising the moral habit of evaluating your own work rather than overclaiming.</p></div>
+    <div class="call amber"><h4>Tool for this week: unplugged simulated-AI cards (teacher-led)</h4><p>This is an unplugged lesson: the teacher runs a simulated-AI card routine on the board – no live tool, no logins. You reason about pre-prepared before-and-after result cards (no personal data), present your two choices, and answer the four-strand task on the worksheet. The live tools stay with the Lab period and stay teacher-operated. <b>No board demo?</b> Run the whole showcase from printed before-and-after result cards and answer the four-strand task on paper – the lesson works with no tool access.</p></div>
+    <div class="call"><h4>Hands-on mission · AI Evaluators: the term showcase</h4><p>1. Name your solution's goal and the criteria you evaluated it against. 2. Present two design or evaluation choices, each tied to what you measured before and after. 3. Admit one limitation that still remains, and one risk you would watch in real use. 4. Complete the four-strand task – one answer each. 5. Finish the reflection: one thing learned, one thing that was hard, and one specific goal for next term. The worked example below shows what a strong showcase sheet looks like.</p></div>
+    <div class="ecard" id="audit"></div>
+    <div id="a-showcase"></div>
+    <div id="a-four1"></div>
+    <div id="a-four2"></div>
+    <div id="a-reflect"></div>
+    <div id="a-safe"></div>
+    <div class="call"><h4>Think about it</h4><p>Which of your two choices are you most confident about – and could you convince a doubter using only the evidence you measured?</p></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 10 Lab</span><h2>Review, Measure, Aim</h2><p>Today you become a reviewer – judge other solutions fairly against shared criteria, use the feedback on your own work to make it stronger, and set one clear goal for next term.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In the Core you showcased and reflected. Today, judge peers fairly and sharpen your own justification.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Fair, not just nice</h2><p>What makes feedback fair and comparable?</p></div>
+  <div class="part-body">
+    <p>Good <b>peer review</b> is kind and honest at the same time. Instead of just saying ‘nice work’, you judge each solution against the <b>same shared criteria</b> everyone is using, so your feedback is fair and comparable. In a <b>carousel</b> you visit several solutions in turn, at different stations.</p>
+    <p>For every solution you visit, write one genuine <b>strength</b> and one specific <b>next step</b>, and tie each to a named criterion. That is <b>criterion-anchored feedback</b> – a comment tied to a performance criterion, not to what you happen to like.</p>
+    <figure>
+      <svg viewBox="0 0 760 262" role="img" aria-labelledby="f3T">
+        <title id="f3T">Left: personal-taste comments such as ‘Nice work, well done!’ and ‘It feels a bit boring’ give the builder nothing to act on. Right: a criterion-anchored review card names the criterion, one strength and one specific next step. Using the same shared criteria for every solution makes feedback fair and comparable.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <text x="175" y="26" font-size="14" font-weight="800" text-anchor="middle" fill="#C92A4B">🎨 JUST PERSONAL TASTE</text>
+          <text x="560" y="26" font-size="14" font-weight="800" text-anchor="middle" fill="#15803D">🧭 CRITERION-ANCHORED</text>
+          <g stroke="#13261B" stroke-width="1.6" fill="#fff">
+            <rect x="20" y="44" width="310" height="52" rx="26"/><rect x="20" y="110" width="310" height="52" rx="26"/>
+            <rect x="380" y="44" width="360" height="160" rx="12" fill="#EAF6EE" stroke="#15803D" stroke-width="2.4"/>
+          </g>
+          <g font-size="14" text-anchor="middle"><text x="175" y="75">“Nice work, well done!”</text><text x="175" y="141">“It feels a bit boring.”</text></g>
+          <text x="175" y="190" font-size="13" font-weight="700" text-anchor="middle" fill="#C92A4B">✗ nothing the builder can act on</text>
+          <g font-size="13">
+            <text x="398" y="72" font-weight="800" fill="#14532D">📏 CRITERION: accuracy · fairness</text>
+            <text x="398" y="104"><tspan font-weight="700">⭐ Strength:</tspan> 9 of 10 short cards right</text>
+            <text x="398" y="136"><tspan font-weight="700">🪜 Next step:</tspan> long cards only 6 of 10 –</text>
+            <text x="398" y="156">add long-card examples and re-test</text>
+            <text x="398" y="188" font-weight="700" fill="#15803D">✓ specific, kind and comparable</text>
+          </g>
+          <text x="380" y="242" font-size="12.5" text-anchor="middle" fill="#4F6457">the same shared criteria judge every solution in the carousel – so feedback is fair and comparable</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> Criterion-anchored feedback ties every comment to a named criterion, not to personal taste.</figcaption>
+    </figure>
+    <div class="call violet"><h4>Cross-curricular link · Arabic</h4><p>Run it like an <b>Arabic</b> peer-editing workshop: review a classmate's work against the same shared success criteria, giving one genuine strength and one specific improvement tied to a criterion, not personal taste.</p></div>
+    <div id="a-lsort"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Check before trust</h2><p>Is a high score always what it seems?</p></div>
+  <div class="part-body">
+    <p>Stay a careful evaluator: if a sheet shows a confident result, check what it was measured against before you trust it. A ninety-five per cent score means little if you do not know the <b>sample</b> behind it.</p>
+    <p>Fairness is not just a feeling – you can <b>measure</b> it. Split your test set by one characteristic (for example short cards vs long cards, or morning photos vs evening photos). Run the <b>same</b> test on each group under the same conditions. Count how many the model got right in each group and work out the accuracy as a percentage (correct ÷ total × 100). Compare the two percentages. If one group scores clearly lower, you have found a <b>possible bias</b>; if the counts are too small or too close to be sure, it is fair to record <b>‘cannot determine’</b> and gather more examples. Always report the disparity and suggest one fix.</p>
+    <figure>
+      <svg viewBox="0 0 760 290" role="img" aria-labelledby="f4T">
+        <title id="f4T">A fairness check. The same test is run on two groups under the same conditions. Short cards: 9 out of 10 correct, 90 per cent. Long cards: 6 out of 10 correct, 60 per cent. The 30-point gap is a possible bias: report it and suggest one fix. If there are too few examples, record cannot determine. Accuracy equals correct divided by total times 100.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <text x="250" y="24" font-size="13.5" font-weight="800" text-anchor="middle" fill="#14532D">SAME TEST · SAME CONDITIONS · TWO GROUPS</text>
+          <g stroke="#D6EBDD" stroke-width="1.4"><path d="M70 60H450"/><path d="M70 135H450"/></g>
+          <g font-size="11.5" text-anchor="end" fill="#4F6457"><text x="62" y="64">100%</text><text x="62" y="139">50%</text><text x="62" y="214">0%</text></g>
+          <rect x="120" y="75" width="110" height="135" rx="6" fill="#15803D"/>
+          <rect x="290" y="120" width="110" height="90" rx="6" fill="#86EFAC" stroke="#15803D" stroke-width="1.6"/>
+          <path d="M70 210H450" stroke="#13261B" stroke-width="2"/>
+          <g font-size="14" font-weight="800" text-anchor="middle"><text x="175" y="102" fill="#fff">9 / 10</text><text x="175" y="122" fill="#fff">= 90%</text><text x="345" y="147">6 / 10</text><text x="345" y="167">= 60%</text></g>
+          <g font-size="13" font-weight="700" text-anchor="middle"><text x="175" y="232">short cards</text><text x="345" y="232">long cards</text></g>
+          <rect x="484" y="52" width="256" height="158" rx="12" fill="#FFF7E8" stroke="#E8890C" stroke-width="2"/>
+          <text x="612" y="82" font-size="15" font-weight="800" text-anchor="middle" fill="#B45309">⚖️ GAP: 30 points</text>
+          <g font-size="13" text-anchor="middle"><text x="612" y="108">→ a possible bias</text><text x="612" y="130">report it + suggest one fix</text></g>
+          <g font-size="11.5" text-anchor="middle" fill="#4F6457"><text x="612" y="168">too few examples to be sure?</text><text x="612" y="186">record ‘cannot determine’</text></g>
+          <text x="380" y="272" font-size="13" text-anchor="middle" fill="#4F6457">accuracy = correct ÷ total × 100 · compare the two percentages</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 4.</b> Measure fairness by comparing two groups' accuracy under the same test conditions. (Illustrative results.)</figcaption>
+    </figure>
+    <div class="call violet"><h4>Cross-curricular links · Maths and Science</h4><p><b>Maths:</b> work out accuracy as a percentage and compare before-and-after scores. <b>Science:</b> use a fair test – change ONE factor and keep all other test conditions the same, so you know the change caused any difference.</p></div>
+    <div id="a-lorder"></div>
+    <div id="a-lcase2"></div>
+    <div class="call"><h4>How a model learns: training, inference and evaluation</h4><p>Machine learning builds a model by learning patterns from a dataset instead of writing fixed rules by hand. The dataset is split into <b>training data</b> (the examples the model learns from) and <b>test data</b> (separate, new examples kept back to check it). <b>Training</b> is teaching the model from the training data; <b>inference</b> is one forward run that turns a new input into an output; <b>evaluation</b> is measuring the outputs against your criteria using the test data. If you change the training examples and train again, the result is a new, retrained model – not the same model.</p></div>
+    <div id="a-lml"></div>
+    <div class="call blue"><h4>Why it matters</h4><p>In UAE research labs and start-ups, engineers review each other's AI systems against shared standards before launch, then set clear next targets. Fair critique and focused goals are how good teams keep improving.</p></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Part 3 of 3 · Worksheet</span><h2>One measurable goal</h2><p>How do many notes become one goal?</p></div>
+  <div class="part-body">
+    <p>By the end of the carousel you will have collected several comments on your own work. The skill now is to <b>consolidate</b>: read them all, find the pattern, and turn it into a single <b>Term-2 goal</b> that is specific and measurable.</p>
+    <p>Weak: ‘get better at AI’. Strong: ‘improve my solution's accuracy on the hardest category to a set target’. Then name the very <b>first step</b> you will take – something small and concrete you could do next week. A goal with a first step is a goal you will actually start.</p>
+    <div id="a-lgoal"></div>
+    <div id="a-lcase3"></div>
+    <div class="call amber"><h4>Today's tool: showcase the improved solution + peer-review cards</h4><p>1. Demonstrate your solution and show your before-and-after score. 2. Explain two evaluation or improvement choices you made. 3. Visit two other solutions and complete a peer-review card for each (two stars and a wish, strand-tagged), noting their improvement. 4. Read the feedback you received. 5. Write one Term-2 goal based on the feedback. <b>You will make:</b> a demonstrated improved solution, peer-review cards and a Term-2 goal. <b>Stay safe:</b> the showcase uses only the non-personal solution – no data is shared, and showcase sheets are anonymised. Any live tool stays teacher-operated.</p></div>
+    <div class="call amber"><h4>Tool for this week: unplugged card decks / output packs</h4><p>The carousel is unplugged by design – account-free, no devices. The teacher lays out the anonymised showcase sheets, review frames and the shared criteria sheet. In pairs, judge each sheet one criterion at a time, record your review on the worksheet, then compare and agree the reason using the lesson's key words. It works fully with no tool or account access.</p></div>
+    <div class="ecard" id="carousel"></div>
+    <div id="a-lreview"></div>
+    <div id="a-lfair"></div>
+    <div class="ecard" id="received"></div>
+    <div id="a-lfeedback"></div>
+    <div id="a-lchange"></div>
+    <div id="a-lsafe"></div>
+    <div class="call"><h4>Think about it</h4><p>Looking at the feedback you received, what single change would improve your solution the most next term?</p></div>
+    <div id="a-lexit"></div>
+    <div id="a-lchal"></div>
+    <div class="call"><h4>Next</h4><p>Next term (Term 2) you apply these design-evaluate-improve skills to bigger workflows and deeper fairness tests.</p></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Show the evidence, review fairly – then aim</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>A <b>showcase</b> makes your reasoning visible: link each choice to a criterion and a before-and-after measurement.</li>
+      <li>Admitting a <b>limitation</b> shows you evaluated your own work, so it builds trust.</li>
+      <li>A complete answer samples <b>all four strands</b>: concept, design, evaluation and ethics.</li>
+      <li>A <b>carousel</b> makes peer review systematic: the same criteria judge every solution fairly, and <b>criterion-anchored feedback</b> names a strength and one specific next step.</li>
+      <li>Check a score against its <b>sample</b> before you trust it; measure <b>fairness</b> by comparing two groups' accuracy under the same test conditions.</li>
+      <li>Consolidate many notes into <b>one measurable goal with a first step</b> – not just ‘get better at AI’.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 8 · Main Course · Term 1 Week 10 (4 – 8 Jan 2027) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- scope & sequence concepts (Grade 8, Week 10: Showcase and reflect – all four strands) ---------- */
+const CU_E="CU · how AI processes inputs and generates outputs";
+const SD_P="SD · structured workflows of multiple steps";
+const SD_A="SD · designs and refines solutions considering how components interact";
+const CE_E="CE · limitations in outputs – verify";
+const CE_P="CE · evaluates using criteria: accuracy, bias, reliability";
+const CE_A="CE · refines systematically and justifies improvements with evidence";
+const GE_E="GE · ethical concerns in AI use";
+const GE_P="GE · structured evaluation of risks (bias, privacy, misuse)";
+const GE_A="GE · proposes mitigations and explains their impact";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["showcase","Presenting your finished solution and explaining the choices behind it."],
+  ["design choice","A decision you made when building or improving the solution."],
+  ["evaluation","Judging your solution against clear, measurable performance criteria."],
+  ["performance criterion","A measurable standard, such as accuracy on a sample, used to test the solution."],
+  ["reflection","An honest look back at what you learned and what to improve next."]
+];
+const DEF_ORDER = [2,4,0,3,1];
+const STAGES = ["🎯 Name your solution's goal and the criteria you judged it against","🔧 Present a design choice you made","📊 Show the before-and-after measurement that proves it helped","🚩 Admit one limitation that still remains"];
+const STAGE_ORDER = [2,0,3,1];
+const CASE1 = ["Accept it only when the presentation slides look neat.","Believe it at once, since a confident builder must be right.","Decide the claim simply cannot be judged by anyone at all.","Ask what was measured – a choice is proven by the result."];
+const MATCH = [["mt1","🧠 Concept",0],["mt2","🧩 Design",1],["mt3","📊 Evaluation",2],["mt4","⚖️ Ethics",3]];
+const MATCH_OPTS = ["🔀 name the input, process and output","🪜 plan the ordered steps for one task","📏 judge an output against a measurable criterion","🛡️ name a risk and who it could affect"];
+const CASE2 = ["Yes, a strong accuracy answer already covers all four strands.","Yes, because ethics is simply not a part of this task at all.","No – it still needs an ethics answer: a risk and who it hits.","Yes, since only the concept strand really matters for the task."];
+const GOALS = [
+  ["gl1","⚖️ Learn to test for fairness across two groups","S"],
+  ["gl2","🗯️ Be more amazing next term","W"],
+  ["gl3","📈 Improve my solution's accuracy on the hardest category","S"],
+  ["gl4","🌫️ Just do well somehow","W"],
+  ["gl5","💭 Get better at AI","W"],
+  ["gl6","🔬 Add a risk check to every workflow I build","S"]
+];
+const CASE3 = ["Less, since a good builder should hide every weakness from view.","It makes no difference to how far the builder is trusted.","More – admitting a limit shows you evaluated your own work.","Less, because naming any limitation is simply embarrassing."];
+const SH_CRIT1 = ["Accuracy on the 10 held-back photos","How neat the slides looked","How many classes the sorter has","How quickly the teacher clicked"];
+const SH_ACC = ["60% → 90%","6% → 9%","90% → 60%","10% → 60%"];
+const SH_CRIT2 = ["How many wrong items reached the bin","How confident the builder felt","The colour of the bins","How many photos were taken"];
+const SH_LIMIT = ["Crushed cans are still often labelled plastic – only 2 of 5 right","It works perfectly now, so there is nothing to report","The slides look finished, so no limitation is needed","It just got better – trust us"];
+const F_CONCEPT = ["Input: a photo of one object · process: the trained model compares it with learned patterns · output: a label such as ‘metal’ with a confidence score","Input: the label · process: the bin · output: the photo","Input: the bin · process: the teacher's opinion · output: the slides","There is no process – the photo itself is the answer"];
+const F_DESIGN = ["Take a photo → the model predicts a label → if confidence is below 70%, a person checks → the item goes in the bin","Put the item in a bin → take a photo → the model predicts a label","The model predicts a label → take a photo → a person checks","A person checks → the item goes in a bin → no photo is needed"];
+const F_IMPROVE = ["Adding the person-checks step – the workflow changes but the model is the same","Renaming the classes on the slides","Taking the test photos in a darker room","Removing the held-back test photos"];
+const F_EVAL = ["On 10 held-back photos it got 9 right – 90%, above our 80% target","It looked right to us, so it passes","The model said it was 95% sure, so it must be right","Everyone liked the demo"];
+const F_RISK = ["A camera used for real could capture people passing by – their privacy could be affected","The bins might fill up too quickly","The model is too accurate","There are no risks, because it is only about recycling"];
+const F_SAFE = ["Photos show objects only – never faces, voices or names – and the teacher operates the tool","Ask classmates to post their photos online","Keep every photo forever, just in case","Let each student log in with their own account"];
+const REFLECT = ["It was fine. Next term I want to get better at AI.","I learned to prove a choice with before-and-after numbers; testing fairly across groups was hard; next term I will raise accuracy on crushed cans from 2 of 5 to 4 of 5.","Everything went perfectly, so there is nothing to improve.","I will just try to do well somehow next term."];
+const SAFE = [
+  ["sr1","👩‍🏫 The tool stayed teacher-operated; students never logged in",1],
+  ["sr2","🏆 A confident-looking output could be trusted without checking",0],
+  ["sr3","🚫 No personal data went in – no faces, voices or names",1],
+  ["sr4","📸 Classmates' faces made the tests more realistic",0],
+  ["sr5","🔎 Every output was checked before we trusted it",1],
+  ["sr6","🔑 Students shared their own logins to save time",0]
+];
+const EXIT = ["Our model said it was 95% confident, so it worked.","Our solution is really good now and everyone liked it.","Adding well-lit training photos raised accuracy on our 10 held-back photos from 60% to 90%.","We changed lots of things at once and it feels better."];
+const CHAL = ["Criterion: how fast it answers · safeguard: none needed, since it worked for recycling","Criterion: a wrong label on any box – reliability on a large, varied test set · safeguard: a pharmacist checks every low-confidence label before use","Criterion: how confident it sounds · safeguard: hide the limitations from staff","Keep the same 10 test photos – a high score there proves it is safe"];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["peer review","Judging a classmate's solution helpfully against the same criteria everyone uses."],
+  ["carousel","A rotation where you review several solutions in turn at different stations."],
+  ["criterion-anchored feedback","A comment tied to a named performance criterion, not to personal taste."],
+  ["consolidate","Bringing many scattered notes together into one clear point."],
+  ["Term-2 goal","One specific, measurable target you set yourself for next term."]
+];
+const LDEF_ORDER = [3,0,4,1,2];
+const LSORT = [
+  ["ls1","🌟 Nice work, well done!","P"],
+  ["ls2","📊 Against fairness, it scored lower on the long cards","A"],
+  ["ls3","🎨 I just do not like how it looks","P"],
+  ["ls4","📏 Against accuracy, it failed on two of the three test inputs","A"],
+  ["ls5","💬 It feels a bit boring to me","P"],
+  ["ls6","🚩 Its risk check does not name who is affected – fix against the risk criterion","A"]
+];
+const LCASE1 = ["Not yet – tie it to a criterion so the feedback is comparable.","No, but only because the comment is far too short to count.","Yes, praise really is all that a good reviewer ever needs.","Yes, telling someone their work is great is always the kindest thing."];
+const LSTEPS = ["🗂️ Split your test set by one characteristic – short cards vs long cards","🔁 Run the SAME test on each group under the same conditions","🧮 Count how many the model got right in each group","📊 Work out each group's accuracy as a percentage","⚖️ Compare the two percentages and report any disparity"];
+const LSTEP_ORDER = [1,3,0,4,2];
+const LCASE2 = ["Trust it fully, since a score that high always proves it works.","Yes, because a number that high is always simply right.","Check what it was measured on; 95% is empty without a sample.","No, because every score that anyone reports is basically fake."];
+const LML = [
+  ["ml1","📚 Teaching the model from the training examples","T"],
+  ["ml2","➡️ One forward run that turns a new photo into a label","I"],
+  ["ml3","📏 Measuring the outputs on held-back test data against our criteria","E"],
+  ["ml4","🧪 Scoring 9 out of 10 on photos the model has never seen","E"],
+  ["ml5","🥫 The app labels a new can ‘metal’ during the demo","I"],
+  ["ml6","➕ Adding 10 new examples to a class and building the model again","T"]
+];
+const LML_Q = ["A new, retrained model","The same model, given a new input","The same model with a new output","No model at all – just a dataset"];
+const LGOAL = [
+  ["lg1","🎯 It names a specific, measurable target.",1],
+  ["lg2","✨ It sounds impressive but cannot be measured.",0],
+  ["lg3","📊 It comes from the pattern across your feedback.",1],
+  ["lg4","🌫️ It just says ‘get better at AI’.",0],
+  ["lg5","🪜 It names the first step you will take next week.",1],
+  ["lg6","🎲 It changes every time someone asks you.",0]
+];
+const LCASE3 = ["Whichever of the two happens to sound the most impressive.","Neither goal, because goals never really matter for progress.","The broad ‘get better at AI’ aim, since big aims push you furthest.","The measurable goal with a first step – start it and track it."];
+const RV1 = ["Strength (clarity): 4 of 5 replies were rated clear. Next step (accuracy): add a date check, since one Arabic reply had the wrong date.","Great job, I love the colours!","It's a bit boring – make it more fun.","Arabic is hard, so just remove the parents' reply."];
+const RV2 = ["75% sounds good enough to me.","Nice work, well done!","Strength (accuracy): 9 of 10 short cards right. Next step (fairness): long cards scored only 6 of 10 – add long-card examples and re-test.","I don't really like card sorters."];
+const RV3 = ["Good – nothing to add.","I would have picked a different topic.","Make the alert louder, because I like loud sounds.","Strength (accuracy): it alerted on all 5 hot-day readings. Next step (risk): name who is affected – such as outdoor workers – in the risk check."];
+const PCT = ["90%","60%","75%","9%","6%"];
+const FAIR_CONC = ["Long cards score clearly lower – a possible bias to report","Both groups did the same, so it is fair","Short cards are the problem","The overall 75% proves it is fair to everyone"];
+const FAIR_FIX = ["Add more varied long-card training examples, retrain, then run the SAME test again","Remove the long cards from the test so the score goes up","Change the cards, the test and the scoring all at once","Report only the overall 75%"];
+const FAIR_SMALL = ["Cannot determine – too few examples to be sure; gather more","Evening photos are clearly better – a definite bias","Morning photos are clearly better","There can never be any bias in photos"];
+const FB_PATTERN = ["Crushed or squashed metal items are the weak spot","The slides need brighter colours","Everyone thinks it is perfect","The project should be abandoned"];
+const FB_GOAL = ["Get much better at AI","Raise accuracy on crushed cans from 2 of 5 to at least 4 of 5 by the end of Term 2","Make the sorter more amazing","Try harder somehow"];
+const FB_STEP = ["Wait until the end of term and see","Think about it some more","Next week, photograph 10 new crushed cans in varied light and add them to the metal class","Ask the model whether it feels better"];
+const FB_JUST = ["Show the counts before and after – 4 of 20 wrong items reached the bin, then 1 of 20","Say that it felt much smoother","Add more pictures to the slide","Leave the numbers out to save time"];
+const LCHANGE = [
+  ["ch1","Added 10 well-lit photos to each class and trained again","M"],
+  ["ch2","Added a step: low-confidence labels go to a person to check","W"],
+  ["ch3","Took the test photo again in better light","P"],
+  ["ch4","Added a big ‘Which bin?’ button and a picture of each bin to the screen","U"],
+  ["ch5","Reworded the request so it says ‘for parents, in Arabic’","P"],
+  ["ch6","Moved the date check so it happens before the reply is sent","W"]
+];
+const LSAFE = [
+  ["sf1","Showcase only the non-personal solution – no data shared",1],
+  ["sf2","Write the builder's full name and photo on each review card",0],
+  ["sf3","Use anonymised showcase sheets at each station",1],
+  ["sf4","Post screenshots of classmates' results online",0],
+  ["sf5","No faces, voices or names in any example",1],
+  ["sf6","Any live tool is teacher-operated; students never log in",1]
+];
+const LEXIT = ["Goal: get better at AI – I will start sometime.","Goal: raise accuracy on crushed cans from 2 of 5 to 4 of 5 by the end of Term 2 – first step: next week, add 10 new crushed-can photos.","Goal: be amazing – first step: believe in myself.","Goal: finish Term 2 – first step: wait for more feedback."];
+const LCHAL = ["Criterion: how friendly the alert sounds · safeguard: hide any limitations from workers","Keep the same 5 test readings – a perfect score proves it is safe","Criterion: it must miss no dangerous reading, tested on a large, varied set · safeguard: a supervisor confirms every alert, with a manual check if the tool fails","Criterion: how fast the alert sounds · no safeguard needed, since 5 of 5 is perfect"];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CE_P,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"A showcase presents your solution and the choices behind it; a design choice is a decision you made; evaluation judges the solution against measurable criteria; a performance criterion is the measurable standard you test against; reflection is an honest look back at what you learned and what to improve."},
+ {id:"order",mount:"a-order",section:"Core · Part 1",title:"Set up your showcase",sub:"Objective 1 · "+CE_A,ico:"🪜",
+  fields:STAGES.map((_,i)=>({k:"o"+i,ok:v=>eq(v,i)})),
+  explain:"First name the goal and the criteria, then present the design choice, then show the before-and-after measurement that proves it helped – and finally admit one limitation that still remains."},
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"Case 1 · The ‘It Got Better’ Claim",sub:"AI Evaluators · "+CE_A,ico:"🕵️",
+  fields:[{k:"c1",radio:1,ok:v=>eq(v,3)}],
+  explain:"Ask what was measured – a choice is proven by the result. Confidence is not evidence, neat slides are not proof, and the claim can be judged once they show the before-and-after measurement."},
+ {id:"match",mount:"a-match",section:"Core · Part 2",title:"Match the strand to its task",sub:"Objective 2 · "+CU_E,ico:"🧷",
+  fields:MATCH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Concept = name the input, process and output. Design = plan the ordered steps for one task. Evaluation = judge an output against a measurable criterion. Ethics = name a risk and who it could affect."},
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"Case 2 · The Half-Finished Task",sub:"AI Evaluators · "+GE_P,ico:"🔬",
+  fields:[{k:"c2",radio:1,ok:v=>eq(v,2)}],
+  explain:"Not complete – it still needs an ethics answer: a risk and who it could affect. Accuracy is one strand; all four strands must be sampled, because a solution can be correct and still be unfair or unsafe."},
+ {id:"goals",mount:"a-goals",section:"Core · Part 3",title:"Weak goal or strong goal?",sub:"Objective 3 · "+CE_A,ico:"🎯",
+  fields:GOALS.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Strong goals are specific and measurable: test for fairness across two groups, improve accuracy on the hardest category, add a risk check to every workflow. ‘Be more amazing’, ‘just do well somehow’ and ‘get better at AI’ are vague – there is nothing to measure."},
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"Case 3 · The Honest Builder",sub:"AI Evaluators · "+CE_E,ico:"⚖️",
+  fields:[{k:"c3",radio:1,ok:v=>eq(v,2)}],
+  explain:"Trusted more – naming a limit is a strength, because it proves the builder checked her own work. Hiding limits hides evidence, and honesty about limits does make a difference to trust."},
+ {id:"showcase",mount:"a-showcase",section:"Core worksheet",title:"My showcase: two justified choices",sub:"Worksheet · "+CE_A,ico:"📝",cls:"ws",
+  fields:[{k:"sh1",ok:v=>eq(v,0)},{k:"sh2",ok:v=>eq(v,0)},{k:"sh3",ok:v=>eq(v,0)},{k:"sh4",ok:v=>eq(v,0)}],
+  explain:"Choice 1 (more well-lit training photos, retrained) improved accuracy on the 10 held-back photos from 6/10 (60%) to 9/10 (90%). Choice 2 (a person checks low-confidence labels) cut wrong items reaching the bin from 4 of 20 to 1 of 20. The honest limitation is the one with evidence: crushed cans are still often labelled plastic."},
+ {id:"four1",mount:"a-four1",section:"Core worksheet",title:"Four-strand task: concept and design",sub:"Worksheet · "+SD_P,ico:"🧩",cls:"ws",
+  fields:[{k:"fc",ok:v=>eq(v,0)},{k:"fd",ok:v=>eq(v,0)},{k:"fi",ok:v=>eq(v,0)}],
+  explain:"Concept: a photo goes in, the trained model compares it with learned patterns, and a label with a confidence score comes out. Design: photo → model predicts → a person checks low-confidence labels → bin, in that order. Adding the person-checks step is a design (workflow) improvement – the model itself is unchanged."},
+ {id:"four2",mount:"a-four2",section:"Core worksheet",title:"Four-strand task: evaluation and ethics",sub:"Worksheet · "+GE_P,ico:"⚖️",cls:"ws",
+  fields:[{k:"fe",ok:v=>eq(v,0)},{k:"fr",ok:v=>eq(v,0)},{k:"fs",ok:v=>eq(v,0)}],
+  explain:"Evaluation judges the output against a measurable criterion – 9 of 10 held-back photos against an 80% target – not a feeling or the model's own confidence. Ethics names a real risk and who it affects (people passing a camera could lose privacy), with a safeguard: objects only, no faces, voices or names, and a teacher-operated tool."},
+ {id:"reflect",mount:"a-reflect",section:"Core worksheet",title:"Reflection and next-term goal",sub:"Worksheet · "+CE_A,ico:"🪞",cls:"ws",
+  fields:[{k:"rf",radio:1,ok:v=>eq(v,1)}],
+  explain:"A useful reflection names one thing learned, one thing that was hard, and a specific, measurable goal (2 of 5 → 4 of 5 on crushed cans). ‘Get better at AI’, ‘everything was perfect’ and ‘do well somehow’ give you nothing to measure or act on."},
+ {id:"safe",mount:"a-safe",section:"Core worksheet",title:"The rules that kept us safe all term",sub:"Safety check · "+GE_E,ico:"🛡️",
+  fields:SAFE.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"All term the tool stayed teacher-operated, no personal data went in, and every output was checked before it was trusted. Confidence is not accuracy, faces are personal data, and logins are never shared."},
+ {id:"exit",mount:"a-exit",section:"Core exit ticket",title:"Exit ticket",sub:"One choice, with its evidence · "+CE_A,ico:"🎫",
+  fields:[{k:"ex",radio:1,ok:v=>eq(v,2)}],
+  explain:"A strong exit ticket names the design choice AND the before-and-after evidence: well-lit training photos raised accuracy on 10 held-back photos from 60% to 90%. The model's confidence, people liking it or ‘it feels better’ are not evidence."},
+ {id:"chal",mount:"a-chal",section:"Core challenge",title:"Challenge ⭐ A higher-stakes context",sub:"Stretch · "+GE_A,ico:"⭐",
+  fields:[{k:"chq",radio:1,ok:v=>eq(v,1)}],
+  explain:"In a hospital pharmacy a wrong label could harm a patient, so reliability on a large, varied test set matters most – and a new safeguard puts a pharmacist in charge of every low-confidence label. Speed, sounding confident or a score on the old 10 photos does not prove it is safe there."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+CE_P,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"Peer review = judging a classmate's solution against shared criteria. Carousel = reviewing several solutions in turn at different stations. Criterion-anchored feedback = a comment tied to a named criterion. Consolidate = bring many notes together into one point. Term-2 goal = one specific, measurable target for next term."},
+ {id:"lsort",mount:"a-lsort",section:"Lab · Part 1",title:"Fair or just personal?",sub:"Objective 1 · "+CE_P,ico:"🗂️",
+  fields:LSORT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Comments naming fairness on the long cards, accuracy on the test inputs, or the risk criterion are anchored – the builder knows exactly what to improve. ‘Nice work’, ‘I don't like how it looks’ and ‘it feels boring’ are personal taste."},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"Case 1 · The ‘Great Job’ Card",sub:"AI Evaluators · "+CE_P,ico:"🕵️",
+  fields:[{k:"lc1",radio:1,ok:v=>eq(v,0)}],
+  explain:"Not yet – praise alone gives nothing to act on. Length is not the issue: fair review needs a named criterion, one strength and one specific next step, so the feedback is comparable."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 2",title:"Compare two groups",sub:"Objective 2 · "+CE_P,ico:"🧮",
+  fields:LSTEPS.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"Split the test set by one characteristic, run the SAME test on each group under the same conditions, count how many were right in each, work out each group's accuracy as a percentage, then compare the two and report any disparity."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"Case 2 · The 95 Per Cent Sheet",sub:"AI Evaluators · "+CE_E,ico:"🔬",
+  fields:[{k:"lc2",radio:1,ok:v=>eq(v,2)}],
+  explain:"Check what it was measured on – verify before trust. A high number without its sample is not proof, but scores are not fake either: you just need to see the test set behind them."},
+ {id:"lml",mount:"a-lml",section:"Lab · Part 2",title:"Training, inference or evaluation?",sub:"How a model learns · "+CU_E,ico:"🧠",
+  fields:[...LML.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"mlq",ok:v=>eq(v,0)}],
+  explain:"Training teaches the model from the training data (including adding examples and building it again). Inference is one forward run from a new input to an output, such as labelling a can in the demo. Evaluation measures outputs on held-back test data against criteria. Changing the training examples and training again gives a new, retrained model."},
+ {id:"lgoal",mount:"a-lgoal",section:"Lab · Part 3",title:"What makes a strong goal?",sub:"Objective 3 · "+CE_A,ico:"🧩",
+  fields:LGOAL.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"A strong Term-2 goal comes from the pattern across your feedback, names a specific, measurable target, and names the first step you will take next week. Sounding impressive, ‘get better at AI’ and a goal that keeps changing cannot be measured or started."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"Case 3 · The Two Goals",sub:"AI Evaluators · "+CE_A,ico:"⚖️",
+  fields:[{k:"lc3",radio:1,ok:v=>eq(v,3)}],
+  explain:"The measurable goal with a first step is stronger – you can start it next week and track it. A vague aim gives nothing to measure or start, and clear goals are exactly how good teams keep improving."},
+ {id:"lreview",mount:"a-lreview",section:"Lab worksheet",title:"Carousel review frame",sub:"Worksheet · "+CE_P,ico:"🔄",cls:"ws",
+  fields:[{k:"rv1",ok:v=>eq(v,0)},{k:"rv2",ok:v=>eq(v,2)},{k:"rv3",ok:v=>eq(v,3)}],
+  explain:"Each good review names a criterion, one genuine strength and one specific next step drawn from the sheet's own evidence: the wrong date in an Arabic reply, the 6-of-10 score on long cards, and a risk check that does not say who is affected. Praise, taste and ‘good enough’ give the builder nothing to act on."},
+ {id:"lfair",mount:"a-lfair",section:"Lab worksheet",title:"Fairness check: compare two groups",sub:"Worksheet · "+GE_P,ico:"⚖️",cls:"ws",
+  fields:[{k:"fa1",ok:v=>eq(v,0)},{k:"fa2",ok:v=>eq(v,1)},{k:"fa3",ok:v=>eq(v,0)},{k:"fa4",ok:v=>eq(v,0)},{k:"fa5",ok:v=>eq(v,0)}],
+  explain:"Short cards: 9 ÷ 10 × 100 = 90%. Long cards: 6 ÷ 10 × 100 = 60%. The 30-point gap is a possible bias, hidden inside the overall 75%. A fair fix changes one factor – more varied long-card examples – then runs the SAME test again. With only 3 photos per group, 2/3 against 3/3 is too few to be sure: record ‘cannot determine’ and gather more."},
+ {id:"lfeedback",mount:"a-lfeedback",section:"Lab worksheet",title:"Feedback I received – and my Term-2 goal",sub:"Worksheet · "+CE_A,ico:"📬",cls:"ws",
+  fields:[{k:"fb1",ok:v=>eq(v,0)},{k:"fb2",ok:v=>eq(v,1)},{k:"fb3",ok:v=>eq(v,2)},{k:"fb4",ok:v=>eq(v,0)}],
+  explain:"Three of the four cards point at crushed or squashed metal items, so that is the pattern. Consolidate it into one measurable goal (2 of 5 → at least 4 of 5) with a small first step for next week, and sharpen the justification of Choice 2 by showing the counts before and after."},
+ {id:"lchange",mount:"a-lchange",section:"Lab worksheet",title:"Tool log: what kind of change was it?",sub:"Worksheet · tool log · "+SD_A,ico:"🧾",cls:"ws",
+  fields:LCHANGE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Model training = changing the training examples and training again (a new, retrained model). Workflow design = adding or reordering steps (model unchanged). Prompt / input refinement = changing the input given (model unchanged). Interface development = changing how a user interacts with the solution (model unchanged)."},
+ {id:"lsafe",mount:"a-lsafe",section:"Lab worksheet",title:"Safe and fair review",sub:"Safety check · "+GE_E,ico:"🛡️",
+  fields:LSAFE.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Showcase only the non-personal solution, use anonymised sheets, keep faces, voices and names out of every example, and keep any live tool teacher-operated. Names, photos and screenshots of classmates' results posted online are personal data."},
+ {id:"lexit",mount:"a-lexit",section:"Lab exit ticket",title:"Lab exit ticket",sub:"One goal and its first step · "+CE_A,ico:"🎫",
+  fields:[{k:"le",radio:1,ok:v=>eq(v,1)}],
+  explain:"Only one sentence gives a measurable Term-2 goal (2 of 5 → 4 of 5 on crushed cans) AND a concrete first step for next week. ‘Sometime’, ‘believe in myself’ and ‘wait for feedback’ are not steps you can start."},
+ {id:"lchal",mount:"a-lchal",section:"Lab challenge",title:"Challenge ⭐ A higher-stakes context",sub:"Stretch · "+GE_A,ico:"⭐",
+  fields:[{k:"lch",radio:1,ok:v=>eq(v,2)}],
+  explain:"On a building site a missed alert could hurt a worker, so the new criterion is missing no dangerous reading on a large, varied test set, and the new safeguard is a supervisor confirming every alert with a manual back-up. Five perfect test readings are too few to prove safety."}
+];
+
+/* ---------- state ---------- */
+const KEY="g8-mw10-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#audit").innerHTML=`<header><small>Worked example · showcase sheet · illustrative class results</small><b>Recycling sorter (paper · plastic · metal)</b></header>
+<div class="in">
+  <p class="task"><b>Goal:</b> sort photos of recycling into the right bin. <b>Criteria:</b> accuracy on 10 held-back photos the model has never seen (target 80%), and how many wrong items reach the bin out of 20 test items. Photos show objects only; the teacher operated the tool.</p>
+  <table class="t"><thead><tr><th>Design or evaluation choice</th><th>Criterion it improved</th><th>Before</th><th>After</th></tr></thead>
+  <tbody><tr><td>1. Added 10 well-lit, varied photos to each class and trained again</td><td>Accuracy on the 10 held-back photos</td><td>6&nbsp;of&nbsp;10</td><td>9&nbsp;of&nbsp;10</td></tr>
+  <tr><td>2. Added a step: if the model's confidence is below 70%, a person checks before the item goes in the bin</td><td>Wrong items reaching the bin (out of 20)</td><td>4&nbsp;of&nbsp;20</td><td>1&nbsp;of&nbsp;20</td></tr></tbody></table>
+  <p class="note"><b>Limitation still remaining:</b> crushed cans are still often labelled plastic (2 of 5 right). <b>Risk to watch:</b> a camera used for real could capture people passing by.</p>
+</div>`;
+$("#carousel").innerHTML=`<header><small>Carousel · three anonymised showcase sheets · illustrative</small><b>Review each solution against the shared criteria</b></header>
+<div class="in">
+  <table class="t"><thead><tr><th>Station</th><th>Solution</th><th>What its sheet shows</th></tr></thead>
+  <tbody><tr><td>1</td><td>Two-audience reply workflow: a homework reminder in English for students and in Arabic for parents</td><td>Clarity: 4 of 5 test replies rated clear by readers. Accuracy: a fluent teacher checked the Arabic replies – 1 had the wrong date.</td></tr>
+  <tr><td>2</td><td>Card sorter for short and long cards</td><td>Accuracy 15 of 20 (75%) overall. Short cards: 9 of 10 right. Long cards: 6 of 10 right – same test, same conditions.</td></tr>
+  <tr><td>3</td><td>Heat-safety alert workflow</td><td>Accuracy: a correct alert for 5 of 5 hot-day readings above 40 °C. Risk check: ‘something could go wrong’ – it does not say who is affected.</td></tr></tbody></table>
+</div>`;
+$("#received").innerHTML=`<header><small>Feedback I received · peer-review cards (two stars and a wish) · illustrative</small><b>On my recycling-sorter showcase sheet</b></header>
+<div class="in">
+  <table class="t"><thead><tr><th>Card</th><th>Two stars</th><th>One wish</th></tr></thead>
+  <tbody><tr><td>A</td><td>Clear before-and-after on accuracy · objects only, so it is safe</td><td>Crushed cans still fail – test more of them</td></tr>
+  <tr><td>B</td><td>The confidence-check step is smart · honest limitation</td><td>Try more squashed or bent metal items</td></tr>
+  <tr><td>C</td><td>Good criteria · tidy tool log</td><td>Choice 2 needs its numbers – I could not see how much it helped</td></tr>
+  <tr><td>D</td><td>Fair test – one factor changed · good target</td><td>The metal class needs more varied photos of crushed cans</td></tr></tbody></table>
+</div>`;
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "order":
+    return `<p class="how">Put the showcase steps into the order that proves a design choice helped, from first to last.</p>`+
+      STAGES.map((_,i)=>`<div class="pair" data-item="o${i}"><span class="t">Step ${i+1}</span>${sel("o"+i,STAGES,"Choose the step…",STAGE_ORDER)}</div>`).join("");
+  case "case1":
+    return `<div class="quote">A pair presents a design choice and says their solution ‘just got better’, but shows no numbers. Evaluator, how should the class respond?</div><div class="clues"><div class="clue">🔧<span>A CHOICE</span></div><div class="clue">📊<span>NO NUMBERS</span></div><div class="clue">❓<span>PROVEN?</span></div></div><p class="q" id="q-c1">How should the class respond?</p>${radios("c1",CASE1)}`;
+  case "match":
+    return `<p class="how">Match each strand to the task that samples it.</p>`+
+      MATCH.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,MATCH_OPTS,"Choose its task…",[2,3,0,1])}</div>`).join("");
+  case "case2":
+    return `<div class="quote">A student answers the accuracy question well and hands the four-strand task in, but leaves the ethics box empty. Evaluator, is the task complete?</div><div class="clues"><div class="clue">📊<span>ACCURACY DONE</span></div><div class="clue">⚖️<span>ETHICS BLANK</span></div><div class="clue">🏁<span>COMPLETE?</span></div></div><p class="q" id="q-c2">Is the task complete?</p>${radios("c2",CASE2)}`;
+  case "goals":
+    return `<p class="how">Sort each goal: strong because it is specific and measurable, or weak because it is vague.</p>`+
+      GOALS.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🎯 Strong","🌫️ Weak"],["S","W"],t)}</div>`).join("");
+  case "case3":
+    return `<div class="quote">At the end of her showcase, a builder names one limitation her solution still has. A classmate says that makes it look weak. Evaluator, is the builder trusted more or less?</div><div class="clues"><div class="clue">🚩<span>NAMES A LIMIT</span></div><div class="clue">🔎<span>SELF-EVALUATED</span></div><div class="clue">🤝<span>TRUSTED?</span></div></div><p class="q" id="q-c3">Trusted more or less?</p>${radios("c3",CASE3)}`;
+  case "showcase":
+    return `<p class="how">Use the worked showcase sheet above. For each choice, name the criterion it improved and read the result before and after.</p>
+      <div class="pair" data-item="sh1"><span class="t">Choice 1 improved which criterion?</span>${sel("sh1",SH_CRIT1,"Choose…",[1,3,0,2])}</div>
+      <div class="pair" data-item="sh2"><span class="t">Choice 1: accuracy before → after</span>${sel("sh2",SH_ACC,"Choose…",[2,1,3,0])}</div>
+      <div class="pair" data-item="sh3"><span class="t">Choice 2 improved which criterion?</span>${sel("sh3",SH_CRIT2,"Choose…",[1,0,3,2])}</div>
+      <div class="pair" data-item="sh4"><span class="t">Which sentence admits a limitation honestly?</span>${sel("sh4",SH_LIMIT,"Choose…",[3,1,0,2])}</div>`;
+  case "four1":
+    return `<p class="how">One answer per strand, about the recycling sorter. Choose the best answer for each.</p>
+      <div class="pair" data-item="fc"><span class="t">🧠 Concept: name the input, process and output</span>${sel("fc",F_CONCEPT,"Choose…",[2,0,3,1])}</div>
+      <div class="pair" data-item="fd"><span class="t">🧩 Design: plan the ordered steps for one task</span>${sel("fd",F_DESIGN,"Choose…",[1,3,0,2])}</div>
+      <div class="pair" data-item="fi"><span class="t">🧩 Design: which is a design improvement, not a model change?</span>${sel("fi",F_IMPROVE,"Choose…",[3,1,2,0])}</div>`;
+  case "four2":
+    return `<p class="how">One answer per strand, about the recycling sorter. Choose the best answer for each.</p>
+      <div class="pair" data-item="fe"><span class="t">📊 Evaluation: judge an output against a measurable criterion</span>${sel("fe",F_EVAL,"Choose…",[2,1,0,3])}</div>
+      <div class="pair" data-item="fr"><span class="t">⚖️ Ethics: name a risk and who it could affect</span>${sel("fr",F_RISK,"Choose…",[3,0,1,2])}</div>
+      <div class="pair" data-item="fs"><span class="t">⚖️ Ethics: name one data safeguard</span>${sel("fs",F_SAFE,"Choose…",[1,2,0,3])}</div>`;
+  case "reflect":
+    return `<p class="q" id="q-rf">Which reflection names one thing learned, one thing that was hard, and a specific, measurable goal for next term?</p>${radios("rf",REFLECT)}`;
+  case "safe":
+    return boxes(SAFE,"Tick the THREE rules that kept our work safe all term. Leave the others unticked.");
+  case "exit":
+    return `<p class="q" id="q-ex">Which sentence gives a design choice AND the before-and-after evidence that proves it worked?</p>${radios("ex",EXIT)}`;
+  case "chal":
+    return `<div class="quote">The sorter idea is reused in a hospital pharmacy to sort boxes of medicine – a much higher-stakes context. Which plan names the performance criterion that would matter most and one new safeguard?</div><p class="q" id="q-chq">Which plan fits the higher-stakes context?</p>${radios("chq",CHAL)}`;
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lsort":
+    return `<p class="how">Sort each comment: anchored to a criterion, or just personal taste.</p>`+
+      LSORT.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🧭 Criterion","🎨 Taste"],["A","P"],t)}</div>`).join("");
+  case "lcase1":
+    return `<div class="quote">A reviewer fills in a peer-review card with just the words ‘great job’. Evaluator, is that useful feedback for the builder?</div><div class="clues"><div class="clue">🎨<span>JUST PRAISE</span></div><div class="clue">📏<span>NO CRITERION</span></div><div class="clue">❓<span>USEFUL?</span></div></div><p class="q" id="q-lc1">Is it useful feedback?</p>${radios("lc1",LCASE1)}`;
+  case "lorder":
+    return `<p class="how">Put the fairness check into the order that gives a fair comparison.</p>`+
+      LSTEPS.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">Step ${i+1}</span>${sel("lo"+i,LSTEPS,"Choose the step…",LSTEP_ORDER)}</div>`).join("");
+  case "lcase2":
+    return `<div class="quote">A peer's sheet proudly shows ‘95% accurate’ in big letters, but says nothing about the sample it was tested on. Evaluator, should you trust the number?</div><div class="clues"><div class="clue">📊<span>95% SHOWN</span></div><div class="clue">🗂️<span>NO SAMPLE</span></div><div class="clue">🔎<span>TRUST IT?</span></div></div><p class="q" id="q-lc2">Should you trust the number?</p>${radios("lc2",LCASE2)}`;
+  case "lml":
+    return `<p class="how">Is each one training, inference or evaluation?</p>`+
+      LML.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Training","Inference","Evaluation"],["T","I","E"],t)}</div>`).join("")+
+      `<div class="pair" data-item="mlq" style="margin-top:10px"><span class="t">You change the training examples and train again. What do you have now?</span>${sel("mlq",LML_Q,"Choose…",[1,3,0,2])}</div>`;
+  case "lgoal":
+    return boxes(LGOAL,"Tick the THREE things that make a strong Term-2 goal. Leave the others unticked.");
+  case "lcase3":
+    return `<div class="quote">One classmate writes ‘get much better at AI’; another writes ‘raise my accuracy on the hardest category by testing five new cards next week’. Evaluator, which goal is stronger?</div><div class="clues"><div class="clue">🌫️<span>VAGUE GOAL</span></div><div class="clue">🎯<span>MEASURABLE GOAL</span></div><div class="clue">🪜<span>FIRST STEP</span></div></div><p class="q" id="q-lc3">Which goal is stronger?</p>${radios("lc3",LCASE3)}`;
+  case "lreview":
+    return `<p class="how">Use the carousel sheets above. For each station, choose the review that names a criterion, one strength and one specific next step.</p>
+      <div class="pair" data-item="rv1"><span class="t">Station 1 · reply workflow</span>${sel("rv1",RV1,"Choose the review…",[2,0,3,1])}</div>
+      <div class="pair" data-item="rv2"><span class="t">Station 2 · card sorter</span>${sel("rv2",RV2,"Choose the review…",[0,3,2,1])}</div>
+      <div class="pair" data-item="rv3"><span class="t">Station 3 · heat-safety alert</span>${sel("rv3",RV3,"Choose the review…",[1,3,0,2])}</div>`;
+  case "lfair":
+    return `<p class="how">Station 2's card sorter: run the fairness check (accuracy = correct ÷ total × 100).</p>
+      <div class="scen"><p>Same test, same conditions, two groups</p><div class="two">
+        <div data-item="fa1"><span>Short cards: 9 of 10 right</span>${sel("fa1",PCT,"Accuracy…",[2,4,0,1,3])}</div>
+        <div data-item="fa2"><span>Long cards: 6 of 10 right</span>${sel("fa2",PCT,"Accuracy…",[0,2,4,1,3])}</div></div></div>
+      <div class="pair" data-item="fa3"><span class="t">What do the two percentages show?</span>${sel("fa3",FAIR_CONC,"Choose…",[3,1,0,2])}</div>
+      <div class="pair" data-item="fa4"><span class="t">Which fix is a fair next test?</span>${sel("fa4",FAIR_FIX,"Choose…",[1,3,0,2])}</div>
+      <div class="pair" data-item="fa5"><span class="t">Another group tests morning photos (2 of 3 right) and evening photos (3 of 3 right). What should they record?</span>${sel("fa5",FAIR_SMALL,"Choose…",[2,0,3,1])}</div>`;
+  case "lfeedback":
+    return `<p class="how">Use the four peer-review cards above. Consolidate them into one goal.</p>
+      <div class="pair" data-item="fb1"><span class="t">What is the pattern across the feedback?</span>${sel("fb1",FB_PATTERN,"Choose…",[1,0,3,2])}</div>
+      <div class="pair" data-item="fb2"><span class="t">My measurable Term-2 goal</span>${sel("fb2",FB_GOAL,"Choose…",[0,2,1,3])}</div>
+      <div class="pair" data-item="fb3"><span class="t">The first step I will take next week</span>${sel("fb3",FB_STEP,"Choose…",[0,3,2,1])}</div>
+      <div class="pair" data-item="fb4"><span class="t">Card C's wish: how will you make the justification of Choice 2 clearer?</span>${sel("fb4",FB_JUST,"Choose…",[2,3,0,1])}</div>`;
+  case "lchange":
+    return `<p class="how">Label each change so you know what you improved: model training, workflow design, prompt / input refinement, or interface development.</p>`+
+      LCHANGE.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Model training","Workflow","Prompt / input","Interface"],["M","W","P","U"],t)}</div>`).join("");
+  case "lsafe":
+    return boxes(LSAFE,"Safety check: tick every rule that keeps the showcase and carousel safe. Leave the others unticked.");
+  case "lexit":
+    return `<p class="q" id="q-le">Which sentence gives a Term-2 goal AND the very first step you will take toward it?</p>${radios("le",LEXIT)}`;
+  case "lchal":
+    return `<div class="quote">Station 3's heat-safety alert is to be used for real on a building site, where workers' safety depends on it. Which Term-2 goal names the new criterion and the new safeguard that context would demand?</div><p class="q" id="q-lch">Which goal fits the higher-stakes context?</p>${radios("lch",LCHAL)}`;
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 8 Main Course · Term 1 Week 10 (4 – 8 Jan 2027) · Core + Lab · Showcase and Reflect + Review, Measure, Aim</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
