@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Refining &amp; Finishing the System + Lock It and Rehearse the Demo – Grade 10 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#0F766E; --main2:#14897F; --deep:#0E4F4A;
+  --ink:#12302D; --muted:#4E6562; --paper:#F4FAF9; --card:#FFFFFF;
+  --line:#D3E7E3; --soft:#EAF5F3;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#5EEAD4,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#1BA394);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#12302D,#285A55)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#BFEDE6 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#F9FCFC;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FBFEFD}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#1BA394)}
+.act-head.ws{background:linear-gradient(120deg,#12302D,#2B6B64)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#E9F7F4}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #B9D8D2;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #8CCFC5;border-radius:12px;padding:10px 14px;background:#F6FCFB;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(18,48,45,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#12302D;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (max-width:420px){.row .seg:has(>button:nth-child(3)):not(:has(>button:nth-child(4))){display:grid;grid-template-columns:1fr}
+  .row .seg:has(>button:nth-child(3)):not(:has(>button:nth-child(4))) button+button{border-left:0;border-top:2px solid var(--line)}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 10 Main Course, Term 1</span><span class="pill">Week 9 Core + Week 9 Lab</span><span class="pill">📅 Teach: week of 30 Nov – 4 Dec 2026</span></div>
+    <h1>Refining &amp; Finishing the System + Lock It and Rehearse the Demo</h1>
+    <p>Today you finish your integrated solution and prove it is good enough to share. Finishing is not adding more – it is making one smart change, tracing where it travels, and measuring that it worked. Then, in the Lab, you lock your final version and rehearse showing it well: a demo that shows how your system's components work together, the checks that make it trustworthy, and that holds up under a hard question.</p>
+    <p class="meta"><b>Strand:</b> Signature Solution · Refine &nbsp;·&nbsp; <b>Scenario:</b> your chosen stakeholder brief</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 10B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 9 of Term 1 – week of Monday 30 November to Friday 4 December 2026.</b> Grade 10 has one AI period a week. <b>Girls 10:</b> Friday 4 December. <b>Boys 10:</b> their period on Thursday 3 December falls on UAE National Day, so their lesson is pushed back to <b>Wednesday 9 December</b>. Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Refining &amp; Finishing the System</a>, then move on to the <a href="#lab">Lab: Lock It and Rehearse the Demo</a>. Next week (Week 10) is your showcase.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Finish to criteria.</b> I can finish my solution so its subsystems and their hand-offs meet all our success criteria.</li>
+      <li><b>Evaluate and trace.</b> I can evaluate the whole system for accuracy, usefulness and risk, and trace how one change propagates.</li>
+      <li><b>Justify a change.</b> I can justify one change that improved the system, citing the evidence and the systems principle behind it.</li>
+      <li><b>Lab: lock, rehearse, defend.</b> I can run one final iteration and lock the version I will show, rehearse a demo that explains how my components interact and the checks I ran, and defend my system as trustworthy and low-risk under a tough question.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 9 Core · Refining &amp; Finishing the System</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Change one component, trace where it travels</b><small>One change, predicted along the hand-offs</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Measure on the held-out set</b><small>Correct ÷ total, before and after</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Accurate, useful and responsible</b><small>Judge three ways and run a risk check</small></a></li>
+      <li><span class="num">4</span><a href="#p4"><b>Core worksheet</b><small>One traced change, measured and justified</small></a></li>
+      <li><span class="num">5</span><a href="#p5"><b>Finish by balancing, on paper</b><small>Unplugged activity and refine check</small></a></li>
+    </ol>
+    <h3 class="rh">Week 9 Lab · Lock It and Rehearse the Demo</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Lock it, do not add to it</b><small>One final iteration, then version-lock</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Show the hand-offs and the checks</b><small>Then defend them under a hard question</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Lab worksheet</b><small>Lock, demo spine, two checks, defend</small></a></li>
+      <li><span class="num">L4</span><a href="#l4"><b>Lock and rehearse, on paper</b><small>Unplugged activity and lock check</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 5</span><h2>Change one component, then trace where it travels</h2><p>Why is finishing not the same as adding more?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>Last week (Week 8) you built your system, ran it for real, tested it repeatedly and set aside a held-out set you did not touch. Now you finish it with one traced, measured change.</p></div>
+    <div class="call"><h4>Scenario – continued</h4><p>Your solution nearly meets its criteria. Today you make one traced change, re-run the chain, and measure the improvement on your held-out set – then run a risk check before you share. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">Change one component, then trace where it travels</h3>
+    <p>Your solution is a system of parts joined by hand-offs: input data, a chain of tool steps, and the prompts that drive them. Much of the behaviour lives in the interfaces, because one step's output becomes the next step's input. When you improve it, change only <b>one</b> component and predict how the change <b>propagates</b> along the chain. A sharper first-stage prompt gives cleaner output, which changes what the next tool returns. Then re-run the whole chain and compare the new final output with the old against your criteria. Change three things at once and you cannot tell which one helped. Small, traced changes are how real systems get finished and trusted.</p>
+    <figure>
+      <svg viewBox="0 0 760 250" role="img" aria-labelledby="f1T">
+        <title id="f1T">One change traced along a chain: the stage 1 classify prompt is changed; its cleaner topic label is handed to stage 2 look-up, which finds the right FAQ row; stage 3 drafts the reply from that row; the final output is re-run and compared with the old output against the criteria.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#12302D"/></marker>
+        <marker id="ahT" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0F766E"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#12302D">
+          <text x="380" y="24" font-size="15" font-weight="700" text-anchor="middle">Change ONE component – then follow it down the chain</text>
+          <g stroke="#12302D" stroke-width="1.6">
+            <rect x="11" y="62" width="150" height="76" rx="10" fill="#FFF3C9" stroke="#B45309" stroke-width="2.4"/>
+            <rect x="207" y="62" width="150" height="76" rx="10" fill="#fff"/>
+            <rect x="403" y="62" width="150" height="76" rx="10" fill="#fff"/>
+            <rect x="599" y="62" width="150" height="76" rx="10" fill="#EAF5F3"/>
+          </g>
+          <g font-size="15" font-weight="700" text-anchor="middle"><text x="86" y="88">1 · Classify</text><text x="282" y="88">2 · Look up</text><text x="478" y="88">3 · Draft reply</text><text x="674" y="88">Final output</text></g>
+          <g font-size="13" text-anchor="middle" fill="#4E6562"><text x="86" y="108">topic of question</text><text x="86" y="126" fill="#B45309" font-weight="700">prompt CHANGED</text><text x="282" y="108">finds the FAQ row</text><text x="282" y="126">for that topic</text><text x="478" y="108">writes the reply</text><text x="478" y="126">from that row</text><text x="674" y="108">compared with</text><text x="674" y="126">the old output</text></g>
+          <g stroke="#12302D" stroke-width="2.5" marker-end="url(#ah)"><path d="M161 100H204"/><path d="M357 100H400"/><path d="M553 100H596"/></g>
+          <g font-size="13" fill="#0F766E" font-weight="600" text-anchor="middle"><text x="184" y="54">hand-off</text><text x="380" y="54">hand-off</text><text x="576" y="54">hand-off</text></g>
+          <path d="M86 150 C 86 175, 170 175, 282 175 S 470 175, 674 175" fill="none" stroke="#0F766E" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#ahT)"/>
+          <g font-size="13" text-anchor="middle" fill="#0F766E" font-weight="600"><text x="210" y="196">cleaner label in</text><text x="400" y="196">right FAQ row in</text><text x="600" y="196">better replies out?</text></g>
+          <rect x="60" y="210" width="640" height="30" rx="8" fill="#EAF5F3" stroke="#D3E7E3"/>
+          <text x="380" y="230" font-size="13.5" text-anchor="middle">Predict the path → re-run the WHOLE chain → compare against your criteria</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> Change one component (here, the stage 1 prompt) and predict how its effect propagates through each hand-off. Then re-run the whole chain and compare the final output with the old one. <span class="illus">(Illustrative chain.)</span></figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-trace"></div>
+    <div id="a-onechange"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 5</span><h2>Measure the improvement – on the held-out set</h2><p>How do you prove a change really helped?</p></div>
+  <div class="part-body">
+    <p>Prove the change with a number, measured on the inputs you did <b>not</b> tune on. Record accuracy as <b>correct ÷ total</b> before and after: for example, before 7 of 10 = 70%; after your one change, 9 of 10 = 90% – a rise of <b>20 percentage points</b>. Measured on the held-out set, that is real evidence your system got better at the task, not just at the practice inputs.</p>
+    <figure>
+      <svg viewBox="0 0 760 290" role="img" aria-labelledby="f2T">
+        <title id="f2T">Bar chart, before and after, measured on the held-out set: before 70 percent, after 90 percent, a rise of 20 percentage points.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0F766E"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#12302D">
+          <text x="380" y="26" font-size="15" font-weight="700" text-anchor="middle">Before and after – measured on the held-out set</text>
+          <g stroke="#D3E7E3" stroke-width="1.2"><path d="M150 230H600"/><path d="M150 145H600"/><path d="M150 60H600"/></g>
+          <g font-size="13" text-anchor="end" fill="#4E6562"><text x="140" y="235">0%</text><text x="140" y="150">50%</text><text x="140" y="65">100%</text></g>
+          <path d="M150 52V230" stroke="#12302D" stroke-width="1.6"/>
+          <rect x="220" y="111" width="130" height="119" rx="6" fill="#9FD4CC"/>
+          <rect x="410" y="77" width="130" height="153" rx="6" fill="#0F766E"/>
+          <g font-size="16" font-weight="700" text-anchor="middle"><text x="285" y="102">70%</text><text x="475" y="68">90%</text></g>
+          <g font-size="14" font-weight="600" text-anchor="middle"><text x="285" y="252">Before</text><text x="475" y="252">After</text></g>
+          <g font-size="13" text-anchor="middle" fill="#4E6562"><text x="285" y="270">7 of 10 correct</text><text x="475" y="270">9 of 10 correct</text></g>
+          <g stroke="#0F766E" stroke-width="1.4" stroke-dasharray="4 4"><path d="M350 111H620"/><path d="M540 77H620"/></g>
+          <path d="M620 109V81" stroke="#0F766E" stroke-width="2.4" marker-end="url(#ah2)"/>
+          <text x="632" y="92" font-size="16" font-weight="800" fill="#0F766E">+20</text>
+          <text x="632" y="110" font-size="13" fill="#0F766E" font-weight="600">points</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Show the improvement as a number, before and after, measured on the held-out test set the system has never seen. A real gain shows as a number on inputs the system has never seen before.</figcaption>
+    </figure>
+    <div class="call violet"><h4>Percentage points, not percent</h4><p>When you subtract one percentage from another, the answer is in <b>percentage points</b>. 90% − 70% = 20 percentage points. Saying ‘20 percent better’ would wrongly suggest 20% of 70%.</p></div>
+    <div id="a-measure"></div>
+    <div id="a-fair"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head"><span class="pill">Core · Part 3 of 5</span><h2>Accurate, useful and responsible</h2><p>What makes an integrated solution trustworthy?</p></div>
+  <div class="part-body">
+    <p>A finished system is judged three ways. <b>Accuracy</b>: is the output correct against a trusted source? A confident output can still be wrong. <b>Usefulness</b>: does it complete the task for its real user? <b>Risk</b>: could a wrong output mislead, exclude or expose someone, and does it meet the governance expectations set for it? Before you share, do a <b>risk check</b> – name who could be affected, how you would catch a mistake, and which governance rule your system must respect. That is what makes an integrated solution trustworthy, not how polished it looks.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, teams finishing an integrated AI system must trace how one change moves through the workflow and show it meets accuracy and governance expectations before launch. <span class="illus">(Illustrative context.)</span> Finishing, tracing and evaluating an integrated solution is a real workplace skill.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Mathematics · Moral Education</h4><p>Balancing three competing goals against measurable criteria is <b>optimisation</b> in <b>Mathematics</b>. Running an impact check before calling a solution finished is <b>responsibility</b> from <b>Moral Education</b>.</p></div>
+    <div class="call amber"><h4>Tool for this week: spreadsheet (before/after metrics) with the approved assistant – teacher-mediated</h4><p>1. Record baseline scores on the held-out set; identify the weakest stage from the evaluation grid. 2. Change one variable and re-run that stage; re-measure on the held-out set and record the change against baseline. 3. Repeat for a second refinement and note any trade-offs. <b>Stay safe:</b> no personal data in the sheet or prompts; approved assistant only. Verify refined outputs against a trusted source and keep the analysis your own.</p></div>
+    <div id="a-judge"></div>
+    <div id="a-risk"></div>
+  </div>
+</section>
+
+<!-- CORE PART 4 · WORKSHEET -->
+<section class="part" id="p4">
+  <div class="part-head dark"><span class="pill">Core · Part 4 of 5 · Worksheet</span><h2>Refining &amp; Finishing</h2><p>Your brief: make one traced change, re-run the chain, and measure the improvement on your held-out set.</p></div>
+  <div class="part-body">
+    <p>Work through the worksheet using the project file below – an example signature solution at the same stage as yours. Then do the same for your own system.</p>
+    <div class="ecard" id="proj"></div>
+    <div id="a-wsplan"></div>
+    <div id="a-wsmeasure"></div>
+    <div id="a-wsrisk"></div>
+    <div id="a-wsrefl"></div>
+  </div>
+</section>
+
+<!-- CORE PART 5 · UNPLUGGED -->
+<section class="part" id="p5">
+  <div class="part-head"><span class="pill">Core · Part 5 of 5 · Unplugged</span><h2>Finish by balancing, on paper</h2><p>Pick one lever, predict its effect three ways, and plan the impact check.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>Your signature solution works but is not yet balanced. Working on paper, pick one lever to adjust and predict its effect on accuracy, usability and responsibility. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Record it as: ‘Lever: shorten the prompt. Predicted: usability up, accuracy slightly down – re-measure to confirm.’</div>
+    <div id="a-balance"></div>
+    <div id="a-quiz"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 9 Lab</span><h2>Lock It and Rehearse the Demo</h2><p>Today you lock your final version and rehearse showing it well. A great demo does not just show the answer – it shows how your system's components work together, and the checks that make it trustworthy, and it holds up under a hard question.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In the Core you made one traced change, measured it on the held-out set and ran a risk check. Now lock that version and rehearse showing it.</p></div>
+    <div class="call"><h4>Scenario – continued</h4><p>The showcase is close. You resist the urge to add one more feature, lock a reproducible version, and rehearse a demo that shows your checks and survives a hard question. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 4</span><h2>Lock it, do not add to it</h2><p>Why not add one more feature?</p></div>
+  <div class="part-body">
+    <p>Right before a showcase, the temptation is to add one more tool or feature. Do not. A last-minute change is untested, and because your components interact across hand-offs, its effect can propagate and quietly move a criterion you already passed. Instead, run <b>one final iteration</b>, confirm every component still meets the criteria after the change settles, then <b>version-lock</b>: pick the final output you can reproduce and agree not to touch the chain again. A locked, reproducible version is one you can show with confidence, because you know exactly how it behaves and what checks it passed.</p>
+    <figure>
+      <svg viewBox="0 0 760 250" role="img" aria-labelledby="f3T">
+        <title id="f3T">The road to the showcase: 1 final iteration, 2 confirm every criterion, 3 version-lock, 4 rehearse and defend. A last-minute extra feature is blocked because it is untested and can propagate and move a criterion you passed.</title>
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#12302D"/></marker>
+        <marker id="ah3r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#C92A4B"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#12302D">
+          <text x="380" y="24" font-size="15" font-weight="700" text-anchor="middle">The road to the showcase – lock, then rehearse</text>
+          <g stroke="#12302D" stroke-width="1.6">
+            <rect x="11" y="44" width="150" height="70" rx="10" fill="#fff"/>
+            <rect x="207" y="44" width="150" height="70" rx="10" fill="#fff"/>
+            <rect x="403" y="44" width="150" height="70" rx="10" fill="#0F766E" stroke="#0E4F4A"/>
+            <rect x="599" y="44" width="150" height="70" rx="10" fill="#EAF5F3"/>
+          </g>
+          <g font-size="15" font-weight="700" text-anchor="middle"><text x="86" y="72">1 · Final</text><text x="282" y="72">2 · Confirm</text><text x="478" y="72" fill="#fff" font-size="14">3 · Version-lock</text><text x="674" y="72">4 · Rehearse</text></g>
+          <g font-size="13" text-anchor="middle" fill="#4E6562"><text x="86" y="96">iteration</text><text x="282" y="96">every criterion</text><text x="478" y="96" fill="#fff">reproducible output</text><text x="674" y="96">and defend</text></g>
+          <g stroke="#12302D" stroke-width="2.5" marker-end="url(#ah3)"><path d="M161 79H204"/><path d="M357 79H400"/><path d="M553 79H596"/></g>
+          <rect x="300" y="170" width="200" height="56" rx="10" fill="#FDE7EC" stroke="#C92A4B" stroke-width="1.8" stroke-dasharray="6 4"/>
+          <text x="400" y="194" font-size="14" font-weight="700" text-anchor="middle" fill="#C92A4B">+ one more feature?</text>
+          <text x="400" y="214" font-size="13" text-anchor="middle" fill="#8A1330">untested, the night before</text>
+          <path d="M455 170L470 122" stroke="#C92A4B" stroke-width="2.2" marker-end="url(#ah3r)"/>
+          <g stroke="#C92A4B" stroke-width="3.2"><path d="M452 136L478 156"/><path d="M478 136L452 156"/></g>
+          <g font-size="13" fill="#4E6562"><text x="520" y="184">Its effect can propagate</text><text x="520" y="202">across hand-offs and move</text><text x="520" y="220">a criterion you passed.</text></g>
+          <g font-size="13" fill="#4E6562"><text x="14" y="184">Lock = the final output</text><text x="14" y="202">you can reproduce, and</text><text x="14" y="220">no more changes to the chain.</text></g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> Run one final iteration, confirm every criterion, then version-lock a reproducible output and rehearse. A last-minute extra is blocked: it is untested and can move a criterion you already passed.</figcaption>
+    </figure>
+    <div id="a-lsort"></div>
+    <div id="a-lregress"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 4</span><h2>Show the hand-offs and the checks, then defend them</h2><p>What turns ‘it works’ into a justification?</p></div>
+  <div class="part-body">
+    <p>A strong demo narrates your workflow: the task, the input data, the tool chain, and the final output – and how the components depend on each other across their hand-offs. Then it shows evidence: the checks you ran. To <b>justify</b> that your system is trustworthy and low-risk, cite two specific checks – you verified the output against a trusted source, and your risk check named who could be affected, how you would catch a mistake, and which rule the system meets. Then be ready to <b>defend</b> it: if someone asks how you know it is not misleading anyone, point to your checks. ‘It works’ is not a justification; named, defendable checks are.</p>
+    <figure>
+      <svg viewBox="0 0 760 270" role="img" aria-labelledby="f4T">
+        <title id="f4T">The demo spine: task, input data, tool chain, output, joined by arrows; underneath, the two checks that justify trust – a performance check verified against a trusted source, and a governance or risk check naming who is affected, how a mistake is caught and which rule is met. A hard question is answered by pointing to a check.</title>
+        <defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#12302D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#12302D">
+          <text x="380" y="24" font-size="15" font-weight="700" text-anchor="middle">The demo spine – then the evidence</text>
+          <g stroke="#12302D" stroke-width="1.6" fill="#fff">
+            <rect x="11" y="42" width="150" height="56" rx="10"/><rect x="207" y="42" width="150" height="56" rx="10"/><rect x="403" y="42" width="150" height="56" rx="10"/><rect x="599" y="42" width="150" height="56" rx="10" fill="#EAF5F3"/>
+          </g>
+          <g font-size="15" font-weight="700" text-anchor="middle"><text x="86" y="67">Task</text><text x="282" y="67">Input data</text><text x="478" y="67">Tool chain</text><text x="674" y="67">Output</text></g>
+          <g font-size="13" text-anchor="middle" fill="#4E6562"><text x="86" y="87">who it is for</text><text x="282" y="87">no personal data</text><text x="478" y="87">and its hand-offs</text><text x="674" y="87">locked version</text></g>
+          <g stroke="#12302D" stroke-width="2.5" marker-end="url(#ah4)"><path d="M161 70H204"/><path d="M357 70H400"/><path d="M553 70H596"/></g>
+          <rect x="11" y="128" width="360" height="74" rx="12" fill="#EAF5F3" stroke="#0F766E" stroke-width="1.8"/>
+          <rect x="389" y="128" width="360" height="74" rx="12" fill="#F4F0FC" stroke="#6B46C1" stroke-width="1.8"/>
+          <text x="191" y="153" font-size="15" font-weight="700" text-anchor="middle" fill="#0F766E">✓ Performance check</text>
+          <g font-size="13" text-anchor="middle"><text x="191" y="173">verified against a trusted source,</text><text x="191" y="191">accuracy on the held-out set</text></g>
+          <text x="569" y="153" font-size="15" font-weight="700" text-anchor="middle" fill="#6B46C1">✓ Governance / risk check</text>
+          <g font-size="13" text-anchor="middle"><text x="569" y="173">who could be affected, how a mistake</text><text x="569" y="191">is caught, which rule is met</text></g>
+          <rect x="150" y="220" width="460" height="38" rx="19" fill="#12302D"/>
+          <text x="380" y="244" font-size="14" font-weight="600" text-anchor="middle" fill="#fff">Hard question? Point to a named check – not ‘it works’.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 4.</b> Narrate the spine – task, input, tool chain, output – then justify trust with two named checks: one performance check and one governance or risk check.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>When a UAE team demos a new integrated AI service to leaders or regulators, they are judged on the checks they can show and how well they defend them under hard questions – not on how polished it looks. <span class="illus">(Illustrative context.)</span> Rehearsing an evidence-based, defendable demo builds exactly that skill.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Design &amp; Technology · Moral Education</h4><p>Freezing a tested version before a showcase is <b>configuration control</b> from <b>Design &amp; Technology</b>. Honestly owning what you traded away is <b>integrity</b> from <b>Moral Education</b>.</p></div>
+    <div class="call amber"><h4>Tool for this week: spreadsheet (before/after metrics) with the approved assistant – teacher-mediated</h4><p>1. Run one final iteration and confirm every component still meets the criteria; version-lock the reproducible output. 2. Write your demo sentences – task, input, chain, output, one performance check, one governance check. 3. Rehearse twice, swapping speaker and checker, and prepare to defend one hard question. <b>Stay safe:</b> no personal data in any artefact; approved tools only. Verify the locked output against a trusted source and disclose AI use.</p></div>
+    <div id="a-lorder"></div>
+    <div id="a-lchecks"></div>
+    <div id="a-ldefend"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Part 3 of 4 · Worksheet</span><h2>Lock &amp; Rehearse</h2><p>Your brief: lock a reproducible version and rehearse a defendable demo.</p></div>
+  <div class="part-body">
+    <p>Use the lock log below – the same example solution from the Core worksheet, one final iteration later. Then do the same for your own system.</p>
+    <div class="ecard" id="lock"></div>
+    <div id="a-llock"></div>
+    <div id="a-lspine"></div>
+    <div id="a-lhard"></div>
+  </div>
+</section>
+
+<section class="part" id="l4">
+  <div class="part-head"><span class="pill">Lab · Part 4 of 4 · Unplugged</span><h2>Lock and rehearse, on paper</h2><p>Check for regression, write the four demo sentences, own the trade-off.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>You are one lesson from your showcase. Working on paper, run a final check that no criterion has regressed, then write your demo script. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Check regression: ‘Accuracy before 8/10, after 8/10 – no regression. Safe to lock.’</div>
+    <div id="a-lpaper"></div>
+    <div id="a-lquiz"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>One traced change, measured – then lock it and defend it</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>Finish by making <b>one traced change</b> and predicting how it propagates through the hand-offs.</li>
+      <li>Measure the improvement as <b>correct ÷ total</b> on the <b>held-out set</b> – real evidence. A rise from 70% to 90% is <b>20 percentage points</b>.</li>
+      <li>Judge the finished system three ways: <b>accurate, useful, responsible</b> – and run a risk check.</li>
+      <li><b>Version-lock</b> a reproducible output; do not add untested changes at the end.</li>
+      <li>A strong demo narrates the hand-offs and shows the checks you ran: justify trust with <b>two named checks</b> – one performance, one governance/risk.</li>
+      <li>Be ready to <b>defend</b> a hard question by pointing to a specific check. Next week (Week 10): the showcase.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 10 · Main Course · Term 1 Week 9 (30 Nov – 4 Dec 2026; Boys 10 on 9 Dec) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- strand + concept tags ---------- */
+const CU_P="CU · how components interact as a system";
+const CU_A="CU · how system design affects performance and reliability";
+const SD_P="SD · multi-step solutions combining tools and data";
+const SD_A="SD · selects and structures tools strategically to improve performance";
+const CE_P="CE · evaluates solutions using criteria (accuracy, fairness, usefulness)";
+const CE_A="CE · refines solutions and explains the impact of improvements";
+const GE_P="GE · structured evaluation of risks (bias, privacy, misuse)";
+const GE_A="GE · proposes mitigations and explains their effectiveness";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["hand-off","The point where one step's output becomes the next step's input."],
+  ["propagate","The way a change to one component travels through the hand-offs to affect others."],
+  ["success criteria","The agreed, measurable list that says when your system is good enough."],
+  ["risk","The chance the output could mislead, exclude, expose or harm someone, or breach a rule."],
+  ["held-out set","Inputs the system was not tuned on, used to measure real improvement."]
+];
+const DEF_ORDER = [3,0,4,2,1];
+const TRACE1 = ["Reply → parent","Classify → look up, where the cleaner topic label becomes the look-up's input","Look up → draft reply","None – a prompt change stays inside stage 1"];
+const TRACE2 = ["Re-run only stage 1 and assume the rest improved too","Change the reply tool as well, to save time","Re-run the whole chain and compare the new final output with the old against the criteria","Nothing – a sharper prompt must have helped"];
+const ONE = [
+  ["oc1","Rewrite the stage 1 classify prompt only, then re-run the whole chain","O"],
+  ["oc2","Swap the FAQ sheet, change the reply tool and shorten the prompt in one go","M"],
+  ["oc3","Change only the reply tool's tone setting, then compare the final replies with the old ones","O"],
+  ["oc4","Add new example questions to the prompt and switch the output language at the same time","M"],
+  ["oc5","Rebuild the whole chain the night before you measure it","M"]
+];
+const ME_B = ["11%","45%","55%","60%"];
+const ME_A = ["16%","75%","85%","80%"];
+const ME_R = ["25 percent of the original score","25 percentage points","5 percentage points","45 percentage points"];
+const FAIR = [
+  ["fa1","Accuracy on the 20 held-out enquiries, before and after the change","R"],
+  ["fa2","Accuracy on the practice enquiries you tuned the prompt on","N"],
+  ["fa3","“It feels a lot better now.”","N"],
+  ["fa4","Correct ÷ total on inputs the system has never seen, recorded before and after","R"],
+  ["fa5","One impressive reply picked out to show the teacher","N"]
+];
+const JUDGE = [
+  ["j1","The fees and dates in the reply match the school's published FAQ sheet","A"],
+  ["j2","A parent can act on the reply without phoning the office","U"],
+  ["j3","A wrong reply could send a parent to the wrong place at the wrong time","R"],
+  ["j4","No personal data goes into the prompts, and replies say AI helped draft them","R"],
+  ["j5","Staff say the drafts save them time on busy mornings","U"],
+  ["j6","The bus times in the reply are checked against the transport timetable","A"]
+];
+const RK1 = ["Nobody – it is only a draft","The tool's developer","Parents who are given a wrong date or fee and act on it","The school's website"];
+const RK2 = ["Trust replies that sound confident","A member of staff checks each draft against the FAQ sheet before it is sent","Ask the tool whether it is sure","Send replies faster so mistakes are fixed sooner"];
+const RK3 = ["Replies must be as long as possible","Use as many tools as possible","Replies must sound formal","No personal data goes into prompts, and AI use is disclosed"];
+const WP1 = ["All three stages at once, to save time","The font of the reply","The stage 1 classify prompt – 6 of the 8 errors began with a wrong topic label","The held-out set, so it is easier"];
+const WP2 = ["Reply → parent","Look up → classify","Classify → look up","There is no hand-off involved"];
+const WP3 = ["Only stage 1 changed; the later stages gave exactly the same results","The reply tool became faster","Nothing – effects never travel along a chain","The look-up now pulled the right FAQ row, so the drafted replies were correct more often"];
+const WM_B = ["12%","40%","60%","65%"];
+const WM_A = ["18%","80%","85%","90%"];
+const WM_R = ["30 percentage points","30 percent of the original score","6 percentage points","50 percentage points"];
+const WRISK = [
+  ["wr1","Who: parents could be given a wrong date or fee and act on it",1],
+  ["wr2","Catch: a member of staff checks each draft against the FAQ sheet before it is sent",1],
+  ["wr3","Rule: no personal data in the prompts, and every reply says AI helped draft it",1],
+  ["wr4","The replies look professional, so the risk is low",0],
+  ["wr5","The system uses three tools, so it must be reliable",0]
+];
+const WF1 = ["changing the font of the reply","sharpening the stage 1 classify prompt","adding a fourth tool","tuning on the held-out set"];
+const WF2 = ["the reply → parent hand-off","the classify → look-up hand-off","no hand-off at all","the look-up → classify hand-off"];
+const WF3 = ["the parents' phone calls","the FAQ sheet itself","the drafted replies","the held-out set"];
+const WF4 = ["held-out accuracy rose from 60% to 90%, a rise of 30 percentage points","the replies now look more polished","it felt faster during practice","accuracy on the practice inputs went up"];
+const BAL = [
+  ["ba1","Fees and dates in the reply match the FAQ sheet","A"],
+  ["ba2","The reply is under 80 words and in the parent's language","U"],
+  ["ba3","No personal data is stored, and AI use is disclosed","R"],
+  ["ba4","Staff can review a draft in under a minute","U"]
+];
+const BLEVER = ["All three go up automatically","Usability up, accuracy may dip slightly – re-measure to confirm","Nothing changes, so there is no need to re-measure","Responsibility no longer matters"];
+const BIMPACT = ["Ask a friend whether it looks finished","Check only that it runs without errors","Re-measure on the held-out set and re-run the risk check before calling it finished","Add one more feature, then decide"];
+const QUIZ = [
+  ["q1","Why change only one component and trace it, rather than changing several?",["Because changing several components is not technically possible.","So you can tell which change helped and how the effect travelled.","Because the first component is the only one worth changing."],1],
+  ["q2","Why measure the before/after improvement on the held-out set?",["Because the held-out set is always smaller and quicker to run.","Because you are allowed to tune on the held-out set at the end.","Because it shows the system improved at the task, not at the practice inputs."],2],
+  ["q3","Accuracy rises from 70% to 90% on the held-out set. The improvement is:",["20 percentage points, the difference between the two rates.","20 percent of the original score.","2 percent, because two more were correct."],0]
+];
+const TF = [
+  ["tf1","Finishing a solution means adding as many features as possible.","F"],
+  ["tf2","You should adjust one lever at a time when refining.","T"],
+  ["tf3","A finished solution is judged only on how fast it runs.","F"]
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["iteration","One round of changing and re-testing your integrated system."],
+  ["version-lock","Choosing the final output you will show and not changing the chain again."],
+  ["justify","To back up a claim with specific evidence, not just say it."],
+  ["governance-aligned","Meeting the responsibility rules set for the system, not only running cleanly."],
+  ["defend","To answer a hard question by pointing to a specific check you ran."]
+];
+const LDEF_ORDER = [2,4,1,3,0];
+const LSORT = [
+  ["ls1","Run one final iteration and re-check every criterion","S"],
+  ["ls2","Add a translation tool the evening before the showcase","R"],
+  ["ls3","Save the exact prompts, settings and output you will show","S"],
+  ["ls4","Swap to a newer model “because it might be better”","R"],
+  ["ls5","Re-run the locked version to confirm it gives the same output","S"],
+  ["ls6","Tweak the stage 1 prompt during the demo to make it look smarter","R"]
+];
+const REG = [
+  ["rg1","Accuracy: correct replies on the held-out set","19 / 20","19 / 20","H"],
+  ["rg2","Usefulness: replies under 80 words","20 / 20","6 / 20","R"],
+  ["rg3","Responsibility: no personal data, AI use disclosed","pass","pass","H"],
+  ["rg4","Usefulness: staff review a draft in under a minute","20 / 20","20 / 20","H"]
+];
+const RSAFE = ["Yes – three criteria out of four is good enough","No – usefulness regressed; undo or fix the change and re-check before locking","Yes – accuracy is the only criterion that matters","No – throw the system away and start again"];
+const SPINE = ["The task: answer parents' routine enquiries faster for the school office","The input data: typed, teacher-made questions with no personal data","The tool chain: classify → FAQ look-up → draft reply, each output handed on","The output: a locked draft reply that staff check before sending","The evidence: our performance check and our governance/risk check"];
+const SPINE_ORDER = [3,1,4,0,2];
+const CHECKS = [
+  ["ck1","Held-out accuracy 19 of 20, each reply verified against the FAQ sheet","P"],
+  ["ck2","Risk check: who could be affected, how a mistake is caught, and the rule met","G"],
+  ["ck3","The demo slides look polished","N"],
+  ["ck4","Dates in every reply checked against the school calendar","P"],
+  ["ck5","No personal data in any prompt; AI use disclosed on every reply","G"],
+  ["ck6","“It works – trust us.”","N"]
+];
+const DEF_Q = ["How do you know it is not misleading anyone?","Is it accurate on questions it has never seen?","Is anyone's personal data at risk?","Why didn't you add a translation tool?"];
+const DEF_A = ["Every reply is verified against the FAQ sheet and checked by staff before it is sent","Our held-out accuracy, measured before and after: 19 of 20","Our governance check: no personal data goes into any prompt","Our version-lock: an untested change could move a criterion we had already passed"];
+const DEF_ORDER2 = [2,0,3,1];
+const LK1 = ["Version 5 – the newest idea is always the best","Version 4 – it passed every criterion and gave the same output on two re-runs","Version 3 – an earlier version is always safer","No version – keep improving it during the demo"];
+const LK2 = ["We re-ran it twice and got the same output both times","It worked once in practice","The tool said it was finished","Nobody has changed it for an hour"];
+const SP1 = ["The tools all come from one company, so they fit together","The classify step's topic label is the look-up's input – a wrong label means the wrong FAQ row","The last tool fixes any earlier mistakes","Each tool works on its own, so there are no hand-offs"];
+const SP2 = ["The demo ran smoothly in rehearsal","Held-out accuracy 19 of 20, verified against the FAQ sheet","The replies sound confident","We used the newest model"];
+const SP3 = ["The replies are short","The tools are approved by the company that made them","Risk check: parents could act on a wrong date, so staff check every draft; no personal data; AI use disclosed","Nobody complained during rehearsal"];
+const LH1 = ["The demo looked polished, so it must be fine","The check that every reply is verified against the FAQ sheet and reviewed by staff before sending","How quickly the system runs","The number of tools in the chain"];
+const LR1 = ["it looks professional","its held-out accuracy is 19 of 20, verified against a trusted source","it uses the newest tools","it worked once in practice"];
+const LR2 = ["staff review every draft, no personal data goes in, and AI use is disclosed","it has never been wrong","the replies are short","it runs on a school laptop"];
+const LR3 = ["how confident the replies sound","the number of tools in the chain","a specific named check I ran","how long I spent on it"];
+const PAPER = [
+  ["pp1","“We help a youth club answer questions about weekend activities.”","T"],
+  ["pp2","“We start from typed questions written by our class – no personal data.”","I"],
+  ["pp3","“A classifier picks the activity, then a look-up finds the times and drafts a reply.”","P"],
+  ["pp4","“Members get a short, checked reply with the right time and place.”","O"]
+];
+const PTRADE = ["We have no trade-offs","Our system is the best at everything","We added a last-minute feature so the demo looks better","We chose staff review before sending: replies take a little longer, but no unchecked reply reaches anyone"];
+const LQUIZ = [
+  ["lq1","Why avoid adding a new feature right before the showcase?",["Because new features are not allowed in a showcase at all.","It is untested and its effect can propagate and move a criterion you passed.","Because the demo must be exactly two minutes long."],1],
+  ["lq2","What makes a claim that your system is trustworthy a justification, not just an assertion?",["Saying confidently that the system clearly works well.","Showing that the demo looks polished and runs smoothly.","Pointing to specific checks you ran, such as verification and a risk check."],2],
+  ["lq3","Two teams show the same output; only one can name and defend its checks. Which would you trust to launch?",["The team that can name and defend its performance and governance checks.","The team whose demo looked more visually impressive.","Either team, since they produced the same final output."],0]
+];
+const LTF = [
+  ["ltf1","Adding one more feature just before the showcase is a safe move.","F"],
+  ["ltf2","Version-locking means freezing the tested build with no further changes.","T"],
+  ["ltf3","A strong demo owns its key trade-off and the checks behind it.","T"]
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CU_P,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"A hand-off is where one step's output becomes the next step's input. To propagate is how a change travels through the hand-offs. Success criteria are the agreed, measurable list that says when the system is good enough. Risk is the chance an output could mislead, exclude, expose or harm someone, or breach a rule. The held-out set is inputs you did not tune on, used to measure real improvement."},
+ {id:"trace",mount:"a-trace",section:"Core · Part 1",title:"Follow one change down the chain",sub:"Objective 2 · trace how a change propagates · "+CU_P,ico:"🧭",
+  fields:[{k:"tr1",radio:1,ok:v=>eq(v,1)},{k:"tr2",radio:1,ok:v=>eq(v,2)}],
+  explain:"The changed prompt's output – the topic label – is the look-up's input, so the classify → look-up hand-off carries the effect first, and it travels on into the drafted reply. That is why you re-run the whole chain and compare the new final output with the old against your criteria, rather than assuming the later stages improved."},
+ {id:"onechange",mount:"a-onechange",section:"Core · Part 1",title:"One traced change or too many?",sub:"Objective 1 · refine one component at a time · "+SD_A,ico:"🎯",
+  fields:ONE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Changing only the stage 1 prompt, or only the tone setting, is one traced change – you can tell whether it helped and how it travelled. Swapping several parts at once, or rebuilding the whole chain, means you cannot tell which change helped or harmed."},
+ {id:"measure",mount:"a-measure",section:"Core · Part 2",title:"Work out the improvement",sub:"Objective 3 · correct ÷ total, before and after · "+CE_A,ico:"🧮",
+  fields:[{k:"me1",ok:v=>eq(v,2)},{k:"me2",ok:v=>eq(v,3)},{k:"me3",ok:v=>eq(v,1)}],
+  explain:"Before: 11 ÷ 20 = 55%. After: 16 ÷ 20 = 80%. The rise is 80 − 55 = 25 percentage points. ‘25 percent of the original score’ would be a different (and wrong) claim, and 5 is the number of extra correct replies, not a rate."},
+ {id:"fair",mount:"a-fair",section:"Core · Part 2",title:"Real evidence or not?",sub:"Held-out set · "+CE_P,ico:"⚖️",
+  fields:FAIR.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Real evidence is correct ÷ total on the held-out set, recorded before and after. Accuracy on the practice inputs you tuned on only shows the system got better at those inputs. A feeling, or one hand-picked reply, is not a measure at all."},
+ {id:"judge",mount:"a-judge",section:"Core · Part 3",title:"Accurate, useful or a risk?",sub:"Judge the system three ways · "+CE_P,ico:"🔭",
+  fields:JUDGE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Accuracy is about being correct against a trusted source (the FAQ sheet, the timetable). Usefulness is about the real user completing the task (parents act without phoning; staff save time). Risk covers who could be misled or harmed and whether governance rules are met – a wrong time or place, personal data and disclosure."},
+ {id:"risk",mount:"a-risk",section:"Core · Part 3",title:"Run a risk check",sub:"Who, how caught, which rule · "+GE_P,ico:"🛡️",
+  fields:[{k:"rk1",ok:v=>eq(v,2)},{k:"rk2",ok:v=>eq(v,1)},{k:"rk3",ok:v=>eq(v,3)}],
+  explain:"A risk check names who could be affected (parents who act on a wrong date or fee), how you would catch a mistake (staff check each draft against the FAQ sheet before it is sent) and which governance rule applies (no personal data in prompts; AI use disclosed). A confident tone is not a check."},
+ {id:"wsplan",mount:"a-wsplan",section:"Core worksheet 1 + 3",title:"Pick one component and trace it",sub:"Worksheet tasks 1 and 3 · "+CU_A,ico:"🔧",cls:"ws",
+  fields:[{k:"wp1",ok:v=>eq(v,2)},{k:"wp2",ok:v=>eq(v,2)},{k:"wp3",radio:1,ok:v=>eq(v,3)}],
+  explain:"The project file shows 6 of the 8 wrong replies began with a wrong topic label, so the stage 1 classify prompt is the one component to change. Its effect is carried by the classify → look-up hand-off: a cleaner label means the look-up finds the right FAQ row, so more drafted replies are correct downstream."},
+ {id:"wsmeasure",mount:"a-wsmeasure",section:"Core worksheet 2",title:"Measure before and after",sub:"Worksheet task 2 · "+CE_A,ico:"📊",cls:"ws",
+  fields:[{k:"wm1",ok:v=>eq(v,2)},{k:"wm2",ok:v=>eq(v,3)},{k:"wm3",ok:v=>eq(v,0)}],
+  explain:"Before: 12 ÷ 20 = 60%. After: 18 ÷ 20 = 90%. The rise is 90 − 60 = 30 percentage points, measured on the 20 held-out enquiries – real evidence the change helped."},
+ {id:"wsrisk",mount:"a-wsrisk",section:"Core worksheet 4",title:"Risk check before you share",sub:"Worksheet task 4 · "+GE_A,ico:"🧯",cls:"ws",
+  fields:WRISK.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"A complete risk check answers three things: who could be affected, how a mistake would be caught (a staff check before sending is the mitigation), and which governance rule applies. ‘Looks professional’ and ‘uses three tools’ are not evidence of low risk."},
+ {id:"wsrefl",mount:"a-wsrefl",section:"Core worksheet 5",title:"Justify the change",sub:"Worksheet task 5 · reflection · "+CE_A,ico:"💭",cls:"ws",
+  fields:[{k:"wf1",ok:v=>eq(v,1)},{k:"wf2",ok:v=>eq(v,1)},{k:"wf3",ok:v=>eq(v,2)},{k:"wf4",ok:v=>eq(v,0)}],
+  explain:"A strong justification names the one change (sharpening the classify prompt), the path it propagated along (the classify → look-up hand-off, into the drafted replies) and the evidence (held-out accuracy 60% → 90%, a rise of 30 percentage points). Polish, a feeling or practice-set scores are not evidence."},
+ {id:"balance",mount:"a-balance",section:"Core · Part 5",title:"Finish by balancing, on paper",sub:"Unplugged activity · tag, predict, impact check · "+CE_A,ico:"⚖️",
+  fields:[...BAL.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"bl",ok:v=>eq(v,1)},{k:"bi",radio:1,ok:v=>eq(v,2)}],
+  explain:"Matching the FAQ sheet is accuracy; short replies in the parent's language and quick staff review are usability; no personal data and disclosure are responsibility. Shortening the prompt is likely to help usability but may cost a little accuracy – so re-measure. Before calling it finished, re-measure on the held-out set and re-run the risk check."},
+ {id:"quiz",mount:"a-quiz",section:"Core · Part 5",title:"Refine check",sub:"Quick quiz · 3 questions and 3 true or false · "+CE_A,ico:"✅",cls:"quiz",
+  fields:[...QUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...TF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: One traced change lets you tell which change helped and how the effect travelled. 2: The held-out set gives a fair measure of real improvement – you never tune on it. 3: 90% − 70% is a 20 percentage-point rise. True or false: finishing is balancing competing goals, not stuffing in features (false); one lever at a time, then re-measure (true); a finished solution is judged accurate, useful and responsible, not just fast (false)."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+SD_A,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"An iteration is one round of changing and re-testing. To version-lock is to choose the final output you will show and not change the chain again. To justify is to back up a claim with specific evidence. Governance-aligned means meeting the responsibility rules, not only running cleanly. To defend is to answer a hard question by pointing to a specific check."},
+ {id:"lsort",mount:"a-lsort",section:"Lab · Part 1",title:"Lock it or risk it?",sub:"Objective 1 · lock the version · "+SD_A,ico:"🔒",
+  fields:LSORT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Safe moves confirm or preserve a tested version: one final iteration with every criterion re-checked, saving the exact prompts and settings, and re-running the locked version to show it reproduces. Adding a tool, swapping the model or tweaking a prompt at the last minute are untested changes whose effects can propagate and move a criterion you already passed."},
+ {id:"lregress",mount:"a-lregress",section:"Lab · Part 1",title:"Check for regression before you lock",sub:"Final iteration · did any criterion slip? · "+CE_A,ico:"📉",
+  fields:[...REG.map(([k,,,,c])=>({k,ok:v=>eq(v,c)})),{k:"rgs",ok:v=>eq(v,1)}],
+  explain:"Accuracy (19/20), responsibility (pass) and review time (20/20) held. But usefulness regressed from 20/20 to 6/20 replies under 80 words – the long safety paragraph propagated into every reply. It is not safe to lock: undo or fix that change, then re-check every criterion."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 2",title:"Build the demo spine",sub:"Objective 2 · task, input, chain, output, evidence · "+SD_P,ico:"🪜",
+  fields:SPINE.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"A strong demo narrates the workflow in order – the task, the input data, the tool chain with its hand-offs, and the final output – and then shows the evidence: the performance check and the governance/risk check."},
+ {id:"lchecks",mount:"a-lchecks",section:"Lab · Part 2",title:"Performance check, governance check, or no check?",sub:"Two named checks · "+CE_P,ico:"🧷",
+  fields:CHECKS.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Performance checks verify outputs against a trusted source – held-out accuracy against the FAQ sheet, dates against the calendar. Governance/risk checks show responsibility – a risk check (who, how caught, which rule), and no personal data with AI use disclosed. Polished slides and ‘trust us’ are assertions, not checks."},
+ {id:"ldefend",mount:"a-ldefend",section:"Lab · Part 2",title:"Defend it under a hard question",sub:"Objective 3 · point to a specific check · "+GE_A,ico:"🗣️",
+  fields:DEF_Q.map((_,i)=>({k:"df"+i,ok:v=>eq(v,i)})),
+  explain:"Each hard question is answered by pointing to the check that addresses it: misleading anyone → verification plus staff review; unseen questions → held-out accuracy; personal data → the governance check; a missing feature → the version-lock, because an untested change could move a criterion you passed."},
+ {id:"llock",mount:"a-llock",section:"Lab worksheet 1",title:"Run one final iteration, then lock",sub:"Worksheet task 1 · "+SD_A,ico:"🔐",cls:"ws",
+  fields:[{k:"lk1",radio:1,ok:v=>eq(v,1)},{k:"lk2",ok:v=>eq(v,0)}],
+  explain:"Version 4 is the final iteration: it passed every criterion and gave the same output on two re-runs, so it is reproducible – lock it. Version 5 adds an untested tool on showcase morning, so it is not safe to show. You know a version is reproducible because re-running it gives the same output."},
+ {id:"lspine",mount:"a-lspine",section:"Lab worksheet 2–3",title:"Demo spine and two checks",sub:"Worksheet tasks 2 and 3 · "+CU_P,ico:"🎤",cls:"ws",
+  fields:[{k:"sp1",ok:v=>eq(v,1)},{k:"sp2",ok:v=>eq(v,1)},{k:"sp3",ok:v=>eq(v,2)}],
+  explain:"The hand-off line explains how components depend on each other: the classify step's topic label is the look-up's input, so a wrong label means the wrong FAQ row. The performance check is held-out accuracy verified against the FAQ sheet; the governance/risk check names who could be affected, how a mistake is caught, and the rules met."},
+ {id:"lhard",mount:"a-lhard",section:"Lab worksheet 4–5",title:"Prepare for the hard question",sub:"Worksheet tasks 4 and 5 · reflection · "+GE_A,ico:"💬",cls:"ws",
+  fields:[{k:"lh1",radio:1,ok:v=>eq(v,1)},{k:"lr1",ok:v=>eq(v,1)},{k:"lr2",ok:v=>eq(v,0)},{k:"lr3",ok:v=>eq(v,2)}],
+  explain:"‘How do you know it is not misleading anyone?’ is answered by the verification and staff-review check. Trustworthy because of verified held-out accuracy; low-risk and governance-aligned because staff review every draft, no personal data goes in and AI use is disclosed; under a hard question you point to a specific named check."},
+ {id:"lpaper",mount:"a-lpaper",section:"Lab · Part 4",title:"Lock and rehearse, on paper",sub:"Unplugged activity · four demo sentences and the trade-off · "+SD_P,ico:"📝",
+  fields:[...PAPER.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"pt",radio:1,ok:v=>eq(v,3)}],
+  explain:"The four demo sentences are task (who it helps and with what), input (where the data comes from, with no personal data), process (the tool chain and its hand-offs) and output (what the user gets). A strong demo owns its trade-off honestly: staff review slows replies a little but means no unchecked reply reaches anyone."},
+ {id:"lquiz",mount:"a-lquiz",section:"Lab · Part 4",title:"Lock check",sub:"Quick quiz · 3 questions and 3 true or false · "+GE_A,ico:"✅",cls:"quiz",
+  fields:[...LQUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...LTF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: A last-minute feature is untested and can propagate and move a criterion you passed. 2: Named, defendable checks – verification and a risk check – turn a claim into a justification. 3: Same output, but only defendable performance and governance checks earn trust to launch. True or false: a last-minute feature is not safe (false); version-locking freezes the tested build (true); a strong demo owns its trade-off and the checks behind it (true)."}
+];
+
+/* ---------- state ---------- */
+const KEY="g10-mw9-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#proj").innerHTML=`<header><small>Project file · illustrative</small><b>Parents' office enquiry helper</b></header>
+<div class="in">
+  <p class="task"><b>The brief:</b> the school office wants routine parent enquiries (dates, fees, transport, uniform) answered faster. All test enquiries are teacher-made – no personal data.</p>
+  <ol class="pipe"><li><b>Input</b>A parent's typed question</li><li><b>1 · Classify</b>Label the topic (one of 8 FAQ topics)</li><li><b>2 · Look up</b>Find the matching row in the FAQ sheet</li><li><b>3 · Draft reply</b>Write the answer from that row</li><li class="out"><b>Output</b>A draft reply that staff check before sending</li></ol>
+  <table class="t record"><caption><b>Held-out set:</b> 20 teacher-made enquiries never used while tuning.</caption><thead><tr><th>Run</th><th>What changed</th><th>Correct replies</th></tr></thead>
+  <tbody><tr><td>Baseline</td><td>–</td><td>12 of 20</td></tr><tr><td>After one change</td><td>Stage 1 prompt now lists the 8 FAQ topics with one example each</td><td>18 of 20</td></tr></tbody></table>
+  <p class="note"><b>Error log (baseline):</b> 6 of the 8 wrong replies began with a wrong topic label at stage 1 – for example, bus questions labelled ‘events’ – so the look-up fetched the wrong FAQ row. The other 2 came from a row missing from the FAQ sheet. <b>After the change:</b> the 2 errors left both come from the missing row.</p>
+</div>`;
+$("#lock").innerHTML=`<header><small>Lock log · illustrative</small><b>Parents' office enquiry helper – final iteration</b></header>
+<div class="in">
+  <p class="task">Criteria: held-out accuracy at least 18 of 20 · replies under 80 words · staff review in under a minute · no personal data and AI use disclosed.</p>
+  <table class="t record"><thead><tr><th>Version</th><th>What changed</th><th>Criteria</th><th>Re-run twice</th></tr></thead>
+  <tbody><tr><td>3</td><td>Sharpened stage 1 prompt (the Core change)</td><td>Accuracy 18/20 · all others pass</td><td>Same output ✓</td></tr>
+  <tr><td>4</td><td>Final iteration: added the missing ‘lost property’ row to the FAQ sheet</td><td>Accuracy 19/20 · all others pass</td><td>Same output ✓</td></tr>
+  <tr><td>5</td><td>Idea on showcase morning: add a translation tool</td><td>Not tested</td><td>–</td></tr></tbody></table>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+const pair=(k,label,opts,order)=>`<div class="pair" data-item="${k}"><span class="t">${label}</span>${sel(k,opts,"Choose…",order)}</div>`;
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "trace":
+    return `<div class="quote">Using Figure 1: you change only the stage 1 <b>classify</b> prompt so it labels each enquiry's topic more sharply.</div>
+      <p class="q" id="q-tr1">Which hand-off carries the effect of the change first?</p>${radios("tr1",TRACE1)}
+      <p class="q" id="q-tr2">What should you do next?</p>${radios("tr2",TRACE2)}`;
+  case "onechange":
+    return `<p class="how">Is each refinement plan one traced change, or too many changes at once to tell which one helped?</p>`+
+      ONE.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["One traced change","Too many at once"],["O","M"],t)}</div>`).join("");
+  case "measure":
+    return `<div class="quote">A team tests its system on 20 held-out inputs. <b>Before</b> its one change: 11 correct. <b>After</b>: 16 correct. <span class="illus">(Illustrative data.)</span></div>`+
+      pair("me1","Accuracy before (11 ÷ 20)",ME_B)+pair("me2","Accuracy after (16 ÷ 20)",ME_A)+pair("me3","The improvement is…",ME_R,[0,2,1,3]);
+  case "fair":
+    return `<p class="how">Which of these is real evidence that the change improved the system at its task?</p>`+
+      FAIR.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Real evidence","Not real evidence"],["R","N"],t)}</div>`).join("");
+  case "judge":
+    return `<p class="how">The parents' office enquiry helper (see the Core worksheet) is being judged before it is shared. Is each statement about accuracy, usefulness or risk?</p>`+
+      JUDGE.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Accuracy","Usefulness","Risk"],["A","U","R"],t)}</div>`).join("");
+  case "risk":
+    return `<p class="how">Complete the risk check for the enquiry helper before it is shared.</p>`+
+      pair("rk1","Who could be affected?",RK1)+pair("rk2","How would you catch a mistake?",RK2,[2,1,0,3])+pair("rk3","Which governance rule must it respect?",RK3,[1,3,0,2]);
+  case "wsplan":
+    return `<p class="q">1. Using the project file, pick ONE component to change, and predict which hand-off will carry the effect.</p>`+
+      pair("wp1","The one component",WP1,[1,0,2,3])+pair("wp2","The hand-off that carries the effect",WP2,[0,3,2,1])+
+      `<p class="q" id="q-wp3">3. After the change, what happened downstream?</p>${radios("wp3",WP3)}`;
+  case "wsmeasure":
+    return `<p class="how">2. Measure before and after on the held-out set, using the project file. Accuracy = correct ÷ total.</p>
+      <table class="t"><thead><tr><th></th><th>Correct</th><th>Total</th></tr></thead>
+      <tbody><tr><td>Before</td><td>12</td><td>20</td></tr><tr><td>After</td><td>18</td><td>20</td></tr></tbody></table>
+      <div style="margin-top:10px">${pair("wm1","Accuracy before (12 ÷ 20)",WM_B,[1,3,0,2])}${pair("wm2","Accuracy after (18 ÷ 20)",WM_A,[0,3,2,1])}</div>`+
+      pair("wm3","The rise, in percentage points",WM_R,[2,1,3,0]);
+  case "wsrisk":
+    return boxes(WRISK,"4. Risk check: tick every statement that belongs in a good risk check for the enquiry helper – who could be affected, how you would catch a mistake, and which governance rule applies. Leave the others unticked.");
+  case "wsrefl":
+    return `<p class="how">5. Complete the reflection for the project file's change.</p><p class="sent">The one change that most improved my system was <span data-item="wf1">${sel("wf1",WF1,"Choose…",[2,0,3,1])}</span>, it propagated through <span data-item="wf2">${sel("wf2",WF2,"Choose…",[0,2,1,3])}</span> to <span data-item="wf3">${sel("wf3",WF3,"Choose…",[1,0,2,3])}</span>, and I know it helped because <span data-item="wf4">${sel("wf4",WF4,"Choose…",[2,3,0,1])}</span>.</p>`;
+  case "balance":
+    return `<p class="q">1. Tag each success criterion as accuracy, usability or responsibility.</p>`+
+      BAL.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Accuracy","Usability","Responsibility"],["A","U","R"],t)}</div>`).join("")+
+      `<p class="q">2. Lever: shorten the prompt. Predict its effect on all three.</p>`+pair("bl","Prediction",BLEVER,[0,2,1,3])+
+      `<p class="q" id="q-bi">3. Which impact check would you run before calling it finished?</p>${radios("bi",BIMPACT)}`;
+  case "quiz":
+    return quiz(QUIZ,TF);
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lsort":
+    return `<p class="how">The showcase is next lesson. Is each move safe before a showcase, or a risky last-minute change?</p>`+
+      LSORT.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Safe to do","Risky last-minute"],["S","R"],t)}</div>`).join("");
+  case "lregress":
+    return `<div class="quote">Suppose the enquiry helper's final change had been <b>‘add a long safety paragraph to every reply’</b>. Compare each criterion before and after that change. <span class="illus">(Illustrative data.)</span></div>`+
+      REG.map(([k,t,b,af])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)} – before ${esc(b)}, after ${esc(af)}</span>${seg(k,["Held","Regressed"],["H","R"],t)}</div>`).join("")+
+      pair("rgs","Is it safe to lock?",RSAFE,[0,2,1,3]);
+  case "lorder":
+    return `<p class="how">Put the demo sentences for the enquiry helper in the order you would say them, following Figure 4.</p>`+
+      SPINE.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">${i+1}${i===4?" · then":""}</span>${sel("lo"+i,SPINE,"Choose…",SPINE_ORDER)}</div>`).join("");
+  case "lchecks":
+    return `<p class="how">Which of these is a performance check, a governance/risk check – or not a check at all?</p>`+
+      CHECKS.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Performance","Governance / risk","Not a check"],["P","G","N"],t)}</div>`).join("");
+  case "ldefend":
+    return `<p class="how">A visitor at the showcase asks four hard questions. Match each one to the check you would point to.</p>`+
+      DEF_Q.map((q,i)=>`<div class="pair" data-item="df${i}"><span class="t">“${esc(q)}”</span>${sel("df"+i,DEF_A,"Choose…",DEF_ORDER2)}</div>`).join("");
+  case "llock":
+    return `<p class="q" id="q-lk1">1. Using the lock log, which version do you lock?</p>${radios("lk1",LK1)}`+
+      `<div style="margin-top:10px">${pair("lk2","How do you know it is reproducible?",LK2,[2,0,3,1])}</div>`;
+  case "lspine":
+    return `<p class="q">2. Your demo spine needs one line on a hand-off.</p>`+pair("sp1","Hand-off line",SP1,[0,2,1,3])+
+      `<p class="q">3. Name your two checks.</p>`+pair("sp2","Performance check",SP2,[2,1,0,3])+pair("sp3","Governance / risk check",SP3,[1,0,2,3]);
+  case "lhard":
+    return `<p class="q" id="q-lh1">4. If asked “How do you know it is not misleading anyone?”, which check do you point to?</p>${radios("lh1",LH1)}
+      <p class="q">5. My reflection</p><p class="sent">I can show my system is trustworthy because <span data-item="lr1">${sel("lr1",LR1,"Choose…",[0,3,1,2])}</span>, low-risk and governance-aligned because <span data-item="lr2">${sel("lr2",LR2,"Choose…",[2,1,0,3])}</span>, and under a hard question I can point to <span data-item="lr3">${sel("lr3",LR3,"Choose…",[0,2,3,1])}</span>.</p>`;
+  case "lpaper":
+    return `<p class="q">1–2. Tag each sentence of a youth-club demo script as task, input, process or output. <span class="illus">(Illustrative script.)</span></p>`+
+      PAPER.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Task","Input","Process","Output"],["T","I","P","O"],t)}</div>`).join("")+
+      `<p class="q" id="q-pt">3. Which states a trade-off you would honestly own in the demo?</p>${radios("pt",PTRADE)}`;
+  case "lquiz":
+    return quiz(LQUIZ,LTF);
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 10 Main Course · Term 1 Week 9 (30 Nov – 4 Dec 2026; Boys 10 on 9 Dec) · Core + Lab · Refining &amp; Finishing the System + Lock It and Rehearse the Demo</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
