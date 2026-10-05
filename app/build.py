@@ -6,6 +6,15 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, 'app', 'build')
 shutil.rmtree(OUT, ignore_errors=True)
 shutil.copytree(os.path.join(ROOT, 'app', 'src'), OUT)
+# school-calendar.js (holidays, breaks and the AI timetable) is a separate file on the
+# public site; in the app every page is served on its own, so it is inlined.
+CAL_TAG = '<script src="school-calendar.js"></script>'
+CAL_JS = '<script>\n' + open(os.path.join(ROOT, 'school-calendar.js'), encoding='utf-8').read() + '</script>'
+def inline_calendar(html):
+    return html.replace(CAL_TAG, CAL_JS)
+dash = os.path.join(OUT, 'dashboard.html')
+dash_html = inline_calendar(open(dash, encoding='utf-8').read())
+open(dash, 'w', encoding='utf-8').write(dash_html)
 catalog = []
 pages = ['index.html', 'calendar.html'] + sorted(glob.glob('grade-*/*.html', root_dir=ROOT))
 for p in pages:
@@ -16,7 +25,7 @@ for p in pages:
         raise SystemExit(f'{p}: no <head> tag for the sign-in bridge')
     if p.startswith('grade-') and 'LessonHooks' not in html:
         raise SystemExit(f'{p}: missing the LessonHooks line in update() – scores would not be saved')
-    open(dest, 'w', encoding='utf-8').write(html)
+    open(dest, 'w', encoding='utf-8').write(inline_calendar(html))
     m = re.match(r'grade-(\d+)/(main|bridging)-w(\d+)', p)
     if m:
         t = re.search(r'<title>([^<]*)</title>', html)

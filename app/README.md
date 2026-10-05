@@ -49,8 +49,26 @@ official strand names. Without the file everything still works, minus the
 descriptor wording.
 
 Bridging lessons are shown as "to be scheduled" and don't count towards
-Finisher until they are assigned; Main course lessons count from their
-teaching week (Week 1 = 28 Sep 2026, set by `TERM_START` in `src/Code.js`).
+Finisher until they are assigned.
+
+### School calendar and pushed lessons
+
+`school-calendar.js` (top of the repository) holds the AISA 2026–27 calendar –
+breaks, public holidays and PD days, plus exam and MAP weeks as notes – and the
+AI Literacy timetable. Each section has one AI period a week; its *n*-th period
+on a real school day teaches Main course Week *n*. A period that falls on a day
+with no school simply doesn't happen, so that section's lesson is **pushed** to
+its next period (e.g. the six Wednesday/Thursday sections lose one lesson to UAE
+National Day). Weeks with no school at all (Mid-Term, Winter, Spring Break) don't
+advance the Week 1 / Week 2 cycle – change `CYCLE_SKIPS_BREAKS` if the school's
+cycle runs on by date instead.
+
+The teaching calendar shows no-school days, each section's actual lesson and a
+"pushed back" note; the dashboards count a lesson as due only once the
+student's section has been taught it ("Not taught yet" vs "Not started", the
+Finisher badge, completion and "this week's lesson"). When the Islamic holiday
+dates are confirmed, update `NO_SCHOOL` in that file. `node app/test/calendar.test.js`
+checks the rules.
 
 ## Home page by role
 
@@ -218,6 +236,7 @@ stop saving.
 
 ## Testing locally
 
+`node app/test/calendar.test.js` checks the school-calendar rules.
 `node app/test/server.test.js` runs the server code against stand-ins for the
 Google services and checks the sign-in gate, role filtering, first-try
 protection and input cleaning. Run `python3 app/build.py` first.

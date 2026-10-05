@@ -165,6 +165,7 @@ select.jsel.tW{background:var(--s100);color:#0b0b0b}select.jsel.tO{background:va
   <div id="app"><div class="loading">Loading progress…</div></div>
 </div>
 <div class="tip" id="tip" role="tooltip"></div>
+<script src="school-calendar.js"></script>
 <script>
 var CFG = <?!= cfg ?>;
 var D = null, F = { section: '', lesson: '' };
@@ -265,8 +266,8 @@ function draw(){
       card('Average first-try score by lesson', 'Mean of each student\'s first attempt, as a % of the points they attempted.',
         hbars(rows.filter(function(b){ return b.max; }).map(function(b){ return { label: lessonName(b.l), value: pct(b.pts, b.max), text: pct(b.pts, b.max) + '%',
           tip: '<b>' + esc(lessonName(b.l)) + '</b><br>' + esc(lessonTitle(b.l)) + '<br>Average first try: ' + pct(b.pts, b.max) + '%<br>' + b.started + ' student' + (b.started === 1 ? '' : 's') }; }), 100, '%')) +
-      card('Completion by lesson', 'Share of students who have checked every activity.',
-        hbars(rows.filter(function(b){ return b.l.course === 'main' || b.started; }).map(function(b){ var n = rosterFor(f, b.l); return { label: lessonName(b.l), value: pct(b.finished, n), text: b.finished + ' / ' + n,
+      card('Completion by lesson', 'Share of students who have checked every activity, out of those whose section has been taught the lesson.',
+        hbars(rows.filter(function(b){ return (b.l.course === 'main' && rosterFor(f, b.l) > 0) || b.started; }).map(function(b){ var n = rosterFor(f, b.l); return { label: lessonName(b.l), value: pct(b.finished, n), text: b.finished + ' / ' + n,
           tip: '<b>' + esc(lessonName(b.l)) + '</b><br>Finished: ' + b.finished + '<br>Started, not finished: ' + (b.started - b.finished) + '<br>Not started: ' + Math.max(0, n - b.started) }; }), 100, '%')) +
       '</div>';
     if (f.students.length) h += attainmentCard(f);
@@ -287,7 +288,8 @@ function viewAs(email){
   render(); window.scrollTo(0, 0);
 }
 
-function rosterFor(f, l){ return f.students.filter(function(s){ return !s.grade || s.grade === l.grade; }).length; }
+/* Students in this lesson's grade whose section has been taught it (Bridging: everyone in the grade). */
+function rosterFor(f, l){ return f.students.filter(function(s){ return (!s.grade || s.grade === l.grade) && (l.course !== 'main' || taughtFor(s.section) >= l.week); }).length; }
 function tile(k, v, s){ return '<div class="tile"><small>' + esc(k) + '</small><b>' + esc(v) + '</b><span>' + esc(s) + '</span></div>'; }
 function card(t, s, body){ return '<section class="card"><h2>' + esc(t) + '</h2><p class="sub">' + esc(s) + '</p>' + body + '</section>'; }
 
@@ -334,7 +336,8 @@ function progressTable(f, self){
     f.lessons.forEach(function(l){
       if (s.grade && s.grade !== l.grade) { h += '<td class="c"><span class="cell none">n/a</span></td>'; return; }
       var r = R[s.email + '|' + l.id];
-      if (!r) { h += '<td class="c"><span class="cell none" data-tip="' + esc(l.course === 'bridging' ? 'Bridging lessons have not been scheduled yet' : s.name + ' has not started ' + lessonName(l)) + '">' + (l.course === 'bridging' ? 'To be scheduled' : 'Not started') + '</span></td>'; return; }
+      if (!r) { var nt = l.course === 'main' && taughtFor(s.section) < l.week;
+        h += '<td class="c"><span class="cell none" data-tip="' + esc(l.course === 'bridging' ? 'Bridging lessons have not been scheduled yet' : nt ? s.section + ' has not been taught ' + lessonName(l) + ' yet' : s.name + ' has not started ' + lessonName(l)) + '">' + (l.course === 'bridging' ? 'To be scheduled' : nt ? 'Not taught yet' : 'Not started') + '</span></td>'; return; }
       var max = Object.keys(r.acts).reduce(function(n, k){ return n + r.acts[k][1]; }, 0), p = pct(r.score, max), sh = shade(p);
       var fin = r.done >= l.activities;
       h += '<td class="c"><span class="cell" style="background:' + sh[1] + ';color:' + sh[2] + '" data-tip="' +
@@ -467,14 +470,17 @@ function lessonInfo(id){
   var l = (D.catalog || []).filter(function(x){ return x.id === id; })[0] || D.lessons.filter(function(x){ return x.id === id; })[0];
   return l || { id: id, activities: 0, week: 0, grade: 0, course: '', title: id };
 }
-/* Bridging is not scheduled yet; Main course lessons are due from their teaching week. */
-function isDue(l, wk){ return l.course === 'main' && l.week <= wk.n; }
+/* Bridging is not scheduled yet. A Main course lesson is due once the student's section has
+   actually been taught it – holidays and breaks push a section's lessons back (school-calendar.js). */
+function sectionOf(email){ var s = D.students.filter(function(x){ return x.email === email; })[0]; return s ? s.section : ''; }
+function taughtFor(section){ return AICAL.taughtSoFar(section, new Date()); }
+function isDue(l, taught){ return l.course === 'main' && l.week <= taught; }
 
 /** Everything about one student: lessons, strand tiers and badges. */
 function studentStats(email, grade){
-  var wk = thisWeek();
+  var taught = taughtFor(sectionOf(email));
   var res = D.results.filter(function(r){ return r.email === email; });
-  var lessons = catalogFor(grade), due = lessons.filter(function(l){ return isDue(l, wk); });
+  var lessons = catalogFor(grade), due = lessons.filter(function(l){ return isDue(l, taught); });
   var strands = {}, fixed = 0, finished = [], acts = 0, pts = 0, max = 0, badges = [];
   var fixerLesson = false, stretch = false, bull = false;
   STRAND_ORDER.forEach(function(c){ strands[c] = { p: 0, m: 0, n: 0, sp: 0, sm: 0, sn: 0 }; });
@@ -511,18 +517,11 @@ function studentStats(email, grade){
     B(sb[0], sb[1], 'Secure Emerging or above in ' + STRAND_SHORT[c] + ' (' + strandName(c, grade) + ').', TIER_RANK[o.tier] >= 2,
       o.n ? TIERS[o.tier] + ' · ' + o.pct + '% across ' + o.n + ' activit' + (o.n === 1 ? 'y' : 'ies') : 'Not started yet');
   });
-  return { res: res, lessons: lessons, due: due, finished: finished, strands: strands, fixed: fixed, acts: acts, firstPct: max ? pct(pts, max) : null,
+  return { res: res, lessons: lessons, due: due, taught: taught, finished: finished, strands: strands, fixed: fixed, acts: acts, firstPct: max ? pct(pts, max) : null,
            badges: badges, earned: badges.filter(function(b){ return b.earned; }) };
 }
 
-function thisWeek(){
-  var start = new Date(D.termStart + 'T00:00:00'), now = new Date(); now.setHours(0, 0, 0, 0);
-  var n = Math.floor((now - start) / 864e5 / 7) + 1;
-  var mon = new Date(start); mon.setDate(mon.getDate() + (n - 1) * 7);
-  var fri = new Date(mon); fri.setDate(fri.getDate() + 4);
-  var f = function(d){ return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }); };
-  return { n: n, label: n >= 1 ? 'Week ' + n + ' · ' + f(mon) + ' – ' + f(fri) : 'Before term starts' };
-}
+function thisWeek(){ return { label: AICAL.weekLabel(new Date()) }; }
 function tierChip(t, judged){
   return '<span class="tier t' + (t || 'N') + '">' + esc(TIERS[t]) + (judged ? ' ✎' : '') + '</span>';
 }
@@ -531,6 +530,8 @@ function tierChip(t, judged){
 function studentView(who){
   var me = who || D.students[0] || { email: CFG.email, name: CFG.name, grade: 0 }, preview = !!who;
   var st = studentStats(me.email, me.grade), wk = thisWeek(), older = me.grade >= 9;
+  var sec = me.section && AICAL.SCHEDULE.some(function(r){ return r[0] === me.section; }) ? me.section : '';
+  var curN = sec ? AICAL.currentLesson(sec, new Date()) : st.taught;
   var R = {}; st.res.forEach(function(r){ R[r.lessonId] = r; });
   var url = function(id){ return CFG.base + '?p=' + encodeURIComponent(id); };
   var go = function(cls, id, text){ return preview ? '<span class="' + cls + ' off">' + text + '</span>' : '<a class="' + cls + '" href="' + esc(url(id)) + '">' + text + '</a>'; };
@@ -539,10 +540,11 @@ function studentView(who){
     if (r && l.activities && r.done >= l.activities) return { cls: 'done', text: '✓ Finished · ' + pct(r.score, m) + '% first try', btn: 'Review' };
     if (r) return { cls: 'doing', text: r.done + ' of ' + l.activities + ' activities · ' + pct(r.score, m) + '%', btn: 'Continue' };
     if (l.course === 'bridging') return { cls: 'later', text: 'Bridging · to be scheduled', btn: 'Preview' };
-    if (l.week > wk.n) return { cls: 'later', text: 'Coming in Week ' + l.week, btn: 'Preview' };
+    if (l.week > st.taught && l.week !== curN) return { cls: 'later', text: 'Not taught yet · Lesson ' + l.week, btn: 'Preview' };
+    if (l.week > st.taught) return { cls: 'todo', text: 'This week\'s lesson', btn: 'Start' };
     return { cls: 'todo', text: 'Not started', btn: 'Start' };
   };
-  var now = st.lessons.filter(function(l){ return l.week === wk.n && l.course === 'main'; })[0];
+  var now = st.lessons.filter(function(l){ return l.week === curN && l.course === 'main'; })[0];
   var h = preview ? '<div class="viewbar"><span>👁 You are seeing <b>' + esc(me.name) + '</b>\'s dashboard exactly as they see it. Nothing here can be changed.</span><div><button type="button" id="pdfBtn">Save as PDF</button><button type="button" id="backBtn">← Back to dashboard</button></div></div>'
     : '<div class="tools"><button type="button" id="pdfBtn">Save as PDF</button></div>';
   h += printHead('AI Literacy progress report – ' + me.name, 'Grade ' + (me.grade || '–') + (me.section && me.section !== 'Unassigned' ? ' · ' + me.section : '') + ' · ' + wk.label);
