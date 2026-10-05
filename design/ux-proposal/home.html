@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Lessons – home (proposal)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="ui.css">
+<style>
+.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:16px;margin:22px 0 20px}
+@media (max-width:820px){.hero{grid-template-columns:1fr}}
+.now{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 24px 22px 28px;position:relative;overflow:hidden}
+.now::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--gold)}
+.now h1{font-size:clamp(22px,3.2vw,30px);margin:6px 0 12px}
+.now .title{font-size:clamp(19px,2.6vw,23px);color:var(--ink);margin:8px 0 6px;font-weight:700;line-height:1.25}
+.now p{margin:0 0 6px;color:var(--muted);font-size:15px}
+.bar{height:10px;background:var(--tint);border-radius:6px;overflow:hidden;margin:10px 0 4px}
+.bar i{display:block;height:100%;width:59%;background:var(--purple);border-radius:6px}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.side{display:grid;gap:10px;align-content:start}
+.side .card{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:14px 16px}
+.side .ico{font-size:20px;background:var(--tint);width:38px;height:38px;border-radius:10px;display:grid;place-items:center}
+.side .card>div>b{display:block;color:var(--purple)}
+.side small{color:var(--muted);font-size:13.5px;line-height:1.4;display:block}
+.grades{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 14px}
+.grades .lab{font-size:14px;color:var(--muted);margin-right:2px}
+.gp{font:inherit;font-weight:700;font-size:14px;border:1.5px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;padding:5px 13px;cursor:pointer}
+.gp[aria-pressed="true"]{background:var(--gc);border-color:var(--gc);color:#fff}
+.lessons{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.lessons li{display:grid;grid-template-columns:86px 1fr auto;gap:14px;align-items:center;background:#fff;border:1px solid var(--line-2);border-radius:14px;padding:14px 16px}
+.lessons li.now{border-color:var(--purple);box-shadow:0 0 0 3px var(--tint)}
+.lessons .wk{text-align:center;border-radius:10px;background:var(--tint);padding:8px 4px;color:var(--purple);font-weight:700;line-height:1.15;font-size:18px}
+.lessons .wk small{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+.lessons b{display:block;font-size:16.5px;color:var(--ink);line-height:1.3}
+.lessons .meta{font-size:13.5px;color:var(--muted);margin-top:3px}
+.lessons .st{margin-top:7px}
+.lessons li.later{background:transparent}
+.lessons li.later .wk{background:#fff;border:1.5px dashed var(--line)}
+@media (max-width:560px){.gp{padding:4px 11px}.lessons li{grid-template-columns:64px 1fr;gap:10px 12px}.lessons li .btn{grid-column:2;justify-self:start}.lessons .wk{font-size:16px}}
+details.all{margin:28px 0 0}
+details.all summary{cursor:pointer;font-weight:700;color:var(--purple);list-style:none;display:flex;align-items:center;gap:8px;font-size:15px}
+details.all summary::-webkit-details-marker{display:none}
+details.all summary::before{content:"▸";transition:transform .15s} details.all[open] summary::before{transform:rotate(90deg)}
+.allgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-top:12px}
+.allgrid a{display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid var(--line-2);border-left:5px solid var(--gc);border-radius:10px;padding:10px 12px}
+.allgrid a b{display:block;color:var(--purple)} .allgrid a small{color:var(--muted)}
+body.visitor .stu{display:none!important}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="#"><span class="mark">AISA</span><span class="t">AI Lessons</span></a>
+  <nav class="main"><a href="#" aria-current="page">Lessons</a><a href="calendar.html">Calendar</a><a href="dashboard.html" class="stu">My progress</a></nav>
+  <div class="right"><span class="me stu">Yousef R. · Boys 8</span><button class="langbtn" type="button" lang="ar">العربية</button></div>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="now">
+      <span class="eyebrow" id="wk">Teaching week</span>
+      <h1 id="h1">Hi Yousef – here is your lesson this week</h1>
+      <span class="chip purple" id="gchip">Grade 8 · Main course · Week 2</span>
+      <div class="title" id="ltitle"></div>
+      <p id="when"></p>
+      <div class="stu"><div class="bar"><i></i></div><p style="font-size:13.5px">14 of 19 activities checked · 59% first try</p></div>
+      <div class="acts"><a class="btn primary" href="#" id="cta">Continue lesson →</a><a class="btn quiet stu" href="dashboard.html">See my progress</a></div>
+    </div>
+    <div class="side">
+      <div class="card"><span class="ico">📅</span><div><b id="offT">No school next week</b><small id="offS"></small></div></div>
+      <div class="card stu"><span class="ico">🏅</span><div><b>4 of 10 badges</b><small>Latest: ⚖️ Fair Judge. Next up: 🏁 Finisher – finish this week's lesson.</small></div></div>
+      <div class="card"><span class="ico">🧑‍🏫</span><div><b>Teachers</b><small>The <a href="calendar.html">teaching calendar</a> shows every class's lesson for the week, with the page to open.</small></div></div>
+    </div>
+  </section>
+
+  <div class="grades" id="grades"><span class="lab">Grade</span></div>
+  <h2 style="font-size:19px;margin:0 0 10px" id="listH">Grade 8 lessons</h2>
+  <ol class="lessons" id="list"></ol>
+
+  <details class="all"><summary>Browse all grades</summary><div class="allgrid" id="all"></div></details>
+</main>
+<footer class="site"><span class="stu">Your answers save to your school account automatically. · </span>American International School in Abu Dhabi</footer>
+
+<div class="mockbar">Preview as <button type="button" id="mStu" aria-pressed="true">Signed-in student</button><button type="button" id="mVis" aria-pressed="false">Visitor</button></div>
+
+<script src="../../school-calendar.js"></script>
+<script>
+/* Proposal mock. The dates are real (school-calendar.js); the student's progress is made up. */
+if (/clean/.test(location.search)) document.documentElement.classList.add('clean');
+const NOW = new Date(2026, 9, 7), SEC = 'Boys 8', G = 8, SECS = ['Boys 8', 'Girls 8'];
+const TITLES = { 1: 'From ‘It Works’ to ‘How Well’ + Two Outputs, One Verdict', 2: 'Inside the Pipeline + Change One Factor' };
+const COUNTS = { 6: 2, 7: 1, 8: 2, 9: 2, 10: 2, 11: 2, 12: 2 };
+const $ = s => document.querySelector(s), add = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const fmt = (d, o) => d.toLocaleDateString('en-GB', o || { weekday: 'short', day: 'numeric', month: 'short' });
+function dateOf(sec, n) { for (let d = AICAL.parse(AICAL.TERM_START), i = 0; i < 400; i++, d = add(d, 1)) if (AICAL.lessonOn(sec, d) === n) return d; return null; }
+function rowFor(sec, d) { return AICAL.SCHEDULE.find(r => r[0] === sec && r[4] === AICAL.DAYS[d.getDay()] && r[3] === AICAL.cycleOf(d)); }
+function spans(from, days) { const out = []; for (let i = 0; i < days; i++) { const d = add(from, i); if (d.getDay() === 0 || d.getDay() === 6) continue; const why = AICAL.noSchool(d); if (!why) continue; const l = out[out.length - 1]; if (l && l.why === why && d - l.to <= 3 * 864e5) l.to = d; else out.push({ why, from: d, to: d }); } return out; }
+const tw = AICAL.teachingWeek(NOW), mon = AICAL.monday(NOW), fri = add(mon, 4), cur = AICAL.currentLesson(SEC, NOW);
+$('#wk').textContent = `Teaching week ${tw} · ${fmt(mon, { day: 'numeric', month: 'short' })} – ${fmt(fri, { day: 'numeric', month: 'short' })}`;
+$('#ltitle').textContent = TITLES[cur];
+const cd = dateOf(SEC, cur), cr = rowFor(SEC, cd);
+const WHEN_STU = `Boys 8 has it on <b>${fmt(cd, { weekday: 'long', day: 'numeric', month: 'long' })}</b>, period ${cr[5]} (${cr[2]} Studies).`;
+const WHEN_VIS = SECS.map(s => { const d = dateOf(s, cur), r = rowFor(s, d); return `<b>${s}</b>: ${fmt(d)}, period ${r[5]} (${r[2]})`; }).join(' · ');
+$('#when').innerHTML = WHEN_STU;
+const sp = spans(add(mon, 7), 21), nx = (() => { for (let d = add(fri, 1), i = 0; i < 200; i++, d = add(d, 1)) { const n = AICAL.lessonOn(SEC, d); if (n) return { d, n }; } })();
+const OFF = sp.map(s => `${s.why.replace(/ – no school for students/, '')} ${s.from.getTime() === s.to.getTime() ? fmt(s.from, { weekday: 'short', day: 'numeric', month: 'short' }) : fmt(s.from, { day: 'numeric' }) + ' – ' + fmt(s.to, { day: 'numeric', month: 'short' })}`).join(', then ');
+const nxAll = SECS.map(s => { for (let d = add(fri, 1), i = 0; i < 200; i++, d = add(d, 1)) { const n = AICAL.lessonOn(s, d); if (n) return `<b>${s}</b> ${fmt(d)}`; } }).join(' · ');
+const OFF_STU = OFF + `. Your next AI lesson is <b>${fmt(nx.d)}</b> (Week ${nx.n}).`, OFF_VIS = OFF + `. Next Grade 8 lessons: ${nxAll}.`;
+$('#offS').innerHTML = OFF_STU;
+
+/* lesson list for the grade */
+const status = { 1: ['done', '✓ Finished · 78% first try', 'Review'], 2: ['doing', '14 of 19 activities · 59%', 'Continue'] };
+$('#list').innerHTML = [1, 2, 3, 4].map(n => {
+  const d = dateOf(SEC, n), r = rowFor(SEC, d), past = d < mon, thisWeek = d >= mon && d <= fri, st = status[n], live = !!TITLES[n];
+  const cls = thisWeek ? 'now' : (!past && !thisWeek ? 'later' : '');
+  const metaDate = past ? `Taught ${fmt(d)}` : thisWeek ? `This week · ${fmt(d)}, period ${r[5]}` : `Coming ${fmt(d)}${n === nx.n && sp.length ? ' · after the break' : ''}`;
+  const chip = st ? `<span class="chip ${st[0] === 'done' ? 'ok' : 'warn'} stu">${st[1]}</span>` : (live ? '' : '<span class="chip muted">Lesson page coming</span>');
+  const btn = st ? `<a class="btn small ${st[0] === 'doing' ? 'primary' : ''} stu" href="#">${st[2]}</a><a class="btn small vis" href="#">Open</a>` : (live ? '<a class="btn small quiet" href="#">Preview</a>' : '');
+  return `<li class="${cls}"><div class="wk"><small>Week</small>${n}</div><div><b>${live ? TITLES[n] : `Grade 8 · Week ${n}`}</b><div class="meta">${metaDate}</div><div class="st">${chip}</div></div>${btn}</li>`;
+}).join('') + `<li class="later"><div class="wk"><small>Bridging</small>–</div><div><b>Bridging course</b><div class="meta">Foundation lessons for Grade 8 · to be scheduled</div></div></li>`;
+
+/* grade pills and the all-grades grid */
+for (let g = 6; g <= 12; g++) $('#grades').insertAdjacentHTML('beforeend', `<button type="button" class="gp" style="--gc:var(--g${g})" aria-pressed="${g === G}" data-g="${g}">${g}</button>`);
+$('#grades').insertAdjacentHTML('beforeend', `<span class="lab stu" style="margin-left:6px">✓ your grade is remembered on this device</span>`);
+$('#grades').onclick = e => { const b = e.target.closest('.gp'); if (!b) return; document.querySelectorAll('.gp').forEach(x => x.setAttribute('aria-pressed', x === b)); $('#listH').textContent = `Grade ${b.dataset.g} lessons`; };
+$('#all').innerHTML = [6, 7, 8, 9, 10, 11, 12].map(g => `<a href="#" style="--gc:var(--g${g})"><b>Grade ${g}</b><small>${COUNTS[g]} lesson${COUNTS[g] > 1 ? 's' : ''} · Week ${g === 8 ? '1–2' : '1'}</small></a>`).join('');
+
+/* proposal switch: signed-in student vs public visitor */
+const vis = document.querySelectorAll('.vis'); vis.forEach(x => x.style.display = 'none');
+function mode(v) { document.body.classList.toggle('visitor', v); $('#mStu').setAttribute('aria-pressed', !v); $('#mVis').setAttribute('aria-pressed', v);
+  $('#h1').textContent = v ? 'This week\'s lesson for Grade 8' : 'Hi Yousef – here is your lesson this week'; $('#cta').textContent = v ? 'Open lesson →' : 'Continue lesson →'; $('#when').innerHTML = v ? WHEN_VIS : WHEN_STU; $('#offS').innerHTML = v ? OFF_VIS : OFF_STU;
+  vis.forEach(x => x.style.display = v ? '' : 'none'); }
+$('#mStu').onclick = () => mode(false); $('#mVis').onclick = () => mode(true);
+</script>
+</body>
+</html>

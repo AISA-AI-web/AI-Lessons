@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Teaching Calendar – my week (proposal)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="ui.css">
+<style>
+.toolbar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin:20px 0 10px}
+.tools2{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:flex-end;margin:0 0 14px}
+.weeknav{display:flex;align-items:center;gap:6px}
+.weeknav .nav{font:inherit;font-size:18px;font-weight:700;width:38px;height:38px;border-radius:10px;border:1.5px solid var(--line);background:#fff;color:var(--purple);cursor:pointer}
+.weeknav h1{font-size:clamp(20px,3vw,26px);margin:0 8px}
+.weeknav .sub{display:block;font-size:13.5px;color:var(--muted);font-weight:500}
+.toolbar .spacer{flex:1}
+.toolbar label.jump{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:start;margin:0 0 20px}
+.day{background:#fff;border:1px solid var(--line-2);border-radius:14px;padding:10px;min-height:120px}
+.day header{display:flex;align-items:baseline;gap:6px;padding:2px 4px 8px;border-bottom:2px solid var(--line-2);margin:0 0 10px}
+.day header b{color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+.day header span{font-size:22px;font-weight:700;color:var(--ink)}
+.day header em{margin-left:auto;font-style:normal;font-size:11.5px;font-weight:700;background:var(--gold);color:var(--purple);border-radius:999px;padding:1px 8px}
+.day.today{border-color:var(--purple);box-shadow:0 0 0 3px var(--tint)}
+.day.today header{border-bottom-color:var(--purple)}
+.day.off{background:repeating-linear-gradient(135deg,#fff 0 8px,#F6F3FB 8px 16px)}
+.offbox{color:var(--warn);font-weight:700;font-size:14px;padding:4px 4px 8px}
+.offbox small{display:block;font-weight:500;color:var(--muted)}
+.evt{font-size:12.5px;color:var(--warn);background:var(--warnbg);border-radius:8px;padding:4px 8px;margin:0 0 8px}
+.none{color:var(--muted-2);font-size:13.5px;padding:6px 4px}
+.slot{border:1px solid var(--line-2);border-left:4px solid var(--purple);border-radius:10px;padding:8px 10px;margin:0 0 8px;background:#fff}
+.slot.nolesson{border-left-color:var(--line)}
+.slot .t{font-size:12.5px;color:var(--muted)} .slot .t b{color:var(--purple);font-size:13px}
+.slot .sec{font-weight:700;font-size:15.5px;margin:2px 0;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.via{font-size:11px;font-weight:700;border-radius:999px;padding:1px 7px;color:#fff;background:var(--muted)}
+.via.Arabic{background:#0F766E} .via.Islamic{background:#7C3AED}
+.slot .les{font-size:13.5px;line-height:1.35;margin:2px 0 6px} .slot .les b{color:var(--purple)}
+.slot .les a{font-weight:600}
+.slot.nolesson .les{color:var(--muted)}
+.slot .pushed{font-size:12.5px;color:var(--warn);margin:2px 0 4px}
+.slot .links{display:flex;gap:10px;font-size:13px;flex-wrap:wrap}
+.slot .links a{font-weight:700;text-decoration:none}
+.slot .links a:hover{text-decoration:underline}
+.legend{display:flex;gap:6px 18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin:0 0 14px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:5px}
+details.about{margin:6px 0 30px;font-size:13.5px;color:var(--muted)}
+details.about summary{cursor:pointer;font-weight:700;color:var(--purple)}
+@media (max-width:820px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){
+  .grid{grid-template-columns:1fr;gap:8px}
+  .day{min-height:0} .day.off{padding:8px 10px} .day.off header{border:0;margin:0;padding:0} .day.off .offbox{padding:0 0 0 10px}
+  .day.off{display:flex;align-items:center}
+  .weeknav h1{font-size:19px}
+}
+@media print{.toolbar,.mockbar{display:none}.grid{grid-template-columns:repeat(5,1fr)}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="home.html"><span class="mark">AISA</span><span class="t">AI Lessons</span></a>
+  <nav class="main"><a href="home.html">Lessons</a><a href="#" aria-current="page">Calendar</a><a href="dashboard.html">Dashboard</a></nav>
+  <div class="right"><span class="me">Amani Hussain · 2 classes</span><button class="langbtn" type="button" lang="ar">العربية</button></div>
+</div></header>
+
+<main class="wrap">
+  <div class="toolbar">
+    <div class="weeknav">
+      <button class="nav" id="prev" type="button" aria-label="Previous week">‹</button>
+      <h1><span id="title">Teaching week</span><span class="sub" id="sub"></span></h1>
+      <button class="nav" id="next" type="button" aria-label="Next week">›</button>
+      <button class="btn small quiet" id="today" type="button">Today</button>
+    </div>
+    <span class="spacer"></span>
+    <div class="seg" role="group" aria-label="Which classes"><button type="button" id="vMine" aria-pressed="true">My classes (2)</button><button type="button" id="vAll" aria-pressed="false">All grades</button></div>
+    <select id="grade" aria-label="Grade" hidden><option value="">Every grade</option></select>
+  </div>
+  <div class="tools2"><label class="jump">Jump to a date <input type="date" id="jump" aria-label="Jump to a date"></label><button class="btn small quiet" type="button" onclick="print()">Print this week</button></div>
+
+  <div class="notice" id="notice" hidden></div>
+  <div class="grid" id="grid"></div>
+  <div class="legend"><span><i style="background:var(--purple)"></i>Lesson page ready to open</span><span><i style="background:var(--line)"></i>Lesson page not published yet</span><span><i style="background:repeating-linear-gradient(135deg,#fff 0 3px,#E6E1F5 3px 6px);border:1px solid var(--line-2)"></i>No school</span><span>⏪ Pushed back by a holiday</span></div>
+  <details class="about"><summary>About this calendar</summary><p>Two-week timetable cycle starting Monday 28 September 2026 (Week 1). One AI Literacy lesson per section per week, delivered through Arabic or Islamic Studies. Holidays, breaks and PD days come from the AISA 2026–27 calendar: when a section's AI period falls on a day with no school, its next lesson is pushed to its next period, and break weeks do not count towards the Week 1 / Week 2 cycle. Islamic holiday dates are still to be confirmed. Teacher names are kept off the public page.</p></details>
+</main>
+
+<div class="mockbar">Proposal · clock fixed at Wed 7 Oct 2026</div>
+
+<script src="../../school-calendar.js"></script>
+<script>
+if (/clean/.test(location.search)) document.documentElement.classList.add('clean');
+const NOW = new Date(2026, 9, 7), MINE = ['Boys 8', 'Girls 8'];
+const LESSONS = {
+  1:{6:["grade-6/main-w1-l1.html","Rule-Based vs Learning Systems + Hands-On Exploration"],7:["grade-7/main-w1-l1.html","How Models Learn + AI as a Workflow"],8:["grade-8/main-w1-l1.html","From ‘It Works’ to ‘How Well’ + Two Outputs, One Verdict"],9:["grade-9/main-w1-l1.html","Open the Black Box + Change One Thing"],10:["grade-10/main-w1-l1.html","See the Whole System + Compare, Map, and Stress-Test"],11:["grade-11/main-w1-l1.html","Optimising AI Solutions for Performance + Compare Two Versions"],12:["grade-12/main-w1-l1.html","Designing AI Systems for Strategic Use + Compare and Map the System"]},
+  2:{8:["grade-8/main-w2-l1.html","Inside the Pipeline + Change One Factor"]}
+};
+const $ = s => document.querySelector(s), add = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; }, iso = AICAL.iso;
+const fmt = (d, o) => d.toLocaleDateString('en-GB', o);
+let view = 'mine', grade = '', mon = AICAL.monday(NOW);
+const slotsOn = d => AICAL.slotsOn(d).filter(r => view === 'mine' ? MINE.includes(r[0]) : (!grade || String(r[1]) === grade)).sort((a, b) => a[5] - b[5] || a[0].localeCompare(b[0]));
+function spans(from, days) { const out = []; for (let i = 0; i < days; i++) { const d = add(from, i); if (d.getDay() === 0 || d.getDay() === 6) continue; const why = AICAL.noSchool(d); if (!why || /After the last/.test(why)) continue; const l = out[out.length - 1]; if (l && l.why === why && d - l.to <= 3 * 864e5) l.to = d; else out.push({ why, from: d, to: d }); } return out; }
+function nextLesson(sec, after) { for (let d = add(after, 1), i = 0; i < 200; i++, d = add(d, 1)) { const n = AICAL.lessonOn(sec, d); if (n) return { d, n }; } return null; }
+const short = s => s.replace(/ – no school for students/, '');
+function card([sec, gr, sub, , , per, time], d, tw) {
+  const n = AICAL.lessonOn(sec, d), L = (LESSONS[n] || {})[gr];
+  return `<article class="slot${L ? '' : ' nolesson'}"><div class="t"><b>P${per}</b> · <span dir="ltr">${time}</span></div><div class="sec">${sec} <span class="via ${sub}">${sub}</span></div>` +
+    `<div class="les">${L ? `<b>Week ${n}</b> · ${L[1]}` : `<b>Week ${n}</b> · lesson page coming`}</div>` +
+    (n < tw ? `<div class="pushed">⏪ Pushed back by a holiday: on Week ${n} (other classes on Week ${tw})</div>` : '') +
+    `<div class="links">${L ? `<a href="../../${L[0]}">Open lesson</a>` : ''}<a href="dashboard.html">Class progress</a></div></article>`;
+}
+function render() {
+  const tw = AICAL.teachingWeek(mon), fri = add(mon, 4), cyc = AICAL.cycleOf(mon);
+  $('#title').textContent = tw === 0 ? 'Before the AI timetable starts' : tw === null ? short(AICAL.noSchool(mon) || 'No school') : 'Teaching week ' + tw;
+  $('#sub').textContent = `${fmt(mon, { weekday: 'short', day: 'numeric', month: 'short' })} – ${fmt(fri, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}${cyc ? ` · Timetable Week ${cyc} of 2` : ''}`;
+  $('#jump').value = iso(mon);
+  const sp = spans(add(mon, 7), 21);
+  let notice = '';
+  if (sp.length) {
+    notice = `<span>📅</span><div><b>Coming up:</b> ` + sp.map(s => `${short(s.why)} (${s.from.getTime() === s.to.getTime() ? fmt(s.from, { weekday: 'short', day: 'numeric', month: 'short' }) : fmt(s.from, { weekday: 'short', day: 'numeric' }) + ' – ' + fmt(s.to, { weekday: 'short', day: 'numeric', month: 'short' })})`).join(', then ') +
+      `. No AI lessons on those days – each class's next lesson moves to its next AI period.` +
+      (view === 'mine' ? '<br>' + MINE.map(s => { const nx = nextLesson(s, fri); return nx ? `<b>${s}</b>: next lesson ${fmt(nx.d, { weekday: 'short', day: 'numeric', month: 'short' })} (Week ${nx.n})` : ''; }).join(' · ') : '') + '</div>';
+  }
+  $('#notice').innerHTML = notice; $('#notice').hidden = !notice;
+  $('#grid').innerHTML = [0, 1, 2, 3, 4].map(i => {
+    const d = add(mon, i), off = AICAL.noSchool(d), evt = AICAL.eventOn(d), today = iso(d) === iso(NOW), items = off ? [] : slotsOn(d);
+    return `<section class="day${today ? ' today' : ''}${off ? ' off' : ''}"><header><b>${fmt(d, { weekday: 'short' })}</b><span>${d.getDate()}</span>${today ? '<em>Today</em>' : ''}</header>` +
+      (off ? `<div class="offbox">No school<small>${short(off)}</small></div>` : '') + (evt ? `<div class="evt">📌 ${evt}</div>` : '') +
+      (items.length ? items.map(r => card(r, d, tw)).join('') : (off ? '' : `<div class="none">${view === 'mine' ? 'None of your classes' : 'No AI lessons'}</div>`)) + '</section>';
+  }).join('');
+}
+for (let g = 6; g <= 12; g++) $('#grade').insertAdjacentHTML('beforeend', `<option value="${g}">Grade ${g}</option>`);
+$('#prev').onclick = () => { mon = add(mon, -7); render(); }; $('#next').onclick = () => { mon = add(mon, 7); render(); };
+$('#today').onclick = () => { mon = AICAL.monday(NOW); render(); };
+$('#jump').onchange = () => { if ($('#jump').value) { mon = AICAL.monday(AICAL.parse($('#jump').value)); render(); } };
+function setView(v) { view = v; $('#vMine').setAttribute('aria-pressed', v === 'mine'); $('#vAll').setAttribute('aria-pressed', v === 'all'); $('#grade').hidden = v !== 'all'; render(); }
+$('#vMine').onclick = () => setView('mine'); $('#vAll').onclick = () => setView('all');
+$('#grade').onchange = () => { grade = $('#grade').value; render(); };
+if (/[?&]view=all/.test(location.search)) setView('all'); else render();
+</script>
+</body>
+</html>

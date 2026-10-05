@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Curriculum Dashboard – teacher (proposal)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="ui.css">
+<style>
+.titlebar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin:20px 0 14px}
+.titlebar h1{font-size:clamp(20px,3vw,26px)}
+.titlebar .spacer{flex:1}
+.badge{display:inline-block;min-width:18px;padding:0 5px;border-radius:999px;background:var(--bad);color:#fff;font-size:12px;line-height:18px;text-align:center;margin-left:6px}
+details.menu{position:relative}
+details.menu summary{list-style:none;cursor:pointer}
+details.menu summary::-webkit-details-marker{display:none}
+details.menu .pop{position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px;display:grid;min-width:230px;z-index:5;box-shadow:0 10px 30px rgba(33,7,108,.14)}
+details.menu .pop button{font:inherit;text-align:left;border:0;background:none;padding:8px 10px;border-radius:8px;cursor:pointer;font-weight:600;color:var(--ink)}
+details.menu .pop button:hover{background:var(--tint)}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 14px}
+@media (max-width:900px){.tiles{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:480px){.tiles{grid-template-columns:1fr}}
+.tile{background:#fff;border:1px solid var(--line-2);border-top:4px solid var(--gold);border-radius:12px;padding:12px 14px;min-width:0}
+.tile small{display:block;color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.tile>b{display:block;font-size:30px;line-height:1.15;color:var(--purple);letter-spacing:-.01em;margin:2px 0}
+.tile span b{color:var(--ink)}
+.tile>b.t{font-size:16px;line-height:1.3;color:var(--ink);margin:4px 0 6px}
+.tile span{color:var(--muted);font-size:13px;display:block;line-height:1.45}
+.tile a{font-weight:700}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 14px}
+@media (max-width:860px){.grid2{grid-template-columns:1fr}}
+.rows{display:grid;gap:12px}
+.row{display:grid;grid-template-columns:minmax(120px,34%) 1fr 56px;gap:10px;align-items:center;font-size:13px}
+.row .lab b{display:block;color:var(--ink);font-size:13.5px}
+.row .lab small{color:var(--muted);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stack{display:flex;height:22px;gap:2px;border-radius:5px;overflow:hidden;direction:ltr}
+.seg2{display:grid;place-items:center;font-size:12px;font-weight:700;min-width:2px;color:#fff}
+.seg2.fin{background:var(--ok)} .seg2.doing{background:var(--gold);color:var(--purple)} .seg2.todo{background:var(--badbg);color:var(--bad)}
+.seg2.later{background:repeating-linear-gradient(135deg,#fff 0 4px,#E6E1F5 4px 8px);color:var(--muted);border:1px solid var(--line-2)}
+.row .num{font-weight:700;color:var(--purple);text-align:right;font-size:15px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted);margin:12px 0 0}
+.legend i{display:inline-block;width:14px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:5px}
+.tN{background:#E9E6F2;color:var(--muted)} .tW{background:#DCD3F5;color:var(--purple)} .tO{background:#B9A9E8;color:#1A1A1A} .tE{background:#8B74D6;color:#fff} .tP{background:#5A3DB8;color:#fff} .tA{background:var(--purple);color:#fff}
+.toolrow{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin:0 0 12px}
+.toolrow input[type=search]{min-width:190px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips button{font:inherit;font-size:13px;font-weight:600;border:1.5px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;padding:4px 11px;cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--tint);border-color:var(--purple);color:var(--purple)}
+.chips button i{font-style:normal;font-weight:700;color:var(--purple);margin-left:4px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line-2);border-radius:12px;background:#fff}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:13.5px}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line-2);text-align:left;vertical-align:middle}
+th{position:sticky;top:0;background:var(--tint);color:var(--purple);font-size:12px;text-transform:uppercase;letter-spacing:.05em;font-weight:700;white-space:nowrap}
+th small{display:block;text-transform:none;letter-spacing:0;font-weight:500;color:var(--muted);max-width:220px;white-space:normal;line-height:1.25}
+th:first-child,td:first-child{position:sticky;left:0;background:#fff;z-index:1;box-shadow:1px 0 0 var(--line-2)}
+th:first-child{background:var(--tint);z-index:2}
+tr:last-child td{border-bottom:0}
+td.name{min-width:170px} td.name a{font-weight:700;text-decoration:none;color:var(--ink)} td.name a:hover{text-decoration:underline}
+td.name small{display:block;color:var(--muted);font-size:12px}
+.cell{display:inline-block;font-weight:700;border-radius:8px;padding:3px 9px;line-height:1.3;min-width:78px;text-align:center}
+.cell.done{background:var(--okbg);color:var(--ok)} .cell.doing{background:var(--warnbg);color:var(--warn)} .cell.todo{background:var(--badbg);color:var(--bad)}
+.cell.later{background:transparent;border:1.5px dashed var(--line);color:var(--muted);font-weight:500}
+td .sm{display:block;font-size:11.5px;color:var(--muted);margin-top:3px;white-space:nowrap}
+.tiers{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.tier{font-size:11.5px;font-weight:700;border-radius:999px;padding:2px 8px;white-space:nowrap}
+.tier .c{opacity:.75;font-weight:600;margin-right:3px}
+.pen{font:inherit;border:1.5px solid var(--line);background:#fff;border-radius:999px;width:26px;height:26px;cursor:pointer;color:var(--purple);font-size:13px;line-height:1;padding:0}
+.pen:hover,.pen[aria-pressed="true"]{background:var(--tint);border-color:var(--purple)}
+.tiers select{font-size:12px;padding:3px 4px;border-radius:999px;font-weight:700}
+.bc{font-weight:700;color:var(--purple)} .bc small{color:var(--muted);font-weight:500}
+.note{color:var(--muted-2);font-size:12.5px;margin:12px 0 36px}
+@media (max-width:720px){
+  .tablewrap{border:0;background:none;overflow:visible}
+  table,tbody,tr,td{display:block} thead{display:none}
+  tr{background:#fff;border:1px solid var(--line-2);border-radius:12px;padding:10px 12px;margin:0 0 8px;display:grid;grid-template-columns:1fr 1fr;gap:8px 10px}
+  td{border:0;padding:0} td:first-child{grid-column:1/-1;position:static;box-shadow:none}
+  td[data-l]::before{content:attr(data-l);display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;margin-bottom:3px}
+  td.tiersc{grid-column:1/-1}
+  .cell{min-width:0}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="home.html"><span class="mark">AISA</span><span class="t">AI Lessons</span></a>
+  <nav class="main"><a href="home.html">Lessons</a><a href="calendar.html">Calendar</a><a href="#" aria-current="page">Dashboard</a></nav>
+  <div class="right"><span class="me">Amani Hussain</span><button class="langbtn" type="button" lang="ar">العربية</button></div>
+</div></header>
+
+<main class="wrap">
+  <div class="titlebar">
+    <h1>Dashboard</h1>
+    <div class="seg" id="tabs" role="group" aria-label="Class"></div>
+    <span class="spacer"></span>
+    <button class="btn small" type="button">👥 Class lists<span class="badge" title="1 request waiting for you">1</span></button>
+    <details class="menu"><summary class="btn small quiet">More ▾</summary><div class="pop"><button type="button">👁 See a student's view…</button><button type="button">🖨 Save as PDF</button><button type="button">⬇ Download data (CSV)</button></div></details>
+  </div>
+  <div class="tiles" id="tiles"></div>
+  <div class="grid2"><section class="card" id="lessons"></section><section class="card" id="strands"></section></div>
+  <section class="card" style="padding:14px 16px">
+    <div class="toolrow">
+      <h2 style="margin-right:auto">Students <small id="count" style="color:var(--muted);font-weight:500;font-size:14px"></small></h2>
+      <input type="search" id="q" placeholder="Find a student…" aria-label="Find a student">
+      <div class="chips" id="chips"></div>
+      <select id="sort" aria-label="Sort students"><option value="name">Sort: name</option><option value="low">Sort: lowest first try</option><option value="todo">Sort: not started first</option></select>
+    </div>
+    <div class="tablewrap"><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
+    <p class="note" style="margin-bottom:0">Click a name to see that student's own view. ✎ records a tier for a strand (it overrides the automatic tier until set back to Auto). First-try scores never change; retries are for learning. Data refreshed 7 Oct 2026, 09:00.</p>
+  </section>
+</main>
+<div class="mockbar">Proposal · fictional students · clock fixed at Wed 7 Oct 2026</div>
+
+<script src="../../school-calendar.js"></script>
+<script src="dashboard-data.js"></script>
+<script>
+if (/clean/.test(location.search)) document.documentElement.classList.add('clean');
+const D = window.__MOCK, NOW = new Date(2026, 9, 7);
+const $ = s => document.querySelector(s), esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const pct = (a, b) => b ? Math.round(a / b * 100) : 0, add = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const fmt = (d, o) => d.toLocaleDateString('en-GB', o || { weekday: 'short', day: 'numeric', month: 'short' });
+/* --- same rules as app/src/dashboard.html --- */
+const TIER_RULES = { emergingPct: 70, minActs: 3, proficientPct: 85, proficientMinActs: 5, stretchPct: 70 };
+const TIERS = { '': 'Not yet evidenced', W: 'Working towards Emerging', O: 'On track – needs more evidence', E: 'Emerging', P: 'Proficient', A: 'Advanced' };
+const SHORTT = { '': 'Not yet', W: 'Working towards', O: 'On track', E: 'Emerging', P: 'Proficient', A: 'Advanced' };
+const RANK = { '': 0, W: 1, O: 1, E: 2, P: 3, A: 4 }, ORDER = ['CU', 'SD', 'CE', 'GE'];
+const SHORT = { CU: 'How AI works', SD: 'Design & build', CE: 'Judgement', GE: 'Ethics & governance' };
+const NAME = { CU: 'AI Conceptual Understanding', SD: 'AI Solution Design & Development', CE: 'Critical Evaluation & Informed Interaction', GE: 'Ethics & Governance' };
+const STRAND_MAP = {
+  'grade-8/main-w2-l1': 'vocab:CU order:CU case1:CU match:CU case2:CU truths:CU case3:CU trace:CU think:CU lvocab:CU lsort:SD lcase1:SD lorder:CU lcase2:CU ltester:CE lcase3:CU ltm:CU lsafe:GE lexit:CU',
+  'grade-8/main-w1-l1': 'vocab:CU evalq:CE case1:CE sort:CU which:SD case2:SD fair:CE case3:GE ws:CU questions:CE charter:GE exit:CU chal:SD lvocab:CU lmatch:CE lcase1:CE ljudge:CE lcase2:CE lorder:CE lcase3:CE llog:CE lconc:CE lchecks:CE lexit:CE lchal:SD'
+};
+const LOOK = {}; Object.keys(STRAND_MAP).forEach(l => STRAND_MAP[l].split(' ').forEach(p => { const x = p.split(':'); LOOK[l + '|' + x[0]] = x[1]; }));
+const strandOf = (l, a) => LOOK[l + '|' + a] || 'CU', isStretch = a => /challenge|⭐/i.test(a[2] + ' ' + a[3]);
+function autoTier(o) { if (!o.n) return ''; const p = pct(o.p, o.m); if (p < TIER_RULES.emergingPct) return 'W'; if (o.n < TIER_RULES.minActs) return 'O';
+  if ((o.n >= TIER_RULES.proficientMinActs && p >= TIER_RULES.proficientPct) || (o.sn && pct(o.sp, o.sm) >= TIER_RULES.stretchPct)) return 'P'; return 'E'; }
+
+const LESSONS = D.catalog.filter(l => l.grade === 8 && l.course === 'main').sort((a, b) => a.week - b.week);
+const CUR = Math.max.apply(null, D.sections.map(s => AICAL.currentLesson(s, NOW))), cur = LESSONS.find(l => l.week === CUR) || LESSONS[LESSONS.length - 1];
+const dcache = {}; function dateOf(sec, n) { const k = sec + n; if (dcache[k]) return dcache[k]; for (let d = AICAL.parse(AICAL.TERM_START), i = 0; i < 400; i++, d = add(d, 1)) if (AICAL.lessonOn(sec, d) === n) return (dcache[k] = d); return null; }
+const R = {}; D.results.forEach(r => R[r.email + '|' + r.lessonId] = r);
+function stat(s) {
+  const taught = AICAL.taughtSoFar(s.section, NOW), out = { byL: {}, strands: {}, badges: 0, taught };
+  let finished = 0, stretch = false, bull = false, fixer = false;
+  ORDER.forEach(c => out.strands[c] = { p: 0, m: 0, n: 0, sp: 0, sm: 0, sn: 0 });
+  LESSONS.forEach(l => {
+    const r = R[s.email + '|' + l.id], m = r ? Object.keys(r.acts).reduce((n, k) => n + r.acts[k][1], 0) : 0;
+    const st = r && r.done >= l.activities ? 'done' : r ? 'doing' : l.week <= taught ? 'todo' : 'later';
+    out.byL[l.id] = { r, st, pct: r ? pct(r.score, m) : null, date: dateOf(s.section, l.week), mins: r ? Math.round(r.seconds / 60) : 0 };
+    if (st === 'done') { finished++; if (pct(r.score, m) >= 90) bull = true; }
+    if (r) { let wrong = 0, mended = 0; Object.keys(r.acts).forEach(k => { const a = r.acts[k], o = out.strands[strandOf(l.id, k)]; o.p += a[0]; o.m += a[1]; o.n++;
+      if (isStretch(a)) { o.sp += a[0]; o.sm += a[1]; o.sn++; stretch = true; } if (a[0] < a[1]) { wrong++; if (a[4] === a[1]) mended++; } }); if (wrong && mended === wrong) fixer = true; }
+  });
+  ORDER.forEach(c => { const o = out.strands[c], j = D.judgements[s.email + '|' + c]; o.pct = o.m ? pct(o.p, o.m) : null; o.auto = autoTier(o); o.judged = j || null; o.tier = j ? j.tier : o.auto; if (RANK[o.tier] >= 2) out.badges++; });
+  out.badges += (finished ? 1 : 0) + (stretch ? 1 : 0) + (bull ? 1 : 0) + (fixer ? 1 : 0);
+  const prev = LESSONS.filter(l => l.week < CUR && l.week <= taught);
+  out.behind = prev.some(l => out.byL[l.id].st !== 'done'); out.notStarted = prev.some(l => out.byL[l.id].st === 'todo');
+  return out;
+}
+const ST = {}; D.students.forEach(s => ST[s.email] = stat(s));
+let tab = '', filter = 'all', sort = 'name', q = '', editing = {};
+const pool = () => D.students.filter(s => !tab || s.section === tab);
+const tier = (o, c) => `<span class="tier t${o.tier || 'N'}" title="${esc(NAME[c] + ': ' + TIERS[o.tier] + (o.pct === null ? '' : ' · first try ' + o.pct + '% on ' + o.n + ' activities') + (o.judged ? ' · set by teacher' : ''))}"><span class="c">${c}</span>${SHORTT[o.tier]}${o.judged ? ' ✎' : ''}</span>`;
+
+function render() {
+  const P = pool();
+  $('#tabs').innerHTML = [['', 'All my classes', D.students.length]].concat(D.sections.map(s => [s, s, D.students.filter(x => x.section === s).length]))
+    .map(t => `<button type="button" data-tab="${esc(t[0])}" aria-pressed="${tab === t[0]}">${t[1]} <span style="opacity:.75;font-weight:500">${t[2]}</span></button>`).join('');
+  /* tiles */
+  const secs = tab ? [tab] : D.sections;
+  const week = secs.map(sec => { const ps = P.filter(s => s.section === sec), t = AICAL.taughtSoFar(sec, NOW);
+    if (t >= cur.week) { const st = ps.filter(s => ST[s.email].byL[cur.id].r).length, fin = ps.filter(s => ST[s.email].byL[cur.id].st === 'done').length; return `<b>${sec}</b>: ${st} of ${ps.length} started · ${fin} finished`; }
+    return `<b>${sec}</b>: taught ${fmt(dateOf(sec, cur.week))}`; }).join('<br>');
+  const ns = P.filter(s => ST[s.email].notStarted).length, bh = P.filter(s => ST[s.email].behind).length - ns;
+  const sums = LESSONS.map(l => { let p = 0, m = 0; P.forEach(s => { const r = ST[s.email].byL[l.id].r; if (r) { p += r.score; m += Object.keys(r.acts).reduce((n, k) => n + r.acts[k][1], 0); } }); return { l, p, m }; });
+  const tot = sums.reduce((a, x) => ({ p: a.p + x.p, m: a.m + x.m }), { p: 0, m: 0 });
+  let eplus = 0, ratings = 0; P.forEach(s => ORDER.forEach(c => { ratings++; if (RANK[ST[s.email].strands[c].tier] >= 2) eplus++; }));
+  $('#tiles').innerHTML =
+    `<div class="tile"><small>This week · Week ${cur.week}</small><b class="t">${esc(cur.title)}</b><span>${week}</span></div>` +
+    `<div class="tile"><small>Need a nudge</small><b>${ns}</b><span>haven't started Week ${cur.week - 1} yet · ${bh} more started it but didn't finish · <a href="#" data-f="nudge">Show them</a></span></div>` +
+    `<div class="tile"><small>Average first try</small><b>${tot.m ? pct(tot.p, tot.m) + '%' : '–'}</b><span>${sums.filter(x => x.m).map(x => 'Week ' + x.l.week + ' ' + pct(x.p, x.m) + '%').join(' → ')}</span></div>` +
+    `<div class="tile"><small>At Emerging or above</small><b>${pct(eplus, ratings)}%</b><span>of strand ratings · the Term 1 goal is Emerging in all four strands</span></div>`;
+  /* lesson overview */
+  $('#lessons').innerHTML = `<h2>Lesson overview</h2><p class="sub">Who has finished each lesson, and the average first-try score.</p><div class="rows">` + LESSONS.map(l => {
+    const c = { done: 0, doing: 0, todo: 0, later: 0 }; P.forEach(s => c[ST[s.email].byL[l.id].st]++);
+    const seg = (k, cls) => c[k] ? `<span class="seg2 ${cls}" style="width:${c[k] / P.length * 100}%" title="${k}: ${c[k]}">${c[k] / P.length >= .09 ? c[k] : ''}</span>` : '';
+    const sm = sums.find(x => x.l === l);
+    return `<div class="row"><div class="lab"><b>Week ${l.week}</b><small title="${esc(l.title)}">${esc(l.title)}</small></div><div class="stack">${seg('done', 'fin')}${seg('doing', 'doing')}${seg('todo', 'todo')}${seg('later', 'later')}</div><div class="num">${sm.m ? pct(sm.p, sm.m) + '%' : '–'}</div></div>`;
+  }).join('') + `</div><div class="legend"><span><i style="background:var(--ok)"></i>Finished</span><span><i style="background:var(--gold)"></i>In progress</span><span><i style="background:var(--badbg);border:1px solid #f1c9c7"></i>Not started</span><span><i style="background:repeating-linear-gradient(135deg,#fff 0 3px,#E6E1F5 3px 6px);border:1px solid var(--line-2)"></i>Not taught yet</span><span>Number = average first try</span></div>`;
+  /* attainment */
+  const keys = ['', 'W', 'O', 'E', 'P', 'A'];
+  $('#strands').innerHTML = `<h2>Attainment by strand</h2><p class="sub">Each student's current tier (Grade 8). Emerging is the Term 1 expected standard.</p><div class="rows">` + ORDER.map(c => {
+    const n = {}; keys.forEach(k => n[k] = 0); P.forEach(s => n[ST[s.email].strands[c].tier]++);
+    return `<div class="row"><div class="lab"><b>${c} · ${SHORT[c]}</b><small title="${NAME[c]}">${NAME[c]}</small></div><div class="stack">` +
+      keys.map(k => n[k] ? `<span class="seg2 t${k || 'N'}" style="width:${n[k] / P.length * 100}%" title="${TIERS[k]}: ${n[k]}">${n[k] / P.length >= .08 ? n[k] : ''}</span>` : '').join('') +
+      `</div><div class="num">${pct(n.E + n.P + n.A, P.length)}%</div></div>`;
+  }).join('') + `</div><div class="legend">` + keys.map(k => `<span><i class="t${k || 'N'}"></i>${SHORTT[k]}</span>`).join('') + `<span>Number = at Emerging or above</span></div>`;
+  /* students */
+  let rows = P.filter(s => !q || s.name.toLowerCase().includes(q));
+  if (filter === 'nudge') rows = rows.filter(s => ST[s.email].behind); if (filter === 'finished') rows = rows.filter(s => ST[s.email].byL[LESSONS[0].id].st === 'done');
+  const w1 = LESSONS[0].id, key = s => ST[s.email].byL[w1].pct === null ? 101 : ST[s.email].byL[w1].pct;
+  rows.sort((a, b) => sort === 'low' ? key(a) - key(b) || a.name.localeCompare(b.name) : sort === 'todo' ? (ST[b.email].notStarted - ST[a.email].notStarted) || (ST[b.email].behind - ST[a.email].behind) || a.name.localeCompare(b.name) : a.section.localeCompare(b.section, undefined, { numeric: true }) || a.name.localeCompare(b.name));
+  $('#count').textContent = rows.length === P.length ? `· ${P.length}` : `· ${rows.length} of ${P.length}`;
+  $('#chips').innerHTML = [['all', 'All', P.length], ['nudge', 'Needs a nudge', P.filter(s => ST[s.email].behind).length], ['finished', `Finished Week ${LESSONS[0].week}`, P.filter(s => ST[s.email].byL[w1].st === 'done').length]]
+    .map(c => `<button type="button" data-f="${c[0]}" aria-pressed="${filter === c[0]}">${c[1]}<i>${c[2]}</i></button>`).join('');
+  const L2 = LESSONS.slice().reverse();
+  $('#thead').innerHTML = '<tr><th>Student</th>' + L2.map(l => `<th>Week ${l.week}${l === cur ? ' · this week' : ''}<small>${esc(l.title)}</small></th>`).join('') + `<th>Strands<small>${ORDER.map(c => c + ' ' + SHORT[c]).join(' · ')}</small></th><th>Badges</th></tr>`;
+  $('#tbody').innerHTML = rows.map(s => { const st = ST[s.email];
+    const cells = L2.map(l => { const x = st.byL[l.id];
+      const c = x.st === 'done' ? `<span class="cell done">✓ ${x.pct}%</span><span class="sm">${x.mins} min</span>` : x.st === 'doing' ? `<span class="cell doing">${x.pct}%</span><span class="sm">${x.r.done} of ${l.activities} activities</span>` :
+        x.st === 'todo' ? `<span class="cell todo">Not started</span><span class="sm">taught ${fmt(x.date)}</span>` : `<span class="cell later">Not yet</span><span class="sm">on ${fmt(x.date)}</span>`;
+      return `<td data-l="Week ${l.week}">${c}</td>`; }).join('');
+    const tiers = editing[s.email] ? ORDER.map(c => { const o = st.strands[c]; return `<select class="t${o.tier || 'N'}" data-j="${esc(s.email)}|${c}" aria-label="${esc(s.name)} ${c}"><option value="">${c} · Auto: ${SHORTT[o.auto]}</option>` + ['W', 'E', 'P', 'A'].map(t => `<option value="${t}"${o.judged && o.judged.tier === t ? ' selected' : ''}>${c} · ✎ ${SHORTT[t]}</option>`).join('') + '</select>'; }).join('')
+      : ORDER.map(c => tier(st.strands[c], c)).join('');
+    return `<tr><td class="name"><a href="#" title="See ${esc(s.name)}'s own view">${esc(s.name)}</a>${tab ? '' : `<small>${esc(s.section)}</small>`}</td>${cells}` +
+      `<td class="tiersc" data-l="Strands"><div class="tiers">${tiers}<button type="button" class="pen" data-e="${esc(s.email)}" aria-pressed="${!!editing[s.email]}" title="${editing[s.email] ? 'Done' : 'Record a tier'}">${editing[s.email] ? '✓' : '✎'}</button></div></td>` +
+      `<td data-l="Badges"><span class="bc">${st.badges} <small>🏅</small></span></td></tr>`; }).join('') || `<tr><td colspan="5" style="color:var(--muted);padding:18px">No students match.</td></tr>`;
+  document.querySelectorAll('#tabs button').forEach(b => b.onclick = () => { tab = b.dataset.tab; render(); });
+  document.querySelectorAll('[data-f]').forEach(b => b.onclick = e => { e.preventDefault(); filter = b.dataset.f; render(); if (b.tagName === 'A') $('#tbody').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+  document.querySelectorAll('.pen').forEach(b => b.onclick = () => { editing[b.dataset.e] = !editing[b.dataset.e]; render(); });
+  document.querySelectorAll('select[data-j]').forEach(el => el.onchange = () => { const k = el.dataset.j, [e] = k.split('|'); if (el.value) D.judgements[k] = { tier: el.value, by: 'me', at: '' }; else delete D.judgements[k]; ST[e] = stat(D.students.find(s => s.email === e)); render(); });
+}
+$('#q').oninput = () => { q = $('#q').value.trim().toLowerCase(); render(); };
+$('#sort').onchange = () => { sort = $('#sort').value; render(); };
+render();
+</script>
+</body>
+</html>
