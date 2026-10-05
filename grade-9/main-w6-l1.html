@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Four Strands, One Workflow + Running It End-to-End – Grade 9 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#D7263D; --main2:#EF4444; --deep:#8A1024;
+  --ink:#2B1A14; --muted:#6B5750; --paper:#FFF7F4; --card:#FFFFFF;
+  --line:#F5DDD5; --soft:#FFEFE9;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#FDBA74,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#F59E0B);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#2B1A14,#6E3A2E)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#FDD8C8 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FFFAF8;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FFFCFA}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#F59E0B)}
+.act-head.ws{background:linear-gradient(120deg,#2B1A14,#7A3F2E)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#FFF0EA}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #EFC3B3;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #F0B49E;border-radius:12px;padding:10px 14px;background:#FFF9F6;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(43,26,20,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#2B1A14;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+@media (max-width:420px){#sheet table.t th,#sheet table.t td{padding:5px 4px}}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 9 Main Course, Term 1</span><span class="pill">Week 6 Core + Week 6 Lab</span><span class="pill">📅 Teach: week of 9 – 13 Nov 2026</span></div>
+    <h1>Four Strands, One Workflow + Running It End-to-End</h1>
+    <p>Today you bring together everything from this term – understanding, designing, evaluating and using AI responsibly – to build one small workflow whose data, prompt and tool connect to solve a real problem, then check the output against a clear target. Then, in the Lab, you run the whole workflow from start to finish, record a check at every component, add one new rule and re-run to see how your system copes.</p>
+    <p class="meta"><b>Strands:</b> all four – Systems Understanding, Solution Design, Critical Evaluation, Ethics &amp; Responsible Use &nbsp;·&nbsp; <b>Role:</b> Solution Architects</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 9B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 6 of Term 1 – Monday 9 to Friday 13 November 2026.</b> Grade 9's AI period is on Friday 13 November: Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Four Strands, One Workflow</a>, then move on to the <a href="#lab">Lab: Running It End-to-End</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Use all four strands.</b> I can complete a guided task that uses all four strands to build and check one small AI workflow.</li>
+      <li><b>Connect the parts.</b> I can explain how the data, prompt and tool connect to make an output and how I check that output.</li>
+      <li><b>Choose responsibly.</b> I can name one responsible choice I made while doing the task.</li>
+      <li><b>Lab: run it end-to-end.</b> I can run my whole workflow, record every check at each component, use the checks to say how reliably it met the target and which component let it down, then add a new criterion or risk rule and re-run it responsibly.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 6 Core · Four Strands, One Workflow</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Connect the strands</b><small>Four skills act on one workflow</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Run and check</b><small>Compare each output with a target and source</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Refine one component</b><small>Change one word, then re-run · worksheet</small></a></li>
+    </ol>
+    <h3 class="rh">Week 6 Lab · Running It End-to-End</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Run end-to-end</b><small>Log a check at every component</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Read the log</b><small>Reliability shows the weakest component</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Add a constraint</b><small>Adapt one part, then re-run · tool log</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Four skills, one workflow</h2><p>What does each strand do here?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In Week 5 you audited risks by likelihood and impact and named who is accountable for each. Today you join all four strands on one workflow.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">They click together</h3>
+    <p>Until now you have practised four skills in separate lessons: <b>understanding</b> how an AI system fits together, <b>designing</b> and building a solution, <b>critically evaluating</b> an output, and <b>using AI responsibly</b>. Today they click together on a single <b>workflow</b>. You feed in data, write a <b>prompt</b> that tells the tool what to do, read the output it makes, and check that output against a target and a trusted source.</p>
+    <p>Nothing here is brand new – you are using all four skills at once, which is exactly how real AI solutions are designed, run and judged. Joining several skills or parts into one working system is called <b>integration</b>.</p>
+    <figure>
+      <svg viewBox="0 0 760 330" role="img" aria-labelledby="f1T">
+        <title id="f1T">One workflow, four strands. Data goes into a prompt, the prompt drives the tool, the tool makes an output, and the output is checked against a target and a rules card. Understanding systems sees how the parts connect; solution design builds and runs the tool; responsible use keeps the data non-personal; critical evaluation checks the output.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <g stroke="#D7263D" stroke-width="2" stroke-dasharray="6 5" fill="none"><path d="M145 86L145 160"/><path d="M560 86L380 126"/><path d="M200 244L72 204"/><path d="M560 244L688 204"/></g>
+          <g stroke="#2B1A14" stroke-width="1.6" fill="#fff">
+            <rect x="30" y="14" width="340" height="72" rx="12"/>
+            <rect x="390" y="14" width="340" height="72" rx="12"/>
+            <rect x="30" y="244" width="340" height="72" rx="12"/>
+            <rect x="390" y="244" width="340" height="72" rx="12"/>
+          </g>
+          <g font-size="16" font-weight="700" fill="#8A1024"><text x="48" y="44">Understanding systems</text><text x="408" y="44">Solution design</text><text x="48" y="274">Responsible use</text><text x="408" y="274">Critical evaluation</text></g>
+          <g font-size="14" fill="#6B5750"><text x="48" y="68">see how the parts connect</text><text x="408" y="68">build and run the workflow</text><text x="48" y="298">keep every input non-personal</text><text x="408" y="298">check output vs target and source</text></g>
+          <g stroke="#2B1A14" stroke-width="1.6">
+            <rect x="8" y="126" width="128" height="78" rx="10" fill="#E2F5EC"/>
+            <rect x="162" y="126" width="128" height="78" rx="10" fill="#FFEFE9"/>
+            <rect x="316" y="126" width="128" height="78" rx="10" fill="#FFEFE9" stroke="#D7263D" stroke-width="2.4"/>
+            <rect x="470" y="126" width="128" height="78" rx="10" fill="#fff"/>
+            <rect x="624" y="126" width="128" height="78" rx="10" fill="#F4F0FC"/>
+          </g>
+          <g stroke="#2B1A14" stroke-width="2.4" fill="none" marker-end="url(#ah)"><path d="M136 165H158"/><path d="M290 165H312"/><path d="M444 165H466"/><path d="M598 165H620"/></g>
+          <g font-size="15" font-weight="700" text-anchor="middle"><text x="72" y="158">DATA</text><text x="226" y="158">PROMPT</text><text x="380" y="158">TOOL</text><text x="534" y="158">OUTPUT</text><text x="688" y="158">CHECK</text></g>
+          <g font-size="13" text-anchor="middle" fill="#6B5750"><text x="72" y="182">10 facility</text><text x="72" y="197">comments</text><text x="226" y="182">tells the tool</text><text x="226" y="197">what to do</text><text x="380" y="182">tags each one,</text><text x="380" y="197">adds an action</text><text x="534" y="182">tag + action</text><text x="534" y="197">(tidy, confident)</text><text x="688" y="182">vs target and</text><text x="688" y="197">rules card</text></g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> Four strands act on one workflow: understand, design, evaluate, and use responsibly.</figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-match"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>The parts interact</h2><p>Why does the check matter?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Tidy is not the same as right</h3>
+    <p>A workflow is a system, so its parts affect each other. Feed in messy data or write a vague prompt and the tool will still produce a tidy, confident output – but it may be wrong. That is why the check matters: you compare each output with what you know is true and with a trusted <b>rules card</b> before you trust it.</p>
+    <p>You keep the task safe by using only facility comments – about benches, lighting, litter or water – never a person's name or face, so the workflow is responsible from its very first <b>component</b>.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, councils and smart-city teams use exactly this kind of workflow to sort thousands of public service messages quickly – and it only helps residents if each output is checked against a clear target and a trusted source, and if personal data is handled responsibly, just like in your task.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Social Studies / Moral Education</h4><p>In <b>Moral Education</b>, examine the responsible choice built into your workflow – using only facility comments, never a person's name or face – and debate why keeping personal data out of any system protects residents' privacy and dignity.</p></div>
+    <div class="call amber"><h4>Tool for this week: unplugged simulated-AI cards (teacher-led)</h4><p>This is an unplugged concept lesson: the teacher runs a simulated-AI card routine on the board – no live tool, no logins. Students reason about pre-prepared example outputs on the cards – no personal data is used – and use the worksheet to sort or judge the cards, explaining their thinking with the key vocabulary. <b>No board tool?</b> The routine is already unplugged – run the ten cards by hand through the same prompt and checks against the true categories and the rules card. The live tools (Teachable Machine and Scratch) are used in the matching Lab.</p></div>
+    <div id="a-order"></div>
+    <div id="a-case2"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3 · Worksheet</span><h2>Refine one component</h2><p>What do you check before you trust an output?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Find it, change one thing</h3>
+    <p>If the workflow misses the target, you do not blame the tool alone – you find which component caused the misses, change one thing, usually a word in the prompt, and re-run. A defined problem gives a clear target, and a <b>performance criterion</b>, such as eight of ten correct, makes the check measurable.</p>
+    <p>An output can be fluent and confident yet still wrong, so you compare it against the criterion and a trusted source before you trust it, and you name one responsible choice you made along the way.</p>
+    <figure>
+      <svg viewBox="0 0 760 286" role="img" aria-labelledby="f2T">
+        <title id="f2T">The refine loop. 1, score it: 7 of 10 outputs pass both checks against a target of 8, so the target is missed. 2, find it: on cards 4 and 5 the prompt tagged the place, not the problem. 3, change one thing: the word place becomes problem, while the data and tool stay the same. 4, re-run cards 4 and 5: both are now right, 9 of 10, target met. If it still misses, repeat the loop on the next component.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <g stroke="#2B1A14" stroke-width="1.6">
+            <rect x="9" y="30" width="166" height="140" rx="12" fill="#FDE7EC"/>
+            <rect x="201" y="30" width="166" height="140" rx="12" fill="#fff"/>
+            <rect x="393" y="30" width="166" height="140" rx="12" fill="#FFEFE9" stroke="#D7263D" stroke-width="2.4"/>
+            <rect x="585" y="30" width="166" height="140" rx="12" fill="#E2F5EC"/>
+          </g>
+          <g stroke="#2B1A14" stroke-width="2.4" fill="none" marker-end="url(#ah2)"><path d="M175 100H197"/><path d="M367 100H389"/><path d="M559 100H581"/></g>
+          <g font-size="15" font-weight="700" text-anchor="middle"><text x="92" y="62" fill="#C92A4B">1 · SCORE IT</text><text x="284" y="62">2 · FIND IT</text><text x="476" y="62" fill="#D7263D">3 · CHANGE IT</text><text x="668" y="62" fill="#0F8A5F">4 · RE-RUN</text></g>
+          <g font-size="13.5" text-anchor="middle">
+            <text x="92" y="92">7 of 10 pass</text><text x="92" y="112">both checks</text><text x="92" y="132" fill="#C92A4B" font-weight="700">target 8 – missed</text>
+            <text x="284" y="92">cards 4 and 5:</text><text x="284" y="112">the prompt tags</text><text x="284" y="132">the place, not</text><text x="284" y="152">the problem</text>
+            <text x="476" y="92">one word only:</text><text x="476" y="112" font-weight="700">‘place’ → ‘problem’</text><text x="476" y="132" fill="#6B5750">data, tool unchanged</text>
+            <text x="668" y="92">cards 4 and 5</text><text x="668" y="112">now right</text><text x="668" y="132" fill="#0F8A5F" font-weight="700">9 of 10 – met</text>
+          </g>
+          
+          <path d="M668 174V222H92V178" stroke="#D7263D" stroke-width="2" stroke-dasharray="6 5" fill="none" marker-end="url(#ah2)"/>
+          <rect x="150" y="206" width="460" height="32" rx="16" fill="#fff" stroke="#D7263D" stroke-width="1.6"/>
+          <text x="380" y="227" font-size="14" font-weight="700" text-anchor="middle" fill="#8A1024">still missing? repeat on the next component</text>
+          <text x="380" y="272" font-size="13.5" text-anchor="middle" fill="#6B5750">Change one component at a time, so you know which change made the difference.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> If the workflow misses the target, find the component that caused it, change one thing, and re-run.</figcaption>
+    </figure>
+    <div id="a-checks"></div>
+    <div id="a-case3"></div>
+    <div class="call"><h4>Solution Architects: build and check one workflow (away from the screen)</h4><p>In pairs, turn ten non-personal facility comments into a checked action list. Write the defined problem and target: tag ten comments and meet at least eight of ten. Feed in ten facility cards mentioning only benches, lighting, litter or water – no people. Read the agreed prompt for each card and record its tag and one-line action. Flip each card to its true category, mark the tag right or wrong, and check the action against the rules card. Name the component that caused most misses, change one word of the prompt, and re-run those cards. Write down one responsible choice you made. <b>You need:</b> comment cards (true category on the back), an agreed prompt strip, a trusted rules card and a tally sheet.</p></div>
+    <div class="ecard" id="sheet"></div>
+    <div id="a-map"></div>
+    <div id="a-sheet"></div>
+    <div id="a-refine"></div>
+    <div id="a-resp"></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 6 Lab</span><h2>Running It End-to-End</h2><p>In the Core you combined understand, design, evaluate and responsible use in one small workflow. Today you run the whole workflow properly from start to finish, record a check at every component, then add one new rule and re-run.</p></div>
+  <div class="part-body">
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>From cards to a full run</h2><p>What turns ‘it seemed to work’ into evidence?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Log every check</h3>
+    <p>In the Core lesson you ran the workflow on ten cards. Today you run it <b>end-to-end</b> on twelve or more, and you record a check at every component in a <b>checks log</b> – was the data clean, did the tag match the true category, did the action pass the rules card.</p>
+    <p>That log is powerful: it turns ‘it seemed to work’ into real evidence. You can total how many outputs were right, compare that with the criterion, and spot which component fails most.</p>
+    <figure>
+      <svg viewBox="0 0 760 312" role="img" aria-labelledby="f3T">
+        <title id="f3T">A checks log. Each card has a check at every component. Card 1, bench slat broken: data clean, tag matches, action allowed, output right. Card 2, fountain by the bins is dry: data clean, but the tag does not match, so the output is wrong. Card 3, lamp flickers on the path: all checks pass. Card 4, glass on the footpath: tag matches but the action breaks the rules card, so the output is wrong. Totals for 15 cards: data 15 of 15, tags 12 of 15, actions 14 of 15, outputs right 11 of 15.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <rect x="10" y="12" width="740" height="250" rx="10" fill="#fff" stroke="#2B1A14" stroke-width="1.4"/>
+          <rect x="11" y="13" width="738" height="52" rx="9" fill="#FFEFE9"/>
+          <g stroke="#F5DDD5" stroke-width="1.4"><path d="M10 66H750M10 104H750M10 142H750M10 180H750M10 218H750"/><path d="M60 12V218M290 12V218M400 12V218M516 12V218M640 12V218"/></g>
+          <g font-size="13.5" font-weight="700" text-anchor="middle"><text x="35" y="44">Card</text><text x="175" y="44">Comment (facility only)</text>
+            <text x="345" y="35">Data</text><text x="345" y="53">clean?</text><text x="458" y="35">Tag</text><text x="458" y="53">matches?</text><text x="578" y="35">Action</text><text x="578" y="53">allowed?</text><text x="695" y="35">Output</text><text x="695" y="53">right?</text></g>
+          <g font-size="14">
+            <g text-anchor="middle"><text x="35" y="90">1</text><text x="35" y="128">2</text><text x="35" y="166">3</text><text x="35" y="204">4</text></g>
+            <text x="72" y="90">Bench slat broken</text><text x="72" y="128">Fountain by the bins dry</text><text x="72" y="166">Lamp flickers on the path</text><text x="72" y="204">Glass on the footpath</text>
+          </g>
+          <g font-size="16" font-weight="700" text-anchor="middle">
+            <g fill="#0F8A5F"><text x="345" y="91">✓</text><text x="458" y="91">✓</text><text x="578" y="91">✓</text><text x="695" y="91">✓</text>
+              <text x="345" y="129">✓</text><text x="578" y="129">✓</text>
+              <text x="345" y="167">✓</text><text x="458" y="167">✓</text><text x="578" y="167">✓</text><text x="695" y="167">✓</text>
+              <text x="345" y="205">✓</text><text x="458" y="205">✓</text></g>
+            <g fill="#C92A4B"><text x="458" y="129">✗</text><text x="695" y="129">✗</text><text x="578" y="205">✗</text><text x="695" y="205">✗</text></g>
+          </g>
+          <text x="380" y="246" font-size="14" font-weight="700" text-anchor="middle" fill="#8A1024">Totals for 15 cards: data 15/15 · tags 12/15 · actions 14/15 · right 11/15</text>
+          <text x="380" y="296" font-size="13.5" text-anchor="middle" fill="#6B5750">A check at every component, for every card – then total each column.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> A checks log records the check you made at every component, for every item. <span class="illus">(Illustrative class results.)</span></figcaption>
+    </figure>
+    <div id="a-lsort"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Read the log</h2><p>Which component let the workflow down?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Reliability points the way</h3>
+    <p>A workflow is a system, so it is only as reliable as its weakest connection. Total how many outputs were right and compare that with the criterion – that total is your workflow's <b>reliability</b>, and it tells you exactly where to aim your next change.</p>
+    <p>Patterns in the log show which component fails most – maybe the prompt keeps mixing two categories. An improvement is judged by re-running: the score before against the score after shows whether adapting a component actually helped.</p>
+    <figure>
+      <svg viewBox="0 0 760 290" role="img" aria-labelledby="f4T">
+        <title id="f4T">Reliability from the checks log for 15 cards. Data check: 15 of 15 pass. Tag check, set by the prompt: 12 of 15 – the weakest component, because Water comments were tagged as Litter. Action check against the rules card: 14 of 15. Outputs right on every check: 11 of 15, one short of the target of 12.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <g font-size="14.5" font-weight="700"><text x="12" y="60">Data clean</text><text x="12" y="110">Tag matches (prompt)</text><text x="12" y="160">Action allowed</text><text x="12" y="210">Outputs right</text></g>
+          <g stroke="#F5DDD5" stroke-width="1"><path d="M240 34V226M700 34V226"/></g>
+          <rect x="240" y="40" width="460" height="28" rx="6" fill="#E2F5EC" stroke="#0F8A5F" stroke-width="1.4"/>
+          <rect x="240" y="90" width="368" height="28" rx="6" fill="#FDE7EC" stroke="#C92A4B" stroke-width="2.2"/>
+          <rect x="240" y="140" width="429" height="28" rx="6" fill="#E2F5EC" stroke="#0F8A5F" stroke-width="1.4"/>
+          <rect x="240" y="190" width="337" height="28" rx="6" fill="#FFEFE9" stroke="#D7263D" stroke-width="1.6"/>
+          <g font-size="14" font-weight="700"><text x="706" y="60">15/15</text><text x="706" y="110" fill="#C92A4B">12/15</text><text x="706" y="160">14/15</text><text x="706" y="210" fill="#8A1024">11/15</text></g>
+          <path d="M608 30V230" stroke="#2B1A14" stroke-width="2" stroke-dasharray="5 4"/>
+          <text x="608" y="24" font-size="13.5" font-weight="700" text-anchor="middle">target 12/15</text>
+          <text x="380" y="254" font-size="14" font-weight="700" text-anchor="middle" fill="#C92A4B">Weakest component: the prompt – Water comments tagged as Litter</text>
+          <text x="380" y="278" font-size="13.5" text-anchor="middle" fill="#6B5750">Reliability = outputs right out of the total: 11 of 15, one short of the target.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 4.</b> Reliability is how many outputs were right, out of the total – it points to the weakest component. <span class="illus">(Illustrative class results.)</span></figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Smart-city and council teams in the UAE keep improving their message-sorting workflows by logging where each component fails and testing every change against a clear target – exactly the run, analyse and adapt loop you are practising today.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Mathematics</h4><p>In <b>Mathematics</b>, calculate your workflow's reliability as a <b>fraction and percentage</b> of correct outputs out of the total (11 out of 15 ≈ 73%), then compare your before-change and after-change scores to judge whether one aimed adjustment genuinely improved the system.</p></div>
+    <div id="a-lorder"></div>
+    <div id="a-lcase2"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Part 3 of 3 · Worksheet</span><h2>Add a constraint</h2><p>Can your system cope with a tougher rule?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Adapt, do not rebuild</h3>
+    <p>Today you find the weak component, make one aimed change, then add one <b>constraint</b>: either a second criterion, like rating each action high or low priority, or a risk rule, like flagging any comment that mentions a possible hazard for a person to review. Then you re-run only the cards the change touches and compare your score before with your score after.</p>
+    <p>Notice you do not rebuild from scratch – you <b>adapt</b> the workflow you already have. This run, analyse, change one component and re-run cycle is called <b>iteration</b>. All the while you keep the safe rules: only facility comments go in, and every output is verified against a trusted source before you trust it.</p>
+    <div id="a-lrules"></div>
+    <div id="a-lcase3"></div>
+    <div class="call"><h4>Solution Architects: run it end-to-end (away from the screen)</h4><p>In a team, choose twelve to fifteen facility cards mentioning only benches, lighting, litter or water. Run every card through the workflow and record the tag and action in the log. At each component, log the check and mark it pass or fail. Total your reliability, compare with the criterion, and name the component that failed most. Refine that component and add one constraint – a second criterion or a risk rule. Re-run the cards it affects and record your score after. <b>You need:</b> twelve to fifteen comment cards, a checks-log table, the agreed prompt strip and a trusted rules card. <b>No board tool?</b> The routine is card-based – run the whole set by hand through the same prompt, checks and rules card.</p></div>
+    <div class="ecard" id="rlog"></div>
+    <div id="a-llog"></div>
+    <div id="a-lcons"></div>
+    <div class="call amber"><h4>Today's tool: Teachable Machine + Scratch – integrated system: build, evaluate, trace (teacher-operated)</h4><p>1. Train the model in Teachable Machine: name the classes, add balanced examples, click Train, then test in Preview. 2. Open Scratch (account-free) and add the machine-learning blocks so the trained model becomes the <b>process</b> step. 3. Wire the workflow: input (what you feed in) → model (classifies) → output (what Scratch shows), and click the green flag to run the whole system end to end. 4. Run the system on five inputs and record the outputs; evaluate them against the criteria and trace each fault to a component. 5. Improve one component, re-run the same inputs, and record one responsible-use choice you made. Save the Scratch project as an .sb3 file. <b>Roles:</b> Systems architect (maps the components), Data lead (prepares and checks inputs), Evaluator (tests and scores outputs), Scribe (records the trace and decisions). <b>Stay safe:</b> the teacher operates the tool on the board and students never log in. Teachable Machine trains in the browser and the samples stay on the teacher's device. Use objects, hand gestures or drawings only – never faces, voices or names. Clear the project at the end of the lesson and reuse only the non-personal model.</p></div>
+    <div class="ecard" id="tlog"></div>
+    <div id="a-ltool"></div>
+    <div id="a-lsafe"></div>
+    <div id="a-lexit"></div>
+    <div id="a-lchal"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Join the four strands – then run it end-to-end and adapt it</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>A <b>workflow</b> is a small system: data and a prompt drive a tool to make an output you then check.</li>
+      <li>The parts <b>interact</b>, so a vague prompt or messy data can still produce a <b>tidy but wrong</b> output.</li>
+      <li>You check each output against a clear <b>target</b> and a <b>trusted source</b> – the true category and the rules card – before you trust it.</li>
+      <li>To improve, you <b>refine one component</b> – usually the prompt – and re-run the misses.</li>
+      <li>Running <b>end-to-end</b> logs a check at every component; <b>reliability</b> – right outputs out of the total – shows which component let the workflow down.</li>
+      <li>Adding a <b>constraint</b> tests the system; you <b>adapt</b> what you have and keep the safe rules: facility comments only, no names or faces, and a person reviews anything high-impact.</li>
+    </ul>
+    <p class="note"><b>Next:</b> in Week 7 you become the architect of your own signature solution for the term.</p>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 9 · Main Course · Term 1 Week 6 (9 – 13 Nov 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- scope & sequence concepts (Grade 9, Week 6: Integrate – all four strands) ---------- */
+const CU_P="CU · how data, tools and prompts interact within a solution";
+const CU_A="CU · how design choices affect output quality and reliability";
+const SD_E="SD · uses AI tools to complete structured tasks";
+const SD_P="SD · designs structured AI workflows for defined problems";
+const SD_A="SD · refines workflows to improve outputs and usability";
+const CE_E="CE · identifies incorrect or unclear outputs";
+const CE_P="CE · evaluates outputs for accuracy, bias and usefulness";
+const CE_A="CE · explains limitations and suggests targeted improvements";
+const GE_E="GE · identifies risks in AI-generated content";
+const GE_P="GE · explains bias, misinformation and misuse";
+const GE_A="GE · proposes actions for responsible and safe use";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["workflow","A set of connected steps where data, a prompt and a tool work together to produce an output."],
+  ["component","One part of the workflow, such as the data, the prompt, the tool or the check."],
+  ["prompt","The instruction you give the tool that tells it exactly what to do with the data."],
+  ["performance criterion","The target the workflow must reach, such as eight correct out of ten."],
+  ["integration","Joining several skills or parts into one working system."]
+];
+const DEF_ORDER = [3,0,4,1,2];
+const MATCH = [["m1","⚙️ Solution design",0],["m2","🔎 Critical evaluation",1],["m3","🧠 Understanding systems",2],["m4","🛡️ Responsible use",3]];
+const MATCH_OPTS = ["🛠️ build and run the workflow","📊 check the output against a target","🔗 see how the parts connect","📥 keep every input non-personal"];
+const CASE1 = ["Responsible use – keeping the data fully non-personal.","None at all – checking is not really a genuine skill here.","Critical evaluation – comparing output to target and source.","Solution design – comparing is really part of the build work."];
+const STEPS = ["📥 Feed in the ten facility comments","✍️ Read the agreed prompt to the tool","🏷️ The tool returns a tag and an action","🔎 Check each output against the target and rules card","🔧 Refine one component and re-run the misses"];
+const STEP_ORDER = [3,0,4,1,2];
+const CASE2 = ["Add much more data without checking any of it first.","Check each tag against the true category and rules card.","Blame the tool and rebuild the entire workflow from scratch.","Trust it at once, since it looks neat and confident."];
+const CHECKS = [
+  ["ck1","🏷️ Whether the tag matches the true category",1],
+  ["ck2","✨ Whether the output looks tidy and well formatted",0],
+  ["ck3","📋 Whether the action is allowed on the rules card",1],
+  ["ck4","🏆 Whether the output sounds confident",0],
+  ["ck5","🔗 Whether the claim holds against a trusted source",1],
+  ["ck6","⏱️ Whether the output came back quickly",0]
+];
+const CASE3 = ["Yes – the tag score is really all that ever counts here.","No – the tool is simply broken beyond any repair now.","Yes, since nine out of ten is a clearly high enough score.","No – actions breaking the rules card fail the check too."];
+const CARDS10 = [
+  [1,"A bench slat by the playground is broken.","Benches","Benches","Report it to the maintenance team."],
+  [2,"Two lamps on the jogging track stay dark at night.","Lighting","Lighting","Report it to the lighting team."],
+  [3,"Bins by the car park overflow at weekends.","Litter","Litter","Send the cleaning team."],
+  [4,"The fountain beside the bins is dry.","Litter","Water","Send the cleaning team."],
+  [5,"Plastic bottles are left around the benches.","Benches","Litter","Report it to the maintenance team."],
+  [6,"Sprinklers flood the footpath every morning.","Water","Water","Ask residents to turn the sprinklers off."],
+  [7,"The paint on the beach benches is peeling.","Benches","Benches","Report it to the maintenance team."],
+  [8,"A street light flickers near the bus stop.","Lighting","Lighting","Report it to the lighting team."],
+  [9,"Litter blows out of the open bin by the beach.","Litter","Litter","Send the cleaning team."],
+  [10,"A tap at the park toilets keeps leaking.","Water","Water","Report it to the water team."]
+];
+const MAP = [["mp1","🎯 Defined problem and criterion",0],["mp2","📥 Data (input)",1],["mp3","✍️ Prompt",2],["mp4","🤖 Tool (process)",3],["mp5","🔎 Check (output vs criterion and rules card)",4]];
+const MAP_OPTS = ["Tag ten facility comments; at least 8 of 10 must pass both checks","Ten comment cards about benches, lighting, litter or water – no people","‘Tag the place in each comment as Benches, Lighting, Litter or Water, then write one action.’","The simulated-AI card routine the teacher runs on the board","Flip each card to its true category and test each action against the rules card"];
+const SH_TAGS = ["8 out of 10","10 out of 10","7 out of 10","6 out of 10"];
+const SH_RULE = ["1 – card 6 asks residents to turn the sprinklers off","None – every action is allowed","2 – cards 4 and 5","3 – cards 4, 5 and 6"];
+const SH_BOTH = ["7 out of 10 – one short of the 8 of 10 target","8 out of 10 – exactly on the target","9 out of 10 – above the target","10 out of 10 – every output passes"];
+const RF_COMP = ["The prompt – ‘place’ makes the tool tag the place named, not the problem (cards 4 and 5)","The data – the comment cards were messy","The tool – it is broken and must be replaced","The check – the rules card is too strict"];
+const RF_CHANGE = ["Change ‘place’ to ‘problem’ in the prompt, then re-run cards 4 and 5","Rewrite the prompt, swap the tool and add new cards all at once","Remove cards 4 and 5 from the set","Lower the target to 7 out of 10"];
+const RF_AFTER = ["9 out of 10 – meets the target; card 6's action is the next thing to fix","10 out of 10 – every output is now right","7 out of 10 – no change","9 out of 10 – but still below the target"];
+const RESP = [
+  ["r1","📥 We used only facility comments – benches, lighting, litter, water.","R"],
+  ["r2","🪪 We added a resident's name so the action could thank them.","N"],
+  ["r3","📋 We checked every action against the rules card before trusting it.","R"],
+  ["r4","📸 We attached a photo of the person who sent the comment.","N"],
+  ["r5","🚫 We rejected the action that asked residents to fix the sprinklers.","R"],
+  ["r6","🏆 We kept an action that broke the rules card because its tag was right.","N"]
+];
+const EXIT = [
+  "The tool's tags looked tidy and confident, so the workflow met the target and nothing needed changing.",
+  "I changed the data, the prompt and the tool all at once until every card came out right.",
+  "Ten facility comments went in, the prompt told the tool to tag each one and suggest an action, and I checked each output against its true category and the rules card: 7/10 before, 9/10 after changing ‘place’ to ‘problem’. I used only facility comments – no names or faces.",
+  "It scored 8 out of 10 on tags, so the actions did not need checking."
+];
+const CHAL = [
+  "Start again with a brand-new workflow that only rates priority.",
+  "Keep the workflow, add a ‘flag any possible hazard for a person to review’ line to the prompt, and re-check against both the tag target and the new rule.",
+  "Drop the tag target so that only the new hazard rule counts.",
+  "Add the hazard rule but keep reporting the old score as the result."
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["end-to-end","Running every component of the workflow in order on a full data set."],
+  ["checks log","A table where you record the check you made at each component for every item."],
+  ["reliability","How well the workflow met the target, counted out of the total."],
+  ["constraint","A new rule or limit you add, such as a second criterion or a risk to flag."],
+  ["iteration","Improving a workflow by running it, analysing failures, changing one component, and re-running."]
+];
+const LDEF_ORDER = [3,0,4,2,1];
+const LSORT = [
+  ["ls1","🧼 Was the data clean and non-personal?","Y"],
+  ["ls2","⏱️ How fast the tool replied","N"],
+  ["ls3","🏷️ Did the tag match the true category?","Y"],
+  ["ls4","📋 Did the action pass the rules card?","Y"],
+  ["ls5","😊 How you felt about the answer","N"],
+  ["ls6","✨ Did the output look tidy on the page?","N"]
+];
+const LCASE1 = ["A tidier layout for the whole output list on screen.","Nothing – you can never really prove that it worked.","A checks log recording the check at every component.","Just running the workflow once more to feel more sure."];
+const LSTEPS = ["▶️ Run every card and log each check","📊 Total the reliability and compare with the criterion","🔍 Find the component that failed most","🔧 Change one component","🔁 Re-run the affected cards and compare the score"];
+const LSTEP_ORDER = [2,4,0,3,1];
+const LCASE2 = ["Refine the prompt the log blamed, re-run and compare.","Rebuild the entire workflow again from the very beginning.","Lower the target until the score finally passes it.","Add more cards and simply hope the score rises soon."];
+const LRULES = [
+  ["lr1","🏗️ Rebuild the whole workflow from scratch each time",0],
+  ["lr2","📥 Only facility comments go in – no names or faces",1],
+  ["lr3","🔧 Change one component, then re-run the cards it affects",1],
+  ["lr4","🪪 Add a real person's name to test the risk rule",0],
+  ["lr5","🏆 Accept the higher score without checking anything",0],
+  ["lr6","🔗 Every output is verified against a trusted source",1]
+];
+const LCASE3 = ["It just makes the whole workflow run faster overall.","The tool should never produce any output on its own.","A hazard is high-impact, so a person verifies first.","Because human reviewers are simply never wrong at all."];
+const LG_BEFORE = ["11 out of 15 (about 73%)","12 out of 15 (80%)","14 out of 15 (about 93%)","15 out of 15 (100%)"];
+const LG_MEET = ["No – one short of the 12 needed","Yes – 11 is close enough to count","Yes – the data check passed 15 out of 15"];
+const LG_WEAK = ["The prompt's tagging – Water comments tagged as Litter (cards 2, 7 and 11)","The data – some cards were not clean","The rules card – it fails too many actions","Every component failed equally"];
+const LG_AFTER = ["13 out of 15 (about 87%) – meets the criterion","11 out of 15 – no change","15 out of 15 – perfect","13 out of 15 – still below the criterion"];
+const CN_TYPE = ["A risk rule – flag any comment that mentions a possible hazard for a person to review","A second tool that replaces the first one","A new criterion: tag 15 out of 15 or start again","A rule to add the name of whoever wrote each comment"];
+const CN_ADAPT = ["One line added to the existing prompt: ‘If it mentions a possible hazard, add FLAG’","The whole workflow was rebuilt from scratch","The rules card was thrown away","The target was lowered to 10 out of 15"];
+const CN_RERUN = ["Only the cards the rule touches – 4, 9 and 13 – checking all three are flagged","All 15, after deleting the old prompt","None – a new rule does not need testing","Only the cards that were already right"];
+const CN_RESP = ["Facility comments only, and a person reviews every flagged item before any action","The tool decides alone, so nobody needs to read the comments","Real names are added so the team can call people back","Flagged comments are deleted so they cannot cause trouble"];
+const TL_WIRE = ["The process step – between the input and the output","The input – it is what you feed in","The output – it is what Scratch shows","Outside the workflow – it is not connected"];
+const TL_F2 = ["The data – the ‘tap’ class had too few examples, so the model said ‘lamp’","The Scratch output logic","The input – a tap drawing is not allowed","Nothing – the output was right"];
+const TL_F4 = ["The Scratch output logic – the model said ‘bin’ correctly, but the if-block sends ‘bin’ to the water team","The data – the model got the label wrong","The camera input","Nothing – the output was right"];
+const TL_SCORE = ["3 out of 5 before, 4 out of 5 after","3 out of 5 before, 5 out of 5 after","5 out of 5 before and after","2 out of 5 before, 4 out of 5 after"];
+const TL_STILL = ["Only the data was improved; the Scratch logic fault remains, so fix that next and re-run","The model needs even more tap drawings","Scratch is too unreliable to use","It was just bad luck on that run"];
+const TL_SAME = ["So the before and after scores are a fair comparison","To make the score look higher","Because new inputs are not allowed in Scratch","It does not matter which inputs you use"];
+const LSAFE = [
+  ["sf1","The teacher operates the tool on the board; students never log in",1],
+  ["sf2","Use objects, hand gestures or drawings only",1],
+  ["sf3","Train the model on classmates' faces so the test is realistic",0],
+  ["sf4","Samples stay on the teacher's device; clear the project at the end",1],
+  ["sf5","Record students' voices saying the class names",0],
+  ["sf6","Reuse only the non-personal model",1],
+  ["sf7","Add each student's name to the class labels",0]
+];
+const LEXIT = [
+  "It felt more reliable after the change, and we were careful with it.",
+  "We deleted the cards it got wrong, so reliability rose to 15 out of 15 and it now meets the target.",
+  "We added residents' names to the comments so the hazard rule would be realistic, then re-ran everything.",
+  "Before: 11/15, below the 12 target; the prompt's tagging failed most, so we refined it: 13/15, which meets it. We added a flag-hazard rule, re-ran only cards 4, 9 and 13, used facility comments only, and a person reviews every flag."
+];
+const LCHAL = [
+  "Predict which matters more, then add one constraint at a time, re-check after each and compare the reliability changes.",
+  "Add both constraints at once and look only at the final score.",
+  "Skip the prediction and keep whichever constraint sounds better.",
+  "Remove the first constraint so only the second one is tested."
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CU_P,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"A workflow is a set of connected steps where data, a prompt and a tool produce an output. A component is one part of it – the data, the prompt, the tool or the check. The prompt tells the tool exactly what to do with the data. The performance criterion is the target, such as 8 out of 10. Integration joins several skills or parts into one working system."},
+ {id:"match",mount:"a-match",section:"Core · Part 1",title:"Match each strand to its job",sub:"Objective 1 · connect the four strands · "+CU_P,ico:"🧷",
+  fields:MATCH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Solution design builds and runs the workflow. Critical evaluation checks the output against a target. Understanding systems sees how the parts connect. Responsible use keeps every input non-personal. Four strands, one workflow – that is integration."},
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"Case 1 · Four Gears, One Result",sub:"Solution Architects · "+CE_P,ico:"🕵️",
+  fields:[{k:"c1",radio:1,ok:v=>eq(v,2)}],
+  explain:"Comparing the output against a target and a trusted source is critical evaluation – the check step. Design builds and runs the workflow, responsible use protects the input, and checking is a real, core skill."},
+ {id:"order",mount:"a-order",section:"Core · Part 2",title:"Order the workflow",sub:"Objective 2 · run and check the workflow · "+SD_P,ico:"🧭",
+  fields:STEPS.map((_,i)=>({k:"o"+i,ok:v=>eq(v,i)})),
+  explain:"Data flows in order: feed in the ten facility comments, read the agreed prompt to the tool, the tool returns a tag and an action, check each output against the target and the rules card – and only then refine one component and re-run the misses."},
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"Case 2 · Tidy but Wrong",sub:"Solution Architects · "+CE_E,ico:"⚖️",
+  fields:[{k:"c2",radio:1,ok:v=>eq(v,1)}],
+  explain:"A tidy, confident output still has to be verified: check each tag against the true category and the rules card. Tidy and confident does not mean correct, more unchecked data will not fix it, and you find the component that caused the misses rather than rebuilding everything."},
+ {id:"checks",mount:"a-checks",section:"Core · Part 3",title:"What must you check?",sub:"Objective 3 · check before you trust · "+CE_P,ico:"🧩",
+  fields:CHECKS.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Before you trust an output, check that the tag matches the true category, that the action is allowed on the rules card, and that the claim holds against a trusted source. Looking tidy, sounding confident or coming back quickly says nothing about whether it is right."},
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"Case 3 · Nine Right, Two Broken Rules",sub:"Solution Architects · "+CE_P,ico:"🔬",
+  fields:[{k:"c3",radio:1,ok:v=>eq(v,3)}],
+  explain:"No – meeting the tag target is not enough if actions break the rules card; the action must pass the check too. The tool is not beyond repair: you refine one component, usually the prompt, rather than scrapping the workflow."},
+ {id:"map",mount:"a-map",section:"Core worksheet",title:"My defined problem and workflow map",sub:"Worksheet · "+SD_P,ico:"🗺️",cls:"ws",
+  fields:MAP.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"The defined problem and criterion: tag ten comments, at least 8 of 10 passing both checks. The data is the ten facility comment cards. The prompt is the agreed instruction. The tool is the simulated-AI routine. The check flips each card to its true category and tests each action against the rules card."},
+ {id:"sheet",mount:"a-sheet",section:"Core worksheet",title:"My check sheet",sub:"Worksheet · "+CE_P,ico:"📝",cls:"ws",
+  fields:[{k:"sh1",ok:v=>eq(v,0)},{k:"sh2",ok:v=>eq(v,0)},{k:"sh3",ok:v=>eq(v,0)}],
+  explain:"Cards 4 and 5 have the wrong tag, so 8 out of 10 tags are right. Card 6's action asks residents to act themselves, which breaks rule 2 of the rules card. Cards 4, 5 and 6 each fail a check, so only 7 out of 10 outputs pass both – one short of the 8 of 10 target."},
+ {id:"refine",mount:"a-refine",section:"Core worksheet",title:"My refinement",sub:"Worksheet · "+SD_A,ico:"🔧",cls:"ws",
+  fields:[{k:"rf1",ok:v=>eq(v,0)},{k:"rf2",ok:v=>eq(v,0)},{k:"rf3",ok:v=>eq(v,0)}],
+  explain:"Both tag misses happened because the prompt asked for the place named in the comment (bins, benches) rather than the problem. Change that one word to ‘problem’, keep the data and tool the same, and re-run cards 4 and 5: both are now right, so 9 of 10 pass and the target is met – card 6's action is the next thing to fix."},
+ {id:"resp",mount:"a-resp",section:"Core worksheet",title:"Responsible choice, or not?",sub:"Worksheet · my responsible-use choice · "+GE_P,ico:"🛡️",cls:"ws",
+  fields:RESP.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Responsible: facility comments only, checking every action against the rules card, and rejecting an action that asks residents to fix things. Not responsible: adding a resident's name or a photo of a person is personal data, and keeping a rule-breaking action because the tag was right lets a harmful output through."},
+ {id:"exit",mount:"a-exit",section:"Core worksheet",title:"Exit ticket",sub:"Explain it · "+CU_P,ico:"🎫",
+  fields:[{k:"ex",radio:1,ok:v=>eq(v,2)}],
+  explain:"A complete answer says how the data, prompt and tool connected to make an output, how it was checked against the criterion and the rules card, gives the score before and after one change, and names a responsible choice. Looking tidy, changing everything at once, or skipping the action check is not evidence."},
+ {id:"chal",mount:"a-chal",section:"Core worksheet",title:"Challenge · add a constraint",sub:"Stretch · "+SD_A,ico:"⭐",
+  fields:[{k:"ch",radio:1,ok:v=>eq(v,1)}],
+  explain:"Adapting an approach means keeping what works, adapting the prompt for the new risk rule, and re-checking against both targets. Starting again, dropping the first target or reporting an old score does not show how the constraint changed your components and your score."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+CE_P,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"End-to-end = every component in order on a full data set. Checks log = the check made at each component for every item. Reliability = how well the workflow met the target, counted out of the total. Constraint = a new rule or limit. Iteration = run, analyse failures, change one component, re-run."},
+ {id:"lsort",mount:"a-lsort",section:"Lab · Part 1",title:"What belongs in the checks log?",sub:"Objective 1 · log a check at every component · "+CE_P,ico:"🗂️",
+  fields:LSORT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Real checks: was the data clean and non-personal, did the tag match the true category, did the action pass the rules card – one for each component. How fast it replied, how you felt and how tidy it looked are not checks of whether the output is right."},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"Case 1 · It Seemed to Work",sub:"Solution Architects · "+CE_P,ico:"🕵️",
+  fields:[{k:"lc1",radio:1,ok:v=>eq(v,2)}],
+  explain:"A per-component checks log turns an impression into evidence. Appearance is not evidence, repeating a run without logging still gives no evidence, and you can prove it – the log is the proof."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 2",title:"Order the iteration loop",sub:"Objective 2 · judge reliability and iterate · "+SD_A,ico:"🧭",
+  fields:LSTEPS.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"Run every card and log each check, total the reliability and compare it with the criterion, find the component that failed most, change that one component, then re-run the affected cards and compare the score before and after."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"Case 2 · Eleven of Fifteen",sub:"Solution Architects · "+CE_A,ico:"⚖️",
+  fields:[{k:"lc2",radio:1,ok:v=>eq(v,0)}],
+  explain:"Aim one change at the weakest component the log points to – the prompt – then re-check the score. Rebuilding throws away what works, lowering the target hides the problem, and more cards without a fix will not raise the score."},
+ {id:"lrules",mount:"a-lrules",section:"Lab · Part 3",title:"Keep the re-run responsible",sub:"Objective 3 · add a constraint responsibly · "+GE_P,ico:"🧩",
+  fields:LRULES.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Only facility comments go in, you change one component and re-run the cards it affects, and every output is verified against a trusted source. Rebuilding each time is not adapting, a real name is personal data, and a higher score you have not checked is not evidence."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"Case 3 · Flag for a Human",sub:"Solution Architects · "+GE_A,ico:"🔬",
+  fields:[{k:"lc3",radio:1,ok:v=>eq(v,2)}],
+  explain:"A hazard is high-impact, so a person verifies it before it is trusted. A review step adds care, not speed; the tool still does most of the work; and reviewers are not perfect – the reason is impact."},
+ {id:"llog",mount:"a-llog",section:"Lab worksheet",title:"Full checks log: reliability before and after",sub:"Worksheet · "+CE_A,ico:"🧮",cls:"ws",
+  fields:[{k:"lg1",ok:v=>eq(v,0)},{k:"lg2",ok:v=>eq(v,0)},{k:"lg3",ok:v=>eq(v,0)},{k:"lg4",ok:v=>eq(v,0)}],
+  explain:"Cards 2, 7 and 11 failed the tag check and card 4 failed the rules card, so 11 out of 15 (about 73%) were right – one short of 12. The prompt's tagging failed most, mixing Water and Litter. After the aimed prompt change, cards 2 and 7 pass: 13 out of 15 (about 87%), which meets the criterion."},
+ {id:"lcons",mount:"a-lcons",section:"Lab worksheet",title:"My added constraint",sub:"Worksheet · "+SD_A,ico:"🚧",cls:"ws",
+  fields:[{k:"cn1",ok:v=>eq(v,0)},{k:"cn2",ok:v=>eq(v,0)},{k:"cn3",ok:v=>eq(v,0)},{k:"cn4",ok:v=>eq(v,0)}],
+  explain:"The constraint is a risk rule: flag any possible hazard for a person to review. You adapt the workflow you have by adding one line to the prompt, re-run only the cards it touches (4, 9 and 13) and check all three are flagged, and keep it responsible: facility comments only, and a person reviews each flag before any action."},
+ {id:"ltool",mount:"a-ltool",section:"Lab worksheet",title:"Tool log: Teachable Machine + Scratch",sub:"Worksheet · system evaluate + trace · "+SD_E,ico:"🤖",cls:"ws",
+  fields:[{k:"tl1",ok:v=>eq(v,0)},{k:"tl2",ok:v=>eq(v,0)},{k:"tl3",ok:v=>eq(v,0)},{k:"tl4",ok:v=>eq(v,0)},{k:"tl5",ok:v=>eq(v,0)},{k:"tl6",ok:v=>eq(v,0)}],
+  explain:"In Scratch the trained model is the process step. Input 2 failed in the data: too few tap drawings, so the model said ‘lamp’. Input 4 failed in the Scratch logic: the model said ‘bin’ correctly, but the if-block sent it to the wrong team. Adding tap drawings fixed input 2 only – 3 of 5 became 4 of 5 – so the Scratch logic is the next component to fix. Re-running the same inputs keeps the comparison fair."},
+ {id:"lsafe",mount:"a-lsafe",section:"Lab worksheet",title:"Safety check",sub:"Safety check · "+GE_E,ico:"🛡️",
+  fields:LSAFE.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"The teacher operates the tool and students never log in; use objects, hand gestures or drawings only; samples stay on the teacher's device and the project is cleared at the end; reuse only the non-personal model. Faces, voices and names are personal data – never use them."},
+ {id:"lexit",mount:"a-lexit",section:"Lab worksheet",title:"Exit ticket",sub:"Explain it · "+CE_A,ico:"🎫",
+  fields:[{k:"le",radio:1,ok:v=>eq(v,3)}],
+  explain:"A complete exit ticket gives reliability before and after, says whether each meets the criterion, names the component that failed most, describes the constraint and how it was re-run, and says how the task stayed responsible. A feeling, deleting hard cards or adding names is not responsible evidence."},
+ {id:"lchal",mount:"a-lchal",section:"Lab worksheet",title:"Challenge · two constraints",sub:"Stretch · "+CU_A,ico:"⭐",
+  fields:[{k:"lch",radio:1,ok:v=>eq(v,0)}],
+  explain:"Predict first, then change one thing at a time: add one constraint, re-check, add the next, re-check again. Only then can you say which design choice affected reliability more and how to adapt the workflow further."}
+];
+
+/* ---------- state ---------- */
+const KEY="g9-mw6-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#sheet").innerHTML=`<header><small>Check sheet · simulated-AI cards · illustrative</small><b>Facility comments · target: at least 8 of 10 pass both checks</b></header>
+<div class="in">
+  <p class="task"><b>The prompt read to the tool:</b> ‘Tag the place in each comment as Benches, Lighting, Litter or Water, then write one action.’ The true category is on the back of each card. Check each tag, then check each action against the rules card.</p>
+  <table class="t"><thead><tr><th>#</th><th>Comment</th><th>Tag (true)</th><th>Action</th></tr></thead>
+  <tbody>${CARDS10.map(([n,c,t,tr,a])=>`<tr><td>${n}</td><td>${esc(c)}</td><td><b>${t}</b> (${tr})</td><td>${esc(a)}</td></tr>`).join("")}</tbody></table>
+  <p class="note"><b>Trusted rules card:</b> 1. Every action is a report to a council team. 2. No action asks a resident or visitor to fix, move or touch anything. 3. No action names or describes a person.</p>
+</div>`;
+$("#rlog").innerHTML=`<header><small>Checks log · simulated-AI cards · illustrative class results</small><b>15 facility comment cards · criterion: at least 12 of 15 outputs right</b></header>
+<div class="in">
+  <p class="task"><b>The run:</b> every card went through the workflow, and a check was logged at each component. An output is right only if it passes every check.</p>
+  <table class="t"><thead><tr><th>Check at each component</th><th>Pass</th><th>Fail</th><th>Cards that failed</th></tr></thead>
+  <tbody><tr><td>Data clean and non-personal</td><td>15</td><td>0</td><td>–</td></tr>
+  <tr><td>Tag matches the true category (prompt + tool)</td><td>12</td><td>3</td><td>2, 7, 11 – all Water comments tagged as Litter</td></tr>
+  <tr><td>Action passes the rules card</td><td>14</td><td>1</td><td>4 – asks a passer-by to sweep up broken glass</td></tr>
+  <tr><td><b>Output right on every check</b></td><td><b>11</b></td><td><b>4</b></td><td>2, 4, 7, 11</td></tr></tbody></table>
+  <p class="note"><b>Aimed change:</b> one line added to the prompt – ‘Fountains, taps, sprinklers and leaks are Water.’ Cards 2, 7 and 11 are re-run: cards 2 and 7 are now tagged Water; card 11 is still tagged Litter. Card 4's action is unchanged.</p>
+  <p class="note"><b>Constraint added:</b> a risk rule – ‘If a comment mentions a possible hazard, add FLAG so a person reviews it.’ Cards 4 (broken glass), 9 (exposed wire) and 13 (slippery path) mention hazards.</p>
+</div>`;
+$("#tlog").innerHTML=`<header><small>Tool log · Teachable Machine + Scratch · illustrative</small><b>Facility sorter: five inputs, before and after one improvement</b></header>
+<div class="in">
+  <p class="task"><b>Set-up:</b> classes ‘bench’, ‘lamp’, ‘bin’ and ‘tap’, trained on drawings held up to the camera (objects only – no faces, voices or names). In Scratch: input (camera image) → model (classifies) → output (the sprite names the council team to tell: repairs, lights, cleaning or water).</p>
+  <table class="t"><thead><tr><th>Input</th><th>Model's label before</th><th>Output before</th><th>Output after</th></tr></thead>
+  <tbody><tr><td>1 · bench drawing</td><td>bench</td><td>repairs ✓</td><td>repairs ✓</td></tr>
+  <tr><td>2 · tap drawing</td><td>lamp</td><td>lights ✗</td><td>water ✓</td></tr>
+  <tr><td>3 · lamp drawing</td><td>lamp</td><td>lights ✓</td><td>lights ✓</td></tr>
+  <tr><td>4 · bin drawing</td><td>bin</td><td>water ✗</td><td>water ✗</td></tr>
+  <tr><td>5 · tap drawing, sideways</td><td>tap</td><td>water ✓</td><td>water ✓</td></tr></tbody></table>
+  <p class="note"><b>Change made between runs:</b> 15 more tap drawings added to the ‘tap’ class, then the model was retrained. The Scratch blocks were not changed.</p>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const pairs=(rows,opts,ph,order)=>rows.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,opts,ph,order)}</div>`).join("");
+const ask=(k,q,opts,order)=>`<div class="pair" data-item="${k}"><span class="t">${esc(q)}</span>${sel(k,opts,"Choose…",order)}</div>`;
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "match":
+    return `<p class="how">Match each strand to the job it does in the workflow.</p>`+pairs(MATCH,MATCH_OPTS,"Choose its job…",[2,0,3,1]);
+  case "case1":
+    return `<div class="quote">A council workflow sorts public messages: data goes in, a prompt guides the tool, an output appears, and someone checks it. Architect, which strand is doing the work at the check step?</div><div class="clues"><div class="clue">📥<span>DATA IN</span></div><div class="clue">🤖<span>TOOL RUNS</span></div><div class="clue">🔎<span>OUTPUT CHECKED</span></div></div><p class="q" id="q-c1">Which strand acts at the check step?</p>${radios("c1",CASE1)}`;
+  case "order":
+    return `<p class="how">Put the workflow steps in the order data flows through them, from first to last.</p>`+
+      STEPS.map((_,i)=>`<div class="pair" data-item="o${i}"><span class="t">Step ${i+1}</span>${sel("o"+i,STEPS,"Choose the step…",STEP_ORDER)}</div>`).join("");
+  case "case2":
+    return `<div class="quote">A vague prompt is fed messy data, and the tool returns a neat, confident list of tags. Architect, what should you do before trusting that output?</div><div class="clues"><div class="clue">🌫️<span>VAGUE PROMPT</span></div><div class="clue">🏷️<span>TIDY TAGS</span></div><div class="clue">🔎<span>CHECK FIRST</span></div></div><p class="q" id="q-c2">What do you do before trusting it?</p>${radios("c2",CASE2)}`;
+  case "checks":
+    return boxes(CHECKS,"Tick the THREE things you must check before trusting an output. Leave the others unticked.");
+  case "case3":
+    return `<div class="quote">A workflow scores nine of ten tags correct, but two of those correct-looking actions break the trusted rules card. Architect, is it really solving the problem?</div><div class="clues"><div class="clue">🎯<span>9 OF 10 TAGS</span></div><div class="clue">🚩<span>2 BREAK RULES</span></div><div class="clue">🔧<span>FIX FIRST?</span></div></div><p class="q" id="q-c3">Is the workflow solving the problem?</p>${radios("c3",CASE3)}`;
+  case "map":
+    return `<p class="how">Fill in what goes in each component of the workflow on the check sheet above.</p>`+pairs(MAP,MAP_OPTS,"Choose what goes here…",[3,0,4,1,2]);
+  case "sheet":
+    return `<p class="how">Use the check sheet and the rules card above. Check every tag and every action, then total your score.</p>`+
+      ask("sh1","Tags that match the true category",SH_TAGS,[2,0,3,1])+
+      ask("sh2","Actions that break the rules card",SH_RULE,[1,3,0,2])+
+      ask("sh3","Outputs that pass both checks, compared with the target",SH_BOTH,[1,2,0,3]);
+  case "refine":
+    return `<p class="how">Name the component that caused most misses, the one change you make, and your re-score.</p>`+
+      ask("rf1","The component that caused most misses",RF_COMP,[1,2,0,3])+
+      ask("rf2","The one change I make",RF_CHANGE,[1,0,2,3])+
+      ask("rf3","My re-score after re-running those cards",RF_AFTER,[3,1,0,2]);
+  case "resp":
+    return `<p class="how">Sort each choice made during the task: is it responsible, or not?</p>`+
+      RESP.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🛡️ Responsible","⛔ Not responsible"],["R","N"],t)}</div>`).join("");
+  case "exit":
+    return `<p class="q" id="q-ex">Which sentence explains how the data, prompt and tool connected to make an output, how it was checked against the criterion and the rules card, gives the score before and after the change, and names a responsible choice?</p>${radios("ex",EXIT)}`;
+  case "chal":
+    return `<div class="quote">Stretch: you add a risk rule – flag any comment that mentions a possible hazard for a person to review. How should you adapt your approach?</div><p class="q" id="q-ch">Which is the best way to add the constraint?</p>${radios("ch",CHAL)}`;
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lsort":
+    return `<p class="how">Sort each item – is it a real check you should log, or not?</p>`+
+      LSORT.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🗃️ Log this check","🌱 Not a check"],["Y","N"],t)}</div>`).join("");
+  case "lcase1":
+    return `<div class="quote">A pair say their workflow ‘seemed to work’ but kept no record of any check. Architect, what turns that claim into real evidence?</div><div class="clues"><div class="clue">🤔<span>‘SEEMED FINE’</span></div><div class="clue">🗃️<span>CHECKS LOG</span></div><div class="clue">📊<span>REAL EVIDENCE</span></div></div><p class="q" id="q-lc1">What turns the claim into evidence?</p>${radios("lc1",LCASE1)}`;
+  case "lorder":
+    return `<p class="how">Put the run, analyse and adapt loop in order, from first to last.</p>`+
+      LSTEPS.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">Step ${i+1}</span>${sel("lo"+i,LSTEPS,"Choose the step…",LSTEP_ORDER)}</div>`).join("");
+  case "lcase2":
+    return `<div class="quote">A workflow scores 11 of 15 but the target is 12, and the log shows the prompt keeps mixing two categories. Architect, what is the best next move?</div><div class="clues"><div class="clue">📊<span>11 OF 15</span></div><div class="clue">🗃️<span>LOG BLAMES PROMPT</span></div><div class="clue">🔧<span>ONE CHANGE</span></div></div><p class="q" id="q-lc2">What is the best next move?</p>${radios("lc2",LCASE2)}`;
+  case "lrules":
+    return boxes(LRULES,"Tick the THREE rules that keep your re-run responsible and valid. Leave the others unticked.");
+  case "lcase3":
+    return `<div class="quote">You add a risk rule: any comment hinting at a hazard is flagged for a person to review. Architect, why route those flagged items to a human instead of letting the tool decide alone?</div><div class="clues"><div class="clue">🚩<span>HAZARD FLAGGED</span></div><div class="clue">🧑‍🔧<span>HUMAN REVIEWS</span></div><div class="clue">🛡️<span>SAFER SYSTEM</span></div></div><p class="q" id="q-lc3">Why route flagged items to a human?</p>${radios("lc3",LCASE3)}`;
+  case "llog":
+    return `<p class="how">Use the checks log above.</p>`+
+      ask("lg1","Reliability before any change",LG_BEFORE,[2,0,3,1])+
+      ask("lg2","Does it meet the criterion (12 of 15) before the change?",LG_MEET,[1,2,0])+
+      ask("lg3","The component that failed most",LG_WEAK,[1,3,0,2])+
+      ask("lg4","Reliability after the aimed change",LG_AFTER,[3,1,0,2]);
+  case "lcons":
+    return `<p class="how">Use the constraint note under the checks log.</p>`+
+      ask("cn1","The constraint we added",CN_TYPE,[2,0,3,1])+
+      ask("cn2","How we adapted the workflow",CN_ADAPT,[1,3,0,2])+
+      ask("cn3","Which cards we re-ran",CN_RERUN,[2,1,0,3])+
+      ask("cn4","How the re-run stayed responsible",CN_RESP,[1,2,3,0]);
+  case "ltool":
+    return `<p class="how">Use the tool log above. Evaluate each output and trace each fault to a component.</p>`+
+      ask("tl1","In Scratch, where does the trained model sit?",TL_WIRE,[1,0,2,3])+
+      ask("tl2","Input 2 – which component caused the fault?",TL_F2,[1,2,0,3])+
+      ask("tl3","Input 4 – which component caused the fault?",TL_F4,[1,0,2,3])+
+      ask("tl4","Score before and after the change",TL_SCORE,[1,3,0,2])+
+      ask("tl5","Why is input 4 still wrong after the change?",TL_STILL,[2,1,3,0])+
+      ask("tl6","Why re-run the same five inputs?",TL_SAME,[2,0,3,1]);
+  case "lsafe":
+    return boxes(LSAFE,"Safety check: tick every rule that keeps our Teachable Machine and Scratch work safe – I used no personal data (no faces, voices or names). Leave the others unticked.");
+  case "lexit":
+    return `<p class="q" id="q-le">Which exit ticket gives reliability before and after, whether each meets the criterion, the component that failed most, the constraint added and how the task stayed responsible?</p>${radios("le",LEXIT)}`;
+  case "lchal":
+    return `<div class="quote">Stretch: you add a second constraint on top of the first – a high-or-low priority criterion together with the flag-hazard risk rule – and want to find out which change affects reliability more.</div><p class="q" id="q-lch">How should you test it?</p>${radios("lch",LCHAL)}`;
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 9 Main Course · Term 1 Week 6 (9 – 13 Nov 2026) · Core + Lab · Four Strands, One Workflow + Running It End-to-End</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
