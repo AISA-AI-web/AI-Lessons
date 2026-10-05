@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Designing the System + Prototype and Pressure-Test – Grade 9 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#D7263D; --main2:#EF4444; --deep:#8A1024;
+  --ink:#2B1A14; --muted:#6B5750; --paper:#FFF7F4; --card:#FFFFFF;
+  --line:#F5DDD5; --soft:#FFEFE9;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#FDBA74,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#F59E0B);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#2B1A14,#6E3A2E)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#FDD8C8 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FFFAF8;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FFFCFA}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#F59E0B)}
+.act-head.ws{background:linear-gradient(120deg,#2B1A14,#7A3F2E)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#FFF0EA}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #EFC3B3;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #F0B49E;border-radius:12px;padding:10px 14px;background:#FFF9F6;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(43,26,20,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#2B1A14;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 9 Main Course, Term 1</span><span class="pill">Week 7 Core + Week 7 Lab</span><span class="pill">📅 Teach: week of 16 – 20 Nov 2026</span></div>
+    <h1>Designing the System + Prototype and Pressure-Test</h1>
+    <p>Today you become the architect of your signature solution – not just a line of steps, but a system whose parts work together. You plan how the data, the tool and the prompt interact, and set the bar the final output must clear. Then, in the Lab, your system meets reality: you walk it through as a prototype, weaken one part on purpose to see how far the damage spreads, and add a fallback for when a check fails.</p>
+    <p class="meta"><b>Focus:</b> Plan your signature solution – all four strands &nbsp;·&nbsp; <b>Role:</b> Solution Architects</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 9B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 7 of Term 1 – Monday 16 to Friday 20 November 2026.</b> Grade 9's AI period is on Friday 20 November: Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Designing the System</a>, then move on to the <a href="#lab">Lab: Prototype and Pressure-Test</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Map the system.</b> I can write a clear goal and map my solution as interacting components – data, tools and prompts – in ordered steps with success criteria and check steps.</li>
+      <li><b>Trace the interactions.</b> I can name the inputs, the teacher-operated tool and the non-personal data each component uses, and show how one step's output becomes the next step's input.</li>
+      <li><b>Plan for risk.</b> I can name one risk to my system, show the check step and mitigation that reduce it, and explain how my plan stays responsible and account-free.</li>
+      <li><b>Lab: prototype and pressure-test.</b> I can walk my whole system through once, weaken one component on purpose and trace how the problem spreads, and add a fallback path for when a check fails – with no personal data and no student logins.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 7 Core · Designing the System</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Map the system</b><small>Goal, components and ordered steps with arrows</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Trace the interactions</b><small>Each component's output feeds the next</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Set the bar, plan for risk</b><small>Success criteria, a check step and a mitigation · worksheet</small></a></li>
+    </ol>
+    <h3 class="rh">Week 7 Lab · Prototype and Pressure-Test</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Walk it through</b><small>Trace one input through every component</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Weaken one part</b><small>Watch the failure spread downstream</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Add a fallback</b><small>Handle a failed check safely · prototype log</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>System, not a list</h2><p>What turns steps into a system?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>Last week (Week 6) you ran a workflow end to end, scored its reliability, and saw which part let it down. Now you design your own <b>signature solution</b> as a system whose parts work together.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">A solution is a system</h3>
+    <p>Your signature solution is a small system with three kinds of <b>component</b>: the <b>non-personal data</b> it uses, the <b>teacher-operated tool</b> that does the work, and the <b>prompt</b> that tells the tool what to do. Planning means designing how these components <b>interact</b> before you build.</p>
+    <p>You write a clear <b>goal</b>, then map the components as ordered steps with arrows, so the output of one component becomes the input of the next. Change the prompt and the tool's output changes too. Seeing those connections is what makes it a system, not just a list.</p>
+    <figure>
+      <svg viewBox="0 0 760 330" role="img" aria-labelledby="f1T">
+        <title id="f1T">A signature solution mapped as a system. On top: the goal (the one defined problem to solve) and the success criteria (a measurable bar, such as at least 9 of 10 correct). Below: three interacting components – data, prompt and tool – feed an output, and a check step judges the output against the bar. Arrows show each output becoming the next input. A risk, a weak part spreading downstream, is reduced by a mitigation and the check.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <g stroke-width="2.2">
+            <rect x="14" y="14" width="350" height="70" rx="12" fill="#FFEFE9" stroke="#D7263D"/>
+            <rect x="396" y="14" width="350" height="70" rx="12" fill="#FFEFE9" stroke="#D7263D"/>
+          </g>
+          <g font-size="16" font-weight="800" text-anchor="middle" fill="#D7263D"><text x="189" y="42">GOAL</text><text x="571" y="42">SUCCESS CRITERIA</text></g>
+          <g font-size="13.5" text-anchor="middle"><text x="189" y="67">the one defined problem to solve</text><text x="571" y="67">a measurable bar: at least 9 of 10 correct</text></g>
+          <g stroke="#2B1A14" stroke-width="1.6">
+            <rect x="14" y="140" width="120" height="78" rx="10" fill="#E2F5EC"/>
+            <rect x="169" y="140" width="120" height="78" rx="10" fill="#F4F0FC"/>
+            <rect x="324" y="140" width="120" height="78" rx="10" fill="#fff"/>
+            <rect x="479" y="140" width="120" height="78" rx="10" fill="#fff"/>
+            <rect x="634" y="140" width="120" height="78" rx="10" fill="#8A1024" stroke="#8A1024"/>
+          </g>
+          <g stroke="#2B1A14" stroke-width="2.4" fill="none" marker-end="url(#ah)"><path d="M134 179H165"/><path d="M289 179H320"/><path d="M444 179H475"/><path d="M599 179H630"/></g>
+          <path d="M74 84V136" stroke="#D7263D" stroke-width="2.2" stroke-dasharray="6 4" fill="none" marker-end="url(#ah)"/>
+          <path d="M694 84V136" stroke="#D7263D" stroke-width="2.2" stroke-dasharray="6 4" fill="none" marker-end="url(#ah)"/>
+          <g font-size="13" font-weight="700" fill="#D7263D"><text x="84" y="116">drives the design</text><text x="684" y="116" text-anchor="end">the bar to judge against</text></g>
+          <g font-size="15" font-weight="800" text-anchor="middle"><text x="74" y="170">DATA</text><text x="229" y="170">PROMPT</text><text x="384" y="170">TOOL</text><text x="539" y="170">OUTPUT</text><text x="694" y="170" fill="#fff">CHECK</text></g>
+          <g font-size="13" text-anchor="middle" fill="#6B5750"><text x="74" y="190">non-personal</text><text x="74" y="207">examples</text><text x="229" y="190">tells the tool</text><text x="229" y="207">what to do</text><text x="384" y="190">teacher-</text><text x="384" y="207">operated</text><text x="539" y="190">a label or</text><text x="539" y="207">an answer</text></g>
+          <g font-size="13" text-anchor="middle" fill="#FFE3DA"><text x="694" y="190">judged against</text><text x="694" y="207">the bar</text></g>
+          <path d="M14 236V246H599V236" stroke="#2B1A14" stroke-width="1.6" fill="none"/>
+          <text x="306" y="268" font-size="13.5" font-weight="700" text-anchor="middle">Interactions: each component's output becomes the next one's input</text>
+          <rect x="14" y="284" width="420" height="36" rx="18" fill="#FDE7EC" stroke="#C92A4B" stroke-width="1.6"/>
+          <text x="224" y="307" font-size="13.5" font-weight="700" text-anchor="middle" fill="#C92A4B">RISK: a weak part spreads its problem downstream</text>
+          <rect x="452" y="284" width="294" height="36" rx="18" fill="#E2F5EC" stroke="#0F8A5F" stroke-width="1.6"/>
+          <text x="599" y="307" font-size="13.5" font-weight="700" text-anchor="middle" fill="#0A5E41">MITIGATION + the check step</text>
+          <path d="M694 280V222" stroke="#0F8A5F" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> A signature solution mapped as a system: a goal and success criteria on top, three interacting components – data, prompt and tool – feeding an output and a check step.</figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-order"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Components interact</h2><p>Whose output feeds whom?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Each part has a job</h3>
+    <p>A system has parts that each do one job. The <b>non-personal data</b> is what the system works from, the <b>teacher-operated tool</b> does the processing, and the <b>prompt</b> directs that tool. A <b>check step</b> then judges the final output.</p>
+    <p>Because the components are connected, the output of one becomes the input of the next. Naming each part and its handover is how you show the system really interacts, rather than sitting as separate boxes. It also shows you something important: a weak part does not stay on its own – its problem flows on to every component downstream.</p>
+    <figure>
+      <svg viewBox="0 0 760 270" role="img" aria-labelledby="f2T">
+        <title id="f2T">Each component has one job. The data gives the non-personal examples; the prompt tells the tool what to do; the tool, operated by the teacher, does the processing; it hands an output to the check step, which judges it against the success criteria. If the data at the start is weak, the problem spreads to the tool, the output and the check – every component downstream.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <g stroke="#2B1A14" stroke-width="1.6">
+            <rect x="214" y="12" width="164" height="62" rx="10" fill="#F4F0FC"/>
+            <rect x="14" y="110" width="164" height="74" rx="10" fill="#E2F5EC"/>
+            <rect x="214" y="110" width="164" height="74" rx="10" fill="#fff"/>
+            <rect x="414" y="110" width="150" height="74" rx="10" fill="#fff"/>
+            <rect x="600" y="110" width="146" height="74" rx="10" fill="#8A1024" stroke="#8A1024"/>
+          </g>
+          <g stroke="#2B1A14" stroke-width="2.4" fill="none" marker-end="url(#ah2)"><path d="M178 147H210"/><path d="M378 147H410"/><path d="M564 147H596"/><path d="M296 74V106"/></g>
+          <g font-size="15" font-weight="800" text-anchor="middle"><text x="296" y="38">PROMPT</text><text x="96" y="140">DATA</text><text x="296" y="140">TOOL</text><text x="489" y="140">OUTPUT</text><text x="673" y="140" fill="#fff">CHECK STEP</text></g>
+          <g font-size="13" text-anchor="middle" fill="#6B5750"><text x="296" y="59">directs the tool</text><text x="96" y="163">examples the</text><text x="96" y="178">system works from</text><text x="296" y="163">teacher-operated</text><text x="296" y="178">model: processes</text><text x="489" y="163">handed on to</text><text x="489" y="178">the next step</text></g>
+          <g font-size="13" text-anchor="middle" fill="#FFE3DA"><text x="673" y="163">judges it against</text><text x="673" y="178">the criteria</text></g>
+          <g font-size="13" font-weight="700" fill="#C92A4B" text-anchor="middle"><text x="96" y="208">weak data here …</text></g>
+          <path d="M96 216V232H746V216" stroke="#C92A4B" stroke-width="2" stroke-dasharray="6 4" fill="none"/>
+          <path d="M214 224H730" stroke="#C92A4B" stroke-width="2.2" fill="none" marker-end="url(#ah2)"/>
+          <text x="470" y="256" font-size="14" font-weight="700" text-anchor="middle" fill="#C92A4B">… degrades every component downstream</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Each component has one job, and the output of one becomes the input of the next along the arrows – so a weak first link spreads its problem downstream.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, teams building integrated systems – from smart-city dashboards in Dubai to logistics tools at the ports – plan how each part connects and set clear numbers before anyone relies on the whole system. Designing the interactions, and keeping them responsible, is what makes an AI solution trustworthy.</p></div>
+    <div id="a-match"></div>
+    <div id="a-case2"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3 · Worksheet</span><h2>Set the bar, plan for risk</h2><p>Can you trust an output on sight?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Criteria, check and mitigation</h3>
+    <p>Because your components are connected, a weak part spreads its problem downstream: poor data or a vague prompt gives the tool a poor output, and every step after it suffers. So your plan sets <b>success criteria</b> – a measurable bar, such as 9 correct out of 10 – and a <b>check step</b> that judges the final output against that bar instead of trusting it on sight.</p>
+    <p>Then you name one <b>risk</b> to the system and the <b>mitigation</b> that reduces it. As a stretch, add a <b>fallback</b>: what your system does when a check fails, so a wrong output never flows on. Throughout, the design stays account-free and uses no personal data.</p>
+    <div id="a-truths"></div>
+    <div id="a-case3"></div>
+    <div class="call violet"><h4>Cross-curricular link · Art &amp; Design</h4><p>In Art &amp; Design, you plan a product using a <b>design brief</b> and an annotated flow diagram with a clear specification – just as you map your AI system's data, prompt and tool as ordered, interacting components with success criteria.</p></div>
+    <div class="call amber"><h4>Tool for this week: unplugged simulated-AI cards (teacher-led)</h4><p>This is an unplugged concept lesson: the teacher runs a <i>simulated-AI</i> card routine on the board – no live tool, no logins. Students reason about pre-prepared example outputs on the cards; no personal data is used. Use the worksheet to sort or judge the cards and explain your thinking with the key vocabulary. The live tools (Teachable Machine and Scratch) are used in the matching Lab period. No demo tool? Run the tool component as a simulated AI: a sealed envelope of pre-written response cards a partner draws from in reply to your written prompt, so the whole system can still be mapped and traced with no device.</p></div>
+    <div class="call"><h4>Solution Architects: map the system (away from the screen, in pairs)</h4>
+      <ol class="steps">
+        <li>Write your goal in one sentence: what defined problem will your system solve?</li>
+        <li>List the components: the non-personal data, the teacher-operated tool, and the prompt that drives it.</li>
+        <li>Draw the ordered steps and connect them with arrows so each component's output feeds the next.</li>
+        <li>Set your success criteria: how good must the final output be, as a number or comparison?</li>
+        <li>Add a check step that judges the output, then name one risk with a mitigation the plan uses.</li>
+        <li>Draw a dashed arrow showing which downstream components are affected if that risk hits.</li>
+      </ol></div>
+    <div class="ecard" id="audit"></div>
+    <div id="a-wsplan"></div>
+    <div id="a-wsstruct"></div>
+    <div id="a-think"></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 7 Lab</span><h2>Prototype and Pressure-Test</h2><p>In the Core period you planned your signature solution as coupled parts with success criteria and checks. Today your system meets reality: you run it as a prototype, weaken one part on purpose to see how far the damage spreads, and make it safer with a fallback for when a check fails.</p></div>
+  <div class="part-body">
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>A map is a guess</h2><p>Do the parts really connect?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Walk it through by hand</h3>
+    <p>Your Core map looks neat on paper, but paper hides broken connections. A <b>prototype</b> is the first time you actually run it: you take one real, non-personal input and <b>walk it through</b> every component in order – data, prompt, tool – saying at each arrow what output is handed to the next.</p>
+    <p>At the check step, you judge the output against your success criteria. Where one component's output cannot really be used by the next, you have found a <b>broken interaction</b> – and finding it now, by hand, is exactly the point. Prototyping turns a guess into something you have seen connect.</p>
+    <figure>
+      <svg viewBox="0 0 760 262" role="img" aria-labelledby="f3T">
+        <title id="f3T">A prototype walk-through. One normal, non-personal input is handed along each arrow: step 1 the input, step 2 the data component, step 3 the tool driven by the prompt, step 4 the check step, which judges the output against the criteria – 9 of 10 against a bar of 9, so it passes. At each arrow you say aloud what is handed on. If the next part cannot use what it receives, that is a broken interaction.</title>
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <text x="380" y="24" font-size="15" font-weight="800" text-anchor="middle" fill="#D7263D">ONE INPUT, HANDED ALONG EVERY ARROW</text>
+          <g fill="#D7263D"><circle cx="89" cy="58" r="15"/><circle cx="282" cy="58" r="15"/><circle cx="475" cy="58" r="15"/><circle cx="669" cy="58" r="15"/></g>
+          <g font-size="15" font-weight="800" text-anchor="middle" fill="#fff"><text x="89" y="63">1</text><text x="282" y="63">2</text><text x="475" y="63">3</text><text x="669" y="63">4</text></g>
+          <g stroke="#2B1A14" stroke-width="1.6">
+            <rect x="14" y="84" width="150" height="80" rx="10" fill="#fff"/><rect x="207" y="84" width="150" height="80" rx="10" fill="#E2F5EC"/><rect x="400" y="84" width="150" height="80" rx="10" fill="#fff"/><rect x="593" y="84" width="153" height="80" rx="10" fill="#8A1024" stroke="#8A1024"/>
+          </g>
+          <g stroke="#2B1A14" stroke-width="2.4" fill="none" marker-end="url(#ah3)"><path d="M164 119H203"/><path d="M357 119H396"/><path d="M550 119H589"/></g>
+          <g font-size="15" font-weight="800" text-anchor="middle"><text x="89" y="114">INPUT</text><text x="282" y="114">DATA</text><text x="475" y="114">TOOL + PROMPT</text><text x="669" y="114" fill="#fff">CHECK</text></g>
+          <g font-size="13" text-anchor="middle" fill="#6B5750"><text x="89" y="136">one normal,</text><text x="282" y="136">say what it</text><text x="475" y="136">say what output</text></g>
+          <g font-size="13" text-anchor="middle" fill="#6B5750"><text x="89" y="152">non-personal item</text><text x="282" y="152">produces</text><text x="475" y="152">it hands on</text></g>
+          <g font-size="13" text-anchor="middle" fill="#FFE3DA"><text x="669" y="136">judge vs the</text><text x="669" y="152">criteria</text></g>
+          <rect x="593" y="176" width="153" height="36" rx="18" fill="#E2F5EC" stroke="#0F8A5F" stroke-width="1.6"/>
+          <text x="669" y="199" font-size="13.5" font-weight="700" text-anchor="middle" fill="#0A5E41">9 of 10 ≥ 9: pass</text>
+          <path d="M378 119V186" stroke="#C92A4B" stroke-width="2" stroke-dasharray="5 4" fill="none"/>
+          <text x="378" y="206" font-size="13.5" font-weight="700" text-anchor="middle" fill="#C92A4B">Next part cannot use what it gets?</text>
+          <text x="378" y="225" font-size="13.5" font-weight="700" text-anchor="middle" fill="#C92A4B">That is a broken interaction – log it</text>
+          <text x="380" y="252" font-size="13" text-anchor="middle" fill="#6B5750">The walk-through ends at the check step, not at the output</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> A prototype walk-through: one real input handed along each arrow, component by component, up to the check step.</figcaption>
+    </figure>
+    <div id="a-lorder"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Weaken one part</h2><p>How far does a fault travel?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Pressure-test the system</h3>
+    <p>Because your components are coupled, a fault in one spreads downstream – it <b>propagates</b>. To really trust your system, you <b>weaken one component on purpose</b> – give the tool a vague prompt, or feed it a poor data example – then trace how far the problem travels and measure the output at your check step.</p>
+    <p>Did the check catch a result below the criteria? If a poor output slipped through, you <b>tighten the check</b>. Pressure-testing is how engineers decide what to improve before anyone relies on the whole system.</p>
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="f4T">
+        <title id="f4T">Pressure-testing a system. One component, the prompt, is weakened on purpose into a vague prompt. The failure propagates downstream: the tool produces a weak output. At the check step the question is whether the output meets the bar. If yes, it is passed on. If no, a fallback path fires and loops back into the system: reroute to a safer step, flag for a human, or return to the input.</title>
+        <defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <text x="226" y="26" font-size="14" font-weight="800" text-anchor="middle" fill="#C92A4B">THE FAILURE PROPAGATES DOWNSTREAM</text>
+          <path d="M30 38H440" stroke="#C92A4B" stroke-width="2.2" stroke-dasharray="6 4" fill="none" marker-end="url(#ah4)"/>
+          <g stroke="#2B1A14" stroke-width="1.6">
+            <rect x="14" y="58" width="130" height="70" rx="10" fill="#FDE7EC" stroke="#C92A4B" stroke-width="2.4"/>
+            <rect x="176" y="58" width="124" height="70" rx="10" fill="#FFF4F1"/>
+            <rect x="332" y="58" width="124" height="70" rx="10" fill="#FFF4F1"/>
+            <path d="M568 28L650 93L568 158L486 93Z" fill="#8A1024" stroke="#8A1024"/>
+            <rect x="606" y="190" width="140" height="58" rx="10" fill="#E2F5EC" stroke="#0F8A5F"/>
+            <rect x="14" y="176" width="470" height="78" rx="10" fill="#FDE7EC" stroke="#C92A4B"/>
+          </g>
+          <g stroke="#2B1A14" stroke-width="2.4" fill="none" marker-end="url(#ah4)"><path d="M144 93H172"/><path d="M300 93H328"/><path d="M456 93H482"/></g>
+          <path d="M650 93H700V186" stroke="#0F8A5F" stroke-width="2.4" fill="none" marker-end="url(#ah4)"/>
+          <path d="M568 158V215H488" stroke="#C92A4B" stroke-width="2.4" fill="none" marker-end="url(#ah4)"/>
+          <path d="M60 176V132" stroke="#C92A4B" stroke-width="2.2" stroke-dasharray="5 4" fill="none" marker-end="url(#ah4)"/>
+          <g font-size="14.5" font-weight="800" text-anchor="middle"><text x="79" y="88" fill="#C92A4B">PROMPT</text><text x="238" y="88">TOOL</text><text x="394" y="88">OUTPUT</text></g>
+          <g font-size="13" text-anchor="middle" fill="#6B5750"><text x="79" y="110" fill="#C92A4B">made vague</text><text x="79" y="124" fill="#C92A4B">on purpose</text><text x="238" y="110">same tool,</text><text x="238" y="124">weaker result</text><text x="394" y="110">weak, but</text><text x="394" y="124">confident</text></g>
+          <g text-anchor="middle" fill="#fff" font-weight="700"><text x="568" y="88" font-size="14.5">CHECK</text><text x="568" y="108" font-size="13">meets the bar?</text></g>
+          <g font-size="13.5" font-weight="800"><text x="710" y="150" fill="#0F8A5F">yes</text><text x="558" y="200" fill="#C92A4B" text-anchor="end">no</text></g>
+          <text x="676" y="214" font-size="13.5" font-weight="700" text-anchor="middle" fill="#0A5E41">pass it on</text>
+          <text x="676" y="234" font-size="13" text-anchor="middle" fill="#0A5E41">to the next step</text>
+          <text x="249" y="202" font-size="14.5" font-weight="800" text-anchor="middle" fill="#C92A4B">FALLBACK PATH (back into the system)</text>
+          <text x="249" y="224" font-size="13" text-anchor="middle">reroute to a safer step · flag for a human</text>
+          <text x="249" y="243" font-size="13" text-anchor="middle">return to the input</text>
+          <text x="380" y="285" font-size="13" text-anchor="middle" fill="#6B5750">A below-bar output that slips past the check means: tighten the check</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 4.</b> Pressure-testing a system: weakening one component sends a failure downstream to the check step, which either passes the output or triggers a fallback path back into the system.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Engineers testing integrated systems in the UAE – smart-city networks, port logistics, health tools – deliberately weaken one part to see how failures spread, and measure against strict numbers, before anyone relies on the whole system. Pressure-testing and fallbacks are how a smart solution earns trust.</p></div>
+    <div id="a-lbin"></div>
+    <div id="a-lcase2"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Part 3 of 3 · Worksheet</span><h2>Build a fallback</h2><p>What happens when a check fails?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Fail safely, stay account-free</h3>
+    <p>A strong system degrades gracefully. You build a <b>fallback path</b> – you decide which check triggers it and exactly what the system does the moment that check fails: reroute to a safer component, flag the output for a human, or return to the input.</p>
+    <p>That way a wrong output never flows on. Throughout, every tool step stays <b>teacher-operated and account-free</b>, and only non-personal example inputs enter the system.</p>
+    <div id="a-lfall"></div>
+    <div id="a-lcase3"></div>
+    <div class="call violet"><h4>Cross-curricular link · Physical Education</h4><p>In Physical Education, treat a relay team as a coupled system – weaken one runner's handover and watch the delay spread down the chain; a substitute runner ready to step in is your <b>fallback path</b> when a check fails.</p></div>
+    <div class="call amber"><h4>Tool for this week: Scratch – architect the solution (teacher-operated)</h4><p>1. The teacher opens Scratch (offline app or scratch.mit.edu) – no account needed; work saves as a local .sb3 file. 2. Find the three zones: Blocks (left), Code area (middle), Stage (top-right). 3. Build the input → process → output chain: an input block (ask), the process step (a rule or an ML block, e.g. classify), then an output block (say). 4. Click the green flag to run; the red button stops it. 5. Change the input and run again – check the output changes as you expect. 6. Save to the computer (File → Save to your computer) as an .sb3 to reopen next week. <b>Stay safe:</b> teacher-operated on the board; students never log in; non-personal data only (no names, faces or voices).</p></div>
+    <div class="call amber"><h4>Today's tool: systems-plan cards + Scratch storyboard (architect the solution)</h4><p>Roles: <b>systems architect</b> (maps the components), <b>data lead</b> (prepares and checks inputs), <b>evaluator</b> (tests and scores outputs), <b>scribe</b> (records the trace and decisions). 1. Lay out the systems-plan cards and fill each one for your solution. 2. Draw the component diagram: what connects to what. 3. Mark where evaluation checks sit between components. 4. Name one risk and the mitigation you will build in. 5. Sketch the component chain as Scratch blocks on the storyboard. You will make a systems plan with a component diagram, evaluation points and a mitigation. <b>Stay safe:</b> planning only – no live tool or data. No device? Run the whole prototype on paper: a partner draws a pre-written response card in reply to your written prompt, including one deliberately poor card, so the pressure-test and fallback still work.</p></div>
+    <div class="ecard" id="tmpack"></div>
+    <div id="a-llog"></div>
+    <div id="a-lpress"></div>
+    <div id="a-lfb"></div>
+    <div id="a-ltool"></div>
+    <div id="a-lsafe"></div>
+    <div id="a-lexit"></div>
+    <div id="a-lchal"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Design the system – then see it connect, break and recover</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>A signature solution is an integrated <b>system</b> of components – <b>data</b>, <b>tool</b> and <b>prompt</b> – not just a list of steps.</li>
+      <li>The components are coupled: the output of one becomes the input of the next, so a weak part degrades everything downstream.</li>
+      <li><b>Success criteria</b> set a measurable bar, and a <b>check step</b> judges the final output against it before it is trusted.</li>
+      <li>A named <b>risk</b> with a <b>mitigation</b> keeps the design robust, responsible and account-free.</li>
+      <li>A system map is only a hypothesis; a <b>prototype</b> walk-through shows whether the components really connect.</li>
+      <li><b>Pressure-testing</b> weakens one component on purpose to trace how a failure <b>propagates</b>; if a poor output slips past the check, tighten the check.</li>
+      <li>A <b>fallback path</b> – a named trigger and a safer action – makes a coupled system fail gracefully. Next week (Week 8) you stop planning and assemble your parts into one working system.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 9 · Main Course · Term 1 Week 7 (16 – 20 Nov 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- scope & sequence concepts (Grade 9, Week 7: Plan the signature solution – all four strands) ---------- */
+const CU_P="CU · how data, tools and prompts interact within a solution";
+const CU_A="CU · how design choices affect output quality and reliability";
+const SD_E="SD · uses AI tools to complete structured tasks";
+const SD_P="SD · designs structured AI workflows for defined problems";
+const SD_A="SD · refines workflows to improve outputs and usability";
+const CE_E="CE · identifies incorrect or unclear outputs";
+const CE_P="CE · evaluates outputs for accuracy, bias and usefulness";
+const CE_A="CE · explains limitations and suggests targeted improvements";
+const GE_E="GE · identifies risks in AI-generated content";
+const GE_A="GE · proposes actions for responsible and safe use";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["goal","The one defined problem your system is built to solve."],
+  ["component","A working part of your system: the data, the teacher-operated tool, or the prompt."],
+  ["interaction","How one component's output becomes the next component's input."],
+  ["success criteria","A measurable bar for a good final output, such as at least 9 of 10 correct."],
+  ["check step","A step that judges the output against your criteria, because a confident output can still be wrong."]
+];
+const DEF_ORDER = [3,0,4,1,2];
+const PLAN = ["📝 Write one clear goal – the defined problem your system solves","🧩 List the components – non-personal data, the tool and the prompt","🔗 Draw arrows so each component's output feeds the next","📊 Set success criteria – the measurable bar the output must clear","🔎 Add a check step that judges the output against the bar"];
+const PLAN_ORDER = [3,0,4,2,1];
+const CASE1 = ["A longer numbered list of steps written neatly down the page.","Arrows showing how one component's output feeds the next.","Brighter colours picked out for each separate step in turn.","Nothing at all, since a numbered list is already a system."];
+const MATCH = [["mt1","🗂️ Data",1],["mt2","⚙️ Tool",2],["mt3","🖊️ Prompt",0],["mt4","🔎 Check step",3]];
+const MATCH_OPTS = ["🧭 the instruction that tells the tool what to do","📚 the non-personal examples the system works from","🤖 the teacher-operated model that does the processing","📊 judges the final output against the success criteria"];
+const CASE2 = ["Only that first component, since each part works on its own.","Every component downstream of it, since the parts connect.","Only the goal that sits at the very top of the system.","None of them, because the data never matters to the result."];
+const TRUTHS = [
+  ["t1","🔎 A check step judges the final output against that bar before it is trusted.",1],
+  ["t2","📊 Success criteria set a measurable bar, such as 9 correct out of 10.",1],
+  ["t3","🔑 The design needs student logins to work.",0],
+  ["t4","🧱 A weak component only ever affects itself.",0],
+  ["t5","🛡️ Naming one risk and a mitigation reduces the harm if the risk hits.",1],
+  ["t6","🏆 A fluent, confident output is always correct.",0]
+];
+const CASE3 = ["Ask the students to log in and then simply retry the run.","Delete the success criteria so the output always passes.","Pass the output on anyway, because fluent text must be right.","Reroute to a safer step so the wrong output never flows on."];
+const GOALS = ["Help with recycling.","Sort each photographed waste item into the paper, plastic or metal bin.","Use AI on the school's rubbish somehow.","Build the most impressive Scratch project in the class."];
+const CRITS = ["It should be accurate.","At least 9 of 10 test items sorted correctly, checked against the class answer key.","The labels sound confident.","The tool runs without crashing."];
+const RISKS = ["Crushed or dirty cans get a confident but wrong ‘plastic’ label, which flows on into the wrong bin","Nothing can go wrong once the tool has run","The goal sentence is too short","The label appears in a different colour"];
+const MITIG = ["Add crushed and dirty can photos to the data, and add a check step that counts correct labels against the answer key before any item goes in a bin","Trust any label above 90% confidence without checking","Remove the crushed cans from the test set so the score looks better","Ask students to log in so the tool remembers their answers"];
+const STRUCT_ROWS = [["🗂️ Data (non-personal)","wd1","wf1"],["🖊️ Prompt","wd2","wf2"],["⚙️ Tool (teacher-operated)","wd3","wf3"],["🔎 Check step","wd4","wf4"]];
+const DOES = ["Gives 200 labelled photos of paper, plastic and metal items, plus the photo of the item to sort","Tells the tool to answer with exactly one bin label – paper, plastic or metal – and how sure it is","Compares the item photo with the patterns it learned and picks a label","Compares 10 test labels with the class answer key and counts them against the bar of 9 of 10"];
+const FEEDS = ["The tool – the examples it learned from and the photo it processes","The tool – the instruction that sets the exact answer it must give","The check step – its label and confidence are judged against the bar","The bin if it passes, or the fallback path if it fails"];
+const THINK = ["Only the prompt itself – the other parts work on their own","Every component after it – the tool and the output – and the check step catches it before the output is trusted","The data and the goal, which come before the prompt","None of them – a check step is only needed when the data is poor"];
+const EXIT = ["My recycling helper uses AI, and I will see if it runs.","My recycling helper sorts items; the prompt is important, and my check step confirms the tool ran.","My recycling helper sorts waste photos into paper, plastic or metal; the prompt makes the tool answer with one bin label, and the check step counts those labels against the answer key – at least 9 of 10 correct.","At least 9 of 10 is my bar, and my system has data and a tool."];
+const CHAL = [
+  ["ch1","🔁 Reroute the item to a ‘check me’ tray instead of a bin",1],
+  ["ch2","📣 Show the label anyway, in bold",0],
+  ["ch3","🙋 Flag the run for a human to look at",1],
+  ["ch4","📉 Lower the bar to 5 of 10 so more outputs pass",0],
+  ["ch5","🧭 Note that the reroute stops the output reaching the bin step, so nothing downstream receives the wrong label",1],
+  ["ch6","🗑️ Switch off the check step so the run always finishes",0]
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["prototype","A first working version you walk through by hand to see if the components really connect."],
+  ["walk-through","Tracing one input through every component, in order, up to the check step."],
+  ["pressure-test","Weakening one component on purpose to see how the failure spreads and whether your check catches it."],
+  ["propagate","How a problem in one component spreads to the components downstream."],
+  ["fallback path","What your system does when a check fails, instead of passing on a wrong output."]
+];
+const LDEF_ORDER = [2,4,0,3,1];
+const LSTEPS = ["📥 Choose one normal, non-personal input to test","🗂️ Hand it to the data component and say what it produces","⚙️ Pass that output to the tool, driven by your prompt","🔎 At the check step, judge the output against your criteria"];
+const LSTEP_ORDER = [3,2,0,1];
+const LCASE1 = ["Proof the system can never be made to work at all, ever.","A broken interaction – the reason you prototype by hand.","Nothing worth noting, since a neat plan must already work.","A good reason to skip the check step and just move along."];
+const LBIN = [
+  ["lb1","🧷 Poor data weakened the output, yet every downstream part still ran","A"],
+  ["lb2","🧱 A component's output could not be read by the next part at all","C"],
+  ["lb3","✂️ The arrow between two components handed on nothing usable","C"],
+  ["lb4","📶 A vague prompt still produced an output the check flagged as below the bar","A"],
+  ["lb5","🚩 A below-bar output slipped past the check and was passed on as fine","B"],
+  ["lb6","🌀 The check scored the output as a pass even though it missed the criteria","B"]
+];
+const LCASE2 = ["Remove the check step entirely and trust the system output.","Leave the check as it is and just promise clearer prompts.","Trust the passing score and send the output straight on.","Tighten the check so it catches outputs below the set bar."];
+const LFALL = [
+  ["lf1","🙈 A hidden failure that no one records.",0],
+  ["lf2","🔁 A defined safer action, such as rerouting or flagging for a human.",1],
+  ["lf3","🎯 A named check that triggers the fallback when it fails.",1],
+  ["lf4","🏆 Permission to pass a failed output on because it sounds fluent.",0],
+  ["lf5","🔒 Only non-personal inputs and no student logins.",1],
+  ["lf6","🔑 A personal account so the tool remembers each student.",0]
+];
+const LCASE3 = ["Pass the output on regardless and add a student login too.","Ignore the failed check completely and simply continue on.","Reroute to a safer step and flag the run for a human.","Feed in a real name so you can identify the failing run."];
+const HAND = [
+  ["h1","📥 → 🗂️ Input to data: the can photo is handed on, with the labelled examples the tool learned from","H"],
+  ["h2","🖊️ → ⚙️ Prompt to tool: the tool follows the prompt ‘Describe this item.’","H"],
+  ["h3","⚙️ → 🔎 Tool to check: the check needs paper, plastic or metal, but receives “A shiny, crushed silver drinks can.”","B"]
+];
+const HFIX = ["The data – add more photos of cans","The prompt – ask for exactly one label: paper, plastic or metal","The check step – delete it so the run can finish","Nothing – a description is good enough for the check"];
+const PSPREAD = ["Nowhere – removing photos from the data had no effect","Only the data component itself","From the data, through the tool and its output, past the check and into the wrong bin","Only the check step"];
+const PMET = ["Yes – every item got a confident label","Yes – the check step passed it","No – 6 of 10 is below the bar of 9 of 10","It cannot be judged until the labels sound surer"];
+const PTIGHT = ["Only test clear, uncrushed cans so the score goes up","Count correct labels against the answer key on every run, with crushed cans in the test set","Trust any label above 90% confidence","Remove the check so the run always finishes"];
+const FTRIG = ["The accuracy check after the tool: fewer than 9 of 10 correct, or a label below the confidence level we set","No check – wait until someone empties the bin","The goal sentence at the top of the plan","A login check for each student"];
+const FACT = ["Drop the item in the bin it was given anyway","Hold the item in a ‘check me’ tray, flag the run for a human, and log the failure","Lower the bar until the output passes","Retype the prompt in capital letters and carry on"];
+const CARDS = [["pc1","🎯 Goal"],["pc2","🧩 Components and how they connect"],["pc3","🔎 Evaluation points between components"],["pc4","🛡️ Risk and mitigation"],["pc5","🧱 Scratch storyboard chain"]];
+const DECIDE = ["Sort each photographed waste item into the paper, plastic or metal bin","Data (labelled photos) → tool (image classifier), steered by the prompt → label → check → bin","A format check after the tool (is it one of the three labels?) and an accuracy check against the answer key (at least 9 of 10)","Crushed cans mislabelled as plastic – add crushed-can photos to the data and hold low-scoring items for a human","ask for an item → classify → say the label → if below the bar, say ‘check me tray’"];
+const LSAFE = [
+  ["ls1","Planning only – no live tool or data today",1],
+  ["ls2","The teacher operates Scratch on the board; students never log in",1],
+  ["ls3","Use photos of classmates' faces as test inputs",0],
+  ["ls4","Use non-personal test inputs, such as photos of waste items",1],
+  ["ls5","Create a Scratch account for each student",0],
+  ["ls6","Record students' voices reading out the labels",0]
+];
+const LEXIT = ["Our prototype worked, so we did not need a fallback.","We found a broken interaction, so we removed the check step to keep the run moving.","Our walk-through showed the tool's description could not be scored by the check, so we fixed the prompt; and when the accuracy check finds fewer than 9 of 10 correct, our fallback holds the item for a human.","The labels sounded confident, so we pass every output on to the bin."];
+const CH_FB = ["Re-run the item with the saved, fixed prompt template","Hold the item in a ‘check me’ tray and flag it for a human","Pass the output on anyway","Switch off the check so the run finishes"];
+const CH_TRIG = ["A format check right after the tool: is the answer one of paper, plastic or metal?","The accuracy check against the answer key: fewer than 9 of 10 correct","No check – wait until someone complains"];
+const CH_HARM = ["They stop the wrong output before it reaches the bin, so no later component receives it","They pass the output on but colour it red","They switch off the data component","They need each student to log in"];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+SD_P,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"The goal is the one defined problem; a component is a working part (data, tool or prompt); an interaction is one component's output becoming the next one's input; success criteria are a measurable bar; a check step judges the output against them, because a confident output can still be wrong."},
+ {id:"order",mount:"a-order",section:"Core · Part 1",title:"Map the system in order",sub:"Objective 1 · "+SD_P,ico:"🧭",
+  fields:PLAN.map((_,i)=>({k:"o"+i,ok:v=>eq(v,i)})),
+  explain:"An architect writes one clear goal first, lists the components, draws the arrows that connect them, sets the success criteria, and finally adds a check step that judges the output against that bar."},
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"Case 1 · The Bare List",sub:"Solution Architects · "+CU_P,ico:"🗺️",
+  fields:[{k:"c1",radio:1,ok:v=>eq(v,1)}],
+  explain:"The interactions between components are what make it a system, not a list – so the plan must add arrows showing how one component's output feeds the next. More steps in a line is still a list, and colour does not show how the parts connect."},
+ {id:"match",mount:"a-match",section:"Core · Part 2",title:"Match the component to its job",sub:"Objective 2 · "+CU_P,ico:"🧷",
+  fields:MATCH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Data = the non-personal examples the system works from. Tool = the teacher-operated model that does the processing. Prompt = the instruction that tells the tool what to do. Check step = judges the final output against the success criteria."},
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"Case 2 · The Weak First Link",sub:"Solution Architects · "+CU_A,ico:"🔗",
+  fields:[{k:"c2",radio:1,ok:v=>eq(v,1)}],
+  explain:"A weak component degrades everything that depends on its output. The parts are coupled, so poor data hands a poor input to the next part, and the problem flows on to every component downstream."},
+ {id:"truths",mount:"a-truths",section:"Core · Part 3",title:"What makes the plan robust?",sub:"Objective 3 · "+GE_A,ico:"🧩",
+  fields:TRUTHS.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Robust and responsible: success criteria set a measurable bar, a check step judges the output against it before it is trusted, and a named risk with a mitigation reduces the harm. Logins are never part of the design, a weak component affects everything downstream, and a fluent output can still be wrong."},
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"Case 3 · The Failed Check",sub:"Solution Architects · "+GE_A,ico:"🛡️",
+  fields:[{k:"c3",radio:1,ok:v=>eq(v,3)}],
+  explain:"A fallback path reroutes to a safer step, so a failed output is never passed downstream. Deleting the bar hides the failure, the design stays account-free, and a fluent output can still miss the bar – that is why the check exists."},
+ {id:"wsplan",mount:"a-wsplan",section:"Core worksheet",title:"My signature system: goal, criterion, risk and mitigation",sub:"Worksheet · "+SD_P,ico:"📝",cls:"ws",
+  fields:[{k:"wg",ok:v=>eq(v,1)},{k:"wc",ok:v=>eq(v,1)},{k:"wr",ok:v=>eq(v,0)},{k:"wm",ok:v=>eq(v,0)}],
+  explain:"A clear goal names one defined problem (sort each waste photo into the paper, plastic or metal bin). Success criteria must be measurable (at least 9 of 10 against the answer key). The real risk is a confident but wrong label that flows on into the wrong bin; the mitigation adds the missing examples to the data, and the check counts correct labels before anything is trusted."},
+ {id:"wsstruct",mount:"a-wsstruct",section:"Core worksheet",title:"My system components and interactions",sub:"Worksheet · "+CU_P,ico:"🗂️",cls:"ws",
+  fields:STRUCT_ROWS.flatMap(([,a,b],i)=>[{k:a,ok:v=>eq(v,i)},{k:b,ok:v=>eq(v,i)}]),
+  explain:"Data gives the labelled examples and the photo to sort, and feeds the tool. The prompt tells the tool to answer with one bin label, and also feeds the tool. The tool picks a label, which it hands to the check step. The check counts labels against the bar, then hands on to the bin – or to the fallback path if it fails."},
+ {id:"think",mount:"a-think",section:"Core worksheet",title:"Think about it",sub:"Reflect · "+CU_A,ico:"💭",
+  fields:[{k:"th",radio:1,ok:v=>eq(v,1)}],
+  explain:"Components are coupled, so a poor prompt output weakens everything after it – the tool's processing and the output it hands on. The check step sits after the output, so it is where the problem is caught before anyone trusts the result."},
+ {id:"exit",mount:"a-exit",section:"Core exit ticket",title:"Exit ticket",sub:"Goal, one interaction and the check · "+SD_P,ico:"🎫",
+  fields:[{k:"ex",radio:1,ok:v=>eq(v,2)}],
+  explain:"Only C links all three: what the system is for (sort waste photos into bins), how two components connect (the prompt makes the tool answer with one bin label) and how the output is judged (count labels against the answer key, at least 9 of 10). The others leave out the goal or the interaction, or only check that the tool ran."},
+ {id:"chal",mount:"a-chal",section:"Core challenge",title:"Challenge ⭐ Design a fallback path",sub:"Stretch · "+SD_A,ico:"⭐",
+  fields:CHAL.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"A good fallback reroutes the item to a safer step, flags the run for a human, and you note what the reroute affects: the output never reaches the bin, so nothing downstream receives the wrong label. Showing it anyway, lowering the bar or switching off the check would let a wrong output flow on."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+SD_A,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"Prototype = a first working version you walk through by hand. Walk-through = tracing one input through every component to the check step. Pressure-test = weakening one component on purpose. Propagate = how a problem spreads downstream. Fallback path = what the system does when a check fails."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 1",title:"Order the walk-through",sub:"Objective 1 · "+CU_P,ico:"🧭",
+  fields:LSTEPS.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"Choose one normal, non-personal input; hand it to the data component and say what it produces; pass that output to the tool, driven by your prompt; then judge the output against your criteria at the check step."},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"Case 1 · The Handover That Fails",sub:"Solution Architects · "+CE_E,ico:"🪜",
+  fields:[{k:"lc1",radio:1,ok:v=>eq(v,1)}],
+  explain:"A prototype exists to expose handovers the paper map hid – this is a broken interaction, a fixable finding, not the end of the system. Paper hides broken connections, and you still judge the output: the check step is never skipped."},
+ {id:"lbin",mount:"a-lbin",section:"Lab · Part 2",title:"Read the pressure-test",sub:"Objective 2 · "+CE_P,ico:"🩺",
+  fields:LBIN.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"The interaction holds when a weakened part still hands on something the next part can use and the check catches a below-bar result. Tighten the check when a below-bar output slips past it or is scored as a pass. The interaction is broken when one component's output cannot be read or used by the next at all."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"Case 2 · The Output That Slipped Through",sub:"Solution Architects · "+CE_A,ico:"🔬",
+  fields:[{k:"lc2",radio:1,ok:v=>eq(v,3)}],
+  explain:"If a poor output slipped through, the check step is too loose – tighten it so it catches outputs below the bar. A score that passed a below-bar output cannot be trusted yet, removing the check lets every weak output through, and you cannot guarantee perfect inputs."},
+ {id:"lfall",mount:"a-lfall",section:"Lab · Part 3",title:"A safe fallback has…",sub:"Objective 3 · "+GE_A,ico:"🧩",
+  fields:LFALL.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"A responsible fallback has a named check that triggers it, a defined safer action (reroute or flag for a human), and uses only non-personal inputs with no student logins. Hidden failures, passing on fluent but failed outputs and personal accounts are never part of it."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"Case 3 · The Graceful Failure",sub:"Solution Architects · "+GE_A,ico:"🛡️",
+  fields:[{k:"lc3",radio:1,ok:v=>eq(v,2)}],
+  explain:"Reroute to a safer step and flag the run for a human – the system fails gracefully instead of passing a wrong output on. Ignoring the check lets the wrong output flow downstream, logins break the account-free design, and no real names ever enter the system."},
+ {id:"llog",mount:"a-llog",section:"Lab worksheet",title:"Prototype log: find the broken interaction",sub:"Worksheet · walk-through · "+CE_E,ico:"📓",cls:"ws",
+  fields:[...HAND.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"hfix",ok:v=>eq(v,1)}],
+  explain:"The first two handovers hold. The tool-to-check handover is broken: the check needs one of three bin labels to compare with the answer key, but the tool – following the prompt ‘Describe this item.’ – hands on a description. Fix the component upstream: the prompt should ask for exactly one label."},
+ {id:"lpress",mount:"a-lpress",section:"Lab worksheet",title:"Pressure-test",sub:"Worksheet · "+CE_A,ico:"🌀",cls:"ws",
+  fields:[{k:"ps",ok:v=>eq(v,2)},{k:"pm",ok:v=>eq(v,2)},{k:"pt",ok:v=>eq(v,1)}],
+  explain:"Weakening the data propagated all the way: the tool learned no crushed cans, its output was wrong, the loose check passed it, and items went in the wrong bin. 6 of 10 is below the bar of 9 of 10 however confident the labels were, so tighten the check: count correct labels against the answer key every run, with crushed cans in the test set."},
+ {id:"lfb",mount:"a-lfb",section:"Lab worksheet",title:"Fallback path",sub:"Worksheet · "+SD_A,ico:"🔁",cls:"ws",
+  fields:[{k:"ft",ok:v=>eq(v,0)},{k:"fa",ok:v=>eq(v,1)}],
+  explain:"A fallback needs a named trigger – the accuracy check after the tool (fewer than 9 of 10, or a low-confidence label) – and a defined safer action: hold the item in a ‘check me’ tray, flag the run for a human and log it, so a wrong label never reaches the bin."},
+ {id:"ltool",mount:"a-ltool",section:"Lab worksheet",title:"Systems-plan cards + Scratch storyboard",sub:"Worksheet · tool log · "+SD_P,ico:"🧱",cls:"ws",
+  fields:CARDS.map(([k],i)=>({k,ok:v=>eq(v,i)})),
+  explain:"Goal: sort waste photos into three bins. Components: data → tool, steered by the prompt → label → check → bin. Evaluation points: a format check and an accuracy check between the tool and the bin. Risk and mitigation: crushed cans – more examples and a human hold. Storyboard: ask → classify → say, with a ‘check me tray’ branch."},
+ {id:"lsafe",mount:"a-lsafe",section:"Lab worksheet",title:"Safety check",sub:"Safety check · "+GE_E,ico:"🔒",
+  fields:LSAFE.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Today is planning only, the teacher operates Scratch and students never log in, and test inputs are non-personal (photos of waste items). Faces, voices and student accounts are personal data – never use them."},
+ {id:"lexit",mount:"a-lexit",section:"Lab exit ticket",title:"Lab exit ticket",sub:"One broken interaction and its fallback · "+CE_A,ico:"🎟️",
+  fields:[{k:"le",radio:1,ok:v=>eq(v,2)}],
+  explain:"A strong exit ticket names a real broken interaction the prototype revealed (the description could not be scored), the fix, and a fallback with the check that triggers it (fewer than 9 of 10 → hold the item for a human). ‘It worked’, removing the check or passing every output on are not fallbacks."},
+ {id:"lchal",mount:"a-lchal",section:"Lab challenge",title:"Challenge ⭐ Two fallback paths",sub:"Stretch · "+SD_A,ico:"⭐",
+  fields:[{k:"xf1",ok:v=>eq(v,0)},{k:"xt1",ok:v=>eq(v,0)},{k:"xf2",ok:v=>eq(v,1)},{k:"xt2",ok:v=>eq(v,1)},{k:"xh",ok:v=>eq(v,0)}],
+  explain:"A poor prompt gives answers that are not one of the three labels: a format check right after the tool catches it, and the fallback re-runs the item with the saved, fixed prompt. Poor data gives wrong labels: the accuracy check catches fewer than 9 of 10, and the fallback holds the item for a human. Both reroutes stop the wrong output before the bin, so no later component is harmed."}
+];
+
+/* ---------- state ---------- */
+const KEY="g9-mw7-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#audit").innerHTML=`<header><small>Worked example · a pair's planning notes · illustrative</small><b>Signature solution: the recycling-bin helper</b></header>
+<div class="in">
+  <p class="task"><b>The idea:</b> the school wants less rubbish in the wrong bin. A pair plans a small AI system that looks at a photo of one waste item and says which bin it belongs in – paper, plastic or metal. Photos of items only, never people.</p>
+  <table class="t"><thead><tr><th>Their rough notes</th><th>Still to decide</th></tr></thead>
+  <tbody><tr><td>📝 “Help with recycling.”</td><td>A goal that names one defined problem</td></tr>
+  <tr><td>🗂️ 200 labelled photos of paper, plastic and metal items</td><td>What each component hands to the next</td></tr>
+  <tr><td>⚙️ Teacher-operated image classifier, trained on those photos</td><td>How the tool's output reaches the check</td></tr>
+  <tr><td>🖊️ Prompt: still to be written</td><td>A prompt that asks for the exact output the next step needs</td></tr>
+  <tr><td>📊 “It should be accurate.”</td><td>A measurable bar, checked against the class answer key</td></tr>
+  <tr><td>🚩 Crushed cans look a bit like plastic</td><td>The risk, its mitigation and the check that catches it</td></tr></tbody></table>
+</div>`;
+$("#tmpack").innerHTML=`<header><small>Prototype log · illustrative paper prototype with simulated-AI cards</small><b>Recycling-bin helper: walk-through and pressure-test</b></header>
+<div class="in">
+  <p class="task"><b>Set-up:</b> the pair's Core system map, a partner drawing pre-written response cards as the ‘tool’, and the class answer key. Bar: at least 9 of 10 correct. Photos of waste items only – no personal data.</p>
+  <table class="t"><thead><tr><th>Component</th><th>Output it hands on (normal input)</th></tr></thead>
+  <tbody><tr><td>📥 Input</td><td>One clear photo of a drinks can from the class set</td></tr>
+  <tr><td>🗂️ Data</td><td>The can photo, plus the 200 labelled examples the tool learned from</td></tr>
+  <tr><td>🖊️ Prompt</td><td>‘Describe this item.’</td></tr>
+  <tr><td>⚙️ Tool</td><td>“A shiny, crushed silver drinks can.”</td></tr>
+  <tr><td>🔎 Check step</td><td>Needs paper, plastic or metal to compare with the answer key – could not score a description</td></tr></tbody></table>
+  <p class="note"><b>Pressure-test (after fixing the prompt to ask for one label):</b> the pair weakened the <b>data</b> on purpose by removing every crushed-can photo, then sent 10 crushed cans through. The tool confidently said ‘plastic’ for 4 of them – only <b>6 of 10</b> correct. Their check, as written, only asked ‘did every item get a label?’, so it passed the run and the wrong labels went on to the bin step.</p>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const clues=c=>`<div class="clues">${c.map(([e,t])=>`<div class="clue">${e}<span>${t}</span></div>`).join("")}</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "order":
+    return `<p class="how">Arrange the planning moves in the order an architect designs a system, from first to last.</p>`+
+      PLAN.map((_,i)=>`<div class="pair" data-item="o${i}"><span class="t">Step ${i+1}</span>${sel("o"+i,PLAN,"Choose the step…",PLAN_ORDER)}</div>`).join("");
+  case "case1":
+    return `<div class="quote">A team hands you a plan: five steps written one under the other, with no arrows between them. Architect, what is missing that would make this a system?</div>${clues([["📝","GOAL"],["🧩","PARTS"],["🔗","LINKS?"]])}<p class="q" id="q-c1">What must the plan add?</p>${radios("c1",CASE1)}`;
+  case "match":
+    return `<p class="how">Match each component to the job it does in the system.</p>`+
+      MATCH.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,MATCH_OPTS,"Choose its job…",[2,0,3,1])}</div>`).join("");
+  case "case2":
+    return `<div class="quote">An architect feeds poor, unclear data into the very first component of a connected system. Architect, which parts of the system does that weak data put at risk?</div>${clues([["🗂️","POOR DATA"],["⚙️","TOOL"],["📤","OUTPUT"]])}<p class="q" id="q-c2">Which parts are affected?</p>${radios("c2",CASE2)}`;
+  case "truths":
+    return boxes(TRUTHS,"Tick the THREE statements that make a system plan robust and responsible. Leave the others unticked.");
+  case "case3":
+    return `<div class="quote">During planning, an architect asks what the system should do at the moment its check step judges an output below the bar. Architect, which plan keeps the system responsible?</div>${clues([["🔎","CHECK FAILS"],["🚩","BELOW BAR"],["🔁","FALLBACK"]])}<p class="q" id="q-c3">What should the plan do?</p>${radios("c3",CASE3)}`;
+  case "wsplan":
+    return `<p class="how">Turn the pair's rough notes (above) into a strong plan. Choose the best entry for each line.</p>
+      <div class="pair" data-item="wg"><span class="t">📝 Goal in one sentence</span>${sel("wg",GOALS,"Choose a goal…",[0,2,1,3])}</div>
+      <div class="pair" data-item="wc"><span class="t">📊 One measurable success criterion</span>${sel("wc",CRITS,"Choose a criterion…",[2,0,3,1])}</div>
+      <div class="pair" data-item="wr"><span class="t">🚩 One risk to the system</span>${sel("wr",RISKS,"Choose a risk…",[1,3,0,2])}</div>
+      <div class="pair" data-item="wm"><span class="t">🛡️ The mitigation, and how the check step judges the affected output</span>${sel("wm",MITIG,"Choose…",[3,1,0,2])}</div>`;
+  case "wsstruct":
+    return `<p class="how">Complete the component table for the recycling-bin helper: what each component does, and what its output feeds into next. Non-personal data only.</p>`+
+      STRUCT_ROWS.map(([s,a,b],i)=>`<div class="scen"><p>${esc(s)}</p><div class="two">
+        <div data-item="${a}"><span>What it does</span>${sel(a,DOES,"Choose…",[[2,0,3,1],[3,2,1,0],[1,3,0,2],[0,2,1,3]][i])}</div>
+        <div data-item="${b}"><span>Its output feeds into …</span>${sel(b,FEEDS,"Choose…",[[3,1,0,2],[0,2,3,1],[0,1,3,2],[1,3,2,0]][i])}</div></div></div>`).join("");
+  case "think":
+    return `<p class="q" id="q-th">If one component in your system – say the prompt – produced a poor output, which other components would it affect, and where would your check step catch it?</p>${radios("th",THINK)}`;
+  case "exit":
+    return `<p class="q" id="q-ex">Which ONE sentence links a goal, one component interaction and the check step – what the system is for, how two of its components connect, and how you will judge whether the final output is good?</p>${radios("ex",EXIT)}`;
+  case "chal":
+    return boxes(CHAL,"Stretch: when the recycling-bin helper's check step fails, what should its fallback path do? Tick the THREE moves that reroute safely and note what the reroute affects. Leave the others unticked.");
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lorder":
+    return `<p class="how">Put the prototype walk-through into the order you run it by hand, from first to last.</p>`+
+      LSTEPS.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">Step ${i+1}</span>${sel("lo"+i,LSTEPS,"Choose the step…",LSTEP_ORDER)}</div>`).join("");
+  case "lcase1":
+    return `<div class="quote">Walking a prototype by hand, an architect reaches an arrow where one component's output simply cannot be used by the next component. Architect, what has the walk-through just revealed?</div>${clues([["⚙️","OUTPUT"],["❓","UNUSABLE"],["🔗","NEXT PART"]])}<p class="q" id="q-lc1">What has been found?</p>${radios("lc1",LCASE1)}`;
+  case "lbin":
+    return `<p class="how">Sort each pressure-test result: did the interaction hold, does the check need tightening, or is the interaction broken?</p>`+
+      LBIN.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["✅ Holds","❓ Tighten check","⛔ Broken"],["A","B","C"],t)}</div>`).join("");
+  case "lcase2":
+    return `<div class="quote">An architect feeds a deliberately vague prompt into the tool. A weak output travels all the way to the check step, which passes it even though it misses the bar. Architect, what should you do next?</div>${clues([["📶","VAGUE PROMPT"],["📉","WEAK OUTPUT"],["🔎","CHECK PASSED"]])}<p class="q" id="q-lc2">What is the right fix?</p>${radios("lc2",LCASE2)}`;
+  case "lfall":
+    return boxes(LFALL,"Tick the THREE things a responsible fallback path includes. Leave the others unticked.");
+  case "lcase3":
+    return `<div class="quote">An architect's accuracy check fails on a run and the system is about to hand the output on. Architect, which fallback keeps the system safe and account-free?</div>${clues([["🔎","CHECK FAILS"],["🚩","WRONG OUTPUT"],["🔁","REROUTE"]])}<p class="q" id="q-lc3">Which fallback is right?</p>${radios("lc3",LCASE3)}`;
+  case "llog":
+    return `<p class="how">Use the prototype log above. For each handover in the normal walk-through, decide whether the interaction holds or is broken – then choose the fix.</p>`+
+      HAND.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["✅ Holds","⛔ Broken"],["H","B"],t)}</div>`).join("")+
+      `<div class="pair" data-item="hfix" style="margin-top:10px"><span class="t">Which component should change to fix the broken interaction?</span>${sel("hfix",HFIX,"Choose…",[0,3,1,2])}</div>`;
+  case "lpress":
+    return `<p class="how">Use the pressure-test in the log above: the data was weakened on purpose (no crushed-can photos), and 10 crushed cans gave only 6 of 10 correct – yet the check passed the run.</p>
+      <div class="pair" data-item="ps"><span class="t">How far did the failure spread?</span>${sel("ps",PSPREAD,"Choose…",[1,0,3,2])}</div>
+      <div class="pair" data-item="pm"><span class="t">Did the output meet the success criteria at the check step?</span>${sel("pm",PMET,"Choose…",[1,3,2,0])}</div>
+      <div class="pair" data-item="pt"><span class="t">A poor output slipped through. How would you tighten the check?</span>${sel("pt",PTIGHT,"Choose…",[2,0,3,1])}</div>`;
+  case "lfb":
+    return `<p class="how">Write the fallback path for the recycling-bin helper: which check triggers it, and exactly what the system does when that check fails.</p>
+      <div class="pair" data-item="ft"><span class="t">🎯 Which check step triggers the fallback?</span>${sel("ft",FTRIG,"Choose…",[2,0,3,1])}</div>
+      <div class="pair" data-item="fa"><span class="t">🔁 What does the system do the moment that check fails?</span>${sel("fa",FACT,"Choose…",[0,3,1,2])}</div>`;
+  case "ltool":
+    return `<p class="how">Systems plan: lay out the systems-plan cards for the recycling-bin helper and choose the decision that belongs on each card.</p>`+
+      CARDS.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,DECIDE,"Choose the decision…",[3,0,4,2,1])}</div>`).join("");
+  case "lsafe":
+    return boxes(LSAFE,"Safety check: tick every rule that keeps today's planning safe. Leave the others unticked.");
+  case "lexit":
+    return `<p class="q" id="q-le">Which sentence describes one broken interaction the prototype revealed AND the fallback path added, including which check triggers it?</p>${radios("le",LEXIT)}`;
+  case "lchal":
+    return `<p class="how">Stretch: design two fallback paths for two different component failures, say which check step triggers each, and how the reroutes protect the rest of the system.</p>
+      <div class="scen"><p>Failure 1 · a poor prompt (the tool answers with a description, not a bin label)</p><div class="two">
+        <div data-item="xf1"><span>Fallback path</span>${sel("xf1",CH_FB,"Choose…",[2,1,0,3])}</div>
+        <div data-item="xt1"><span>Triggered by</span>${sel("xt1",CH_TRIG,"Choose…",[1,2,0])}</div></div></div>
+      <div class="scen"><p>Failure 2 · poor input data (no crushed-can examples, so labels are wrong)</p><div class="two">
+        <div data-item="xf2"><span>Fallback path</span>${sel("xf2",CH_FB,"Choose…",[0,3,2,1])}</div>
+        <div data-item="xt2"><span>Triggered by</span>${sel("xt2",CH_TRIG,"Choose…",[2,0,1])}</div></div></div>
+      <div class="pair" data-item="xh"><span class="t">How do both reroutes avoid harming the rest of the system?</span>${sel("xh",CH_HARM,"Choose…",[3,1,0,2])}</div>`;
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 9 Main Course · Term 1 Week 7 (16 – 20 Nov 2026) · Core + Lab · Designing the System + Prototype and Pressure-Test</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
