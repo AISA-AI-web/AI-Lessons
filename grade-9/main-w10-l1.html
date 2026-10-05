@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Showcase, Assess &amp; Reflect + Peer Review &amp; Aim Higher – Grade 9 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#D7263D; --main2:#EF4444; --deep:#8A1024;
+  --ink:#2B1A14; --muted:#6B5750; --paper:#FFF7F4; --card:#FFFFFF;
+  --line:#F5DDD5; --soft:#FFEFE9;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#FDBA74,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#F59E0B);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#2B1A14,#6E3A2E)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#FDD8C8 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FFFAF8;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FFFCFA}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#F59E0B)}
+.act-head.ws{background:linear-gradient(120deg,#2B1A14,#7A3F2E)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#FFF0EA}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #EFC3B3;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #F0B49E;border-radius:12px;padding:10px 14px;background:#FFF9F6;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(43,26,20,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#2B1A14;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 9 Main Course, Term 1</span><span class="pill">Week 10 Core + Week 10 Lab</span><span class="pill">📅 Teach: week of 7 – 11 Dec 2026</span></div>
+    <h1>Showcase, Assess &amp; Reflect + Peer Review &amp; Aim Higher</h1>
+    <p>Today you show what you built this term and, more importantly, explain why your choices were good ones and how you know they worked. A showcase at Grade 9 is not a show-and-tell – it is a justification. Then, in the Lab, you review each other's solutions like a real design team, act on the feedback to improve one part, and turn your term's reflections into one clear goal for next term.</p>
+    <p class="meta"><b>Strand:</b> Showcase, assess &amp; reflect · all four strands &nbsp;·&nbsp; <b>Role:</b> Solution Architects</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 9B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 10 of Term 1 – Monday 7 to Friday 11 December 2026</b> (AI period on Friday 11 December) – the last week before Winter Break. Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Showcase, Assess &amp; Reflect</a>, then move on to the <a href="#lab">Lab: Peer Review &amp; Aim Higher</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Justify two choices.</b> I can present my AI solution and justify at least two choices I made about its design or evaluation.</li>
+      <li><b>Sample four strands.</b> I can show what I have learned this term by completing a short task that samples all four strands.</li>
+      <li><b>Reflect and aim.</b> I can name one thing I learned and set one clear, specific goal for next term.</li>
+      <li><b>Lab: review and aim higher.</b> I can give specific, evidence-based feedback to peers and use feedback to improve my own solution; turn my reflections into one measurable goal with clear success criteria; and explain how my solution would change for a harder task or a higher-stakes context.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 10 Core · Showcase, Assess &amp; Reflect</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Justify two choices</b><small>A reason plus evidence for each</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Sample four strands</b><small>Understand, design, evaluate, responsible</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Prove, then reflect</b><small>Verify the output, set a clear goal · worksheet</small></a></li>
+    </ol>
+    <h3 class="rh">Week 10 Lab · Peer Review &amp; Aim Higher</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Give feed-forward</b><small>Strength, one improvement, one question</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Close the loop</b><small>Change one component, re-check the output</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Aim higher</b><small>A measurable goal and higher stakes · worksheet</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Justify two choices</h2><p>What turns a description into a justification?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In Week 9 you locked your version and rehearsed a demo that holds up under a hard question. Today you show it – and justify it.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">From what I made to why it works</h3>
+    <p>A showcase at Grade 9 is not a show-and-tell. Anyone can say what they built. Your job is to <b>justify</b>: pick two choices you made – one about <b>design</b> (your data, tool or prompt) and one about <b>evaluation</b> (how you checked the output) – and give a <b>reason plus evidence</b> for each.</p>
+    <p>Use the frame: <b>‘I chose X because Y, and I checked it by Z.’</b> <b>Evidence</b> can be a before-and-after example, a mistake you caught, or how often the output was correct. You are marked on your reasoning, not on how polished the project looks.</p>
+    <figure>
+      <svg viewBox="0 0 760 334" role="img" aria-labelledby="f1T">
+        <title id="f1T">A choice becomes a justification when it carries a reason and evidence. Choice: I chose X, a design or evaluation choice. Reason: because Y, why it should help. Evidence: and I checked it by Z, such as a test, a caught mistake or a hit rate. Together they make a justification, marked on reasoning, not polish. A description only, such as ‘I made a waste-sorting app’, is not enough; a justified choice says clearer photos were used because blurry ones confused the tool, and the score went from 6 of 10 to 9 of 10.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <g stroke="#2B1A14" stroke-width="1.6">
+            <rect x="14" y="16" width="220" height="110" rx="12" fill="#FFEFE9"/>
+            <rect x="270" y="16" width="220" height="110" rx="12" fill="#FFEFE9"/>
+            <rect x="526" y="16" width="220" height="110" rx="12" fill="#FFEFE9"/>
+            <rect x="190" y="166" width="380" height="58" rx="14" fill="#D7263D" stroke="#8A1024"/>
+          </g>
+          <g font-size="26" font-weight="800" text-anchor="middle" fill="#D7263D"><text x="252" y="80">+</text><text x="508" y="80">+</text></g>
+          <g font-size="16" font-weight="800" text-anchor="middle" fill="#8A1024"><text x="124" y="46">CHOICE</text><text x="380" y="46">REASON</text><text x="636" y="46">EVIDENCE</text></g>
+          <g font-size="14" font-weight="600" text-anchor="middle"><text x="124" y="74">“I chose X …”</text><text x="380" y="74">“… because Y …”</text><text x="636" y="74">“… and I checked it by Z”</text></g>
+          <g font-size="13" text-anchor="middle" fill="#6B5750"><text x="124" y="100">design or evaluation</text><text x="380" y="100">why it should help</text><text x="636" y="100">a test, a caught mistake</text><text x="636" y="117">or a hit rate</text></g>
+          <g stroke="#2B1A14" stroke-width="2" fill="none" marker-end="url(#ah)"><path d="M124 128L250 162"/><path d="M380 128V162"/><path d="M636 128L510 162"/></g>
+          <text x="380" y="192" font-size="17" font-weight="800" text-anchor="middle" fill="#fff">= A JUSTIFICATION</text>
+          <text x="380" y="213" font-size="13" text-anchor="middle" fill="#fff">marked on your reasoning, not on polish</text>
+          <rect x="14" y="246" width="356" height="78" rx="12" fill="#FDE7EC" stroke="#C92A4B" stroke-width="1.6"/>
+          <rect x="390" y="246" width="356" height="78" rx="12" fill="#E2F5EC" stroke="#0F8A5F" stroke-width="1.6"/>
+          <g font-size="13" font-weight="800" text-anchor="middle"><text x="192" y="270" fill="#C92A4B">✗ DESCRIPTION ONLY</text><text x="568" y="270" fill="#0F8A5F">✓ JUSTIFIED</text></g>
+          <g font-size="14" text-anchor="middle"><text x="192" y="298">“I made a waste-sorting app.”</text><text x="568" y="292">“Clearer photos, because blurry ones</text><text x="568" y="311">confused the tool: 6/10 → 9/10.”</text></g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> A choice becomes a justification when it carries a reason and evidence: I chose X because Y, and I checked it by Z. (Illustrative example.)</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, teams that build AI systems – in hospitals, banks and government – must explain and defend their design choices to regulators, not just show a working demo. Learning to justify and reflect now is exactly the habit those roles demand.</p></div>
+    <div id="a-vocab"></div>
+    <div id="a-jsort"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Sample the four strands</h2><p>What did the whole term ask you to do?</p></div>
+  <div class="part-body">
+    <h3 class="sub">One system, four strands</h3>
+    <p>Your assessment samples all four strands with one system. It asks you to <b>understand</b> how the components interact, to <b>design</b> them, to <b>evaluate</b> the output, and to use the system <b>responsibly</b>.</p>
+    <p>A weakness in one part shows up in the output of the whole, so a strong solution treats all four together. Naming which strand a task belongs to shows you understand the system as a whole. Responsible use is about <b>governance</b> – the rules that keep an AI system safe and fair, like using no personal data.</p>
+    <div class="call amber"><h4>Tool for this week: unplugged simulated-AI cards (teacher-led)</h4><p>1. This is an unplugged concept lesson: the teacher runs a <i>simulated-AI</i> card routine on the board – no live tool, no logins. 2. You reason about pre-prepared example outputs on the cards; no personal data is used. 3. Use the worksheet to sort or judge the cards and explain your thinking with the key vocabulary. The live tools (Teachable Machine and Scratch) are used in the matching Lab period.</p></div>
+    <div id="a-match"></div>
+    <div id="a-case2"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3 · Worksheet</span><h2>Prove it, then reflect</h2><p>Can you trust an output just because it sounds sure?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Verify, then set a goal</h3>
+    <p>A confident, detailed AI output can still be wrong, so every ‘it works’ claim needs a check against the task and a trusted source – that is <b>verify-before-trust</b>. Keep your showcase <b>account-free</b> and use <b>no personal data</b>: no names, faces or voices, only non-personal examples.</p>
+    <p>After the showcase you <b>reflect</b>: name one skill that carried across the term – understanding a system, designing it, evaluating it, or using it responsibly – and set one clear goal for next term that you could actually test.</p>
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="f2T">
+        <title id="f2T">Verify before trust. An AI output says a greasy pizza box goes in paper and claims to be 98 per cent sure. Before trusting it, check that it fits the task and matches a trusted source. If it matches, trust it. If it does not match, fix one part, then re-test. In this illustrative example the trusted guide says greasy pizza boxes are general waste, so the output needs a fix.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <rect x="14" y="66" width="220" height="118" rx="12" fill="#F4F0FC" stroke="#2B1A14" stroke-width="1.6"/>
+          <text x="124" y="96" font-size="15" font-weight="800" text-anchor="middle">AI OUTPUT</text>
+          <g font-size="14" text-anchor="middle"><text x="124" y="122">Greasy pizza box</text><text x="124" y="144" font-weight="700">→ PAPER</text></g>
+          <text x="124" y="168" font-size="13" text-anchor="middle" fill="#6B5750">“I am 98% sure.”</text>
+          <rect x="272" y="46" width="220" height="158" rx="14" fill="#FFEFE9" stroke="#D7263D" stroke-width="2.2"/>
+          <text x="382" y="80" font-size="15" font-weight="800" text-anchor="middle" fill="#D7263D">VERIFY FIRST</text>
+          <g font-size="14" text-anchor="middle"><text x="382" y="114">✓ fits the task?</text><text x="382" y="146">✓ matches a trusted</text><text x="382" y="166">source?</text></g>
+          <rect x="530" y="26" width="216" height="72" rx="12" fill="#E2F5EC" stroke="#0F8A5F" stroke-width="1.6"/>
+          <rect x="530" y="146" width="216" height="86" rx="12" fill="#FDE7EC" stroke="#C92A4B" stroke-width="1.6"/>
+          <g font-size="14" text-anchor="middle"><text x="638" y="56" font-weight="800" fill="#0F8A5F">MATCHES</text><text x="638" y="80">→ trust it</text>
+            <text x="638" y="174" font-weight="800" fill="#C92A4B">DOES NOT MATCH</text><text x="638" y="198">→ fix one part,</text><text x="638" y="218">then re-test</text></g>
+          <g stroke="#2B1A14" stroke-width="2.2" fill="none" marker-end="url(#ah2)"><path d="M234 125H268"/><path d="M492 96L526 66"/><path d="M492 160L526 186"/></g>
+          <text x="380" y="268" font-size="13" text-anchor="middle" fill="#6B5750">Trusted guide: greasy pizza boxes are general waste – so this output needs a fix.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Verify-before-trust: a confident output still needs a check against the task and a trusted source before you believe it. (Illustrative example.)</figcaption>
+    </figure>
+    <div id="a-prove"></div>
+    <div id="a-case3"></div>
+    <div class="call violet"><h4>Cross-curricular link · Islamic Studies</h4><p>Connect the idea of <i>amanah</i> (trust and responsibility) and giving truthful evidence to justifying your AI choices honestly – showing proof that each choice worked and keeping the exhibit account-free, with no personal data.</p></div>
+    <div class="call"><h4>Hands-on mission · Solution Architects: the justified showcase</h4><p>In small groups, run a short showcase of your term project. 1. Choose the two choices you will justify – one about design (data, tool or prompt) and one about evaluation (how you checked the output). 2. For each, write the evidence: a before-and-after example, a failure you caught, or how often the output was correct. 3. Remove any personal data from your exhibit – no names, faces or voices – and swap in a label or icon. 4. Present for two minutes using ‘I chose X because Y, and I checked it by Z’, then take one peer question. 5. Score one peer's showcase on the rubric with one specific piece of feed-forward. 6. Complete the four-strand task, then write your one thing learned and your next-term goal. <b>No artefacts to display?</b> Present from a hand-drawn one-page poster – a workflow map plus two justified choices – and peer-review on paper, so the showcase runs with no device.</p></div>
+    <div class="ecard" id="audit"></div>
+    <div id="a-choices"></div>
+    <div id="a-four1"></div>
+    <div id="a-four2"></div>
+    <div class="call"><h4>Think about it</h4><p>If you had to hand your solution to a stranger who did not trust it, which single piece of evidence would convince them fastest?</p></div>
+    <div id="a-reflect"></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 10 Lab</span><h2>Peer Review &amp; Aim Higher</h2><p>Today you review each other's solutions like a real design team, act on the feedback to improve one part, and turn your term's reflections into one clear goal for next term.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In the Core you showcased your solution and justified your design and evaluation choices.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Give feed-forward</h2><p>What makes feedback usable?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Strength, improvement, question</h3>
+    <p>‘Nice project’ changes nothing. Usable <b>feed-forward</b> has three parts: a <b>specific strength</b>, <b>one concrete improvement</b>, and <b>a question</b> – all aimed at the work, never the person.</p>
+    <p>In the <b>peer-review carousel</b> you and other reviewers score each exhibit on the same rubric. When your scores differ, you do not argue about opinions; you point to the evidence on the exhibit, such as whether the output was checked against a trusted source. That is <b>calibration</b>: it makes review fair and comparable instead of a matter of taste.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>Design and engineering teams in the UAE improve their systems through structured peer review and clear, measurable goals – the same routine you practise here is how real AI teams raise quality and stay accountable.</p></div>
+    <div id="a-lsort"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Close the loop</h2><p>When does feedback actually count?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Act on it, then re-check</h3>
+    <p>Feedback only counts if you act on it. Pick the single most useful comment on your exhibit, change <b>one component</b> – your data, tool or prompt – and <b>re-check</b> the output against the task, recording the before-and-after.</p>
+    <p>Change one thing at a time, just as you did when refining. That way you can prove the change helped, and you do not reintroduce untested risk into a system that was already working.</p>
+    <figure>
+      <svg viewBox="0 0 760 290" role="img" aria-labelledby="f3T">
+        <title id="f3T">Close the loop in five steps: 1 collect all the feed-forward, 2 choose the most useful one, 3 change one component only, 4 re-check against the task, 5 record the before and after. Then loop again, one change at a time. Illustrative example: the comment ‘crushed cans get labelled plastic’ leads to adding crushed-can photos, a data-only change; re-testing the same 5 new cans gives 2 of 5 right before and 4 of 5 after.</title>
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <g stroke="#2B1A14" stroke-width="1.6" fill="#fff">
+            <rect x="8" y="24" width="124" height="116" rx="12"/><rect x="162" y="24" width="124" height="116" rx="12"/>
+            <rect x="316" y="24" width="124" height="116" rx="12" fill="#FFEFE9" stroke="#D7263D" stroke-width="2.2"/>
+            <rect x="470" y="24" width="124" height="116" rx="12"/><rect x="624" y="24" width="124" height="116" rx="12"/>
+          </g>
+          <g fill="#D7263D"><circle cx="70" cy="24" r="13"/><circle cx="224" cy="24" r="13"/><circle cx="378" cy="24" r="13"/><circle cx="532" cy="24" r="13"/><circle cx="686" cy="24" r="13"/></g>
+          <g font-size="14" font-weight="800" text-anchor="middle" fill="#fff"><text x="70" y="29">1</text><text x="224" y="29">2</text><text x="378" y="29">3</text><text x="532" y="29">4</text><text x="686" y="29">5</text></g>
+          <g font-size="14" font-weight="800" text-anchor="middle" fill="#8A1024"><text x="70" y="64">COLLECT</text><text x="224" y="64">CHOOSE</text><text x="378" y="64">CHANGE</text><text x="532" y="64">RE-CHECK</text><text x="686" y="64">RECORD</text></g>
+          <g font-size="13" text-anchor="middle"><text x="70" y="92">all the</text><text x="70" y="110">feed-forward</text>
+            <text x="224" y="92">the most</text><text x="224" y="110">useful one</text>
+            <text x="378" y="92">one component</text><text x="378" y="110" font-weight="700" fill="#D7263D">only</text>
+            <text x="532" y="92">against</text><text x="532" y="110">the task</text>
+            <text x="686" y="92">before</text><text x="686" y="110">and after</text></g>
+          <g stroke="#2B1A14" stroke-width="2" fill="none" marker-end="url(#ah3)"><path d="M133 82H159"/><path d="M287 82H313"/><path d="M441 82H467"/><path d="M595 82H621"/></g>
+          <path d="M686 141V160H70V145" stroke="#D7263D" stroke-width="2" stroke-dasharray="6 4" fill="none" marker-end="url(#ah3)"/>
+          <text x="380" y="184" font-size="13" font-weight="700" text-anchor="middle" fill="#D7263D">one change at a time – then loop again</text>
+          <rect x="14" y="202" width="732" height="74" rx="12" fill="#FFEFE9" stroke="#F5DDD5" stroke-width="1.6"/>
+          <g font-size="13" text-anchor="middle"><text x="380" y="232">Example: ‘crushed cans get labelled plastic’ → add crushed-can photos (data only)</text><text x="380" y="256">→ re-test the same 5 new cans: 2 of 5 right before, 4 of 5 after</text></g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> Close the loop: pick the most useful comment, change one component, and re-check the output against the task. (Illustrative example.)</figcaption>
+    </figure>
+    <div class="call violet"><h4>Cross-curricular link · Computing</h4><p>Run a structured peer code review where classmates score each program against the same rubric, settle score gaps using evidence, then act on one comment to improve the code – the calibration and feed-forward loop practised here.</p></div>
+    <div id="a-lorder"></div>
+    <div id="a-lcase2"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Part 3 of 3 · Worksheet</span><h2>Aim higher</h2><p>How would your solution change for higher stakes?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Measurable, and higher stakes</h3>
+    <p>Consolidate your term's reflections into one <b>measurable goal</b> with success criteria, so you can prove later whether you met it. A goal like ‘get better at AI’ cannot be tested; one that names what you will improve and how you will check it can.</p>
+    <p>Then think bigger: how would your solution have to change for a harder task or a <b>higher-stakes context</b>, such as real users where a wrong output matters more? Name the component you would strengthen and the extra check you would add.</p>
+    <figure>
+      <svg viewBox="0 0 760 290" role="img" aria-labelledby="f4T">
+        <title id="f4T">Left: a goal you can prove. ‘Get better at AI’ has nothing to check. A measurable goal names what: crushed-can accuracy; criteria: 4 of 5 right, up from 2; check: re-run the same 5 new cans; when: by half-term in Term 2. Right: higher stakes. Moving from a class task to real users means a wrong output matters more, so strengthen the weakest component and add one extra check before use.</title>
+        <defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <rect x="14" y="14" width="356" height="262" rx="14" fill="#fff" stroke="#F5DDD5" stroke-width="2"/>
+          <rect x="390" y="14" width="356" height="262" rx="14" fill="#fff" stroke="#F5DDD5" stroke-width="2"/>
+          <g font-size="15" font-weight="800" text-anchor="middle" fill="#8A1024"><text x="192" y="42">🎯 A GOAL YOU CAN PROVE</text><text x="568" y="42">🛡️ HIGHER STAKES</text></g>
+          <rect x="30" y="58" width="324" height="44" rx="10" fill="#FDE7EC" stroke="#C92A4B" stroke-width="1.4"/>
+          <text x="192" y="85" font-size="13" text-anchor="middle">✗ “Get better at AI” – nothing to check</text>
+          <rect x="30" y="116" width="324" height="146" rx="10" fill="#E2F5EC" stroke="#0F8A5F" stroke-width="1.4"/>
+          <g font-size="13"><text x="46" y="144"><tspan font-weight="800" fill="#0F8A5F">WHAT:</tspan> crushed-can accuracy</text>
+            <text x="46" y="174"><tspan font-weight="800" fill="#0F8A5F">CRITERIA:</tspan> 4 of 5 right, up from 2</text>
+            <text x="46" y="204"><tspan font-weight="800" fill="#0F8A5F">CHECK:</tspan> re-run the same 5 new cans</text>
+            <text x="46" y="234"><tspan font-weight="800" fill="#0F8A5F">WHEN:</tspan> by half-term in Term 2</text></g>
+          <g stroke="#2B1A14" stroke-width="1.6"><rect x="406" y="60" width="130" height="50" rx="10" fill="#FFEFE9"/><rect x="600" y="60" width="130" height="50" rx="10" fill="#FDE7EC" stroke="#C92A4B"/></g>
+          <g font-size="14" font-weight="700" text-anchor="middle"><text x="471" y="90">CLASS TASK</text><text x="665" y="90">REAL USERS</text></g>
+          <path d="M538 85H596" stroke="#2B1A14" stroke-width="2.2" marker-end="url(#ah4)"/>
+          <text x="568" y="142" font-size="13" text-anchor="middle" fill="#6B5750">a wrong output matters more, so:</text>
+          <g stroke="#D7263D" stroke-width="1.6" fill="#FFEFE9"><rect x="406" y="158" width="324" height="44" rx="10"/><rect x="406" y="214" width="324" height="44" rx="10"/></g>
+          <g font-size="13" text-anchor="middle"><text x="568" y="185"><tspan font-weight="800" fill="#D7263D">1</tspan> Strengthen the weakest component</text><text x="568" y="241"><tspan font-weight="800" fill="#D7263D">2</tspan> Add one extra check before use</text></g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 4.</b> A measurable goal names success criteria and a way to check it; higher stakes need a stronger component and an extra check. (Illustrative example.)</figcaption>
+    </figure>
+    <div id="a-lgoal"></div>
+    <div id="a-lcase3"></div>
+    <div class="call amber"><h4>Today's tool: showcase the system + peer design-review cards</h4><p><b>I will be successful when</b> I can explain how my system's components interact, and give and receive a component-level design critique. <b>Roles:</b> Presenter (walks through the system), Reviewers (complete design-review cards), Scribe (captures feedback). 1. Demonstrate your system and name its components and interactions. 2. Explain two design or evaluation choices you made. 3. Review two other systems with a component strength and one suggestion each. 4. Read the feedback you received. 5. Write one Term-2 design goal based on the feedback. <b>You will make:</b> a demonstrated system, completed design-review cards and a Term-2 design goal. <b>Stay safe:</b> the showcase uses only the non-personal system – no data is shared.</p></div>
+    <div class="call amber"><h4>Tool for this week: unplugged card decks / output packs</h4><p>The teacher lays out the pre-printed card deck / output pack for this task – account-free, no devices. In pairs, sort, match or sequence the cards as the worksheet directs; for each card read its input, process and output and record it on the worksheet; then compare piles and agree the reason using the lesson's key words.</p></div>
+    <div class="call"><h4>Hands-on mission · Solution Architects: the review carousel</h4><p>1. Calibrate: score the sample exhibit on the shared rubric and compare with a partner, settling any gap with evidence. 2. At each station, score the exhibit and write feed-forward as a strength plus one specific improvement plus one question. 3. Keep every comment aimed at the work, never the person, and check no exhibit shows personal data. 4. Collect the feed-forward on your own exhibit and pick the single most useful improvement. 5. Revise one component – data, tool or prompt – and re-check the output against the task, recording before and after. 6. Consolidate your reflections into one measurable goal for next term. <b>No printed exhibits?</b> Display hand-drawn project posters and pass a paper rubric, so review and goal-setting need no device.</p></div>
+    <div class="ecard" id="carousel"></div>
+    <div id="a-lreview"></div>
+    <div class="ecard" id="received"></div>
+    <div id="a-lbefore"></div>
+    <div id="a-ltool"></div>
+    <div id="a-lsafe"></div>
+    <div class="call"><h4>Revision addendum · Data, fairness &amp; privacy</h4><p>Before Term 2, revisit three habits from the term. <b>Datasets:</b> keep classes balanced (within about 20% of each other), remove duplicates, use clear examples that show one subject, and test on <b>new held-out examples</b> the model never saw in training. <b>Fairness:</b> split the held-out test set by one characteristic and compare the two groups' accuracy. <b>Privacy by design:</b> remove direct identifiers, remove or generalise quasi-identifiers, keep only what the task needs, delete it when the task is done, and limit who can see it.</p></div>
+    <div id="a-ldata"></div>
+    <div id="a-lfair"></div>
+    <div id="a-lpriv"></div>
+    <div class="call"><h4>Think about it</h4><p>Which piece of feedback that you received would make the biggest difference if you had one more week – and how would you prove it worked?</p></div>
+    <div id="a-lexit"></div>
+    <div id="a-lchal"></div>
+    <div class="call"><h4>Next</h4><p>Next term (Term 2): take your goal into harder tasks and higher-stakes work, where checks matter even more.</p></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Justify with evidence, review like a team – then aim higher</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>A showcase <b>justifies</b> choices: I chose X because Y, and I checked it by Z.</li>
+      <li><b>Evidence</b> is concrete – a before-and-after test, a caught mistake, or how often the output was correct.</li>
+      <li>One system samples <b>all four strands</b>: understand, design, evaluate, and use responsibly.</li>
+      <li><b>Verify-before-trust</b>: a confident output still needs a check against a trusted source.</li>
+      <li>Usable <b>feed-forward</b> names a strength, one improvement and a question, aimed at the work; <b>calibration</b> settles score gaps with evidence, not opinion.</li>
+      <li>Feedback counts only when you <b>change one component and re-check</b> the output.</li>
+      <li>A <b>measurable goal</b> has success criteria and a check; higher stakes need a stronger component and extra verification.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 9 · Main Course · Term 1 Week 10 (7 – 11 Dec 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- strand + concept tags ---------- */
+const CU_P="CU · how data, tools and prompts interact within a solution";
+const CU_A="CU · how design choices affect output quality and reliability";
+const SD_A="SD · refines workflows to improve outputs and usability";
+const CE_P="CE · evaluates outputs for accuracy, bias and usefulness";
+const CE_A="CE · explains limitations and suggests targeted improvements";
+const GE_E="GE · identifies risks in AI-generated content";
+const GE_P="GE · explains bias, misinformation and misuse";
+const GE_A="GE · proposes actions for responsible and safe use";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["justify","Give a reason for a choice AND show evidence it worked, not just describe it."],
+  ["evidence","A concrete example or result that proves a claim, like a before-and-after test."],
+  ["verify-before-trust","Checking an output against the task and a trusted source before believing it."],
+  ["reflection","Thinking about your own learning: what you can now do, and what to improve next."],
+  ["governance","The rules that keep an AI system safe and fair, like using no personal data."]
+];
+const DEF_ORDER = [3,0,4,1,2];
+const JSORT = [
+  ["js1","📊 I chose labelled photos because clearer data raised accuracy, and my before-and-after test proved it","J"],
+  ["js2","🎯 I wrote a specific prompt because vague ones misled the tool, and the output then matched the task","J"],
+  ["js3","🔧 I used a tool and a prompt","D"],
+  ["js4","🔎 I checked the output against a trusted source and it was correct nine times out of ten","J"],
+  ["js5","🎨 It has a nice colourful design","D"],
+  ["js6","🧺 I made a waste-sorting app","D"]
+];
+const CASE1 = ["Saying that you and your team worked really hard on it.","A reason for the choice plus evidence that it worked.","A detailed description of every button and screen feature.","Showing that the app runs smoothly without ever crashing."];
+const MATCH = [["mt1","🧠 Understand",0],["mt2","🔧 Design",1],["mt3","🔎 Evaluate",2],["mt4","🛡️ Responsible",3]];
+const MATCH_OPTS = ["🔗 explain how the components interact","🧱 build data, tool and prompt to solve a problem","📊 check the output against a trusted source","🔒 use no personal data and follow the rules"];
+const CASE2 = ["Check the output against a trusted, reliable source.","Explain how each component passes its data along.","Use no personal data and follow the safety rules.","Build the data, the tool and the prompt yourself."];
+const PROVE = [
+  ["pk1","🎨 I trust the output because the project looks polished",0],
+  ["pk2","🔎 A confident output still needs a check against a trusted source",1],
+  ["pk3","🌫️ My goal is just to get better at AI",0],
+  ["pk4","🎯 My goal names what I will improve and how I could test it",1],
+  ["pk5","💬 A detailed output must be correct",0],
+  ["pk6","🔒 I removed personal data and used a label instead",1]
+];
+const CASE3 = ["Pointing out how confident the output sounds.","A description of all the effort your team put into it.","Telling them the output is definitely correct.","A before-and-after test showing that you checked it."];
+const EXHIBIT = [
+  ["Data","120 labelled photos of waste items (objects only – no people). Blurry photos replaced with clearer ones."],
+  ["Tool","An image-recognition model, run by the teacher – account-free."],
+  ["Prompt","‘Sort this item into paper, plastic, metal or general waste.’"],
+  ["Check","10 new test items the model never saw, each compared with the council recycling guide (a trusted source)."],
+  ["Before → after","Blurry photos: 6 of 10 test items right. Clearer photos: 9 of 10 right."],
+  ["Mistake caught","A greasy pizza box was sorted as paper; the guide says general waste."],
+  ["Still weak","Crushed cans are often labelled plastic (2 of 5 right)."]
+];
+const CH1R = ["Because the team liked how the new photos looked on the poster","Because blurry photos were confusing the tool, so clearer examples should help it recognise each item","Because more data always makes any tool perfect","Because the teacher said so"];
+const CH1E = ["Everyone at the showcase said it looked great","The tool sounded very sure of its answers","Before-and-after test: 6 of 10 → 9 of 10 right on the same 10 new items","We spent three weeks on it"];
+const CH2R = ["Because a confident output can still be wrong, so it needs a check against a trusted source","Because checking makes the slides look more professional","Because the tool asked us to check it","Because it was the quickest thing to do"];
+const CH2E = ["We asked the tool whether it was right, and it said yes","It caught a real mistake – a greasy pizza box sorted as paper – and 9 of 10 outputs matched the guide","The output was long and detailed","Nobody complained about it"];
+const COMP_OPTS = ["Data","Tool","Prompt","Output"];
+const F_PARTS = [["fs1","120 labelled photos of waste items",0],["fs2","The image-recognition model",1],["fs3","‘Sort this item into paper, plastic, metal or general waste.’",2]];
+const F_DESIGN = ["Add clearer photos of crushed cans to the metal class, then re-test on the same new items","Change the data, the tool and the prompt all at once","Make the app's colours brighter","Remove the hard test items so the score goes up"];
+const F_VERIFY = ["Trust it, because the tool says it is 98% sure","Compare it with the council recycling guide and the task, using items the model never saw","Ask the tool to check its own answer","Accept it if it is long and detailed"];
+const F_RISK = ["Photos of the bins could show people's faces or names on packaging","The bins are the wrong colour","The tool is too accurate","There are no risks with a recycling app"];
+const F_CONTROL = ["Photograph objects only, crop out faces and names, and keep the tool teacher-run and account-free","Post the photos online so others can help","Keep every photo forever, just in case","Let each student log in with their own account"];
+const REFLECT = ["The skill I most improved was evaluating outputs; next term I want to get better at AI.","The skill I most improved was evaluating outputs – checking against a trusted source; next term I will raise my tool's crushed-can accuracy from 2 of 5 to 4 of 5, tested on the same 5 new cans.","Everything went perfectly, so I do not need a goal.","I enjoyed the term; next term I will just try harder."];
+const EXIT = ["I chose clearer photos because blurry ones confused the tool, and my test went from 6 of 10 to 9 of 10; I kept to no personal data – objects only, no faces or names.","Our app looked great and everyone liked it; we followed the rules.","The tool was 98% sure, so it worked; we used our own logins to save time.","We changed lots of things and it feels better; safety rules did not apply to a recycling app."];
+const CHAL = ["Keep it unchanged – it scored 9 of 10 in class, so it is ready for patients","Strengthen the data with a larger, checked and anonymised set, and add a new check: a qualified person verifies every output before it is used","Make the answers longer and more confident so patients trust them","Add real patient names to the data so it feels more realistic"];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["feed-forward","Feedback that names a specific next step, not just praise for what is done."],
+  ["calibration","Reviewers agreeing on a standard so scores are comparable, settled by evidence."],
+  ["peer-review carousel","A routine where you move between stations reviewing each exhibit against the same rubric."],
+  ["measurable goal","A goal with success criteria and a way to check whether you met it."],
+  ["higher-stakes context","A situation where a wrong output matters more, like real users or medical data."]
+];
+const LDEF_ORDER = [2,4,0,3,1];
+const LSORT = [
+  ["lf1","❓ Asks one question aimed at the work","U"],
+  ["lf2","🎲 Scores it on a different rubric from everyone else","N"],
+  ["lf3","🎈 Just says the project is nice","N"],
+  ["lf4","🙅 Criticises the person, not the work","N"],
+  ["lf5","🌱 Names a specific strength in the work","U"],
+  ["lf6","🔧 Gives one concrete improvement to try next","U"]
+];
+const LCASE1 = ["Tell them the team is not very good at this.","Suggest labelling the data so accuracy improves.","Just say the project is really nice and impressive.","Simply say that you do not like it very much."];
+const LSTEPS = ["📥 Collect the feed-forward left on your exhibit","📌 Choose the single most useful improvement","🔧 Change one component of your solution","🔎 Re-check the output against the task","🗒️ Record the before and after"];
+const LSTEP_ORDER = [4,2,0,3,1];
+const LCASE2 = ["Agree it sounds fine and leave the solution as it is.","Change every component in the workflow at once.","Thank the reviewer politely and simply move on.","Change one component, then re-check the output."];
+const LGOAL = [
+  ["lg1","🌫️ It just says do better next term",0],
+  ["lg2","🎯 It names success criteria you could actually check",1],
+  ["lg3","🙈 It ignores who a wrong output could affect",0],
+  ["lg4","📏 It says how you will prove you met it",1],
+  ["lg5","🕳️ It has no way to tell whether you met it",0],
+  ["lg6","🛡️ For higher stakes it names the component to strengthen and an extra check",1]
+];
+const LCASE3 = ["Strengthen the weak component and add one more check.","Leave it unchanged, since it once worked fine in class.","Just make the output text a good deal longer.","Add more colours to brighten up the whole display."];
+const CAROUSEL = [
+  ["A","Homework-planner chatbot","Prompt: ‘Make a study plan for my Grade 9 test week.’ Plans were checked against the real test timetable: 4 of 5 plans had the right dates; 1 put Maths on the wrong day. No names used."],
+  ["B","Bus-timetable helper","Data: last year's timetable PDF. Tool: a chatbot. Output: ‘The 7:40 bus stops at Gate 2.’ The sheet shows no check against the current timetable."]
+];
+const RV1 = ["Nice project – I really like the colours!","You obviously did not try very hard.","Strength: you checked each plan against the real timetable (4 of 5 right). Improvement: add ‘list the test dates first’ to the prompt. Question: which date did the wrong plan use?","I would have made a games app instead."];
+const RV2 = ["Strength: the output is short and clear. Improvement: update the data to this term's timetable. Question: how did you check the 7:40 time was right?","It looks fine to me.","Your group is always slow.","Great work, ten out of ten!"];
+const RCAL = ["Average the two scores and move on","Let whoever argues loudest decide","Point to the evidence on the exhibit – is there a record of the output being checked against a trusted source? – and agree the score from that","Each keep your own score, because feedback is just a matter of taste"];
+const RECEIVED = [
+  ["1","Love the colours on your poster!"],
+  ["2","Strength: clear before-and-after on accuracy. Improvement: crushed cans are labelled plastic – add crushed-can photos to the metal class. Question: did you re-test on new cans?"],
+  ["3","Why not change the data, the tool and the prompt all at once and start again?"],
+  ["4","I don't like recycling apps."]
+];
+const BF_COMMENT = ["Card 1 – love the colours","Card 2 – crushed cans are labelled plastic; add crushed-can photos","Card 3 – change everything at once","Card 4 – I don't like recycling apps"];
+const BF_RESULT = ["Crushed cans: 2 of 5 right before → 4 of 5 right after","Crushed cans: 5 of 5 right before → 5 of 5 after","The app looked better after","It felt more accurate, so no numbers were needed"];
+const BF_RECHECK = ["Asked the tool whether it had improved","Re-ran the same 5 new crushed cans the model never saw and compared each output with the recycling guide","Tested on the training photos it had just learned from","Asked friends whether they liked it more"];
+const LTOOL = [
+  ["dr1","Your data step passes clear, labelled photos to the tool – that is why accuracy is high","S"],
+  ["dr2","Add a check step between the tool's label and the bin","G"],
+  ["dr3","You seem like you didn't try","N"],
+  ["dr4","Your prompt names all four bins, so the output always picks one of them","S"],
+  ["dr5","Reword the prompt so the tool says ‘check’ when it is unsure","G"],
+  ["dr6","Mine is better than yours","N"]
+];
+const LSAFE = [
+  ["ls1","Showcase only the non-personal system – no data shared",1],
+  ["ls2","Write the presenter's full name and photo on each review card",0],
+  ["ls3","Keep every comment aimed at the work, never the person",1],
+  ["ls4","Post screenshots of classmates' exhibits online",0],
+  ["ls5","Check no exhibit shows faces, voices or names",1],
+  ["ls6","Keep the showcase account-free – no student logins",1]
+];
+const DSET = [["Paper","120"],["Plastic","110"],["Metal","35 – all flat, clean cans in bright light"]];
+const D_CLASS = ["Paper","Plastic","Metal"];
+const D_BAL = ["Yes – the classes are close enough","No – Metal has far fewer, well outside about 20% of the others","Cannot tell without training a model","Yes – any dataset over 200 is balanced"];
+const D_MISS = ["Crushed, dented or dimly lit metal items","Paper items","Any more plastic bottles","Nothing is missing"];
+const D_PRED = ["The model will be equally good at every class","Metal items – especially crushed cans – are more likely to be labelled wrongly","Paper items will be labelled metal","The imbalance cannot affect the outputs"];
+const D_TEST = ["Some of the training photos, because they are already labelled","New held-out photos the model never saw in training","The same photos, flipped sideways","Any photos – it does not matter"];
+const PCT = ["90%","60%","18%","12%","30%"];
+const F_CONC = ["Yes – a 30-point gap is a fairness concern to report","No – the overall score is fine, so it is fair","Cannot determine – there is no gap","No – dark backgrounds never matter"];
+const F_SMALL = ["Yes – dark backgrounds are clearly worse","No – it is perfectly fair","Cannot determine – too few examples; test more items","Yes – light backgrounds are clearly worse"];
+const PRIV = [
+  ["pv1","Name","D"],["pv2","Face photo","D"],["pv3","Class","Q"],["pv4","Age","Q"],["pv5","Home area","Q"],["pv6","Favourite subject","K"]
+];
+const P_RET = ["Keep it forever, just in case","Delete it as soon as the count is finished","Keep it until the end of next year","Share it with the next class"];
+const P_ACC = ["Anyone in the school","Only the teacher running the task","The whole class, on a shared screen","Anyone who asks"];
+const LEXIT = ["My goal is to get better at AI next term.","My goal is to raise crushed-can accuracy from 2 of 5 to 4 of 5 by half-term, checked by re-running the same 5 new cans against the recycling guide.","My goal is to make the app look more professional.","My goal is to finish quickly next term."];
+const LEXC = ["The colours of the display","The data – a larger, more varied and checked set","The length of each output","Nothing – it already works in class"];
+const LCHAL = ["Keep the same 10 test dishes – a perfect score there proves it is safe for students","Make the tool's answers longer so they sound more trustworthy","Data: the canteen's checked allergen list for every dish (no student names) · control: staff run it, account-free · check: a staff member confirms every flag before serving · success: 0 missed allergens on 50 test dishes","Add each student's name and allergy to the data so it feels more personal"];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CE_A,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"Justify = give a reason AND evidence, not just a description. Evidence = a concrete result that proves a claim. Verify-before-trust = check an output against the task and a trusted source before believing it. Reflection = thinking about what you can now do and what to improve. Governance = the rules that keep an AI system safe and fair."},
+ {id:"jsort",mount:"a-jsort",section:"Core · Part 1",title:"Justification or description?",sub:"Objective 1 · justify with evidence · "+CE_A,ico:"🗂️",
+  fields:JSORT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A justification always carries a reason and evidence: clearer data raised accuracy and a before-and-after test proved it; a specific prompt fixed a misleading output; an output checked against a trusted source was right nine times out of ten. ‘I used a tool and a prompt’, ‘a nice colourful design’ and ‘I made a waste-sorting app’ only describe."},
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"Case 1 · Show and Tell, or Justify?",sub:"Solution Architects · "+CE_A,ico:"🕵️",
+  fields:[{k:"c1",radio:1,ok:v=>eq(v,1)}],
+  explain:"A reason for the choice plus evidence that it worked – I chose X because Y, and I checked it by Z. Effort is not evidence, running without crashing is not a justification, and describing every button in more detail is still not a reason with evidence."},
+ {id:"match",mount:"a-match",section:"Core · Part 2",title:"Match the strand to the task",sub:"Objective 2 · sample all four strands · "+CU_P,ico:"🧷",
+  fields:MATCH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Understand = explain how the components interact. Design = build the data, tool and prompt to solve a problem. Evaluate = check the output against a trusted source. Responsible = use no personal data and follow the rules. One system, four strands – each with its own task."},
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"Case 2 · The Four-Strand Task",sub:"Solution Architects · "+GE_A,ico:"🔬",
+  fields:[{k:"c2",radio:1,ok:v=>eq(v,2)}],
+  explain:"Using no personal data and following the safety rules samples responsible use – governance keeps the system safe and fair. Checking against a trusted source is evaluation, explaining how components pass data along is understanding, and building the parts is design."},
+ {id:"prove",mount:"a-prove",section:"Core · Part 3",title:"Prove it and aim well",sub:"Objective 3 · verify and set a clear goal · "+CE_A,ico:"🧩",
+  fields:PROVE.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Verify every output, keep it personal-data-free, and set a goal you could test: a confident output still needs a check against a trusted source; personal data is swapped for a label; a good goal names what you will improve and how you could test it. Polish and detail do not make an output correct, and ‘get better at AI’ cannot be tested."},
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"Case 3 · Convince a Stranger",sub:"Solution Architects · "+CE_P,ico:"⚖️",
+  fields:[{k:"c3",radio:1,ok:v=>eq(v,3)}],
+  explain:"Concrete evidence of a check beats any claim: a before-and-after test shows you checked it. Telling them it is definitely correct is only a claim, confidence is not proof, and effort and polish are not evidence that the output was checked."},
+ {id:"choices",mount:"a-choices",section:"Core worksheet",title:"My two justified choices",sub:"Worksheet · choice, reason, evidence · "+CE_A,ico:"📝",cls:"ws",
+  fields:[{k:"ch1r",ok:v=>eq(v,1)},{k:"ch1e",ok:v=>eq(v,2)},{k:"ch2r",ok:v=>eq(v,0)},{k:"ch2e",ok:v=>eq(v,1)}],
+  explain:"Design choice: clearer photos, because blurry ones confused the tool – checked by a before-and-after test on the same 10 new items (6 → 9 of 10). Evaluation choice: checking against the council guide, because a confident output can still be wrong – it caught a real mistake (the greasy pizza box) and 9 of 10 matched. Praise, confidence, effort or ‘the tool said yes’ are not evidence."},
+ {id:"four1",mount:"a-four1",section:"Core worksheet",title:"Four-strand check: understand and design",sub:"Worksheet · four-strand task · "+CU_P,ico:"🧩",cls:"ws",
+  fields:[...F_PARTS.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"fd",ok:v=>eq(v,0)}],
+  explain:"Understand: the labelled photos are the data, the image-recognition model is the tool, and the sorting instruction is the prompt. Design: one targeted change – clearer crushed-can photos in the metal class, then re-test on the same new items. Changing everything at once, brighter colours or deleting hard test items do not improve the output."},
+ {id:"four2",mount:"a-four2",section:"Core worksheet",title:"Four-strand check: evaluate and act responsibly",sub:"Worksheet · four-strand task · "+GE_A,ico:"⚖️",cls:"ws",
+  fields:[{k:"fe",ok:v=>eq(v,1)},{k:"fr",ok:v=>eq(v,0)},{k:"fx",ok:v=>eq(v,0)}],
+  explain:"Evaluate: verify by comparing with a trusted source (the council guide) and the task, on items the model never saw – not by its confidence, its length or asking the tool. Ethics: one governance risk is that photos capture faces or names; the control is objects only, faces and names cropped out, and a teacher-run, account-free tool."},
+ {id:"reflect",mount:"a-reflect",section:"Core worksheet",title:"My reflection and goal",sub:"Worksheet · one thing learned, one testable goal · "+CE_A,ico:"🪞",cls:"ws",
+  fields:[{k:"rf",radio:1,ok:v=>eq(v,1)}],
+  explain:"A strong reflection names the skill you improved and a goal you could actually test: what (crushed-can accuracy), the success criteria (2 of 5 → 4 of 5) and the check (the same 5 new cans). ‘Get better at AI’, ‘try harder’ and ‘no goal needed’ cannot be tested."},
+ {id:"exit",mount:"a-exit",section:"Core exit ticket",title:"Exit ticket",sub:"One justified choice and one governance rule · "+CE_A,ico:"🎫",
+  fields:[{k:"ex",radio:1,ok:v=>eq(v,0)}],
+  explain:"Only one answer gives a choice with its reason AND evidence (6 of 10 → 9 of 10) plus a governance rule actually kept (no personal data – objects only). Looks, the tool's confidence and ‘it feels better’ are not evidence, and shared logins or ignoring safety rules break governance."},
+ {id:"chal",mount:"a-chal",section:"Core challenge",title:"Challenge ⭐ A higher-stakes context",sub:"Stretch · adapt to context · "+GE_A,ico:"⭐",
+  fields:[{k:"chq",radio:1,ok:v=>eq(v,1)}],
+  explain:"With medical data a wrong output could harm someone, so strengthen the weakest component (a larger, checked and anonymised data set) and add a new check (a qualified person verifies every output before use). A class score does not prove it is safe for patients, longer answers are not safer, and real patient names are personal data."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+CE_P,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"Feed-forward names a specific next step. Calibration means reviewers agree a standard, settled by evidence. A peer-review carousel moves you between stations, reviewing each exhibit against the same rubric. A measurable goal has success criteria and a check. A higher-stakes context is one where a wrong output matters more."},
+ {id:"lsort",mount:"a-lsort",section:"Lab · Part 1",title:"Usable feed-forward?",sub:"Objective 1 · give evidence-based feedback · "+CE_P,ico:"🎯",
+  fields:LSORT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Usable feed-forward names a specific strength, one concrete improvement and a question – aimed at the work. ‘Just nice’, criticising the person and scoring on a different rubric from everyone else are not usable: they give nothing to act on, or cannot be compared."},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"Case 1 · Which Comment Helps?",sub:"Solution Architects · "+CE_A,ico:"🕵️",
+  fields:[{k:"lc1",radio:1,ok:v=>eq(v,1)}],
+  explain:"‘Label the data so accuracy improves’ names a specific part of the work and a concrete next step. Targeting the person, matters of taste and warm praise give the builder nothing to act on."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 2",title:"Close the feedback loop",sub:"Objective 2 · act on feedback and re-check · "+SD_A,ico:"🧭",
+  fields:LSTEPS.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"Collect the feed-forward on your exhibit → choose the single most useful improvement → change one component → re-check the output against the task → record the before and after. Feedback counts only when you act on it and re-check the result."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"Case 2 · Close the Loop",sub:"Solution Architects · "+SD_A,ico:"🔬",
+  fields:[{k:"lc2",radio:1,ok:v=>eq(v,3)}],
+  explain:"Acting on feedback and re-checking is what closes the loop: change one component, then re-check the output. Changing every component at once means you cannot tell which change helped; agreeing or thanking politely is not action."},
+ {id:"lgoal",mount:"a-lgoal",section:"Lab · Part 3",title:"A goal you can prove",sub:"Objective 3 · set a measurable goal for higher stakes · "+CE_A,ico:"🧩",
+  fields:LGOAL.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"A measurable goal names success criteria you could check and says how you will prove you met it; for higher stakes it names the component to strengthen and an extra check. ‘Do better next term’, ignoring who a wrong output could affect and having no way to tell whether you met it are the marks of a weak goal."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"Case 3 · Higher Stakes",sub:"Solution Architects · "+GE_A,ico:"⚖️",
+  fields:[{k:"lc3",radio:1,ok:v=>eq(v,0)}],
+  explain:"Higher stakes mean a stronger component and more verification. One class success does not make it reliable for real users, and length or colours do not reduce the risk of a wrong output."},
+ {id:"lreview",mount:"a-lreview",section:"Lab worksheet",title:"Carousel feed-forward and calibration",sub:"Worksheet · strength, improvement, question · "+CE_P,ico:"🔄",cls:"ws",
+  fields:[{k:"rv1",radio:1,ok:v=>eq(v,2)},{k:"rv2",radio:1,ok:v=>eq(v,0)},{k:"rcal",ok:v=>eq(v,2)}],
+  explain:"Each usable comment names a strength, one improvement and one question drawn from the exhibit's own evidence – the 4-of-5 timetable check, and the out-of-date timetable with no check. When two scores differ, calibrate by pointing to the evidence on the exhibit, not by averaging, arguing or treating it as taste."},
+ {id:"lbefore",mount:"a-lbefore",section:"Lab worksheet",title:"My before-and-after",sub:"Worksheet · one change, re-checked · "+SD_A,ico:"🔁",cls:"ws",
+  fields:[{k:"bf1",ok:v=>eq(v,1)},{k:"bf2",ok:v=>eq(v,0)},{k:"bf3",ok:v=>eq(v,0)},{k:"bf4",ok:v=>eq(v,1)}],
+  explain:"Card 2 is the most useful comment: a strength, a concrete improvement and a question. It points at the data, so you change only the data (add crushed-can photos), then re-check on the same 5 new crushed cans against the recycling guide: 2 of 5 → 4 of 5. Training photos, the tool's own opinion or friends' feelings do not prove the change helped."},
+ {id:"ltool",mount:"a-ltool",section:"Lab worksheet",title:"Tool log: design review received",sub:"Worksheet · component strength or design suggestion · "+CU_P,ico:"🧾",cls:"ws",
+  fields:LTOOL.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A component strength names a part and how it helps the output (clear labelled data → high accuracy; a prompt that names all four bins → a valid bin every time). A design suggestion names a change to a component or the workflow (add a check step; reword the prompt to say ‘check’ when unsure). Comments about the person or ‘mine is better’ are not design reviews."},
+ {id:"lsafe",mount:"a-lsafe",section:"Lab worksheet",title:"Safety check",sub:"Safety check · no personal data · "+GE_E,ico:"🛡️",
+  fields:LSAFE.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Showcase only the non-personal system, aim comments at the work, check exhibits for faces, voices or names, and keep the showcase account-free. Names and photos on review cards and screenshots posted online are personal data – never allowed."},
+ {id:"ldata",mount:"a-ldata",section:"Lab worksheet",title:"Inspect a supplied dataset",sub:"Revision addendum · D1 and D2 · "+CU_A,ico:"🗃️",cls:"ws",
+  fields:[{k:"dm",ok:v=>eq(v,0)},{k:"df",ok:v=>eq(v,2)},{k:"db",ok:v=>eq(v,1)},{k:"dmiss",ok:v=>eq(v,0)},{k:"dpred",ok:v=>eq(v,1)},{k:"dtest",ok:v=>eq(v,1)}],
+  explain:"Paper has the most (120) and Metal the fewest (35), far outside about 20% of the others – not balanced. Crushed, dented or dimly lit metal items are missing, and flat, bright cans are over-represented, so metal – especially crushed cans – is likely to be labelled wrongly. Always test on new held-out examples the model never saw in training."},
+ {id:"lfair",mount:"a-lfair",section:"Lab worksheet",title:"Fairness check: compare two groups",sub:"Revision addendum · F1 · "+GE_P,ico:"⚖️",cls:"ws",
+  fields:[{k:"fa1",ok:v=>eq(v,0)},{k:"fa2",ok:v=>eq(v,1)},{k:"fa3",ok:v=>eq(v,4)},{k:"fa4",ok:v=>eq(v,0)},{k:"fa5",ok:v=>eq(v,2)}],
+  explain:"Light backgrounds: 18 ÷ 20 × 100 = 90%. Dark backgrounds: 12 ÷ 20 × 100 = 60%. The 30-point gap is a fairness concern to report, with a fix such as adding varied dark-background examples. With only 4 items per group, 3 of 4 against 4 of 4 is too few to be sure: record ‘cannot determine’ and test more."},
+ {id:"lpriv",mount:"a-lpriv",section:"Lab worksheet",title:"Privacy by design",sub:"Revision addendum · P1 · "+GE_A,ico:"🔒",cls:"ws",
+  fields:[...PRIV.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"pret",ok:v=>eq(v,1)},{k:"pacc",ok:v=>eq(v,1)}],
+  explain:"Name and face photo are direct identifiers – remove them. Class, age and home area could re-identify someone when combined, and the task does not need them – remove or generalise. Only the favourite subject is needed (data minimisation). Delete the data as soon as the count is finished, and only the teacher running the task should see it."},
+ {id:"lexit",mount:"a-lexit",section:"Lab exit ticket",title:"Lab exit ticket",sub:"Goal with success criteria + component to strengthen · "+CE_A,ico:"🎫",
+  fields:[{k:"le",radio:1,ok:v=>eq(v,1)},{k:"lec",ok:v=>eq(v,1)}],
+  explain:"A measurable goal names what, the success criteria (2 of 5 → 4 of 5), when (by half-term) and the check (the same 5 new cans against the guide). For a higher-stakes context, strengthen the weakest component – the data – rather than the colours or the length of the output."},
+ {id:"lchal",mount:"a-lchal",section:"Lab challenge",title:"Challenge ⭐ Design the upgraded solution",sub:"Stretch · governance control + verification check · "+GE_A,ico:"⭐",
+  fields:[{k:"lch",radio:1,ok:v=>eq(v,2)}],
+  explain:"For a canteen allergen helper a missed allergen could harm a student, so the upgrade changes the data (the canteen's checked allergen list, no names), adds a governance control (staff-run, account-free) and a verification check (staff confirm every flag), and measures success (0 missed allergens on 50 test dishes). A small perfect test, longer answers or personal data do not make it safe."}
+];
+
+/* ---------- state ---------- */
+const KEY="g9-mw10-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#audit").innerHTML=`<header><small>Showcase exhibit · illustrative · no personal data</small><b>Waste-sorting helper (paper · plastic · metal · general waste)</b></header>
+<div class="in">
+  <p class="task"><b>How to use it:</b> this is a sample exhibit from a showcase. Use it for the worksheet tasks below – justify two of its choices, then answer the four-strand check.</p>
+  <table class="t"><tbody>${EXHIBIT.map(([t,d])=>`<tr><th scope="row">${esc(t)}</th><td>${esc(d)}</td></tr>`).join("")}</tbody></table>
+</div>`;
+$("#carousel").innerHTML=`<header><small>Carousel stations · anonymised exhibits · illustrative</small><b>Two exhibits to review against the same rubric</b></header>
+<div class="in">
+  <table class="t"><thead><tr><th>Exhibit</th><th>System</th><th>What the exhibit shows</th></tr></thead>
+  <tbody>${CAROUSEL.map(([e,s,d])=>`<tr><td>${esc(e)}</td><td>${esc(s)}</td><td>${esc(d)}</td></tr>`).join("")}</tbody></table>
+</div>`;
+$("#received").innerHTML=`<header><small>Feed-forward left on my exhibit · illustrative</small><b>Comments on my waste-sorting helper</b></header>
+<div class="in">
+  <table class="t"><thead><tr><th>Card</th><th>Comment</th></tr></thead>
+  <tbody>${RECEIVED.map(([c,t])=>`<tr><td>${esc(c)}</td><td>${esc(t)}</td></tr>`).join("")}</tbody></table>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const pairSel=(k,label,opts,ph,order,style)=>`<div class="pair" data-item="${k}"${style?` style="${style}"`:""}><span class="t">${label}</span>${sel(k,opts,ph,order)}</div>`;
+const clues=c=>`<div class="clues">${c.map(([e,t])=>`<div class="clue">${e}<span>${esc(t)}</span></div>`).join("")}</div>`;
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>pairSel("v"+i,esc(t),WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)).join("");
+  case "jsort":
+    return `<p class="how">Sort each statement: is it a justification (reason plus evidence), or just a description?</p>`+
+      JSORT.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🗂️ Justification","🏷️ Description"],["J","D"],t)}</div>`).join("");
+  case "case1":
+    return `<div class="quote">At the showcase, a student says ‘here is my waste-sorting app, it looks great’. Architect, what turns that into a justification?</div>${clues([["🗂️","CHOICE"],["🔎","CHECK"],["📊","EVIDENCE"]])}<p class="q" id="q-c1">What makes it a justification?</p>${radios("c1",CASE1)}`;
+  case "match":
+    return `<p class="how">Match each strand to the task that samples it.</p>`+
+      MATCH.map(([k,t])=>pairSel(k,esc(t),MATCH_OPTS,"Choose the task…",[2,0,3,1])).join("");
+  case "case2":
+    return `<div class="quote">Your assessment samples all four strands with one system. Architect, which task belongs to the responsible-use strand?</div>${clues([["🧠","UNDERSTAND"],["🔧","DESIGN"],["🛡️","RESPONSIBLE"]])}<p class="q" id="q-c2">Which task samples responsible use?</p>${radios("c2",CASE2)}`;
+  case "prove":
+    return boxes(PROVE,"Tick the THREE statements that show verify-before-trust and a clear, testable goal.");
+  case "case3":
+    return `<div class="quote">You hand your solution to someone who does not trust it. Architect, which single piece of evidence would convince them fastest?</div>${clues([["🙋","STRANGER"],["📊","EVIDENCE"],["🏁","TRUST"]])}<p class="q" id="q-c3">Which evidence convinces fastest?</p>${radios("c3",CASE3)}`;
+  case "choices":
+    return `<p class="how">Use the showcase exhibit above. Complete the frame ‘I chose X because Y, and I checked it by Z’ for one design choice and one evaluation choice.</p>
+      <div class="scen"><p>Design choice (data): replaced blurry photos with clearer, labelled ones</p><div class="two">
+        <div data-item="ch1r"><span>Reason (because …)</span>${sel("ch1r",CH1R,"Choose…")}</div>
+        <div data-item="ch1e"><span>Evidence (how I checked / result)</span>${sel("ch1e",CH1E,"Choose…")}</div></div></div>
+      <div class="scen"><p>Evaluation choice: checked outputs against the council recycling guide on 10 new items</p><div class="two">
+        <div data-item="ch2r"><span>Reason (because …)</span>${sel("ch2r",CH2R,"Choose…",[2,0,3,1])}</div>
+        <div data-item="ch2e"><span>Evidence (how I checked / result)</span>${sel("ch2e",CH2E,"Choose…")}</div></div></div>`;
+  case "four1":
+    return `<p class="how"><b>AI Systems Understanding:</b> label the three components of the exhibit's system.</p>`+
+      F_PARTS.map(([k,t])=>pairSel(k,esc(t),COMP_OPTS,"Choose the component…",[3,1,0,2])).join("")+
+      `<p class="how" style="margin-top:12px"><b>AI Solution Design &amp; Development:</b> suggest one change to improve the output.</p>`+
+      pairSel("fd","One change to improve the output",F_DESIGN,"Choose…",[2,0,3,1]);
+  case "four2":
+    return `<p class="how"><b>Critical Evaluation &amp; Informed Interaction:</b> the tool says a greasy pizza box is ‘paper (98% sure)’.</p>`+
+      pairSel("fe","How would you verify this output?",F_VERIFY,"Choose…")+
+      `<p class="how" style="margin-top:12px"><b>Ethics &amp; Responsible Use:</b> name one governance risk and one control.</p>`+
+      pairSel("fr","One governance risk",F_RISK,"Choose…",[1,3,0,2])+
+      pairSel("fx","One control",F_CONTROL,"Choose…",[2,0,3,1]);
+  case "reflect":
+    return `<p class="q" id="q-rf">Which reflection names one thing learned AND one goal for next term that you could actually test?</p>${radios("rf",REFLECT)}`;
+  case "exit":
+    return `<p class="q" id="q-ex">Which answer names one choice justified with evidence AND one governance rule kept during the showcase?</p>${radios("ex",EXIT)}`;
+  case "chal":
+    return `<div class="quote">Your waste-sorting idea is adapted to sort photos of medicine packets for a clinic, using medical data – a higher-stakes context. <span class="illus">(Illustrative scenario.)</span></div><p class="q" id="q-chq">Which plan names a component to strengthen and a new check?</p>${radios("chq",CHAL)}`;
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>pairSel("lv"+i,esc(t),LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)).join("");
+  case "lsort":
+    return `<p class="how">Sort each comment: is it usable feed-forward, or not?</p>`+
+      LSORT.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🎯 Usable","🚩 Not usable"],["U","N"],t)}</div>`).join("");
+  case "lcase1":
+    return `<div class="quote">Your exhibit gets three comments: ‘nice work’, ‘label the data so accuracy improves’, and ‘did you check the output?’. Architect, which is the usable feed-forward?</div>${clues([["🌱","STRENGTH"],["🔧","IMPROVEMENT"],["❓","QUESTION"]])}<p class="q" id="q-lc1">Which comment is usable feed-forward?</p>${radios("lc1",LCASE1)}`;
+  case "lorder":
+    return `<p class="how">Put the close-the-loop steps into the order a design team follows, from first to last.</p>`+
+      LSTEPS.map((_,i)=>pairSel("lo"+i,"Step "+(i+1),LSTEPS,"Choose the step…",LSTEP_ORDER)).join("");
+  case "lcase2":
+    return `<div class="quote">You collect the feedback on your exhibit and pick the most useful comment. Architect, what actually closes the loop?</div>${clues([["📌","PICK ONE"],["🔧","CHANGE"],["🔎","RE-CHECK"]])}<p class="q" id="q-lc2">What closes the feedback loop?</p>${radios("lc2",LCASE2)}`;
+  case "lgoal":
+    return boxes(LGOAL,"Tick the THREE marks of a strong measurable goal and higher-stakes thinking.");
+  case "lcase3":
+    return `<div class="quote">Your solution works for a class task, but next it must serve real users, where a wrong output matters much more. Architect, how should it change?</div>${clues([["📈","HARDER TASK"],["🛡️","HIGHER STAKES"],["🔎","EXTRA CHECK"]])}<p class="q" id="q-lc3">How should the solution change?</p>${radios("lc3",LCASE3)}`;
+  case "lreview":
+    return `<p class="how">Use the carousel stations above. Choose the usable feed-forward for each exhibit – aimed at the work, not the person.</p>
+      <p class="q" id="q-rv1">Exhibit A · Homework-planner chatbot</p>${radios("rv1",RV1)}
+      <p class="q" id="q-rv2">Exhibit B · Bus-timetable helper</p>${radios("rv2",RV2)}`+
+      pairSel("rcal","Calibrate: you scored Exhibit B 2 out of 4 for ‘output checked’; your partner gave 4. What do you do?",RCAL,"Choose…",[1,3,2,0],"margin-top:12px");
+  case "lbefore":
+    return `<p class="how">Use the comments on your exhibit above. Record the one change you made after feedback and how you re-checked it.</p>`+
+      pairSel("bf1","The single most useful comment",BF_COMMENT,"Choose…",[2,0,3,1])+
+      pairSel("bf2","Component changed",COMP_OPTS,"Choose…",[2,1,0,3])+
+      pairSel("bf3","Before → after",BF_RESULT,"Choose…",[1,3,0,2])+
+      pairSel("bf4","How I re-checked",BF_RECHECK,"Choose…",[0,2,1,3]);
+  case "ltool":
+    return `<p class="how">Sort each design-review card you received: a component strength, a design suggestion, or not a design review?</p>`+
+      LTOOL.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["💪 Strength","💡 Suggest a change","🚫 Not a review"],["S","G","N"],t)}</div>`).join("");
+  case "lsafe":
+    return boxes(LSAFE,"Tick EVERY action that keeps the showcase and carousel safe – no personal data, no faces, voices or names.");
+  case "ldata":
+    return `<p class="how">Your teacher supplies this dataset for a waste-sorting model <span class="illus">(illustrative counts)</span>. Answer without training anything.</p>
+      <table class="t" style="margin-bottom:12px"><thead><tr><th>Class</th><th>Examples</th></tr></thead><tbody>${DSET.map(([c,n])=>`<tr><td>${esc(c)}</td><td>${esc(n)}</td></tr>`).join("")}</tbody></table>`+
+      pairSel("dm","Which class has the MOST examples?",D_CLASS,"Choose…",[2,0,1])+
+      pairSel("df","Which class has the FEWEST?",D_CLASS,"Choose…",[1,2,0])+
+      pairSel("db","Is it balanced?",D_BAL,"Choose…",[2,1,3,0])+
+      pairSel("dmiss","What is MISSING or under-represented?",D_MISS,"Choose…",[3,1,0,2])+
+      pairSel("dpred","Predict: how might this change the model's outputs?",D_PRED,"Choose…",[0,3,1,2])+
+      pairSel("dtest","D1 rule: the test set should be…",D_TEST,"Choose…",[0,2,1,3]);
+  case "lfair":
+    return `<p class="how">A held-out test set is split by ONE characteristic – light vs dark background – and both groups are run under the same conditions <span class="illus">(illustrative results)</span>. Light background: <b>18 correct out of 20</b>. Dark background: <b>12 correct out of 20</b>.</p>`+
+      pairSel("fa1","Light background accuracy",PCT,"Choose…",[2,4,0,3,1])+
+      pairSel("fa2","Dark background accuracy",PCT,"Choose…",[0,3,2,1,4])+
+      pairSel("fa3","Gap between the two rates",PCT,"Choose…",[1,3,4,2,0])+
+      pairSel("fa4","Is there a fairness concern?",F_CONC,"Choose…",[1,3,0,2])+
+      pairSel("fa5","Another class tested only 4 items per group: 3 of 4 vs 4 of 4. Fairness concern?",F_SMALL,"Choose…",[0,2,3,1],"margin-top:12px");
+  case "lpriv":
+    return `<p class="how">A record holds: name, face photo, class, age, home area, favourite subject. The task is to find which favourite subjects are most popular across the whole grade. Decide what to do with each field.</p>`+
+      PRIV.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Remove – direct","Remove or generalise","Keep – needed"],["D","Q","K"],t)}</div>`).join("")+
+      pairSel("pret","Retention – when should this data be deleted?",P_RET,"Choose…",[0,2,1,3],"margin-top:12px")+
+      pairSel("pacc","Access – who should be allowed to see it?",P_ACC,"Choose…",[2,0,3,1]);
+  case "lexit":
+    return `<p class="q" id="q-le">Which sentence is a goal for next term that includes its success criteria?</p>${radios("le",LEXIT)}`+
+      pairSel("lec","The one component you would strengthen for a higher-stakes context",LEXC,"Choose…",[0,2,1,3],"margin-top:12px");
+  case "lchal":
+    return `<div class="quote">A harder, higher-stakes version: your helper is upgraded to flag allergens in school-canteen dishes for real students – sensitive data. <span class="illus">(Illustrative scenario.)</span></div><p class="q" id="q-lch">Which upgraded design shows the component change, a governance control, a verification check and how success is measured?</p>${radios("lch",LCHAL)}`;
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 9 Main Course · Term 1 Week 10 (7 – 11 Dec 2026) · Core + Lab · Showcase, Assess &amp; Reflect + Peer Review &amp; Aim Higher</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
