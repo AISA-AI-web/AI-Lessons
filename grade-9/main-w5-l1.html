@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Risk Is a System Property + Auditing the Risks – Grade 9 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#D7263D; --main2:#EF4444; --deep:#8A1024;
+  --ink:#2B1A14; --muted:#6B5750; --paper:#FFF7F4; --card:#FFFFFF;
+  --line:#F5DDD5; --soft:#FFEFE9;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#FDBA74,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#F59E0B);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#2B1A14,#6E3A2E)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#FDD8C8 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FFFAF8;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FFFCFA}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#F59E0B)}
+.act-head.ws{background:linear-gradient(120deg,#2B1A14,#7A3F2E)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#FFF0EA}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #EFC3B3;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #F0B49E;border-radius:12px;padding:10px 14px;background:#FFF9F6;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(43,26,20,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#2B1A14;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+.flip{min-width:0}
+.flip .term{overflow-wrap:anywhere;hyphens:auto}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 9 Main Course, Term 1</span><span class="pill">Week 5 Core + Week 5 Lab</span><span class="pill">📅 Teach: week of 2 – 6 Nov 2026</span></div>
+    <h1>Risk Is a System Property + Auditing the Risks</h1>
+    <p>AI can generate content that looks polished and sounds certain, but polished is not the same as true or fair. Today you learn to identify the risks hidden in AI content and trace each one back to the part of the system it came from. Then, in the Lab, you become an auditor: you rate how likely and how harmful each risk is, decide which mitigation to build in first, and say who is accountable for what is left over.</p>
+    <p class="meta"><b>Strand:</b> Ethics &amp; Responsible Use &nbsp;·&nbsp; <b>Role:</b> Solution Architects</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 9B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 5 of Term 1 – Monday 2 to Friday 6 November 2026.</b> Grade 9 has one AI period a week, on Friday 6 November. Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Risk Is a System Property</a>, then move on to the <a href="#lab">Lab: Auditing the Risks</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Trace the risk.</b> I can name the risks in AI-generated content and say which system component – data, tool or prompt – each risk comes from.</li>
+      <li><b>Analyse and propose.</b> I can analyse a real scenario, identify its risks and governance concerns, and propose a responsible-use measure with a justified reason.</li>
+      <li><b>Use the words.</b> I can use terms like bias, misinformation, misuse and governance accurately, and explain how a risk would shape how I build or evaluate a solution.</li>
+      <li><b>Lab: audit and govern.</b> I can audit an AI system scenario, rate each risk for likelihood and impact, argue which mitigation to build in first, and write a governance rule saying who is accountable for what is left over.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 5 Core · Risk Is a System Property</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Trace the source</b><small>Match each risk to its component</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Design it in</b><small>Build responsible habits from the start</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Judge the content</b><small>Verify before you trust or share · worksheet</small></a></li>
+    </ol>
+    <h3 class="rh">Week 5 Lab · Auditing the Risks</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Run the audit</b><small>List risks and trace each to a component</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Rate and prioritise</b><small>Likelihood by impact decides what to fix first</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Mitigate and govern</b><small>Target the component; own the residual risk · worksheet</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Where risk begins</h2><p>Which component did each risk come from?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>Last week (Week 4) you ranked a set of outputs and fixed the weakest by repairing its faulty component. Today you trace the <b>risks</b> in AI content back to the component they came from.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">Risk is a system property</h3>
+    <p>An AI system is a set of interacting parts: the <b>data</b> it learned from, the <b>tool</b> that processes a request, and the <b>prompt</b> that guides it. A weakness in any one of these can surface as a risk in the final content. Skewed data can produce <b>bias</b>; a limited tool can <b>invent facts</b>; a careless prompt can invite <b>misuse</b>. Because the parts interact, a small flaw early on can grow by the time content reaches a reader – and false content that spreads becomes <b>misinformation</b>. That is why you check not just the output, but <b>where in the system a risk was born</b>, so your fix targets the real cause.</p>
+    <figure>
+      <svg viewBox="0 0 760 290" role="img" aria-labelledby="f1T">
+        <title id="f1T">Risk can enter at any component. Skewed data can produce bias, a limited tool can invent a fact, and a careless prompt can invite misuse. All three flow into the final content, which looks polished; if false content reaches readers and spreads, it becomes misinformation.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <g stroke="#2B1A14" stroke-width="1.6" fill="#fff">
+            <rect x="14" y="16" width="176" height="64" rx="10"/>
+            <rect x="14" y="112" width="176" height="64" rx="10"/>
+            <rect x="14" y="208" width="176" height="64" rx="10"/>
+          </g>
+          <g fill="#FDE7EC" stroke="#C92A4B" stroke-width="1.8">
+            <rect x="228" y="26" width="176" height="44" rx="22"/>
+            <rect x="228" y="122" width="176" height="44" rx="22"/>
+            <rect x="228" y="218" width="176" height="44" rx="22"/>
+          </g>
+          <rect x="452" y="84" width="140" height="120" rx="12" fill="#FFEFE9" stroke="#D7263D" stroke-width="2.2"/>
+          <rect x="644" y="104" width="104" height="80" rx="12" fill="#F4F0FC" stroke="#2B1A14" stroke-width="1.6"/>
+          <rect x="560" y="226" width="188" height="46" rx="10" fill="#FDE7EC" stroke="#C92A4B" stroke-width="1.8" stroke-dasharray="6 4"/>
+          <g font-size="16" font-weight="800" text-anchor="middle">
+            <text x="102" y="44">DATA</text><text x="102" y="140">TOOL</text><text x="102" y="236">PROMPT</text>
+            <text x="522" y="132" fill="#D7263D">FINAL</text><text x="522" y="152" fill="#D7263D">CONTENT</text>
+            <text x="696" y="149">READERS</text>
+          </g>
+          <g font-size="13" text-anchor="middle" fill="#6B5750">
+            <text x="102" y="64">skewed examples</text><text x="102" y="160">a limited tool</text><text x="102" y="256">a careless request</text>
+            <text x="522" y="176">looks polished</text>
+          </g>
+          <g font-size="14.5" font-weight="700" text-anchor="middle" fill="#8A1024">
+            <text x="316" y="53">BIAS</text><text x="316" y="149">INVENTED FACT</text><text x="316" y="245">MISUSE</text>
+            <text x="654" y="254">MISINFORMATION</text>
+          </g>
+          <g stroke="#2B1A14" stroke-width="2.2" fill="none" marker-end="url(#ah)">
+            <path d="M190 48H224"/><path d="M190 144H224"/><path d="M190 240H224"/>
+            <path d="M404 48C430 48 430 110 448 114"/><path d="M404 144H448"/><path d="M404 240C430 240 430 178 448 174"/>
+            <path d="M592 144H640"/>
+          </g>
+          <path d="M696 184V222" stroke="#C92A4B" stroke-width="2.2" fill="none" marker-end="url(#ah)"/>
+          <text x="616" y="134" font-size="13" text-anchor="middle" fill="#6B5750">shared</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> Risk can enter at any component – data, tool or prompt – and travel into the final content.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, government services, hospitals and companies are building AI into real workflows that affect people's lives. The person who can spot a risk in AI content, name where it came from, and propose a responsible fix is exactly who these teams need and trust.</p></div>
+    <div id="a-vocab"></div>
+    <div id="a-trace"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Designed in, not added on</h2><p>Where should responsible use live?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Three habits plus governance</h3>
+    <p>Responsible use is not a warning you bolt on at the end – it is a set of decisions built into the system. It rests on three habits working together: <b>verify before trust</b>, so you check every claim against a source you already trust; <b>protect people</b>, so you never enter someone's name, face or private data; and <b>be honest about limits</b>, so you state what the tool cannot do well.</p>
+    <p><b>Governance</b> ties these habits together by naming who is <b>accountable</b> if something goes wrong. In an integrated system, responsibility belongs to the people who design and use it, under clear rules agreed in advance.</p>
+    <div class="call violet"><h4>Cross-curricular link · Islamic Studies</h4><p>This links to the duty to verify news before spreading it (<i>tabayyun</i>, Surah al-Hujurat 49:6): checking AI content for misinformation and bias, and naming who is accountable, connects to the ethics of honesty and avoiding harm to others.</p></div>
+    <div id="a-habits"></div>
+    <div id="a-case2"></div>
+    <div id="a-think"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3 · Worksheet</span><h2>Judge the content</h2><p>Safe to share, verify first, or hold back?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Name it, then decide</h3>
+    <p>Using the words accurately lets you say exactly where a problem could enter. <b>Bias</b> is systematic unfairness, usually inherited from skewed data. <b>Misinformation</b> is false or misleading content that spreads, whether or not anyone intended it. <b>Misuse</b> is applying a tool beyond its safe purpose. Naming a risk shapes how you build and evaluate a solution: it tells you which component to check, what to verify, and what you must not share. Polished content that cannot be verified is not ready to trust.</p>
+    <figure>
+      <svg viewBox="0 0 760 290" role="img" aria-labelledby="f2T">
+        <title id="f2T">Polished AI content goes through three checks – is it true, is it fair, is it safe – before a decision. Content checked against trusted sources is safe to share; content with no source yet must be verified first; content that is false, unfair or contains personal data is held back.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <rect x="14" y="85" width="176" height="120" rx="12" fill="#FFEFE9" stroke="#D7263D" stroke-width="2.2"/>
+          <rect x="236" y="70" width="200" height="150" rx="12" fill="#fff" stroke="#2B1A14" stroke-width="1.6"/>
+          <rect x="496" y="14" width="250" height="72" rx="12" fill="#E2F5EC" stroke="#0F8A5F" stroke-width="2"/>
+          <rect x="496" y="109" width="250" height="72" rx="12" fill="#FFF3D6" stroke="#B45309" stroke-width="2"/>
+          <rect x="496" y="204" width="250" height="72" rx="12" fill="#FDE7EC" stroke="#C92A4B" stroke-width="2"/>
+          <g font-size="16" font-weight="800" text-anchor="middle">
+            <text x="102" y="134" fill="#D7263D">AI CONTENT</text>
+            <text x="336" y="104">THREE CHECKS</text>
+          </g>
+          <g font-size="13" text-anchor="middle" fill="#6B5750"><text x="102" y="158">polished and sure –</text><text x="102" y="178">but is it true?</text></g>
+          <g font-size="14.5" text-anchor="middle"><text x="336" y="136">✓ True? Find a source</text><text x="336" y="164">✓ Fair to every group?</text><text x="336" y="192">✓ Safe? No personal data</text></g>
+          <g font-size="15" font-weight="800" text-anchor="middle"><text x="621" y="44" fill="#0A5E41">SAFE TO SHARE</text><text x="621" y="139" fill="#6B4A00">VERIFY FIRST</text><text x="621" y="234" fill="#8A1330">HOLD BACK</text></g>
+          <g font-size="13" text-anchor="middle"><text x="621" y="66">checked with trusted sources</text><text x="621" y="161">no source found yet</text><text x="621" y="256">false, unfair or personal</text></g>
+          <g stroke="#2B1A14" stroke-width="2.2" fill="none" marker-end="url(#ah2)">
+            <path d="M190 145H232"/>
+            <path d="M436 120C466 120 466 50 492 50"/><path d="M436 145H492"/><path d="M436 170C466 170 466 240 492 240"/>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Polished is not the same as true or fair – judge where a risk was born before you trust content.</figcaption>
+    </figure>
+    <div id="a-judge"></div>
+    <div id="a-case3"></div>
+    <h3 class="sub">Solution Architects: trace the risk to its source</h3>
+    <p>Away from the screen: analyse a real-style scenario card, label each risk in the AI-generated content, trace it to a component, and propose a responsible measure with a justified reason.</p>
+    <ol class="steps">
+      <li>Read your scenario card and underline the AI-generated content.</li>
+      <li>Label each risk you find: error, bias, misinformation or misuse.</li>
+      <li>Trace each risk to the component it enters from – data, tool or prompt.</li>
+      <li>Name the ethical or governance concern and who is affected.</li>
+      <li>Finish the stem for each risk: <i>A responsible measure is … because …</i></li>
+      <li>Swap cards with another pair and check whether each measure fixes the source or only the symptom.</li>
+    </ol>
+    <div class="call amber"><h4>Tool for this week: unplugged simulated-AI cards (teacher-led)</h4><p>This is an unplugged concept lesson: the teacher runs a simulated-AI card routine on the board – no live tool, no logins. Students reason about pre-prepared example outputs on the cards – <b>no personal data is used</b> – and use the worksheet to sort or judge the cards and explain their thinking with the key vocabulary. The live tools (Teachable Machine and Scratch) are used in the matching Lab period. No printed content samples? Run the whole analysis from the scenario card text alone – the reasoning steps are identical.</p></div>
+    <div class="ecard" id="audit"></div>
+    <div id="a-analysis"></div>
+    <div id="a-measure"></div>
+    <div class="call"><h4>My reflection</h4><p>The risk I judge most serious in an AI system is … because …</p></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 5 Lab</span><h2>Auditing the Risks</h2><p>Spotting risks is step one. Today you become an auditor of a real AI system: rate how likely and how harmful each risk is, decide which mitigation to build in first, and say who is accountable for what is left over.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In the Core you named the risks in AI content and traced each back to data, tool or prompt. Now you rate them and decide what to fix first.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Run the audit</h2><p>How do you turn a scenario into evidence?</p></div>
+  <div class="part-body">
+    <h3 class="sub">List, trace, rate</h3>
+    <p>An <b>audit</b> is a careful, evidence-based check that lists the risks in a system's content and rates how serious each one is. You start by listing every risk you can find, then trace each back to the component it enters from – the data, the tool or the prompt – so your fix targets the real cause. A long list is not useful until it is ordered, so the next step rates each risk two ways, <b>likelihood</b> and <b>impact</b>, and the team can decide with evidence which risk to tackle first.</p>
+    <figure>
+      <svg viewBox="0 0 760 210" role="img" aria-labelledby="f3T">
+        <title id="f3T">The audit in five steps: list every risk, trace each to its component, rate likelihood and impact, mitigate the top risk first, and name who owns the residual risk.</title>
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <g stroke="#2B1A14" stroke-width="1.6" fill="#fff">
+            <rect x="10" y="20" width="126" height="110" rx="12"/><rect x="161" y="20" width="126" height="110" rx="12"/><rect x="312" y="20" width="126" height="110" rx="12"/>
+            <rect x="463" y="20" width="126" height="110" rx="12" fill="#FFEFE9"/><rect x="614" y="20" width="136" height="110" rx="12" fill="#F4F0FC"/>
+          </g>
+          <g fill="#D7263D" font-size="13" font-weight="700" text-anchor="middle"><text x="73" y="44">STEP 1</text><text x="224" y="44">STEP 2</text><text x="375" y="44">STEP 3</text><text x="526" y="44">STEP 4</text><text x="682" y="44">STEP 5</text></g>
+          <g font-size="16" font-weight="800" text-anchor="middle"><text x="73" y="70">LIST</text><text x="224" y="70">TRACE</text><text x="375" y="70">RATE</text><text x="526" y="70">MITIGATE</text><text x="682" y="70">OWN</text></g>
+          <g font-size="13" text-anchor="middle" fill="#6B5750">
+            <text x="73" y="94">every risk</text><text x="73" y="112">in the content</text>
+            <text x="224" y="94">to data, tool</text><text x="224" y="112">or prompt</text>
+            <text x="375" y="94">likelihood</text><text x="375" y="112">and impact</text>
+            <text x="526" y="94">the top risk</text><text x="526" y="112">first</text>
+            <text x="682" y="94">name who</text><text x="682" y="112">monitors the rest</text>
+          </g>
+          <g stroke="#2B1A14" stroke-width="2.2" fill="none" marker-end="url(#ah3)"><path d="M136 75H157"/><path d="M287 75H308"/><path d="M438 75H459"/><path d="M589 75H610"/></g>
+          <rect x="160" y="156" width="440" height="40" rx="20" fill="#FFEFE9" stroke="#D7263D" stroke-width="1.6"/>
+          <text x="380" y="181" font-size="14.5" font-weight="700" text-anchor="middle">evidence at every step – not guesses</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> An audit lists each risk, traces it to a component, and rates how serious it is.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>When a UAE clinic, ministry or company adds an AI step to a real system, someone must decide which risks to fix first and who is answerable if harm slips through. That auditor-and-governance role is exactly the skill you are practising today.</p></div>
+    <div id="a-lorder"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Rate and prioritise</h2><p>Which risk gets fixed first?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Likelihood by impact</h3>
+    <p>Auditors rate every risk two ways: <b>likelihood</b>, how often it is expected to happen, and <b>impact</b>, how much harm it does when it does. Plotting them on a grid makes the priority obvious – a risk that is both likely and harmful sits in the top corner and is fixed first, while a rare, minor one can wait. Because a system's components interact, one well-placed mitigation can lower several risks at once, so auditors look for the fix that protects the most people for the least disruption.</p>
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="f4T">
+        <title id="f4T">A three-by-three grid with likelihood up the side and impact along the bottom. High likelihood and high impact cells are marked fix first, the middle diagonal is plan next, and low likelihood with low impact cells can wait.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <g stroke="#fff" stroke-width="3">
+            <rect x="170" y="14" width="170" height="74" fill="#FFF3D6"/><rect x="340" y="14" width="170" height="74" fill="#FDE7EC"/><rect x="510" y="14" width="170" height="74" fill="#F8C9D2"/>
+            <rect x="170" y="88" width="170" height="74" fill="#E2F5EC"/><rect x="340" y="88" width="170" height="74" fill="#FFF3D6"/><rect x="510" y="88" width="170" height="74" fill="#FDE7EC"/>
+            <rect x="170" y="162" width="170" height="74" fill="#CDEBDD"/><rect x="340" y="162" width="170" height="74" fill="#E2F5EC"/><rect x="510" y="162" width="170" height="74" fill="#FFF3D6"/>
+          </g>
+          <rect x="170" y="14" width="510" height="222" fill="none" stroke="#2B1A14" stroke-width="1.6"/>
+          <g font-size="15" font-weight="800" text-anchor="middle">
+            <text x="255" y="56" fill="#6B4A00">PLAN NEXT</text><text x="425" y="56" fill="#8A1330">FIX FIRST</text><text x="595" y="56" fill="#8A1330">FIX FIRST</text>
+            <text x="255" y="130" fill="#0A5E41">CAN WAIT</text><text x="425" y="130" fill="#6B4A00">PLAN NEXT</text><text x="595" y="130" fill="#8A1330">FIX FIRST</text>
+            <text x="255" y="204" fill="#0A5E41">CAN WAIT</text><text x="425" y="204" fill="#0A5E41">CAN WAIT</text><text x="595" y="204" fill="#6B4A00">PLAN NEXT</text>
+          </g>
+          <g font-size="14" text-anchor="end" font-weight="600"><text x="160" y="56">High</text><text x="160" y="130">Medium</text><text x="160" y="204">Low</text></g>
+          <g font-size="14" text-anchor="middle" font-weight="600"><text x="255" y="258">Low</text><text x="425" y="258">Medium</text><text x="595" y="258">High</text></g>
+          <text x="425" y="288" font-size="15" font-weight="800" text-anchor="middle" fill="#D7263D">IMPACT – how much harm →</text>
+          <text transform="translate(40 125) rotate(-90)" font-size="15" font-weight="800" text-anchor="middle" fill="#D7263D">LIKELIHOOD →</text>
+          <circle cx="655" cy="34" r="13" fill="#C92A4B"/><text x="655" y="39" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">1</text>
+          <text x="720" y="32" font-size="13" text-anchor="middle" fill="#6B5750">top</text><text x="720" y="48" font-size="13" text-anchor="middle" fill="#6B5750">corner</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 4.</b> Plotting likelihood against impact makes the top priority obvious.</figcaption>
+    </figure>
+    <div class="call violet"><h4>Cross-curricular link · Geography</h4><p>The likelihood-by-impact audit is the natural-hazard <b>risk matrix</b> from geography: rate each risk's probability and severity, plot it, plan mitigation first for high-likelihood, high-impact risks, and keep monitoring the residual risk that remains.</p></div>
+    <div id="a-lprior"></div>
+    <div id="a-lcase2"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Part 3 of 3 · Worksheet</span><h2>Mitigate and govern</h2><p>What change, and who owns what remains?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Target the source, name the owner</h3>
+    <p>A <b>mitigation</b> is a real change to how the system runs, not a disclaimer. It targets the component a risk comes from and lowers its likelihood or its impact – a <b>human-review checkpoint</b> at the output, an <b>input filter</b> that blocks personal data, or a <b>diverse-data check</b> for training. Even a strong mitigation leaves some <b>residual risk</b>, so governance decides who is accountable for monitoring it over time. Naming an owner is what turns a good intention into a rule people can be held to.</p>
+    <div id="a-lmatch"></div>
+    <div id="a-lcase3"></div>
+    <div class="call"><h4>Think about it</h4><p>Two risks in a system have the same impact, but one is far more likely and one comes from data that is hard to change. Which should the team mitigate first, and how would you justify your choice – and its residual risk – to the people building the system?</p></div>
+    <h3 class="sub">Solution Architects: run the risk-and-impact audit</h3>
+    <ol class="steps">
+      <li>List every risk you can find in the scenario's AI-generated content.</li>
+      <li>Trace each risk to a component – data, tool or prompt.</li>
+      <li>Rate each risk for likelihood and impact, then plot it on the matrix.</li>
+      <li>Write a specific mitigation for each risk and name the component it changes.</li>
+      <li>Choose the mitigation to build in first, with a <i>because …</i> reason drawn from the ratings.</li>
+      <li>Draft one governance rule: <i>… is accountable for … because …</i></li>
+    </ol>
+    <div class="call amber"><h4>Today's tool: card decks (risk-in-content cards) + pre-generated packs</h4><p>The teacher lays out the pre-printed card deck and output pack – account-free, no devices. <b>Roles:</b> systems architect (maps the components), data lead (prepares and checks inputs), evaluator (tests and scores outputs), scribe (records the trace and decisions). In your group: 1. Draw a risk-in-content card and read it. 2. Name the risk and who could be affected. 3. Classify it: misinformation, bias or misuse. 4. Check the two flagged outputs and label the risk each carries. 5. Note one responsible-use response and which component it targets. You will make a risk record: the risk, its type, who is affected and a responsible-use response. <b>Stay safe:</b> unplugged; outputs are pre-curated; use no personal data – no faces, voices or names. No printed content samples? Audit from the written scenario alone using the same matrix, mitigation and governance steps.</p></div>
+    <div class="ecard" id="pack"></div>
+    <div id="a-laudit"></div>
+    <div id="a-lplan"></div>
+    <div class="ecard" id="cards"></div>
+    <div id="a-ltool"></div>
+    <div id="a-lsafe"></div>
+    <div class="call"><h4>My reflection</h4><p>The mitigation I would build in first is … and the person accountable for what remains is … because …</p></div>
+    <div id="a-lexit"></div>
+    <div id="a-lchal"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Trace the risk to its source – then audit it, fix the top risk and own what remains</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>Risk is a <b>system property</b>: it can enter at the <b>data</b>, the <b>tool</b> or the <b>prompt</b> and travel into the content.</li>
+      <li>The main risks are <b>factual error</b>, <b>bias</b>, <b>misinformation</b> and <b>misuse</b>.</li>
+      <li>Responsible use is <b>designed in</b> – verify before trust, protect people, be honest about limits.</li>
+      <li><b>Governance</b> names who is accountable before something goes wrong.</li>
+      <li>An <b>audit</b> lists risks, traces each to a component, and rates <b>likelihood</b> by <b>impact</b> – likely-and-harmful risks are fixed first.</li>
+      <li>A <b>mitigation</b> targets the component a risk comes from; <b>residual risk</b> always remains, so someone named must keep monitoring it.</li>
+    </ul>
+    <div class="call"><h4>Next week (Week 6)</h4><p>You bring all four strands together to build one small working workflow.</p></div>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 9 · Main Course · Term 1 Week 5 (2 – 6 Nov 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- scope & sequence concepts (Grade 9, Week 5: Ethics & Responsible Use) ---------- */
+const CE_P="CE · evaluates outputs for accuracy, bias and usefulness";
+const GE_E="GE · identifies risks in AI-generated content";
+const GE_P="GE · explains bias, misinformation and misuse";
+const GE_A="GE · proposes actions for responsible and safe use";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["bias","Systematic unfairness in content, usually inherited from one-sided training data."],
+  ["misinformation","False or misleading content that spreads, whether or not it was intended."],
+  ["misuse","Using a tool beyond its safe purpose, such as entering personal data or trusting output blindly."],
+  ["governance","The framework of rules, roles and accountability that keeps an AI system safe."],
+  ["accountability","Being answerable for a decision or a harm, so responsibility is never left unclear."]
+];
+const DEF_ORDER = [3,0,4,1,2];
+const TRACE = [
+  ["tr1","🛠️ Factual error",2],
+  ["tr2","✍️ Misuse",3],
+  ["tr3","📊 Bias",1],
+  ["tr4","📣 Misinformation",0]
+];
+const TRACE_OPTS = ["🌐 false content that spreads to readers","🗄️ one-sided training data","🤖 a tool inventing an unchecked fact","📥 a careless prompt or unsafe input"];
+const CASE1 = ["A reader added the statistic while sharing it onward.","The summary is fine, since it reads smoothly and sure.","Nothing is wrong – confident content is always true.","The tool invented a fact it could not check."];
+const HABITS = [
+  ["hb1","🏷️ Add a tiny disclaimer at the end and skip every check.",0],
+  ["hb2","🔎 Verify before trust – check every claim against a trusted source.",1],
+  ["hb3","🏆 Trust an answer because it sounds confident and fluent.",0],
+  ["hb4","📣 Share content faster so more people see it first.",0],
+  ["hb5","🧭 Be honest about limits – state what the tool cannot do well.",1],
+  ["hb6","🛡️ Protect people – never enter a name, face or private detail.",1]
+];
+const CASE2 = ["It names who is accountable, agreed in advance.","It simply blames the tool whenever things go wrong.","It removes any need to verify the outputs at all.","It makes the AI tool completely error-free for good."];
+const THINK = ["Neither – fluent, confident content is reliable, so it can be shared as it is.","Only a style problem – rewrite it to sound less certain, then share it.","Both – it may be a factual error the tool invented, and it becomes misinformation if it spreads; so verify it against a trusted source and hold it back from sharing until it checks out.","Only a bias risk – so it needs no fact-checking before it is used."];
+const JUDGE = [
+  ["jg1","🪪 Content that names a real student and shows their photo","C"],
+  ["jg2","🗞️ A false headline already spreading as fact","C"],
+  ["jg3","🌫️ A confident summary you have not verified yet","B"],
+  ["jg4","⚖️ A claim that unfairly favours one group over another","C"],
+  ["jg5","❓ A statistic with no source you can find","B"],
+  ["jg6","📊 A figure that matches your school’s official records","A"],
+  ["jg7","🧾 A fact you checked against two trusted sources","A"]
+];
+const CASE3 = ["Both a factual and misinformation risk – verify, hold it.","No risk at all, since the claim sounds fully certain.","Only a style problem, so you can publish it right now.","A bias risk only, so it needs no checking before you use it."];
+const TYPES = ["Factual error","Bias","Misinformation","Misuse"];
+const CONCERNS = ["Readers could be harmed by a wrong health figure – who checks it before it is shown?","Unfair to applicants who are not young men – the company is accountable for fair hiring","The classmate’s privacy and dignity – private data was entered and could be shared","No real concern – the content reads clearly, so nobody is affected"];
+const SCEN = [
+  ["s1","Card 1 · 💊 Health-tips app",0,"T",0,[2,0,3,1],[1,3,0,2]],
+  ["s2","Card 2 · 💼 Job-advert writer",1,"D",1,[0,3,1,2],[3,1,2,0]],
+  ["s3","Card 3 · 📝 Story helper",3,"P",2,[1,3,0,2],[0,2,3,1]]
+];
+const MEAS1 = ["Add a human-review check: a pharmacist checks every dosage figure against the official leaflet before it is shown, because the error is born in the tool and must be caught before it reaches a reader.","Add a small note saying ‘AI can make mistakes’ and change nothing else, because a warning is enough.","Make the answers longer and more detailed, because detail makes a figure more trustworthy.","Let users report errors after they have taken the dose, because readers are responsible for checking."];
+const MEAS2 = ["Retrain it on adverts from a wide, balanced range of past hires and test the wording for fairness, because the bias was born in one-sided data.","Reword each finished advert by hand, because fixing the symptom is the same as fixing the source.","Post the adverts faster so more people apply, because reach cancels out bias.","Nothing – the tool learned from real company records, so its adverts must be fair."];
+const VERIFY = ["Compare the figure with the official medicine leaflet or ask a pharmacist – a source we already trust","Ask the same app again and see if it repeats the figure","Trust it, because the answer sounds confident and fluent","Search for the figure on social media and count the likes"];
+const ACC = ["The app’s makers, through a named medical reviewer who signs off every health figure before it is shown","Nobody – the tool made the error, so the tool is to blame","Each reader, who should know not to trust health apps","Whoever happens to notice the mistake first"];
+const EXIT = ["Bias in card 2 – born in the prompt – so I would add a disclaimer, because a warning removes bias.","Misuse in card 3 – born in the data – so I would make the chatbot faster, because speed protects privacy.","Factual error in card 1 – born in the tool – so I would build in a pharmacist review before any figure is shown, because a wrong dose could seriously harm someone.","No risk is serious, because all three pieces of content are fluent and confident."];
+const CH_ROWS = [["chb","⚖️ Bias – its stories are mostly about one neighbourhood","D"],["chm","📣 Misinformation – an invented quote is shared as fact","T"],["chu","✍️ Misuse – a user asks it for a fake ‘official’ announcement","P"]];
+const COMPOUND = ["A user’s fake announcement (misuse) is written in the bot’s one-sided style (bias) with an invented quote (tool), and once shared it spreads as misinformation – each risk makes the others worse","They cannot affect each other, because each comes from a different component","Bias cancels out misinformation, so together they are less harmful","Only the first risk matters; the others disappear once it is fixed"];
+const CH_RULE = ["A named editor must verify and approve every story before it is published, and is accountable for anything that goes out","Add ‘written by AI’ to the bottom of each story and publish automatically","Let readers flag problems after stories have spread","Blame the bot whenever a false story appears"];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["audit","A careful, evidence-based check that lists risks and rates how serious each one is."],
+  ["likelihood","How often a risk is expected to happen."],
+  ["impact","How much harm a risk would cause when it happens."],
+  ["mitigation","A specific change to a system that lowers a risk’s likelihood or impact."],
+  ["residual risk","The risk that remains even after a mitigation is added, which someone must keep monitoring."]
+];
+const LDEF_ORDER = [2,4,0,3,1];
+const LSTEPS = ["📋 List every risk in the content","🔍 Trace each risk to its component","📊 Rate each risk for likelihood and impact","🛠️ Propose a mitigation for the top risk","📝 Assign who is accountable for what remains"];
+const LSTEP_ORDER = [2,4,3,0,1];
+const LCASE1 = ["The prompt – its exact wording caused all unfairness.","The screen the ranking results happen to appear on.","The data – one-sided records taught a biased model.","Nothing at all – a tool simply cannot ever be biased."];
+const LPRIOR = [
+  ["pr1","🚨 Likely to happen, and each time it seriously harms someone","A"],
+  ["pr2","🪶 Very unlikely, with almost no harm","C"],
+  ["pr3","⚠️ High likelihood and high impact – frequent, serious harm","A"],
+  ["pr4","🔧 Happens sometimes, with moderate harm each time","B"],
+  ["pr5","🌡️ Uncommon, but harmful enough to plan a fix soon","B"],
+  ["pr6","🌦️ Rare, and only a minor inconvenience if it happens","C"],
+  ["pr7","🩹 Medium likelihood and medium impact on a few users","B"]
+];
+const LCASE2 = ["Neither one – only impact matters when you prioritise.","The rare one, since a risk that rarely happens is urgent.","Both are equal, so just pick one of them at random.","The frequent one – same impact, but far more likely."];
+const LMATCH = [
+  ["mx1","🌍 Diverse-data check",0],
+  ["mx2","📄 Documented statement of limits",2],
+  ["mx3","🚧 Input filter for personal data",1],
+  ["mx4","🔎 Human-review checkpoint",3]
+];
+const COMP = ["🗄️ the training data","📥 the input","🤖 the tool’s transparency","📤 the output stage"];
+const LCASE3 = ["Name who is accountable for monitoring it over time.","Blame the tool later if any harm reaches a patient.","Delete the record of the risk so it looks fully solved.","Declare it finished and stop monitoring the system now."];
+const LMH=["Low","Medium","High"],LMHv=["L","M","H"];
+const AUDITR = [
+  ["ra","Risk A · under-rates teenagers’ urgent symptoms","D","H","H"],
+  ["rb","Risk B · invents clinic opening times","T","M","L"],
+  ["rc","Risk C · private health data could leak","P","L","H"]
+];
+const MIT_A = ["Diverse-data check: retrain and test it on records that include many teenage patients","Add a line to each answer saying ‘this tool may be wrong’","Make it answer twice as fast","Ask teenagers to describe their symptoms more strongly"];
+const MIT_C = ["Input filter: block names, ID numbers and other personal details, and reword the box to ask only about symptoms","Keep the details but promise that nobody will read them","Ask for even more personal detail so the advice is better","Add a padlock icon to the page"];
+const FIRST = ["Risk A’s diverse-data check – A is both likely and seriously harmful, so it sits in the top corner","Risk B’s fix – it is the easiest to change","Risk C’s filter – because a leak has already happened","None yet – wait until patients complain"];
+const RULE = ["The clinic’s lead nurse is accountable for the residual risk: each month they review a sample of teenage cases the helper rated ‘non-urgent’, because some under-rating may remain after retraining","Nobody – the retrained tool is now safe, so no one needs to be accountable","Patients are accountable for noticing if their advice is wrong","The tool’s makers will be blamed if anything goes wrong later"];
+const TWHO = ["Families and students – some travel for an entry deal that does not exist, and families with less money are left out of the trip ideas","Only the chatbot’s makers, who might get fewer users","Nobody – trip ideas cannot harm anyone","Only the museum, which might get more visitors"];
+const TTYPE = ["📣 Misinformation","⚖️ Bias","✍️ Misuse"],TTYPEv=["I","B","U"];
+const TR1 = ["Check the museum’s official website, post a correction in the group chat and add a human check on any ‘official’ claim – targets the output stage","Forward it to more groups so someone else can check it","Retrain the tool on more luxury travel websites","Nothing – it quotes a ministry, so it must be right"];
+const TR2 = ["Block the word ‘museum’ in every prompt","Add a diverse-data check so its examples include free and low-cost activities – targets the training data","Add a note saying ‘prices may vary’","Ask families to pay for the expensive ones"];
+const LSAFE = [
+  ["sk1","Use only the pre-curated cards and output packs – no live AI",1],
+  ["sk2","Add a real patient’s name to a scenario card to make it realistic",0],
+  ["sk3","Use no personal data – no faces, voices or names",1],
+  ["sk4","Type a family member’s medical details into a chatbot to test it",0],
+  ["sk5","Work account-free – no logins and no devices needed",1],
+  ["sk6","Photograph your group with your risk record to share online",0]
+];
+const LX1 = ["A padlock icon on the page – it reduces Risk C","A diverse-data check on the training records – it reduces Risk A, under-rating teenagers’ urgent symptoms","A faster answer – it reduces Risk B","A ‘may be wrong’ sticker – it reduces every risk at once"];
+const LX4 = ["No one – the fix removed the risk completely","The tool itself, which can watch its own results","Each patient, who should check their own advice","The clinic’s lead nurse, named in advance, who monitors the residual risk"];
+const LCH1 = ["They cannot compound, because each risk stays inside its own component","Personal details typed in (misuse at the input) go to a model biased against teenagers (data), and an invented answer (tool) is passed on as fact (misinformation) – one flaw feeds the next, so the harm grows","They cancel each other out","Only the last risk in the chain matters"];
+const LCH2 = ["The tool monitors itself and reports whenever it thinks something is wrong.","One person checks everything once, at launch, and then the system is signed off for good.","The data lead checks teen-case ratings every month (bias); a nurse checks a weekly sample of answers against official guidance (misinformation); the privacy officer checks the input filter every week (misuse) – each reports to the clinic manager monthly.","Patients report any problems they notice; nobody else needs to monitor."];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+GE_E,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"Bias is systematic unfairness, usually from one-sided training data. Misinformation is false or misleading content that spreads, intended or not. Misuse is using a tool beyond its safe purpose. Governance is the framework of rules, roles and accountability. Accountability means being answerable for a decision or a harm."},
+ {id:"trace",mount:"a-trace",section:"Core · Part 1",title:"Trace each risk to its source",sub:"Objective 1 · locate where a risk enters · "+GE_P,ico:"🧷",
+  fields:TRACE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A factual error enters when the tool invents a fact it cannot check. Misuse enters through a careless prompt that invites unsafe use. Bias usually enters from one-sided training data. Misinformation is false content that spreads once it reaches readers."},
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"Case 1 · The Invented Statistic",sub:"Solution Architects · "+GE_E,ico:"🕵️",
+  fields:[{k:"c1",radio:1,ok:v=>eq(v,3)}],
+  explain:"A factual error, or hallucination, enters at the tool: it invented a fact it could not check. The number was already in the summary before any reader saw it, and polished, confident content can still be false – that is exactly the risk."},
+ {id:"habits",mount:"a-habits",section:"Core · Part 2",title:"Pick the responsible-use habits",sub:"Objective 2 · build responsible use in · "+GE_A,ico:"🧩",
+  fields:HABITS.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Responsible use is designed in through three habits: verify before trust, protect people, and be honest about limits. A tiny disclaimer with no checks, trusting a confident answer, or sharing faster are not responsible habits – they make risks worse."},
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"Case 2 · Nobody’s Fault",sub:"Solution Architects · "+GE_A,ico:"⚖️",
+  fields:[{k:"c2",radio:1,ok:v=>eq(v,0)}],
+  explain:"Governance defines roles and accountability before harm occurs – it names who is accountable, agreed in advance. It cannot make a tool error-free, it never removes the need to verify, and accountability sits with the people who design and use the system, not the tool alone."},
+ {id:"think",mount:"a-think",section:"Core · Part 2",title:"Think about it",sub:"Confident, fluent, unverifiable · "+GE_P,ico:"💭",
+  fields:[{k:"th",radio:1,ok:v=>eq(v,2)}],
+  explain:"Confident content that cannot be verified anywhere is both: a possible factual error the tool invented, and misinformation once it spreads. For the error you verify against a trusted source; for the misinformation risk you hold it back and do not share it until it checks out."},
+ {id:"judge",mount:"a-judge",section:"Core · Part 3",title:"Sort the content by risk",sub:"Objective 3 · judge content before trusting it · "+CE_P,ico:"🩺",
+  fields:JUDGE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Safe to share: a figure that matches official records, and a fact checked against two trusted sources. Verify first: a confident summary you have not checked, and a statistic with no source. Hold back: content naming a real student with their photo (personal data), a false headline spreading as fact (misinformation), and a claim that unfairly favours one group (bias)."},
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"Case 3 · Confident but Unverifiable",sub:"Solution Architects · "+GE_P,ico:"🔬",
+  fields:[{k:"c3",radio:1,ok:v=>eq(v,0)}],
+  explain:"An unverifiable confident claim is both a factual and a misinformation risk, so you check before trust and hold it back. Certainty is not verification, clear writing does not make it safe to publish, and the issue is an unverifiable claim, not only fairness."},
+ {id:"analysis",mount:"a-analysis",section:"Core worksheet",title:"Scenario risk analysis",sub:"Worksheet · "+GE_P,ico:"📝",cls:"ws",
+  fields:SCEN.flatMap(([k,,t,c,n])=>[{k:k+"t",ok:v=>eq(v,t)},{k:k+"c",ok:v=>eq(v,c)},{k:k+"n",ok:v=>eq(v,n)}]),
+  explain:"Card 1: the app invented a dosage figure that is in no source – a factual error born in the tool; readers could be harmed, so someone must check it before it is shown. Card 2: adverts learned from one-sided past hiring – bias born in the data; unfair to other applicants. Card 3: a classmate’s name and medical notes typed into a chatbot – misuse born in the prompt (an unsafe input); it harms the classmate’s privacy and dignity."},
+ {id:"measure",mount:"a-measure",section:"Core worksheet",title:"Propose a measure + verify before trust",sub:"Worksheet · "+GE_A,ico:"🛡️",cls:"ws",
+  fields:[{k:"ms1",ok:v=>eq(v,0)},{k:"ms2",ok:v=>eq(v,0)},{k:"vf",ok:v=>eq(v,0)},{k:"acc",ok:v=>eq(v,0)}],
+  explain:"A good measure targets the source component and says why: a pharmacist review catches the tool’s invented figure before it reaches a reader; retraining on balanced adverts fixes bias born in the data, while rewording each advert only treats the symptom. Verify card 1 against a source you already trust – the official leaflet or a pharmacist – and name an accountable person in advance: the makers’ medical reviewer."},
+ {id:"exit",mount:"a-exit",section:"Core worksheet",title:"Exit ticket",sub:"Explain it · "+GE_A,ico:"🎫",
+  fields:[{k:"ex",radio:1,ok:v=>eq(v,2)}],
+  explain:"Only answer C names the right component and a measure that targets it, with a reason: the tool invented the figure, so a human review must catch it before it is shown. Bias is born in data, not the prompt; misuse here is born in the prompt, not the data; and fluent content can still be seriously wrong."},
+ {id:"chal",mount:"a-chal",section:"Core challenge",title:"Challenge ⭐ Three risks, one system",sub:"Stretch · "+GE_A,ico:"⭐",
+  fields:[...CH_ROWS.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"chc",ok:v=>eq(v,0)},{k:"chr",ok:v=>eq(v,0)}],
+  explain:"Bias comes from the data (posts from one neighbourhood), the invented quote from the tool, and the fake announcement from the prompt. They compound: a misused prompt produces one-sided content with an invented quote, and sharing turns it into misinformation. A named editor who verifies and approves every story before publishing catches all three at once – and is accountable for what goes out."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+GE_P,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"Audit = an evidence-based check that lists risks and rates them. Likelihood = how often a risk is expected. Impact = how much harm it does when it happens. Mitigation = a specific change that lowers likelihood or impact. Residual risk = what remains after a mitigation, which someone must keep monitoring."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 1",title:"Order the audit steps",sub:"Objective 1 · audit and trace risks · "+GE_P,ico:"🧭",
+  fields:LSTEPS.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"An audit moves from listing risks to owning what is left: list every risk, trace each to its component, rate likelihood and impact, propose a mitigation for the top risk, then assign who is accountable for what remains."},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"Case 1 · The Skewed Shortlist",sub:"Solution Architects · "+GE_P,ico:"🕵️",
+  fields:[{k:"lc1",radio:1,ok:v=>eq(v,2)}],
+  explain:"The bias is inherited from skewed training data – years of one-sided hiring records. A prompt can invite misuse, but this pattern was learned from the records; the display screen does not create the ranking; and a tool trained on skewed data can absolutely produce biased output."},
+ {id:"lprior",mount:"a-lprior",section:"Lab · Part 2",title:"Set the priority",sub:"Objective 2 · rate likelihood and impact · "+GE_P,ico:"🩺",
+  fields:LPRIOR.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Fix first: risks that are likely and seriously harmful – the top corner. Plan next: moderate risks, and uncommon ones harmful enough to plan a fix soon. Can wait: rare, minor risks and very unlikely ones with almost no harm."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"Case 2 · Same Harm, Different Odds",sub:"Solution Architects · "+GE_P,ico:"🎲",
+  fields:[{k:"lc2",radio:1,ok:v=>eq(v,3)}],
+  explain:"With equal impact, higher likelihood raises the priority – fix the frequent one first. Priority uses both axes, a rarer risk with equal impact is lower priority, and the two are not equal, so you do not pick at random."},
+ {id:"lmatch",mount:"a-lmatch",section:"Lab · Part 3",title:"Match the mitigation to its component",sub:"Objective 3 · target the right component · "+GE_A,ico:"🧷",
+  fields:LMATCH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A diverse-data check targets the training data. A documented statement of limits targets the tool’s transparency. An input filter blocks personal data at the input. A human-review checkpoint targets the output stage. Each mitigation aims at the component where the risk was born."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"Case 3 · What’s Left Over",sub:"Solution Architects · "+GE_A,ico:"🏛️",
+  fields:[{k:"lc3",radio:1,ok:v=>eq(v,0)}],
+  explain:"Governance assigns an owner for the risk that remains: name who is accountable for monitoring it over time. Accountability belongs to a named person agreed in advance, hiding a risk is not governing it, and a mitigation lowers risk but never removes it."},
+ {id:"laudit",mount:"a-laudit",section:"Lab worksheet",title:"Risk-and-impact audit",sub:"Worksheet · "+GE_P,ico:"📊",cls:"ws",
+  fields:AUDITR.flatMap(([k,,c,l,i])=>[{k:k+"c",ok:v=>eq(v,c)},{k:k+"l",ok:v=>eq(v,l)},{k:k+"i",ok:v=>eq(v,i)}]),
+  explain:"Risk A comes from the data (records mostly from adults); it happens in 1 in 4 teenage cases (high) and a missed urgent case could seriously harm a patient (high) – top corner. Risk B comes from the tool inventing facts; it happens sometimes (medium) but a wasted trip is easily put right (low). Risk C comes from the prompt – the question box invites personal data; no leak has happened (low) but a leak would expose private health data (high)."},
+ {id:"lplan",mount:"a-lplan",section:"Lab worksheet",title:"Mitigation plan and governance rule",sub:"Worksheet · "+GE_A,ico:"🗺️",cls:"ws",
+  fields:[{k:"pam",ok:v=>eq(v,0)},{k:"pac",ok:v=>eq(v,0)},{k:"pcm",ok:v=>eq(v,0)},{k:"pcc",ok:v=>eq(v,1)},{k:"pfirst",ok:v=>eq(v,0)},{k:"prule",ok:v=>eq(v,0)}],
+  explain:"For Risk A, a diverse-data check with many teenage records targets the training data. For Risk C, an input filter that blocks personal details targets the input. Build A in first: it is likely and seriously harmful. The governance rule names a person (the lead nurse), what they monitor and how often, and why – because some residual risk remains after retraining."},
+ {id:"ltool",mount:"a-ltool",section:"Lab worksheet",title:"Risk-in-content record",sub:"Worksheet · tool log · "+GE_E,ico:"🃏",cls:"ws",
+  fields:[{k:"tw",ok:v=>eq(v,0)},{k:"t1t",ok:v=>eq(v,"I")},{k:"t1r",ok:v=>eq(v,0)},{k:"t2t",ok:v=>eq(v,"B")},{k:"t2r",ok:v=>eq(v,1)}],
+  explain:"Families and students are affected. Output 1 is misinformation – an invented ‘announcement’ already spreading – so check the official source, correct it and add a human check at the output stage. Output 2 is bias inherited from one-sided travel data – a diverse-data check targets the training data. A note or a blocked word changes nothing at the source."},
+ {id:"lsafe",mount:"a-lsafe",section:"Lab worksheet",title:"Safety check",sub:"Safety check · "+GE_A,ico:"🛡️",
+  fields:LSAFE.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"This Lab is unplugged: use only the pre-curated cards, work account-free, and use no personal data. A real patient’s name, a family member’s medical details and photos of classmates are personal data – they never go on a card, online or into a chatbot."},
+ {id:"lexit",mount:"a-lexit",section:"Lab worksheet",title:"Exit ticket",sub:"Explain it · "+GE_A,ico:"🎫",
+  fields:[{k:"lx1",ok:v=>eq(v,1)},{k:"lx2",ok:v=>eq(v,"L")},{k:"lx3",ok:v=>eq(v,"I")},{k:"lx4",ok:v=>eq(v,3)}],
+  explain:"Build the diverse-data check in first: it reduces Risk A, the top-corner risk. Retraining makes under-rating happen less often, so it lowers likelihood. A nurse reviewing ‘non-urgent’ teenage cases does not stop the tool making the error, but it stops the error causing harm – it lowers impact. A named lead nurse is accountable for the residual risk."},
+ {id:"lchal",mount:"a-lchal",section:"Lab challenge",title:"Challenge ⭐ A short governance framework",sub:"Stretch · "+GE_A,ico:"⭐",
+  fields:[{k:"lch1",ok:v=>eq(v,1)},{k:"lch2",radio:1,ok:v=>eq(v,2)}],
+  explain:"In the clinic, misuse enters at the input, bias at the data and invented facts at the tool – and one flaw feeds the next, so harm grows as content moves through the system. A governance framework names who monitors each residual risk, what they check and how often they report. A tool cannot monitor itself, a one-off check at launch ignores residual risk, and leaving it to patients names no owner."}
+];
+
+/* ---------- state ---------- */
+const KEY="g9-mw5-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#audit").innerHTML=`<header><small>Scenario cards · simulated-AI · illustrative</small><b>Three pieces of AI-generated content to analyse</b></header>
+<div class="in">
+  <p class="task">Each card was prepared by the teacher – no personal data. Underline the AI-generated content, then name the risk, its source component and the concern it raises.</p>
+  <table class="t"><thead><tr><th>Card</th><th>The AI-generated content</th></tr></thead>
+  <tbody><tr><td>1 · 💊 Health-tips app</td><td>Asked about a common cold medicine, the app gives a confident, fluent answer with a daily dose figure. The figure appears in no medical source you can find and does not match the official leaflet. It has not been shared with anyone yet.</td></tr>
+  <tr><td>2 · 💼 Job-advert writer</td><td>A company’s advert writer learned from years of past adverts for jobs that went almost only to young men. Its new adverts now describe the ‘ideal candidate’ as a young man.</td></tr>
+  <tr><td>3 · 📝 Story helper</td><td>A student types a classmate’s full name and private medical notes into a chatbot and asks it to write a funny story about them to post in the class group chat.</td></tr></tbody></table>
+</div>`;
+$("#pack").innerHTML=`<header><small>Scenario pack · pre-curated · illustrative</small><b>A clinic’s AI symptom helper</b></header>
+<div class="in">
+  <p class="task"><b>The system:</b> patients type their symptoms into a question box; the helper suggests whether the case is urgent or non-urgent and answers questions about the clinic.</p>
+  <table class="t"><thead><tr><th>Risk</th><th>What the audit found</th></tr></thead>
+  <tbody><tr><td>A</td><td>It was trained mostly on records from <b>adult</b> patients. In a trial it rated <b>1 in 4</b> teenagers’ urgent symptoms as ‘non-urgent’ – and a missed urgent case could <b>seriously harm</b> a patient.</td></tr>
+  <tr><td>B</td><td>It <b>sometimes</b> gives an opening time that is not on the clinic’s official timetable. A patient may make a wasted trip, which is <b>easily put right</b> with a phone call.</td></tr>
+  <tr><td>C</td><td>The question box says ‘tell us everything’, so patients type full names, ID numbers and family medical history. The store is well protected and <b>no leak has ever happened</b> – but a leak would expose <b>private health data</b>.</td></tr></tbody></table>
+  <p class="note"><b>Rating key.</b> Likelihood: <b>Low</b> = rarely or never seen · <b>Medium</b> = sometimes · <b>High</b> = often, for many people. Impact: <b>Low</b> = minor and easily put right · <b>Medium</b> = real harm that can be put right · <b>High</b> = serious or lasting harm, such as a missed urgent case or exposed health data.</p>
+</div>`;
+$("#cards").innerHTML=`<header><small>Risk-in-content card · two flagged outputs · pre-generated</small><b>A school-trip planner chatbot</b></header>
+<div class="in">
+  <p class="task"><b>The AI use:</b> families and students ask the chatbot for class-trip ideas and visitor information.</p>
+  <table class="t"><thead><tr><th>Flagged output</th><th>What it did</th></tr></thead>
+  <tbody><tr><td>Output 1</td><td>It tells families that entry to a museum is free every Friday, quoting a ‘ministry announcement’ that does not exist – and the message is already being forwarded in a class group chat.</td></tr>
+  <tr><td>Output 2</td><td>Asked for class-trip ideas, it suggests only activities with expensive tickets, because almost all of its examples came from luxury travel websites.</td></tr></tbody></table>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+const pair=(k,label,opts,order)=>`<div class="pair" data-item="${k}"><span class="t">${label}</span>${sel(k,opts,"Choose…",order)}</div>`;
+const DTP=["Data","Tool","Prompt"],DTPv=["D","T","P"];
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "trace":
+    return `<p class="how">For each risk, choose where it most likely enters the system.</p>`+
+      TRACE.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,TRACE_OPTS,"Choose where it enters…",[0,3,2,1])}</div>`).join("");
+  case "case1":
+    return `<div class="quote">A news app produces a polished summary that blends one true fact with a statistic that appears in no source. Architect, which component most likely introduced that invented number?</div>
+      <div class="clues"><div class="clue">📊<span>REAL FACT</span></div><div class="clue">🤖<span>INVENTS STAT</span></div><div class="clue">📤<span>POLISHED SUMMARY</span></div></div>
+      <p class="q" id="q-c1">Where did the false statistic come from?</p>${radios("c1",CASE1)}`;
+  case "habits":
+    return boxes(HABITS,"Tick the THREE habits that make a system responsible by design. Leave the others unticked.");
+  case "case2":
+    return `<div class="quote">A team publishes AI-generated advice, a harmful error slips through, and each person says another was meant to check it. Architect, what would governance have added before launch?</div>
+      <div class="clues"><div class="clue">🛠️<span>SYSTEM BUILT</span></div><div class="clue">🚩<span>HARM SLIPS</span></div><div class="clue">❓<span>WHO OWNS IT?</span></div></div>
+      <p class="q" id="q-c2">What does governance add to the system?</p>${radios("c2",CASE2)}`;
+  case "think":
+    return `<p class="q" id="q-th">A piece of AI content is confident, fluent and cannot be verified anywhere. Is that a factual-error risk, a misinformation risk, or both – and how would your responsible-use measure differ?</p>${radios("th",THINK)}`;
+  case "judge":
+    return `<p class="how">Sort each piece of content into how you would handle it.</p>`+
+      JUDGE.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🟢 Safe to share","🟠 Verify first","🔴 Hold back"],["A","B","C"],t)}</div>`).join("");
+  case "case3":
+    return `<div class="quote">A report is fluent and certain, yet its central claim appears in no source you can find. Architect, how would you classify the risk and respond?</div>
+      <div class="clues"><div class="clue">📄<span>FLUENT CLAIM</span></div><div class="clue">🔎<span>NO SOURCE</span></div><div class="clue">🛑<span>DO NOT SHARE</span></div></div>
+      <p class="q" id="q-c3">How do you classify and handle it?</p>${radios("c3",CASE3)}`;
+  case "analysis":
+    return `<p class="how">Use the three scenario cards above. For each, name the risk type, trace it to a system component, and choose the ethical or governance concern it raises.</p>`+
+      SCEN.map(([k,t,,,,o1,o2])=>`<div class="scen"><p>${esc(t)}</p>
+        ${pair(k+"t","Risk type",TYPES,o1)}
+        <div class="row" data-item="${k}c"><span class="t">Source component</span>${seg(k+"c",DTP,DTPv,t+" source component")}</div>
+        ${pair(k+"n","Ethical / governance concern",CONCERNS,o2)}</div>`).join("");
+  case "measure":
+    return `<p class="how">Propose and justify a responsible-use measure for cards 1 and 2 – it should target the source component. Then plan a verify-before-trust check for card 1.</p>
+      ${pair("ms1","Card 1 · A responsible measure is … because …",MEAS1,[1,3,0,2])}
+      ${pair("ms2","Card 2 · A responsible measure is … because …",MEAS2,[1,0,3,2])}
+      ${pair("vf","Card 1 · How would you verify it against a trusted source?",VERIFY,[2,0,3,1])}
+      ${pair("acc","Card 1 · Who should be accountable for that check?",ACC,[1,2,0,3])}`;
+  case "exit":
+    return `<p class="q" id="q-ex">Which answer names the most serious risk in the scenario cards, the component it came from, and the one responsible-use measure you would build in first, with a sound one-sentence reason?</p>${radios("ex",EXIT)}`;
+  case "chal":
+    return `<div class="quote"><b>📰 A community-news bot</b> <span class="illus">(illustrative)</span>. It learned mostly from posts about one neighbourhood, it sometimes invents quotes, and anyone can ask it to write any ‘announcement’.</div>
+      <p class="how">Which component does each risk arise from? Then explain how they compound and choose the first governance rule.</p>`+
+      CH_ROWS.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,DTP,DTPv,t)}</div>`).join("")+
+      pair("chc","How could they compound one another?",COMPOUND,[1,3,0,2])+
+      pair("chr","Which single governance rule would you introduce first?",CH_RULE,[2,0,3,1]);
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lorder":
+    return `<p class="how">Put the auditor’s steps in the order you would work through them, from first to last.</p>`+
+      LSTEPS.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">Step ${i+1}</span>${sel("lo"+i,LSTEPS,"Choose the step…",LSTEP_ORDER)}</div>`).join("");
+  case "lcase1":
+    return `<div class="quote">An AI screening tool keeps ranking one group of applicants far lower, and its training records came from years of one-sided past hiring. Architect, which component should the audit trace this risk to?</div>
+      <div class="clues"><div class="clue">🗄️<span>PAST RECORDS</span></div><div class="clue">🤖<span>RANKS LOWER</span></div><div class="clue">📉<span>UNFAIR RESULT</span></div></div>
+      <p class="q" id="q-lc1">Which component does this risk trace to?</p>${radios("lc1",LCASE1)}`;
+  case "lprior":
+    return `<p class="how">Sort each rated risk into how soon the team should act.</p>`+
+      LPRIOR.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🔴 Fix first","🟠 Plan next","🟢 Can wait"],["A","B","C"],t)}</div>`).join("");
+  case "lcase2":
+    return `<div class="quote">Two risks would cause the same harm, but one happens often and the other almost never. Architect, which should the team mitigate first?</div>
+      <div class="clues"><div class="clue">🎯<span>EQUAL IMPACT</span></div><div class="clue">🔁<span>ONE IS FREQUENT</span></div><div class="clue">🥇<span>FIRST PRIORITY</span></div></div>
+      <p class="q" id="q-lc2">Which risk is the first priority?</p>${radios("lc2",LCASE2)}`;
+  case "lmatch":
+    return `<p class="how">For each mitigation, choose the component it changes.</p>`+
+      LMATCH.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,COMP,"Choose the component…",[1,3,0,2])}</div>`).join("");
+  case "lcase3":
+    return `<div class="quote">After adding its best mitigation, a clinic’s AI step still carries a small residual risk that could harm a patient. Architect, what does good governance require now?</div>
+      <div class="clues"><div class="clue">🛠️<span>MITIGATION ADDED</span></div><div class="clue">♻️<span>RESIDUAL RISK</span></div><div class="clue">🧑‍⚖️<span>OWNER NAMED</span></div></div>
+      <p class="q" id="q-lc3">What does governance require for the residual risk?</p>${radios("lc3",LCASE3)}`;
+  case "laudit":
+    return `<p class="how">Use the scenario pack and its rating key above. Trace each risk to its source component, then rate its likelihood and impact.</p>`+
+      AUDITR.map(([k,t])=>`<div class="scen"><p>${esc(t)}</p><div class="three">
+        <div class="cell" data-item="${k}c"><span>Source component</span>${seg(k+"c",DTP,DTPv,t+" source")}</div>
+        <div class="cell" data-item="${k}l"><span>Likelihood</span>${seg(k+"l",LMH,LMHv,t+" likelihood")}</div>
+        <div class="cell" data-item="${k}i"><span>Impact</span>${seg(k+"i",LMH,LMHv,t+" impact")}</div></div></div>`).join("");
+  case "lplan":
+    return `<p class="how">Mitigation plan for the two highest-priority risks, A and C: choose a specific mitigation and the component it targets. Then decide what to build in first and write the governance rule.</p>
+      <div class="scen"><p>Risk A · under-rates teenagers’ urgent symptoms</p><div class="two">
+        <div data-item="pam"><span>Mitigation</span>${sel("pam",MIT_A,"Choose…",[2,0,3,1])}</div>
+        <div data-item="pac"><span>Component it targets</span>${sel("pac",COMP,"Choose…",[1,3,0,2])}</div></div></div>
+      <div class="scen"><p>Risk C · private health data could leak</p><div class="two">
+        <div data-item="pcm"><span>Mitigation</span>${sel("pcm",MIT_C,"Choose…",[3,1,0,2])}</div>
+        <div data-item="pcc"><span>Component it targets</span>${sel("pcc",COMP,"Choose…",[0,2,3,1])}</div></div></div>
+      ${pair("pfirst","Build in first … because …",FIRST,[1,3,0,2])}${pair("prule","Governance rule: … is accountable for … because …",RULE,[2,0,3,1])}`;
+  case "ltool":
+    return `<p class="how">Use the risk-in-content card above to complete your risk record.</p>
+      ${pair("tw","Who could be affected, and how?",TWHO,[1,3,0,2])}
+      <div class="scen"><p>Output 1 · the ‘free Friday’ announcement</p>
+        <div class="row" data-item="t1t"><span class="t">Type of risk</span>${seg("t1t",TTYPE,TTYPEv,"Output 1 type")}</div>
+        ${pair("t1r","Responsible-use response",TR1,[2,0,3,1])}</div>
+      <div class="scen"><p>Output 2 · only expensive trip ideas</p>
+        <div class="row" data-item="t2t"><span class="t">Type of risk</span>${seg("t2t",TTYPE,TTYPEv,"Output 2 type")}</div>
+        ${pair("t2r","Responsible-use response",TR2,[0,3,1,2])}</div>`;
+  case "lsafe":
+    return boxes(LSAFE,"Safety check: tick every rule that keeps today’s audit safe. Leave the others unticked.");
+  case "lexit":
+    return `<p class="how">Use the clinic scenario pack. Name the mitigation you would build in first and the risk it reduces, decide whether each mitigation lowers likelihood, impact or both, and name who is accountable for the residual risk.</p>
+      ${pair("lx1","Build in first – and the risk it reduces",LX1,[0,2,1,3])}
+      <div class="row" data-item="lx2"><span class="t">A diverse-data check (retraining on teenage records) lowers…</span>${seg("lx2",["Likelihood","Impact","Both"],["L","I","B"],"Diverse-data check lowers")}</div>
+      <div class="row" data-item="lx3"><span class="t">A nurse reviews every teenage case rated ‘non-urgent’ before the patient is told. It lowers…</span>${seg("lx3",["Likelihood","Impact","Both"],["L","I","B"],"Nurse review lowers")}</div>
+      ${pair("lx4","Who is accountable for the residual risk?",LX4,[0,3,1,2])}`;
+  case "lchal":
+    return `<p class="how">Bias, misinformation and misuse each enter the clinic system from a different component.</p>
+      ${pair("lch1","How could they compound one another?",LCH1,[0,2,1,3])}
+      <p class="q" id="q-lch2">Which short governance framework names who monitors each residual risk and how often they must report?</p>${radios("lch2",LCH2)}`;
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 9 Main Course · Term 1 Week 5 (2 – 6 Nov 2026) · Core + Lab · Risk Is a System Property + Auditing the Risks</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
