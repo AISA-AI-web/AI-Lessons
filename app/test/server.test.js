@@ -156,4 +156,53 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   E.as('bbaki@aisa.sch.ae'); E.call('syncClassroom');
   ok(sh.Roster.slice(1).some(r => r[0] === 'pupil0@aisa.sch.ae'), 'syncClassroom keeps imported rows');
 }
+/* class lists: transfer, add, request, confirm (fresh environment) */
+{
+  const E = makeEnv(), sh = E.sheets;
+  E.as('bbaki@aisa.sch.ae'); E.call('setup');
+  sh.Roles.push(['head@aisa.sch.ae', 'slt', 'Head', '']);
+  sh.Roster.push(
+    ['ta@aisa.sch.ae', 'Teacher A', 'teacher', 'Boys 6', 6, 'sis', '', ''], ['tb@aisa.sch.ae', 'Teacher B', 'teacher', 'Boys 7', 7, 'sis', '', ''],
+    ['101@aisa.sch.ae', 'Omar Ali', 'student', 'Boys 6', 6, 'sis', '', ''], ['102@aisa.sch.ae', 'Zaid Noor', 'student', 'Boys 6', 6, 'sis', '', ''],
+    ['201@aisa.sch.ae', 'Sami Kh', 'student', 'Boys 7', 7, 'sis', '', '']);
+  const sec = e => sh.Roster.slice(1).filter(r => r[0] === e && r[2] === 'student').map(r => r[3]).join();
+  E.as('101@aisa.sch.ae'); throws(() => E.call('transferStudent', '102@aisa.sch.ae', 'Boys 7', ''), /own classes/, 'students cannot transfer');
+  E.as('tb@aisa.sch.ae'); throws(() => E.call('transferStudent', '101@aisa.sch.ae', 'Boys 7', ''), /own classes/, 'a teacher cannot move a student out of someone else\'s class');
+  E.as('ta@aisa.sch.ae');
+  throws(() => E.call('transferStudent', '101@aisa.sch.ae', 'Year 6', ''), /Unknown class/, 'transfer target must be a real class');
+  let r = E.call('transferStudent', '102@aisa.sch.ae', 'Boys 7', 'wrong section');
+  ok(r.moved && sec('102@aisa.sch.ae') === 'Boys 7' && sh.Roster.find(x => x[0] === '102@aisa.sch.ae')[4] === 7, 'teacher moves their own student; section and grade update');
+  ok(sh.Changes.slice(1).some(c => c[1] === 'transfer' && c[2] === '102@aisa.sch.ae' && c[4] === 'Boys 6' && c[5] === 'Boys 7' && c[6] === 'ta@aisa.sch.ae' && c[7] === 'done'), 'transfer is logged with who, from and to');
+  throws(() => E.call('addStudent', '999@gmail.com', 'X Y', 'Boys 6', ''), /@aisa/, 'only school emails can be added');
+  throws(() => E.call('addStudent', '150@aisa.sch.ae', 'New Kid', 'Boys 7', ''), /own classes/, 'cannot add to someone else\'s class');
+  r = E.call('addStudent', '150@aisa.sch.ae', '=New Kid', 'Boys 6', '');
+  ok(r.added && sec('150@aisa.sch.ae') === 'Boys 6' && String(sh.Roster.find(x => x[0] === '150@aisa.sch.ae')[1]).startsWith("'"), 'new student added straight away (formula-safe)');
+  throws(() => E.call('addStudent', '150@aisa.sch.ae', 'New Kid', 'Boys 6', ''), /already in Boys 6/, 'cannot add a student twice');
+  r = E.call('addStudent', '201@aisa.sch.ae', '', 'Boys 6', 'in my class every day');
+  ok(r.requested && sec('201@aisa.sch.ae') === 'Boys 7', 'a student in another class becomes a request, not a move');
+  throws(() => E.call('addStudent', '201@aisa.sch.ae', '', 'Boys 6', ''), /already a request/, 'no duplicate requests');
+  let d = E.call('getDashboard'), req = d.roster.requests[0];
+  ok(req && req.to === 'Boys 6' && req.from === 'Boys 7' && !req.canDecide, 'the requesting teacher sees the request but cannot approve it');
+  throws(() => E.call('decideRequest', req.id, true, ''), /teacher, an owner or SLT/, 'requesting teacher cannot approve their own request');
+  E.as('tb@aisa.sch.ae'); d = E.call('getDashboard');
+  ok(d.roster.requests[0].canDecide, 'the student\'s current teacher can decide');
+  ok(E.call('decideRequest', req.id, true, 'agreed').decided === 'approved' && sec('201@aisa.sch.ae') === 'Boys 6', 'approving moves the student');
+  throws(() => E.call('decideRequest', req.id, false, ''), /already been decided/, 'a request is decided once');
+  E.as('ta@aisa.sch.ae');
+  r = E.call('confirmRoster', 'Boys 6', '');
+  ok(r.confirmed && r.students === 3, 'confirming records the class size');
+  throws(() => E.call('confirmRoster', 'Boys 7', ''), /own classes/, 'cannot confirm someone else\'s class');
+  d = E.call('getDashboard');
+  ok(d.roster.confirmations['Boys 6'] && !d.roster.confirmations['Boys 6'].changedSince, 'confirmation shows on the dashboard');
+  sh.Confirmations[sh.Confirmations.length - 1][0] = new Date(Date.now() - 1000);   // confirmed a moment earlier
+  E.call('transferStudent', '150@aisa.sch.ae', 'Girls 6', '');
+  ok(E.call('getDashboard').roster.confirmations['Boys 6'].changedSince, 'a later change flags the list as changed since confirmation');
+  E.as('head@aisa.sch.ae'); ok(E.call('transferStudent', '201@aisa.sch.ae', 'Boys 7', 'back').moved, 'SLT can move any student');
+  // a fresh import from IT keeps the corrections
+  sh.Import = [['Student ID', 'Student First Name', 'Student Last Name', 'Student Gender', 'Student Grade', 'Email Address', 'Class Name'],
+    [101, 'Omar', 'Ali', 'M', 6, 'ta@aisa.sch.ae', 'B06'], [102, 'Zaid', 'Noor', 'M', 6, 'ta@aisa.sch.ae', 'B06'], [201, 'Sami', 'Kh', 'M', 7, 'tb@aisa.sch.ae', 'B07']];
+  E.as('bbaki@aisa.sch.ae'); r = E.call('importRoster');
+  ok(sec('102@aisa.sch.ae') === 'Boys 7' && sec('201@aisa.sch.ae') === 'Boys 7' && r.classListFixesKept >= 1, 're-import keeps teachers\' transfers');
+  ok(sec('150@aisa.sch.ae') === 'Girls 6', 'students added by teachers survive a re-import');
+}
 console.log('All ' + n + ' server checks passed');

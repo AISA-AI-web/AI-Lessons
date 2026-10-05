@@ -107,6 +107,27 @@ in the progress table, or choose one from the **Student view** menu, to see that
 student's dashboard exactly as the student sees it (read-only; lesson buttons are
 switched off). Teachers can only pick students in their own sections.
 
+## Class lists: transfer, add, request, confirm
+
+Teachers, SLT and owners open **👥 Class lists** on the dashboard to make sure
+their lists are right:
+
+- **Move** a student who is in the wrong class to the right one (from your own
+  classes only) – it happens straight away.
+- **Add** a missing student by school email and name – straight away if they are
+  new to the lists. If they are already in another class, it becomes a
+  **request**: that class's teacher (or an owner / SLT) approves or declines it
+  from their own Class lists screen (a red number on the button shows waiting
+  requests).
+- **✓ This list is correct** records who confirmed each class and when; the
+  stamp turns amber ("changed since …") if the list changes afterwards, so SLT
+  can see which lists are checked.
+
+Every change is logged in the **Changes** tab (who, when, from, to), and
+`importRoster` re-applies them, so a new export from IT doesn't undo teachers'
+corrections. Owners and SLT can **Download changes for IT (CSV)** so the school
+information system gets fixed at the source too.
+
 ## Where the data lives
 
 One Google Sheet, kept in an AISA **Shared Drive** that only the system owners
@@ -122,6 +143,8 @@ student data is ever stored in this GitHub repository**, which is public.
 | Scores | One row per student per activity: first-try score only |
 | Time | Active seconds on each lesson page |
 | Judgements | Tiers recorded by teachers (latest wins) |
+| Changes | Class-list changes: transfers, additions and requests (with who decided) |
+| Confirmations | Teachers confirming a class list is correct |
 | Retries | A student's later score on an activity they corrected (for "answers fixed"); first tries are never changed |
 
 ## One-time setup (about 30 minutes)

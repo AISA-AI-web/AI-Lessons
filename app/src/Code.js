@@ -17,8 +17,12 @@ var TABS = {
   Scores:    ['timestamp', 'email', 'lessonId', 'activityId', 'activityTitle', 'part', 'firstScore', 'max'],
   Time:      ['timestamp', 'email', 'lessonId', 'seconds'],
   Retries:   ['timestamp', 'email', 'lessonId', 'activityId', 'score', 'max'],
-  Judgements:['timestamp', 'student', 'strand', 'tier', 'teacher', 'note']
+  Judgements:['timestamp', 'student', 'strand', 'tier', 'teacher', 'note'],
+  Changes:   ['timestamp', 'type', 'student', 'name', 'fromSection', 'toSection', 'by', 'status', 'decidedBy', 'decidedAt', 'note'],
+  Confirmations: ['timestamp', 'section', 'teacher', 'students', 'note']
 };
+/* Every AI Literacy section, e.g. Boys 6 … Girls 12. */
+var SECTIONS = (function () { var a = []; for (var g = 6; g <= 12; g++) a.push('Boys ' + g, 'Girls ' + g); return a; })();
 var STRAND_CODES = ['CU', 'SD', 'CE', 'GE'];
 /* AI Literacy is delivered through these Classroom courses (see the timetable).
    Only courses matching this are included automatically, so teachers of other
@@ -199,6 +203,131 @@ function registerLesson_(lessonId, meta) {
   append_('Lessons', [row]);
 }
 
+/* ===================== class lists: transfer, add, request, confirm ===================== */
+/* Teachers keep their own class lists right. Every change is logged in the Changes tab
+   (who, when, from, to). Teachers can only act on their own sections; owners and SLT on any.
+   importRoster re-applies these changes, so a fresh export from IT does not undo them. */
+
+function canManage_(me, section) { var vis = visibleSections_(me); return me.role !== 'student' && (vis === null || vis.indexOf(section) >= 0); }
+function checkSection_(s) { if (SECTIONS.indexOf(s) < 0) throw new Error('Unknown class: ' + cleanText_(s, 30)); return s; }
+function gradeOf_(section) { return Number((/(\d+)$/.exec(section) || [])[1]) || ''; }
+function checkEmail_(e) {
+  e = lc_(e);
+  if (!/^[a-z0-9._%+\-]+@[a-z0-9.\-]+$/.test(e) || e.slice(-(DOMAIN.length + 1)) !== '@' + DOMAIN) throw new Error('Use the student\'s @' + DOMAIN + ' email address.');
+  return e;
+}
+function studentRows_(email) { return rows_('Roster').filter(function (r) { return r.role === 'student' && lc_(r.email) === email; }); }
+function logChange_(type, email, name, from, to, by, status, note) {
+  append_('Changes', [[new Date(), type, email, cleanText_(name, 80), from || '', to || '', by, status, '', '', cleanText_(note, 200)]]);
+  return sheet_('Changes').getLastRow();
+}
+/** Moves every Roster row of a student to another section (adds a row if they had none). */
+function moveStudent_(email, to, name) {
+  var sh = sheet_('Roster'), v = sh.getDataRange().getValues(), h = v[0] || TABS.Roster, moved = 0;
+  var ie = h.indexOf('email'), ir = h.indexOf('role'), is = h.indexOf('section'), ig = h.indexOf('grade');
+  for (var i = 1; i < v.length; i++) if (lc_(v[i][ie]) === email && v[i][ir] === 'student') {
+    v[i][is] = to; v[i][ig] = gradeOf_(to); moved++;
+    sh.getRange(i + 1, 1, 1, v[i].length).setValues([v[i].map(safe_)]);
+  }
+  if (!moved) append_('Roster', [[email, cleanText_(name, 80) || email.split('@')[0], 'student', to, gradeOf_(to), '', 'Added from the dashboard', new Date()]]);
+}
+function withLock_(fn) { var l = LockService.getScriptLock(); l.waitLock(20000); try { return fn(); } finally { l.releaseLock(); } }
+
+/** Moves a student from one of your classes to the class they should be in. */
+function transferStudent(studentEmail, toSection, note) {
+  var me = requireUser_(), email = checkEmail_(studentEmail); checkSection_(toSection);
+  return withLock_(function () {
+    var rows = studentRows_(email);
+    if (!rows.length) throw new Error('That student is not on the class lists.');
+    var from = rows[0].section;
+    if (!canManage_(me, from)) throw new Error('You can only move students out of your own classes.');
+    if (from === toSection) throw new Error('The student is already in ' + toSection + '.');
+    moveStudent_(email, toSection);
+    logChange_('transfer', email, rows[0].name, from, toSection, me.email, 'done', note);
+    return { moved: true, from: from, to: toSection };
+  });
+}
+
+/** Adds a missing student to one of your classes. If they are already in another class,
+    it becomes a request for that class's teacher (or an owner / SLT) to approve. */
+function addStudent(studentEmail, name, section, note) {
+  var me = requireUser_(), email = checkEmail_(studentEmail); checkSection_(section);
+  if (!canManage_(me, section)) throw new Error('You can only add students to your own classes.');
+  return withLock_(function () {
+    var rows = studentRows_(email);
+    if (rows.length && rows[0].section === section) throw new Error('That student is already in ' + section + '.');
+    if (rows.length) {
+      var open = rows_('Changes').some(function (c) { return c.type === 'join' && c.status === 'pending' && lc_(c.student) === email && c.toSection === section; });
+      if (open) throw new Error('There is already a request for this student to join ' + section + '.');
+      logChange_('join', email, rows[0].name, rows[0].section, section, me.email, 'pending', note);
+      return { requested: true, from: rows[0].section, to: section };
+    }
+    var nm = cleanText_(name, 80);
+    if (nm.length < 2) throw new Error('Type the student\'s name.');
+    append_('Roster', [[email, nm, 'student', section, gradeOf_(section), '', 'Added by ' + me.email, new Date()]]);
+    logChange_('add', email, nm, '', section, me.email, 'done', note);
+    return { added: true, to: section };
+  });
+}
+
+/** Approves or declines a request for a student to join another class. The student's
+    current teacher, an owner or SLT can decide. */
+function decideRequest(id, approve, note) {
+  var me = requireUser_(), row = Number(id);
+  return withLock_(function () {
+    var sh = sheet_('Changes'), v = sh.getDataRange().getValues(), h = v[0];
+    if (!(row >= 2 && row <= v.length)) throw new Error('Request not found.');
+    var r = {}; h.forEach(function (k, i) { r[k] = v[row - 1][i]; });
+    if (r.type !== 'join' || r.status !== 'pending') throw new Error('This request has already been decided.');
+    var email = lc_(r.student), cur = (studentRows_(email)[0] || {}).section || r.fromSection;
+    if (me.role !== 'owner' && me.role !== 'slt' && !canManage_(me, cur)) throw new Error('Only ' + cur + '\'s teacher, an owner or SLT can decide this request.');
+    if (approve) moveStudent_(email, r.toSection, r.name);
+    r.status = approve ? 'approved' : 'declined'; r.decidedBy = me.email; r.decidedAt = new Date();
+    if (note) r.note = cleanText_((r.note ? r.note + ' · ' : '') + note, 200);
+    sh.getRange(row, 1, 1, h.length).setValues([h.map(function (k) { return safe_(r[k]); })]);
+    return { decided: r.status };
+  });
+}
+
+/** Records that a teacher has checked a class list and it is correct. */
+function confirmRoster(section, note) {
+  var me = requireUser_(); checkSection_(section);
+  if (!canManage_(me, section)) throw new Error('You can only confirm your own classes.');
+  var n = rows_('Roster').filter(function (r) { return r.role === 'student' && r.section === section; })
+    .reduce(function (o, r) { o[lc_(r.email)] = 1; return o; }, {});
+  append_('Confirmations', [[new Date(), section, me.email, Object.keys(n).length, cleanText_(note, 200)]]);
+  return { confirmed: true, students: Object.keys(n).length };
+}
+
+/** Class-list information for the dashboard: requests, recent changes and confirmations. */
+function rosterInfo_(me, vis) {
+  if (me.role === 'student') return null;
+  var all = vis === null, mine = function (s) { return all || vis.indexOf(s) >= 0; };
+  var current = {}; rows_('Roster').forEach(function (r) { if (r.role === 'student' && !current[lc_(r.email)]) current[lc_(r.email)] = r.section; });
+  var ch = sheet_('Changes').getDataRange().getValues(), h = ch[0], requests = [], recent = [], lastChange = {};
+  ch.slice(1).forEach(function (row, i) {
+    var c = {}; h.forEach(function (k, j) { c[k] = row[j]; });
+    if (!c.type) return;
+    var t = new Date(c.timestamp).getTime(), email = lc_(c.student), from = current[email] || c.fromSection;
+    if (c.status === 'pending') {
+      if (mine(c.toSection) || mine(from) || me.role === 'slt')
+        requests.push({ id: i + 2, student: email, name: c.name, from: from, to: c.toSection, by: c.by, at: new Date(c.timestamp).toISOString(), note: c.note,
+                        canDecide: me.role === 'owner' || me.role === 'slt' || canManage_(me, from) });
+      return;
+    }
+    if (c.status === 'done' || c.status === 'approved') {
+      [c.fromSection, c.toSection].forEach(function (s) { if (s) lastChange[s] = Math.max(lastChange[s] || 0, t); });
+      if (mine(c.fromSection) || mine(c.toSection))
+        recent.push({ type: c.type, student: email, name: c.name, from: c.fromSection, to: c.toSection, by: c.by, at: new Date(c.timestamp).toISOString(), status: c.status });
+    }
+  });
+  var conf = {};
+  rows_('Confirmations').forEach(function (c) { if (mine(c.section)) conf[c.section] = { by: c.teacher, at: new Date(c.timestamp).toISOString(), students: c.students }; });
+  Object.keys(conf).forEach(function (s) { conf[s].changedSince = (lastChange[s] || 0) > new Date(conf[s].at).getTime(); });
+  var lead = me.role === 'owner' || me.role === 'slt';   // they also get the full log, to send to IT
+  return { sections: SECTIONS, mySections: all ? SECTIONS : vis, requests: requests, recent: (lead ? recent : recent.slice(-30)).reverse(), confirmations: conf, canExport: lead };
+}
+
 /* ===================== dashboard data ===================== */
 
 /** Role-filtered progress data for the dashboard. */
@@ -253,6 +382,7 @@ function getDashboard() {
     judgements: judgementsFor_(keep),
     framework: typeof FRAMEWORK === 'undefined' ? null : FRAMEWORK,
     canJudge: me.role !== 'student',
+    roster: rosterInfo_(me, vis),
     catalog: typeof CATALOG === 'undefined' ? [] : CATALOG,
     termStart: TERM_START,
     generatedAt: new Date().toISOString()
@@ -386,18 +516,26 @@ function importRoster() {
       if (cls) ts.classes[cls] = 1;
     }
   });
+  // Re-apply teachers' corrections (transfers, additions, approved requests), latest last.
+  var fixed = 0;
+  rows_('Changes').forEach(function (c) {
+    var e = lc_(c.student);
+    if ((c.status === 'done' || c.status === 'approved') && c.toSection && students[e] && students[e].section !== c.toSection) {
+      students[e].section = c.toSection; students[e].grade = gradeOf_(c.toSection); fixed++;
+    }
+  });
   var out = [];
   Object.keys(students).sort().forEach(function (e) { var s = students[e];
     out.push([e, s.name, 'student', s.section, s.grade, SIS_ID, Object.keys(s.classes).sort().join(', '), now]); });
   Object.keys(teachers).sort().forEach(function (e) { var t = teachers[e];
     Object.keys(t.sections).sort().forEach(function (sec) {
       out.push([e, t.name, 'teacher', sec, t.sections[sec].grade, SIS_ID, Object.keys(t.sections[sec].classes).sort().join(', '), now]); }); });
-  var keep = rows_('Roster').filter(function (r) { return String(r.courseId || '').trim() !== SIS_ID; })
+  var keep = rows_('Roster').filter(function (r) { return String(r.courseId || '').trim() !== SIS_ID && !(r.role === 'student' && students[lc_(r.email)]); })
     .map(function (r) { return TABS.Roster.map(function (k) { return r[k] === undefined ? '' : r[k]; }); });
   var all = keep.concat(out), rs = sheet_('Roster');
   if (rs.getLastRow() > 1) rs.getRange(2, 1, rs.getLastRow() - 1, TABS.Roster.length).clearContent();
   if (all.length) rs.getRange(2, 1, all.length, TABS.Roster.length).setValues(all.map(function (r) { return r.map(safe_); }));
-  return { students: Object.keys(students).length, teachers: Object.keys(teachers).length, rows: out.length, keptOtherRows: keep.length, skipped: skipped };
+  return { students: Object.keys(students).length, teachers: Object.keys(teachers).length, rows: out.length, keptOtherRows: keep.length, skipped: skipped, classListFixesKept: fixed };
 }
 
 function listAll_(fn, key) {
@@ -436,7 +574,15 @@ function ss_() {
   if (!id) throw new Error('Run setup() once from the Apps Script editor first.');
   return SpreadsheetApp.openById(id);
 }
-function sheet_(name) { return ss_().getSheetByName(name); }
+function sheet_(name) {
+  var ss = ss_(), sh = ss.getSheetByName(name);
+  if (!sh && TABS[name]) {                       // tabs added after setup() was first run
+    sh = ss.insertSheet(name);
+    sh.getRange(1, 1, 1, TABS[name].length).setValues([TABS[name]]).setFontWeight('bold');
+    sh.setFrozenRows(1);
+  }
+  return sh;
+}
 function rows_(name) {
   var sh = sheet_(name); if (!sh) return [];
   var v = sh.getDataRange().getValues(), h = v[0] || TABS[name];
@@ -465,4 +611,4 @@ function cleanId_(v) {
 function safe_(v) { return typeof v === 'string' && /^[=+\-@]/.test(v) ? "'" + v : v; }
 
 /* exported for the local test harness only */
-if (typeof module !== 'undefined') module.exports = { doGet: doGet, getLessonState: getLessonState, recordScores: recordScores, recordTime: recordTime, recordLatest: recordLatest, setJudgement: setJudgement, getDashboard: getDashboard, syncClassroom: syncClassroom, importRoster: importRoster, setup: setup, currentUser_: currentUser_ };
+if (typeof module !== 'undefined') module.exports = { doGet: doGet, getLessonState: getLessonState, recordScores: recordScores, recordTime: recordTime, recordLatest: recordLatest, setJudgement: setJudgement, getDashboard: getDashboard, syncClassroom: syncClassroom, importRoster: importRoster, transferStudent: transferStudent, addStudent: addStudent, decideRequest: decideRequest, confirmRoster: confirmRoster, setup: setup, currentUser_: currentUser_ };

@@ -130,6 +130,25 @@ select.jsel.tW{background:var(--s100);color:#0b0b0b}select.jsel.tO{background:va
 .off{opacity:.55;cursor:default}
 .loading{padding:60px 0;text-align:center;color:var(--text-2)}
 .err{background:#fde7ec;color:#8a1330;border-radius:10px;padding:12px 14px;margin:20px 0}
+.rmsg{margin:0 0 12px;font-weight:600}.rmsg.ok{color:#0a6e0a}.rmsg.bad{color:#b3261e}
+.dot{display:inline-block;min-width:18px;padding:0 5px;border-radius:999px;background:#d03b3b;color:#fff;font-size:12px;line-height:18px;text-align:center;margin-left:4px}
+details.sec{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:0 0 10px}
+details.sec>summary{cursor:pointer;padding:12px 16px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;list-style:none}
+details.sec>summary::-webkit-details-marker{display:none}
+details.sec>summary b{font-size:16px}
+details.sec .in{padding:0 16px 14px}
+.chip{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12.5px;font-weight:700}
+.chip.ok{background:rgba(12,163,12,.12);color:#0a6e0a}.chip.warn{background:rgba(250,178,25,.2);color:#7a5200}.chip.no{background:var(--grid);color:var(--text-2)}
+.rtable{width:100%;border-collapse:collapse;font-size:13.5px}.rtable td,.rtable th{padding:6px 8px;border-bottom:1px solid var(--grid);text-align:left;white-space:normal}
+.rtable select{font-size:13px;padding:4px 6px}.rtable button{font-size:13px;padding:4px 10px}
+details.sec .in{overflow-x:auto}
+@media (max-width:600px){.rtable th:nth-child(2),.rtable td:nth-child(2){display:none}.rtable select{max-width:120px}}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;align-items:end}
+.form label{display:block;font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:3px}
+.form input{font:inherit;font-size:14px;border:1.5px solid var(--line);border-radius:8px;padding:7px 10px;width:100%;background:var(--card);color:var(--text)}
+.req{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;border-top:1px solid var(--grid);padding:10px 0}
+.req:first-of-type{border-top:0}
+.log li{margin:2px 0;font-size:13.5px;color:var(--text-2)}
 .printhead{display:none}
 .tools{display:flex;justify-content:flex-end;gap:8px;margin:12px 0 0}
 .viewbar div{display:flex;gap:8px;flex-wrap:wrap}
@@ -179,6 +198,7 @@ $('#who').innerHTML = 'Signed in as <b>' + esc(CFG.email) + '</b> · <a href="' 
 if (CFG.role === 'student') $('#title').textContent = 'My progress';
 
 var VIEW = null;   // staff: the student whose view is being previewed
+var MANAGE = false; // staff: the class-lists screen
 
 function load(){
   if (window.google && google.script && google.script.run)
@@ -219,6 +239,7 @@ function render(){
   var self = D.scope === 'self';
   if (self) return studentView();
   if (VIEW) return studentView(VIEW);
+  if (MANAGE && D.roster) return manageView();
   var html = '';
   if (!self) html += '<div class="filters">' +
     '<div><label for="fSec">Section</label><select id="fSec"><option value="">' + (D.scope === 'school' ? 'All sections' : 'All my sections') + '</option>' +
@@ -229,6 +250,7 @@ function render(){
       D.students.slice().sort(function(a, b){ return a.section.localeCompare(b.section, undefined, { numeric: true }) || a.name.localeCompare(b.name); })
         .filter(function(s){ return !F.section || s.section === F.section; })
         .map(function(s){ return '<option value="' + esc(s.email) + '">' + esc(s.name + ' · ' + s.section) + '</option>'; }).join('') + '</select></div>' +
+    (D.roster ? '<div><button type="button" id="rosterBtn">👥 Class lists' + (D.roster.requests.some(function(r){ return r.canDecide; }) ? ' <span class="dot">' + D.roster.requests.filter(function(r){ return r.canDecide; }).length + '</span>' : '') + '</button></div>' : '') +
     '<div><button type="button" id="pdfBtn">Save as PDF</button></div>' +
     '<div><button type="button" id="exportBtn" title="Raw data for spreadsheets">Download data (CSV)</button></div></div>';
   html += '<div id="body"></div>';
@@ -239,6 +261,7 @@ function render(){
     $('#fLes').onchange = function(){ F.lesson = this.value; draw(); };
     $('#exportBtn').onclick = exportCsv;
     $('#pdfBtn').onclick = savePdf;
+    if ($('#rosterBtn')) $('#rosterBtn').onclick = function(){ MANAGE = true; render(); window.scrollTo(0, 0); };
   }
   draw();
 }
@@ -378,6 +401,90 @@ function wireTips(){
     el.addEventListener('mousemove', function(e){ tip.style.left = Math.min(e.clientX + 14, innerWidth - 290) + 'px'; tip.style.top = (e.clientY + 14) + 'px'; });
     el.addEventListener('mouseleave', function(){ tip.style.display = 'none'; });
   });
+}
+
+/* ===================== class lists (teachers, SLT, owners) ===================== */
+function call(fn, args, done){
+  var fail = function(e){ msg(e && e.message ? e.message : String(e), true); busy(false); };
+  busy(true);
+  if (window.google && google.script && google.script.run) { var r = google.script.run.withSuccessHandler(function(x){ busy(false); done(x); }).withFailureHandler(fail); r[fn].apply(r, args); }
+  else fail(new Error('Not connected.'));
+}
+function busy(on){ document.querySelectorAll('#app button').forEach(function(b){ b.disabled = on; }); }
+function msg(t, bad){ var m = $('#rmsg'); if (m) { m.className = 'rmsg ' + (bad ? 'bad' : 'ok'); m.textContent = t; } }
+var LASTMSG = null;
+function reloadWith(t){ LASTMSG = t; load(); }
+function fmtDate(iso){ return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); }
+function who(e){ return String(e || '').split('@')[0]; }
+function confChip(c){
+  if (!c) return '<span class="chip no">Not confirmed yet</span>';
+  if (c.changedSince) return '<span class="chip warn">Changed since ' + esc(who(c.by)) + ' confirmed it on ' + fmtDate(c.at) + '</span>';
+  return '<span class="chip ok">✓ Confirmed by ' + esc(who(c.by)) + ' · ' + fmtDate(c.at) + '</span>';
+}
+function manageView(){
+  var R = D.roster, mine = R.mySections.slice().filter(function(s){ return !F.section || s === F.section; });
+  var many = mine.length > 3;
+  var h = '<div class="viewbar"><span>👥 <b>Class lists</b> – check each class, fix anything wrong, then confirm it is correct. Every change is logged.</span><div><button type="button" id="backBtn">← Back to dashboard</button></div></div>';
+  h += '<p id="rmsg" class="rmsg" role="status" aria-live="polite"></p>';
+  var dec = R.requests.filter(function(r){ return r.canDecide; }), wait = R.requests.filter(function(r){ return !r.canDecide; });
+  if (R.requests.length) {
+    h += '<section class="card"><h2>Requests</h2><p class="sub">A teacher asked for a student who is in another class. The student\'s current teacher, an owner or SLT decides.</p>' +
+      dec.map(function(r){ return '<div class="req"><div><b>' + esc(r.name || who(r.student)) + '</b> <span class="sub">(' + esc(r.student) + ')</span><br>' +
+        esc(who(r.by)) + ' asks to move them from <b>' + esc(r.from) + '</b> to <b>' + esc(r.to) + '</b> · ' + fmtDate(r.at) + (r.note ? '<br><i>“' + esc(r.note) + '”</i>' : '') + '</div>' +
+        '<div><button type="button" data-dec="' + r.id + '" data-ok="1">✓ Approve</button> <button type="button" data-dec="' + r.id + '" data-ok="0">Decline</button></div></div>'; }).join('') +
+      wait.map(function(r){ return '<div class="req"><div><b>' + esc(r.name || who(r.student)) + '</b> <span class="sub">(' + esc(r.student) + ')</span><br>Request to move from ' + esc(r.from) + ' to <b>' + esc(r.to) + '</b> · waiting for ' + esc(r.from) + '\'s teacher</div></div>'; }).join('') + '</section>';
+  }
+  h += '<section class="card"><h2>Add or request a missing student</h2><p class="sub">New to the lists? They are added straight away. Already in another class? This sends a request to that class\'s teacher.</p>' +
+    '<div class="form"><div><label for="adEmail">School email</label><input id="adEmail" type="email" placeholder="12345@aisa.sch.ae" autocomplete="off"></div>' +
+    '<div><label for="adName">Full name (new students)</label><input id="adName" autocomplete="off" placeholder="First and last name"></div>' +
+    '<div><label for="adSec">Class</label><select id="adSec">' + R.mySections.map(function(s){ return '<option' + (F.section === s ? ' selected' : '') + '>' + esc(s) + '</option>'; }).join('') + '</select></div>' +
+    '<div><label for="adNote">Note (optional)</label><input id="adNote" autocomplete="off" placeholder="e.g. joined this week"></div>' +
+    '<div><button type="button" id="adBtn">Add student</button></div></div></section>';
+  mine.forEach(function(sec){
+    var list = D.students.filter(function(x){ return x.section === sec; }).sort(function(a, b){ return a.name.localeCompare(b.name); });
+    h += '<details class="sec"' + (many ? '' : ' open') + '><summary><b>' + esc(sec) + '</b><span class="sub">' + list.length + ' student' + (list.length === 1 ? '' : 's') + '</span>' + confChip(R.confirmations[sec]) + '</summary><div class="in">' +
+      (list.length ? '<table class="rtable"><thead><tr><th>Student</th><th>Email</th><th>In the wrong class? Move to…</th></tr></thead><tbody>' +
+        list.map(function(x){ return '<tr><td>' + esc(x.name) + '</td><td>' + esc(x.email) + '</td><td><select data-to="' + esc(x.email) + '" aria-label="Move ' + esc(x.name) + ' to">' +
+          '<option value="">Choose class…</option>' + R.sections.filter(function(s){ return s !== sec; }).map(function(s){ return '<option>' + esc(s) + '</option>'; }).join('') +
+          '</select> <button type="button" data-move="' + esc(x.email) + '" data-name="' + esc(x.name) + '" data-from="' + esc(sec) + '">Move</button></td></tr>'; }).join('') + '</tbody></table>'
+        : '<p class="empty">No students on this list yet.</p>') +
+      '<p style="margin:12px 0 0"><button type="button" data-confirm="' + esc(sec) + '">✓ This list is correct (' + list.length + ' students)</button></p></div></details>';
+  });
+  if (R.recent.length) h += '<section class="card"><h2>Recent changes</h2>' +
+    (R.canExport ? '<p class="sub">Send these to IT so the school information system is corrected too. <button type="button" id="itCsv">Download changes for IT (CSV)</button></p>' : '') +
+    '<ul class="log">' + R.recent.slice(0, 30).map(function(c){
+    var what = c.type === 'add' ? 'added to ' + esc(c.to) : c.type === 'join' ? 'moved from ' + esc(c.from) + ' to ' + esc(c.to) + ' (request approved)' : 'moved from ' + esc(c.from) + ' to ' + esc(c.to);
+    return '<li><b>' + esc(c.name || who(c.student)) + '</b> ' + what + ' by ' + esc(who(c.by)) + ' · ' + fmtDate(c.at) + '</li>'; }).join('') + '</ul></section>';
+  $('#app').innerHTML = h;
+  if (LASTMSG) { msg(LASTMSG); LASTMSG = null; }
+  $('#backBtn').onclick = function(){ MANAGE = false; render(); };
+  if ($('#itCsv')) $('#itCsv').onclick = function(){
+    var q = function(v){ v = String(v == null ? '' : v); if (/^[=+\-@]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; };
+    var rows = [['Date', 'Change', 'Student email', 'Student name', 'From class', 'To class', 'Changed by']].concat(R.recent.map(function(c){
+      return [c.at.slice(0, 10), c.type === 'add' ? 'Added' : c.type === 'join' ? 'Moved (request approved)' : 'Moved', c.student, c.name, c.from, c.to, c.by]; }));
+    var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([rows.map(function(r){ return r.map(q).join(','); }).join('\n')], { type: 'text/csv' }));
+    a.download = 'class-list-changes-' + new Date().toISOString().slice(0, 10) + '.csv'; document.body.appendChild(a); a.click(); a.remove();
+  };
+  $('#adBtn').onclick = function(){
+    var e = $('#adEmail').value.trim(), n = $('#adName').value.trim(), sc = $('#adSec').value, note = $('#adNote').value.trim();
+    if (!e) return msg('Type the student\'s school email.', true);
+    call('addStudent', [e, n, sc, note], function(r){
+      reloadWith(r.requested ? 'Request sent: they are in ' + r.from + ', so ' + r.from + '\'s teacher will be asked to approve the move to ' + r.to + '.' : 'Added to ' + r.to + '.'); });
+  };
+  document.querySelectorAll('[data-move]').forEach(function(b){ b.onclick = function(){
+    var em = b.getAttribute('data-move'), to = document.querySelector('select[data-to="' + em + '"]').value;
+    if (!to) return msg('Choose the class to move ' + b.getAttribute('data-name') + ' to.', true);
+    if (!confirm('Move ' + b.getAttribute('data-name') + ' from ' + b.getAttribute('data-from') + ' to ' + to + '?')) return;
+    call('transferStudent', [em, to, ''], function(r){ reloadWith(b.getAttribute('data-name') + ' moved from ' + r.from + ' to ' + r.to + '.'); });
+  }; });
+  document.querySelectorAll('[data-confirm]').forEach(function(b){ b.onclick = function(){
+    var sc = b.getAttribute('data-confirm');
+    call('confirmRoster', [sc, ''], function(r){ reloadWith(sc + ' confirmed: ' + r.students + ' students.'); });
+  }; });
+  document.querySelectorAll('[data-dec]').forEach(function(b){ b.onclick = function(){
+    var ok = b.getAttribute('data-ok') === '1';
+    call('decideRequest', [Number(b.getAttribute('data-dec')), ok, ''], function(r){ reloadWith('Request ' + r.decided + '.'); });
+  }; });
 }
 
 function exportCsv(){
