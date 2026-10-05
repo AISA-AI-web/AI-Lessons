@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Build, Evaluate, Improve + Finish It, Then Prove It – Grade 10 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#0F766E; --main2:#14897F; --deep:#0E4F4A;
+  --ink:#12302D; --muted:#4E6562; --paper:#F4FAF9; --card:#FFFFFF;
+  --line:#D3E7E3; --soft:#EAF5F3;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#5EEAD4,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#1BA394);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#12302D,#285A55)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#BFEDE6 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#F9FCFC;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FBFEFD}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#1BA394)}
+.act-head.ws{background:linear-gradient(120deg,#12302D,#2B6B64)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#E9F7F4}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #B9D8D2;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #8CCFC5;border-radius:12px;padding:10px 14px;background:#F6FCFB;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(18,48,45,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#12302D;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+table.log td:first-child,table.log th:first-child{text-align:center;width:44px}
+@media (max-width:560px){table.log thead{display:none}table.log,table.log tbody,table.log tr,table.log td{display:block;width:auto!important}table.log tr{border:1px solid var(--line);border-radius:10px;margin-bottom:8px;overflow:hidden}table.log td{border:0;border-bottom:1px solid var(--line);text-align:left!important}table.log td:last-child{border-bottom:0}table.log td::before{content:attr(data-l);display:block;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}table.log td:first-child{background:var(--soft);font-weight:700}}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 10 Main Course, Term 1</span><span class="pill">Week 8 Core + Week 8 Lab</span><span class="pill">📅 Teach: week of 23 – 27 Nov 2026</span></div>
+    <h1>Build, Evaluate, Improve + Finish It, Then Prove It</h1>
+    <p>Today you stop designing and start building. You assemble your components into one working system, run it for real, judge what it produces against your rules – and set aside a few inputs you will not touch, to test at the very end. Then, in the Lab, you turn that first build into a finished, dependable system and test it enough times, including on awkward inputs and your held-out set, to know its components can be trusted to work together.</p>
+    <p class="meta"><b>Strand:</b> Signature Solution · Build &nbsp;·&nbsp; <b>Scenario:</b> your chosen stakeholder brief (worked example: the open-day visitor helper)</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 10B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 8 of Term 1 – Monday 23 to Friday 27 November 2026.</b> Grade 10 has one AI period a week: Boys 10 on Wednesday 25 November, Girls 10 on Friday 27 November. Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Build, Evaluate, Improve</a>, then move on to the <a href="#lab">Lab: Finish It, Then Prove It</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Assemble to plan.</b> I can build my solution by assembling its data, tools and prompts exactly as my plan set out.</li>
+      <li><b>Evaluate against rules.</b> I can test the whole system and judge its outputs against our success criteria and governance rules.</li>
+      <li><b>Improve one part.</b> I can make and justify one evidence-based improvement to one part of the system.</li>
+      <li><b>Lab: finish, test and log, handle edge cases.</b> I can finish a working solution whose components interact from data to output, test it repeatedly and log how each output scores, and show one edge case handled gracefully.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 8 Core · Build, Evaluate, Improve</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Building means assembling</b><small>Connect the components you planned, one hand-off at a time</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Hold out, then evaluate</b><small>A held-out test set, criteria and governance rules</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Improve one part</b><small>Worksheet, unplugged activity and build check</small></a></li>
+    </ol>
+    <h3 class="rh">Week 8 Lab · Finish It, Then Prove It</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Finish, then test more than once</b><small>Reliable, not lucky – and spotting edge cases</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Keep an evaluation log</b><small>Lab worksheet: read the log for evidence</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Handle an edge case on paper</b><small>Unplugged activity and finish check</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Building means assembling</h2><p>How do you turn a plan into a working system?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In Week 7 you planned your signature solution: its components, its hand-offs, its success criteria and its governance rules. Today that plan moves from paper to a working build.</p></div>
+    <div class="call"><h4>Scenario</h4><p>Your signature solution moves from paper to a working build. You assemble the components, run it, and evaluate it – keeping a few inputs aside, unseen, for a fair final test. <span class="illus">(Illustrative scenario.)</span> Throughout this page, a worked example – an <b>open-day visitor helper</b> for a school front office – shows what each step looks like. <span class="illus">(Illustrative example data.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <div id="a-vocab"></div>
+    <h3 class="sub">Building means assembling your components</h3>
+    <p>Building is not the moment to redesign. It is the moment to <b>assemble</b> the components you already planned – your <b>data</b>, your <b>tools</b> and your <b>prompts</b> – so they interact in order. Set up each component, then connect the <b>hand-offs</b> so one part's output becomes the next part's input. Keep your design open beside you and trace the flow as you go, thinking of the whole thing as one system. If a hand-off is unclear, fix that one connection first, then keep going. No names, faces, voices or personal details go into any data or prompt.</p>
+    <figure>
+      <svg viewBox="0 0 760 320" role="img" aria-labelledby="f1T">
+        <title id="f1T">The disciplined build loop: test, evaluate, refine, log, then repeat. Each cycle adds one row to a log with columns for input, output, criteria and governance, component changed, and effect.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#12302D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#12302D">
+          <text x="380" y="26" font-size="16" font-weight="700" text-anchor="middle">The build loop – test, evaluate, refine, log</text>
+          <g stroke="#12302D" stroke-width="1.6">
+            <rect x="20" y="46" width="150" height="84" rx="12" fill="#EAF5F3"/>
+            <rect x="210" y="46" width="150" height="84" rx="12" fill="#fff"/>
+            <rect x="400" y="46" width="150" height="84" rx="12" fill="#fff"/>
+            <rect x="590" y="46" width="150" height="84" rx="12" fill="#EAF5F3"/>
+          </g>
+          <g stroke="#12302D" stroke-width="2.4" fill="none" marker-end="url(#ah)"><path d="M170 88H206"/><path d="M360 88H396"/><path d="M550 88H586"/></g>
+          <g font-size="16" font-weight="700" text-anchor="middle" fill="#0E4F4A"><text x="95" y="76">1 TEST</text><text x="285" y="76">2 EVALUATE</text><text x="475" y="76">3 REFINE</text><text x="665" y="76">4 LOG</text></g>
+          <g font-size="13" text-anchor="middle" fill="#4E6562">
+            <text x="95" y="98">run one input,</text><text x="95" y="116">record the output</text>
+            <text x="285" y="98">criteria + rules,</text><text x="285" y="116">verify one claim</text>
+            <text x="475" y="98">change ONE</text><text x="475" y="116">component</text>
+            <text x="665" y="98">add one row</text><text x="665" y="116">to the log</text>
+          </g>
+          <path d="M665 130V168H95V134" stroke="#0F766E" stroke-width="2.4" fill="none" marker-end="url(#ah)"/>
+          <rect x="250" y="152" width="260" height="32" rx="16" fill="#fff" stroke="#0F766E" stroke-width="1.6"/>
+          <text x="380" y="173" font-size="14" font-weight="700" text-anchor="middle" fill="#0F766E">repeat – several cycles, not one</text>
+          <g stroke="#12302D" stroke-width="1.2">
+            <rect x="20" y="206" width="720" height="44" fill="#EAF5F3"/>
+            <rect x="20" y="250" width="720" height="40" fill="#fff"/>
+            <path d="M164 206V290M308 206V290M452 206V290M596 206V290"/>
+          </g>
+          <g font-size="13" font-weight="700" text-anchor="middle">
+            <text x="92" y="233">Input</text>
+            <text x="236" y="233">Output</text>
+            <text x="380" y="225">Criteria &amp;</text><text x="380" y="242">governance</text>
+            <text x="524" y="225">Component</text><text x="524" y="242">changed</text>
+            <text x="668" y="233">Effect</text>
+          </g>
+          <g font-size="13" text-anchor="middle" fill="#4E6562">
+            <text x="92" y="275">blank message</text><text x="236" y="275">invented answer</text><text x="380" y="275">C1 fail</text><text x="524" y="275">prompt</text><text x="668" y="275">C1 now passes</text>
+          </g>
+          <text x="380" y="312" font-size="13" text-anchor="middle" fill="#4E6562">Each cycle adds one row. (Illustrative row.)</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> Work in a disciplined loop – test, evaluate, refine, log – recording the input, the output, the component you changed and its effect each time.</figcaption>
+    </figure>
+    <div id="a-loop"></div>
+    <div id="a-handoff"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Hold out, then evaluate</h2><p>How do you test a system fairly – and judge what it says?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Keep a held-out test set</h3>
+    <p>Before you tune anything, set aside a few inputs as a <b>held-out test set</b> – and do not use them to build or improve the system. You will only run them at the very end. Why? If you tune your system on the same inputs you test it on, you learn those inputs, not the task. A held-out set that the system has never seen is the only fair way to check it will work on new cases, not just the ones you practised on.</p>
+    <div id="a-heldout"></div>
+    <h3 class="sub">Evaluate against criteria and governance</h3>
+    <p>When your integrated output appears, do not trust it just because it reads smoothly – a fluent system can still break a rule. Check it against every <b>success criterion</b> and <b>governance expectation</b> – accurate, appropriate, and keeping personal data out. <b>Verify</b> one claim against a trusted source. Then find one criterion it misses and change a single component – a prompt, an input, or a hand-off – and run it again.</p>
+    <div class="ecard" id="audit"></div>
+    <div id="a-eval"></div>
+    <div id="a-verify"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3 · Worksheet</span><h2>Improve one part</h2><p>How do you prove a change helped?</p></div>
+  <div class="part-body">
+    <p>Changing only one part lets you prove which change made the output better, which is how good systems are <b>refined</b>. If you change the prompt, the data and the tool together and the output improves, you cannot say which change did it – or whether one of them made something else worse.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>The integrated AI systems the UAE relies on only work when someone assembles their parts carefully, checks outputs against clear rules, and improves them with evidence – and tests them on cases they were not tuned on. <span class="illus">(Illustrative context.)</span> That is the discipline you practise today.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Mathematics · Design &amp; Technology</h4><p>Scoring each output against a fixed criterion and marking pass or fail is <b>measurement against a standard</b> in <b>Mathematics</b>. Building from a plan and improving one change at a time is the <b>make-and-test cycle</b> from <b>Design &amp; Technology</b>.</p></div>
+    <div class="call amber"><h4>Tool for this week: approved assistant (build), with an optional Colab / no-code extension – teacher-mediated</h4><p>1. Put your design and success criteria side by side; set up each component with no personal data. 2. Assemble the components in order, record the integrated output, and set aside a held-out test set you will not tune on. 3. Mark the output against each criterion and governance rule, verify one claim, then change one component and re-run. <b>Stay safe:</b> approved, teacher-managed assistant only; no personal data. Verify outputs and disclose AI use; the Colab route is optional.</p></div>
+    <div id="a-improve"></div>
+    <h3 class="sub">Unplugged: evaluate a build on paper</h3>
+    <div class="call"><h4>Scenario</h4><p>You have built the first parts of your signature solution. Working on paper, evaluate its output against your success criteria using a fresh, non-personal input. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Mark pass/fail with evidence: ‘Usability: pass – a first-time user finished without help.’</div>
+    <div id="a-upl"></div>
+    <div id="a-quiz"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 8 Lab</span><h2>Finish It, Then Prove It</h2><p>Today you turn your first build into a finished, dependable system – and test it enough times, including on awkward inputs and your held-out set, to know its components can be trusted to work together.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In the Core you assembled your planned components, evaluated the output against your rules, set aside a held-out test set and made one evidence-based improvement.</p></div>
+    <div class="call"><h4>Scenario – continued</h4><p>Your build worked once – but does it hold up on awkward inputs and cases it has never seen? Today you test it repeatedly, keep an evaluation log, and handle an edge case gracefully. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Finish, then test more than once</h2><p>When is a system dependable – not just lucky?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Finish the system, then test it more than once</h3>
+    <p>A system that worked one time is not finished – its components may have aligned by luck. You <b>complete</b> every component so the system runs from data to output, then test it again with different inputs, including your <b>held-out set</b> and a deliberate <b>edge case</b> – a very long, an incorrect, or a blank input. Each time, check the output against your criteria and governance rules. Keep personal details out of every input, and let the teacher run the AI step. An edge case that breaks your system is useful – it shows exactly which component to strengthen.</p>
+    <figure>
+      <svg viewBox="0 0 760 290" role="img" aria-labelledby="f2T">
+        <title id="f2T">Three kinds of test input feed the finished system: typical inputs you build and tune on, edge cases such as blank, very long or incorrect inputs, and held-out inputs tested only at the end. Every test adds a row to the evaluation log.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#12302D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#12302D">
+          <text x="380" y="24" font-size="16" font-weight="700" text-anchor="middle">Test with three kinds of input – log every run</text>
+          <g stroke="#12302D" stroke-width="1.6">
+            <rect x="16" y="44" width="222" height="64" rx="12" fill="#fff"/>
+            <rect x="16" y="126" width="222" height="64" rx="12" fill="#FFF7E8"/>
+            <rect x="16" y="208" width="222" height="64" rx="12" fill="#EAF5F3" stroke-dasharray="6 4"/>
+            <rect x="292" y="84" width="196" height="148" rx="14" fill="#fff"/>
+            <rect x="542" y="84" width="202" height="148" rx="14" fill="#EAF5F3"/>
+          </g>
+          <g font-size="15" font-weight="700"><text x="32" y="70">Typical input</text><text x="32" y="152">Edge case</text><text x="32" y="234">Held-out input</text></g>
+          <g font-size="13" fill="#4E6562"><text x="32" y="92">build and tune on these</text><text x="32" y="174">blank, very long, incorrect</text><text x="32" y="256">run only at the very end</text></g>
+          <g stroke="#12302D" stroke-width="2.2" fill="none" marker-end="url(#ah2)"><path d="M238 76L288 124"/><path d="M238 158H288"/><path d="M238 240L288 192"/><path d="M488 158H538"/></g>
+          <g text-anchor="middle">
+            <text x="390" y="116" font-size="15" font-weight="700" fill="#0E4F4A">YOUR SYSTEM</text>
+            <g font-size="13" fill="#4E6562"><text x="390" y="146">data → tool</text><text x="390" y="166">→ prompt</text><text x="390" y="186">→ output</text></g>
+            <text x="643" y="116" font-size="15" font-weight="700" fill="#0E4F4A">EVALUATION LOG</text>
+            <g font-size="13" fill="#4E6562"><text x="643" y="146">one row per test:</text><text x="643" y="166">criteria and rules met?</text><text x="643" y="186">component changed?</text><text x="643" y="206">effect?</text></g>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Test the finished system on typical inputs, deliberate edge cases and your held-out inputs, and add a row to the evaluation log for every run.</figcaption>
+    </figure>
+    <div id="a-lreliable"></div>
+    <div id="a-ledge"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head dark"><span class="pill">Lab · Part 2 of 3 · Worksheet</span><h2>Keep an evaluation log</h2><p>Which improvement really helped – and how do you know?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Keep an evaluation log and handle edge cases gracefully</h3>
+    <p>Every test goes in your <b>evaluation log</b>: the input, the output, which criteria and governance rules it met, the single component you changed, and what that change did. A log lets you compare runs and see which improvement really helped. When an unusual input makes your system go wrong, do not ignore it – adjust the responsible component so the system responds sensibly, then record the fix. A fluent output still gets checked against a trusted source. Aim for several logged cycles, not one – that is what it means to <b>iterate</b>.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>Reliable integrated services people across the UAE depend on are tested again and again, and made to fail safely on odd inputs, before release. <span class="illus">(Illustrative context.)</span> An evaluation log is how builders prove a system's components really work together and stay within the rules.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Mathematics · Design &amp; Technology</h4><p>An evaluation log of repeated runs is a <b>data table you read for trends</b> in <b>Mathematics</b>. Designing so the system <b>fails gracefully</b> on an awkward input is <b>robust design</b> from <b>Design &amp; Technology</b>.</p></div>
+    <div class="call amber"><h4>Tool for this week: approved assistant (build), with an optional Colab / no-code extension – teacher-mediated</h4><p>1. Finish assembling every component so the system runs from data to output. 2. Test with a normal input, an edge case, and a held-out input; score each against criteria and governance rules. 3. Refine one component, re-run, and add a new row to your evaluation log each time. <b>Stay safe:</b> approved, teacher-managed assistant only; no personal data. Verify outputs against trusted sources and disclose AI use.</p></div>
+    <div class="ecard" id="logpack"></div>
+    <div id="a-llog"></div>
+    <div id="a-ltrust"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head"><span class="pill">Lab · Part 3 of 3 · Unplugged</span><h2>Handle an edge case on paper</h2><p>Design a graceful fallback for an awkward input.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>Your signature solution runs end-to-end. Working on paper, feed it a deliberately awkward input (blank, strange or extreme) and design a graceful fallback. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> A graceful fallback reads: ‘If the input is empty, ask the user to rephrase rather than guessing.’</div>
+    <div id="a-lgrace"></div>
+    <div id="a-lunplug"></div>
+    <div id="a-lquiz"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Build it, judge it, improve it – then prove it holds up</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li><b>Assemble</b> the components you planned; fix unclear hand-offs as you go.</li>
+      <li>Keep a <b>held-out test set</b> you never build or tune on, for a fair final check.</li>
+      <li><b>Evaluate</b> against every criterion and governance rule; <b>verify</b> a claim against a trusted source.</li>
+      <li><b>Refine</b> one component at a time so you can prove which change helped.</li>
+      <li>A system that worked once is not finished – test it again on varied inputs.</li>
+      <li>Test an <b>edge case</b> and a held-out input; make the system <b>fail safely</b>.</li>
+      <li>Keep an <b>evaluation log</b> so improvements become comparable evidence.</li>
+      <li><b>Iterate</b>: test, evaluate, refine, log – several cycles, not one.</li>
+    </ul>
+    <div class="call"><h4>Next</h4><p>In Week 9 you refine your signature solution further, using the evidence in your evaluation log.</p></div>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 10 · Main Course · Term 1 Week 8 (23 – 27 Nov 2026) · Core + Lab</div>
+</footer>
+
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- concept tags (strand · concept) ---------- */
+const CU_P="CU · how components interact as a system";
+const CU_A="CU · how system design affects performance and reliability";
+const SD_P="SD · multi-step solutions combining tools and data";
+const SD_A="SD · selects and structures tools strategically to improve performance";
+const CE_E="CE · strengths and weaknesses of outputs";
+const CE_P="CE · evaluates solutions using criteria (accuracy, fairness, usefulness)";
+const CE_A="CE · refines solutions and explains the impact of improvements";
+const GE_A="GE · proposes mitigations and explains their effectiveness";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["assemble","Connect your components so each one's output feeds the next."],
+  ["evaluate","Judge an output by checking it against your success criteria and governance rules."],
+  ["held-out test set","A few inputs you set aside and do not build or tune on, to test at the end."],
+  ["verify","Check an output against the task and a trusted source before you trust it."],
+  ["refine","Change one component or connection to improve the output."]
+];
+const DEF_ORDER = [2,4,0,3,1];
+const LOOP = [
+  "Assemble the planned components and connect the hand-offs",
+  "Test: run one input and record the integrated output",
+  "Evaluate the output against every criterion and governance rule",
+  "Refine: change one component and re-run",
+  "Log the input, output, component changed and its effect"
+];
+const LOOP_ORDER = [3,1,4,0,2];
+const HAND1 = ["Redesign the whole system from scratch with a different tool","Fix that one hand-off so only the matching FAQ row is passed on, then keep going","Leave it – the assistant will work out which row matters","Paste a real visitor's question, with their name, to see what happens"];
+const HAND2 = ["Add it now – more tools always make a better system","Swap the assistant for the image generator","Stick to the plan you designed and note the idea for a later version","Build both systems at once and keep whichever looks better"];
+const HELD = [
+  ["ho1","Choosing three held-out questions before any tuning, and putting them aside","F"],
+  ["ho2","Rewording the prompt until every held-out question passes, then reporting that score","U"],
+  ["ho3","Running the held-out questions only once, at the very end","F"],
+  ["ho4","Putting in the held-out set only the questions the system already gets right","U"],
+  ["ho5","Including a typical question and an awkward one in the held-out set","F"],
+  ["ho6","Peeking at a held-out result, changing the FAQ data, then re-running the same held-out set as the ‘final test’","U"]
+];
+const FAQ = [
+  ["Open day start","9:30, in the main hall"],
+  ["Visitor parking","North car park"],
+  ["Food for visitors","Free snacks in the canteen, 11:00–12:00"],
+  ["Contact","Ask at the front office (no personal numbers)"]
+];
+const CRIT = [
+  ["e1","C1 · Accurate – matches the approved FAQ sheet","X"],
+  ["e2","C2 · Short – 60 words or fewer","P"],
+  ["e3","C3 · Bilingual – given in English and Arabic","P"],
+  ["e4","G1 · No personal data","X"],
+  ["e5","G2 · Discloses AI use","P"]
+];
+const VER1 = ["Ask the assistant ‘Are you sure?’ and accept its yes","Check the time against the school's official open-day letter","Run it again – if it says 9:00 twice, it must be right","It sounds confident, so mark it as verified"];
+const VER2 = ["Accuracy: fail – the reply says 9:00, the official letter says 9:30","Accuracy: pass – the time is nearly right","Accuracy: fail – I did not like the wording","Accuracy: pass – it was AI-drafted, so it is reliable"];
+const IMP1 = ["Rewrite the prompt, swap the assistant and add a translation tool, all at once","Remove last year's FAQ copy so the look-up can only use this year's sheet","Make the reply longer so it sounds more certain","Delete criterion C1 because it is hard to pass"];
+const IMP2 = ["The data fix made C1 pass – it was the only change, so its effect is shown","Every criterion and rule is now met, so the system is finished","Nothing – a re-run can never show anything","The assistant improved on its own between runs"];
+const UPL1 = ["Pass – snacks, canteen and 11:00–12:00 all match the FAQ sheet","Pass – it sounds friendly","Fail – it is too short","Fail – snacks are not the same as lunch"];
+const UPL2 = ["Pass – it answered the question","Pass – most visitors read English","Fail – there is no Arabic version, so C3 is not met","Fail – it mentions the canteen"];
+const UPL3 = ["Change the prompt, the data and the tool together, to be safe","Delete C3 from the criteria","Fix the translation hand-off that dropped the Arabic version, because C3 is the only criterion missed","Make the reply longer"];
+const QUIZ = [
+  ["q1","Why keep a held-out test set that you never build or tune on?",["So you have spare inputs in case the first ones run out.","So you can fairly check the system works on new, unseen cases.","So the system runs faster on the inputs you did tune on."],1],
+  ["q2","Your output reads smoothly but breaks one governance rule. Is the system finished?",["Yes – if it reads smoothly it has clearly met the criteria.","Yes – governance rules do not apply once a system is built.","No – a fluent output can still break a rule, so it needs a fix."],2],
+  ["q3","Why change only one component when improving the build?",["So you can prove which change actually made the output better.","Because changing two components at once is against the rules.","Because only the first component is allowed to be changed."],0]
+];
+const TF = [
+  ["tf1","Building means assembling your planned components in order.","T"],
+  ["tf2","A confident-sounding output does not need verifying against a source.","F"],
+  ["tf3","Changing several things at once makes it clear which change helped.","F"]
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["complete","Every component runs and hands over correctly, from data to output."],
+  ["reliable","The system keeps meeting the criteria on different inputs, not just one."],
+  ["edge case","An unusual, incorrect or awkward input that can break a component."],
+  ["evaluation log","A record of each test: input, output, criteria met, and the component changed."],
+  ["iterate","Repeat the test, evaluate, refine and log cycle to make the system dependable."]
+];
+const LDEF_ORDER = [3,0,4,1,2];
+const LREL = [
+  ["lr1","It met the criteria on several different inputs, not just one",1],
+  ["lr2","It passed a held-out input it was never tuned on",1],
+  ["lr3","It worked perfectly once, in front of the class",0],
+  ["lr4","It responds sensibly to a blank input instead of guessing",1],
+  ["lr5","Its replies read smoothly and confidently",0],
+  ["lr6","It answered very quickly",0]
+];
+const LEDGE = [
+  ["lg1","“What time does the open day start?”","T"],
+  ["lg2","An empty message – the visitor pressed send by mistake","E"],
+  ["lg3","A 900-word pasted page with the question hidden at the end","E"],
+  ["lg4","“Where do visitors park?”","T"],
+  ["lg5","“Wat tyme is the opn day?? 25:00???”","E"],
+  ["lg6","“Is there food for visitors?”","T"]
+];
+const LOG = [
+  ["1","Typical (dev): “Where do visitors park?”","North car park, in both languages, with the AI-use line","5/5 · rules met","– (first run)"],
+  ["2","Edge case: blank message","Invents an answer about parking","4/5 · C1 fail (made up)","–"],
+  ["3","Edge case: blank message","“Please type your question, or ask at the front office.”","5/5 · rules met","Prompt: if the question is empty, unclear or not in the FAQ, ask the visitor to rephrase or ask at the front office"],
+  ["4","Edge case: 900-word paste","A 140-word reply","4/5 · C2 fail (too long)","–"],
+  ["5","Edge case: 900-word paste","A 52-word reply that answers the question","5/5 · rules met","Input step: keep only the visitor's question"],
+  ["6","Held-out: a question in Arabic about food for visitors","Correct, in both languages","5/5 · rules met","None – held-out, not tuned on"],
+  ["7","Held-out: “Is the pool open for visitors?” (not in the FAQ)","“I don't have that information – please ask at the front office.”","5/5 · rules met","None – held-out, not tuned on"]
+];
+const LL1 = ["Run 1","Run 2","Run 6","Run 7"];
+const LL2 = ["The data (FAQ sheet)","The tool (assistant)","The prompt","The input step"];
+const LL3 = ["Because the Run 5 reply sounds better","Because Run 5 was the last change made","Because trimming the input was the only change between Run 4 and Run 5, and C2 went from fail to pass","Because very long inputs are rare"];
+const LL4 = ["The system is now guaranteed never to fail","The system met the criteria on questions it was never tuned on","Nothing, because nothing was changed in those runs","The prompt fix made the system slower"];
+const LT1 = ["Run 1, because it scored 5/5 the first time","Whichever change made the replies longest","The Run 3 prompt fallback: the blank input failed in Run 2 and passed in Run 3 with only the prompt changed – and held-out Run 7, which the FAQ cannot answer, was also handled sensibly","None – a log cannot show which change helped"];
+const LT2 = ["Run 4 → 5: a very long paste made the reply too long; the input step now keeps only the question, so the reply stays under 60 words","Run 1: a typical question was answered well","Run 6: the held-out question passed","Run 2: a blank input broke C1, so I removed the blank-input test"];
+const LGRACE = [
+  ["lgr1","Blank input → “Please type your question, or ask at the front office.”","G"],
+  ["lgr2","Blank input → invents an answer about parking","P"],
+  ["lgr3","Question not in the FAQ → “I don't have that information – please ask at the front office.”","G"],
+  ["lgr4","Question not in the FAQ → makes up a confident answer","P"],
+  ["lgr5","Very long paste → keeps only the question and answers in under 60 words","G"],
+  ["lgr6","Impossible time ‘25:00’ → repeats ‘25:00’ back as if it were real","P"]
+];
+const LU1 = ["Refuse politely and send the visitor to the front office","Try to look up or guess the student's class, repeating her name in the reply","Ask the visitor to rephrase","Translate the question into Arabic"];
+const LU2 = ["Answer from an old class list it was given","Store the name so later replies are more personal","Not repeat or look up the name, not guess, and direct the visitor to the front office","Ignore the message silently"];
+const LU3 = ["If a question asks about a named person, do not repeat or look up the name – reply ‘I can't help with personal details; please ask at the front office.’","If a question is hard, guess the most likely answer.","If the input contains a name, add it to the FAQ sheet.","If unsure, give a longer answer."];
+const LQUIZ = [
+  ["lq1","Your system passed one input. Why is that not enough to call it reliable?",["One input is always the hardest possible test to pass.","The components may have aligned by luck; reliability needs several inputs.","Reliability only depends on how quickly the system answered."],1],
+  ["lq2","What makes an evaluation log valuable?",["It guarantees the system will never fail on any future input.","It replaces the need to verify outputs against a source.","It lets you compare runs and see which improvement really helped."],2],
+  ["lq3","An edge case breaks a component. The best response is to:",["Adjust the responsible component so the system responds sensibly, and log it.","Ignore it, since edge cases are too rare to matter.","Remove the check that caught it so the system passes."],0]
+];
+const LTF = [
+  ["ltf1","An edge case is the most common, tidy input a system sees.","F"],
+  ["ltf2","A well-built system should fail gracefully on an awkward input.","T"],
+  ["ltf3","An evaluation log turns repeated runs into comparable evidence.","T"]
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+SD_P,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"To assemble is to connect components so each output feeds the next. To evaluate is to judge an output against your success criteria and governance rules. A held-out test set is a few inputs you never build or tune on, kept for the end. To verify is to check an output against the task and a trusted source. To refine is to change one component or connection to improve the output."},
+ {id:"loop",mount:"a-loop",section:"Core · Part 1",title:"Put the build loop in order",sub:"Objective 1 · assemble to plan · "+SD_P,ico:"🔁",
+  fields:LOOP.map((_,i)=>({k:"o"+i,ok:v=>eq(v,i)})),
+  explain:"First assemble the planned components and connect the hand-offs. Then the loop from Figure 1: test (run one input and record the output), evaluate (every criterion and governance rule), refine (change one component and re-run), and log the input, output, change and effect – then repeat."},
+ {id:"handoff",mount:"a-handoff",section:"Core · Part 1",title:"Assemble, don’t redesign",sub:"Building means assembling · "+SD_P,ico:"🔧",
+  fields:[{k:"hd1",radio:1,ok:v=>eq(v,1)},{k:"hd2",radio:1,ok:v=>eq(v,2)}],
+  explain:"If a hand-off is unclear, fix that one connection first – pass on only the matching FAQ row – then keep going; never test with a real person's details. Building is not the moment to redesign: stick to the plan and note new ideas, such as an extra tool, for a later version."},
+ {id:"heldout",mount:"a-heldout",section:"Core · Part 2",title:"Fair or unfair use of the held-out set?",sub:"Worksheet 1 · development vs held-out inputs · "+CE_P,ico:"🔒",
+  fields:HELD.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A held-out set is chosen before tuning, kept aside, and run once at the end – and it should include awkward cases, not just easy ones. Tuning until the held-out questions pass, choosing only questions that already pass, or changing the system after peeking and re-using the same set all mean the system has learned those inputs, so the final test is no longer fair."},
+ {id:"eval",mount:"a-eval",section:"Core · Part 2",title:"Mark the output against every criterion and rule",sub:"Worksheet 2 · pass or fail · "+CE_P,ico:"🩺",
+  fields:CRIT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"C1 fails: the reply says 9:00 but the approved FAQ sheet says 9:30. C2 passes (45 words). C3 passes (English and Arabic). G1 fails: a personal mobile number is personal data, and the FAQ says to send visitors to the front office. G2 passes: the reply ends with the AI-use line. A fluent reply still broke a criterion and a rule."},
+ {id:"verify",mount:"a-verify",section:"Core · Part 2",title:"Verify one claim",sub:"Worksheet 3 · check against a trusted source · "+CE_E,ico:"🔍",
+  fields:[{k:"vf1",radio:1,ok:v=>eq(v,1)},{k:"vf2",ok:v=>eq(v,0)}],
+  explain:"Asking the same assistant, re-running it or trusting its confident tone is not verification – an AI can repeat its own mistake. Check the claim against a trusted source, such as the school's official open-day letter, and record the evidence: ‘Accuracy: fail – the reply says 9:00, the official letter says 9:30.’"},
+ {id:"improve",mount:"a-improve",section:"Core · Part 3",title:"Change one component, then re-run",sub:"Worksheet 4–5 · one evidence-based improvement · "+CE_A,ico:"🛠️",
+  fields:[{k:"im1",radio:1,ok:v=>eq(v,1)},{k:"im2",ok:v=>eq(v,0)}],
+  explain:"The wrong time came from the data component – last year's FAQ copy – so the single change is to remove it. Because that was the only change, the re-run shows the data fix made C1 pass. The system is not finished: G1 still fails, so the next cycle changes one more component – the prompt line asking for a contact number."},
+ {id:"upl",mount:"a-upl",section:"Core · Part 3",title:"Evaluate a build on paper",sub:"Unplugged activity · pass/fail with evidence · "+CE_P,ico:"📝",
+  fields:[{k:"up1",ok:v=>eq(v,0)},{k:"up2",ok:v=>eq(v,2)},{k:"up3",ok:v=>eq(v,2)}],
+  explain:"Good pass/fail marks quote evidence: C1 passes because snacks, canteen and 11:00–12:00 all match the FAQ sheet; C3 fails because there is no Arabic version. The next change targets the one missed criterion with one component – the translation hand-off that dropped the Arabic – so you can see whether it worked."},
+ {id:"quiz",mount:"a-quiz",section:"Core · Part 3",title:"Build check",sub:"Quick quiz · 3 questions and 3 true or false · "+CE_P,ico:"✅",cls:"quiz",
+  fields:[...QUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...TF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: A held-out set is the only fair test that you learned the task, not the practice inputs. 2: No – reading well is not the same as meeting the criteria and rules. 3: One change isolates the effect and gives you evidence. True or false: building follows the plan (true); a confident output can still be wrong, so verify (false); change one thing at a time so the effect is clear (false)."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+CU_A,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"Complete = every component runs and hands over correctly, from data to output. Reliable = keeps meeting the criteria on different inputs. Edge case = an unusual, incorrect or awkward input that can break a component. Evaluation log = a record of each test. Iterate = repeat the test, evaluate, refine and log cycle."},
+ {id:"lreliable",mount:"a-lreliable",section:"Lab · Part 1",title:"Reliable – or just lucky?",sub:"Objective 1 · finish the system · "+CU_P,ico:"🧪",
+  fields:LREL.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Reliability means the components keep working together across varied inputs: several different inputs, a held-out input it was never tuned on, and a sensible response to a blank input. Working once may be luck; sounding fluent or answering fast says nothing about whether the criteria are met."},
+ {id:"ledge",mount:"a-ledge",section:"Lab · Part 1",title:"Typical input or edge case?",sub:"Objective 3 · spot the edge cases · "+CU_A,ico:"🧩",
+  fields:LEDGE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Edge cases are unusual, incorrect or awkward inputs: a blank message, a very long paste with the question buried in it, and a misspelt question with an impossible time. The start time, parking and food questions are typical inputs the system was designed for."},
+ {id:"llog",mount:"a-llog",section:"Lab worksheet 1–3",title:"Read the evaluation log",sub:"Worksheet 1–3 · log, edge case, held-out · "+CE_A,ico:"📊",cls:"ws",
+  fields:[{k:"ll1",ok:v=>eq(v,1)},{k:"ll2",ok:v=>eq(v,2)},{k:"ll3",ok:v=>eq(v,2)},{k:"ll4",ok:v=>eq(v,1)}],
+  explain:"Run 2 shows an edge case (a blank message) breaking C1. The fix in Run 3 changed the prompt. Run 5's input trim can be credited because it was the only change between Run 4 and Run 5, and C2 went from fail to pass. The held-out Runs 6 and 7 met the criteria on questions the system was never tuned on – good evidence, though not a guarantee."},
+ {id:"ltrust",mount:"a-ltrust",section:"Lab worksheet 4–5",title:"The improvement I trust most",sub:"Worksheet 4–5 · evidence from the log · "+CE_A,ico:"💭",cls:"ws",
+  fields:[{k:"lt1",radio:1,ok:v=>eq(v,2)},{k:"lt2",ok:v=>eq(v,0)}],
+  explain:"Trust comes from evidence across runs: the prompt fallback turned a fail (Run 2) into a pass (Run 3) with only one change, and held up on held-out Run 7. A good edge-case description names the input, the component it broke, and the graceful fix – such as trimming a very long paste so the reply stays under 60 words."},
+ {id:"lgrace",mount:"a-lgrace",section:"Lab · Part 3",title:"Graceful or poor?",sub:"Handle edge cases gracefully · "+SD_A,ico:"🪂",
+  fields:LGRACE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A graceful response does something sensible and safe: asks the visitor to rephrase, says it does not know and points to a person, or trims an awkward input. Poor responses guess, invent a confident answer, or repeat an impossible value as if it were real."},
+ {id:"lunplug",mount:"a-lunplug",section:"Lab · Part 3",title:"Design a graceful fallback",sub:"Unplugged activity · awkward input · "+GE_A,ico:"🛡️",
+  fields:[{k:"lu1",ok:v=>eq(v,1)},{k:"lu2",ok:v=>eq(v,2)},{k:"lu3",ok:v=>eq(v,0)}],
+  explain:"A poorly built system would try to look up or guess the student's class and repeat her name – a privacy breach. Yours should not use, repeat or store the name, should not guess, and should send the visitor to a person. The fallback in one sentence: if a question asks about a named person, do not repeat or look up the name – reply that you cannot help with personal details and point to the front office."},
+ {id:"lquiz",mount:"a-lquiz",section:"Lab · Part 3",title:"Finish check",sub:"Quick quiz · 3 questions and 3 true or false · "+CU_A,ico:"✅",cls:"quiz",
+  fields:[...LQUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...LTF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: Passing once could be luck; test across varied inputs, including edge cases. 2: The log turns changes into comparable evidence. 3: Strengthen the responsible component and log the fix. True or false: an edge case is the unusual input, not the tidy one (false); fail gracefully – flag it or route it to a person (true); a log makes improvement evidence, not impression (true)."}
+];
+
+/* ---------- state ---------- */
+const KEY="g10-mw8-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+
+/* ---------- static blocks ---------- */
+const OUTPUT_TEXT="Welcome to our open day! Doors open at 9:00 in the main hall, and visitor parking is in the north car park. If you get lost, call the duty teacher's personal mobile on 05X XXX XXXX. AI-drafted reply – please check with the front office.";
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#audit").innerHTML=`<header><small>Example build · illustrative</small><b>The open-day visitor helper – first assembled run</b></header>
+<div class="in">
+  <p class="task"><b>The brief:</b> the school front office wants a helper that answers open-day visitors' questions briefly, in English and Arabic, from an approved FAQ sheet. The teacher runs the approved assistant; no personal data goes in. <span class="illus">(Illustrative example data.)</span></p>
+  <div class="ab"><div><b>Components</b>Data: the FAQ sheet (the folder also still holds last year's copy, which said 9:00).<br>Tool: the approved assistant, run by the teacher.<br>Prompt: ‘Answer in under 60 words, in English and Arabic, using the matching FAQ row. Add a helpful contact number. End with the AI-use line.’</div>
+  <div><b>Success criteria and rules</b>C1 Accurate – matches the approved FAQ sheet.<br>C2 Short – 60 words or fewer.<br>C3 Bilingual – English and Arabic.<br>G1 No personal data.<br>G2 Discloses AI use.</div></div>
+  <table class="t"><caption class="illus" style="caption-side:top;text-align:left;padding-bottom:6px">Approved FAQ sheet (this year)</caption><thead><tr><th>Topic</th><th>Approved answer</th></tr></thead>
+  <tbody>${FAQ.map(([t,a])=>`<tr><td>${esc(t)}</td><td>${esc(a)}</td></tr>`).join("")}</tbody></table>
+  <p class="task" style="margin-top:12px"><b>Test input:</b> “What time does the open day start, and where do I park?”</p>
+  <div class="quote"><b>Integrated output (English, ${OUTPUT_TEXT.split(/\s+/).length} words):</b> ${esc(OUTPUT_TEXT)}<br><span class="illus">An Arabic version follows it; the teacher confirmed it says the same.</span></div>
+</div>`;
+$("#logpack").innerHTML=`<header><small>Evaluation log · illustrative</small><b>The open-day visitor helper – seven logged runs</b></header>
+<div class="in">
+  <p class="task">Criteria and rules as in the Core: C1 accurate, C2 short, C3 bilingual, G1 no personal data, G2 discloses AI use (5 in all). Runs 6 and 7 are the held-out questions, run only at the end.</p>
+  <table class="t log"><thead><tr><th>Run</th><th>Input</th><th>Output</th><th>Criteria &amp; rules met</th><th>Component changed</th></tr></thead>
+  <tbody>${LOG.map(r=>`<tr>${r.map((c,i)=>`<td data-l="${["Run","Input","Output","Criteria & rules met","Component changed"][i]}">${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+const pair=(k,label,opts,order)=>`<div class="pair" data-item="${k}"><span class="t">${label}</span>${sel(k,opts,"Choose…",order)}</div>`;
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "loop":
+    return `<p class="how">Put the build steps in order, from first to last. Use Figure 1 to help.</p>`+
+      LOOP.map((_,i)=>`<div class="pair" data-item="o${i}"><span class="t">Step ${i+1}</span>${sel("o"+i,LOOP,"Choose the step…",LOOP_ORDER)}</div>`).join("");
+  case "handoff":
+    return `<div class="quote">You are assembling the visitor helper. <span class="illus">(Illustrative.)</span></div>
+      <p class="q" id="q-hd1">1. The FAQ look-up hands the assistant the whole 40-row sheet instead of the one matching row, and the replies wander. What do you do?</p>${radios("hd1",HAND1)}
+      <p class="q" id="q-hd2">2. Halfway through the build, a teammate wants to add an image generator because it would look impressive. What do you do?</p>${radios("hd2",HAND2)}`;
+  case "heldout":
+    return `<p class="how">You wrote 12 example questions for the visitor helper and will hold out 3 of them. Is each way of using the held-out set a fair test or an unfair one?</p>`+
+      HELD.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Fair test","Unfair test"],["F","U"],t)}</div>`).join("");
+  case "eval":
+    return `<p class="how">Use the example build card above. Mark the integrated output against each success criterion and governance rule.</p>`+
+      CRIT.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Pass","Fail"],["P","X"],t)}</div>`).join("");
+  case "verify":
+    return `<p class="q" id="q-vf1">1. The reply says the open day starts at 9:00. Which of these is a real verification?</p>${radios("vf1",VER1)}
+      <p class="q">2. The official letter says 9:30. What do you record?</p>${pair("vf2","My evidence line",VER2,[1,0,3,2])}`;
+  case "improve":
+    return `<p class="q" id="q-im1">1. C1 is missed: the reply says 9:00. Which ONE change targets it?</p>${radios("im1",IMP1)}
+      <p class="q">2. You make only that change and re-run. The reply now says 9:30 and still meets C2, C3 and G2. What can you claim?</p>${pair("im2","My reflection",IMP2,[2,0,3,1])}`;
+  case "upl":
+    return `<div class="quote"><b>Fresh test input:</b> “Is there food for visitors?”<br><b>Output:</b> “Yes – free snacks in the canteen from 11:00 to 12:00. AI-drafted reply – please check with the front office.” – given in English only. <span class="illus">(Illustrative.)</span></div>
+      <p class="q">1. Score the output against each criterion, with evidence.</p>${pair("up1","C1 · Accurate",UPL1,[1,0,2,3])}${pair("up2","C3 · Bilingual",UPL2,[0,2,1,3])}
+      <p class="q">2–3. Name the one change you would make next, and why.</p>${pair("up3","Next change",UPL3,[0,2,1,3])}`;
+  case "quiz":
+    return quiz(QUIZ,TF);
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lreliable":
+    return boxes(LREL,"Your system worked once. Tick every sign that it is <b>reliable</b>, not just lucky. Leave the others unticked.");
+  case "ledge":
+    return `<p class="how">Test inputs for the visitor helper. Is each one a typical input or an edge case?</p>`+
+      LEDGE.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Typical","Edge case"],["T","E"],t)}</div>`).join("");
+  case "llog":
+    return `<p class="how">Use the evaluation log above.</p>`+
+      pair("ll1","a. Which run shows an edge case breaking a component?",LL1)+
+      pair("ll2","b. Which component did the fix in Run 3 change?",LL2,[1,3,2,0])+
+      pair("ll3","c. Why can the Run 5 change be credited with fixing the length?",LL3,[0,2,1,3])+
+      pair("ll4","d. What do the held-out Runs 6 and 7 show?",LL4,[0,2,1,3]);
+  case "ltrust":
+    return `<p class="q" id="q-lt1">4. Across the logged tests, which improvement do you trust most, and what is your evidence?</p>${radios("lt1",LT1)}
+      <div style="margin-top:10px">${pair("lt2","5. Describe one edge case that broke a component, and how the system now responds gracefully",LT2,[2,0,3,1])}</div>`;
+  case "lgrace":
+    return `<p class="how">How does the system respond to each awkward input? Is the response graceful or poor?</p>`+
+      LGRACE.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Graceful","Poor"],["G","P"],t)}</div>`).join("");
+  case "lunplug":
+    return `<div class="quote"><b>Awkward input:</b> a visitor types “My daughter (the visitor types her full name) is in Grade 10 – which class is she in?” <span class="illus">(Illustrative.)</span></div>`+
+      pair("lu1","1–2. What would a poorly built system do?",LU1,[2,1,0,3])+
+      pair("lu2","2. What should yours do instead?",LU2)+
+      pair("lu3","3. My graceful fallback in one sentence",LU3,[1,0,3,2]);
+  case "lquiz":
+    return quiz(LQUIZ,LTF);
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 10 Main Course · Term 1 Week 8 (23 – 27 Nov 2026) · Core + Lab · Build, Evaluate, Improve + Finish It, Then Prove It</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
