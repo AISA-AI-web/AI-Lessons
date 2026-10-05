@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Architect Your Signature Solution + Prototype and Pressure-Test – Grade 11 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#4F46E5; --main2:#6366F1; --deep:#312E81;
+  --ink:#1E1B3A; --muted:#585670; --paper:#F6F6FD; --card:#FFFFFF;
+  --line:#DCDCF3; --soft:#EEEEFC;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#A5B4FC,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#7C74F0);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#1E1B3A,#433D7A)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#D6D6FB 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FAFAFE;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FBFBFF}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#7C74F0)}
+.act-head.ws{background:linear-gradient(120deg,#1E1B3A,#4A447F)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#EEEEFD}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #C4C4EE;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #A9A6F0;border-radius:12px;padding:10px 14px;background:#F8F8FE;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(30,27,58,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#1E1B3A;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+/* three-quality button rows: two rows on narrow phones */
+@media (max-width:420px){.seg.dims{display:grid;grid-template-columns:1fr 1fr}.seg.dims button:nth-child(3){grid-column:1/-1;border-left:0;border-top:2px solid var(--line)}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 11 Main Course, Term 1</span><span class="pill">Week 7 Core + Week 7 Lab</span><span class="pill">📅 Teach: week of 16 – 20 Nov 2026</span></div>
+    <h1>Architect Your Signature Solution + Prototype and Pressure-Test</h1>
+    <p>Today you become the architect of your signature solution. It is not enough to make it work – you plan it to be optimised: efficient, easy to use and high-performing. Before you build, you decide what ‘better’ means for your user and set the numbers your solution must hit. Then, in the Lab, your plan meets reality: you run it as a prototype, measure it against your three targets, stress it on purpose to find where it breaks, and add a fallback for when a check fails.</p>
+    <p class="meta"><b>Strand:</b> Signature Solution · Planning &nbsp;·&nbsp; <b>Scenario:</b> your chosen signature solution</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 11B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 7 of Term 1 – Monday 16 to Friday 20 November 2026.</b> Grade 11 has one AI period a week: Boys 11 and Girls 11 both on Friday 20 November. Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Architect Your Signature Solution</a>, then move on to the <a href="#lab">Lab: Prototype and Pressure-Test</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Architect from a goal.</b> I can write a clear goal and user and architect my solution as integrated components in ordered steps, with measurable success criteria for efficiency, usability and performance and a check step for each.</li>
+      <li><b>Name inputs and outputs.</b> I can name the inputs, the teacher-operated tool and the non-personal data each component uses, and show how one step's output becomes the next step's input.</li>
+      <li><b>Name a risk and trade-off.</b> I can name one risk, the trade-off my design accepts, and the mitigation and check step that reduce the risk, and explain how my plan stays responsible and account-free.</li>
+      <li><b>Lab: walk it through, pressure-test it, add a fallback.</b> I can walk my whole solution through once and measure the output against my three criteria, weaken one component or over-push one trade-off on purpose and trace how the problem spreads, and add a fallback path for when a check fails – with no personal data and no student logins.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 7 Core · Architect Your Signature Solution</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Optimised, not just working</b><small>Goal, components and the three qualities</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Inputs, outputs and the tool</b><small>How each step's output feeds the next</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>You cannot max out everything</b><small>Criteria, check steps, trade-off and risk</small></a></li>
+      <li><span class="num">4</span><a href="#pw"><b>Core worksheet</b><small>Plan an optimised solution</small></a></li>
+      <li><span class="num">5</span><a href="#p4"><b>Architect a solution on paper and check</b><small>Unplugged activity and architect check</small></a></li>
+    </ol>
+    <h3 class="rh">Week 7 Lab · Prototype and Pressure-Test</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>A plan is only a hypothesis</b><small>Walk one input through every component</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Find the breaking point, then catch it</b><small>Pressure-test and fallback path</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Lab worksheet</b><small>Prototype, measure, stress, fall back</small></a></li>
+      <li><span class="num">L4</span><a href="#l4"><b>Pressure-test the plan on paper and check</b><small>Unplugged activity and prototype check</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Optimised, not just working</h2><p>What does ‘better’ mean for your user?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In Week 6 you brought the strands together – understanding, designing, evaluating and governing – in one small integrated solution. Now you become the <b>architect</b> of your own signature solution, and you plan it to be optimised before you build anything.</p></div>
+    <div class="call"><h4>Scenario</h4><p>You begin your signature solution: choose a real, non-personal problem and architect an optimised system – a goal, non-personal data, a teacher-operated tool and the prompt that drives it – knowing the three qualities will compete. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">Optimised, not just working</h3>
+    <p>Your signature solution is an <b>integrated system</b>: non-personal data, a teacher-operated tool and the prompt that drives it, connected so each part's output feeds the next. But this year the target is higher – you plan it to be <b>optimised</b> across three qualities: <b>efficiency</b> (fewer steps, less time), <b>usability</b> (easy for your user) and <b>performance</b> (output that meets a measurable bar). Planning means architecting the components, setting a criterion for each quality, and deciding who your solution is really for before you build anything.</p>
+    <figure>
+      <svg viewBox="0 0 760 330" role="img" aria-labelledby="f1T">
+        <title id="f1T">Planning an optimised solution. Top row, in order: non-personal data, the prompt you design, the teacher-run tool, the output, then check steps that judge it against the bar. Below: three competing qualities – efficiency, usability and performance – each with an example criterion. Bottom: set one measurable criterion and a check step per quality, then name the trade-off you accept.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1E1B3A"/></marker><marker id="ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#C92A4B"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#1E1B3A">
+          <text x="380" y="22" font-size="15" font-weight="700" text-anchor="middle">The component flow – each output feeds the next</text>
+          <g stroke-width="1.6">
+            <rect x="20" y="40" width="120" height="64" rx="10" fill="#EEEEFC" stroke="#1E1B3A"/>
+            <rect x="170" y="40" width="120" height="64" rx="10" fill="#F4F0FC" stroke="#6B46C1"/>
+            <rect x="320" y="40" width="120" height="64" rx="10" fill="#fff" stroke="#4F46E5" stroke-width="2.4"/>
+            <rect x="470" y="40" width="120" height="64" rx="10" fill="#fff" stroke="#1E1B3A"/>
+            <rect x="620" y="40" width="120" height="64" rx="10" fill="#FFF7E8" stroke="#B45309"/>
+          </g>
+          <g font-size="14" font-weight="700" text-anchor="middle"><text x="80" y="67">Data</text><text x="230" y="67" fill="#6B46C1">Prompt</text><text x="380" y="67" fill="#4F46E5">Tool</text><text x="530" y="67">Output</text><text x="680" y="67" fill="#B45309">Check steps</text></g>
+          <g font-size="13" text-anchor="middle" fill="#585670"><text x="80" y="88">non-personal</text><text x="230" y="88">you design it</text><text x="380" y="88">teacher-run</text><text x="530" y="88">for your user</text><text x="680" y="88">judge vs bar</text></g>
+          <g stroke="#1E1B3A" stroke-width="2.4" marker-end="url(#ah)"><path d="M140 72H167"/><path d="M290 72H317"/><path d="M440 72H467"/><path d="M590 72H617"/></g>
+          <text x="380" y="146" font-size="15" font-weight="700" text-anchor="middle">…balanced against three competing qualities</text>
+          <g stroke="#4F46E5" stroke-width="1.8" fill="#fff">
+            <rect x="20" y="164" width="200" height="86" rx="12"/><rect x="280" y="164" width="200" height="86" rx="12"/><rect x="540" y="164" width="200" height="86" rx="12"/>
+          </g>
+          <g font-size="15" font-weight="800" fill="#4F46E5" text-anchor="middle"><text x="120" y="190">EFFICIENCY</text><text x="380" y="190">USABILITY</text><text x="640" y="190">PERFORMANCE</text></g>
+          <g font-size="13" text-anchor="middle"><text x="120" y="211">fewer steps, less time</text><text x="380" y="211">easy for your user</text><text x="640" y="211">meets a measurable bar</text></g>
+          <g font-size="13" text-anchor="middle" fill="#585670"><text x="120" y="233">e.g. answer in ≤ 10 s</text><text x="380" y="233">e.g. first-timer &lt; 1 min</text><text x="640" y="233">e.g. 9 of 10 correct</text></g>
+          <g stroke="#C92A4B" stroke-width="2" marker-start="url(#ahr)" marker-end="url(#ahr)"><path d="M226 207H274"/><path d="M486 207H534"/></g>
+          <rect x="30" y="272" width="700" height="44" rx="10" fill="#1E1B3A"/>
+          <text x="380" y="299" font-size="13.5" fill="#fff" text-anchor="middle">One measurable criterion + a check step per quality · name the trade-off you accept</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> Planning an optimised solution: a component flow from data, prompt and tool to an output and check steps, balanced against the three competing qualities – efficiency, usability and performance. The red arrows show the qualities pull against each other.</figcaption>
+    </figure>
+    <div class="call"><h4>Example system for Parts 1–3: the sports-centre timetable helper</h4><p>A community sports centre publishes a weekly timetable of classes – swimming, football, fitness – with times, halls and age groups. Visitors keep phoning the front desk with the same questions. The planned solution: a visitor types a question such as ‘Is there a beginners' swim class on Saturday morning?’; the <b>prompt</b> combines the question with this week's published timetable; a <b>teacher-operated text generator</b> writes a short answer; <b>check steps</b> judge the answer before it is shown. <span class="illus">(Illustrative example.)</span></p></div>
+    <div id="a-vocab"></div>
+    <div id="a-qual"></div>
+    <div id="a-flow"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Inputs, outputs and the tool</h2><p>What does each component take in – and what does it hand on?</p></div>
+  <div class="part-body">
+    <p>An architect names exactly what flows through the system. For every component, say three things: its <b>input</b> (what it takes in), the <b>data</b> or <b>tool</b> it uses, and its <b>output</b> (what it hands on). The output of one step becomes the input of the next – the timetable feeds the prompt, the prompt feeds the tool, the tool's draft feeds the check. If you cannot say what a step hands on, the plan has a gap. Two rules hold for every component: the data is <b>non-personal</b>, and the tool is <b>teacher-operated</b> – you design the prompt and the checks, and no student signs in to an AI account.</p>
+    <div class="dos">
+      <div class="box"><small style="display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px">The timetable helper, step by step</small>
+        <ol class="pipe">
+          <li><b>Data</b>This week's published class timetable – no names, no bookings</li>
+          <li><b>Prompt</b>The visitor's question plus the timetable, asking for a two-sentence answer</li>
+          <li><b>Tool · teacher-operated</b>A text generator drafts the answer</li>
+          <li><b>Check step</b>The draft is compared with the timetable</li>
+          <li class="out"><b>Output</b>A short answer naming the class, time and hall</li>
+        </ol>
+      </div>
+      <div class="box"><small style="display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px">Stays responsible</small>
+        <p style="margin:0 0 8px">Non-personal data only · teacher-operated tool · no student logins · every output checked before it is used.</p>
+        <p class="note" style="margin:0">The test questions are written by the teacher – no real visitors' messages are used. <span class="illus">(Illustrative.)</span></p>
+      </div>
+    </div>
+    <div id="a-io"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head"><span class="pill">Core · Part 3 of 3</span><h2>You cannot max out everything</h2><p>Set a criterion and a check for each quality – then name the trade-off and a risk.</p></div>
+  <div class="part-body">
+    <p>Here is the catch: <b>efficiency, usability and performance compete</b>. Add more check steps and performance rises but speed drops; simplify the interface and you may lose an option or a safeguard. So set <b>one measurable criterion</b> for each quality and choose a balance you can defend, rather than trying to maximise all three at once. A real plan names a <b>trade-off</b> – the quality you prioritise for your user and what you accept giving up – and defends it. You also set a <b>check step</b> for each criterion, because a confident output can still be wrong, and you name <b>one risk</b> with a mitigation and an owner. Governance is built in: non-personal data only, teacher-operated tools, verifiable outputs.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, teams optimising AI solutions – from smart-city services in Abu Dhabi to logistics platforms at the ports – must balance speed, ease of use and accuracy, and defend the trade-offs to regulators and users. Planning those trade-offs, and keeping the design governed, is what turns a working idea into a solution people can trust.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Design &amp; Technology · Mathematics</h4><p>Architecting from a goal with a measurable criterion per quality is <b>systems design</b> in <b>Design &amp; Technology</b> and <b>target-setting</b> in <b>Mathematics</b>.</p></div>
+    <div class="call amber"><h4>Tool for this week: governance &amp; decision frameworks + decision decks – optimisation plan (teacher-mediated)</h4><p>1. Write your goal in one sentence: what problem, for whom. 2. List your components – non-personal data, teacher-operated tool, prompt – and set one measurable criterion for each quality. 3. Add a check step for each criterion, then name the trade-off you accept and one risk with its owner. <b>Stay safe:</b> no personal data in any plan. The tool is teacher-operated; you design the prompt and checks.</p></div>
+    <div id="a-compete"></div>
+    <div id="a-crit"></div>
+    <div id="a-checks"></div>
+    <div id="a-risk"></div>
+  </div>
+</section>
+
+<!-- CORE WORKSHEET -->
+<section class="part" id="pw">
+  <div class="part-head dark"><span class="pill">Core · Worksheet</span><h2>Plan an optimised solution</h2><p>Goal, components, a criterion and check step per quality, then the trade-off and a risk.</p></div>
+  <div class="part-body">
+    <div class="ecard" id="brief"></div>
+    <div id="a-wsgoal"></div>
+    <div id="a-wscomp"></div>
+    <div id="a-wscrit"></div>
+    <div id="a-wscheck"></div>
+    <div id="a-wstrade"></div>
+  </div>
+</section>
+
+<!-- CORE PART 4: UNPLUGGED + QUIZ -->
+<section class="part" id="p4">
+  <div class="part-head dark"><span class="pill">Core · Unplugged</span><h2>Architect a signature solution, on paper</h2><p>A goal, a criterion per quality, and the trade-off you accept.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>You will design a signature solution for a real, non-personal problem you choose. To practise, take a <b>school-library book-finder</b>: a student types a topic and the helper suggests the shelf code from the library's published catalogue. Working on paper, architect it and set a criterion per quality. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Set a criterion: ‘Usability – a first-time user finishes in under a minute.’</div>
+    <div id="a-unplug"></div>
+    <div id="a-quiz"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 7 Lab</span><h2>Prototype and Pressure-Test</h2><p>Your plan meets reality today. You will run your solution as a prototype, measure it against your three optimisation targets, then stress it on purpose to find where it breaks – and make it safer with a fallback for when a check fails.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>Your plan looks optimal on paper, but paper hides broken connections. You build a prototype, walk one input through every component, then deliberately pressure-test it to find the breaking point and add a fallback path. In this Lab the worked system is the <b>sports-centre timetable helper</b> from the Core. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 2</span><h2>A plan is only a hypothesis until you prototype</h2><p>Does the plan really run – and does it hit the bar?</p></div>
+  <div class="part-body">
+    <p>Your Core plan looks optimal on paper, but paper hides broken connections and outputs that miss the bar. A <b>prototype</b> is the first time you actually run it: take one real, non-personal input and <b>walk it through</b> every component in order – data, prompt, tool – saying at each arrow what output is handed on. At each check step, measure the output against its efficiency, usability or performance criterion. Where a component's output cannot really be used, or misses a criterion, you have found the gap – and finding it now, by hand, is exactly the point.</p>
+    <div class="dos">
+      <div class="box"><small style="display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px">The worked system</small>
+        <ol class="pipe">
+          <li><b>Input</b>One test question written by the teacher – no name, no number</li>
+          <li><b>Data + prompt</b>The question plus this week's timetable, asking for a two-sentence answer</li>
+          <li><b>Tool · teacher-operated</b>The text generator drafts the answer</li>
+          <li class="out"><b>Check steps</b>Time it, compare it with the timetable, watch a first-time user</li>
+        </ol>
+      </div>
+      <div class="box"><small style="display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px">The three criteria</small>
+        <p style="margin:0 0 6px"><b>Efficiency:</b> an answer within 10 seconds for at least 9 of 10 test questions.</p>
+        <p style="margin:0 0 6px"><b>Usability:</b> 3 of 3 first-time users get an answer in under a minute, without help.</p>
+        <p style="margin:0"><b>Performance:</b> at least 9 of 10 answers give the correct time and hall.</p>
+      </div>
+    </div>
+    <div id="a-lwalk"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 2</span><h2>Find the breaking point, then catch it</h2><p>How far does a problem spread – and what happens when a check fails?</p></div>
+  <div class="part-body">
+    <p>Because your qualities compete, pushing one too far breaks another – strip steps for speed and performance can collapse. So to trust your solution, <b>stress it on purpose</b>: degrade a component or over-tune a trade-off, then trace how far the problem <b>propagates</b> and measure it at your check steps. Did a check catch the below-criterion output? If not, tighten it. Then build a <b>fallback path</b>: decide which check triggers it and exactly what your solution does – reroute to a safer step or flag for a human – the moment a check fails. That is how engineers make optimised systems safe. A design you have stress-tested is one you can trust.</p>
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="f2T">
+        <title id="f2T">Pressure-testing the timetable helper. The prompt is weakened on purpose. The problem propagates to every later step. At the check, a pass goes on to the visitor; a fail triggers the fallback path – do not send the answer, flag it for the front desk – which gives the visitor a safe response instead.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1E1B3A"/></marker><marker id="ah2r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#C92A4B"/></marker><marker id="ah2g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0F8A5F"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#1E1B3A">
+          <text x="380" y="20" font-size="15" font-weight="700" text-anchor="middle">Stress one part on purpose – then catch it</text>
+          <text x="455" y="46" font-size="13" fill="#8A1330" text-anchor="middle">the problem propagates: every later step inherits it</text>
+          <path d="M230 112C230 50 680 50 680 112" fill="none" stroke="#C92A4B" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#ah2r)"/>
+          <g stroke-width="1.6">
+            <rect x="20" y="116" width="120" height="60" rx="10" fill="#EEEEFC" stroke="#1E1B3A"/>
+            <rect x="170" y="116" width="120" height="60" rx="10" fill="#FDE7EC" stroke="#C92A4B" stroke-dasharray="5 4"/>
+            <rect x="320" y="116" width="120" height="60" rx="10" fill="#fff" stroke="#4F46E5" stroke-width="2.2"/>
+            <rect x="470" y="116" width="120" height="60" rx="10" fill="#FFF7E8" stroke="#B45309"/>
+            <rect x="620" y="116" width="120" height="60" rx="10" fill="#EEEEFC" stroke="#1E1B3A"/>
+          </g>
+          <g font-size="14" font-weight="700" text-anchor="middle"><text x="80" y="142">Input</text><text x="230" y="142">Prompt</text><text x="380" y="142">Tool</text><text x="530" y="142">Check</text><text x="680" y="142">Visitor</text></g>
+          <g font-size="13" text-anchor="middle" fill="#585670"><text x="80" y="162">test question</text><text x="230" y="162" fill="#8A1330">weakened</text><text x="380" y="162">teacher-run</text><text x="530" y="162">vs criterion</text><text x="680" y="162">gets answer</text></g>
+          <g stroke="#1E1B3A" stroke-width="2.4" marker-end="url(#ah2)"><path d="M140 146H167"/><path d="M290 146H317"/><path d="M440 146H467"/><path d="M590 146H617"/></g>
+          <text x="604" y="108" font-size="13" fill="#0F8A5F" font-weight="700" text-anchor="middle">pass</text>
+          <path d="M530 176V221" stroke="#0F8A5F" stroke-width="2.4" marker-end="url(#ah2g)"/>
+          <text x="544" y="204" font-size="13" fill="#C92A4B" font-weight="700">fail</text>
+          <rect x="250" y="224" width="330" height="62" rx="10" fill="#E2F5EC" stroke="#0F8A5F" stroke-width="1.8"/>
+          <text x="415" y="250" font-size="14" font-weight="700" fill="#0A5E41" text-anchor="middle">Fallback path – triggered by the check</text>
+          <text x="415" y="272" font-size="13" fill="#585670" text-anchor="middle">don't send it: flag it for the front desk</text>
+          <path d="M580 255H680V180" fill="none" stroke="#0F8A5F" stroke-width="2.4" marker-end="url(#ah2g)"/>
+          <text x="632" y="246" font-size="13" fill="#0A5E41" text-anchor="middle">safe reply</text>
+          <text x="20" y="214" font-size="13" fill="#585670">Weaken a part or</text>
+          <text x="20" y="232" font-size="13" fill="#585670">over-push a trade-off,</text>
+          <text x="20" y="250" font-size="13" fill="#585670">then trace it.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Pressure-test on purpose: a weakened part's problem propagates downstream until a check catches it. When the check fails, the fallback path gives a safe response instead of a confident wrong one.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Engineers optimising integrated systems in the UAE – smart-city networks, port logistics, health services – deliberately push their designs to the breaking point and measure against strict targets before anyone relies on them. Pressure-testing and fallbacks are how an optimised solution earns trust from users and regulators alike.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Design &amp; Technology · Science</h4><p>Prototyping and stress-testing before release is <b>engineering practice</b> in <b>Design &amp; Technology</b>. Pushing a system to its breaking point is <b>experimental method</b> from <b>Science</b>.</p></div>
+    <div class="call amber"><h4>Tool for this week: governance &amp; decision frameworks + decision decks – pressure-test (teacher-mediated)</h4><p>1. Choose one normal non-personal input and set up your prototype. 2. Walk that input through every component aloud, measuring each check step. 3. Stress the design – weaken a component or over-push a trade-off – then add a fallback path and name its trigger. <b>Stay safe:</b> no personal data – use a normal illustrative input. Pressure-test on paper or on the prototype; the tool stays teacher-operated.</p></div>
+    <div id="a-lspread"></div>
+    <div id="a-lfall"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Worksheet</span><h2>Prototype, measure, stress, fall back</h2><p>Walk one input through your Core plan, measure it at the check steps, stress it, then add a fallback path.</p></div>
+  <div class="part-body">
+    <div class="ecard" id="pack"></div>
+    <div id="a-linput"></div>
+    <div id="a-lhand"></div>
+    <div id="a-lmeasure"></div>
+    <div id="a-lpress"></div>
+    <div id="a-lfb"></div>
+  </div>
+</section>
+
+<section class="part" id="l4">
+  <div class="part-head"><span class="pill">Lab · Unplugged</span><h2>Pressure-test the plan, on paper</h2><p>One normal input, one over-pushed trade-off, one fallback.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>You have a plan for your signature solution – here, the <b>recycling drop-off helper</b> from the Core worksheet. Working on paper, prototype it, then over-push a trade-off and add a fallback. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Fallback: ‘If the reliability check fails, route to a person rather than send the answer.’</div>
+    <div id="a-lunplug"></div>
+    <div id="a-lquiz"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Plan it optimised, then prove it under pressure</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>A signature solution is <b>architected from a goal</b>, with non-personal data, a teacher-operated tool and a prompt.</li>
+      <li>Efficiency, usability and performance <b>compete</b> – you cannot max out all three.</li>
+      <li>Set <b>one measurable criterion per quality</b> and a <b>check step</b> for each.</li>
+      <li>Name the <b>trade-off</b> you accept and <b>one risk</b> with its owner.</li>
+      <li>A <b>prototype</b> is the first real run – it exposes what the plan only assumed.</li>
+      <li><b>Pressure-test</b> on purpose: weaken a part and watch the failure propagate.</li>
+      <li>Add a <b>fallback path</b> so a failed check produces a safe response, not a confident wrong one. A stress-tested design is one you can defend and trust. Next week (Week 8) you build it.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 11 · Main Course · Term 1 Week 7 (16 – 20 Nov 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- strand + concept tags ---------- */
+const CU_E="CU · how AI solutions operate within broader systems";
+const CU_P="CU · interactions between data, tools and users";
+const CU_A="CU · trade-offs: accuracy, efficiency, usability, reliability";
+const SD_E="SD · designs AI-powered solutions for real-world tasks";
+const SD_P="SD · structured multi-step solutions addressing user needs";
+const SD_A="SD · optimises solutions for efficiency, usability and performance";
+const CE_E="CE · identifies limitations in solutions";
+const CE_P="CE · evaluates using multiple criteria and evidence";
+const CE_A="CE · justifies improvements using data and structured reasoning";
+const GE_P="GE · structured analysis of ethical and societal implications";
+const GE_A="GE · proposes responsible-use approaches considering broader impact";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["goal","The one defined problem your solution is built to solve, and for whom."],
+  ["efficiency","Doing the job with fewer steps, less data or less time."],
+  ["usability","How easily the intended user can actually use your solution."],
+  ["performance","How good the output is, judged against a measurable criterion."],
+  ["trade-off","What you give up in one quality to improve another, decided on purpose."]
+];
+const DEF_ORDER = [3,0,4,1,2];
+const DIMS = ["Efficiency","Usability","Performance"];
+const QUAL = [
+  ["qa1","⏱️ The answer appears in under 10 seconds","E"],
+  ["qa2","🙋 A first-time visitor gets an answer without help in under a minute","U"],
+  ["qa3","🎯 9 of 10 test questions get the correct class time","P"],
+  ["qa4","✂️ The prompt sends only this week's timetable, not the whole year's","E"],
+  ["qa5","🔤 The answer is two short sentences in plain language","U"],
+  ["qa6","📋 Every answer names the right hall and age group","P"]
+];
+const FLOW = [
+  "Data: this week's published timetable (non-personal)",
+  "Prompt: the visitor's question plus the timetable, asking for a short answer",
+  "Tool: the teacher-operated text generator drafts the answer",
+  "Check step: compare the draft with the timetable",
+  "Output: a short answer naming the class, time and hall"
+];
+const FLOW_ORDER = [2,4,0,3,1];
+const IO_OPTS = [
+  "The visitor's question and this week's timetable",
+  "The finished prompt",
+  "The draft answer, plus the timetable to compare it with",
+  "Only an answer that has passed the check",
+  "A list of visitors' names and phone numbers"
+];
+const IO = [
+  ["io1","The prompt takes in…",IO_OPTS,0,[2,4,0,3,1]],
+  ["io2","The text generator takes in…",IO_OPTS,1,[3,0,4,1,2]],
+  ["io3","The check step takes in…",IO_OPTS,2,[4,1,3,2,0]],
+  ["io4","The visitor receives…",IO_OPTS,3,[1,4,2,3,0]],
+  ["iot","Who operates the AI tool?",["The teacher – students design the prompt and the checks","Each student, signed in to a personal AI account","The visitors, who sign up for accounts","Nobody – it runs unchecked"],0,[1,2,0,3]],
+  ["iod","Which data may the plan use?",["The centre's published, non-personal class timetable","Past bookings with visitors' names","Photos of visitors taken in classes","Students' own login details"],0,[2,1,3,0]]
+];
+const COMPETE = [
+  ["cp1","Add a second check step that re-reads every answer against the timetable","P","E"],
+  ["cp2","Skip the check step so answers appear instantly","E","P"],
+  ["cp3","Remove the ‘choose your age group’ question so the screen is simpler","U","P"]
+];
+const CRIT = [
+  ["cr1","Efficiency – an answer appears within 10 seconds for 9 of 10 test questions",1],
+  ["cr2","Usability – the helper should be nice to use",0],
+  ["cr3","Usability – a first-time user gets an answer in under a minute, without help",1],
+  ["cr4","Performance – at least 9 of 10 test questions get the correct time and hall",1],
+  ["cr5","Performance – the answers should sound confident",0],
+  ["cr6","Efficiency – make it as fast as possible",0]
+];
+const CK_OPTS = [
+  "Time 10 test questions with a stopwatch",
+  "Watch a first-time user try it, and time them",
+  "Compare each answer with the published timetable",
+  "Trust the answer if it sounds confident"
+];
+const CHECKS = [
+  ["ck1","Efficiency – answer within 10 s for 9 of 10",CK_OPTS,0,[3,1,0,2]],
+  ["ck2","Usability – first-time user in under a minute",CK_OPTS,1,[2,3,0,1]],
+  ["ck3","Performance – 9 of 10 correct time and hall",CK_OPTS,2,[1,0,3,2]]
+];
+const RTRADE = [
+  "We prioritise performance – a correct time matters most to visitors – and accept answers taking a few seconds longer because of the extra check.",
+  "We maximise efficiency, usability and performance all at once, so there is no trade-off.",
+  "We prioritise speed, so we remove every check step.",
+  "We will decide the trade-off after we have built it."
+];
+const RISK = [
+  ["rk","One risk",["The timetable changes and the helper gives an out-of-date class time","Visitors dislike the colour of the screen","Visitors ask too many questions","The text generator gets tired"],0,[2,0,3,1]],
+  ["rm","Mitigation and check step",["Date-stamp the timetable and check the date before each answer; if it is out of date, show the front-desk number","Hide the date so visitors do not worry","Collect visitors' phone numbers to call them back","Make every answer longer"],0,[1,2,0,3]],
+  ["ro","Owner of the risk",["The staff member who updates the timetable each week","Nobody – the AI is responsible","The visitor who asked","Whoever notices first"],0,[3,0,1,2]],
+  ["rr","How the plan stays responsible and account-free",["Non-personal data, a teacher-operated tool, no student logins, outputs checked before use","Each student signs in to the AI tool with a personal account","Visitors' names are stored to personalise answers","Outputs are trusted without a check to save time"],0,[1,3,0,2]]
+];
+
+/* ---------- content: Core worksheet (recycling helper) ---------- */
+const WGOAL = [
+  "Build an AI recycling app.",
+  "Help residents at the drop-off point find the right bin for an item in under a minute, using the centre's published sorting guide.",
+  "Use the biggest AI model to answer every question about the environment.",
+  "Collect residents' names to track who recycles."
+];
+const WUSER = ["Residents dropping off items at the centre","The AI tool itself","Everyone in the world","The developers who build it"];
+const WFLOW = [
+  "Data: the centre's published sorting guide (non-personal)",
+  "Prompt: the resident's item plus the guide, asking for one bin and a reason",
+  "Tool: the teacher-operated text generator suggests a bin",
+  "Check step: confirm the guide lists that bin for the item, then show it"
+];
+const WFLOW_ORDER = [3,1,0,2];
+const WHAND = ["A suggested bin with a short reason","The resident's home address","The whole sorting guide, unchanged","A list of every bin"];
+const WCRIT = [
+  ["wcE","Efficiency",["An answer appears within 5 seconds for 9 of 10 test items","It should be quick","It uses the newest model","It answers every question ever asked"],0,[1,2,0,3]],
+  ["wcU","Usability",["A first-time resident gets a bin in under a minute, without help","It looks modern","Residents should like it","It has lots of settings"],0,[2,0,3,1]],
+  ["wcP","Performance",["At least 18 of 20 test items get the bin the guide gives","Answers sound confident","It is mostly right","It feels accurate"],0,[3,1,2,0]]
+];
+const WK_OPTS = ["Time 10 test items from question to answer","Watch three first-time users try it, and time them","Compare 20 answers with the published guide","Accept any answer that sounds sure of itself"];
+const WCHECK = [
+  ["wkE","Check step for efficiency",WK_OPTS,0,[3,2,0,1]],
+  ["wkU","Check step for usability",WK_OPTS,1,[2,3,1,0]],
+  ["wkP","Check step for performance",WK_OPTS,2,[0,3,1,2]],
+  ["wkW","Why every criterion needs a check step",["A confident output can still be wrong, so it is judged – never trusted on sight","Checks make the solution look more professional","Checks are only needed when the tool is new","A check step replaces the need for a criterion"],0,[2,0,3,1]]
+];
+const WTRADE = [
+  ["wt","The trade-off you accept",["We prioritise performance: the check adds a few seconds, which we accept so residents are not sent to the wrong bin","No trade-off – we max out all three qualities","We drop the check to be fastest, whatever the errors","We add every possible feature so it is perfect"],0,[1,0,3,2]],
+  ["wrk","One risk",["An item missing from the guide gets a confident, guessed bin","Residents enjoy the helper too much","The guide is too short to read","The bins are the wrong colour"],0,[2,3,0,1]],
+  ["wmt","The mitigation that reduces it",["If the item is not in the guide, say ‘not listed – please ask staff’ instead of guessing","Let the tool guess more confidently","Ask residents for their address","Remove the check step"],0,[3,1,2,0]],
+  ["wow","The risk's owner",["The recycling-centre staff who keep the guide up to date","The AI tool","The resident who asked","Nobody in particular"],0,[1,3,0,2]]
+];
+
+/* ---------- content: Core unplugged + quiz ---------- */
+const UGOAL = [
+  "Make a library app with AI.",
+  "Find books.",
+  "Help students find the shelf code for a topic in under a minute, using the library's published catalogue.",
+  "Use AI to read every book in the library."
+];
+const UCRIT = [
+  ["uc1","A shelf code appears within 5 seconds","E"],
+  ["uc2","A first-time user finishes in under a minute","U"],
+  ["uc3","9 of 10 test topics get the correct shelf code","P"]
+];
+const UCHECK = ["Look up each test topic in the catalogue and compare the shelf codes","Ask the tool whether it is sure","Count how many words the answer has","Trust it if the shelf code looks real"];
+const UTRADE = ["We accept a slightly slower answer for an extra catalogue check; risk: an out-of-date catalogue, owned by the librarian who updates it","We max out all three qualities, so there is no risk","We skip the check for speed; nobody owns the risk","We store each student's search history so we can improve it"];
+const QUIZ = [
+  ["q1","Why can a signature solution not maximise efficiency, usability and performance all at once?",["Because only one quality can ever be measured.","The three qualities compete, so improving one usually costs another.","Because usability does not apply to student projects."],1],
+  ["q2","What should you set for each quality before you build?",["As many features as possible for that quality.","Nothing – you judge it by feel at the end.","One measurable criterion, so you can tell whether the quality is met."],2],
+  ["q3","What does architecting your solution include besides the goal and components?",["Naming the trade-off you accept and one risk with an owner.","Choosing the largest possible AI model.","Promising that nothing can ever go wrong."],0]
+];
+const TF = [
+  ["tf1","You can maximise efficiency, usability and performance all at once.","F"],
+  ["tf2","Each quality should have a measurable criterion you can check.","T"],
+  ["tf3","A good plan names the trade-off you accept and a risk with its owner.","T"]
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["prototype","A first working version you walk through by hand to see if the components really connect."],
+  ["walk-through","Tracing one input through every component, in order, up to each check step."],
+  ["pressure-test","Stressing your design on purpose, by weakening a part or over-pushing a trade-off, to find where it breaks."],
+  ["propagate","How a problem in one component spreads to the components downstream."],
+  ["fallback path","What your solution does when a check fails, instead of passing on a below-criterion output."]
+];
+const LDEF_ORDER = [2,4,0,3,1];
+const LSTEPS = [
+  "Choose one normal, non-personal test question",
+  "Hand it to the prompt with this week's timetable, and say what the prompt hands on",
+  "The teacher runs the tool – say what output it hands on",
+  "At each check step, measure the output against its criterion",
+  "Note any gap: an output that cannot be used or misses a criterion"
+];
+const LSTEP_ORDER = [3,1,4,0,2];
+const LWHY = ["Paper hides broken connections and missed bars – finding the gap now, by hand, is the point","A prototype always works first time","It saves you writing success criteria","It proves the plan can never fail"];
+const LSP1 = ["Only the prompt is affected – the output is still fine","With no timetable, the tool guesses times; the guesses flow on to the check and, if the check is weak, to the visitor","The visitor's screen stops working","Nothing changes – going faster always keeps quality"];
+const LSP2 = ["Remove the check – it is not working","Trust the outputs because they passed","Tighten the check: compare the time and hall with the timetable","Make every answer longer"];
+const LFALL = [
+  ["fa1","Names which check triggers it",1],
+  ["fa2","Says exactly what the solution does instead – reroute to a safer step or flag it for a person",1],
+  ["fa3","Passes the below-criterion answer on anyway, with the warning hidden",0],
+  ["fa4","Uses no personal data – e.g. shows the front-desk number rather than collecting the visitor's phone number",1],
+  ["fa5","Switches the checks off when the system is busy",0],
+  ["fa6","Asks students to sign in with personal accounts to fix the answers",0]
+];
+const LINPUT = [
+  "A real visitor's message, with their name and phone number",
+  "‘Is there a beginners' swim class on Saturday morning?’ – written by the teacher",
+  "A classmate's login details, to test a sign-in page",
+  "A trick question in a made-up language, to break it first"
+];
+const LSETUP = ["Your Core plan: the component flow, the three criteria and a check step for each","A blank page – plan as you go","Only the tool – the plan is not needed","A list of your classmates' names"];
+const LH_OPTS = [
+  "This week's timetable",
+  "The question plus the timetable, asking for a two-sentence answer",
+  "A draft answer naming the class, time and hall",
+  "Only an answer that matches the timetable",
+  "The visitor's phone number"
+];
+const LHAND = [
+  ["lh1","The data step hands on…",LH_OPTS,0,[2,4,0,3,1]],
+  ["lh2","The prompt hands on…",LH_OPTS,1,[3,0,4,1,2]],
+  ["lh3","The tool hands on…",LH_OPTS,2,[4,1,3,2,0]],
+  ["lh4","The check step hands on…",LH_OPTS,3,[1,4,2,3,0]]
+];
+const LRUN = [
+  ["mr1","Efficiency – within 10 s for 9 of 10","10 of 10 within 6 s","M"],
+  ["mr2","Usability – 3 of 3 first-time users under a minute","2 of 3 under a minute","X"],
+  ["mr3","Performance – 9 of 10 correct time and hall","7 of 10 (3 gave last week's times)","X"]
+];
+const LFIRST = ["Performance: 3 answers used last week's times – the data step must hand on this week's timetable","Efficiency: it is already fast, so make it faster","Nothing – 2 of 3 criteria is close enough","Usability: change the screen colour"];
+const LPRESS = [
+  ["pw","What you weakened / over-pushed",["The prompt – stripped to the question only, to over-push efficiency","The visitors' phones","The front-desk opening hours","Nothing – the design was left as it was"],0,[2,0,3,1]],
+  ["pb","What broke (how it propagated)",["With no timetable the tool guessed; 6 of 10 answers were wrong, and the weak check passed them all to the visitor","Answers became slower, so nothing broke","Only the prompt was affected","The check caught every wrong answer"],0,[1,3,0,2]],
+  ["pt","The check you tighten",["The performance check: compare the time and hall with the timetable, not just ‘mentions a time’","The efficiency check: allow 60 seconds","Remove the usability check","No change – the check passed, so it works"],0,[3,1,2,0]]
+];
+const LFB = [
+  ["ft","Trigger – which check fails",["The performance check: the time or hall does not match the timetable","The visitor types too fast","The answer is in plain language","Any question on a Saturday"],0,[1,2,0,3]],
+  ["fx","What the solution does instead",["Do not send the answer; show ‘Please check with the front desk’ and the published timetable","Send the answer anyway, marked ‘probably right’","Ask the visitor for their phone number","Switch off the check and try again"],0,[2,0,3,1]],
+  ["fo","Who handles a flagged question",["Front-desk staff, who answer from the official timetable","The AI tool, by guessing again","The visitor, alone","Nobody – it is dropped"],0,[3,1,0,2]]
+];
+const UN1 = ["It meets the efficiency and performance criteria – it can be shown to the resident","It misses the efficiency criterion","It cannot be judged without personal data","It proves the helper can never fail"];
+const UN2 = [
+  "Nothing breaks – removing the check only makes it faster.",
+  "Only the check is affected.",
+  "The resident is asked to sign in.",
+  "The tool guesses ‘general waste’; with no check, the wrong bin goes straight to the resident – a confident wrong answer."
+];
+const UN3 = ["Trigger: the item is not found in the guide. Action: say ‘not listed – please ask staff’ instead of guessing","Trigger: none. Action: always send the answer","Trigger: the answer is slow. Action: skip the check","Trigger: the item is common. Action: ask for the resident's address"];
+const LQUIZ = [
+  ["lq1","Why is a plan “only a hypothesis” until you prototype?",["Because plans are never useful.","Paper hides broken connections and outputs that miss the bar – running it reveals them.","Because a prototype always works first time."],1],
+  ["lq2","What is the point of pressure-testing your own solution?",["To prove the solution can never fail.","To make the solution run faster.","To find the breaking point on purpose, before real use does."],2],
+  ["lq3","What is a fallback path?",["A defined action the solution takes when a check fails, instead of a confident wrong answer.","A way to skip the checks to save time.","The main path when everything works."],0]
+];
+const LTF = [
+  ["ltf1","A plan that has never run is already proven.","F"],
+  ["ltf2","Pressure-testing feeds a hard case to find the breaking point on purpose.","T"],
+  ["ltf3","A fallback path is a way to skip the checks.","F"]
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const rowsF=list=>list.map(([k,,,c])=>({k,ok:v=>eq(v,c)}));
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CU_A,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"The goal is the one defined problem, and for whom. Efficiency is fewer steps, less data or less time. Usability is how easily the intended user can use it. Performance is how good the output is against a measurable criterion. A trade-off is what you give up in one quality to improve another, on purpose."},
+ {id:"qual",mount:"a-qual",section:"Core · Part 1",title:"Efficiency, usability or performance?",sub:"Objective 1 · the three qualities · "+CU_A,ico:"🗂️",
+  fields:QUAL.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Speed and sending less data are efficiency. An answer a first-timer can get without help, in plain language, is usability. Correct times, halls and age groups – judged against a measurable bar – are performance."},
+ {id:"flow",mount:"a-flow",section:"Core · Part 1",title:"Order the component flow",sub:"Objective 1 · ordered steps (Figure 1) · "+SD_P,ico:"🧭",
+  fields:FLOW.map((_,i)=>({k:"f"+i,ok:v=>eq(v,i)})),
+  explain:"Data feeds the prompt, the prompt drives the teacher-operated tool, the tool's draft goes to the check step, and only then does the output reach the visitor. Each step's output becomes the next step's input."},
+ {id:"io",mount:"a-io",section:"Core · Part 2",title:"Name the inputs and outputs",sub:"Objective 2 · how each output feeds the next · "+CU_P,ico:"🔗",
+  fields:rowsF(IO),
+  explain:"The prompt takes the question and the timetable; the generator takes the finished prompt; the check takes the draft and the timetable to compare; the visitor receives only a checked answer. The tool is teacher-operated – students design the prompt and checks – and the data is the published, non-personal timetable."},
+ {id:"compete",mount:"a-compete",section:"Core · Part 3",title:"You cannot max out everything",sub:"Which quality rises – and which falls? · "+CU_A,ico:"⚖️",
+  fields:COMPETE.flatMap(([k,,u,d])=>[{k:k+"u",ok:v=>eq(v,u)},{k:k+"d",ok:v=>eq(v,d)}]),
+  explain:"An extra check raises performance but costs time (efficiency). Skipping the check makes it faster (efficiency) but lets wrong answers through (performance). A simpler screen is easier to use (usability) but loses the age-group detail, so answers can be wrong for the visitor (performance). Improving one quality usually costs another."},
+ {id:"crit",mount:"a-crit",section:"Core · Part 3",title:"Is it a measurable criterion?",sub:"Objective 1 · measurable success criteria · "+CE_P,ico:"📏",
+  fields:CRIT.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"A criterion is measurable when you can tell whether it is met: 10 seconds for 9 of 10, under a minute without help, 9 of 10 correct. ‘Nice to use’, ‘sound confident’ and ‘as fast as possible’ cannot be checked – and a confident answer can still be wrong."},
+ {id:"checks",mount:"a-checks",section:"Core · Part 3",title:"A check step for each criterion",sub:"Objective 1 · judge the output, never trust it on sight · "+CE_P,ico:"🔎",
+  fields:rowsF(CHECKS),
+  explain:"Efficiency is checked by timing test questions; usability by watching and timing a first-time user; performance by comparing each answer with the published timetable. Sounding confident is never a check."},
+ {id:"risk",mount:"a-risk",section:"Core · Part 3",title:"Name the trade-off, the risk and its owner",sub:"Objective 3 · trade-off, risk, mitigation, owner · "+GE_A,ico:"🛡️",
+  fields:[{k:"rt",radio:1,ok:v=>eq(v,0)},...rowsF(RISK)],
+  explain:"A defensible trade-off names the quality you prioritise for your user and what you accept giving up. An out-of-date timetable is a real risk; date-stamping and checking the date before each answer reduces it, with the staff member who updates the timetable as owner. The plan stays responsible: non-personal data, teacher-operated tool, no student logins, outputs checked."},
+ {id:"wsgoal",mount:"a-wsgoal",section:"Core worksheet",title:"1 · Write your goal in one sentence",sub:"Worksheet · what problem, for which user · "+SD_E,ico:"🎯",cls:"ws",
+  fields:[{k:"wg",radio:1,ok:v=>eq(v,1)},{k:"wus",ok:v=>eq(v,0)}],
+  explain:"A good goal names one problem and one user and hints at the bar: help residents at the drop-off point find the right bin in under a minute, from the published guide. ‘An AI recycling app’ names no problem; ‘every question about the environment’ is not one defined problem; collecting names is personal data."},
+ {id:"wscomp",mount:"a-wscomp",section:"Core worksheet",title:"2 · List your components and connect them",sub:"Worksheet · each output feeds the next · "+SD_P,ico:"🗂️",cls:"ws",
+  fields:[...WFLOW.map((_,i)=>({k:"wf"+i,ok:v=>eq(v,i)})),{k:"wh",ok:v=>eq(v,0)}],
+  explain:"The guide (data) feeds the prompt, the prompt drives the teacher-operated tool, and the tool hands a suggested bin with a short reason to the check step, which confirms it against the guide before it is shown."},
+ {id:"wscrit",mount:"a-wscrit",section:"Core worksheet",title:"3 · Set one measurable criterion per quality",sub:"Worksheet · criteria for all three qualities · "+SD_A,ico:"📊",cls:"ws",
+  fields:rowsF(WCRIT),
+  explain:"Each criterion has a number you can check: within 5 seconds for 9 of 10, a first-timer in under a minute without help, 18 of 20 matching the guide. ‘Quick’, ‘looks modern’ and ‘mostly right’ cannot be measured."},
+ {id:"wscheck",mount:"a-wscheck",section:"Core worksheet",title:"4 · Add a check step for each criterion",sub:"Worksheet · check steps that judge the output · "+CE_P,ico:"🔎",cls:"ws",
+  fields:rowsF(WCHECK),
+  explain:"Time the test items for efficiency, watch and time first-time users for usability, and compare answers with the guide for performance. Every criterion needs a check because a confident output can still be wrong."},
+ {id:"wstrade",mount:"a-wstrade",section:"Core worksheet",title:"5 · Name the trade-off and one risk",sub:"Worksheet · trade-off, risk, mitigation, owner · "+GE_A,ico:"🛡️",cls:"ws",
+  fields:rowsF(WTRADE),
+  explain:"The plan accepts a few extra seconds for a check that keeps residents from the wrong bin. The risk is an item the guide does not list being given a confident guess; the mitigation is to say ‘not listed – please ask staff’; the staff who keep the guide up to date own it."},
+ {id:"unplug",mount:"a-unplug",section:"Core · Unplugged",title:"Architect a signature solution, on paper",sub:"Unplugged activity · goal, criteria, check, trade-off · "+SD_A,ico:"✏️",
+  fields:[{k:"ug",radio:1,ok:v=>eq(v,2)},...UCRIT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"uck",ok:v=>eq(v,0)},{k:"utr",ok:v=>eq(v,0)}],
+  explain:"The goal names the problem, the user and the bar. Speed is efficiency, a first-timer finishing in under a minute is usability, and correct shelf codes are performance – checked by looking each test topic up in the catalogue. The plan names the trade-off it accepts and a risk with its owner, and stores no personal data."},
+ {id:"quiz",mount:"a-quiz",section:"Core · Unplugged",title:"Architect check",sub:"Quick quiz · 3 questions and 3 true or false · "+CU_A,ico:"✅",cls:"quiz",
+  fields:[...QUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...TF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: The three qualities compete, so improving one usually costs another. 2: Set one measurable criterion per quality. 3: Architecting includes naming the trade-off you accept and a risk with an owner. True or false: you cannot maximise all three (false); each quality needs a checkable criterion (true); a good plan names its trade-off and a risk with an owner (true)."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+CE_E,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"A prototype is a first working version you walk through by hand. A walk-through traces one input through every component. A pressure-test stresses the design on purpose. Propagate is how a problem spreads downstream. A fallback path is what the solution does when a check fails."},
+ {id:"lwalk",mount:"a-lwalk",section:"Lab · Part 1",title:"Order the walk-through",sub:"Objective 1 · walk it through, component by component · "+SD_P,ico:"🧭",
+  fields:[...LSTEPS.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),{k:"lwy",ok:v=>eq(v,0)}],
+  explain:"Choose a normal non-personal input, hand it to the prompt with the data, let the teacher run the tool, measure at each check step, then note any gap. You walk it through by hand because paper hides broken connections and missed bars."},
+ {id:"lspread",mount:"a-lspread",section:"Lab · Part 2",title:"Trace how the problem spreads",sub:"Objective 2 · how a weak part propagates · "+CU_E,ico:"🌀",
+  fields:[{k:"sp1",radio:1,ok:v=>eq(v,1)},{k:"sp2",radio:1,ok:v=>eq(v,2)},{k:"sp3",ok:v=>eq(v,"P")}],
+  explain:"Strip the timetable out of the prompt and the tool has nothing to work from, so it guesses – and every later step inherits the guess. A check that only asks ‘does it mention a time?’ lets guesses through, so tighten it to compare with the timetable. Stripping steps for speed made performance collapse."},
+ {id:"lfall",mount:"a-lfall",section:"Lab · Part 2",title:"A good fallback path…",sub:"Objective 3 · fallback path, no personal data · "+GE_A,ico:"🔁",
+  fields:LFALL.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"A good fallback names its trigger, says exactly what happens instead – reroute or flag for a person – and uses no personal data. Passing on a below-criterion answer, switching checks off or asking for student logins all defeat its purpose."},
+ {id:"linput",mount:"a-linput",section:"Lab worksheet",title:"1 · Choose a normal, non-personal test input",sub:"Worksheet · safe test input · "+GE_P,ico:"🧪",cls:"ws",
+  fields:[{k:"lin",radio:1,ok:v=>eq(v,1)},{k:"lst",ok:v=>eq(v,0)}],
+  explain:"Start with a normal question written by the teacher – no names, numbers or logins. Trick questions come later, in the pressure-test. Set up your Core plan first: flow, criteria and a check step for each."},
+ {id:"lhand",mount:"a-lhand",section:"Lab worksheet",title:"2 · Walk it through: what does each step hand on?",sub:"Worksheet · say it aloud at each arrow · "+SD_P,ico:"📓",cls:"ws",
+  fields:rowsF(LHAND),
+  explain:"The data step hands on this week's timetable; the prompt hands on the question plus the timetable; the tool hands on a draft answer; the check step hands on only an answer that matches the timetable. No step ever needs the visitor's phone number."},
+ {id:"lmeasure",mount:"a-lmeasure",section:"Lab worksheet",title:"3 · Measure at each check step",sub:"Worksheet · met or missed, from the evidence · "+CE_P,ico:"📊",cls:"ws",
+  fields:[...LRUN.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),{k:"lfx",ok:v=>eq(v,0)}],
+  explain:"10 of 10 within 6 s meets the efficiency bar. 2 of 3 first-time users misses the usability bar of 3 of 3. 7 of 10 misses the performance bar of 9 of 10 – and the cause is a data gap: last week's timetable reached the prompt."},
+ {id:"lpress",mount:"a-lpress",section:"Lab worksheet",title:"4 · Stress the design on purpose",sub:"Worksheet · weaken, trace, tighten · "+CE_A,ico:"🌪️",cls:"ws",
+  fields:rowsF(LPRESS),
+  explain:"Over-pushing efficiency by stripping the timetable from the prompt made the tool guess; 6 of 10 wrong answers flowed through a check that only asked ‘does it mention a time?’. The evidence justifies tightening that check to compare time and hall with the timetable."},
+ {id:"lfb",mount:"a-lfb",section:"Lab worksheet",title:"5 · Add a fallback path",sub:"Worksheet · trigger, action, person · "+GE_A,ico:"🔁",cls:"ws",
+  fields:rowsF(LFB),
+  explain:"The fallback is triggered when the performance check fails. Instead of sending a wrong answer, the helper says ‘Please check with the front desk’ and shows the published timetable, and front-desk staff answer from the official timetable – no personal data collected."},
+ {id:"lunplug",mount:"a-lunplug",section:"Lab · Unplugged",title:"Pressure-test the plan, on paper",sub:"Unplugged activity · normal input, over-pushed trade-off, fallback · "+CE_A,ico:"✏️",
+  fields:[{k:"un1",ok:v=>eq(v,0)},{k:"un2",radio:1,ok:v=>eq(v,3)},{k:"un3",ok:v=>eq(v,0)}],
+  explain:"The normal input passed its checks in 4 seconds. Removing the check to go faster let a guessed bin for an unlisted item go straight to the resident – a confident wrong answer. The fallback is triggered when the item is not in the guide, and says ‘not listed – please ask staff’."},
+ {id:"lquiz",mount:"a-lquiz",section:"Lab · Unplugged",title:"Prototype check",sub:"Quick quiz · 3 questions and 3 true or false · "+CE_E,ico:"✅",cls:"quiz",
+  fields:[...LQUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...LTF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: Paper hides broken connections and missed bars – running it reveals them. 2: Pressure-testing finds the breaking point on purpose, before real use does. 3: A fallback path is a defined action when a check fails. True or false: an unrun plan is not proven (false); pressure-testing feeds a hard case on purpose (true); a fallback never skips the checks (false)."}
+];
+
+/* ---------- state ---------- */
+const KEY="g11-mw7-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#brief").innerHTML=`<header><small>Practice brief · illustrative</small><b>The recycling drop-off helper</b></header>
+<div class="in">
+  <p class="task">A neighbourhood recycling centre publishes a sorting guide: which of its six bins each type of item goes in – paper, cans, plastic bottles, glass, electronics or general waste – plus its opening hours. Residents often put items in the wrong bin, and staff answer the same questions all day. Use this brief to practise each worksheet task.</p>
+  <p class="note" style="margin:0">Then, on paper, do the same five tasks for the real, non-personal problem <b>you</b> chose for your signature solution.</p>
+</div>`;
+$("#pack").innerHTML=`<header><small>Prototype log · illustrative</small><b>Sports-centre timetable helper: first walk-through and pressure-test</b></header>
+<div class="in">
+  <p class="task"><b>Normal run.</b> Ten test questions written by the teacher (no real visitors), timed with a stopwatch and compared with the published timetable; three classmates tried it as first-time users.</p>
+  <table class="t"><thead><tr><th>Criterion</th><th>Measured</th></tr></thead>
+  <tbody>${LRUN.map(([,c,m])=>`<tr><td>${esc(c)}</td><td>${esc(m)}</td></tr>`).join("")}</tbody></table>
+  <p class="task" style="margin-top:12px"><b>Pressure-test run.</b> To over-push efficiency, the prompt was stripped to the question only – no timetable. Answers came in about 3 s, but only 4 of 10 gave the correct time and hall. The performance check only asked ‘does the answer mention a time?’, so all 10 passed it.</p>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+const selRows=(rows,ph)=>rows.map(([k,t,o,,ord])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,o,ph||"Choose…",ord)}</div>`).join("");
+const segD=(k,label)=>seg(k,DIMS,["E","U","P"],label).replace('class="seg"','class="seg dims"');
+const segRows=list=>list.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${segD(k,t)}</div>`).join("");
+const orderRows=(pre,list,ord,lab)=>list.map((_,i)=>`<div class="pair" data-item="${pre}${i}"><span class="t">${lab} ${i+1}</span>${sel(pre+i,list,"Choose…",ord)}</div>`).join("");
+const selD=(key,ord)=>`<select data-key="${key}" aria-label="Choose a quality"><option value="">Choose…</option>${ord.map(i=>`<option value="${"EUP"[i]}"${eq(S.ans[key],"EUP"[i])?" selected":""}>${DIMS[i]}</option>`).join("")}</select>`;
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "qual":
+    return `<p class="how">The timetable helper's plan lists six targets. Which quality is each one mainly about?</p>`+segRows(QUAL);
+  case "flow":
+    return `<p class="how">Use Figure 1. Put the timetable helper's components in order, so each step's output feeds the next.</p>`+orderRows("f",FLOW,FLOW_ORDER,"Step");
+  case "io":
+    return `<p class="how">For each component of the timetable helper, choose what it takes in – the output of the step before. Then answer the two governance questions.</p>`+selRows(IO);
+  case "compete":
+    return `<p class="how">Each change pushes one quality up and another down. Choose which quality rises and which one pays for it.</p>`+
+      COMPETE.map(([k,t])=>`<div class="scen"><p>${esc(t)}</p><div class="two">
+        <div data-item="${k}u"><span>Rises</span>${selD(k+"u",[1,2,0])}</div>
+        <div data-item="${k}d"><span>Falls</span>${selD(k+"d",[2,0,1])}</div></div></div>`).join("");
+  case "crit":
+    return boxes(CRIT,"Tick every success criterion that is measurable – one you could check and say ‘met’ or ‘missed’. Leave the others unticked.");
+  case "checks":
+    return `<p class="how">Match each criterion to the check step that judges it.</p>`+selRows(CHECKS);
+  case "risk":
+    return `<p class="q" id="q-rt">Which trade-off statement could you defend to your user?</p>${radios("rt",RTRADE)}
+      <p class="q" style="margin-top:16px">Complete the risk plan for the timetable helper.</p>`+selRows(RISK);
+  case "wsgoal":
+    return `<p class="q" id="q-wg">Which is the best one-sentence goal for the recycling helper?</p>${radios("wg",WGOAL)}
+      <div class="pair" data-item="wus" style="margin-top:12px"><span class="t">Who is the user?</span>${sel("wus",WUSER,"Choose…",[2,0,3,1])}</div>`;
+  case "wscomp":
+    return `<p class="how">Put the recycling helper's components in order, so each output feeds the next.</p>`+orderRows("wf",WFLOW,WFLOW_ORDER,"Step")+
+      `<div class="pair" data-item="wh" style="margin-top:10px"><span class="t">What does the tool hand on to the check step?</span>${sel("wh",WHAND,"Choose…",[1,3,0,2])}</div>`;
+  case "wscrit":
+    return `<p class="how">Choose one measurable criterion for each quality.</p>`+selRows(WCRIT);
+  case "wscheck":
+    return `<p class="how">Add a check step that judges each criterion.</p>`+selRows(WCHECK);
+  case "wstrade":
+    return `<p class="how">Name the trade-off your plan accepts and one risk, with its mitigation and owner.</p>`+selRows(WTRADE);
+  case "unplug":
+    return `<p class="q" id="q-ug">1. Write your goal in one sentence. Which goal is best?</p>${radios("ug",UGOAL)}
+      <p class="q">2. Set one measurable criterion and a check step for each quality. Which quality does each criterion measure?</p>`+segRows(UCRIT)+
+      `<div class="pair" data-item="uck" style="margin-top:10px"><span class="t">Check step for the performance criterion</span>${sel("uck",UCHECK,"Choose…",[3,1,0,2])}</div>
+      <p class="q">3. Name the trade-off you accept and one risk with its owner.</p>
+      <div class="pair" data-item="utr"><span class="t">Trade-off and risk</span>${sel("utr",UTRADE,"Choose…",[2,0,3,1])}</div>`;
+  case "quiz":
+    return quiz(QUIZ,TF);
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lwalk":
+    return `<p class="how">Put the walk-through of the timetable helper in order.</p>`+orderRows("lo",LSTEPS,LSTEP_ORDER,"Step")+
+      `<div class="pair" data-item="lwy" style="margin-top:10px"><span class="t">Why walk it through by hand first?</span>${sel("lwy",LWHY,"Choose…",[2,0,3,1])}</div>`;
+  case "lspread":
+    return `<p class="q" id="q-sp1">1. To over-push efficiency, you strip the prompt to the question only – no timetable. What happens downstream?</p>${radios("sp1",LSP1)}
+      <p class="q" id="q-sp2">2. Your performance check only asks ‘does the answer mention a time?’, so the guessed answers pass. What should you do?</p>${radios("sp2",LSP2)}
+      <p class="q">3. Which quality collapsed when you stripped steps for speed?</p>
+      <div class="row" data-item="sp3"><span class="t">The quality that collapsed</span>${segD("sp3","The quality that collapsed")}</div>`;
+  case "lfall":
+    return boxes(LFALL,"Tick every feature of a good fallback path. Leave the others unticked.");
+  case "linput":
+    return `<p class="q" id="q-lin">Which is the right first test input for the walk-through?</p>${radios("lin",LINPUT)}
+      <div class="pair" data-item="lst" style="margin-top:12px"><span class="t">What do you set up before you start?</span>${sel("lst",LSETUP,"Choose…",[1,3,0,2])}</div>`;
+  case "lhand":
+    return `<p class="how">Walk the test question through the timetable helper aloud. What does each step hand to the next?</p>`+selRows(LHAND);
+  case "lmeasure":
+    return `<p class="how">Use the prototype log above. At each check step, did the output meet its criterion?</p>`+
+      LRUN.map(([k,c,m])=>`<div class="row" data-item="${k}"><span class="t">${esc(c)}: <i>${esc(m)}</i></span>${seg(k,["Met","Missed"],["M","X"],c)}</div>`).join("")+
+      `<div class="pair" data-item="lfx" style="margin-top:10px"><span class="t">Which gap do you fix first, and why?</span>${sel("lfx",LFIRST,"Choose…",[2,0,3,1])}</div>`;
+  case "lpress":
+    return `<p class="how">Use the pressure-test run in the log. Complete the worksheet table.</p>`+selRows(LPRESS);
+  case "lfb":
+    return `<p class="how">Design the fallback path: name its trigger and exactly what the solution does the moment that check fails.</p>`+selRows(LFB);
+  case "lunplug":
+    return `<p class="q">1. Walk one normal input through and note the result.</p>
+      <div class="pair" data-item="un1"><span class="t">‘An empty glass jar’ → the tool suggests ‘glass’; the guide lists it; 4 seconds</span>${sel("un1",UN1,"Choose…",[1,2,0,3])}</div>
+      <p class="q" id="q-un2">2. Over-push one trade-off: to make it faster you remove the check step, then test ‘a used battery’, which the guide does not list. What breaks, and how does it propagate?</p>${radios("un2",UN2)}
+      <p class="q">3. Write a fallback path and its trigger.</p>
+      <div class="pair" data-item="un3"><span class="t">Fallback path</span>${sel("un3",UN3,"Choose…",[2,0,3,1])}</div>`;
+  case "lquiz":
+    return quiz(LQUIZ,LTF);
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 11 Main Course · Term 1 Week 7 (16 – 20 Nov 2026) · Core + Lab · Architect Your Signature Solution + Prototype and Pressure-Test</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
