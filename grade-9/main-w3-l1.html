@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Designing a Solution + Build, Test, Chain – Grade 9 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#D7263D; --main2:#EF4444; --deep:#8A1024;
+  --ink:#2B1A14; --muted:#6B5750; --paper:#FFF7F4; --card:#FFFFFF;
+  --line:#F5DDD5; --soft:#FFEFE9;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#FDBA74,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#F59E0B);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#2B1A14,#6E3A2E)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#FDD8C8 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FFFAF8;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FFFCFA}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#F59E0B)}
+.act-head.ws{background:linear-gradient(120deg,#2B1A14,#7A3F2E)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#FFF0EA}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #EFC3B3;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #F0B49E;border-radius:12px;padding:10px 14px;background:#FFF9F6;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(43,26,20,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#2B1A14;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 9 Main Course, Term 1</span><span class="pill">Week 3 Core + Week 3 Lab</span><span class="pill">📅 Teach: Friday 23 Oct 2026 (week of 19 – 23 Oct)</span></div>
+    <h1>Designing a Solution + Build, Test, Chain</h1>
+    <p>Today you become a designer. You take a defined problem and design a structured workflow whose components – data, prompt and tool – work together to solve it, then test whether the solution really holds. Then, in the Lab, you get real build time: you fix the weakest component one change at a time, chain a second tool step, and prove the solution is reliable across two datasets.</p>
+    <p class="meta"><b>Strand:</b> Solution Design &nbsp;·&nbsp; <b>Role:</b> Solution Architects</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 9B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 3 of Term 1 – week of 19 to 23 October 2026.</b> Monday 19 and Tuesday 20 are PD days; the Grade 9 AI period is on <b>Friday 23 October</b>. Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Designing a Solution</a>, then move on to the <a href="#lab">Lab: Build, Test, Chain</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Design it.</b> I can design a structured workflow in which data, a prompt and a tool work together to complete a defined task.</li>
+      <li><b>Build and justify.</b> I can build and run the workflow and justify why each component gave the result it did.</li>
+      <li><b>Use the words.</b> I can use terms like component, data, prompt, tool and interaction correctly to explain how my solution fits together.</li>
+      <li><b>Lab: build, test, chain.</b> I can construct a multi-component workflow and test it until it solves my defined problem, find the component that lets it down and change one thing at a time, and use design vocabulary to justify why my solution is reliable.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 3 Core · Designing a Solution</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Name the components</b><small>Data, prompt, tool, output</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Define the problem first</b><small>Then build and run it</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Verify, don't trust</b><small>Check each component · worksheet</small></a></li>
+    </ol>
+    <h3 class="rh">Week 3 Lab · Build, Test, Chain</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Change one at a time</b><small>Isolate the weak component</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Chain the components</b><small>One output feeds the next</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Prove it is reliable</b><small>Test on two datasets · worksheet</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Components that interact</h2><p>Why is a solution not one magic step?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In Week 2 you tested a system and justified which component mattered most to the output. Now you design a solution of your own.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">A solution is components that interact</h3>
+    <p>A structured AI solution is not one magic step – it is a set of <b>components</b> that <b>interact</b>. You supply <b>data</b>, you write a <b>prompt</b> that tells the <b>tool</b> what to do, the tool does the work, and you evaluate the <b>output</b> against the problem you defined. The interactions are the point: a vague prompt gives the tool nothing useful to do, and messy data gives a messy output no matter how good the tool is. When you design, you specify each component and think about how a change in one ripples through the others.</p>
+    <figure>
+      <svg viewBox="0 0 760 270" role="img" aria-labelledby="f1T">
+        <title id="f1T">A structured workflow of four interacting components. Data and a prompt both feed the tool; the tool produces the output; the output is evaluated against the defined problem, and the result feeds back to adjust a component.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <g stroke="#2B1A14" stroke-width="1.6">
+            <rect x="20" y="30" width="180" height="74" rx="12" fill="#E2F5EC"/>
+            <rect x="20" y="146" width="180" height="74" rx="12" fill="#F4F0FC"/>
+            <rect x="296" y="82" width="180" height="88" rx="12" fill="#FFEFE9" stroke="#D7263D" stroke-width="2.4"/>
+            <rect x="566" y="82" width="176" height="88" rx="12" fill="#fff"/>
+          </g>
+          <g stroke="#2B1A14" stroke-width="2.4" fill="none" marker-end="url(#ah)"><path d="M200 74L292 108"/><path d="M200 180L292 148"/><path d="M476 126H562"/></g>
+          <g font-size="17" font-weight="800" text-anchor="middle"><text x="110" y="63">DATA</text><text x="110" y="179">PROMPT</text><text x="386" y="120" fill="#D7263D">TOOL</text><text x="654" y="120">OUTPUT</text></g>
+          <g font-size="13.5" text-anchor="middle" fill="#6B5750"><text x="110" y="86">what you supply</text><text x="110" y="202">directs the tool</text><text x="386" y="144">the AI step</text><text x="654" y="144">result you evaluate</text></g>
+          <path d="M654 170V248H110V224" stroke="#D7263D" stroke-width="2" stroke-dasharray="6 4" fill="none" marker-end="url(#ah)"/>
+          <text x="382" y="240" font-size="14" font-weight="700" text-anchor="middle" fill="#D7263D">evaluate against the defined problem, then adjust a component</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> A structured workflow of four interacting components: data and prompt direct the tool, which produces the output.</figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-match"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Define, then build</h2><p>What has to come first?</p></div>
+  <div class="part-body">
+    <h3 class="sub">A good designer defines the problem first</h3>
+    <p>Before building anything, a designer states the <b>defined problem</b> clearly – what counts as a good solution. That definition tells you what data you need, what the prompt must ask for, and what a correct output looks like. Then you build and test: run the workflow and verify that the output actually solves the defined problem, checked against a trusted source. If it fails, you know which component to adjust because you know what each one was meant to do.</p>
+    <figure>
+      <svg viewBox="0 0 760 270" role="img" aria-labelledby="f2T">
+        <title id="f2T">Verify before you trust. Define the problem, build and run, get an output, then check it against the problem and a trusted source. If it holds, trust it. If it fails, fix the weak component and run again.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <g stroke="#2B1A14" stroke-width="1.6">
+            <rect x="16" y="30" width="158" height="84" rx="12" fill="#FFEFE9"/>
+            <rect x="204" y="30" width="158" height="84" rx="12" fill="#fff"/>
+            <rect x="392" y="30" width="158" height="84" rx="12" fill="#fff"/>
+            <rect x="580" y="30" width="164" height="84" rx="12" fill="#EEF3FC" stroke="#2E5AAC" stroke-width="2.2"/>
+            <rect x="580" y="178" width="164" height="62" rx="12" fill="#E2F5EC" stroke="#0F8A5F" stroke-width="2"/>
+            <rect x="282" y="178" width="236" height="62" rx="12" fill="#FDE7EC" stroke="#C92A4B" stroke-width="2"/>
+          </g>
+          <g stroke="#2B1A14" stroke-width="2.4" fill="none" marker-end="url(#ah2)"><path d="M174 72H200"/><path d="M362 72H388"/><path d="M550 72H576"/><path d="M662 114V174"/><path d="M612 114L522 190"/><path d="M330 178L292 118"/></g>
+          <g font-size="16" font-weight="800" text-anchor="middle"><text x="95" y="64">1 DEFINE</text><text x="283" y="64">2 BUILD + RUN</text><text x="471" y="64">3 OUTPUT</text><text x="662" y="60" fill="#2E5AAC">4 CHECK</text></g>
+          <g font-size="13.5" text-anchor="middle" fill="#6B5750"><text x="95" y="88">what good looks like</text><text x="283" y="88">data, prompt, tool</text><text x="471" y="88">may look confident</text><text x="662" y="82">against the problem</text><text x="662" y="100">and a trusted source</text></g>
+          <g font-size="15" font-weight="700" text-anchor="middle"><text x="662" y="207" fill="#0F8A5F">✓ holds</text><text x="400" y="204" fill="#C92A4B">✗ fails</text></g>
+          <g font-size="13.5" text-anchor="middle"><text x="662" y="227">now you can trust it</text><text x="400" y="225">fix the component that failed</text></g>
+          <text x="238" y="160" font-size="13" text-anchor="middle" fill="#C92A4B" font-weight="700">run again</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Verify before you trust: check the output against the defined problem, then trace back to the component that failed.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, organisations build structured AI workflows to triage messages, screen documents and plan services – always as interacting components that are tested before anyone trusts them. Learning to design and evaluate one now means you can shape these solutions, not just use them.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Art &amp; Design</h4><p>Designing the workflow follows the design process: write a clear brief (the defined problem), specify each component like materials and tools, build a prototype, then evaluate the output against the brief and refine the part that let it down.</p></div>
+    <div class="call amber"><h4>Tool for this week: unplugged simulated-AI cards (teacher-led)</h4><p>This is an unplugged concept lesson: the teacher runs a <i>simulated-AI</i> card routine on the board – no live tool, no logins. Students reason about pre-prepared example outputs on the cards – no personal data is used – and use the worksheet to sort or judge the cards and explain their thinking with the key vocabulary. The live tools (Teachable Machine and Scratch) are used in the Lab.</p></div>
+    <div id="a-order"></div>
+    <div id="a-case2"></div>
+    <div id="a-think"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3 · Worksheet</span><h2>Verify, don't trust</h2><p>Can you trust a confident output?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Check the components, not the polish</h3>
+    <p>Even a <b>confident output can be wrong</b>, so you check the components rather than trusting how polished the result sounds. Verifying against a <b>trusted source</b> is what turns a good-looking answer into a solution you can stand behind. Using the words component, data, prompt, tool and interaction correctly lets you say exactly where a problem could enter – and which component to adjust when it does.</p>
+    <div id="a-truths"></div>
+    <div id="a-case3"></div>
+    <div class="call"><h4>Solution Architects: design the four-component workflow (away from the screen)</h4><p>You need a problem menu card, component cards (data, prompt, tool, output), a simulated-AI card deck, a trusted-source reference sheet and a pencil. Choose one defined problem and write, in one line, what a good solution looks like. Specify your data – exactly what you will supply, with no personal data. Write your prompt so the tool knows exactly what to do with the data. Place the tool card that matches your prompt and run the workflow. Record the output and note one interaction between two components. Evaluate the output against the problem and a trusted source, then tick or fix each component. <b>No cards?</b> One student is the tool and follows the pair's written prompt exactly, using only the supplied data, while the others evaluate the output.</p></div>
+    <div class="ecard" id="audit"></div>
+    <div id="a-design"></div>
+    <div id="a-runeval"></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 3 Lab</span><h2>Build, Test, Chain</h2><p>In the Core you designed a workflow whose data, prompt and tool work together. Now you get real build time: test it, fix its weakest component, then grow it into a multi-component solution that does more than one job – and prove it solves your defined problem reliably.</p></div>
+  <div class="part-body">
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Change one thing</h2><p>How do you know which change helped?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Improve by changing one component at a time</h3>
+    <p>The fastest way to improve a solution is not to rebuild it. You test it on fresh data, find the one component that weakens the output – often the prompt or the data – and change <b>only that</b>. Because the components interact, that single change ripples to the others, so keeping it to one change is how you know which interaction helped. Then you run it again and compare against the defined problem. Notes of before and after turn guessing into evidence. This is <b>iteration</b>: a controlled loop that makes your build better and lets you justify exactly why.</p>
+    <figure>
+      <svg viewBox="0 0 760 220" role="img" aria-labelledby="f3T">
+        <title id="f3T">The iteration loop: run on fresh data, judge against the problem, isolate the weak component, change only that one, re-run and compare before and after, then repeat until the solution holds.</title>
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <g stroke="#2B1A14" stroke-width="1.6" fill="#fff">
+            <rect x="18" y="40" width="132" height="86" rx="12"/>
+            <rect x="166" y="40" width="132" height="86" rx="12"/>
+            <rect x="314" y="40" width="132" height="86" rx="12" fill="#FFEFE9"/>
+            <rect x="462" y="40" width="132" height="86" rx="12" fill="#FFEFE9" stroke="#D7263D" stroke-width="2.4"/>
+            <rect x="610" y="40" width="132" height="86" rx="12"/>
+          </g>
+          <g stroke="#2B1A14" stroke-width="2.2" fill="none" marker-end="url(#ah3)"><path d="M150 83H162"/><path d="M298 83H310"/><path d="M446 83H458"/><path d="M594 83H606"/></g>
+          <g font-size="15" font-weight="800" text-anchor="middle"><text x="84" y="74">1 RUN</text><text x="232" y="74">2 JUDGE</text><text x="380" y="74">3 ISOLATE</text><text x="528" y="74" fill="#D7263D">4 CHANGE</text><text x="676" y="74">5 RE-RUN</text></g>
+          <g font-size="13" text-anchor="middle" fill="#6B5750"><text x="84" y="96">on fresh data</text><text x="232" y="96">against the</text><text x="232" y="113">problem</text><text x="380" y="96">the one weak</text><text x="380" y="113">component</text><text x="528" y="96">only that one</text><text x="676" y="96">compare before</text><text x="676" y="113">and after</text></g>
+          <path d="M676 126V160H232V130" stroke="#D7263D" stroke-width="2" stroke-dasharray="6 4" fill="none" marker-end="url(#ah3)"/>
+          <text x="454" y="186" font-size="14" font-weight="700" text-anchor="middle" fill="#D7263D">repeat until the solution holds</text>
+          <text x="380" y="24" font-size="14" font-weight="700" text-anchor="middle">one change per loop = you know which change helped</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> Improve by changing one component at a time, then re-run and compare against the defined problem.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Real UAE solutions – screening documents, routing customer requests, planning logistics – are built as chains of interacting components and are tested across many datasets before anyone trusts or governs them. Building and testing a chain now is exactly this professional skill in miniature.</p></div>
+    <div id="a-lorder"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Chain the steps</h2><p>Does the hand-off hold?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Chain components to do more</h3>
+    <p>A multi-component solution does more than one job by chaining tool steps. The structured output of the first tool becomes the input of the second – that join is the <b>hand-off</b>, and it depends on the first step returning something the second can use. So when you test a chain you check three things: does each component do its part, does the hand-off hold, and does the whole solution address the defined problem. A weak hand-off is fragile; a mismatched one is broken.</p>
+    <figure>
+      <svg viewBox="0 0 760 270" role="img" aria-labelledby="f4T">
+        <title id="f4T">A multi-component chain. Data goes into Tool A, steered by prompt A. Tool A's structured output, a labelled list, is the hand-off into Tool B, steered by prompt B. Tool B produces the final output. Three checks: each part works, the hand-off holds, and the whole chain solves the problem.</title>
+        <defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <g stroke="#2B1A14" stroke-width="1.6">
+            <rect x="174" y="14" width="124" height="38" rx="19" fill="#F4F0FC"/>
+            <rect x="470" y="14" width="124" height="38" rx="19" fill="#F4F0FC"/>
+            <rect x="26" y="84" width="124" height="80" rx="12" fill="#E2F5EC"/>
+            <rect x="174" y="84" width="124" height="80" rx="12" fill="#FFEFE9"/>
+            <rect x="322" y="84" width="124" height="80" rx="12" fill="#fff" stroke="#D7263D" stroke-width="2.4" stroke-dasharray="7 4"/>
+            <rect x="470" y="84" width="124" height="80" rx="12" fill="#FFEFE9"/>
+            <rect x="618" y="84" width="124" height="80" rx="12" fill="#fff"/>
+          </g>
+          <g stroke="#2B1A14" stroke-width="2.2" fill="none" marker-end="url(#ah4)"><path d="M150 124H170"/><path d="M298 124H318"/><path d="M446 124H466"/><path d="M594 124H614"/><path d="M236 52V80"/><path d="M532 52V80"/></g>
+          <g font-size="14" text-anchor="middle"><text x="236" y="38">prompt A</text><text x="532" y="38">prompt B</text></g>
+          <g font-size="15" font-weight="800" text-anchor="middle"><text x="88" y="118">DATA</text><text x="236" y="118">TOOL A</text><text x="384" y="118" fill="#D7263D">HAND-OFF</text><text x="532" y="118">TOOL B</text><text x="680" y="118">OUTPUT</text></g>
+          <g font-size="13" text-anchor="middle" fill="#6B5750"><text x="88" y="140">item list</text><text x="236" y="140">labels items</text><text x="384" y="140">labelled list</text><text x="532" y="140">counts each bin</text><text x="680" y="140">poster table</text></g>
+          <g stroke="#2B1A14" stroke-width="1.4" fill="#FFF7F4"><rect x="30" y="200" width="220" height="44" rx="22"/><rect x="270" y="200" width="220" height="44" rx="22"/><rect x="510" y="200" width="220" height="44" rx="22"/></g>
+          <g font-size="14" font-weight="700" text-anchor="middle"><text x="140" y="227">① each part works</text><text x="380" y="227" fill="#D7263D">② hand-off holds</text><text x="620" y="227">③ solves the problem</text></g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 4.</b> A multi-component chain: the structured output of the first tool becomes the input of the second. <span class="illus">(Illustrative recycling-poster example.)</span></figcaption>
+    </figure>
+    <div class="call violet"><h4>Cross-curricular link · Physical Education</h4><p>A relay race models the multi-component chain: each runner's baton hand-off must pass cleanly to the next, and a coach improves the team by drilling one leg at a time, then re-testing the whole chain – just like iterating a workflow.</p></div>
+    <div id="a-lhandoff"></div>
+    <div id="a-lcase2"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Part 3 of 3 · Worksheet</span><h2>Prove reliability</h2><p>One good run – is that enough?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Reliable means it holds across datasets</h3>
+    <p>A solution is <b>reliable</b> only when it holds across more than one dataset, so always test with at least two, and <b>verify</b> each output before you trust the chain. One success can be a fluke. Using words like iterate, hand-off, reliable and verify precisely lets you justify not just that your solution works, but why – and that is what makes it easier to trust and to govern.</p>
+    <div id="a-lwords"></div>
+    <div id="a-lcase3"></div>
+    <div id="a-lthink"></div>
+    <div class="call"><h4>Solution Architects: iterate, then chain (away from the screen)</h4><p>You need your Core workflow cards, a second set of tool cards, two non-personal datasets, an iteration log (before / after) and a trusted-source reference sheet. Run your Core workflow on a fresh dataset and judge the output against the defined problem. Mark the one component that weakens the solution – often the prompt or the data. Change only that component, run again, and log the output before and after. Add a second tool card so your structured output becomes the next input. Run the whole chain on two different datasets, verify each output against the problem and a trusted source, and record which change helped most. <b>No devices?</b> One student is Tool A and another is Tool B; pass A's written output to B by hand to show the hand-off, while the rest verify.</p></div>
+    <div class="call amber"><h4>Tool for this week: Teachable Machine + Scratch – wire the components into a workflow</h4><p>1. First train the model in Teachable Machine: name the classes, add balanced examples, click Train, then test in Preview. 2. Open Scratch (account-free) and add the machine-learning blocks so the trained model becomes the process step. 3. Wire the workflow: input (what you feed in) → model (classifies) → output (what Scratch shows), and add a rule/prompt component that shapes the output. 4. Click the green flag to run the whole system end to end. 5. Test with new inputs; if the output is wrong, improve the model's examples or the Scratch logic, then run again. 6. Save the Scratch project as an .sb3 file.</p><p><b>Roles:</b> systems architect (maps the components), data lead (prepares and checks inputs), evaluator (tests and scores outputs), scribe (records the trace and decisions).</p><p><b>Stay safe:</b> teacher-operated on the board; students never log in. Teachable Machine trains in the browser and the samples stay on the teacher's device. Use objects, hand gestures or drawings only – never faces, voices or names – and clear the project at the end of the lesson.</p></div>
+    <figure>
+      <svg viewBox="0 0 760 210" role="img" aria-labelledby="f5T">
+        <title id="f5T">Teachable Machine trains the model. Inside Scratch, the input goes to the model, a rule shapes the result, and the output is shown. The green flag runs the whole workflow end to end.</title>
+        <defs><marker id="ah5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2B1A14"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2B1A14">
+          <rect x="16" y="64" width="160" height="96" rx="12" fill="#F4F0FC" stroke="#2B1A14" stroke-width="1.6"/>
+          <g font-size="15" font-weight="800" text-anchor="middle"><text x="96" y="96">TEACHABLE</text><text x="96" y="116">MACHINE</text></g>
+          <text x="96" y="142" font-size="13" text-anchor="middle" fill="#6B5750">train the model</text>
+          <rect x="204" y="20" width="540" height="176" rx="16" fill="#FFEFE9" stroke="#D7263D" stroke-width="2.2"/>
+          <text x="474" y="46" font-size="15" font-weight="800" text-anchor="middle" fill="#D7263D">SCRATCH · green flag runs it end to end</text>
+          <g stroke="#2B1A14" stroke-width="1.6" fill="#fff"><rect x="216" y="72" width="118" height="88" rx="10"/><rect x="352" y="72" width="118" height="88" rx="10"/><rect x="488" y="72" width="118" height="88" rx="10"/><rect x="624" y="72" width="108" height="88" rx="10"/></g>
+          <g stroke="#2B1A14" stroke-width="2.2" fill="none" marker-end="url(#ah5)"><path d="M334 116H348"/><path d="M470 116H484"/><path d="M606 116H620"/><path d="M96 160V178H411V164"/></g>
+          <g font-size="15" font-weight="800" text-anchor="middle"><text x="275" y="110">INPUT</text><text x="411" y="110">MODEL</text><text x="547" y="110">RULE</text><text x="678" y="110">OUTPUT</text></g>
+          <g font-size="13" text-anchor="middle" fill="#6B5750"><text x="275" y="132">object card</text><text x="411" y="132">classifies</text><text x="547" y="132">shapes output</text><text x="678" y="132">what shows</text></g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 5.</b> A structured Scratch workflow: the trained model is the process step between the input and a rule that shapes the output.</figcaption>
+    </figure>
+    <div class="ecard" id="testlog"></div>
+    <div id="a-llog"></div>
+    <div id="a-lchain"></div>
+    <div id="a-lrel"></div>
+    <div id="a-ltool"></div>
+    <div id="a-lsafe"></div>
+    <div id="a-lexit"></div>
+    <div id="a-lchal"></div>
+    <div class="call"><h4>Next</h4><p>In Week 4 you judge outputs – correct, unclear or incorrect – and prove it with evidence.</p></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Design a solution of interacting components – then iterate, chain and prove it holds</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>A structured solution is <b>components</b> – data, prompt, tool, output – that <b>interact</b>; a change in one ripples through the others.</li>
+      <li><b>Define the problem first</b>, then build, run and evaluate.</li>
+      <li><b>Verify</b> against a trusted source – a confident output can still be wrong.</li>
+      <li>Change <b>one component at a time</b> so you know which interaction helped; notes of before and after turn guessing into evidence.</li>
+      <li>A chain works only if each <b>hand-off</b> returns what the next stage can use.</li>
+      <li><b>Reliability</b> is shown across more than one dataset, then verified.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 9 · Main Course · Term 1 Week 3 (19 – 23 Oct 2026, lesson Fri 23 Oct) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- strand + concept tags ---------- */
+const CU_P="CU · how data, tools and prompts interact within a solution";
+const CU_A="CU · how design choices affect output quality and reliability";
+const SD_E="SD · uses AI tools to complete structured tasks";
+const SD_P="SD · designs structured AI workflows for defined problems";
+const SD_A="SD · refines workflows to improve outputs and usability";
+const CE_E="CE · identifies incorrect or unclear outputs";
+const CE_P="CE · evaluates outputs for accuracy, bias and usefulness";
+const GE_A="GE · proposes actions for responsible and safe use";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["component","One part of a workflow, such as the data, the prompt, the tool or the output."],
+  ["data","The information you supply to the workflow, containing no personal data."],
+  ["prompt","The clear instruction that directs the tool on what to do with the data."],
+  ["tool","The AI step that carries out the task using your data and prompt."],
+  ["interaction","The way one component hands off to and shapes another so the workflow completes the task."]
+];
+const DEF_ORDER = [3,0,4,1,2];
+const MATCH = [
+  ["mt1","📦 Data",1],
+  ["mt2","🖊️ Prompt",3],
+  ["mt3","📤 Output",0],
+  ["mt4","⚙️ Tool",2]
+];
+const MATCH_OPTS = ["The result you evaluate","The information you supply","The AI step that does the work","The instruction that directs the tool"];
+const CASE1 = ["The data must be at fault, since a wrong output means the data was messy.","The tool is broken and should be swapped out for a brand new one.","Nothing at all – the muddled output is actually correct just as it is.","The prompt – it did not tell the tool what it should do here."];
+const STEPS = ["Define the problem and what a good solution looks like","Specify the data you will supply","Write the prompt that directs the tool","Run the tool to produce an output","Evaluate the output against the problem"];
+const STEP_ORDER = [4,1,3,2,0];
+const CASE2 = ["Skip the definition and just check the output at the very end.","Define the problem and say what a correct output looks like.","Pick the tool first, before you decide anything else about the task.","Run the tool many times and keep the most polished-looking output."];
+const THINK = ["No – only one prompt can ever be correct for a defined problem.","Yes – any two prompts always give exactly the same output.","Yes – if both prompts direct the tool to meet the same defined problem, and both outputs are verified against it and a trusted source.","No – the prompt has no effect, so only the data matters."];
+const TRUTHS = [
+  ["t1","🧭 A vague prompt gives the tool nothing useful to do.",1],
+  ["t2","🔗 A solution is components that interact, not one magic step.",1],
+  ["t3","🧍 The tool understands the problem the way a person does.",0],
+  ["t4","🚫 A change in one component never affects the others.",0],
+  ["t5","🔎 Even a confident output can be wrong, so you verify it.",1],
+  ["t6","🪄 A polished-sounding output is always correct.",0]
+];
+const CASE3 = ["Trust it at once, since a neat and confident output must be right.","Change every single component at once before you decide to trust it.","Run it again and simply hope for a better output the next time round.","Verify it against the defined problem and a known trusted source."];
+const RUNS = [
+  ["Run 1","‘Sort these items.’","“Recyclable: 12. Not sure: 8.” – no bins are named."],
+  ["Run 2","‘Put each item in paper, plastic or metal and give one reason.’","A labelled list: all 20 items, each with a bin and a one-line reason. Every label matches the school recycling guide."]
+];
+const DESIGN = [
+  ["dg1","🎯 Defined problem – what a good solution looks like",["Every one of the 20 items is in the right bin – paper, plastic or metal – matching the school recycling guide","A poster that looks bright and colourful","As many items sorted as fast as possible, right or wrong","Whatever the tool decides is fine"],[2,0,3,1]],
+  ["dg2","📦 Data",["A typed list of the 20 item descriptions, e.g. ‘crushed drinks can’ – no personal data","Photos of classmates holding their rubbish","The class list showing who brought each item","No data – the tool can guess the items"],[1,3,0,2]],
+  ["dg3","🖊️ Prompt",["‘Put each item in paper, plastic or metal and give one reason.’","‘Make it better.’","‘Recycling.’","‘Do something with this list.’"],[3,1,2,0]],
+  ["dg4","⚙️ Tool (AI step)",["A simulated-AI sorting card that labels each item description","A ruler and a pair of scissors","The school recycling guide itself","A blank poster"],[2,3,0,1]],
+  ["dg5","📤 Output",["A labelled list: each item with its bin and a one-line reason","The single word ‘done’","A paragraph about why recycling matters","A list of students' names"],[1,0,3,2]]
+];
+const COMP = ["The data","The prompt","The tool","The output"];
+const R2WHY = ["Every label was checked against the school recycling guide – the trusted source","The output sounded confident","It came back quickly","It was longer than Run 1"];
+const EXIT = [
+  "Data, tool, output. The AI is clever, so its output is right.",
+  "Data → prompt → tool → output. The prompt directs the tool on what to do with the data, so a vague prompt gives a muddled output. It could still be wrong because confidence is not correctness – I check it against a trusted source.",
+  "Prompt → output. It looks neat, so it must be correct.",
+  "Tool → data → output → prompt. The tool works on its own, so nothing interacts and nothing needs checking."
+];
+const CH1 = ["A labelled list – each item with its bin – that Tool B can count","A long paragraph about recycling","Nothing – Tool B starts again from the raw item list","The school recycling guide"];
+const CH2 = ["Check that the hand-off matches what Tool B expects, then verify the final counts against the guide","Trust Tool B, because it comes last","Change every component at once if a number looks wrong","Skip checking, because two tools are better than one"];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["iterate","To test, change one component, and test again until the solution holds."],
+  ["reliable","The solution solves the defined problem across more than one dataset, not just once."],
+  ["multi-component chain","A workflow with more than one tool step, where the output of one feeds the next."],
+  ["hand-off","The point where the structured output of one tool becomes the input of the next."],
+  ["verify","To check an output against the defined problem and a trusted source before trusting it."]
+];
+const LDEF_ORDER = [2,4,0,3,1];
+const LSTEPS = ["Run the workflow on fresh data","Judge the output against the defined problem","Isolate the one component that weakens it","Change only that component","Run again and compare before and after"];
+const LSTEP_ORDER = [3,4,1,2,0];
+const LCASE1 = ["The output did not really improve; any gain you see here is just luck.","They simply forgot to write down what it was that they changed.","They changed two components at once, so the cause is hidden.","Because tools never actually change the way that they behave at all."];
+const HANDOFF = [
+  ["h1","🌫️ Tool A's labels are close but sometimes worded differently than B expects.","F"],
+  ["h2","🚫 Tool A returns a paragraph, but Tool B needs a table it cannot parse.","X"],
+  ["h3","🧩 Every hand-off is checked and matches across two datasets.","H"],
+  ["h4","💥 Tool A gives no output at all, so Tool B has nothing to work on.","X"],
+  ["h5","🔗 Each stage returns exactly the shape the next stage expects.","H"],
+  ["h6","📥 Tool A's output usually fits Tool B, but a few rows need tidying by hand.","F"],
+  ["h7","🧾 Tool A returns a clean labelled list that Tool B is built to read.","H"]
+];
+const LCASE2 = ["Tool B is simply running far too slowly to keep up with Tool A.","The data going in was fine, so nothing is wrong with the chain at all.","Both tools are completely broken, so the whole chain should be rebuilt.","The hand-off – Tool A's output is not a shape that Tool B can use."];
+const LW = [
+  ["w1","🔎 You check the chain's poster counts against the school recycling guide before printing.",3],
+  ["w2","🔗 Tool A's labelled list becomes the input that Tool B counts.",1],
+  ["w3","🔁 You reword only the prompt, run again and compare with your notes from before.",0],
+  ["w4","🛡️ The chain gives correct counts for Dataset A and for a different Dataset B.",2]
+];
+const LW_OPTS = ["iterate","hand-off","reliable","verify"];
+const LCASE3 = ["Yes – one good run is really all of the proof that anyone needs.","Yes – working on the first dataset guarantees it works on every one.","No – reliability means it holds across more than one dataset.","No – but only because tools can never really be trusted at all."];
+const LTHINK = ["Because two datasets make the tool run faster.","Because one success can be a fluke – holding on a second dataset is evidence it works beyond the data it was built on, so people can check and oversee it with confidence.","It is not – one good run is enough proof.","Because the second dataset makes the tool sound more confident."];
+const ITER = [
+  ["Run 1","Nothing – the Core workflow on a fresh dataset of 20 new items","15 of 20 in the right bin; drinks cartons and foil trays misplaced"],
+  ["Run 2","Prompt only – added ‘use the guide's rule: cartons go in plastic, clean foil goes in metal’","19 of 20 in the right bin; one crisp packet still labelled paper"],
+  ["Run 3","Data and tool both swapped at the same time","18 of 20 in the right bin"]
+];
+const DSETS = [
+  ["Dataset A (20 items)","Paper 7 · Plastic 8 · Metal 5 – every count matches the recycling guide"],
+  ["Dataset B (20 different items)","Paper 9 · Plastic 6 · Metal 5 – two cartons counted as paper; the guide says plastic"]
+];
+const IL_COMP = ["The data","The prompt","The tool","Two components at once"];
+const IL2 = ["Only the prompt changed and the output rose from 15 to 19 of 20, so the prompt change helped","The tool improved itself between runs","The data caused it, because the score went up","Nothing – the change in score was luck"];
+const IL4 = ["No – two components changed at once, so the cause is hidden","Yes – the tool, because tools matter most","Yes – the data, because data always matters most","Yes – it beat Run 1, so both changes helped equally"];
+const CHAIN = [
+  ["cha","⚙️ Tool A's job",["Label each item as paper, plastic or metal","Count how many items are in each bin","Print the poster","Collect the items from classrooms"],[1,0,3,2]],
+  ["chh","🔗 The hand-off (what passes from A to B)",["A labelled list – one item and its bin per line","A paragraph describing the items","The original unlabelled item list","Nothing – Tool B works alone"],[2,3,0,1]],
+  ["chb","⚙️ Tool B's job",["Count the items in each bin and make the poster table","Label each item again from scratch","Decide what the defined problem is","Train Tool A"],[3,0,2,1]],
+  ["chv","🔎 Where the verify check sits",["After the hand-off and at the end – check A's list fits B, then check the counts against the guide","Only before any data is collected","Nowhere – two tools check each other","Only on the first dataset"],[1,3,0,2]]
+];
+const REL = ["Not yet – it holds on Dataset A but not on B, so find the weak component, change one thing and re-test both datasets","Yes – Dataset A was perfect, so it works on every dataset","Yes – 18 of 20 is close enough without checking","No – so throw the whole chain away and start again"];
+const TOOLRUN = [
+  ["Drinks can card","metal","✓"],["Newspaper card","paper","✓"],["Plastic bottle card","plastic","✓"],["Crumpled foil card","paper","✗"],["Yoghurt pot card","plastic","✓"]
+];
+const TOOL_PART = ["The object card held up to the camera","The trained Teachable Machine model","A rule: if confidence is under 70%, show ‘not sure – ask a person’","The bin name Scratch shows on screen"];
+const TOOL_ORDER = [3,0,2,1];
+const TOOL_FIRST = ["The model's examples – add more foil examples to the metal class, because foil was the one wrong output","The output – change the colour of the bin names","The input – just stop showing foil cards","Every component at once, to be safe"];
+const LSAFE = [
+  ["sf1","✏️ Use objects, hand gestures or drawings only.",1],
+  ["sf2","🚩 Train the model on photos of classmates' faces.",0],
+  ["sf3","🔒 Samples stay on the teacher's device and students never log in.",1],
+  ["sf4","🎙️ Record classmates' voices saying their names as a dataset.",0],
+  ["sf5","🧹 Clear the Teachable Machine project at the end of the lesson.",1],
+  ["sf6","🏷️ Type real names into the Scratch project so the output feels personal.",0]
+];
+const LEXIT = [
+  "We changed lots of things at once and it got better, so it is reliable.",
+  "The output looked more confident after the change, so the solution is reliable now.",
+  "We changed only the prompt (adding the guide's rule for cartons and foil); the log showed 15 → 19 of 20 with nothing else changed, so that change helped. A chain is reliable when every hand-off holds and it solves the problem on more than one dataset, verified against a trusted source.",
+  "We ran it once on Dataset A and it worked, so it is reliable."
+];
+const LH1 = ["Between Tool B and Tool C – check the counts against the recycling guide before the poster text is written","Before Tool A, so nothing needs checking later","After the poster is printed and on the wall","Nowhere – three tools check each other"];
+const LH2 = ["Run the whole chain on two different datasets and verify every hand-off and the final output","Run it once and check that the poster looks neat","Test only Tool C, since it makes the final output","Ask the tools whether they agree with each other"];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CU_P,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"A component is one part of a workflow. Data is the information you supply (never personal data). The prompt is the clear instruction that directs the tool. The tool is the AI step that does the task. Interaction is the way one component hands off to and shapes another."},
+ {id:"match",mount:"a-match",section:"Core · Part 1",title:"Match the component to its job",sub:"Objective 1 · name the components · "+SD_E,ico:"🧷",
+  fields:MATCH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Data = the information you supply. Prompt = the instruction that directs the tool. Output = the result you evaluate. Tool = the AI step that does the work."},
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"Case 1 · The Vague Prompt",sub:"Solution Architects · "+CU_A,ico:"🕵️",
+  fields:[{k:"c1",radio:1,ok:v=>eq(v,3)}],
+  explain:"The data was clean and the tool ran fine – it just had no clear instruction to follow. A vague prompt gives the tool nothing useful to do with the data, so the prompt let the solution down."},
+ {id:"order",mount:"a-order",section:"Core · Part 2",title:"Order the design steps",sub:"Objective 2 · build and run the workflow · "+SD_P,ico:"🧭",
+  fields:STEPS.map((_,i)=>({k:"o"+i,ok:v=>eq(v,i)})),
+  explain:"Define the problem and what a good solution looks like → specify the data → write the prompt that directs the tool → run the tool → evaluate the output against the problem."},
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"Case 2 · The Missing Definition",sub:"Solution Architects · "+SD_P,ico:"🧭",
+  fields:[{k:"c2",radio:1,ok:v=>eq(v,1)}],
+  explain:"The definition tells you what data, prompt and output you need. Without it you cannot judge the output, because you never said what correct means – and you cannot tell which tool fits."},
+ {id:"think",mount:"a-think",section:"Core · Part 2",title:"Think about it",sub:"Same problem, different prompts · "+CU_A,ico:"💭",
+  fields:[{k:"th",radio:1,ok:v=>eq(v,2)}],
+  explain:"Yes – there can be more than one good design. Both prompts must direct the tool to meet the same defined problem, and both outputs must be verified against that problem and a trusted source."},
+ {id:"truths",mount:"a-truths",section:"Core · Part 3",title:"Which statements are true?",sub:"Objective 3 · use the vocabulary correctly · "+CU_P,ico:"🧩",
+  fields:TRUTHS.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"True: a vague prompt gives the tool nothing useful to do; a solution is components that interact; a confident output can be wrong, so you verify it. False: the tool does not understand the problem like a person; a change in one component does affect the others; polished is not the same as correct."},
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"Case 3 · The Confident Report",sub:"Solution Architects · "+CE_E,ico:"⚖️",
+  fields:[{k:"c3",radio:1,ok:v=>eq(v,3)}],
+  explain:"Confidence is not correctness. Before you trust it, verify it against the defined problem and a trusted source – you check the components, not how polished the result sounds."},
+ {id:"design",mount:"a-design",section:"Core worksheet",title:"Define the problem and specify your components",sub:"Worksheet · "+SD_P,ico:"🗂️",cls:"ws",
+  fields:DESIGN.map(([k])=>({k,ok:v=>eq(v,0)})),
+  explain:"A good definition says exactly what a correct output is: every item in the right bin, matching the recycling guide. The data is a non-personal list of item descriptions; the prompt says exactly what to do with it; the tool is the AI step that labels each item; the output is a labelled list you can check."},
+ {id:"runeval",mount:"a-runeval",section:"Core worksheet",title:"Run and evaluate",sub:"Worksheet · "+CE_P,ico:"🔎",cls:"ws",
+  fields:[{k:"r1",ok:v=>eq(v,"N")},{k:"r1c",ok:v=>eq(v,1)},{k:"r2",ok:v=>eq(v,"Y")},{k:"r2v",ok:v=>eq(v,0)}],
+  explain:"Run 1 does not solve the problem – no bins are named – and the data and tool were the same in both runs, so the vague prompt let it down. Run 2 solves it, and you can say so because every label was checked against the recycling guide, not because it sounded confident."},
+ {id:"exit",mount:"a-exit",section:"Core worksheet",title:"Exit ticket",sub:"Components, one interaction, one reason to verify · "+SD_P,ico:"🎫",cls:"ws",
+  fields:[{k:"ex",radio:1,ok:v=>eq(v,1)}],
+  explain:"A strong exit ticket names data → prompt → tool → output in order, describes a real interaction (the prompt directs what the tool does with the data), and explains that a confident output can still be wrong, so you check it against a trusted source."},
+ {id:"chal",mount:"a-chal",section:"Core worksheet",title:"Challenge: add a second tool step",sub:"Stretch · "+SD_A,ico:"⭐",cls:"ws",
+  fields:[{k:"ch1",ok:v=>eq(v,0)},{k:"ch2",ok:v=>eq(v,0)}],
+  explain:"The output of Tool A becomes the input of Tool B, so it must be a shape Tool B can use – a labelled list it can count. The chain stays reliable when you check each hand-off and verify the final output against the trusted source."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+SD_A,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"Iterate = test, change one component, test again. Reliable = holds across more than one dataset. Multi-component chain = more than one tool step, each output feeding the next. Hand-off = where one tool's output becomes the next input. Verify = check against the defined problem and a trusted source."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 1",title:"Order the iteration loop",sub:"Objective 2 · change one thing at a time · "+SD_A,ico:"🔁",
+  fields:LSTEPS.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"Run on fresh data → judge the output against the defined problem → isolate the one weak component → change only that component → run again and compare before and after."},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"Case 1 · The Two Changes",sub:"Solution Architects · "+SD_A,ico:"🕵️",
+  fields:[{k:"lc1",radio:1,ok:v=>eq(v,2)}],
+  explain:"The improvement can be real, but with two changes at once you cannot attribute it. Tools do respond to different data and prompts – that is exactly why we change one component at a time."},
+ {id:"lhandoff",mount:"a-lhandoff",section:"Lab · Part 2",title:"Judge each hand-off",sub:"Objective 1 · construct and test a chain · "+CE_P,ico:"🔗",
+  fields:HANDOFF.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A hand-off holds when each stage returns exactly what the next can read – a clean labelled list, checked across two datasets. It is fragile when the output is close but needs tidying or rewording. It is broken when the shape does not match (a paragraph instead of a table) or there is no output at all."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"Case 2 · The Broken Hand-off",sub:"Solution Architects · "+SD_P,ico:"🔬",
+  fields:[{k:"lc2",radio:1,ok:v=>eq(v,3)}],
+  explain:"Each tool may work alone – it is the hand-off that fails, because Tool A's output is not a shape Tool B can use. Speed is not the issue, good input does not help, and rebuilding everything is not needed."},
+ {id:"lwords",mount:"a-lwords",section:"Lab · Part 3",title:"Name the design word",sub:"Objective 3 · use the vocabulary precisely · "+SD_A,ico:"🧷",
+  fields:LW.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Checking counts against the guide is verifying. Tool A's list becoming Tool B's input is the hand-off. Changing only the prompt and comparing with your notes is iterating. Working on two different datasets shows the chain is reliable."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"Case 3 · The One-Dataset Wonder",sub:"Solution Architects · "+CE_P,ico:"⚖️",
+  fields:[{k:"lc3",radio:1,ok:v=>eq(v,2)}],
+  explain:"Not yet. One success can be a fluke – reliability must be shown across more than one dataset. Tools can be trusted once they are tested, so test it on more data."},
+ {id:"lthink",mount:"a-lthink",section:"Lab · Part 3",title:"Think about it",sub:"Two datasets, not one · "+CE_P,ico:"💭",
+  fields:[{k:"lt",radio:1,ok:v=>eq(v,1)}],
+  explain:"A single good run could be luck or could depend on the one dataset it was built on. Holding on a second, different dataset is evidence the solution really works – which is what lets people trust it and oversee (govern) it."},
+ {id:"llog",mount:"a-llog",section:"Lab worksheet",title:"Iteration log",sub:"Worksheet · "+SD_A,ico:"📝",cls:"ws",
+  fields:[{k:"il1",ok:v=>eq(v,1)},{k:"il2",ok:v=>eq(v,0)},{k:"il3",ok:v=>eq(v,3)},{k:"il4",ok:v=>eq(v,0)},{k:"il5",ok:v=>eq(v,"N")}],
+  explain:"Run 2 changed only the prompt and the score rose from 15 to 19 of 20, so the log is evidence that the prompt change helped. Run 3 changed two components at once, so you cannot say which caused the result. After Run 2 the problem is not fully solved – one item is still in the wrong bin – so iterate again."},
+ {id:"lchain",mount:"a-lchain",section:"Lab worksheet",title:"Your multi-component chain",sub:"Worksheet · "+SD_P,ico:"⛓️",cls:"ws",
+  fields:CHAIN.map(([k])=>({k,ok:v=>eq(v,0)})),
+  explain:"Tool A labels each item; the hand-off is its labelled list, one item and bin per line, which Tool B is built to read; Tool B counts each bin and makes the poster table. Verify at the hand-off and at the end against the recycling guide."},
+ {id:"lrel",mount:"a-lrel",section:"Lab worksheet",title:"Prove it is reliable",sub:"Worksheet · "+CE_P,ico:"🛡️",cls:"ws",
+  fields:[{k:"ra",ok:v=>eq(v,"Y")},{k:"rb",ok:v=>eq(v,"N")},{k:"rc",ok:v=>eq(v,0)}],
+  explain:"Dataset A matches the guide, but Dataset B does not – two cartons were counted as paper. So the chain is not reliable yet: isolate the weak component, change one thing and re-test on both datasets."},
+ {id:"ltool",mount:"a-ltool",section:"Lab worksheet",title:"Tool log: Scratch + Teachable Machine",sub:"Worksheet · tool log · "+SD_E,ico:"🧰",cls:"ws",
+  fields:[{k:"tl1",ok:v=>eq(v,0)},{k:"tl2",ok:v=>eq(v,1)},{k:"tl3",ok:v=>eq(v,2)},{k:"tl4",ok:v=>eq(v,3)},{k:"tl5",ok:v=>eq(v,0)}],
+  explain:"The input is the object card; the process step is the trained model; the rule shapes what Scratch shows; the output is the bin name on screen. Foil was the one wrong output, so improve the model's examples first – add foil examples to the metal class – then run again."},
+ {id:"lsafe",mount:"a-lsafe",section:"Lab worksheet",title:"Safety check",sub:"Safety check · "+GE_A,ico:"🔒",cls:"ws",
+  fields:LSAFE.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Use objects, gestures or drawings only; samples stay on the teacher's device and students never log in; clear the project at the end. Never use faces, voices or names – they are personal data."},
+ {id:"lexit",mount:"a-lexit",section:"Lab worksheet",title:"Exit ticket",sub:"Name the change, the evidence and what makes it reliable · "+SD_A,ico:"🎫",cls:"ws",
+  fields:[{k:"le",radio:1,ok:v=>eq(v,2)}],
+  explain:"A strong answer names one change (only the prompt), shows how you knew it helped (the before-and-after log with nothing else changed), and says what makes a chain reliable: every hand-off holds and it solves the problem on more than one dataset, verified against a trusted source."},
+ {id:"lchal",mount:"a-lchal",section:"Lab worksheet",title:"Challenge: a three-tool chain",sub:"Stretch · "+SD_A,ico:"⭐",cls:"ws",
+  fields:[{k:"lh1",ok:v=>eq(v,0)},{k:"lh2",ok:v=>eq(v,0)}],
+  explain:"Put the verify component inside the chain, before the final step uses the counts – that is a governance check that stops a wrong number reaching the poster. Then prove reliability by running the whole chain on two different datasets and verifying every hand-off and the final output."}
+];
+
+/* ---------- state ---------- */
+const KEY="g9-mw3-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#audit").innerHTML=`<header><small>Problem menu card · illustrative</small><b>The recycling poster</b></header>
+<div class="in">
+  <p class="task"><b>Defined problem:</b> the school eco-team wants a poster showing which bin – paper, plastic or metal – each of 20 everyday waste items goes in, so students sort correctly at the bins. <b>Trusted source:</b> the school recycling guide. No personal data.</p>
+  <p class="task">The teacher ran the simulated-AI cards twice. The data (the list of 20 items) and the tool card stayed the same; only the prompt changed.</p>
+  <table class="t"><thead><tr><th>Run</th><th>Prompt used</th><th>Output card</th></tr></thead>
+  <tbody>${RUNS.map(([r,p,o])=>`<tr><td>${esc(r)}</td><td>${esc(p)}</td><td>${esc(o)}</td></tr>`).join("")}</tbody></table>
+</div>`;
+$("#testlog").innerHTML=`<header><small>Iteration and dataset log · illustrative</small><b>The recycling-poster chain</b></header>
+<div class="in">
+  <p class="task"><b>How to read it:</b> a pair ran their Core workflow again, changed components, then added Tool B to count each bin. Every output was checked against the school recycling guide. No personal data.</p>
+  <table class="t record"><thead><tr><th>Run</th><th>Component changed</th><th>Output against the guide</th></tr></thead>
+  <tbody>${ITER.map(([r,c,o])=>`<tr><td>${esc(r)}</td><td>${esc(c)}</td><td>${esc(o)}</td></tr>`).join("")}</tbody></table>
+  <table class="t record"><thead><tr><th>Dataset</th><th>Chain output (Tool B's counts)</th></tr></thead>
+  <tbody>${DSETS.map(([d,o])=>`<tr><td>${esc(d)}</td><td>${esc(o)}</td></tr>`).join("")}</tbody></table>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const pairSel=(k,t,opts,ord)=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,opts,"Choose…",ord)}</div>`;
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "match":
+    return `<p class="how">Match each component to the job it does in a workflow.</p>`+
+      MATCH.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,MATCH_OPTS,"Choose its job…",[2,0,3,1])}</div>`).join("");
+  case "case1":
+    return `<div class="quote">A team supplies clean data but writes the prompt ‘make it better.’ The tool returns a muddle. Architect, which component let the solution down?</div>
+      <div class="clues"><div class="clue">📦<span>CLEAN DATA</span></div><div class="clue">🖊️<span>VAGUE PROMPT</span></div><div class="clue">📤<span>MUDDLED OUTPUT</span></div></div>
+      <p class="q" id="q-c1">Which component caused the problem?</p>${radios("c1",CASE1)}`;
+  case "order":
+    return `<p class="how">Put the steps in the order a designer really works through them, from first to last.</p>`+
+      STEPS.map((_,i)=>`<div class="pair" data-item="o${i}"><span class="t">Step ${i+1}</span>${sel("o"+i,STEPS,"Choose the step…",STEP_ORDER)}</div>`).join("");
+  case "case2":
+    return `<div class="quote">Two architects rush to build before agreeing what a good solution looks like. Halfway through they cannot tell if the output is right. Architect, what should have come first?</div>
+      <div class="clues"><div class="clue">🎯<span>DEFINE PROBLEM</span></div><div class="clue">⚙️<span>BUILD</span></div><div class="clue">🔎<span>EVALUATE</span></div></div>
+      <p class="q" id="q-c2">What comes first in a good design?</p>${radios("c2",CASE2)}`;
+  case "think":
+    return `<p class="q" id="q-th">If two designers built a workflow for the same defined problem but wrote different prompts, could they both produce a correct solution? What would have to be true?</p>${radios("th",THINK)}`;
+  case "truths":
+    return boxes(TRUTHS,"Tick the THREE true statements about a structured AI solution. Leave the others unticked.");
+  case "case3":
+    return `<div class="quote">A workflow returns a tidy, confident-sounding report. It looks impressive. Architect, before you trust it, what do you do?</div>
+      <div class="clues"><div class="clue">📤<span>CONFIDENT OUTPUT</span></div><div class="clue">🔎<span>VERIFY</span></div><div class="clue">🏁<span>DECIDE</span></div></div>
+      <p class="q" id="q-c3">What should you do before trusting it?</p>${radios("c3",CASE3)}`;
+  case "design":
+    return `<p class="how">Use the problem menu card above. Choose the best entry for each part of the design – only non-personal data may go in the data box.</p>`+
+      DESIGN.map(([k,t,o,ord])=>pairSel(k,t,o,ord)).join("");
+  case "runeval":
+    return `<p class="how">Use the two runs on the problem menu card. Judge whether each output solves the defined problem.</p>
+      <div class="scen"><p>Run 1 · ‘Sort these items.’</p><div class="two">
+        <div class="cell" data-item="r1"><span>Solves the defined problem?</span>${seg("r1",["Yes","No"],["Y","N"],"Run 1 solves the problem?")}</div>
+        <div data-item="r1c"><span>Which component let it down?</span>${sel("r1c",COMP,"Choose…",[2,0,3,1])}</div></div></div>
+      <div class="scen"><p>Run 2 · ‘Put each item in paper, plastic or metal and give one reason.’</p><div class="two">
+        <div class="cell" data-item="r2"><span>Solves the defined problem?</span>${seg("r2",["Yes","No"],["Y","N"],"Run 2 solves the problem?")}</div>
+        <div data-item="r2v"><span>What makes it safe to say so?</span>${sel("r2v",R2WHY,"Choose…",[2,0,3,1])}</div></div></div>`;
+  case "exit":
+    return `<p class="q" id="q-ex">Which exit ticket names the four components in order, describes one interaction between two of them, and gives one reason the output could be wrong even when it looks confident?</p>${radios("ex",EXIT)}`;
+  case "chal":
+    return `<p class="how">The eco-team now wants the poster to show <b>how many</b> items go in each bin, so the pair adds a second tool step: Tool A labels each item, then Tool B counts them.</p>`+
+      pairSel("ch1","What should Tool A hand to Tool B?",CH1,[1,2,0,3])+
+      pairSel("ch2","How do the interactions keep the chain reliable?",CH2,[2,0,3,1]);
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lorder":
+    return `<p class="how">Put the steps in the order of a controlled improvement loop, from first to last.</p>`+
+      LSTEPS.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">Step ${i+1}</span>${sel("lo"+i,LSTEPS,"Choose the step…",LSTEP_ORDER)}</div>`).join("");
+  case "lcase1":
+    return `<div class="quote">An architect changes the prompt and the data at the same time, then the output improves. Architect, why can they not say which change helped?</div>
+      <div class="clues"><div class="clue">🔧<span>TWO CHANGES</span></div><div class="clue">🧪<span>RE-RUN</span></div><div class="clue">🤷<span>WHICH HELPED?</span></div></div>
+      <p class="q" id="q-lc1">Why can't they tell which change helped?</p>${radios("lc1",LCASE1)}`;
+  case "lhandoff":
+    return `<p class="how">Sort each hand-off between two tools: does it hold, is it fragile, or is it broken?</p>`+
+      HANDOFF.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🎯 Holds","❓ Fragile","⛔ Broken"],["H","F","X"],t)}</div>`).join("");
+  case "lcase2":
+    return `<div class="quote">In a two-step chain, Tool A returns a long paragraph but Tool B expects a tidy list. The chain stalls. Architect, where is the fault?</div>
+      <div class="clues"><div class="clue">⚙️<span>TOOL A</span></div><div class="clue">🔗<span>HAND-OFF</span></div><div class="clue">⚙️<span>TOOL B</span></div></div>
+      <p class="q" id="q-lc2">Where is the fault in the chain?</p>${radios("lc2",LCASE2)}`;
+  case "lwords":
+    return `<p class="how">Which design word names what is happening in each moment?</p>`+
+      LW.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,LW_OPTS,"Choose the word…",[2,0,3,1])}</div>`).join("");
+  case "lcase3":
+    return `<div class="quote">A chain solves the problem perfectly – but only the single dataset it was built on has ever been tried. Architect, is it reliable yet?</div>
+      <div class="clues"><div class="clue">🗂️<span>ONE DATASET</span></div><div class="clue">🧪<span>UNTESTED</span></div><div class="clue">❓<span>RELIABLE?</span></div></div>
+      <p class="q" id="q-lc3">Is the solution reliable yet?</p>${radios("lc3",LCASE3)}`;
+  case "lthink":
+    return `<p class="q" id="q-lt">Why is a solution that holds across two different datasets more trustworthy – and easier to govern – than one that worked on only one?</p>${radios("lt",LTHINK)}`;
+  case "llog":
+    return `<p class="how">Use the iteration log above.</p>`+
+      pairSel("il1","Run 2 – which component was changed?",IL_COMP,[3,0,2,1])+
+      pairSel("il2","Run 2 – what does the log show?",IL2,[1,3,0,2])+
+      pairSel("il3","Run 3 – which component was changed?",IL_COMP,[3,0,2,1])+
+      pairSel("il4","Run 3 – can you say which change caused 18 of 20?",IL4,[2,0,3,1])+
+      `<div class="row" data-item="il5"><span class="t">After Run 2, does the workflow solve the defined problem?</span>${seg("il5",["Yes","No"],["Y","N"],"After Run 2, solves the problem?")}</div>`;
+  case "lchain":
+    return `<p class="how">Label the two-tool chain from the log: what does each part do, and where does the verify check sit?</p>`+
+      CHAIN.map(([k,t,o,ord])=>pairSel(k,t,o,ord)).join("");
+  case "lrel":
+    return `<p class="how">Use the dataset table above. Was each output verified against the defined problem?</p>`+
+      `<div class="row" data-item="ra"><span class="t">Dataset A – solves the problem when verified?</span>${seg("ra",["Yes","No"],["Y","N"],"Dataset A")}</div>`+
+      `<div class="row" data-item="rb"><span class="t">Dataset B – solves the problem when verified?</span>${seg("rb",["Yes","No"],["Y","N"],"Dataset B")}</div>`+
+      pairSel("rc","Is the chain reliable yet, and what next?",REL,[1,3,0,2]);
+  case "ltool":
+    return `<p class="how">The teacher wired a Teachable Machine model into Scratch to show the right bin for an object card. Name each component, then use the run log to choose what to improve first. <span class="illus">(Illustrative run log.)</span></p>
+      <table class="t record"><thead><tr><th>Input</th><th>Output</th><th>Right bin?</th></tr></thead><tbody>${TOOLRUN.map(([i,o,r])=>`<tr><td>${esc(i)}</td><td>${esc(o)}</td><td>${r}</td></tr>`).join("")}</tbody></table>`+
+      pairSel("tl1","📥 Input",TOOL_PART,TOOL_ORDER)+
+      pairSel("tl2","⚙️ Process step (model)",TOOL_PART,TOOL_ORDER)+
+      pairSel("tl3","🧭 Rule / prompt component",TOOL_PART,TOOL_ORDER)+
+      pairSel("tl4","📤 Output",TOOL_PART,TOOL_ORDER)+
+      pairSel("tl5","Which component would you improve first, and why?",TOOL_FIRST,[1,0,3,2]);
+  case "lsafe":
+    return boxes(LSAFE,"Safety check: tick every rule that keeps our Scratch + Teachable Machine workflow safe. Leave the others unticked.");
+  case "lexit":
+    return `<p class="q" id="q-le">Explain one component change that improved your solution and how you knew it helped, then say what makes a multi-component solution reliable. Which answer does that best?</p>${radios("le",LEXIT)}`;
+  case "lchal":
+    return `<p class="how">A pair grows the chain to three tools: <b>Tool A</b> labels each item → <b>Tool B</b> counts each bin → <b>Tool C</b> writes the poster text. They want one verify component inside the chain as a governance check.</p>`+
+      pairSel("lh1","Where should the verify component sit?",LH1,[1,3,0,2])+
+      pairSel("lh2","How do they show the three-tool chain is reliable?",LH2,[2,0,3,1]);
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 9 Main Course · Term 1 Week 3 (19 – 23 Oct 2026, lesson Fri 23 Oct) · Core + Lab · Designing a Solution + Build, Test, Chain</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
