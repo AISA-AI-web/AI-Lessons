@@ -26,6 +26,11 @@
 
   /* 2. Scores: the lesson engine calls LessonHooks.state(S, acts) every time it updates */
   var sent = {}, lastSent = {}, ready = false, latest = null, busy = false, status = null;
+  /* The top bar follows the language chosen on the dashboard / calendar (stored per user). */
+  var AR = { 'Signed in as': 'تم تسجيل الدخول باسم', 'My progress': 'تقدّمي', 'Dashboard': 'لوحة المتابعة', 'Saving…': 'جارٍ الحفظ…',
+             '✓ Saved to your school account': '✓ تم الحفظ في حسابك المدرسي', 'Not saved yet – check your connection. It will retry.': 'لم يُحفَظ بعد – تحقّق من الاتصال. ستُعاد المحاولة.' };
+  var ar = false; try { ar = localStorage.getItem('aisa-lang') === 'ar'; } catch (e) {}
+  function T(s) { return ar && AR[s] ? AR[s] : s; }
   function setStatus(t, bad){ if (status) { status.textContent = t; status.className = 'app-save' + (bad ? ' bad' : ''); } }
   function flushScores(){
     if (!ready || !latest || busy) return;
@@ -41,12 +46,12 @@
     });
     if (fixes.length) run('recordLatest', lessonId, fixes).then(function(){ fixes.forEach(function(f){ lastSent[f.id] = f.score; }); }, function(){});
     if (!items.length) return;
-    busy = true; setStatus('Saving…');
+    busy = true; setStatus(T('Saving…'));
     var meta = { title: document.title, activities: acts.length, maxPoints: acts.reduce(function(n, a){ return n + a.max; }, 0) };
     run('recordScores', lessonId, meta, items).then(function(){
       items.forEach(function(it){ sent[it.id] = it.score; });
-      busy = false; setStatus('✓ Saved to your school account'); flushScores();
-    }, function(){ busy = false; setStatus('Not saved yet – check your connection. It will retry.', true); setTimeout(flushScores, 15000); });
+      busy = false; setStatus(T('✓ Saved to your school account')); flushScores();
+    }, function(){ busy = false; setStatus(T('Not saved yet – check your connection. It will retry.'), true); setTimeout(flushScores, 15000); });
   }
   window.LessonHooks = { state: function(S, acts){ if (lessonId) { latest = { S: S, acts: acts }; flushScores(); } } };
   if (lessonId) run('getLessonState', lessonId).then(function(st){ sent = st.done || {}; lastSent = st.latest || {}; ready = true; flushScores(); }, function(){ ready = true; });
@@ -79,8 +84,9 @@
       try { nm.dispatchEvent(new Event('input', { bubbles: true })); } catch (e) {} }
     var bar = document.createElement('div');
     bar.className = 'app-bar';
-    bar.innerHTML = '<span>Signed in as <b></b></span>' + (lessonId ? '<span class="app-save" aria-live="polite"></span>' : '') +
-      '<a target="_top">' + (CFG.role === 'student' ? 'My progress' : 'Dashboard') + '</a>';
+    bar.innerHTML = '<span>' + T('Signed in as') + ' <b dir="ltr"></b></span>' + (lessonId ? '<span class="app-save" aria-live="polite"></span>' : '') +
+      '<a target="_top">' + (CFG.role === 'student' ? T('My progress') : T('Dashboard')) + '</a>';
+    if (ar) { bar.dir = 'rtl'; bar.lang = 'ar'; }
     bar.querySelector('b').textContent = CFG.email;
     bar.querySelector('a').href = appUrl('dashboard');
     document.body.insertBefore(bar, document.body.firstChild);

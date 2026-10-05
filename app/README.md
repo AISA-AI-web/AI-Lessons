@@ -107,6 +107,17 @@ in the progress table, or choose one from the **Student view** menu, to see that
 student's dashboard exactly as the student sees it (read-only; lesson buttons are
 switched off). Teachers can only pick students in their own sections.
 
+## English / العربية
+
+The dashboard and the teaching calendar have an **العربية / English** button.
+Arabic switches the page to right-to-left and translates every label, button,
+tooltip, message and badge (dates in Arabic, numbers stay 0–9). The choice is
+remembered per user and also applies to the top bar on lesson pages. Lesson
+content, lesson titles, names and the official framework descriptors stay in
+English. Translations live in `src/dashboard.html` (`AR`), `calendar.html` (`AR`)
+and `school-calendar.js` (holiday names) – please have an Arabic-speaking
+colleague check the wording.
+
 ## Class lists: transfer, add, request, confirm
 
 Teachers, SLT and owners open **👥 Class lists** on the dashboard to make sure

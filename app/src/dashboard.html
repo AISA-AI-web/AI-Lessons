@@ -149,6 +149,12 @@ details.sec .in{overflow-x:auto}
 .req{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;border-top:1px solid var(--grid);padding:10px 0}
 .req:first-of-type{border-top:0}
 .log li{margin:2px 0;font-size:13.5px;color:var(--text-2)}
+.langbtn{font-size:13px;padding:3px 10px;border-radius:999px;border:1.5px solid var(--series);color:var(--series);background:var(--card);font-weight:700}
+html[dir="rtl"] body{font-family:"Segoe UI",Tahoma,"Noto Sans Arabic","Geeza Pro",system-ui,sans-serif}
+html[dir="rtl"] th,html[dir="rtl"] td{text-align:right}
+html[dir="rtl"] td.c{text-align:center}
+html[dir="rtl"] .hb .track,html[dir="rtl"] .axis div:last-child,html[dir="rtl"] .sbarwrap,html[dir="rtl"] .strand .sbar .track{direction:ltr}
+html[dir="rtl"] .printhead .r{text-align:left}
 .printhead{display:none}
 .tools{display:flex;justify-content:flex-end;gap:8px;margin:12px 0 0}
 .viewbar div{display:flex;gap:8px;flex-wrap:wrap}
@@ -194,8 +200,256 @@ var pct = function(a, b){ return b ? Math.round(a / b * 100) : 0; };
 var mins = function(s){ return Math.round(s / 60); };
 var home = CFG.base + '?p=index';
 
-$('#who').innerHTML = 'Signed in as <b>' + esc(CFG.email) + '</b> · <a href="' + esc(home) + '">All lessons</a>';
-if (CFG.role === 'student') $('#title').textContent = 'My progress';
+/* ===================== language: English / العربية ===================== */
+/* The interface can switch to Arabic (right-to-left). Lesson content, lesson titles and the
+   official framework descriptors stay in English. Shared with the calendar via the same key. */
+var LKEY = 'u:' + CFG.email + '|aisa-lang';   // same key the lesson pages' sign-in bridge uses
+var LANG = (function(){ try { return localStorage.getItem(LKEY) === 'ar' ? 'ar' : 'en'; } catch (e) { return 'en'; } })();
+var LOC = 'en-GB';
+function setLang(l){
+  LANG = l; LOC = l === 'ar' ? 'ar-AE-u-nu-latn' : 'en-GB';
+  TIERS = l === 'ar' ? TIERS_AR : TIERS_EN; TIER_SHORT = l === 'ar' ? TIER_SHORT_AR : TIER_SHORT_EN;
+  try { localStorage.setItem(LKEY, l); } catch (e) {}
+}
+function T(s, v){
+  var out = LANG === 'ar' && AR[s] !== undefined ? AR[s] : s;
+  if (v) out = out.replace(/\{(\w+)\}/g, function(m, k){ return v[k] !== undefined ? v[k] : m; });
+  if (LANG !== 'ar') out = out.replace(/\b1 (activit)ies\b/g, '1 $1y').replace(/\b1 students\b/g, '1 student');
+  return out;
+}
+function nStudents(n){ return LANG === 'ar' ? 'عدد الطلاب: ' + n : n + ' student' + (n === 1 ? '' : 's'); }
+function secName(s){ return LANG === 'ar' ? String(s || '').replace(/^Boys\b/, 'بنين').replace(/^Girls\b/, 'بنات').replace(/^Unassigned$/, 'غير موزّع') : s; }
+function calLabel(s){ return AICAL.label(s, LANG); }
+/* Messages from the server are in English; these are the ones teachers can meet. */
+var AR_ERRORS = [
+  [/^You can only move students out of your own classes\.$/, 'يمكنك نقل الطلاب من شعبك فقط.'],
+  [/^You can only add students to your own classes\.$/, 'يمكنك إضافة طلاب إلى شعبك فقط.'],
+  [/^You can only confirm your own classes\.$/, 'يمكنك تأكيد قوائم شعبك فقط.'],
+  [/^That student is not on the class lists\.$/, 'هذا الطالب غير موجود في قوائم الشعب.'],
+  [/^(?:The|That) student is already in (.+)\.$/, function(m){ return 'الطالب موجود بالفعل في ' + secName(m[1]) + '.'; }],
+  [/^There is already a request for this student to join (.+)\.$/, function(m){ return 'يوجد طلب سابق لانضمام هذا الطالب إلى ' + secName(m[1]) + '.'; }],
+  [/^Type the student's name\.$/, 'اكتب اسم الطالب.'],
+  [/^Use the student's @.+ email address\.$/, 'استخدم البريد الإلكتروني المدرسي للطالب (@aisa.sch.ae).'],
+  [/^Unknown class/, 'شعبة غير معروفة.'],
+  [/^Request not found\.$/, 'لم يتم العثور على الطلب.'],
+  [/^This request has already been decided\.$/, 'تم البتّ في هذا الطلب مسبقًا.'],
+  [/^Only (.+)'s teacher, an owner or SLT can decide this request\.$/, function(m){ return 'يبتّ في هذا الطلب معلم شعبة ' + secName(m[1]) + ' أو مسؤول النظام أو فريق القيادة فقط.'; }],
+  [/^You can only record judgements for students you teach\.$/, 'يمكنك تسجيل المستويات للطلاب الذين تدرّسهم فقط.'],
+  [/^Only @.+ accounts can use this site\.$/, 'هذا الموقع متاح لحسابات المدرسة (@aisa.sch.ae) فقط.']
+];
+function errT(t){
+  if (LANG !== 'ar') return t;
+  for (var i = 0; i < AR_ERRORS.length; i++) { var m = AR_ERRORS[i][0].exec(t); if (m) return typeof AR_ERRORS[i][1] === 'function' ? AR_ERRORS[i][1](m) : AR_ERRORS[i][1]; }
+  return AR[t] || t;
+}
+var AR = {
+  'AI Curriculum Dashboard': 'لوحة متابعة منهج الذكاء الاصطناعي',
+  'My progress': 'تقدّمي',
+  'Signed in as': 'تم تسجيل الدخول باسم',
+  'All lessons': 'جميع الدروس',
+  'Loading progress…': 'جارٍ تحميل البيانات…',
+  'Section': 'الشعبة',
+  'All sections': 'جميع الشعب',
+  'All my sections': 'جميع شعبي',
+  'Lesson': 'الدرس',
+  'Student view': 'عرض الطالب',
+  "See a student's dashboard…": 'اعرض لوحة أحد الطلاب…',
+  'Class lists': 'قوائم الشعب',
+  'Save as PDF': 'حفظ بصيغة PDF',
+  'Raw data for spreadsheets': 'بيانات خام لجداول البيانات',
+  'Download data (CSV)': 'تنزيل البيانات (CSV)',
+  'Lessons started': 'الدروس التي بدأتها',
+  'Students': 'الطلاب',
+  'of {n} lessons available': 'من أصل {n} من الدروس المتاحة',
+  'whole school': 'المدرسة كلها',
+  'in my sections': 'في شعبي',
+  'Lessons finished': 'الدروس المكتملة',
+  'every activity checked': 'تم تصحيح جميع الأنشطة',
+  'student-lessons with every activity checked': 'دروس أكمل فيها الطالب جميع الأنشطة',
+  'Average first-try score': 'متوسط درجة المحاولة الأولى',
+  'across activities checked': 'في الأنشطة التي تم تصحيحها',
+  'Average time per lesson': 'متوسط الوقت لكل درس',
+  '{n} min': '{n} دقيقة',
+  'active time on the page': 'وقت العمل الفعلي على الصفحة',
+  'Average first-try score by lesson': 'متوسط درجة المحاولة الأولى حسب الدرس',
+  "Mean of each student's first attempt, as a % of the points they attempted.": 'متوسط المحاولة الأولى لكل طالب، كنسبة مئوية من النقاط التي أجاب عنها.',
+  'Average first try: {p}%': 'متوسط المحاولة الأولى: {p}%',
+  'Completion by lesson': 'نسبة الإنجاز حسب الدرس',
+  'Share of students who have checked every activity, out of those whose section has been taught the lesson.': 'نسبة الطلاب الذين أكملوا جميع الأنشطة، من بين الطلاب الذين دُرِّست شعبتهم هذا الدرس.',
+  'Finished: {n}': 'أكملوا: {n}',
+  'Started, not finished: {n}': 'بدأوا ولم يكملوا: {n}',
+  'Not started: {n}': 'لم يبدأوا: {n}',
+  "First-try scores are kept exactly as first checked; retries are for learning and don't change them. Time counts only while the lesson page is open, visible and in use (it pauses after 2 minutes without activity).": 'تُحفَظ درجة المحاولة الأولى كما هي عند أول تصحيح؛ المحاولات اللاحقة للتعلّم ولا تغيّرها. يُحتسب الوقت فقط عندما تكون صفحة الدرس مفتوحة وظاهرة وقيد الاستخدام (يتوقف بعد دقيقتين دون نشاط).',
+  'Only the sections you teach are shown – your role can see the whole school.': 'تظهر الشعب التي تدرّسها – وتتيح لك صلاحيتك رؤية المدرسة كلها.',
+  'Only the sections you teach are shown.': 'تظهر فقط الشعب التي تدرّسها.',
+  'Data refreshed {d}.': 'آخر تحديث للبيانات: {d}.',
+  'AI Literacy progress report': 'تقرير التقدّم في محو أمية الذكاء الاصطناعي',
+  'Whole school': 'المدرسة كلها',
+  'No results yet.': 'لا توجد نتائج بعد.',
+  'Which activities need reteaching?': 'أيّ الأنشطة تحتاج إلى إعادة تدريس؟',
+  'Average first-try score for each activity in this lesson, lowest first.': 'متوسط درجة المحاولة الأولى لكل نشاط في هذا الدرس، من الأدنى إلى الأعلى.',
+  'No lessons have been started yet.': 'لم يبدأ أي درس بعد.',
+  'My lessons': 'دروسي',
+  'Student progress': 'تقدّم الطلاب',
+  'Student': 'الطالب',
+  'Badges': 'الأوسمة',
+  "See {name}'s dashboard": 'اعرض لوحة {name}',
+  '{name} has no badges yet': 'لم يحصل {name} على أوسمة بعد',
+  'n/a': '—',
+  'Bridging lessons have not been scheduled yet': 'لم تتم جدولة دروس البرنامج التمهيدي بعد',
+  '{section} has not been taught {lesson} yet': 'لم يُدرَّس درس {lesson} لشعبة {section} بعد',
+  '{name} has not started {lesson}': 'لم يبدأ {name} درس {lesson}',
+  'To be scheduled': 'لم يُجدوَل بعد',
+  'Not taught yet': 'لم يُدرَّس بعد',
+  'Not started': 'لم يبدأ',
+  'First try: {s} / {m} ({p}%)': 'المحاولة الأولى: {s} / {m} ({p}%)',
+  'Activities checked: {d} of {a}': 'الأنشطة المصحَّحة: {d} من {a}',
+  'Active time: {n} min': 'وقت العمل: {n} دقيقة',
+  '✓ done': '✓ مكتمل',
+  'm': 'د',
+  'First-try score:': 'درجة المحاولة الأولى:',
+  '· “3/9” = activities checked · “12m” = active minutes': '· «3/9» = الأنشطة المصحَّحة · «12د» = دقائق العمل',
+  'American International School in Abu Dhabi': 'المدرسة الأمريكية الدولية في أبوظبي',
+  'Prepared by {e}': 'أعدّه: {e}',
+  'Confidential – contains student data': 'سرّي – يحتوي على بيانات الطلاب',
+  'Not connected.': 'لا يوجد اتصال.',
+  'Not confirmed yet': 'لم تُؤكَّد بعد',
+  'Changed since {who} confirmed it on {d}': 'تغيّرت بعد أن أكّدها {who} في {d}',
+  '✓ Confirmed by {who} · {d}': '✓ أكّدها {who} · {d}',
+  'check each class, fix anything wrong, then confirm it is correct. Every change is logged.': 'راجع كل شعبة، وصحّح أي خطأ، ثم أكّد أن القائمة صحيحة. يُسجَّل كل تغيير.',
+  '← Back to dashboard': '→ العودة إلى لوحة المتابعة',
+  'Requests': 'الطلبات',
+  "A teacher asked for a student who is in another class. The student's current teacher, an owner or SLT decides.": 'طلب أحد المعلمين نقل طالب مسجَّل في شعبة أخرى. يبتّ في الطلب معلم الطالب الحالي أو مسؤول النظام أو فريق القيادة.',
+  '{who} asks to move them from <b>{from}</b> to <b>{to}</b>': 'يطلب {who} نقله من <b>{from}</b> إلى <b>{to}</b>',
+  '✓ Approve': '✓ موافقة',
+  'Decline': 'رفض',
+  "Request to move from {from} to <b>{to}</b> · waiting for {from}'s teacher": 'طلب نقل من {from} إلى <b>{to}</b> · بانتظار ردّ معلم {from}',
+  'Add or request a missing student': 'إضافة طالب غير موجود أو طلب انضمامه',
+  "New to the lists? They are added straight away. Already in another class? This sends a request to that class's teacher.": 'إذا لم يكن الطالب في أي قائمة يُضاف فورًا. وإذا كان مسجَّلًا في شعبة أخرى يُرسَل طلب إلى معلم تلك الشعبة.',
+  'School email': 'البريد الإلكتروني المدرسي',
+  'Full name (new students)': 'الاسم الكامل (للطلاب الجدد)',
+  'First and last name': 'الاسم الأول واسم العائلة',
+  'Class': 'الشعبة',
+  'Note (optional)': 'ملاحظة (اختياري)',
+  'e.g. joined this week': 'مثال: انضم هذا الأسبوع',
+  'Add student': 'إضافة الطالب',
+  'Email': 'البريد الإلكتروني',
+  'In the wrong class? Move to…': 'في شعبة خاطئة؟ انقله إلى…',
+  'Move {name} to': 'انقل {name} إلى',
+  'Choose class…': 'اختر الشعبة…',
+  'Move': 'نقل',
+  'No students on this list yet.': 'لا يوجد طلاب في هذه القائمة بعد.',
+  '✓ This list is correct ({n} students)': '✓ هذه القائمة صحيحة (عدد الطلاب: {n})',
+  'Recent changes': 'آخر التغييرات',
+  'Send these to IT so the school information system is corrected too.': 'أرسلها إلى قسم تقنية المعلومات ليتم تصحيح نظام معلومات الطلاب أيضًا.',
+  'Download changes for IT (CSV)': 'تنزيل التغييرات لقسم تقنية المعلومات (CSV)',
+  'added to {to} by {who}': 'أُضيف إلى {to} بواسطة {who}',
+  'moved from {from} to {to} (request approved) by {who}': 'نُقل من {from} إلى {to} (تمت الموافقة على الطلب) بواسطة {who}',
+  'moved from {from} to {to} by {who}': 'نُقل من {from} إلى {to} بواسطة {who}',
+  "Type the student's school email.": 'اكتب البريد الإلكتروني المدرسي للطالب.',
+  "Request sent: they are in {from}, so {from}'s teacher will be asked to approve the move to {to}.": 'تم إرسال الطلب: الطالب مسجَّل في {from}، لذا سيُطلب من معلم {from} الموافقة على نقله إلى {to}.',
+  'Added to {to}.': 'تمت الإضافة إلى {to}.',
+  'Choose the class to move {name} to.': 'اختر الشعبة التي تريد نقل {name} إليها.',
+  'Move {name} from {from} to {to}?': 'هل تريد نقل {name} من {from} إلى {to}؟',
+  '{name} moved from {from} to {to}.': 'تم نقل {name} من {from} إلى {to}.',
+  '{section} confirmed: {n} students.': 'تم تأكيد قائمة {section}: عدد الطلاب {n}.',
+  'Request approved.': 'تمت الموافقة على الطلب.',
+  'Request declined.': 'تم رفض الطلب.',
+  'First Steps': 'الخطوات الأولى',
+  'Finish your first lesson.': 'أكمل درسك الأول.',
+  '{a} of {b} lessons': '{a} من {b} دروس',
+  'Finisher': 'المُنجِز',
+  'Finish every lesson that has been taught to your grade so far.': 'أكمل جميع الدروس التي دُرِّست لصفك حتى الآن.',
+  'Week Streak': 'أسابيع متتالية',
+  'Finish your lessons in 3 teaching weeks in a row.': 'أكمل دروسك في 3 أسابيع دراسية متتالية.',
+  '{a} of {b} weeks': '{a} من {b} أسابيع',
+  'Fixer': 'المُصحِّح',
+  'In one lesson, go back and correct every answer you got wrong first time.': 'في درس واحد، عُد وصحّح كل إجابة أخطأت فيها في المحاولة الأولى.',
+  '{n} answers fixed so far': 'عدد الإجابات المصحَّحة حتى الآن: {n}',
+  'Fix your red answers and check again': 'صحّح إجاباتك الحمراء ثم تحقّق مرة أخرى',
+  'Stretch': 'التحدّي',
+  'Complete a ⭐ challenge activity.': 'أكمل نشاط تحدٍّ ⭐.',
+  'Try a ⭐ Challenge': 'جرّب تحدّيًا ⭐',
+  'Bullseye': 'إصابة الهدف',
+  'Score 90% or more on first tries across a whole lesson.': 'احصل على 90% أو أكثر في المحاولة الأولى في درس كامل.',
+  'Aim for 90%+ first time': 'اهدف إلى 90% فأكثر من المحاولة الأولى',
+  'AI Detective': 'محقّق الذكاء الاصطناعي',
+  'Solution Builder': 'باني الحلول',
+  'Fair Judge': 'الحَكَم العادل',
+  'Responsible User': 'المستخدم المسؤول',
+  'Secure Emerging or above in {s} ({name}).': 'حقّق مستوى ناشئ أو أعلى في {s} ({name}).',
+  '{p}% across {n} activities': '{p}% في {n} من الأنشطة',
+  'Not started yet': 'لم يبدأ بعد',
+  'No school': 'لا دوام',
+  'Before the AI Literacy timetable starts': 'قبل بدء جدول محو أمية الذكاء الاصطناعي',
+  'Teaching week {n}': 'الأسبوع الدراسي {n}',
+  '✓ Finished · {p}% first try': '✓ مكتمل · {p}% في المحاولة الأولى',
+  'Review': 'مراجعة',
+  '{d} of {a} activities · {p}%': '{d} من {a} أنشطة · {p}%',
+  'Continue': 'متابعة',
+  'Bridging · to be scheduled': 'البرنامج التمهيدي · لم يُجدوَل بعد',
+  'Preview': 'معاينة',
+  'Not taught yet · Lesson {n}': 'لم يُدرَّس بعد · الدرس {n}',
+  "This week's lesson": 'درس هذا الأسبوع',
+  'Start': 'ابدأ',
+  "You are seeing <b>{name}</b>'s dashboard exactly as they see it. Nothing here can be changed.": 'أنت ترى لوحة <b>{name}</b> كما يراها الطالب تمامًا. لا يمكن تغيير أي شيء هنا.',
+  'Grade {g}': 'الصف {g}',
+  'Hi {name} 👋': 'مرحبًا {name} 👋',
+  'This week': 'هذا الأسبوع',
+  'No new lesson on the site yet.': 'لا يوجد درس جديد على الموقع بعد.',
+  'Main course lessons taught so far': 'دروس البرنامج الرئيسي التي دُرِّست حتى الآن',
+  'First-try score': 'درجة المحاولة الأولى',
+  'across {n} activities': 'في {n} من الأنشطة',
+  'Answers fixed': 'الإجابات المصحَّحة',
+  'wrong first time, then corrected': 'خاطئة في المرة الأولى ثم صُحِّحت',
+  'Milestones reached': 'المحطات المُنجَزة',
+  'Badges earned': 'الأوسمة المكتسبة',
+  'see below': 'انظر أدناه',
+  'collect them all': 'اجمعها كلها',
+  'My strands': 'مجالاتي',
+  'The four parts of AI literacy for Grade {g}. Emerging is the goal for this term; Proficient is the goal for the year.': 'المجالات الأربعة لمحو أمية الذكاء الاصطناعي للصف {g}. الهدف لهذا الفصل مستوى «ناشئ»، والهدف للعام مستوى «متمكّن».',
+  'No activities yet': 'لا توجد أنشطة بعد',
+  '{p}% first try · {n} activities': '{p}% في المحاولة الأولى · {n} من الأنشطة',
+  'Next step – {tier}:': 'الخطوة التالية – {tier}:',
+  'My first tries, lesson by lesson': 'محاولاتي الأولى درسًا بدرس',
+  'Is your first-try score growing?': 'هل تتحسّن درجة محاولتك الأولى؟',
+  'Main': 'الرئيسي',
+  'Bridging': 'التمهيدي',
+  'W{n}': 'أسبوع {n}',
+  'First try: {s} / {m}': 'المحاولة الأولى: {s} / {m}',
+  'My learning journey': 'رحلتي التعليمية',
+  'Every AI lesson for your grade.': 'جميع دروس الذكاء الاصطناعي لصفك.',
+  'Main course · Week {n}': 'البرنامج الرئيسي · الأسبوع {n}',
+  'Bridging · Week {n}': 'البرنامج التمهيدي · الأسبوع {n}',
+  'Milestones': 'المحطات',
+  'My badges': 'أوسمتي',
+  'Milestones reward careful work, fixing mistakes and stretching yourself – not speed.': 'تكافئ المحطات العمل المتقن وتصحيح الأخطاء وتحدّي النفس – لا السرعة.',
+  'Badges reward careful work, fixing mistakes and stretching yourself – not speed.': 'تكافئ الأوسمة العمل المتقن وتصحيح الأخطاء وتحدّي النفس – لا السرعة.',
+  'Reached': 'تم بلوغها',
+  'Earned!': 'حصلت عليه!',
+  'Only you, your teachers and school leaders can see this page. There are no class rankings. ✎ means your teacher set that level.': 'لا يرى هذه الصفحة إلا أنت ومعلموك وقيادة المدرسة. لا يوجد ترتيب للطلاب. تعني ✎ أن معلمك حدّد هذا المستوى.',
+  'Updated {d}.': 'آخر تحديث: {d}.',
+  'Attainment by strand': 'التحصيل حسب المجال',
+  "Each student's current tier in each strand (Grade {g}).": 'المستوى الحالي لكل طالب في كل مجال (الصف {g}).',
+  "Each student's current tier in each strand.": 'المستوى الحالي لكل طالب في كل مجال.',
+  'Emerging is the Term 1 expected standard; Advanced is recorded by teachers. Use the menus in the table below to record a tier (✎).': 'مستوى «ناشئ» هو المستوى المتوقع في الفصل الأول، ومستوى «متقدّم» يسجّله المعلمون. استخدم القوائم في الجدول أدناه لتسجيل مستوى (✎).',
+  '{n} of {t} students ({p}%)': '{n} من {t} طالبًا ({p}%)',
+  '{p}% at Emerging+': '{p}% في مستوى ناشئ فأعلى',
+  'First try {p}% on {n} activities': 'المحاولة الأولى {p}% في {n} من الأنشطة',
+  'Automatic tier: {t}': 'المستوى التلقائي: {t}',
+  'Set by {e}': 'حدّده {e}'
+};
+
+function header(){
+  document.documentElement.lang = LANG; document.documentElement.dir = LANG === 'ar' ? 'rtl' : 'ltr';
+  document.title = T('AI Curriculum Dashboard');
+  $('#title').textContent = CFG.role === 'student' ? T('My progress') : T('AI Curriculum Dashboard');
+  $('#who').innerHTML = T('Signed in as') + ' <b>' + esc(CFG.email) + '</b> · <a href="' + esc(home) + '">' + T('All lessons') + '</a> · ' +
+    '<button type="button" id="langBtn" class="langbtn" lang="' + (LANG === 'ar' ? 'en' : 'ar') + '">' + (LANG === 'ar' ? 'English' : 'العربية') + '</button>';
+  $('#langBtn').onclick = function(){ setLang(LANG === 'ar' ? 'en' : 'ar'); header(); if (D) render(); };
+}
+header();
+if (!D) $('#app').innerHTML = '<div class="loading">' + T('Loading progress…') + '</div>';
 
 var VIEW = null;   // staff: the student whose view is being previewed
 var MANAGE = false; // staff: the class-lists screen
@@ -216,7 +470,7 @@ function addCatalog(){
   });
 }
 
-function lessonName(l){ return 'G' + l.grade + ' ' + (l.course === 'main' ? 'Main' : 'Bridging') + ' W' + l.week; }
+function lessonName(l){ return LANG === 'ar' ? 'ص' + l.grade + ' ' + (l.course === 'main' ? 'رئيسي' : 'تمهيدي') + ' – أسبوع ' + l.week : 'G' + l.grade + ' ' + (l.course === 'main' ? 'Main' : 'Bridging') + ' W' + l.week; }
 function lessonTitle(l){ return (l.title || '').replace(/ – Grade.*$/, ''); }
 
 /* one row per student × lesson with derived numbers */
@@ -242,17 +496,17 @@ function render(){
   if (MANAGE && D.roster) return manageView();
   var html = '';
   if (!self) html += '<div class="filters">' +
-    '<div><label for="fSec">Section</label><select id="fSec"><option value="">' + (D.scope === 'school' ? 'All sections' : 'All my sections') + '</option>' +
-      secs.map(function(s){ return '<option' + (F.section === s ? ' selected' : '') + '>' + esc(s) + '</option>'; }).join('') + '</select></div>' +
-    '<div><label for="fLes">Lesson</label><select id="fLes"><option value="">All lessons</option>' +
+    '<div><label for="fSec">' + T('Section') + '</label><select id="fSec"><option value="">' + (D.scope === 'school' ? T('All sections') : T('All my sections')) + '</option>' +
+      secs.map(function(s){ return '<option value="' + esc(s) + '"' + (F.section === s ? ' selected' : '') + '>' + esc(secName(s)) + '</option>'; }).join('') + '</select></div>' +
+    '<div><label for="fLes">' + T('Lesson') + '</label><select id="fLes"><option value="">' + T('All lessons') + '</option>' +
       lessons.map(function(l){ return '<option value="' + esc(l.id) + '"' + (F.lesson === l.id ? ' selected' : '') + '>' + esc(lessonName(l) + ' – ' + lessonTitle(l)) + '</option>'; }).join('') + '</select></div>' +
-    '<div><label for="fView">Student view</label><select id="fView"><option value="">See a student\'s dashboard…</option>' +
+    '<div><label for="fView">' + T('Student view') + '</label><select id="fView"><option value="">' + T('See a student\'s dashboard…') + '</option>' +
       D.students.slice().sort(function(a, b){ return a.section.localeCompare(b.section, undefined, { numeric: true }) || a.name.localeCompare(b.name); })
         .filter(function(s){ return !F.section || s.section === F.section; })
-        .map(function(s){ return '<option value="' + esc(s.email) + '">' + esc(s.name + ' · ' + s.section) + '</option>'; }).join('') + '</select></div>' +
-    (D.roster ? '<div><button type="button" id="rosterBtn">👥 Class lists' + (D.roster.requests.some(function(r){ return r.canDecide; }) ? ' <span class="dot">' + D.roster.requests.filter(function(r){ return r.canDecide; }).length + '</span>' : '') + '</button></div>' : '') +
-    '<div><button type="button" id="pdfBtn">Save as PDF</button></div>' +
-    '<div><button type="button" id="exportBtn" title="Raw data for spreadsheets">Download data (CSV)</button></div></div>';
+        .map(function(s){ return '<option value="' + esc(s.email) + '">' + esc(s.name + ' · ' + secName(s.section)) + '</option>'; }).join('') + '</select></div>' +
+    (D.roster ? '<div><button type="button" id="rosterBtn">👥 ' + T('Class lists') + (D.roster.requests.some(function(r){ return r.canDecide; }) ? ' <span class="dot">' + D.roster.requests.filter(function(r){ return r.canDecide; }).length + '</span>' : '') + '</button></div>' : '') +
+    '<div><button type="button" id="pdfBtn">' + T('Save as PDF') + '</button></div>' +
+    '<div><button type="button" id="exportBtn" title="' + T('Raw data for spreadsheets') + '">' + T('Download data (CSV)') + '</button></div></div>';
   html += '<div id="body"></div>';
   $('#app').innerHTML = html;
   if (!self) {
@@ -279,29 +533,29 @@ function draw(){
   var tot = rows.reduce(function(a, b){ a.st += b.started; a.p += b.pts; a.m += b.max; a.s += b.secs; a.fin += b.finished; return a; }, { st: 0, p: 0, m: 0, s: 0, fin: 0 });
 
   var h = '<div class="tiles">' +
-    tile(self ? 'Lessons started' : 'Students', self ? tot.st : f.students.length, self ? 'of ' + f.lessons.length + ' lessons available' : (F.section || (D.scope === 'school' ? 'whole school' : 'in my sections'))) +
-    tile('Lessons finished', tot.fin, self ? 'every activity checked' : 'student-lessons with every activity checked') +
-    tile('Average first-try score', tot.m ? pct(tot.p, tot.m) + '%' : '–', 'across activities checked') +
-    tile('Average time per lesson', tot.st ? mins(tot.s / tot.st) + ' min' : '–', 'active time on the page') + '</div>';
+    tile(self ? T('Lessons started') : T('Students'), self ? tot.st : f.students.length, self ? T('of {n} lessons available', { n: f.lessons.length }) : (F.section ? secName(F.section) : (D.scope === 'school' ? T('whole school') : T('in my sections')))) +
+    tile(T('Lessons finished'), tot.fin, self ? T('every activity checked') : T('student-lessons with every activity checked')) +
+    tile(T('Average first-try score'), tot.m ? pct(tot.p, tot.m) + '%' : '–', T('across activities checked')) +
+    tile(T('Average time per lesson'), tot.st ? T('{n} min', { n: mins(tot.s / tot.st) }) : '–', T('active time on the page')) + '</div>';
 
   if (!self) {
     h += '<div class="grid2">' +
-      card('Average first-try score by lesson', 'Mean of each student\'s first attempt, as a % of the points they attempted.',
+      card(T('Average first-try score by lesson'), T('Mean of each student\'s first attempt, as a % of the points they attempted.'),
         hbars(rows.filter(function(b){ return b.max; }).map(function(b){ return { label: lessonName(b.l), value: pct(b.pts, b.max), text: pct(b.pts, b.max) + '%',
-          tip: '<b>' + esc(lessonName(b.l)) + '</b><br>' + esc(lessonTitle(b.l)) + '<br>Average first try: ' + pct(b.pts, b.max) + '%<br>' + b.started + ' student' + (b.started === 1 ? '' : 's') }; }), 100, '%')) +
-      card('Completion by lesson', 'Share of students who have checked every activity, out of those whose section has been taught the lesson.',
+          tip: '<b>' + esc(lessonName(b.l)) + '</b><br>' + esc(lessonTitle(b.l)) + '<br>' + T('Average first try: {p}%', { p: pct(b.pts, b.max) }) + '<br>' + nStudents(b.started) }; }), 100, '%')) +
+      card(T('Completion by lesson'), T('Share of students who have checked every activity, out of those whose section has been taught the lesson.'),
         hbars(rows.filter(function(b){ return (b.l.course === 'main' && rosterFor(f, b.l) > 0) || b.started; }).map(function(b){ var n = rosterFor(f, b.l); return { label: lessonName(b.l), value: pct(b.finished, n), text: b.finished + ' / ' + n,
-          tip: '<b>' + esc(lessonName(b.l)) + '</b><br>Finished: ' + b.finished + '<br>Started, not finished: ' + (b.started - b.finished) + '<br>Not started: ' + Math.max(0, n - b.started) }; }), 100, '%')) +
+          tip: '<b>' + esc(lessonName(b.l)) + '</b><br>' + T('Finished: {n}', { n: b.finished }) + '<br>' + T('Started, not finished: {n}', { n: b.started - b.finished }) + '<br>' + T('Not started: {n}', { n: Math.max(0, n - b.started) }) }; }), 100, '%')) +
       '</div>';
     if (f.students.length) h += attainmentCard(f);
     if (F.lesson) h += activityChart(f);
   }
   h += progressTable(f, self);
-  h += '<p class="note">First-try scores are kept exactly as first checked; retries are for learning and don\'t change them. Time counts only while the lesson page is open, visible and in use (it pauses after 2 minutes without activity). ' +
-       (self ? '' : 'Only the sections you teach are shown' + (D.scope === 'school' ? ' – your role can see the whole school.' : '.')) + ' Data refreshed ' + new Date(D.generatedAt).toLocaleString('en-GB') + '.</p>';
+  h += '<p class="note">' + T('First-try scores are kept exactly as first checked; retries are for learning and don\'t change them. Time counts only while the lesson page is open, visible and in use (it pauses after 2 minutes without activity).') + ' ' +
+       (self ? '' : (D.scope === 'school' ? T('Only the sections you teach are shown – your role can see the whole school.') : T('Only the sections you teach are shown.'))) + ' ' + T('Data refreshed {d}.', { d: new Date(D.generatedAt).toLocaleString(LOC) }) + '</p>';
   var les = F.lesson && D.lessons.filter(function(l){ return l.id === F.lesson; })[0];
-  $('#body').innerHTML = printHead('AI Literacy progress report',
-    (F.section || (D.scope === 'school' ? 'Whole school' : 'All my sections')) + ' · ' + (les ? lessonName(les) + ' – ' + lessonTitle(les) : 'All lessons')) + h;
+  $('#body').innerHTML = printHead(T('AI Literacy progress report'),
+    (F.section ? secName(F.section) : (D.scope === 'school' ? T('Whole school') : T('All my sections'))) + ' · ' + (les ? lessonName(les) + ' – ' + lessonTitle(les) : T('All lessons'))) + h;
   wireTips(); wireJudge();
   document.querySelectorAll('#body .stu').forEach(function(b){ b.onclick = function(){ viewAs(b.getAttribute('data-e')); }; });
 }
@@ -317,7 +571,7 @@ function tile(k, v, s){ return '<div class="tile"><small>' + esc(k) + '</small><
 function card(t, s, body){ return '<section class="card"><h2>' + esc(t) + '</h2><p class="sub">' + esc(s) + '</p>' + body + '</section>'; }
 
 function hbars(items, max, unit){
-  if (!items.length) return '<div class="empty">No results yet.</div>';
+  if (!items.length) return '<div class="empty">' + T('No results yet.') + '</div>';
   return '<div class="hbars">' + items.map(function(it){
     var w = Math.max(0, Math.min(100, it.value / max * 100));
     return '<div class="hb"><span class="lab" title="' + esc(it.label) + '">' + esc(it.label) + '</span><div class="track">' +
@@ -332,9 +586,9 @@ function activityChart(f){
     Object.keys(r.acts).forEach(function(k){ var a = r.acts[k]; var o = acts[k] || (acts[k] = { title: a[2], part: a[3], p: 0, m: 0, n: 0 }); o.p += a[0]; o.m += a[1]; o.n++; });
   });
   var items = Object.keys(acts).map(function(k){ var a = acts[k]; return { label: (a.part ? a.part + ': ' : '') + a.title, value: pct(a.p, a.m), text: pct(a.p, a.m) + '%',
-    tip: '<b>' + esc(a.title) + '</b><br>' + esc(a.part) + '<br>Average first try: ' + pct(a.p, a.m) + '%<br>' + a.n + ' student' + (a.n === 1 ? '' : 's') }; })
+    tip: '<b>' + esc(a.title) + '</b><br>' + esc(a.part) + '<br>' + T('Average first try: {p}%', { p: pct(a.p, a.m) }) + '<br>' + nStudents(a.n) }; })
     .sort(function(a, b){ return a.value - b.value; });
-  return card('Which activities need reteaching?', 'Average first-try score for each activity in this lesson, lowest first.', hbars(items, 100, '%'));
+  return card(T('Which activities need reteaching?'), T('Average first-try score for each activity in this lesson, lowest first.'), hbars(items, 100, '%'));
 }
 
 function shade(p){
@@ -344,41 +598,41 @@ function shade(p){
 }
 
 function progressTable(f, self){
-  if (!f.lessons.length) return '<div class="card"><div class="empty">No lessons have been started yet.</div></div>';
+  if (!f.lessons.length) return '<div class="card"><div class="empty">' + T('No lessons have been started yet.') + '</div></div>';
   var R = {}; f.res.forEach(function(r){ R[r.email + '|' + r.lessonId] = r; });
   var students = f.students.slice().sort(function(a, b){ return a.section.localeCompare(b.section, undefined, { numeric: true }) || a.name.localeCompare(b.name); });
-  var h = '<div class="card" style="padding:0;border:0;background:none"><h2 style="margin:0 0 8px">' + (self ? 'My lessons' : 'Student progress') + '</h2><div class="tablewrap"><table><thead><tr>' +
-    (self ? '' : '<th>Student</th><th>Section</th><th>Badges</th>' + STRAND_ORDER.map(function(c){ return '<th class="l" title="' + esc(STRAND_SHORT[c]) + '">' + c + '<br><span style="font-weight:400">' + esc(STRAND_SHORT[c]) + '</span></th>'; }).join('')) +
+  var h = '<div class="card" style="padding:0;border:0;background:none"><h2 style="margin:0 0 8px">' + (self ? T('My lessons') : T('Student progress')) + '</h2><div class="tablewrap"><table><thead><tr>' +
+    (self ? '' : '<th>' + T('Student') + '</th><th>' + T('Section') + '</th><th>' + T('Badges') + '</th>' + STRAND_ORDER.map(function(c){ return '<th class="l" title="' + esc(strandShort(c)) + '">' + c + '<br><span style="font-weight:400">' + esc(strandShort(c)) + '</span></th>'; }).join('')) +
     f.lessons.map(function(l){ return '<th class="l" title="' + esc(lessonTitle(l)) + '">' + esc(lessonName(l)) + '</th>'; }).join('') + '</tr></thead><tbody>';
   students.forEach(function(s){
     var stt = studentStats(s.email, s.grade), bs = stt.earned;
-    h += '<tr>' + (self ? '' : '<td><button type="button" class="stu" data-e="' + esc(s.email) + '" title="See ' + esc(s.name) + '\'s dashboard">' + esc(s.name) + '</button></td><td>' + esc(s.section) + '</td><td class="c"><span class="bcount" data-tip="' +
-      esc(bs.length ? '<b>' + s.name + '</b><br>' + bs.map(function(b){ return b.icon + ' ' + b.name; }).join('<br>') : s.name + ' has no badges yet') + '">' +
+    h += '<tr>' + (self ? '' : '<td><button type="button" class="stu" data-e="' + esc(s.email) + '" title="' + esc(T('See {name}\'s dashboard', { name: s.name })) + '">' + esc(s.name) + '</button></td><td>' + esc(secName(s.section)) + '</td><td class="c"><span class="bcount" data-tip="' +
+      esc(bs.length ? '<b>' + s.name + '</b><br>' + bs.map(function(b){ return b.icon + ' ' + b.name; }).join('<br>') : T('{name} has no badges yet', { name: s.name })) + '">' +
       (bs.length ? bs.slice(0, 4).map(function(b){ return b.icon; }).join('') + (bs.length > 4 ? ' +' + (bs.length - 4) : '') : '–') + '</span></td>' +
       STRAND_ORDER.map(function(c){ return judgeCell(s, c, stt.strands[c]); }).join(''));
     f.lessons.forEach(function(l){
-      if (s.grade && s.grade !== l.grade) { h += '<td class="c"><span class="cell none">n/a</span></td>'; return; }
+      if (s.grade && s.grade !== l.grade) { h += '<td class="c"><span class="cell none">' + T('n/a') + '</span></td>'; return; }
       var r = R[s.email + '|' + l.id];
       if (!r) { var nt = l.course === 'main' && taughtFor(s.section) < l.week;
-        h += '<td class="c"><span class="cell none" data-tip="' + esc(l.course === 'bridging' ? 'Bridging lessons have not been scheduled yet' : nt ? s.section + ' has not been taught ' + lessonName(l) + ' yet' : s.name + ' has not started ' + lessonName(l)) + '">' + (l.course === 'bridging' ? 'To be scheduled' : nt ? 'Not taught yet' : 'Not started') + '</span></td>'; return; }
+        h += '<td class="c"><span class="cell none" data-tip="' + esc(l.course === 'bridging' ? T('Bridging lessons have not been scheduled yet') : nt ? T('{section} has not been taught {lesson} yet', { section: secName(s.section), lesson: lessonName(l) }) : T('{name} has not started {lesson}', { name: s.name, lesson: lessonName(l) })) + '">' + (l.course === 'bridging' ? T('To be scheduled') : nt ? T('Not taught yet') : T('Not started')) + '</span></td>'; return; }
       var max = Object.keys(r.acts).reduce(function(n, k){ return n + r.acts[k][1]; }, 0), p = pct(r.score, max), sh = shade(p);
       var fin = r.done >= l.activities;
       h += '<td class="c"><span class="cell" style="background:' + sh[1] + ';color:' + sh[2] + '" data-tip="' +
-        esc('<b>' + s.name + ' · ' + lessonName(l) + '</b><br>First try: ' + r.score + ' / ' + max + ' (' + p + '%)<br>Activities checked: ' + r.done + ' of ' + l.activities + '<br>Active time: ' + mins(r.seconds) + ' min') + '">' +
-        p + '%<small>' + (fin ? '✓ done' : r.done + '/' + l.activities) + ' · ' + mins(r.seconds) + 'm</small></span></td>';
+        esc('<b>' + s.name + ' · ' + lessonName(l) + '</b><br>' + T('First try: {s} / {m} ({p}%)', { s: r.score, m: max, p: p }) + '<br>' + T('Activities checked: {d} of {a}', { d: r.done, a: l.activities }) + '<br>' + T('Active time: {n} min', { n: mins(r.seconds) })) + '">' +
+        p + '%<small>' + (fin ? T('✓ done') : r.done + '/' + l.activities) + ' · ' + mins(r.seconds) + T('m') + '</small></span></td>';
     });
     h += '</tr>';
   });
-  h += '</tbody></table></div><div class="legend"><span>First-try score:</span>' +
+  h += '</tbody></table></div><div class="legend"><span>' + T('First-try score:') + '</span>' +
     [['var(--s100)','0–19%'],['var(--s200)','20–39%'],['var(--s300)','40–59%'],['var(--s400)','60–74%'],['var(--s500)','75–89%'],['var(--s600)','90–100%']].map(function(x){ return '<span><i style="background:' + x[0] + '"></i>' + x[1] + '</span>'; }).join('') +
-    '<span>· “3/9” = activities checked · “12m” = active minutes</span></div></div>';
+    '<span>' + T('· “3/9” = activities checked · “12m” = active minutes') + '</span></div></div>';
   return h;
 }
 
 /* ---------- Save as PDF: prints the dashboard as shown, with a report header ---------- */
 function printHead(title, scope){
-  return '<div class="printhead"><div><h1>' + esc(title) + '</h1><p>' + esc(scope) + '</p></div><div class="r"><p><b>American International School in Abu Dhabi</b></p><p>Prepared by ' + esc(CFG.email) + ' · ' +
-    new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) + '</p><p>Confidential – contains student data</p></div></div>';
+  return '<div class="printhead"><div><h1>' + esc(title) + '</h1><p>' + esc(scope) + '</p></div><div class="r"><p><b>' + T('American International School in Abu Dhabi') + '</b></p><p>' + T('Prepared by {e}', { e: esc(CFG.email) }) + ' · ' +
+    new Date().toLocaleDateString(LOC, { day: 'numeric', month: 'long', year: 'numeric' }) + '</p><p>' + T('Confidential – contains student data') + '</p></div></div>';
 }
 function fitTables(){       // shrink wide tables to the page width (A4 landscape ≈ 1040px)
   document.querySelectorAll('.tablewrap table').forEach(function(t){
@@ -408,53 +662,54 @@ function call(fn, args, done){
   var fail = function(e){ msg(e && e.message ? e.message : String(e), true); busy(false); };
   busy(true);
   if (window.google && google.script && google.script.run) { var r = google.script.run.withSuccessHandler(function(x){ busy(false); done(x); }).withFailureHandler(fail); r[fn].apply(r, args); }
-  else fail(new Error('Not connected.'));
+  else fail(new Error(T('Not connected.')));
 }
 function busy(on){ document.querySelectorAll('#app button').forEach(function(b){ b.disabled = on; }); }
-function msg(t, bad){ var m = $('#rmsg'); if (m) { m.className = 'rmsg ' + (bad ? 'bad' : 'ok'); m.textContent = t; } }
+function msg(t, bad){ var m = $('#rmsg'); if (m) { m.className = 'rmsg ' + (bad ? 'bad' : 'ok'); m.textContent = bad ? errT(t) : t; } }
 var LASTMSG = null;
 function reloadWith(t){ LASTMSG = t; load(); }
-function fmtDate(iso){ return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); }
+function fmtDate(iso){ return new Date(iso).toLocaleDateString(LOC, { day: 'numeric', month: 'short', year: 'numeric' }); }
 function who(e){ return String(e || '').split('@')[0]; }
 function confChip(c){
-  if (!c) return '<span class="chip no">Not confirmed yet</span>';
-  if (c.changedSince) return '<span class="chip warn">Changed since ' + esc(who(c.by)) + ' confirmed it on ' + fmtDate(c.at) + '</span>';
-  return '<span class="chip ok">✓ Confirmed by ' + esc(who(c.by)) + ' · ' + fmtDate(c.at) + '</span>';
+  if (!c) return '<span class="chip no">' + T('Not confirmed yet') + '</span>';
+  if (c.changedSince) return '<span class="chip warn">' + T('Changed since {who} confirmed it on {d}', { who: esc(who(c.by)), d: fmtDate(c.at) }) + '</span>';
+  return '<span class="chip ok">' + T('✓ Confirmed by {who} · {d}', { who: esc(who(c.by)), d: fmtDate(c.at) }) + '</span>';
 }
 function manageView(){
   var R = D.roster, mine = R.mySections.slice().filter(function(s){ return !F.section || s === F.section; });
   var many = mine.length > 3;
-  var h = '<div class="viewbar"><span>👥 <b>Class lists</b> – check each class, fix anything wrong, then confirm it is correct. Every change is logged.</span><div><button type="button" id="backBtn">← Back to dashboard</button></div></div>';
+  var h = '<div class="viewbar"><span>👥 <b>' + T('Class lists') + '</b> – ' + T('check each class, fix anything wrong, then confirm it is correct. Every change is logged.') + '</span><div><button type="button" id="backBtn">' + T('← Back to dashboard') + '</button></div></div>';
   h += '<p id="rmsg" class="rmsg" role="status" aria-live="polite"></p>';
   var dec = R.requests.filter(function(r){ return r.canDecide; }), wait = R.requests.filter(function(r){ return !r.canDecide; });
   if (R.requests.length) {
-    h += '<section class="card"><h2>Requests</h2><p class="sub">A teacher asked for a student who is in another class. The student\'s current teacher, an owner or SLT decides.</p>' +
+    h += '<section class="card"><h2>' + T('Requests') + '</h2><p class="sub">' + T('A teacher asked for a student who is in another class. The student\'s current teacher, an owner or SLT decides.') + '</p>' +
       dec.map(function(r){ return '<div class="req"><div><b>' + esc(r.name || who(r.student)) + '</b> <span class="sub">(' + esc(r.student) + ')</span><br>' +
-        esc(who(r.by)) + ' asks to move them from <b>' + esc(r.from) + '</b> to <b>' + esc(r.to) + '</b> · ' + fmtDate(r.at) + (r.note ? '<br><i>“' + esc(r.note) + '”</i>' : '') + '</div>' +
-        '<div><button type="button" data-dec="' + r.id + '" data-ok="1">✓ Approve</button> <button type="button" data-dec="' + r.id + '" data-ok="0">Decline</button></div></div>'; }).join('') +
-      wait.map(function(r){ return '<div class="req"><div><b>' + esc(r.name || who(r.student)) + '</b> <span class="sub">(' + esc(r.student) + ')</span><br>Request to move from ' + esc(r.from) + ' to <b>' + esc(r.to) + '</b> · waiting for ' + esc(r.from) + '\'s teacher</div></div>'; }).join('') + '</section>';
+        T('{who} asks to move them from <b>{from}</b> to <b>{to}</b>', { who: esc(who(r.by)), from: esc(secName(r.from)), to: esc(secName(r.to)) }) + ' · ' + fmtDate(r.at) + (r.note ? '<br><i>“' + esc(r.note) + '”</i>' : '') + '</div>' +
+        '<div><button type="button" data-dec="' + r.id + '" data-ok="1">' + T('✓ Approve') + '</button> <button type="button" data-dec="' + r.id + '" data-ok="0">' + T('Decline') + '</button></div></div>'; }).join('') +
+      wait.map(function(r){ return '<div class="req"><div><b>' + esc(r.name || who(r.student)) + '</b> <span class="sub">(' + esc(r.student) + ')</span><br>' + T('Request to move from {from} to <b>{to}</b> · waiting for {from}\'s teacher', { from: esc(secName(r.from)), to: esc(secName(r.to)) }) + '</div></div>'; }).join('') + '</section>';
   }
-  h += '<section class="card"><h2>Add or request a missing student</h2><p class="sub">New to the lists? They are added straight away. Already in another class? This sends a request to that class\'s teacher.</p>' +
-    '<div class="form"><div><label for="adEmail">School email</label><input id="adEmail" type="email" placeholder="12345@aisa.sch.ae" autocomplete="off"></div>' +
-    '<div><label for="adName">Full name (new students)</label><input id="adName" autocomplete="off" placeholder="First and last name"></div>' +
-    '<div><label for="adSec">Class</label><select id="adSec">' + R.mySections.map(function(s){ return '<option' + (F.section === s ? ' selected' : '') + '>' + esc(s) + '</option>'; }).join('') + '</select></div>' +
-    '<div><label for="adNote">Note (optional)</label><input id="adNote" autocomplete="off" placeholder="e.g. joined this week"></div>' +
-    '<div><button type="button" id="adBtn">Add student</button></div></div></section>';
+  h += '<section class="card"><h2>' + T('Add or request a missing student') + '</h2><p class="sub">' + T('New to the lists? They are added straight away. Already in another class? This sends a request to that class\'s teacher.') + '</p>' +
+    '<div class="form"><div><label for="adEmail">' + T('School email') + '</label><input id="adEmail" type="email" dir="ltr" placeholder="12345@aisa.sch.ae" autocomplete="off"></div>' +
+    '<div><label for="adName">' + T('Full name (new students)') + '</label><input id="adName" autocomplete="off" placeholder="' + T('First and last name') + '"></div>' +
+    '<div><label for="adSec">' + T('Class') + '</label><select id="adSec">' + R.mySections.map(function(s){ return '<option value="' + esc(s) + '"' + (F.section === s ? ' selected' : '') + '>' + esc(secName(s)) + '</option>'; }).join('') + '</select></div>' +
+    '<div><label for="adNote">' + T('Note (optional)') + '</label><input id="adNote" autocomplete="off" placeholder="' + T('e.g. joined this week') + '"></div>' +
+    '<div><button type="button" id="adBtn">' + T('Add student') + '</button></div></div></section>';
   mine.forEach(function(sec){
     var list = D.students.filter(function(x){ return x.section === sec; }).sort(function(a, b){ return a.name.localeCompare(b.name); });
-    h += '<details class="sec"' + (many ? '' : ' open') + '><summary><b>' + esc(sec) + '</b><span class="sub">' + list.length + ' student' + (list.length === 1 ? '' : 's') + '</span>' + confChip(R.confirmations[sec]) + '</summary><div class="in">' +
-      (list.length ? '<table class="rtable"><thead><tr><th>Student</th><th>Email</th><th>In the wrong class? Move to…</th></tr></thead><tbody>' +
-        list.map(function(x){ return '<tr><td>' + esc(x.name) + '</td><td>' + esc(x.email) + '</td><td><select data-to="' + esc(x.email) + '" aria-label="Move ' + esc(x.name) + ' to">' +
-          '<option value="">Choose class…</option>' + R.sections.filter(function(s){ return s !== sec; }).map(function(s){ return '<option>' + esc(s) + '</option>'; }).join('') +
-          '</select> <button type="button" data-move="' + esc(x.email) + '" data-name="' + esc(x.name) + '" data-from="' + esc(sec) + '">Move</button></td></tr>'; }).join('') + '</tbody></table>'
-        : '<p class="empty">No students on this list yet.</p>') +
-      '<p style="margin:12px 0 0"><button type="button" data-confirm="' + esc(sec) + '">✓ This list is correct (' + list.length + ' students)</button></p></div></details>';
+    h += '<details class="sec"' + (many ? '' : ' open') + '><summary><b>' + esc(secName(sec)) + '</b><span class="sub">' + nStudents(list.length) + '</span>' + confChip(R.confirmations[sec]) + '</summary><div class="in">' +
+      (list.length ? '<table class="rtable"><thead><tr><th>' + T('Student') + '</th><th>' + T('Email') + '</th><th>' + T('In the wrong class? Move to…') + '</th></tr></thead><tbody>' +
+        list.map(function(x){ return '<tr><td>' + esc(x.name) + '</td><td dir="ltr">' + esc(x.email) + '</td><td><select data-to="' + esc(x.email) + '" aria-label="' + esc(T('Move {name} to', { name: x.name })) + '">' +
+          '<option value="">' + T('Choose class…') + '</option>' + R.sections.filter(function(s){ return s !== sec; }).map(function(s){ return '<option value="' + esc(s) + '">' + esc(secName(s)) + '</option>'; }).join('') +
+          '</select> <button type="button" data-move="' + esc(x.email) + '" data-name="' + esc(x.name) + '" data-from="' + esc(sec) + '">' + T('Move') + '</button></td></tr>'; }).join('') + '</tbody></table>'
+        : '<p class="empty">' + T('No students on this list yet.') + '</p>') +
+      '<p style="margin:12px 0 0"><button type="button" data-confirm="' + esc(sec) + '">' + T('✓ This list is correct ({n} students)', { n: list.length }) + '</button></p></div></details>';
   });
-  if (R.recent.length) h += '<section class="card"><h2>Recent changes</h2>' +
-    (R.canExport ? '<p class="sub">Send these to IT so the school information system is corrected too. <button type="button" id="itCsv">Download changes for IT (CSV)</button></p>' : '') +
+  if (R.recent.length) h += '<section class="card"><h2>' + T('Recent changes') + '</h2>' +
+    (R.canExport ? '<p class="sub">' + T('Send these to IT so the school information system is corrected too.') + ' <button type="button" id="itCsv">' + T('Download changes for IT (CSV)') + '</button></p>' : '') +
     '<ul class="log">' + R.recent.slice(0, 30).map(function(c){
-    var what = c.type === 'add' ? 'added to ' + esc(c.to) : c.type === 'join' ? 'moved from ' + esc(c.from) + ' to ' + esc(c.to) + ' (request approved)' : 'moved from ' + esc(c.from) + ' to ' + esc(c.to);
-    return '<li><b>' + esc(c.name || who(c.student)) + '</b> ' + what + ' by ' + esc(who(c.by)) + ' · ' + fmtDate(c.at) + '</li>'; }).join('') + '</ul></section>';
+    var v = { from: esc(secName(c.from)), to: esc(secName(c.to)), who: esc(who(c.by)) };
+    var what = c.type === 'add' ? T('added to {to} by {who}', v) : c.type === 'join' ? T('moved from {from} to {to} (request approved) by {who}', v) : T('moved from {from} to {to} by {who}', v);
+    return '<li><b>' + esc(c.name || who(c.student)) + '</b> ' + what + ' · ' + fmtDate(c.at) + '</li>'; }).join('') + '</ul></section>';
   $('#app').innerHTML = h;
   if (LASTMSG) { msg(LASTMSG); LASTMSG = null; }
   $('#backBtn').onclick = function(){ MANAGE = false; render(); };
@@ -467,23 +722,24 @@ function manageView(){
   };
   $('#adBtn').onclick = function(){
     var e = $('#adEmail').value.trim(), n = $('#adName').value.trim(), sc = $('#adSec').value, note = $('#adNote').value.trim();
-    if (!e) return msg('Type the student\'s school email.', true);
+    if (!e) return msg(T('Type the student\'s school email.'), true);
     call('addStudent', [e, n, sc, note], function(r){
-      reloadWith(r.requested ? 'Request sent: they are in ' + r.from + ', so ' + r.from + '\'s teacher will be asked to approve the move to ' + r.to + '.' : 'Added to ' + r.to + '.'); });
+      reloadWith(r.requested ? T('Request sent: they are in {from}, so {from}\'s teacher will be asked to approve the move to {to}.', { from: secName(r.from), to: secName(r.to) }) : T('Added to {to}.', { to: secName(r.to) })); });
   };
   document.querySelectorAll('[data-move]').forEach(function(b){ b.onclick = function(){
     var em = b.getAttribute('data-move'), to = document.querySelector('select[data-to="' + em + '"]').value;
-    if (!to) return msg('Choose the class to move ' + b.getAttribute('data-name') + ' to.', true);
-    if (!confirm('Move ' + b.getAttribute('data-name') + ' from ' + b.getAttribute('data-from') + ' to ' + to + '?')) return;
-    call('transferStudent', [em, to, ''], function(r){ reloadWith(b.getAttribute('data-name') + ' moved from ' + r.from + ' to ' + r.to + '.'); });
+    var nm = b.getAttribute('data-name');
+    if (!to) return msg(T('Choose the class to move {name} to.', { name: nm }), true);
+    if (!confirm(T('Move {name} from {from} to {to}?', { name: nm, from: secName(b.getAttribute('data-from')), to: secName(to) }))) return;
+    call('transferStudent', [em, to, ''], function(r){ reloadWith(T('{name} moved from {from} to {to}.', { name: nm, from: secName(r.from), to: secName(r.to) })); });
   }; });
   document.querySelectorAll('[data-confirm]').forEach(function(b){ b.onclick = function(){
     var sc = b.getAttribute('data-confirm');
-    call('confirmRoster', [sc, ''], function(r){ reloadWith(sc + ' confirmed: ' + r.students + ' students.'); });
+    call('confirmRoster', [sc, ''], function(r){ reloadWith(T('{section} confirmed: {n} students.', { section: secName(sc), n: r.students })); });
   }; });
   document.querySelectorAll('[data-dec]').forEach(function(b){ b.onclick = function(){
     var ok = b.getAttribute('data-ok') === '1';
-    call('decideRequest', [Number(b.getAttribute('data-dec')), ok, ''], function(r){ reloadWith('Request ' + r.decided + '.'); });
+    call('decideRequest', [Number(b.getAttribute('data-dec')), ok, ''], function(r){ reloadWith(r.decided === 'approved' ? T('Request approved.') : T('Request declined.')); });
   }; });
 }
 
@@ -496,7 +752,7 @@ function exportCsv(){
     var max = r ? Object.keys(r.acts).reduce(function(n, k){ return n + r.acts[k][1]; }, 0) : 0;
     var stt = studentStats(s.email, s.grade);
     lines.push([s.name, s.email, s.section, s.grade, lessonName(l), lessonTitle(l), r ? r.score : '', r ? max : '', r ? pct(r.score, max) : '', r ? r.done : 0, l.activities, r ? mins(r.seconds) : 0]
-      .concat(STRAND_ORDER.map(function(c){ var o = stt.strands[c]; return TIERS[o.tier] + (o.judged ? ' (teacher)' : ''); })));
+      .concat(STRAND_ORDER.map(function(c){ var o = stt.strands[c]; return TIERS_EN[o.tier] + (o.judged ? ' (teacher)' : ''); })));
   }); });
   var csv = lines.map(function(row){ return row.map(function(v){ v = String(v); if (/^[=+\-@]/.test(v)) v = "'" + v; return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(','); }).join('\n');
   var a = document.createElement('a');
@@ -513,12 +769,19 @@ function exportCsv(){
    or >= stretchPct on that strand's ⭐ challenge (stretch) activities.
    Advanced is never inferred from quiz scores – only a teacher can record it. */
 var TIER_RULES = { emergingPct: 70, minActs: 3, proficientPct: 85, proficientMinActs: 5, stretchPct: 70 };
-var TIERS = { '': 'Not yet evidenced', W: 'Working towards Emerging', O: 'On track – needs more evidence', E: 'Emerging', P: 'Proficient', A: 'Advanced' };
-var TIER_SHORT = { '': 'Not yet', W: 'Working towards', O: 'On track', E: 'Emerging', P: 'Proficient', A: 'Advanced' };
+var TIERS_EN = { '': 'Not yet evidenced', W: 'Working towards Emerging', O: 'On track – needs more evidence', E: 'Emerging', P: 'Proficient', A: 'Advanced' };
+var TIER_SHORT_EN = { '': 'Not yet', W: 'Working towards', O: 'On track', E: 'Emerging', P: 'Proficient', A: 'Advanced' };
+var TIERS_AR = { '': 'لم يُثبت بعد', W: 'يعمل نحو مستوى ناشئ', O: 'على المسار – يحتاج إلى أدلة أكثر', E: 'ناشئ', P: 'متمكّن', A: 'متقدّم' };
+var TIER_SHORT_AR = { '': 'لم يُثبت بعد', W: 'نحو ناشئ', O: 'على المسار', E: 'ناشئ', P: 'متمكّن', A: 'متقدّم' };
+var TIERS = TIERS_EN, TIER_SHORT = TIER_SHORT_EN;   // switched by setLang()
 var TIER_RANK = { '': 0, W: 1, O: 1, E: 2, P: 3, A: 4 };
 var STRAND_ORDER = ['CU', 'SD', 'CE', 'GE'];
 var STRAND_SHORT = { CU: 'How AI works', SD: 'Design & build', CE: 'Judgement', GE: 'Ethics & governance' };
+var STRAND_SHORT_AR = { CU: 'كيف يعمل الذكاء الاصطناعي', SD: 'التصميم والبناء', CE: 'التقييم والحكم', GE: 'الأخلاقيات والحوكمة' };
+function strandShort(c){ return LANG === 'ar' ? STRAND_SHORT_AR[c] : STRAND_SHORT[c]; }
 function strandName(code, grade){
+  if (LANG === 'ar') return { CU: grade >= 9 ? 'فهم أنظمة الذكاء الاصطناعي' : 'الفهم المفاهيمي للذكاء الاصطناعي', SD: 'تصميم حلول الذكاء الاصطناعي وتطويرها',
+    CE: 'التقييم الناقد والتفاعل الواعي', GE: ({ 9: 'الأخلاقيات والاستخدام المسؤول', 10: 'الحوكمة والأخلاقيات', 11: 'الحوكمة والأثر', 12: 'الحوكمة والأخلاقيات والأثر المجتمعي' })[grade] || 'الأخلاقيات والحوكمة' }[code];
   var fw = D.framework && D.framework[grade];
   if (fw) { var s = fw.strands.filter(function(x){ return x.code === code; })[0]; if (s) return s.name; }
   return { CU: grade >= 9 ? 'AI Systems Understanding' : 'AI Conceptual Understanding', SD: 'AI Solution Design & Development',
@@ -613,22 +876,28 @@ function studentStats(email, grade){
   var weeks = {}; finished.forEach(function(l){ if (l.course === 'main') weeks[l.week] = 1; });
   var run = 0, best = 0; Object.keys(weeks).map(Number).sort(function(a, b){ return a - b; }).forEach(function(w, i, arr){ run = i && arr[i - 1] === w - 1 ? run + 1 : 1; best = Math.max(best, run); });
   function B(icon, name, desc, earned, prog){ badges.push({ icon: icon, name: name, desc: desc, earned: !!earned, prog: prog }); }
-  B('🚀', 'First Steps', 'Finish your first lesson.', finished.length >= 1, '0 of 1 lessons');
-  B('🏁', 'Finisher', 'Finish every lesson that has been taught to your grade so far.', due.length && finDue >= due.length, finDue + ' of ' + due.length + ' lessons');
-  B('🔥', 'Week Streak', 'Finish your lessons in 3 teaching weeks in a row.', best >= 3, best + ' of 3 weeks');
-  B('🛠️', 'Fixer', 'In one lesson, go back and correct every answer you got wrong first time.', fixerLesson, fixed ? fixed + ' answers fixed so far' : 'Fix your red answers and check again');
-  B('⭐', 'Stretch', 'Complete a ⭐ challenge activity.', stretch, 'Try a ⭐ Challenge');
-  B('🎯', 'Bullseye', 'Score 90% or more on first tries across a whole lesson.', bull, 'Aim for 90%+ first time');
+  B('🚀', T('First Steps'), T('Finish your first lesson.'), finished.length >= 1, T('{a} of {b} lessons', { a: 0, b: 1 }));
+  B('🏁', T('Finisher'), T('Finish every lesson that has been taught to your grade so far.'), due.length && finDue >= due.length, T('{a} of {b} lessons', { a: finDue, b: due.length }));
+  B('🔥', T('Week Streak'), T('Finish your lessons in 3 teaching weeks in a row.'), best >= 3, T('{a} of {b} weeks', { a: best, b: 3 }));
+  B('🛠️', T('Fixer'), T('In one lesson, go back and correct every answer you got wrong first time.'), fixerLesson, fixed ? T('{n} answers fixed so far', { n: fixed }) : T('Fix your red answers and check again'));
+  B('⭐', T('Stretch'), T('Complete a ⭐ challenge activity.'), stretch, T('Try a ⭐ Challenge'));
+  B('🎯', T('Bullseye'), T('Score 90% or more on first tries across a whole lesson.'), bull, T('Aim for 90%+ first time'));
   STRAND_ORDER.forEach(function(c){
     var o = strands[c], sb = STRAND_BADGES[c];
-    B(sb[0], sb[1], 'Secure Emerging or above in ' + STRAND_SHORT[c] + ' (' + strandName(c, grade) + ').', TIER_RANK[o.tier] >= 2,
-      o.n ? TIERS[o.tier] + ' · ' + o.pct + '% across ' + o.n + ' activit' + (o.n === 1 ? 'y' : 'ies') : 'Not started yet');
+    B(sb[0], T(sb[1]), T('Secure Emerging or above in {s} ({name}).', { s: strandShort(c), name: strandName(c, grade) }), TIER_RANK[o.tier] >= 2,
+      o.n ? TIERS[o.tier] + ' · ' + T('{p}% across {n} activities', { p: o.pct, n: o.n }) : T('Not started yet'));
   });
   return { res: res, lessons: lessons, due: due, taught: taught, finished: finished, strands: strands, fixed: fixed, acts: acts, firstPct: max ? pct(pts, max) : null,
            badges: badges, earned: badges.filter(function(b){ return b.earned; }) };
 }
 
-function thisWeek(){ return { label: AICAL.weekLabel(new Date()) }; }
+function thisWeek(){
+  var d = new Date(), mon = AICAL.monday(d), fri = new Date(mon); fri.setDate(fri.getDate() + 4);
+  var f = function(x){ return x.toLocaleDateString(LOC, { day: 'numeric', month: 'short' }); }, t = AICAL.teachingWeek(d), range = f(mon) + ' – ' + f(fri);
+  if (t === 0) return { label: T('Before the AI Literacy timetable starts') };
+  if (t === null) return { label: calLabel(AICAL.noSchool(mon) || 'No school') + ' · ' + range };
+  return { label: T('Teaching week {n}', { n: t }) + ' · ' + range };
+}
 function tierChip(t, judged){
   return '<span class="tier t' + (t || 'N') + '">' + esc(TIERS[t]) + (judged ? ' ✎' : '') + '</span>';
 }
@@ -644,47 +913,47 @@ function studentView(who){
   var go = function(cls, id, text){ return preview ? '<span class="' + cls + ' off">' + text + '</span>' : '<a class="' + cls + '" href="' + esc(url(id)) + '">' + text + '</a>'; };
   var status = function(l){
     var r = R[l.id], m = r ? Object.keys(r.acts).reduce(function(n, k){ return n + r.acts[k][1]; }, 0) : 0;
-    if (r && l.activities && r.done >= l.activities) return { cls: 'done', text: '✓ Finished · ' + pct(r.score, m) + '% first try', btn: 'Review' };
-    if (r) return { cls: 'doing', text: r.done + ' of ' + l.activities + ' activities · ' + pct(r.score, m) + '%', btn: 'Continue' };
-    if (l.course === 'bridging') return { cls: 'later', text: 'Bridging · to be scheduled', btn: 'Preview' };
-    if (l.week > st.taught && l.week !== curN) return { cls: 'later', text: 'Not taught yet · Lesson ' + l.week, btn: 'Preview' };
-    if (l.week > st.taught) return { cls: 'todo', text: 'This week\'s lesson', btn: 'Start' };
-    return { cls: 'todo', text: 'Not started', btn: 'Start' };
+    if (r && l.activities && r.done >= l.activities) return { cls: 'done', text: T('✓ Finished · {p}% first try', { p: pct(r.score, m) }), btn: T('Review') };
+    if (r) return { cls: 'doing', text: T('{d} of {a} activities · {p}%', { d: r.done, a: l.activities, p: pct(r.score, m) }), btn: T('Continue') };
+    if (l.course === 'bridging') return { cls: 'later', text: T('Bridging · to be scheduled'), btn: T('Preview') };
+    if (l.week > st.taught && l.week !== curN) return { cls: 'later', text: T('Not taught yet · Lesson {n}', { n: l.week }), btn: T('Preview') };
+    if (l.week > st.taught) return { cls: 'todo', text: T('This week\'s lesson'), btn: T('Start') };
+    return { cls: 'todo', text: T('Not started'), btn: T('Start') };
   };
   var now = st.lessons.filter(function(l){ return l.week === curN && l.course === 'main'; })[0];
-  var h = preview ? '<div class="viewbar"><span>👁 You are seeing <b>' + esc(me.name) + '</b>\'s dashboard exactly as they see it. Nothing here can be changed.</span><div><button type="button" id="pdfBtn">Save as PDF</button><button type="button" id="backBtn">← Back to dashboard</button></div></div>'
-    : '<div class="tools"><button type="button" id="pdfBtn">Save as PDF</button></div>';
-  h += printHead('AI Literacy progress report – ' + me.name, 'Grade ' + (me.grade || '–') + (me.section && me.section !== 'Unassigned' ? ' · ' + me.section : '') + ' · ' + wk.label);
-  h += '<section class="hello card"><div><h2>Hi ' + esc(String(me.name).split(' ')[0]) + ' 👋</h2><p class="sub">Grade ' + esc(me.grade || '') +
-    (me.section && me.section !== 'Unassigned' ? ' · ' + esc(me.section) : '') + ' · ' + esc(wk.label) + '</p></div>' +
-    (now ? '<div class="now"><small>This week\'s lesson</small><b>' + esc(now.title) + '</b><span class="pill ' + status(now).cls + '">' + esc(status(now).text) + '</span>' +
-      go('go', now.id, status(now).btn + ' →') + '</div>' : '<div class="now"><small>This week</small><b>No new lesson on the site yet.</b></div>') + '</section>';
+  var h = preview ? '<div class="viewbar"><span>👁 ' + T('You are seeing <b>{name}</b>\'s dashboard exactly as they see it. Nothing here can be changed.', { name: esc(me.name) }) + '</span><div><button type="button" id="pdfBtn">' + T('Save as PDF') + '</button><button type="button" id="backBtn">' + T('← Back to dashboard') + '</button></div></div>'
+    : '<div class="tools"><button type="button" id="pdfBtn">' + T('Save as PDF') + '</button></div>';
+  var gs = T('Grade {g}', { g: me.grade || '–' }) + (me.section && me.section !== 'Unassigned' ? ' · ' + secName(me.section) : '');
+  h += printHead(T('AI Literacy progress report') + ' – ' + me.name, gs + ' · ' + wk.label);
+  h += '<section class="hello card"><div><h2>' + T('Hi {name} 👋', { name: esc(String(me.name).split(' ')[0]) }) + '</h2><p class="sub">' + esc(gs) + ' · ' + esc(wk.label) + '</p></div>' +
+    (now ? '<div class="now"><small>' + T('This week\'s lesson') + '</small><b>' + esc(now.title) + '</b><span class="pill ' + status(now).cls + '">' + esc(status(now).text) + '</span>' +
+      go('go', now.id, status(now).btn + (LANG === 'ar' ? ' ←' : ' →')) + '</div>' : '<div class="now"><small>' + T('This week') + '</small><b>' + T('No new lesson on the site yet.') + '</b></div>') + '</section>';
   h += '<div class="tiles">' +
-    tile('Lessons finished', st.finished.filter(function(l){ return l.course === 'main'; }).length + ' / ' + st.due.length, 'Main course lessons taught so far') +
-    tile('First-try score', st.firstPct === null ? '–' : st.firstPct + '%', 'across ' + st.acts + ' activities') +
-    tile('Answers fixed', st.fixed, 'wrong first time, then corrected') +
-    tile(older ? 'Milestones reached' : 'Badges earned', st.earned.length + ' / ' + st.badges.length, older ? 'see below' : 'collect them all') + '</div>';
-  h += '<section class="card"><h2>My strands</h2><p class="sub">The four parts of AI literacy for Grade ' + esc(me.grade) + '. Emerging is the goal for this term; Proficient is the goal for the year.</p><div class="strands">' +
+    tile(T('Lessons finished'), st.finished.filter(function(l){ return l.course === 'main'; }).length + ' / ' + st.due.length, T('Main course lessons taught so far')) +
+    tile(T('First-try score'), st.firstPct === null ? '–' : st.firstPct + '%', T('across {n} activities', { n: st.acts })) +
+    tile(T('Answers fixed'), st.fixed, T('wrong first time, then corrected')) +
+    tile(older ? T('Milestones reached') : T('Badges earned'), st.earned.length + ' / ' + st.badges.length, older ? T('see below') : T('collect them all')) + '</div>';
+  h += '<section class="card"><h2>' + T('My strands') + '</h2><p class="sub">' + T('The four parts of AI literacy for Grade {g}. Emerging is the goal for this term; Proficient is the goal for the year.', { g: esc(me.grade) }) + '</p><div class="strands">' +
     STRAND_ORDER.map(function(c){
       var o = st.strands[c], next = o.tier === 'A' ? '' : (TIER_RANK[o.tier] >= 3 ? 'A' : (TIER_RANK[o.tier] >= 2 ? 'P' : 'E'));
       var nd = descriptor(c, me.grade, next);
-      return '<div class="strand"><div class="sh"><small>' + esc(STRAND_SHORT[c]) + '</small><b>' + esc(strandName(c, me.grade)) + '</b></div>' +
-        '<div class="sbar"><div class="track"><div class="bar" style="width:' + (o.pct || 0) + '%"></div></div><span>' + (o.pct === null ? 'No activities yet' : o.pct + '% first try · ' + o.n + ' activit' + (o.n === 1 ? 'y' : 'ies')) + '</span></div>' +
-        tierChip(o.tier, o.judged) + (nd ? '<p class="next"><b>Next step – ' + TIERS[next] + ':</b> ' + esc(nd) + '</p>' : '') + '</div>';
+      return '<div class="strand"><div class="sh"><small>' + esc(strandShort(c)) + '</small><b>' + esc(strandName(c, me.grade)) + '</b></div>' +
+        '<div class="sbar"><div class="track"><div class="bar" style="width:' + (o.pct || 0) + '%"></div></div><span>' + (o.pct === null ? T('No activities yet') : T('{p}% first try · {n} activities', { p: o.pct, n: o.n })) + '</span></div>' +
+        tierChip(o.tier, o.judged) + (nd ? '<p class="next"><b>' + T('Next step – {tier}:', { tier: TIERS[next] }) + '</b> <span lang="en" dir="ltr">' + esc(nd) + '</span></p>' : '') + '</div>';
     }).join('') + '</div></section>';
-  h += card('My first tries, lesson by lesson', 'Is your first-try score growing?',
+  h += card(T('My first tries, lesson by lesson'), T('Is your first-try score growing?'),
       hbars(st.lessons.filter(function(l){ return R[l.id]; }).map(function(l){ var r = R[l.id], m = Object.keys(r.acts).reduce(function(n, k){ return n + r.acts[k][1]; }, 0);
-        return { label: (l.course === 'main' ? 'Main' : 'Bridging') + ' W' + l.week, value: pct(r.score, m), text: pct(r.score, m) + '%',
-          tip: '<b>' + esc(l.title) + '</b><br>First try: ' + r.score + ' / ' + m + '<br>Active time: ' + mins(r.seconds) + ' min' }; }), 100, '%'));
-  h += '<section class="card"><h2>My learning journey</h2><p class="sub">Every AI lesson for your grade.</p><ol class="journey">' +
+        return { label: (l.course === 'main' ? T('Main') : T('Bridging')) + ' ' + T('W{n}', { n: l.week }), value: pct(r.score, m), text: pct(r.score, m) + '%',
+          tip: '<b>' + esc(l.title) + '</b><br>' + T('First try: {s} / {m}', { s: r.score, m: m }) + '<br>' + T('Active time: {n} min', { n: mins(r.seconds) }) }; }), 100, '%'));
+  h += '<section class="card"><h2>' + T('My learning journey') + '</h2><p class="sub">' + T('Every AI lesson for your grade.') + '</p><ol class="journey">' +
     st.lessons.map(function(l){ var s = status(l);
-      return '<li class="' + s.cls + '"><span class="dot" aria-hidden="true"></span><div><small>' + (l.course === 'main' ? 'Main course · Week ' + l.week : 'Bridging · Week ' + l.week) + '</small><b>' + esc(l.title) + '</b>' +
+      return '<li class="' + s.cls + '"><span class="dot" aria-hidden="true"></span><div><small>' + (l.course === 'main' ? T('Main course · Week {n}', { n: l.week }) : T('Bridging · Week {n}', { n: l.week })) + '</small><b>' + esc(l.title) + '</b>' +
         '<span class="pill ' + s.cls + '">' + esc(s.text) + '</span></div>' + go('', l.id, s.btn) + '</li>'; }).join('') + '</ol></section>';
-  h += '<section class="card"><h2>' + (older ? 'Milestones' : 'My badges') + '</h2><p class="sub">' + (older ? 'Milestones' : 'Badges') + ' reward careful work, fixing mistakes and stretching yourself – not speed.</p>' +
+  h += '<section class="card"><h2>' + (older ? T('Milestones') : T('My badges')) + '</h2><p class="sub">' + (older ? T('Milestones reward careful work, fixing mistakes and stretching yourself – not speed.') : T('Badges reward careful work, fixing mistakes and stretching yourself – not speed.')) + '</p>' +
     '<ul class="badges' + (older ? ' plain' : '') + '">' + st.badges.map(function(b){
       return '<li class="' + (b.earned ? 'got' : 'locked') + '"><span class="ico" aria-hidden="true">' + (older ? (b.earned ? '✓' : '○') : b.icon) + '</span><div><b>' + esc(b.name) + '</b>' +
-        '<span>' + esc(b.desc) + '</span><em>' + (b.earned ? (older ? 'Reached' : 'Earned!') : esc(b.prog)) + '</em></div></li>'; }).join('') + '</ul></section>';
-  h += '<p class="note">Only you, your teachers and school leaders can see this page. There are no class rankings. ✎ means your teacher set that level. Updated ' + new Date(D.generatedAt).toLocaleString('en-GB') + '.</p>';
+        '<span>' + esc(b.desc) + '</span><em>' + (b.earned ? (older ? T('Reached') : T('Earned!')) : esc(b.prog)) + '</em></div></li>'; }).join('') + '</ul></section>';
+  h += '<p class="note">' + T('Only you, your teachers and school leaders can see this page. There are no class rankings. ✎ means your teacher set that level.') + ' ' + T('Updated {d}.', { d: new Date(D.generatedAt).toLocaleString(LOC) }) + '</p>';
   $('#app').innerHTML = h;
   if (preview) $('#backBtn').onclick = function(){ VIEW = null; render(); };
   $('#pdfBtn').onclick = function(){ savePdf(me.name); };
@@ -698,24 +967,24 @@ function attainmentCard(f){
     f.students.forEach(function(s){ counts[studentStats(s.email, s.grade).strands[c].tier]++; });
     return { c: c, counts: counts, total: f.students.length };
   });
-  var segs = [['', 'var(--grid)', 'Not yet evidenced'], ['W', 'var(--s100)', 'Working towards'], ['O', 'var(--s200)', 'On track – needs more evidence'], ['E', 'var(--s300)', 'Emerging'], ['P', 'var(--s500)', 'Proficient'], ['A', 'var(--s600)', 'Advanced']];
+  var segs = [['', 'var(--grid)', TIERS['']], ['W', 'var(--s100)', TIER_SHORT.W], ['O', 'var(--s200)', TIERS.O], ['E', 'var(--s300)', TIERS.E], ['P', 'var(--s500)', TIERS.P], ['A', 'var(--s600)', TIERS.A]];
   var g = f.students[0] && f.students.every(function(s){ return s.grade === f.students[0].grade; }) ? f.students[0].grade : null;
-  return card('Attainment by strand', 'Each student\'s current tier in each strand' + (g ? ' (Grade ' + g + ')' : '') + '. Emerging is the Term 1 expected standard; Advanced is recorded by teachers. Use the menus in the table below to record a tier (✎).',
+  return card(T('Attainment by strand'), (g ? T('Each student\'s current tier in each strand (Grade {g}).', { g: g }) : T('Each student\'s current tier in each strand.')) + ' ' + T('Emerging is the Term 1 expected standard; Advanced is recorded by teachers. Use the menus in the table below to record a tier (✎).'),
     '<div class="stack">' + rows.map(function(r){
-      return '<div class="srow"><span class="lab"><b>' + r.c + '</b> ' + esc(g ? strandName(r.c, g) : STRAND_SHORT[r.c]) + '</span><div class="sbarwrap">' +
+      return '<div class="srow"><span class="lab"><b>' + r.c + '</b> ' + esc(g ? strandName(r.c, g) : strandShort(r.c)) + '</span><div class="sbarwrap">' +
         segs.map(function(s){ var n = r.counts[s[0]]; if (!n) return '';
           var w = n / r.total * 100;
-          return '<span class="seg" style="width:' + w + '%;background:' + s[1] + ';color:' + (s[0] === 'P' || s[0] === 'A' ? '#fff' : '#0b0b0b') + '" data-tip="' + esc('<b>' + r.c + ' · ' + s[2] + '</b><br>' + n + ' of ' + r.total + ' students (' + Math.round(w) + '%)') + '">' + (w >= 8 ? n : '') + '</span>'; }).join('') +
-        '</div><span class="srow-pct">' + pct(r.counts.E + r.counts.P + r.counts.A, r.total) + '% at Emerging+</span></div>';
+          return '<span class="seg" style="width:' + w + '%;background:' + s[1] + ';color:' + (s[0] === 'P' || s[0] === 'A' ? '#fff' : '#0b0b0b') + '" data-tip="' + esc('<b>' + r.c + ' · ' + s[2] + '</b><br>' + T('{n} of {t} students ({p}%)', { n: n, t: r.total, p: Math.round(w) })) + '">' + (w >= 8 ? n : '') + '</span>'; }).join('') +
+        '</div><span class="srow-pct">' + T('{p}% at Emerging+', { p: pct(r.counts.E + r.counts.P + r.counts.A, r.total) }) + '</span></div>';
     }).join('') + '</div><div class="legend">' + segs.map(function(s){ return '<span><i style="background:' + s[1] + '"></i>' + s[2] + '</span>'; }).join('') + '</div>');
 }
 
 function judgeCell(s, c, o){
   var label = TIER_SHORT[o.tier] + (o.judged ? ' ✎' : '');
-  var tip = '<b>' + esc(s.name) + ' · ' + c + '</b><br>' + (o.pct === null ? 'No activities yet' : 'First try ' + o.pct + '% on ' + o.n + ' activit' + (o.n === 1 ? 'y' : 'ies')) +
-    '<br>Automatic tier: ' + TIERS[o.auto] + (o.judged ? '<br>Set by ' + esc(o.judged.by) + (o.judged.note ? ': ' + esc(o.judged.note) : '') : '');
+  var tip = '<b>' + esc(s.name) + ' · ' + c + '</b><br>' + (o.pct === null ? T('No activities yet') : T('First try {p}% on {n} activities', { p: o.pct, n: o.n })) +
+    '<br>' + T('Automatic tier: {t}', { t: TIERS[o.auto] }) + (o.judged ? '<br>' + T('Set by {e}', { e: esc(o.judged.by) }) + (o.judged.note ? ': ' + esc(o.judged.note) : '') : '');
   if (!D.canJudge) return '<td class="c"><span class="tier t' + (o.tier || 'N') + '" data-tip="' + esc(tip) + '">' + esc(label) + '</span></td>';
-  return '<td class="c" data-tip="' + esc(tip) + '"><select class="jsel t' + (o.tier || 'N') + '" data-j="' + esc(s.email + '|' + c) + '" aria-label="' + esc(s.name + ' ' + c + ' tier') + '">' +
+  return '<td class="c" data-tip="' + esc(tip) + '"><select class="jsel t' + (o.tier || 'N') + '" data-j="' + esc(s.email + '|' + c) + '" aria-label="' + esc(s.name + ' ' + c) + '">' +
     '<option value=""' + (o.judged ? '' : ' selected') + '>' + esc(TIER_SHORT[o.auto]) + '</option>' +
     ['W', 'E', 'P', 'A'].map(function(t){ return '<option value="' + t + '"' + (o.judged && o.judged.tier === t ? ' selected' : '') + '>✎ ' + TIER_SHORT[t] + '</option>'; }).join('') + '</select></td>';
 }
@@ -726,12 +995,13 @@ function wireJudge(){
       el.disabled = true;
       var done = function(){ if (t) D.judgements[k.join('|')] = { tier: t, by: CFG.email, at: new Date().toISOString(), note: '' }; else delete D.judgements[k.join('|')]; draw(); };
       if (window.google && google.script && google.script.run)
-        google.script.run.withSuccessHandler(done).withFailureHandler(function(e){ el.disabled = false; alert(e.message || e); }).setJudgement(k[0], k[1], t, '');
+        google.script.run.withSuccessHandler(done).withFailureHandler(function(e){ el.disabled = false; alert(errT(e.message || String(e))); }).setJudgement(k[0], k[1], t, '');
       else done();
     };
   });
 }
 
+setLang(LANG); header();
 load();
 </script>
 </body>

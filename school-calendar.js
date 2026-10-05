@@ -38,6 +38,28 @@ var AICAL = (function () {
   /* Section, grade, subject, cycle week (1/2), day, period, time – AISA Secondary AI Literacy Timetable */
   var SCHEDULE = [["Boys 6", 6, "Arabic", 1, "Wed", 7, "2:05 - 2:55"], ["Boys 7", 7, "Arabic", 1, "Wed", 2, "8:50 - 9:40"], ["Girls 7", 7, "Islamic", 1, "Wed", 1, "7:55 - 8:45"], ["Boys 8", 8, "Arabic", 1, "Wed", 5, "11:55 - 12:45"], ["Girls 8", 8, "Islamic", 1, "Wed", 6, "1:10 - 2:00"], ["Boys 10", 10, "Islamic", 1, "Thu", 6, "1:10 - 2:00"], ["Girls 6", 6, "Arabic", 1, "Fri", 2, "8:35 - 9:25"], ["Boys 9", 9, "Arabic", 1, "Fri", 4, "10:40 - 11:30"], ["Girls 9", 9, "Arabic", 1, "Fri", 3, "9:45 - 10:35"], ["Girls 10", 10, "Arabic", 1, "Fri", 2, "8:35 - 9:25"], ["Boys 11", 11, "Arabic", 1, "Fri", 3, "9:45 - 10:35"], ["Girls 11", 11, "Islamic", 1, "Fri", 4, "10:40 - 11:30"], ["Boys 12", 12, "Arabic", 1, "Fri", 1, "7:40 - 8:30"], ["Girls 12", 12, "Arabic", 1, "Fri", 1, "7:40 - 8:30"], ["Boys 8", 8, "Islamic", 2, "Mon", 7, "2:05 - 2:55"], ["Boys 6", 6, "Islamic", 2, "Wed", 6, "1:10 - 2:00"], ["Boys 7", 7, "Islamic", 2, "Wed", 2, "8:50 - 9:40"], ["Boys 10", 10, "Arabic", 2, "Wed", 4, "11:00 - 11:50"], ["Boys 11", 11, "Islamic", 2, "Wed", 7, "2:05 - 2:55"], ["Boys 12", 12, "Islamic", 2, "Wed", 1, "7:55 - 8:45"], ["Girls 12", 12, "Islamic", 2, "Wed", 1, "7:55 - 8:45"], ["Girls 6", 6, "Islamic", 2, "Fri", 4, "10:40 - 11:30"], ["Girls 7", 7, "Arabic", 2, "Fri", 1, "7:40 - 8:30"], ["Girls 8", 8, "Arabic", 2, "Fri", 2, "8:35 - 9:25"], ["Boys 9", 9, "Islamic", 2, "Fri", 3, "9:45 - 10:35"], ["Girls 9", 9, "Islamic", 2, "Fri", 2, "8:35 - 9:25"], ["Girls 10", 10, "Islamic", 2, "Fri", 1, "7:40 - 8:30"], ["Girls 11", 11, "Arabic", 2, "Fri", 3, "9:45 - 10:35"]];
 
+  /* Arabic for the calendar labels above (the pages can switch to Arabic). */
+  var AR_LABELS = {
+    'Mid-Term Break': 'إجازة منتصف الفصل',
+    'Professional Development – no school for students': 'تطوير مهني – لا دوام للطلاب',
+    'UAE National Day': 'اليوم الوطني لدولة الإمارات',
+    'Winter Break': 'العطلة الشتوية',
+    'Eid Al-Fitr (dates to be confirmed)': 'عيد الفطر (التواريخ قيد التأكيد)',
+    'Spring Break': 'عطلة الربيع',
+    'Arafat Day & Eid Al-Adha (dates to be confirmed)': 'يوم عرفة وعيد الأضحى (التواريخ قيد التأكيد)',
+    'Parent-Teacher Conferences': 'اجتماعات أولياء الأمور والمعلمين',
+    'Winter MAP & Semester Finals': 'اختبارات MAP الشتوية والاختبارات النهائية للفصل',
+    'IB Exams begin': 'بداية امتحانات البكالوريا الدولية',
+    'IB Exams end': 'نهاية امتحانات البكالوريا الدولية',
+    'Spring MAP': 'اختبارات MAP الربيعية',
+    'End-of-Year Semester Exams': 'امتحانات نهاية العام',
+    'Last day of school': 'آخر يوم دراسي',
+    'Weekend': 'عطلة نهاية الأسبوع',
+    'After the last day of school': 'بعد آخر يوم دراسي',
+    'No school': 'لا دوام'
+  };
+  function label(s, lang) { return lang === 'ar' && AR_LABELS[s] ? AR_LABELS[s] : s; }
+
   var DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   function iso(d) { return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
   function parse(s) { var p = String(s).split('-').map(Number); return new Date(p[0], p[1] - 1, p[2]); }
@@ -123,6 +145,6 @@ var AICAL = (function () {
   return { TERM_START: TERM_START, YEAR_END: YEAR_END, SCHEDULE: SCHEDULE, NO_SCHOOL: NO_SCHOOL, EVENTS: EVENTS, DAYS: DAYS,
            iso: iso, parse: parse, monday: monday, noSchool: noSchool, eventOn: eventOn, teachingWeek: teachingWeek,
            cycleOf: cycleOf, slotsOn: slotsOn, taughtCount: taughtCount, lessonOn: lessonOn, currentLesson: currentLesson,
-           taughtSoFar: taughtSoFar, weekLabel: weekLabel };
+           taughtSoFar: taughtSoFar, weekLabel: weekLabel, label: label };
 })();
 if (typeof module !== 'undefined') module.exports = AICAL;

@@ -51,27 +51,30 @@ input[type=date],select{font:inherit;font-size:15px;border:2px solid var(--line)
 .lesson .pushed{display:block;margin-top:2px;font-size:13px;color:#8A5A00}
 .note{font-size:13.5px;color:var(--muted);margin:0 0 40px}
 @media (max-width:560px){.slot{grid-template-columns:1fr;gap:4px}.week{gap:4px}.day span{font-size:17px}}
-@media print{.controls,.back{display:none}body{background:#fff}}
+@media print{.controls,.back,.langbtn{display:none}body{background:#fff}}
+.toprow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.langbtn{font:inherit;font-size:14px;font-weight:700;padding:5px 14px;border-radius:999px;border:1.5px solid var(--accent);color:var(--accent);background:#fff;cursor:pointer}
+html[dir="rtl"] body{font-family:"Segoe UI",Tahoma,"Noto Sans Arabic","Geeza Pro",system-ui,sans-serif}
 </style>
 </head>
 <body>
 <header class="wrap">
-  <a class="back" href="index.html">&larr; All grades</a>
-  <h1>AI Teaching Calendar</h1>
-  <p>Pick a date to see every AI Literacy lesson that day – the time, the section, and the lesson to teach.</p>
+  <div class="toprow"><a class="back" href="index.html" data-i18n="← All grades">&larr; All grades</a><button type="button" class="langbtn" id="langBtn" lang="ar">العربية</button></div>
+  <h1 data-i18n="AI Teaching Calendar">AI Teaching Calendar</h1>
+  <p data-i18n="Pick a date to see every AI Literacy lesson that day – the time, the section, and the lesson to teach.">Pick a date to see every AI Literacy lesson that day – the time, the section, and the lesson to teach.</p>
 </header>
 <main class="wrap">
   <div class="controls">
     <button class="btn" id="prev" type="button" aria-label="Previous school day">&larr;</button>
     <input type="date" id="date" aria-label="Date">
     <button class="btn" id="next" type="button" aria-label="Next school day">&rarr;</button>
-    <button class="btn" id="today" type="button">Today</button>
+    <button class="btn" id="today" type="button" data-i18n="Today">Today</button>
     <select id="grade" aria-label="Filter by grade"><option value="">All grades</option></select>
   </div>
   <div class="week" id="week"></div>
   <div class="banner" id="banner"></div>
   <ul class="list" id="list"></ul>
-  <p class="note">Two-week timetable cycle starting Monday 28 September 2026 (Week 1). One AI Literacy lesson per section per week, delivered through Arabic or Islamic Studies. Holidays, breaks and PD days come from the AISA 2026–27 calendar: when a section's AI period falls on a day with no school, its next lesson is pushed to its next period, and break weeks do not count towards the Week 1 / Week 2 cycle. Islamic holiday dates are still to be confirmed. Teacher names are kept off this public page.</p>
+  <p class="note" id="note">Two-week timetable cycle starting Monday 28 September 2026 (Week 1). One AI Literacy lesson per section per week, delivered through Arabic or Islamic Studies. Holidays, breaks and PD days come from the AISA 2026–27 calendar: when a section's AI period falls on a day with no school, its next lesson is pushed to its next period, and break weeks do not count towards the Week 1 / Week 2 cycle. Islamic holiday dates are still to be confirmed. Teacher names are kept off this public page.</p>
 </main>
 <script src="school-calendar.js"></script>
 <script>
@@ -93,7 +96,31 @@ const MINE=(window.APP&&Array.isArray(APP.sections))?APP.sections:[];
 const link=h=>window.APP?APP.base+"?p="+encodeURIComponent(h.replace(/\.html$/,"")):h;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const iso=AICAL.iso, parse=AICAL.parse, monday=AICAL.monday;
-const fmt=(d,o)=>d.toLocaleDateString("en-GB",o);
+/* Interface language: English or Arabic (right-to-left). Lesson titles stay in English. In the
+   signed-in app the bridge stores this per user, so it matches the dashboard's setting. */
+let LANG=(()=>{try{return localStorage.getItem("aisa-lang")==="ar"?"ar":"en"}catch(e){return "en"}})();
+const NOTE_EN=document.getElementById("note").textContent;
+const AR={
+  "← All grades":"→ جميع الصفوف","AI Teaching Calendar":"تقويم تدريس الذكاء الاصطناعي",
+  "Pick a date to see every AI Literacy lesson that day – the time, the section, and the lesson to teach.":"اختر تاريخًا لعرض جميع دروس محو أمية الذكاء الاصطناعي في ذلك اليوم – الوقت والشعبة والدرس الذي يُدرَّس.",
+  "Today":"اليوم","Previous school day":"اليوم الدراسي السابق","Next school day":"اليوم الدراسي التالي","Date":"التاريخ","Filter by grade":"تصفية حسب الصف",
+  "All grades":"جميع الصفوف","My classes ({n})":"شعبي ({n})","Grade {g}":"الصف {g}",
+  "Mon":"الإثنين","Tue":"الثلاثاء","Wed":"الأربعاء","Thu":"الخميس","Fri":"الجمعة","Sat":"السبت","Sun":"الأحد","No school":"لا دوام",
+  "Before the AI Literacy timetable starts (Monday 28 September 2026).":"قبل بدء جدول محو أمية الذكاء الاصطناعي (الإثنين 28 سبتمبر 2026).",
+  "No school – {why}. AI lessons due today move to each section's next AI period.":"لا دوام – {why}. تنتقل دروس الذكاء الاصطناعي المقرّرة اليوم إلى الحصة التالية لكل شعبة.",
+  "Teaching week {n} · Timetable cycle Week {c} · {k}":"الأسبوع الدراسي {n} · أسبوع الدورة {c} في الجدول · {k}",
+  "Pushed back: this section missed an AI period to a holiday, so it is on Week {n}'s lesson (other sections are on Week {w}).":"مؤجَّل: فاتت هذه الشعبةَ حصةٌ بسبب عطلة، لذا تدرس درس الأسبوع {n} (الشعب الأخرى في الأسبوع {w}).",
+  "Period {p}":"الحصة {p}","via Arabic Studies":"ضمن مادة اللغة العربية","via Islamic Studies":"ضمن مادة التربية الإسلامية",
+  "Lesson:":"الدرس:","Grade {g} Main · Week {n}":"الصف {g} · البرنامج الرئيسي · الأسبوع {n}",
+  "Grade {g} Main · Week {n} lesson is not on the site yet.":"درس الصف {g} · البرنامج الرئيسي · الأسبوع {n} غير متوفر على الموقع بعد.",
+  "None of your classes have AI Literacy on this day.":"لا توجد حصص ذكاء اصطناعي لشعبك في هذا اليوم.",
+  "No AI Literacy lessons for this grade on this day.":"لا توجد دروس ذكاء اصطناعي لهذا الصف في هذا اليوم.",
+  "No AI Literacy lessons on this day.":"لا توجد دروس ذكاء اصطناعي في هذا اليوم."
+};
+AR[NOTE_EN]="دورة جدول مدتها أسبوعان تبدأ يوم الإثنين 28 سبتمبر 2026 (الأسبوع الأول). لكل شعبة درس واحد في محو أمية الذكاء الاصطناعي أسبوعيًا، ضمن مادة اللغة العربية أو التربية الإسلامية. العطل والإجازات وأيام التطوير المهني مأخوذة من تقويم المدرسة للعام 2026–2027: إذا صادفت حصة الشعبة يومًا بلا دوام، يُؤجَّل درسها إلى حصتها التالية، ولا تُحتسب أسابيع الإجازات ضمن دورة الأسبوع الأول والثاني. تواريخ الأعياد الإسلامية قيد التأكيد. لا تظهر أسماء المعلمين في هذه الصفحة العامة.";
+const T=(s,v)=>{let o=LANG==="ar"&&AR[s]!==undefined?AR[s]:s;if(v)o=o.replace(/\{(\w+)\}/g,(m,k)=>v[k]!==undefined?v[k]:m);return o};
+const secName=s=>LANG==="ar"?String(s).replace(/^Boys\b/,"بنين").replace(/^Girls\b/,"بنات"):s;
+const fmt=(d,o)=>d.toLocaleDateString(LANG==="ar"?"ar-AE-u-nu-latn":"en-GB",o);
 function lessonsOn(d){
   const g=$("#grade").value;
   return AICAL.slotsOn(d).filter(r=>!g||(g==="mine"?MINE.includes(r[0]):String(r[1])===g)).sort((a,b)=>a[5]-b[5]||a[0].localeCompare(b[0]));
@@ -105,22 +132,36 @@ function render(){
   $("#date").value=iso(cur);
   const today=iso(new Date()), mon=monday(cur);
   $("#week").innerHTML=[0,1,2,3,4].map(i=>{const d=new Date(mon);d.setDate(d.getDate()+i);const off=AICAL.noSchool(d),c=lessonsOn(d).length;
-    return `<button type="button" class="day${off?" off":c?" has":""}${iso(d)===today?" today":""}" data-d="${iso(d)}"${iso(d)===iso(cur)?' aria-current="date"':""}${off?` title="${esc(off)}"`:""}><b>${DAYS[d.getDay()]}</b><span>${d.getDate()}</span><small>${off?"No school":c?c+" lesson"+(c>1?"s":""):"–"}</small></button>`}).join("");
+    return `<button type="button" class="day${off?" off":c?" has":""}${iso(d)===today?" today":""}" data-d="${iso(d)}"${iso(d)===iso(cur)?' aria-current="date"':""}${off?` title="${esc(AICAL.label(off,LANG))}"`:""}><b>${T(DAYS[d.getDay()])}</b><span>${d.getDate()}</span><small>${off?T("No school"):c?(LANG==="ar"?"دروس: "+c:c+" lesson"+(c>1?"s":"")):"–"}</small></button>`}).join("");
   const tw=AICAL.teachingWeek(cur), off=AICAL.noSchool(cur), evt=AICAL.eventOn(cur), items=lessonsOn(cur);
   const head=`<h2>${fmt(cur,{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</h2>`;
   $("#banner").className="banner"+(off?" off":"");
-  $("#banner").innerHTML=tw===0?head+`<p>Before the AI Literacy timetable starts (Monday 28 September 2026).</p>`:
-    off?head+`<p>No school – ${esc(off)}. AI lessons due today move to each section's next AI period.</p>`:
-    head+`<p>Teaching week ${tw} · Timetable cycle Week ${AICAL.cycleOf(cur)} · ${items.length} AI lesson${items.length===1?"":"s"}</p>${evt?`<span class="evt">📌 ${esc(evt)}</span>`:""}`;
+  $("#banner").innerHTML=tw===0?head+`<p>${T("Before the AI Literacy timetable starts (Monday 28 September 2026).")}</p>`:
+    off?head+`<p>${T("No school – {why}. AI lessons due today move to each section's next AI period.",{why:esc(AICAL.label(off,LANG))})}</p>`:
+    head+`<p>${T("Teaching week {n} · Timetable cycle Week {c} · {k}",{n:tw,c:AICAL.cycleOf(cur),k:LANG==="ar"?"دروس الذكاء الاصطناعي: "+items.length:items.length+" AI lesson"+(items.length===1?"":"s")})}</p>${evt?`<span class="evt">📌 ${esc(AICAL.label(evt,LANG))}</span>`:""}`;
   $("#list").innerHTML=off?"":items.length?items.map(([sec,gr,sub,,,per,time])=>{
     const n=AICAL.lessonOn(sec,cur), L=(LESSONS[n]||{})[gr];
-    const pushed=n<tw?`<span class="pushed">⏪ Pushed back: this section missed an AI period to a holiday, so it is on Week ${n}'s lesson (other sections are on Week ${tw}).</span>`:"";
-    return `<li class="slot"><div class="when"><b>${esc(time)}</b><small>Period ${per}</small></div><div><h3>${esc(sec)}<span class="subj ${sub}">via ${sub} Studies</span></h3>
-      <div class="lesson">${L?`Lesson: <a href="${esc(link(L[0]))}"${window.APP?' target="_top"':""}>Grade ${gr} Main · Week ${n} – ${esc(L[1])}</a>`:`<span class="none">Grade ${gr} Main · Week ${n} lesson is not on the site yet.</span>`}${pushed}</div></div></li>`}).join(""):
-    `<li class="empty">${$("#grade").value==="mine"?"None of your classes have AI Literacy on this day.":`No AI Literacy lessons${$("#grade").value?" for this grade":""} on this day.`}</li>`;
+    const pushed=n<tw?`<span class="pushed">⏪ ${T("Pushed back: this section missed an AI period to a holiday, so it is on Week {n}'s lesson (other sections are on Week {w}).",{n,w:tw})}</span>`:"";
+    return `<li class="slot"><div class="when"><b dir="ltr">${esc(time)}</b><small>${T("Period {p}",{p:per})}</small></div><div><h3>${esc(secName(sec))}<span class="subj ${sub}">${T("via "+sub+" Studies")}</span></h3>
+      <div class="lesson">${L?`${T("Lesson:")} <a href="${esc(link(L[0]))}"${window.APP?' target="_top"':""}>${T("Grade {g} Main · Week {n}",{g:gr,n})} – <span lang="en">${esc(L[1])}</span></a>`:`<span class="none">${T("Grade {g} Main · Week {n} lesson is not on the site yet.",{g:gr,n})}</span>`}${pushed}</div></div></li>`}).join(""):
+    `<li class="empty">${$("#grade").value==="mine"?T("None of your classes have AI Literacy on this day."):$("#grade").value?T("No AI Literacy lessons for this grade on this day."):T("No AI Literacy lessons on this day.")}</li>`;
 }
 for(let g=6;g<=12;g++)$("#grade").insertAdjacentHTML("beforeend",`<option value="${g}">Grade ${g}</option>`);
 if(MINE.length){$("#grade").insertAdjacentHTML("afterbegin",`<option value="mine">My classes (${MINE.length})</option>`);$("#grade").value="mine"}
+/* ---------- English / العربية ---------- */
+function applyLang(){
+  document.documentElement.lang=LANG;document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
+  document.title=T("AI Teaching Calendar");
+  document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=T(el.dataset.i18n)});
+  $("#note").textContent=T(NOTE_EN);
+  $("#langBtn").textContent=LANG==="ar"?"English":"العربية";$("#langBtn").lang=LANG==="ar"?"en":"ar";
+  $("#prev").innerHTML=LANG==="ar"?"&rarr;":"&larr;";$("#next").innerHTML=LANG==="ar"?"&larr;":"&rarr;";
+  $("#prev").setAttribute("aria-label",T("Previous school day"));$("#next").setAttribute("aria-label",T("Next school day"));
+  $("#date").setAttribute("aria-label",T("Date"));$("#grade").setAttribute("aria-label",T("Filter by grade"));
+  [...$("#grade").options].forEach(o=>{o.textContent=o.value===""?T("All grades"):o.value==="mine"?T("My classes ({n})",{n:MINE.length}):T("Grade {g}",{g:o.value})});
+}
+$("#langBtn").onclick=()=>{LANG=LANG==="ar"?"en":"ar";try{localStorage.setItem("aisa-lang",LANG)}catch(e){}applyLang();render()};
+applyLang();
 try{const g=localStorage.getItem("cal-grade");if(g&&(g!=="mine"||MINE.length))$("#grade").value=g}catch(e){}
 $("#grade").onchange=()=>{try{localStorage.setItem("cal-grade",$("#grade").value)}catch(e){}render()};
 $("#date").onchange=()=>{if($("#date").value){cur=parse($("#date").value);render()}};
