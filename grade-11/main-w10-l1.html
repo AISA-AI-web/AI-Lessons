@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Showcase, Assessment &amp; Reflection + Peer Review &amp; Aim Higher – Grade 11 Main Course</title>
+<title>Showcase and Reflection + Peer Review and Aim Higher – Grade 11 Main Course</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -328,9 +328,9 @@ table.record caption b{color:var(--main)}
 <header class="hero">
   <div class="wrap">
     <div class="pills"><span class="pill">Grade 11 Main Course, Term 1</span><span class="pill">Week 10 Core + Week 10 Lab</span><span class="pill">📅 Teach: week of 7 – 11 Dec 2026</span></div>
-    <h1>Showcase, Assessment &amp; Reflection</h1>
+    <h1>Showcase and Reflection</h1>
     <p>This is your showcase. Today you show the solution you optimised this term and, more importantly, argue why your trade-offs were the right ones – and prove it with your own performance numbers. Then, in the Lab, you review each other's optimised solutions like a real design team, act on the feedback to improve one part and re-measure it, and turn your term's reflections into one clear, measurable goal for next term.</p>
-    <p class="meta"><b>Strand:</b> Showcase, Assessment &amp; Reflection · all four strands &nbsp;·&nbsp; <b>Scenario:</b> your signature-solution showcase and the peer-review carousel</p>
+    <p class="meta"><b>Strand:</b> Showcase and Reflection · all four strands &nbsp;·&nbsp; <b>Scenario:</b> your signature-solution showcase and the peer-review carousel</p>
     <div class="who">
       <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
       <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 11B"></div>
@@ -344,7 +344,7 @@ table.record caption b{color:var(--main)}
 <div class="intro">
   <div class="pn">
     <div class="box"><small>📅 When to teach</small><b>Week 10 of Term 1 – Monday 7 to Friday 11 December 2026</b>, the last week before Winter Break. <b>Boys 11:</b> Wednesday 9 December. <b>Girls 11:</b> Friday 11 December. Core lesson first, then the Lab.</div>
-    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Showcase, Assessment &amp; Reflection</a>, then move on to the <a href="#lab">Lab: Peer Review &amp; Aim Higher</a>.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Showcase and Reflection</a>, then move on to the <a href="#lab">Lab: Peer Review and Aim Higher</a>.</div>
   </div>
   <div class="box">
     <h2>What you will learn</h2>
@@ -357,13 +357,13 @@ table.record caption b{color:var(--main)}
   </div>
   <div class="box">
     <h2>Lesson route</h2>
-    <h3 class="rh">Week 10 Core · Showcase, Assessment &amp; Reflection</h3>
+    <h3 class="rh">Week 10 Core · Showcase and Reflection</h3>
     <ol class="route">
       <li><span class="num">1</span><a href="#p1"><b>From what I built to why the trade-off was right</b><small>Optimise, cost, measured proof</small></a></li>
       <li><span class="num">2</span><a href="#p2"><b>Prove it, then reflect on the system</b><small>Verify before you trust · one task, four strands</small></a></li>
       <li><span class="num">3</span><a href="#p3"><b>Showcase worksheet and check</b><small>Worksheet, unplugged activity and quiz</small></a></li>
     </ol>
-    <h3 class="rh">Week 10 Lab · Peer Review &amp; Aim Higher</h3>
+    <h3 class="rh">Week 10 Lab · Peer Review and Aim Higher</h3>
     <ol class="route">
       <li><span class="num">L1</span><a href="#l1"><b>Feedback that actually moves a number</b><small>Strength, one improvement, one question · calibration</small></a></li>
       <li><span class="num">L2</span><a href="#l2"><b>Close the loop, then aim higher</b><small>Act, re-measure, govern, plan for higher stakes</small></a></li>
@@ -451,7 +451,7 @@ table.record caption b{color:var(--main)}
 
 <!-- ===================== LAB ===================== -->
 <section class="part" id="lab">
-  <div class="part-head dark"><span class="pill">Week 10 Lab</span><h2>Peer Review &amp; Aim Higher</h2><p>Today you review each other's optimised solutions like a real design team, act on the feedback to improve one part and re-measure it, then turn your term's reflections into one clear, measurable goal for next term.</p></div>
+  <div class="part-head dark"><span class="pill">Week 10 Lab</span><h2>Peer Review and Aim Higher</h2><p>Today you review each other's optimised solutions like a real design team, act on the feedback to improve one part and re-measure it, then turn your term's reflections into one clear, measurable goal for next term.</p></div>
   <div class="part-body">
     <div class="call"><h4>Previously</h4><p>In the Core you showcased your solution and justified two choices with performance evidence, verified against a trusted source.</p></div>
     <div class="call"><h4>Scenario – the peer-review carousel</h4><p>In a peer-review carousel you give feedback that actually moves a number – a strength, one concrete improvement, and a question – then act on the most useful comment on your own exhibit and set a measurable goal for next term. <span class="illus">(Illustrative scenario.)</span></p></div>
@@ -1026,7 +1026,7 @@ function update(){
   const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
   $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
     <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
-    <div>Grade 11 Main Course · Term 1 Week 10 (7 – 11 Dec 2026) · Core + Lab · Showcase, Assessment &amp; Reflection + Peer Review &amp; Aim Higher</div>
+    <div>Grade 11 Main Course · Term 1 Week 10 (7 – 11 Dec 2026) · Core + Lab · Showcase and Reflection + Peer Review and Aim Higher</div>
     <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
     ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
     ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
