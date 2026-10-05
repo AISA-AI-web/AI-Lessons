@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Build Loop + The Evaluation Log – Grade 8 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#15803D; --main2:#22C55E; --deep:#14532D;
+  --ink:#13261B; --muted:#4F6457; --paper:#F4FAF6; --card:#FFFFFF;
+  --line:#D6EBDD; --soft:#EAF6EE;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#86EFAC,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#3CCB7F);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#13261B,#2E5E40)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#C8EDD4 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#F8FDF9;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FBFEFC}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#3CCB7F)}
+.act-head.ws{background:linear-gradient(120deg,#13261B,#2F6B47)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#ECF8F0}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #B7DCC3;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #9FD9B4;border-radius:12px;padding:10px 14px;background:#F7FCF9;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(19,38,27,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#13261B;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+.tscroll{overflow-x:auto}
+table.log td:nth-child(n+3):nth-child(-n+5),table.log th:nth-child(n+3):nth-child(-n+5){text-align:center}
+@media (max-width:560px){#logpack .in{padding:12px 10px}table.t.log{font-size:12px}table.t.log th,table.t.log td{padding:5px 3px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 8 Main Course, Term 1</span><span class="pill">Week 8 Core + Week 8 Lab</span><span class="pill">📅 Teach: week of 23 – 27 Nov 2026</span></div>
+    <h1>The Build Loop + The Evaluation Log</h1>
+    <p>Today you turn your plan into a real, running solution – then you test it honestly and make it better with evidence, not guesswork. Then, in the Lab, you finish it so it runs end to end, keep an honest evaluation log, and improve it more than once using what the log tells you.</p>
+    <p class="meta"><b>Strands:</b> all four – Solution Design, Critical Evaluation, Conceptual Understanding, Ethics &amp; Governance (Build) &nbsp;·&nbsp; <b>Role:</b> AI Evaluators</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 8B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 8 of Term 1 – Monday 23 to Friday 27 November 2026.</b> Core lesson first, then the Lab period.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: The Build Loop</a>, then move on to the <a href="#lab">Lab: The Evaluation Log</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Build by the plan.</b> I can build my solution step by step by following our plan and structure.</li>
+      <li><b>Test against criteria.</b> I can test my solution and judge its outputs against our success criteria.</li>
+      <li><b>Improve with evidence.</b> I can make one clear improvement and explain what evidence led to it.</li>
+      <li><b>Lab: log and iterate.</b> I can finish a solution that runs end to end, keep an evaluation log that scores each output against every criterion, and make more than one evidence-based improvement – including a graceful response to an edge case.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 8 Core · The Build Loop</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Build and run</b><small>Assemble the steps, run on test inputs</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Evaluate the output</b><small>Judge each output against the criteria</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Improve with evidence</b><small>Change one thing, then run again · worksheet</small></a></li>
+    </ol>
+    <h3 class="rh">Week 8 Lab · The Evaluation Log</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Finish end to end</b><small>Build the last steps and log every run</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Choose the move</b><small>Which lever does each change pull?</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Iterate and fail safely</b><small>Improve twice, handle an edge case · Scratch log</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Building is testing</h2><p>Is a solution that runs already finished?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In Week 7 you prototyped your signature solution and added a fallback. Now build it for real using the run–evaluate–improve loop.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">Run, evaluate, improve, repeat</h3>
+    <p>Building your solution does not mean finishing it in one go. You assemble the steps from your plan, run them on test inputs, and read what comes out. Then you compare that output to your <b>criteria</b> – one by one – and mark each as <b>pass</b> or <b>not-yet</b>.</p>
+    <p>This is a <b>loop</b>, not a single act: run, evaluate, improve, then run again. A solution that runs is only halfway there; a solution you have tested against clear criteria is one you can actually trust. Any AI step is run by your teacher at the board, and you never enter personal data such as names, faces or voices.</p>
+    <figure>
+      <svg viewBox="0 0 760 250" role="img" aria-labelledby="f1T">
+        <title id="f1T">The build loop: build the steps from your plan, run them on non-personal test inputs, evaluate each output against every criterion, then improve by changing one thing – and loop back to run again and compare before and after.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#13261B"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <text x="380" y="24" font-size="14" font-weight="700" text-anchor="middle">ONE TURN OF THE BUILD LOOP</text>
+          <g stroke="#13261B" stroke-width="1.6">
+            <rect x="20" y="44" width="150" height="84" rx="10" fill="#fff"/>
+            <rect x="210" y="44" width="150" height="84" rx="10" fill="#fff"/>
+            <rect x="400" y="44" width="160" height="84" rx="10" fill="#EAF6EE" stroke="#15803D" stroke-width="2.4"/>
+            <rect x="600" y="44" width="140" height="84" rx="10" fill="#fff"/>
+          </g>
+          <g stroke="#13261B" stroke-width="2.6" fill="none" marker-end="url(#ah)"><path d="M170 86H206"/><path d="M360 86H396"/><path d="M560 86H596"/></g>
+          <g font-size="16" font-weight="700" text-anchor="middle"><text x="95" y="74">🧱 BUILD</text><text x="285" y="74">▶️ RUN</text><text x="480" y="74" fill="#15803D">📊 EVALUATE</text><text x="670" y="74">🔧 IMPROVE</text></g>
+          <g font-size="12" text-anchor="middle" fill="#4F6457">
+            <text x="95" y="96">assemble the</text><text x="95" y="112">plan's steps</text>
+            <text x="285" y="96">test inputs</text><text x="285" y="112">(non-personal)</text>
+            <text x="480" y="96">each output vs</text><text x="480" y="112">every criterion</text>
+            <text x="670" y="96">change one</text><text x="670" y="112">thing only</text>
+          </g>
+          <path d="M670 128V180H285V132" stroke="#15803D" stroke-width="2.2" stroke-dasharray="7 5" fill="none" marker-end="url(#ah)"/>
+          <text x="478" y="172" font-size="12" font-weight="700" text-anchor="middle" fill="#15803D">run again</text>
+          <text x="380" y="208" font-size="13" font-weight="700" text-anchor="middle" fill="#15803D">RUN AGAIN AND COMPARE: before → after</text>
+          <text x="380" y="232" font-size="12" text-anchor="middle" fill="#4F6457">a running solution is only halfway – a tested one can be trusted</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> The build loop: run the solution, evaluate each output against the criteria, then improve and run again.</figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-order"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Evaluate honestly</h2><p>Does a confident output pass?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Judge, do not trust</h3>
+    <p>AI outputs often sound sure of themselves. Fluent and detailed is <b>not</b> the same as correct. That is why you <b>verify before you trust</b>: check each output against your criteria and against a source you already trust.</p>
+    <p>Evaluating means scoring each output honestly – pass or not-yet – with <b>one word of evidence</b>. An output can pass one criterion while failing another, so you judge them one by one.</p>
+    <figure>
+      <svg viewBox="0 0 760 240" role="img" aria-labelledby="f2T">
+        <title id="f2T">A fluent, confident output is checked twice – against the criteria one by one, and against a trusted source. Only then is it given a verdict: pass or not-yet, with one word of evidence. Fluent is not the same as correct.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#13261B"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <g stroke="#13261B" stroke-width="1.6">
+            <rect x="20" y="58" width="200" height="100" rx="12" fill="#fff"/>
+            <rect x="290" y="30" width="200" height="64" rx="10" fill="#EAF6EE" stroke="#15803D" stroke-width="2"/>
+            <rect x="290" y="122" width="200" height="64" rx="10" fill="#EAF6EE" stroke="#15803D" stroke-width="2"/>
+            <rect x="560" y="58" width="180" height="100" rx="12" fill="#fff" stroke-width="2.4"/>
+          </g>
+          <g stroke="#13261B" stroke-width="2.2" fill="none" marker-end="url(#ah2)"><path d="M220 96L286 66"/><path d="M220 120L286 152"/><path d="M490 62L556 94"/><path d="M490 154L556 122"/></g>
+          <g text-anchor="middle">
+            <text x="120" y="88" font-size="16" font-weight="700">📤 OUTPUT</text>
+            <text x="120" y="112" font-size="12" fill="#4F6457">“fluent, detailed,</text><text x="120" y="128" font-size="12" fill="#4F6457">sure of itself”</text>
+            <text x="390" y="58" font-size="15" font-weight="700" fill="#15803D">✅ Criteria</text><text x="390" y="78" font-size="12" fill="#4F6457">judged one by one</text>
+            <text x="390" y="150" font-size="15" font-weight="700" fill="#15803D">📚 Trusted source</text><text x="390" y="170" font-size="12" fill="#4F6457">does it agree?</text>
+            <text x="650" y="88" font-size="16" font-weight="700">⚖️ VERDICT</text>
+            <text x="650" y="112" font-size="12" fill="#4F6457">pass or not-yet</text><text x="650" y="128" font-size="12" fill="#4F6457">+ one word of evidence</text>
+            <text x="380" y="222" font-size="13" font-weight="700" fill="#C92A4B">Fluent is not the same as correct – verify before you trust</text>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Each output is judged against the criteria and a trusted source – fluent is not the same as correct.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, teams building smart tools – from Arabic-language helpers to traffic and energy systems – only ship them after testing outputs against strict criteria. Learning to evaluate and improve, not just build, is exactly how that real work is done.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Islamic Studies</h4><p>Connect verify-before-trust to the Islamic principle of <b>tabayyun</b> – checking a report's truth before acting on it (Surah Al-Hujurat 49:6) – so you never accept a confident-sounding output without checking it against a trusted source.</p></div>
+    <div id="a-score"></div>
+    <div id="a-case2"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3 · Worksheet</span><h2>Improve with evidence</h2><p>What makes a change worth keeping?</p></div>
+  <div class="part-body">
+    <p>When something fails, that failure is useful – it points to exactly what to improve. A good improvement is one you can trace back to <b>evidence</b>: this criterion failed, so I changed this, and on the re-run it passed.</p>
+    <p>Random changes just move the problem around. Pick the criterion that failed most, change <b>one thing</b> to target it, then re-run and record the before-and-after so you know whether the change actually helped.</p>
+    <div id="a-improve"></div>
+    <div id="a-case3"></div>
+    <div class="call amber"><h4>Tool for this week: unplugged simulated-AI cards (teacher-led)</h4><p>This is an unplugged concept lesson: the teacher runs a simulated-AI card routine on the board – no live tool, no logins. Students reason about pre-prepared example outputs on the cards – no personal data is used – and use the worksheet to sort or judge the cards and explain their thinking with the key vocabulary. The live tools (Teachable Machine and Scratch) are used in the matching Lab period. <b>No device?</b> The AI step becomes a paper rule card or a pre-printed output deck: draw the matching card for each input, score it against the criteria, and swap one rule card as your improvement.</p></div>
+    <div class="ecard" id="audit"></div>
+    <div id="a-blog"></div>
+    <div id="a-bimp"></div>
+    <div id="a-bsafe"></div>
+    <div id="a-think"></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 8 Lab</span><h2>The Evaluation Log</h2><p>This Lab is your build-and-test workshop. Finish your solution so it runs end to end, keep an honest log, and improve it more than once using what the log tells you.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In the Core you started the build loop – today run it end to end and keep an honest evaluation log. The aim is <b>get it running and fully logged</b>; finishing and refining comes in Week 9.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>The log leads</h2><p>What turns testing into improvement?</p></div>
+  <div class="part-body">
+    <p>Anyone can change their solution; the <b>log</b> is what makes a change worth trusting. For each test input you write the output, a pass or not-yet against <b>every</b> criterion, and one word of evidence.</p>
+    <p>When you look down the log and see the same criterion failing again and again, you know exactly where to work next. That is how real teams prioritise – <b>by evidence</b>, not by which problem is loudest. Keep any AI step teacher-run, use no personal data, and verify each output against the criteria and a trusted source before you believe it.</p>
+    <figure>
+      <svg viewBox="0 0 560 280" role="img" aria-labelledby="f3T">
+        <title id="f3T">An evaluation log with one row per test input and one column per criterion. Five inputs are scored on C1 label, C2 clear and C3 safe, each with one word of evidence. Reading down the C1 column shows it fails twice, on the one-word inputs, so that is where to work next.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <text x="280" y="20" font-size="15" font-weight="700" text-anchor="middle">EVALUATION LOG</text>
+          <text x="280" y="38" font-size="12.5" text-anchor="middle" fill="#4F6457">one row per input · one column per criterion</text>
+          <rect x="180" y="48" width="80" height="196" fill="#FFF3C9" stroke="#E8890C" stroke-width="2.4"/>
+          <g fill="none" stroke="#B7DCC3" stroke-width="1.2">
+            <rect x="20" y="50" width="520" height="192" rx="6"/>
+            <path d="M20 82H540M20 114H540M20 146H540M20 178H540M20 210H540"/>
+            <path d="M180 50V242M260 50V242M340 50V242M420 50V242"/>
+          </g>
+          <rect x="21" y="51" width="518" height="30" fill="#EAF6EE"/>
+          <rect x="181" y="51" width="78" height="30" fill="#FDE7B0"/>
+          <g font-size="13" font-weight="700"><text x="30" y="71">Test input</text><text x="220" y="71" text-anchor="middle">C1 label</text><text x="300" y="71" text-anchor="middle">C2 clear</text><text x="380" y="71" text-anchor="middle">C3 safe</text><text x="430" y="71">Evidence</text></g>
+          <g font-size="13">
+            <text x="30" y="103">red umbrella</text><text x="430" y="103">matches</text>
+            <text x="30" y="135">tennis racket</text><text x="430" y="135">matches</text>
+            <text x="30" y="167">“blue”</text><text x="430" y="167" fill="#C92A4B">guessed</text>
+            <text x="30" y="199">“silver”</text><text x="430" y="199" fill="#C92A4B">guessed</text>
+            <text x="30" y="231">lunch box</text><text x="430" y="231">matches</text>
+          </g>
+          <g font-size="16" font-weight="700" text-anchor="middle">
+            <g fill="#0F8A5F"><text x="220" y="103">✓</text><text x="300" y="103">✓</text><text x="380" y="103">✓</text><text x="220" y="135">✓</text><text x="300" y="135">✓</text><text x="380" y="135">✓</text><text x="300" y="167">✓</text><text x="380" y="167">✓</text><text x="300" y="199">✓</text><text x="380" y="199">✓</text><text x="220" y="231">✓</text><text x="300" y="231">✓</text><text x="380" y="231">✓</text></g>
+            <g fill="#C92A4B"><text x="220" y="167">✗</text><text x="220" y="199">✗</text></g>
+          </g>
+          <text x="280" y="268" font-size="12.5" font-weight="700" text-anchor="middle" fill="#B45309">Read down a column: the one failing most is where to work next</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> An evaluation log: one row per input, one column per criterion, with a score and one word of evidence. <span class="illus">(Illustrative lost-property sorter.)</span></figcaption>
+    </figure>
+    <div id="a-lorder"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Choose the move</h2><p>Which lever does each change pull?</p></div>
+  <div class="part-body">
+    <p>When the log shows a criterion failing, you pick an <b>improvement move</b> and apply just one at a time. Each move pulls a different lever: you can <b>change the data</b>, <b>change a step</b>, <b>add a check</b>, or <b>change the tool</b>.</p>
+    <p>Knowing which move targets which problem is what keeps your changes deliberate. Apply one, re-run, re-score, and log the before-and-after so you can see whether the move helped.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>Whether it is a delivery app, a health screening tool, or a smart-city sensor in the UAE, the difference between a demo and a product is a tested solution with a log and safe handling of odd inputs. That is the standard you are practising here.</p></div>
+    <div id="a-lmatch"></div>
+    <div id="a-lcase2"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Part 3 of 3 · Worksheet</span><h2>Fail gracefully</h2><p>How should a solution meet a bad input?</p></div>
+  <div class="part-body">
+    <p>A strong solution is not one that never meets a hard input – it is one that handles a hard input well. Feed yours something tricky on purpose: a blank field, an unknown value, something outside what you planned for. This is an <b>edge case</b>.</p>
+    <p>A weak solution gives a confident wrong answer; a strong one says clearly that it cannot match the input and asks you to check. When you find a case like that, fix it and <b>write the fix in your log</b> so the solution fails gracefully next time. Documenting the fix is part of the engineering, not an extra.</p>
+    <figure>
+      <svg viewBox="0 0 760 250" role="img" aria-labelledby="f4T">
+        <title id="f4T">An edge-case input – a blank description – goes into the solution. Failing badly: it gives a confident wrong label. Failing gracefully: it says it cannot match the input and asks you to check. Fix it, then write the fix in your log.</title>
+        <defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#13261B"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#13261B">
+          <g stroke="#13261B" stroke-width="1.6">
+            <rect x="20" y="82" width="160" height="72" rx="10" fill="#fff" stroke-dasharray="5 4"/>
+            <rect x="222" y="82" width="140" height="72" rx="10" fill="#EAF6EE" stroke="#15803D" stroke-width="2.2"/>
+            <rect x="420" y="22" width="320" height="80" rx="10" fill="#FDE7EC" stroke="#C92A4B" stroke-width="2"/>
+            <rect x="420" y="134" width="320" height="80" rx="10" fill="#E2F5EC" stroke="#0F8A5F" stroke-width="2"/>
+          </g>
+          <g stroke="#13261B" stroke-width="2.4" fill="none" marker-end="url(#ah4)"><path d="M180 118H218"/><path d="M362 108L416 66"/><path d="M362 128L416 170"/></g>
+          <g text-anchor="middle">
+            <text x="100" y="112" font-size="15" font-weight="700">⬜ EDGE CASE</text><text x="100" y="134" font-size="12" fill="#4F6457">blank description</text>
+            <text x="292" y="112" font-size="15" font-weight="700" fill="#15803D">⚙️ SOLUTION</text><text x="292" y="134" font-size="12" fill="#4F6457">no match found</text>
+            <text x="580" y="54" font-size="15" font-weight="700" fill="#C92A4B">⚠️ FAILS BADLY</text><text x="580" y="78" font-size="12">“Clothing · shelf B” – confident, wrong</text>
+            <text x="580" y="166" font-size="15" font-weight="700" fill="#0F8A5F">🛟 FAILS GRACEFULLY</text><text x="580" y="190" font-size="12">“Can't match – please check”</text>
+            <text x="380" y="240" font-size="12.5" font-weight="700" fill="#15803D">Fix it, then write the fix in your log so it fails safely next time</text>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 4.</b> Failing gracefully: on an edge-case input, the solution says clearly that it cannot match and asks you to check.</figcaption>
+    </figure>
+    <div class="call violet"><h4>Cross-curricular link · Computing</h4><p>Like handling <b>invalid input</b> in a program, test edge cases such as a blank or unexpected value, make the solution fail gracefully with a clear message instead of a confident wrong answer, and keep a <b>test log</b>.</p></div>
+    <div id="a-lgrace"></div>
+    <div id="a-lcase3"></div>
+    <div class="call amber"><h4>Today's tool: Scratch + improvement-move cards – build and iterate (teacher-operated)</h4><p>1. The teacher opens Scratch (offline app or scratch.mit.edu) – no account needed; work saves as a local .sb3 file. 2. Find the three zones: Blocks (left), Code area (middle), Stage (top-right). 3. Build the input → process → output chain: an input block (ask), the process step (a rule or an ML block, e.g. classify), then an output block (say). 4. Click the green flag to run; the red button stops it. Run it and score the outputs against your criteria. 5. Draw an improvement-move card (change the data, change a step, add a check, change the tool), apply it, re-run and re-score. 6. Log the move, the before score and the after score, then save to the computer (File → Save to your computer) as an .sb3 to reopen next week. <b>Stay safe:</b> the teacher operates the tool on the board and students never log in; use non-personal data only. Teachable Machine trains in the browser and the samples stay on the teacher's device; use objects, hand gestures or drawings only – never faces, voices or names; clear the project at the end of the lesson; only the non-personal model is used. <b>No device?</b> Replace the live step with a pre-printed output deck: draw the matching card per input, complete the same log by hand, and swap rule cards as your two improvements – including one graceful response to a bad input.</p></div>
+    <div class="ecard" id="logpack"></div>
+    <div id="a-llog"></div>
+    <div id="a-limp"></div>
+    <div id="a-ledge"></div>
+    <div id="a-ltool"></div>
+    <div id="a-lsafe"></div>
+    <div id="a-lthink"></div>
+    <div id="a-lexit"></div>
+    <div id="a-lchal"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Build, log honestly – then improve with evidence</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>Building is a <b>loop</b>: run, evaluate, improve, then run again.</li>
+      <li>Evaluate each output against the <b>criteria</b> and a <b>trusted source</b>, one by one.</li>
+      <li>A confident, fluent output can still fail a criterion – <b>verify before you trust</b>.</li>
+      <li>A good improvement traces back to a specific gap the evaluation exposed – change <b>one thing</b> at a time.</li>
+      <li>A solution is finished when it runs <b>end to end</b> and has been evaluated across inputs; the <b>evaluation log</b> records output, per-criterion score and evidence for each input.</li>
+      <li>Patterns in the log show which criterion to iterate on next, and a strong solution <b>fails gracefully</b> on an edge case, with the fix documented.</li>
+    </ul>
+    <div class="call"><h4>Next</h4><p>In Week 9 you refine your solution, making one smart change and measuring that it truly worked.</p></div>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 8 · Main Course · Term 1 Week 8 (23 – 27 Nov 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- scope & sequence concepts (Grade 8, Week 8: Build – all four strands) ---------- */
+const CU_P="CU · how factors (data, inputs, design) affect performance";
+const SD_E="SD · develops AI-powered solutions for specific tasks";
+const SD_P="SD · structured workflows of multiple steps";
+const SD_A="SD · designs and refines solutions considering how components interact";
+const CE_E="CE · limitations in outputs – verify";
+const CE_P="CE · evaluates using criteria: accuracy, bias, reliability";
+const CE_A="CE · refines systematically and justifies improvements with evidence";
+const GE_E="GE · ethical concerns in AI use";
+const GE_P="GE · structured evaluation of risks (bias, privacy, misuse)";
+const GE_A="GE · proposes mitigations and explains their impact";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["signature solution","The small AI-powered workflow you designed to do one clear task."],
+  ["criteria","The fixed rules that decide whether an output is good enough."],
+  ["evaluate","To judge an output against the criteria, using evidence not feelings."],
+  ["iterate","To run, check, change and run again to make the solution better."],
+  ["evidence","The specific result from testing that shows something passed or failed."]
+];
+const DEF_ORDER = [2,4,0,3,1];
+const LOOP = ["🧱 Assemble the steps from your plan","▶️ Run the solution on a non-personal test input","📊 Evaluate the output against each criterion: pass or not-yet","🔧 Change one thing to fix the criterion that failed","🔁 Run again and compare the before-and-after"];
+const LOOP_ORDER = [3,1,4,0,2];
+const CASE1 = ["No, but only because it still looks a little unfinished.","Yes, a single run is always enough to call it finished.","Yes, producing any output means the plan is fully done.","No – it must be evaluated against the criteria first."];
+const SCORE = [
+  ["sc1","❔ Passes the count, but you have not verified it yet","B"],
+  ["sc2","🚩 Confident wording, but the trusted source disagrees","C"],
+  ["sc3","🟩 Matches the criteria and your trusted source","A"],
+  ["sc4","🌀 Fluent answer that is factually wrong","C"],
+  ["sc5","🟨 Meets one criterion, unclear on another","B"],
+  ["sc6","🎯 Scores 9 of 10 and agrees with the source","A"],
+  ["sc7","📚 Correct label backed by evidence you checked","A"]
+];
+const CASE2 = ["It cannot really be scored against anything at all here.","Not yet – it fails the check against the trusted source.","Pass, since such confident language must already be right.","Pass, because it honestly sounds better than the source."];
+const IMPROVE = [
+  ["im1","🔎 The label criterion failed most, so you clarified the input and re-ran.",1],
+  ["im4","🏆 You picked the change that felt best without re-running anything.",0],
+  ["im2","🔁 You changed one thing, re-ran, and logged the before-and-after.",1],
+  ["im5","🙈 You kept the failing output because it sounded confident.",0],
+  ["im3","📉 You targeted the criterion with the weakest evidence in your scores.",1],
+  ["im6","🎲 You changed several steps at random and hoped one worked.",0]
+];
+const CASE3 = ["They changed too much at once, so no evidence links the fix.","They should have changed even more of the process steps here.","They should not have re-run the whole solution again at all.","Nothing, since it passes and the exact cause does not matter here."];
+const BROW = ["None – it passes every criterion","C1 · correct category","C2 · short, clear message","C3 · no personal data"];
+const BMOST = ["C1 · correct category","C2 · short, clear message","C3 · no personal data"];
+const BFIX = ["Add clear category examples to the rule card – boots and rackets are sports kit, hoodies are clothing","Make every message longer and more detailed","Change the rule card, the message format and the test inputs all at once","Remove C1 from the criteria list so fewer rows fail"];
+const BRERUN = ["Rows 2 and 3 now pass C1, and row 1 still passes C1","The outputs sound more confident than before","Row 3 passes, but rows 1 and 2 were not re-run","Nothing – if the solution runs, the change worked"];
+const RULES = ["Use only non-personal test inputs – no names, faces or voices","Use real lost items labelled with owners' names so the test is realistic","Let each student type into the AI tool on their own account","Trust the AI step's output whenever it sounds confident"];
+const RULE_WHY = ["We cannot control what a tool keeps or shares, so personal data could leak and harm someone's privacy","It makes the outputs sound more fluent","It makes the solution run faster","It means we no longer need any criteria"];
+const THINK = ["It can't – an output that passes one criterion passes them all","A long output always fails every criterion, so length matters most","A short, clear message can pass C2 while naming the wrong category – the category matters more, because a clear message to the wrong shelf still sends the owner to the wrong place","Whichever criterion is easiest to pass matters most"];
+const EXIT = ["I improved it a lot and now it feels much better","I added sports-kit and clothing examples to the rule card because C1 failed on rows 2 and 3; on the re-run all three rows passed C1","I changed several things and it passes now","The AI sounded confident, so I kept every output"];
+const CH_IN = ["A red folding umbrella","Random letters: ‘xqzt plm’","Black football boots","A dented metal water bottle"];
+const CH_FIX = ["It replies ‘Can't match – please check with the office’, and the fix is written in the log","It picks the most likely shelf and gives a confident message","It crashes, so nobody sees a wrong answer","It skips the input and moves on, with no note anywhere"];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["evaluation log","Your written record of each input, its output, and how it scored on every criterion."],
+  ["end to end","The solution runs through every step of the workflow without a gap."],
+  ["edge case","An unusual or tricky input that can catch a solution out."],
+  ["fail gracefully","Respond safely and clearly to a bad input instead of giving a confident wrong answer."],
+  ["iterate","Run, log, change and run again to keep improving."]
+];
+const LDEF_ORDER = [3,0,4,2,1];
+const LSTEPS = ["🧱 Build the steps still unbuilt so the solution runs end to end","📋 Set up a log: one row per input, one column per criterion","▶️ Run a non-personal test input through every step","🖊️ Fill the row: output, per-criterion pass or not-yet, one word of evidence","📉 Read down the log to find the criterion that fails most"];
+const LSTEP_ORDER = [2,4,1,3,0];
+const LCASE1 = ["By guessing which fix happens to feel the quickest to do.","By always fixing the single newest problem on the list.","By whichever problem is complained about most loudly today.","By the criterion the log shows failing most across inputs."];
+const MOVES = [["mv1","🔎 Add a check",2],["mv2","🪜 Change a step",1],["mv3","🗃️ Change the data",0],["mv4","🔧 Change the tool",3]];
+const MOVE_OPTS = ["📥 clearer, better test inputs","🧱 how the workflow is built","📊 catches an output that misses the bar","⚙️ the AI step that does the work"];
+const LCASE2 = ["Change the data – supply clearer, non-personal inputs.","Change nothing and simply re-run the very same inputs.","Throw out the whole workflow and rebuild it from scratch.","Delete the failing criterion so that nothing fails at all."];
+const GRACE = [
+  ["gr1","💥 Crashes and shows nothing at all","N"],
+  ["gr2","🙋 Says it cannot match the input and asks you to check","Y"],
+  ["gr3","🎭 Gives a confident answer it cannot back up","N"],
+  ["gr4","🤫 Hides the error and passes the output on anyway","N"],
+  ["gr5","🔁 Routes an unknown value to a safe review step","Y"],
+  ["gr6","🚧 Flags the blank field and pauses instead of guessing","Y"]
+];
+const LCASE3 = ["Ignore the blank and pass on whatever output appears.","Invent the most confident label it can for the blank field.","Let the solution crash so that it simply stops running.","Say it cannot match the input and ask a human to check."];
+const LG_MOST = ["C1 · correct label","C2 · clear message","C3 · safe (no personal data)","No criterion – every row passes"];
+const LG_PAT = ["It fails on every input","It fails only on one-word descriptions","It fails only on sports items","It fails at random – there is no pattern"];
+const LG_MOVE = ["🔧 Change the tool – swap the AI step, even though clear inputs already pass","🔎 Add a check – ask for more detail when a description is too short to classify","🗑️ Delete C1 so that nothing fails","🎲 Change several steps at once and re-run"];
+const LK_ROWS = ["Rows 1 and 2 – they passed every criterion","Row 5 – the lunch box","Rows 3 and 4 – the one-word inputs that failed C1","No rows – it just felt like the right move"];
+const LK_WHY = ["It was the newest change, so it had to go","The after score fell from 5 of 5 to 4 of 5, so the log shows it made things worse","Changing the tool is never allowed","The outputs sounded less confident"];
+const LE_BEFORE = ["A clear ‘please check’ message","The right shelf for the item","A confident wrong label – ‘Clothing · shelf B’","Nothing – the blank input was never tested"];
+const LE_FIX = ["Guess the most common category whenever the field is blank","Add a check: a blank field returns ‘No description – please check with the office’","Let it crash so no label is shown","Delete blank rows from the log so they do not count"];
+const LE_DOC = ["Nowhere – the fix speaks for itself","Only in your memory, for next week","In the evaluation log – a new row with the input, the fix and the re-run result","In a chat message to a friend"];
+const LTOOL = [
+  ["tl1","🟢 The green flag runs the project; the red button stops it.",1],
+  ["tl2","🔑 Each student logs in with their own Scratch account.",0],
+  ["tl3","💾 Save the work as a local .sb3 file to reopen next week.",1],
+  ["tl4","🧩 Chain an input block (ask), a process step (classify) and an output block (say).",1],
+  ["tl5","🎭 The Stage is the zone you drag blocks from.",0],
+  ["tl6","📋 After each improvement-move card, re-run, re-score and log the before and after scores.",1]
+];
+const LSAFE = [
+  ["sf1","Use objects, hand gestures or drawings only",1],
+  ["sf2","The teacher operates the tool on the board; students never log in",1],
+  ["sf3","Add classmates' names to the test inputs so they feel real",0],
+  ["sf4","Clear the project at the end of the lesson",1],
+  ["sf5","Record students' voices so the inputs are more varied",0],
+  ["sf6","Teachable Machine samples stay on the teacher's device",1]
+];
+const LTHINK = ["Fix whichever is quickest, whatever the log says","Fix both at once with several changes, then re-run","Check the whole log: fix the criterion that matters most for the task and fails most across inputs – safety first – one change at a time","Fix whichever one a teammate complains about most loudly"];
+const LEXIT = ["I made two improvements and it works better now","Row 5 passed, so I changed the tool, and I kept it","I fixed the problems my teammate noticed","Rows 3–4 failed C1 on one-word inputs, so I added a ‘more detail’ check – re-run 5 of 5; the blank-field row got a confident wrong label, so I added a ‘please check’ reply – the re-run handled it safely"];
+const LCH_IN = ["A blank description","A long nonsense description such as ‘zzz qqq www xxx’ – enough words, but it matches no category","‘blue’","A tennis racket"];
+const LCH_GUARD = ["Prediction: a confident wrong label. Guard: if no category matches well, reply ‘Can't match – please check’ and log it","Prediction: it will be fine. Guard: none needed","Prediction: a crash. Guard: hide the error message","Prediction: a wrong label. Guard: delete that input from the test set"];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CE_P,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"Your signature solution is the small AI-powered workflow you designed; criteria are the fixed rules for ‘good enough’; to evaluate is to judge against them with evidence; to iterate is to run, check, change and run again; evidence is the test result that shows a pass or a fail."},
+ {id:"order",mount:"a-order",section:"Core · Part 1",title:"Order the build loop",sub:"Objective 1 · "+SD_P,ico:"🔄",
+  fields:LOOP.map((_,i)=>({k:"o"+i,ok:v=>eq(v,i)})),
+  explain:"Assemble the steps from your plan, run on a non-personal test input, evaluate the output against each criterion, change one thing to fix the criterion that failed, then run again and compare the before-and-after."},
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"Case 1 · The One-And-Done Build",sub:"AI Evaluators · "+CE_P,ico:"🕵️",
+  fields:[{k:"c1",radio:1,ok:v=>eq(v,3)}],
+  explain:"Not yet – it must be evaluated against the criteria first. A solution that runs is only halfway; one run cannot show whether the output meets the bar or holds up across inputs."},
+ {id:"score",mount:"a-score",section:"Core · Part 2",title:"Score each output",sub:"Objective 2 · "+CE_P,ico:"🩺",
+  fields:SCORE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Pass: matches the criteria and the trusted source, scores 9 of 10 and agrees with the source, or a correct label backed by evidence you checked. Not-yet: meets one criterion but is unclear on another, or passes the count but is not verified yet. Fail: the trusted source disagrees, or the fluent answer is factually wrong."},
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"Case 2 · The Fluent Wrong Answer",sub:"AI Evaluators · "+CE_E,ico:"🔬",
+  fields:[{k:"c2",radio:1,ok:v=>eq(v,1)}],
+  explain:"Not yet – it fails the check against the trusted source. Fluent and confident is not the same as correct; detail and confidence are not evidence, but the source it disagrees with is."},
+ {id:"improve",mount:"a-improve",section:"Core · Part 3",title:"Which are evidence-based improvements?",sub:"Objective 3 · "+CE_A,ico:"🧩",
+  fields:IMPROVE.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Evidence-based: clarifying the input because the label criterion failed most, changing one thing and logging the before-and-after, and targeting the criterion with the weakest evidence. Picking what feels best, keeping a confident failing output, or changing several steps at random are guesswork."},
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"Case 3 · The Random Fix",sub:"AI Evaluators · "+CE_A,ico:"⚖️",
+  fields:[{k:"c3",radio:1,ok:v=>eq(v,0)}],
+  explain:"They changed too much at once, so no evidence links the fix. Re-running was right; change one thing at a time so you can trace the improvement to evidence – otherwise the fix cannot be trusted or repeated."},
+ {id:"blog",mount:"a-blog",section:"Core worksheet",title:"Evaluation log: score each row",sub:"Worksheet · "+CE_P,ico:"📝",cls:"ws",
+  fields:[{k:"br1",ok:v=>eq(v,2)},{k:"br2",ok:v=>eq(v,1)},{k:"br3",ok:v=>eq(v,1)},{k:"bmost",ok:v=>eq(v,0)}],
+  explain:"Row 1 names the right category but rambles, so it fails C2. Rows 2 and 3 give clear, safe messages with the wrong category, so they fail C1. C1 fails most (2 of 3 rows) – that is the criterion to fix first."},
+ {id:"bimp",mount:"a-bimp",section:"Core worksheet",title:"My one improvement",sub:"Worksheet · "+CE_A,ico:"🔧",cls:"ws",
+  fields:[{k:"bi1",ok:v=>eq(v,0)},{k:"bi2",ok:v=>eq(v,0)}],
+  explain:"C1 failed because the rule card mixed up clothing and sports kit, so the one change is to add clear category examples. The re-run must show rows 2 and 3 now pass C1 – and row 1 still passes – so the evidence links the change to the result."},
+ {id:"bsafe",mount:"a-bsafe",section:"Core worksheet",title:"Safe-use check",sub:"Worksheet · "+GE_P,ico:"🛡️",cls:"ws",
+  fields:[{k:"bs1",ok:v=>eq(v,0)},{k:"bs2",ok:v=>eq(v,0)}],
+  explain:"Use only non-personal test inputs – no names, faces or voices – because we cannot control what a tool keeps or shares. Owners' names, personal logins or trusting confident outputs would make the build less safe."},
+ {id:"think",mount:"a-think",section:"Core worksheet",title:"Think about it",sub:"Reflect · "+CE_P,ico:"💭",
+  fields:[{k:"th",radio:1,ok:v=>eq(v,2)}],
+  explain:"Criteria are judged one by one, so an output can pass one and fail another – a short, clear message can still name the wrong category. For a lost-property sorter the correct category matters more: a clear message that sends the owner to the wrong shelf does not do the job."},
+ {id:"exit",mount:"a-exit",section:"Core worksheet",title:"Exit ticket",sub:"Explain it · "+CE_A,ico:"🎫",
+  fields:[{k:"ex",radio:1,ok:v=>eq(v,1)}],
+  explain:"A strong exit ticket names one change, the exact evidence that led to it (C1 failed on rows 2 and 3), and what the re-run showed. ‘It feels better’ or ‘I changed several things’ gives no evidence."},
+ {id:"chal",mount:"a-chal",section:"Core challenge",title:"Challenge ⭐ The tricky input",sub:"Stretch · "+SD_A,ico:"⭐",
+  fields:[{k:"ch1",radio:1,ok:v=>eq(v,1)},{k:"ch2",ok:v=>eq(v,0)}],
+  explain:"Random letters match no category, so they are an edge case; the umbrella, boots and bottle are normal inputs. Failing gracefully means a clear ‘can't match – please check’ reply, with the fix documented in the log so it fails safely next time."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+SD_P,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"Evaluation log = your record of each input, output and per-criterion score. End to end = every step runs without a gap. Edge case = an unusual or tricky input. Fail gracefully = respond safely and clearly instead of giving a confident wrong answer. Iterate = run, log, change, run again."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 1",title:"Order the logging routine",sub:"Objective 1 · "+SD_P,ico:"🗂️",
+  fields:LSTEPS.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"Build the unbuilt steps so it runs end to end, set up the log, run a non-personal test input, fill the row with the output, per-criterion scores and evidence, then read down the log to find the criterion that fails most."},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"Case 1 · The Loudest Problem",sub:"AI Evaluators · "+CE_A,ico:"🕵️",
+  fields:[{k:"lc1",radio:1,ok:v=>eq(v,3)}],
+  explain:"Choose by the criterion the log shows failing most across inputs. The loudest, newest or quickest problem is not always the most important – the log lets teams prioritise by evidence."},
+ {id:"lmatch",mount:"a-lmatch",section:"Lab · Part 2",title:"Match the move to what it changes",sub:"Objective 2 · "+CU_P,ico:"🧷",
+  fields:MOVES.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Add a check = catches an output that misses the bar before you trust it. Change a step = alters how the workflow is built. Change the data = gives clearer, better inputs. Change the tool = swaps the AI step that does the work."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"Case 2 · The Blurry Inputs",sub:"AI Evaluators · "+CU_P,ico:"🔬",
+  fields:[{k:"lc2",radio:1,ok:v=>eq(v,0)}],
+  explain:"Change the data – supply clearer, non-personal inputs. Only the blurry inputs fail, so the evidence points at the data. Rebuilding everything ignores the evidence, deleting the criterion hides the problem, and re-running unchanged cannot improve it."},
+ {id:"lgrace",mount:"a-lgrace",section:"Lab · Part 3",title:"Does it fail gracefully?",sub:"Objective 3 · "+SD_A,ico:"🛟",
+  fields:GRACE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Graceful: saying it cannot match and asking you to check, routing an unknown value to a safe review step, and flagging a blank field instead of guessing. Crashing, a confident answer it cannot back up, and hiding the error all fail badly."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"Case 3 · The Blank Field",sub:"AI Evaluators · "+GE_A,ico:"⚖️",
+  fields:[{k:"lc3",radio:1,ok:v=>eq(v,3)}],
+  explain:"Say it cannot match the input and ask a human to check. A clear, safe response beats a confident invented label; crashing is failing badly, and passing on an unchecked output hides the problem."},
+ {id:"llog",mount:"a-llog",section:"Lab worksheet",title:"Read the full evaluation log",sub:"Worksheet · "+CE_P,ico:"📓",cls:"ws",
+  fields:[{k:"lg1",ok:v=>eq(v,0)},{k:"lg2",ok:v=>eq(v,1)},{k:"lg3",ok:v=>eq(v,1)}],
+  explain:"Reading down the log, C1 (correct label) fails twice – both on the one-word inputs ‘blue’ and ‘silver’. Clear inputs pass, so the tool is not the problem: add a check that asks for more detail when a description is too short to classify."},
+ {id:"limp",mount:"a-limp",section:"Lab worksheet",title:"Two improvements, from evidence",sub:"Worksheet · improvement log · "+CE_A,ico:"📈",cls:"ws",
+  fields:[{k:"lk1",ok:v=>eq(v,"K")},{k:"lk2",ok:v=>eq(v,"U")},{k:"lk3",ok:v=>eq(v,2)},{k:"lk4",ok:v=>eq(v,1)}],
+  explain:"Keep Move 1: rows 3 and 4 justified it and the score rose from 3 of 5 to 5 of 5. Undo Move 2: the score fell to 4 of 5, so the log shows it made things worse. Each decision comes from a before and after score, not a feeling."},
+ {id:"ledge",mount:"a-ledge",section:"Lab worksheet",title:"Edge-case fix",sub:"Worksheet · "+SD_A,ico:"🚧",cls:"ws",
+  fields:[{k:"le1",ok:v=>eq(v,2)},{k:"le2",ok:v=>eq(v,1)},{k:"le3",ok:v=>eq(v,2)}],
+  explain:"Before the fix, the blank input got a confident wrong label. The graceful fix is a check that replies ‘No description – please check with the office’, and it is documented as a new row in the evaluation log with the input, the fix and the re-run result."},
+ {id:"ltool",mount:"a-ltool",section:"Lab worksheet",title:"Scratch: build and iterate",sub:"Worksheet · tool log · "+SD_E,ico:"🐱",cls:"ws",
+  fields:LTOOL.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"The green flag runs and the red button stops; work saves as a local .sb3 file; the chain is input (ask) → process (classify) → output (say); after each improvement move you re-run, re-score and log. No accounts are needed – the teacher operates Scratch – and blocks come from the Blocks zone on the left, not the Stage."},
+ {id:"lsafe",mount:"a-lsafe",section:"Lab worksheet",title:"Safety check",sub:"Safety check · "+GE_E,ico:"🛡️",
+  fields:LSAFE.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Use objects, hands or drawings only, let the teacher operate the tool so students never log in, keep Teachable Machine samples on the teacher's device, and clear the project at the end. Never use names, faces or voices – they are personal data."},
+ {id:"lthink",mount:"a-lthink",section:"Lab worksheet",title:"Think about it",sub:"Reflect · "+CE_P,ico:"💭",
+  fields:[{k:"lth",radio:1,ok:v=>eq(v,2)}],
+  explain:"Use the whole log as evidence: fix the criterion that matters most for the task (a safety failure always comes first) and that fails most across inputs – one change at a time, so the re-run shows what helped."},
+ {id:"lexit",mount:"a-lexit",section:"Lab worksheet",title:"Exit ticket",sub:"Explain it · "+CE_A,ico:"🎫",
+  fields:[{k:"lx",radio:1,ok:v=>eq(v,3)}],
+  explain:"A strong exit ticket points to the exact log rows behind each improvement and gives the change and the re-run result for both. The other answers give no rows, no evidence, or keep a change the log shows did not help."},
+ {id:"lchal",mount:"a-lchal",section:"Lab challenge",title:"Challenge ⭐ A second edge case",sub:"Stretch · "+SD_A,ico:"⭐",
+  fields:[{k:"lch1",radio:1,ok:v=>eq(v,1)},{k:"lch2",ok:v=>eq(v,0)}],
+  explain:"A long nonsense description has enough words to pass the ‘more detail’ check but matches no category, so it could still get a confident wrong label. The guard: if no category matches well, reply ‘Can't match – please check’ and log the reasoning – a robust solution that fails gracefully."}
+];
+
+/* ---------- state ---------- */
+const KEY="g8-mw8-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+$("#audit").innerHTML=`<header><small>Worked example · simulated-AI cards · illustrative</small><b>Build sheet: a lost-property sorter for the school office</b></header>
+<div class="in">
+  <p class="task"><b>The task:</b> the sorter reads a short, non-personal description of a found item and replies with a category and a shelf. <b>Criteria:</b> C1 · correct category (matches the office list) · C2 · short, clear message (one line) · C3 · no personal data in the output.</p>
+  <table class="t"><thead><tr><th>Row · test input</th><th>Output from the card</th><th>Office list says</th></tr></thead>
+  <tbody><tr><td>1 · dented metal water bottle</td><td>‘Bottle · shelf A. This item appears to be a bottle, which is a container often used for drinks and often made of metal or plastic, and it may…’</td><td>Bottle · shelf A</td></tr>
+  <tr><td>2 · grey hoodie, size M</td><td>‘Sports kit · shelf C’</td><td>Clothing · shelf B</td></tr>
+  <tr><td>3 · black football boots</td><td>‘Clothing · shelf B’</td><td>Sports kit · shelf C</td></tr></tbody></table>
+</div>`;
+$("#logpack").innerHTML=`<header><small>Evaluation log · illustrative class results</small><b>Lost-property sorter in Scratch – full log and improvement log</b></header>
+<div class="in">
+  <p class="task"><b>Set-up:</b> ask block → classify step → say block, run end to end on five non-personal descriptions. Criteria as in the Core: C1 label · C2 clear · C3 safe.</p>
+  <div class="tscroll"><table class="t log"><thead><tr><th>Input</th><th>Output</th><th>C1</th><th>C2</th><th>C3</th><th>Evidence</th></tr></thead>
+  <tbody><tr><td>1 · red folding umbrella</td><td>Other · shelf E</td><td>✓</td><td>✓</td><td>✓</td><td>matches</td></tr>
+  <tr><td>2 · tennis racket</td><td>Sports kit · shelf C</td><td>✓</td><td>✓</td><td>✓</td><td>matches</td></tr>
+  <tr><td>3 · ‘blue’</td><td>Clothing · shelf B</td><td>✗</td><td>✓</td><td>✓</td><td>guessed</td></tr>
+  <tr><td>4 · ‘silver’</td><td>Bottle · shelf A</td><td>✗</td><td>✓</td><td>✓</td><td>guessed</td></tr>
+  <tr><td>5 · lunch box, stickers</td><td>Other · shelf E</td><td>✓</td><td>✓</td><td>✓</td><td>matches</td></tr>
+  <tr><td>6 · <i>(blank)</i></td><td>Clothing · shelf B</td><td>✗</td><td>✓</td><td>✓</td><td>edge case</td></tr></tbody></table></div>
+  <table class="t record" style="margin-top:12px"><thead><tr><th>Improvement move</th><th>Rows passing every criterion: before</th><th>After</th></tr></thead>
+  <tbody><tr><td>Move 1 · 🔎 Add a check: a one-word description gets ‘Please add more detail’ instead of a guess</td><td>3 of 5</td><td>5 of 5</td></tr>
+  <tr><td>Move 2 · 🔧 Change the tool: swap the classify step for a different ML block</td><td>5 of 5</td><td>4 of 5 (umbrella now ‘Clothing’)</td></tr></tbody></table>
+</div>`;
+
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "order":
+    return `<p class="how">Put the moves in the order of one full turn of the build loop, from first to last.</p>`+
+      LOOP.map((_,i)=>`<div class="pair" data-item="o${i}"><span class="t">Step ${i+1}</span>${sel("o"+i,LOOP,"Choose the step…",LOOP_ORDER)}</div>`).join("");
+  case "case1":
+    return `<div class="quote">A team gets their solution to run once, sees an output appear, and calls the build finished. Evaluator, is it really done?</div><p class="q" id="q-c1">Is the solution finished?</p>${radios("c1",CASE1)}`;
+  case "score":
+    return `<p class="how">You are checking outputs against the criteria and a trusted source. Sort each one.</p>`+
+      SCORE.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["✅ Pass","❓ Not-yet","⛔ Fail"],["A","B","C"],t)}</div>`).join("");
+  case "case2":
+    return `<div class="quote">An output is detailed, fluent and sure of itself – but it disagrees with the trusted source the class uses. Evaluator, how should it be scored?</div><p class="q" id="q-c2">How should this output be scored?</p>${radios("c2",CASE2)}`;
+  case "improve":
+    return boxes(IMPROVE,"Tick the THREE improvements that are driven by evidence. Leave the others unticked.");
+  case "case3":
+    return `<div class="quote">One criterion keeps failing, so a team changes three different steps at once and re-runs. It passes – but they cannot say why. Evaluator, what went wrong with their method?</div><p class="q" id="q-c3">What is wrong with their method?</p>${radios("c3",CASE3)}`;
+  case "blog":
+    return `<p class="how">Use the build sheet above. For each row, which criterion did the output fail? Then find the criterion that failed most.</p>`+
+      [["br1","Row 1 · water bottle",[3,0,2,1]],["br2","Row 2 · grey hoodie",[0,2,3,1]],["br3","Row 3 · football boots",[2,1,0,3]]].map(([k,t,o])=>`<div class="pair" data-item="${k}"><span class="t">${t}</span>${sel(k,BROW,"Which criterion failed?",o)}</div>`).join("")+
+      `<div class="pair" data-item="bmost"><span class="t">The criterion that failed most</span>${sel("bmost",BMOST,"Choose…",[2,0,1])}</div>`;
+  case "bimp":
+    return `<p class="how">Name the change you made for the criterion that failed most, and what the re-run must show.</p>
+      <div class="pair" data-item="bi1"><span class="t">My one change</span>${sel("bi1",BFIX,"Choose the change…",[1,3,0,2])}</div>
+      <div class="pair" data-item="bi2"><span class="t">What the re-run must show</span>${sel("bi2",BRERUN,"Choose…",[2,0,3,1])}</div>`;
+  case "bsafe":
+    return `<p class="how">Choose the one rule about data you followed while building, and why it matters.</p>
+      <div class="pair" data-item="bs1"><span class="t">The rule I followed</span>${sel("bs1",RULES,"Choose a rule…",[1,0,3,2])}</div>
+      <div class="pair" data-item="bs2"><span class="t">Why it matters</span>${sel("bs2",RULE_WHY,"Choose a reason…",[2,1,0,3])}</div>`;
+  case "think":
+    return `<p class="q" id="q-th">How could an output pass one of your criteria while completely failing another – and which one matters more for the lost-property sorter?</p>${radios("th",THINK)}`;
+  case "exit":
+    return `<p class="q" id="q-ex">Which exit-ticket answer names one improvement AND the exact evaluation evidence that led to it?</p>${radios("ex",EXIT)}`;
+  case "chal":
+    return `<div class="quote"><b>Stretch:</b> feed the sorter a deliberately tricky input, show how it handles an unexpected output gracefully, and document the fix so it fails safely next time.</div><p class="q" id="q-ch1">1. Which input is a true edge case for the sorter?</p>${radios("ch1",CH_IN)}
+      <div class="pair" data-item="ch2" style="margin-top:10px"><span class="t">2. How should it respond – and what happens to the fix?</span>${sel("ch2",CH_FIX,"Choose…",[2,0,3,1])}</div>`;
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lorder":
+    return `<p class="how">Put the moves in the order you run and log the solution, from first to last.</p>`+
+      LSTEPS.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">Step ${i+1}</span>${sel("lo"+i,LSTEPS,"Choose the step…",LSTEP_ORDER)}</div>`).join("");
+  case "lcase1":
+    return `<div class="quote">A team fixes whichever fault a teammate complains about most loudly, ignoring the log. Evaluator, how should they decide what to fix first?</div><p class="q" id="q-lc1">How should they choose what to fix first?</p>${radios("lc1",LCASE1)}`;
+  case "lmatch":
+    return `<p class="how">Match each improvement move to what it changes.</p>`+
+      MOVES.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,MOVE_OPTS,"Choose what it targets…",[3,0,2,1])}</div>`).join("");
+  case "lcase2":
+    return `<div class="quote">The log shows the same criterion failing only on blurry photos, while clear photos pass. Evaluator, which improvement move fits the evidence?</div><p class="q" id="q-lc2">Which move best fits the evidence?</p>${radios("lc2",LCASE2)}`;
+  case "lgrace":
+    return `<p class="how">Sort each response to a bad or unexpected input by whether it fails gracefully.</p>`+
+      GRACE.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🛟 Gracefully","⚠️ Badly"],["Y","N"],t)}</div>`).join("");
+  case "lcase3":
+    return `<div class="quote">A test input arrives with a blank field the solution was never built for. Evaluator, which response should you build in and log as the fix?</div><p class="q" id="q-lc3">Which response should you build in and log?</p>${radios("lc3",LCASE3)}`;
+  case "llog":
+    return `<p class="how">Use the full evaluation log above (rows 1–5).</p>
+      <div class="pair" data-item="lg1"><span class="t">The criterion that fails most</span>${sel("lg1",LG_MOST,"Choose…",[2,3,0,1])}</div>
+      <div class="pair" data-item="lg2"><span class="t">The pattern in the failing rows</span>${sel("lg2",LG_PAT,"Choose…",[3,1,0,2])}</div>
+      <div class="pair" data-item="lg3"><span class="t">The improvement move that fits the evidence</span>${sel("lg3",LG_MOVE,"Choose a move…",[0,2,1,3])}</div>`;
+  case "limp":
+    return `<p class="how">Use the improvement log above. Decide whether to keep each move, and name the evidence.</p>
+      <div class="scen"><p>Move 1 · 🔎 Add a check (3 of 5 → 5 of 5)</p><div class="two">
+        <div data-item="lk1"><span>Kept it?</span>${seg("lk1",["✅ Keep","↩️ Undo"],["K","U"],"Move 1: keep or undo")}</div>
+        <div data-item="lk3"><span>Which log rows justified it?</span>${sel("lk3",LK_ROWS,"Choose…",[0,2,3,1])}</div></div></div>
+      <div class="scen"><p>Move 2 · 🔧 Change the tool (5 of 5 → 4 of 5)</p><div class="two">
+        <div data-item="lk2"><span>Kept it?</span>${seg("lk2",["✅ Keep","↩️ Undo"],["K","U"],"Move 2: keep or undo")}</div>
+        <div data-item="lk4"><span>Why?</span>${sel("lk4",LK_WHY,"Choose…",[0,3,1,2])}</div></div></div>`;
+  case "ledge":
+    return `<p class="how">Row 6 of the log is the edge case: a blank description.</p>
+      <div class="pair" data-item="le1"><span class="t">Before the fix, the blank input got…</span>${sel("le1",LE_BEFORE,"Choose…",[0,2,1,3])}</div>
+      <div class="pair" data-item="le2"><span class="t">How it now fails gracefully</span>${sel("le2",LE_FIX,"Choose…",[0,2,1,3])}</div>
+      <div class="pair" data-item="le3"><span class="t">Where the fix is documented</span>${sel("le3",LE_DOC,"Choose…",[1,0,3,2])}</div>`;
+  case "ltool":
+    return boxes(LTOOL,"Tool log: tick the FOUR statements that are true for today's Scratch build-and-iterate routine. Leave the others unticked.");
+  case "lsafe":
+    return boxes(LSAFE,"Safety check: tick every rule that keeps our build safe. Leave the others unticked.");
+  case "lthink":
+    return `<p class="q" id="q-lth">When your log shows two different criteria failing on the same input, how do you decide which to fix first?</p>${radios("lth",LTHINK)}`;
+  case "lexit":
+    return `<p class="q" id="q-lx">Which exit-ticket answer points to the log rows that justified BOTH improvements, with the change and the re-run result for each?</p>${radios("lx",LEXIT)}`;
+  case "lchal":
+    return `<div class="quote"><b>Stretch:</b> design a second edge case that could still slip past your ‘please add more detail’ check, predict how the solution would respond, and add a guard so it also fails gracefully.</div><p class="q" id="q-lch1">1. Which input could still slip past the check?</p>${radios("lch1",LCH_IN)}
+      <div class="pair" data-item="lch2" style="margin-top:10px"><span class="t">2. Your prediction and your guard</span>${sel("lch2",LCH_GUARD,"Choose…",[3,1,0,2])}</div>`;
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 8 Main Course · Term 1 Week 8 (23 – 27 Nov 2026) · Core + Lab · The Build Loop + The Evaluation Log</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
