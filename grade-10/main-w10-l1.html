@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Showcase &amp; Reflection + Peer Review &amp; Aim Higher – Grade 10 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#0F766E; --main2:#14897F; --deep:#0E4F4A;
+  --ink:#12302D; --muted:#4E6562; --paper:#F4FAF9; --card:#FFFFFF;
+  --line:#D3E7E3; --soft:#EAF5F3;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#5EEAD4,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#1BA394);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#12302D,#285A55)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#BFEDE6 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#F9FCFC;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FBFEFD}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#1BA394)}
+.act-head.ws{background:linear-gradient(120deg,#12302D,#2B6B64)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#E9F7F4}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #B9D8D2;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #8CCFC5;border-radius:12px;padding:10px 14px;background:#F6FCFB;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(18,48,45,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#12302D;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 10 Main Course, Term 1</span><span class="pill">Week 10 Core + Week 10 Lab</span><span class="pill">📅 Teach: week of 7 – 11 Dec 2026</span></div>
+    <h1>Showcase &amp; Reflection + Peer Review &amp; Aim Higher</h1>
+    <p>This is your showcase. After a term of designing and governing an integrated AI solution, today you present it, justify your choices across all four strands, govern it on a full canvas, and set your sights on next term. Then, in the Lab, you close the term by helping each other – giving and receiving real feedback in a review carousel, acting on the best of it while watching the whole system, and turning everything you learned into one clear goal for Term 2.</p>
+    <p class="meta"><b>Strand:</b> Showcase, Assessment &amp; Reflection &nbsp;·&nbsp; <b>Scenario:</b> your finished signature solution</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 10B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 10 of Term 1 – Monday 7 to Friday 11 December 2026</b>, the last week before Winter Break. <b>Girls 10:</b> Friday 11 December. <b>Boys 10:</b> Thursday 7 January 2027, after Winter Break – their Week 9 lesson was pushed back to Wednesday 9 December because their 3 December period fell on UAE National Day, so Week 10 moves to their first period of the new term. Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Showcase &amp; Reflection</a>, then move on to the <a href="#lab">Lab: Peer Review &amp; Aim Higher</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Present and justify.</b> I can present my solution and justify at least two design or evaluation choices, naming the strand each belongs to.</li>
+      <li><b>Show all four strands.</b> I can complete a short task that shows something from each of the four strands and explain how the parts work together.</li>
+      <li><b>Reflect and set a goal.</b> I can name one thing I learned this term and set one clear, checkable goal for next term.</li>
+      <li><b>Lab: review, act, aim higher.</b> I can review other solutions against the four-strand criteria, use feedback to improve one part of my solution while watching the whole system, and turn my reflections into one specific Term-2 goal with a first step.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 10 Core · Showcase &amp; Reflection</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Show it, then justify it</b><small>Choice, strand, reason and trade-off</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Govern the whole system</b><small>A six-part canvas and a decision brief</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>One task, all four strands</b><small>Showcase worksheet, unplugged activity and check</small></a></li>
+    </ol>
+    <h3 class="rh">Week 10 Lab · Peer Review &amp; Aim Higher</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Feedback that can be acted on</b><small>Specific, strand-tied and kind</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>One fix ripples through the system</b><small>Four lenses and the ripple effect</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Review carousel and Term-2 goal</b><small>Lab worksheet, unplugged activity and check</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Show it, then justify it</h2><p>What turns ‘here is what it does’ into a justification?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In Week 9 you refined and finished your integrated system, locked your final version and rehearsed a demo that holds up under a hard question. Today it goes on show.</p></div>
+    <div class="call"><h4>Scenario</h4><p>Your finished signature solution goes on show. You justify your key choices, complete a four-strand task, and put your whole system on a governance canvas that ends in a clear decision: <b>deploy</b>, <b>scale</b>, or <b>pause</b>. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">Show it, then justify it</h3>
+    <p>Anyone can point at a screen and say what a solution does. A showcase asks for more: you name a <b>choice</b>, say which <b>strand</b> it serves, give the <b>reason</b> you made it, and admit the <b>trade-off</b> you accepted. Maybe you chose a simpler tool you could explain over a stronger one you could not audit. Maybe you dropped a feature to protect people's data. Justifying like this is the real evidence that you understand your own system – it shows the thinking behind the build, not just the build. Keep every slide and output free of personal data.</p>
+    <figure>
+      <svg viewBox="0 0 760 330" role="img" aria-labelledby="f1T">
+        <title id="f1T">A choice becomes a justification when it carries four things: the choice (I chose X), the strand it serves (for solution design, say), the reason (because Y) and the trade-off (and I gave up Z). Together they make a justification. A description only, such as ‘Our assistant translates voice notes’, is not enough. A justified choice says: a smaller translation tool we can audit, for solution design, because staff must explain every output – we gave up 2 points of accuracy.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#12302D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#12302D">
+          <g stroke="#12302D" stroke-width="1.6" fill="#EAF5F3">
+            <rect x="10" y="14" width="170" height="104" rx="12"/><rect x="200" y="14" width="170" height="104" rx="12"/><rect x="390" y="14" width="170" height="104" rx="12"/><rect x="580" y="14" width="170" height="104" rx="12"/>
+          </g>
+          <g font-size="15" font-weight="800" text-anchor="middle" fill="#0E4F4A"><text x="95" y="42">CHOICE</text><text x="285" y="42">STRAND</text><text x="475" y="42">REASON</text><text x="665" y="42">TRADE-OFF</text></g>
+          <g font-size="14" font-weight="600" text-anchor="middle"><text x="95" y="68">“I chose X …”</text><text x="285" y="68">“… for design …”</text><text x="475" y="68">“… because Y …”</text><text x="665" y="68">“… and I gave up Z”</text></g>
+          <g font-size="13" text-anchor="middle" fill="#4E6562"><text x="95" y="96">what you decided</text><text x="285" y="96">which of the four</text><text x="475" y="96">why it should help</text><text x="665" y="96">what it cost you</text></g>
+          <g stroke="#12302D" stroke-width="2" fill="none" marker-end="url(#ah)"><path d="M95 120L250 160"/><path d="M285 120L330 158"/><path d="M475 120L430 158"/><path d="M665 120L510 160"/></g>
+          <rect x="190" y="164" width="380" height="54" rx="14" fill="#0F766E" stroke="#0E4F4A"/>
+          <text x="380" y="188" font-size="17" font-weight="800" text-anchor="middle" fill="#fff">= A JUSTIFICATION</text>
+          <text x="380" y="208" font-size="13" text-anchor="middle" fill="#fff">the thinking behind the build, not just the build</text>
+          <rect x="10" y="234" width="300" height="86" rx="12" fill="#FDE7EC" stroke="#C92A4B" stroke-width="1.6"/>
+          <rect x="326" y="234" width="424" height="86" rx="12" fill="#E2F5EC" stroke="#0F8A5F" stroke-width="1.6"/>
+          <g font-size="13" font-weight="800" text-anchor="middle"><text x="160" y="256" fill="#C92A4B">✗ DESCRIPTION ONLY</text><text x="538" y="256" fill="#0F8A5F">✓ JUSTIFIED</text></g>
+          <g font-size="13" text-anchor="middle"><text x="160" y="282">“Our assistant transcribes and</text><text x="160" y="300">translates voice notes.”</text>
+            <text x="538" y="276">“A smaller translation tool we can audit (design),</text><text x="538" y="294">because staff must explain every output –</text><text x="538" y="312">we gave up 2 points of accuracy.”</text></g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> A justification names the choice, its strand, the reason and the trade-off you accepted. (Illustrative example.)</figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-jsort"></div>
+    <div id="a-jparts"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Govern the whole system on a six-part canvas</h2><p>What must be on the page before you recommend anything?</p></div>
+  <div class="part-body">
+    <p>Before you recommend anything, put your whole system on a <b>governance canvas</b> with six parts – the professional standard:</p>
+    <ul class="keys">
+      <li><b>Purpose &amp; benefit</b> – who it helps and how.</li>
+      <li><b>Risks &amp; affected groups</b> – what could go wrong, and for whom.</li>
+      <li><b>Mitigations &amp; owners</b> – the controls, each with a named owner.</li>
+      <li><b>Data &amp; privacy</b> – what data, how minimised and protected.</li>
+      <li><b>Human oversight</b> – where a person checks or approves.</li>
+      <li><b>Monitoring &amp; review</b> – how you watch it over time after launch.</li>
+    </ul>
+    <p>Then write a one-line <b>decision brief</b>: deploy, scale, or pause – and why. Leaving out Monitoring &amp; Review is the classic mistake; a system is never ‘done’ at launch.</p>
+    <figure>
+      <svg viewBox="0 0 760 340" role="img" aria-labelledby="f2T">
+        <title id="f2T">The six-element governance canvas. 1 Purpose and benefit: what it is for, value created. 2 Risks and affected groups: what could go wrong, and for whom. 3 Mitigations and owners: what reduces each risk, who owns it. 4 Data and privacy: data used, how people are protected. 5 Human oversight: the gate and what triggers a pause. 6 Monitoring and review: how it is watched after launch. Leaving out monitoring and review is the classic mistake – a system is never done at launch. The canvas ends in a decision brief: deploy, scale or pause, and why.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#12302D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#12302D">
+          <g stroke="#12302D" stroke-width="1.6" fill="#fff">
+            <rect x="10" y="12" width="236" height="96" rx="12"/><rect x="262" y="12" width="236" height="96" rx="12"/><rect x="514" y="12" width="236" height="96" rx="12"/>
+            <rect x="10" y="122" width="236" height="96" rx="12"/><rect x="262" y="122" width="236" height="96" rx="12"/><rect x="514" y="122" width="236" height="96" rx="12" fill="#FFF7E8" stroke="#E8890C" stroke-width="2.6"/>
+          </g>
+          <g fill="#0F766E"><circle cx="36" cy="40" r="14"/><circle cx="288" cy="40" r="14"/><circle cx="540" cy="40" r="14"/><circle cx="36" cy="150" r="14"/><circle cx="288" cy="150" r="14"/><circle cx="540" cy="150" r="14" fill="#E8890C"/></g>
+          <g font-size="14" font-weight="800" text-anchor="middle" fill="#fff"><text x="36" y="45">1</text><text x="288" y="45">2</text><text x="540" y="45">3</text><text x="36" y="155">4</text><text x="288" y="155">5</text><text x="540" y="155">6</text></g>
+          <g font-size="14" font-weight="700"><text x="58" y="45">Purpose &amp; benefit</text><text x="310" y="45">Risks &amp; affected</text><text x="562" y="45">Mitigations &amp; owners</text><text x="58" y="155">Data &amp; privacy</text><text x="310" y="155">Human oversight</text><text x="562" y="155">Monitoring &amp; review</text></g>
+          <text x="310" y="63" font-size="14" font-weight="700">groups</text>
+          <g font-size="13" fill="#4E6562"><text x="26" y="78">what it is for,</text><text x="26" y="96">value created</text>
+            <text x="278" y="86">what could go wrong,</text><text x="278" y="102">and for whom</text>
+            <text x="530" y="78">what reduces each risk,</text><text x="530" y="96">who owns it</text>
+            <text x="26" y="188">data used, how people</text><text x="26" y="206">are protected</text>
+            <text x="278" y="188">the gate, and what</text><text x="278" y="206">triggers a pause</text>
+            <text x="530" y="188">how it is watched</text><text x="530" y="206">after launch</text></g>
+          <text x="380" y="246" font-size="13" font-weight="700" text-anchor="middle" fill="#B45309">Leaving out monitoring &amp; review is the classic mistake – a system is never ‘done’ at launch.</text>
+          <path d="M380 256V272" stroke="#12302D" stroke-width="2" marker-end="url(#ah2)"/>
+          <rect x="130" y="278" width="500" height="50" rx="14" fill="#0F766E" stroke="#0E4F4A"/>
+          <text x="380" y="300" font-size="15" font-weight="800" text-anchor="middle" fill="#fff">DECISION BRIEF: deploy · scale · pause</text>
+          <text x="380" y="319" font-size="13" text-anchor="middle" fill="#fff">one line – the decision and the reason</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> A six-element governance canvas – purpose and benefit, risks and affected groups, mitigations and owners, data and privacy, human oversight, and monitoring and review – ending in a one-line decision brief.</figcaption>
+    </figure>
+    <div class="call amber"><h4>Tool for this week: governance canvas + spreadsheet evidence pack (unplugged, teacher-mediated)</h4><p>Decision decks are there as reference. 1. Mark two choices to justify – one design, one evaluation or governance – each with its strand, reason and trade-off. 2. Complete the six-part governance canvas for your whole system and write a one-line decision brief. 3. Present, complete the four-strand sampling task, and set one checkable Term-2 goal. <b>Stay safe:</b> no personal data in any artefact; approved tools only. Present honest evidence including limitations, and weigh real-world impact.</p></div>
+    <div id="a-canvas"></div>
+    <div id="a-gap"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3 · Worksheet</span><h2>One task, all four strands</h2><p>Present and justify your solution, govern it on a six-part canvas, and set a Term-2 goal.</p></div>
+  <div class="part-body">
+    <p>Your solution is not four separate boxes; it is <b>one system</b> where the strands overlap. A single data choice can be design, evaluation and governance at once. The short sampling task asks one thing from each strand so you can show that overlap on purpose – how your <b>systems understanding</b> shaped your <b>design</b>, how your <b>evaluation</b> tested it, and how your <b>governance</b> kept it responsible. For the evaluation item, remember <b>verify-before-trust</b>: give the evidence and say how you checked it, because a confident-looking output can still be wrong.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>This is how AI solutions are judged in the UAE and beyond: not by how impressive a demo looks, but by whether the team can justify their choices, show the solution is effective and responsible, and explain the trade-offs to the people who govern it. <span class="illus">(Illustrative context.)</span></p></div>
+    <div class="call violet"><h4>Cross-curricular link · Mathematics · English</h4><p>Backing a claim with before-and-after evidence is <b>data-based argument</b> in <b>Mathematics</b>. Presenting a concise, justified case to an audience is <b>structured oral communication</b> in <b>English</b>.</p></div>
+    <div id="a-four"></div>
+    <div id="a-verify"></div>
+    <h3 class="sub">Showcase worksheet</h3>
+    <p>The worksheet uses one example signature solution so everyone can practise on the same evidence. Then do the same on paper for your own solution.</p>
+    <div class="ecard" id="audit"></div>
+    <div id="a-wsjust"></div>
+    <div id="a-wscanvas"></div>
+    <div id="a-wsbrief"></div>
+    <div id="a-wsfour"></div>
+    <div id="a-wsrefl"></div>
+    <h3 class="sub">Unplugged activity · prepare a justified showcase, on paper</h3>
+    <div class="call"><h4>Scenario</h4><p>Your signature solution is finished. Working on paper, prepare a two-minute justification of two key choices with evidence. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Justify with evidence: ‘I chose a shorter prompt so users finish faster – completion went from 6/10 to 9/10.’</div>
+    <div id="a-show"></div>
+    <div id="a-quiz"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 10 Lab</span><h2>Peer Review &amp; Aim Higher</h2><p>Today you close the term by helping each other. In a review carousel you give and receive real feedback, act on the best of it while watching the whole system, and turn everything you learned into one clear goal to start next term.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In the Core you showcased your solution, justified your choices by strand, and governed it on a six-part canvas.</p></div>
+    <div class="call"><h4>Scenario – continued</h4><p>A review carousel: you rotate past your classmates' solutions, review each through one strand at a time, then make the highest-value fix to your own – and watch what it ripples into. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Feedback that can be acted on</h2><p>What makes a comment useful to the maker?</p></div>
+  <div class="part-body">
+    <p>The most useful feedback is <b>specific</b>, <b>tied to a strand</b>, and <b>kind</b>. ‘It was good’ tells the maker nothing. ‘Your governance is strong because you use only non-personal data, but your evaluation names no evidence – add one test case’ tells them exactly what works and what to do next. In the carousel you review each solution through <b>one strand at a time</b>, so your comments stay focused. Keep it about the work, never the person, and keep every card free of personal data. Good feedback is a gift you would want to receive.</p>
+    <div class="call violet"><h4>Cross-curricular link · Moral Education · Mathematics</h4><p>Giving specific, kind, actionable feedback is <b>constructive collaboration</b> from <b>Moral Education</b>. Setting a goal with a checkable target is <b>defining a measurable objective</b> in <b>Mathematics</b>.</p></div>
+    <div id="a-lsort"></div>
+    <div id="a-lstrand"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>One fix ripples through the system</h2><p>When you change one part, what else changes?</p></div>
+  <div class="part-body">
+    <p>Your solution is a system, so a change to one part rarely stays there. Add test cases to your evaluation and you might expose a gap in your data. Tighten a safeguard for governance and you might narrow what the tool can cover. That is not a problem – it is <b>systems thinking</b>. When you act on feedback, make the <b>highest-value fix</b>, then ask what else it changes, for better or worse. Then consolidate into one goal: not ‘get better at AI’, but a <b>specific, prioritised goal</b> with a first step and a way to tell when you have met it.</p>
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="f3T">
+        <title id="f3T">Weigh your finished solution across four lenses. Benefit: who is helped, and how much? Risk: what could go wrong, and for whom? Control: what catches or stops it? Accountability: who answers if it fails? All four feed into the next iteration: the one improvement you will make – then check what it ripples into elsewhere in the system.</title>
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#12302D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#12302D">
+          <text x="380" y="24" font-size="15" font-weight="700" text-anchor="middle">Weigh the finished solution through four lenses</text>
+          <g stroke="#12302D" stroke-width="1.6" fill="#EAF5F3">
+            <rect x="10" y="40" width="170" height="112" rx="12"/><rect x="200" y="40" width="170" height="112" rx="12"/><rect x="390" y="40" width="170" height="112" rx="12"/><rect x="580" y="40" width="170" height="112" rx="12"/>
+          </g>
+          <g font-size="24" text-anchor="middle"><text x="95" y="72">🌱</text><text x="285" y="72">⚠️</text><text x="475" y="72">🛡️</text><text x="665" y="72">🧾</text></g>
+          <g font-size="15" font-weight="800" text-anchor="middle" fill="#0E4F4A"><text x="95" y="98">BENEFIT</text><text x="285" y="98">RISK</text><text x="475" y="98">CONTROL</text><text x="665" y="98">ACCOUNTABILITY</text></g>
+          <g font-size="13" text-anchor="middle"><text x="95" y="120">Who is helped,</text><text x="95" y="138">and how much?</text>
+            <text x="285" y="120">What could go</text><text x="285" y="138">wrong, for whom?</text>
+            <text x="475" y="120">What catches</text><text x="475" y="138">or stops it?</text>
+            <text x="665" y="120">Who answers</text><text x="665" y="138">if it fails?</text></g>
+          <g stroke="#12302D" stroke-width="2" fill="none" marker-end="url(#ah3)"><path d="M95 154L270 196"/><path d="M285 154L340 194"/><path d="M475 154L420 194"/><path d="M665 154L490 196"/></g>
+          <rect x="150" y="200" width="460" height="60" rx="14" fill="#0F766E" stroke="#0E4F4A"/>
+          <text x="380" y="225" font-size="15" font-weight="800" text-anchor="middle" fill="#fff">NEXT ITERATION</text>
+          <text x="380" y="247" font-size="13" text-anchor="middle" fill="#fff">the one improvement you will make first</text>
+          <text x="380" y="286" font-size="13" text-anchor="middle" fill="#4E6562">…then ask: what does this fix ripple into elsewhere – for better or worse?</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> Weigh your finished solution across four lenses – benefit, risk, control and accountability – then name what you will improve in the next iteration.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Real AI teams improve through review: they critique each other's work against shared criteria, act on it while watching the whole system, and set clear next goals – as engineers do on UAE smart-services and sustainability projects, where one improvement must be weighed against its effect on the rest of the solution. <span class="illus">(Illustrative context.)</span></p></div>
+    <div id="a-llens"></div>
+    <div id="a-lripple"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Part 3 of 3 · Worksheet</span><h2>Review, fix, aim higher</h2><p>Review others by strand, act on the best feedback, and set a prioritised Term-2 goal.</p></div>
+  <div class="part-body">
+    <div class="call amber"><h4>Tool for this week: governance canvas + spreadsheet evidence pack (unplugged, teacher-mediated)</h4><p>1. Assemble your evidence pack (plan, build log, metrics, risk register) and complete the governance canvas summary. 2. Rotate through the carousel, reviewing each solution against that round's strand with one strength and one improvement. 3. Make the highest-value fix from your feedback, note what it rippled into, and write a prioritised Term-2 goal. <b>Stay safe:</b> no personal data in any artefact; approved tools only. Present honest evidence including limitations, and weigh real-world impact.</p></div>
+    <div class="ecard" id="carousel"></div>
+    <div id="a-lreview"></div>
+    <div id="a-lfix"></div>
+    <div id="a-lgoal"></div>
+    <h3 class="sub">Unplugged activity · give feed-forward, on paper</h3>
+    <div class="call"><h4>Scenario</h4><p>In a peer-review carousel you review a partner's exhibit. Working on paper, write feed-forward and set your own measurable next goal. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Feed-forward: ‘Strength: clear pipeline. Improvement: add a verify step. Question: how do you handle a blank input?’</div>
+    <div id="a-lff"></div>
+    <div id="a-lquiz"></div>
+    <div class="call"><h4>Next</h4><p>Term 2: take your prioritised goal – and its first step – into the new term's work, and check it against its target.</p></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Justify it, govern it, review it – then aim higher</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li><b>Justify</b> choices: name the choice, its strand, the reason, and the trade-off.</li>
+      <li>Govern the whole system on a <b>six-part canvas</b> – including <b>Monitoring &amp; Review</b>.</li>
+      <li>End with a <b>decision brief</b>: deploy, scale, or pause, and why.</li>
+      <li>Show the <b>strands overlap</b> in one system, and set a checkable Term-2 goal.</li>
+      <li>Give <b>specific, strand-tied, kind</b> feedback the maker can act on.</li>
+      <li>Make the <b>highest-value fix</b>, then check what it <b>rippled into</b>.</li>
+      <li>Set one <b>prioritised Term-2 goal</b> with a first step and a way to check it – improvement is a system move.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 10 · Main Course · Term 1 Week 10 (7 – 11 Dec 2026; Boys 10: 7 Jan 2027) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- strand + concept tags ---------- */
+const CU_P="CU · how components interact as a system";
+const CU_A="CU · how system design affects performance and reliability";
+const SD_A="SD · selects and structures tools strategically to improve performance";
+const CE_P="CE · evaluates solutions using criteria (accuracy, fairness, usefulness)";
+const CE_A="CE · refines solutions and explains the impact of improvements";
+const GE_P="GE · structured evaluation of risks (bias, privacy, misuse)";
+const GE_A="GE · proposes mitigations and explains their effectiveness";
+
+/* display order for dropdowns: shuffled, and never with the right answer first */
+const PERM={3:[2,0,1],4:[2,0,3,1],5:[3,0,4,1,2],6:[4,1,5,0,3,2]};
+function ord(n,c){const p=PERM[n].slice();while(p[0]===c)p.push(p.shift());return p}
+
+const STR4=["Systems understanding","Solution design","Critical evaluation","Governance & ethics"];
+const STR_SHORT=["Systems","Design","Evaluation","Governance"];
+const STR_VALS=["CU","SD","CE","GE"];
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["justify","Give the reason and the trade-off behind a choice, not just describe what you did."],
+  ["strand","One of the four course areas: systems understanding, solution design, critical evaluation, governance."],
+  ["trade-off","What you gave up to gain something else when you made a choice."],
+  ["governance canvas","A one-page summary of a system's purpose, risks, mitigations, data, oversight and monitoring."],
+  ["decision brief","A short recommendation to deploy, scale or pause, with the reason."]
+];
+const JSORT = [
+  ["j1","“Our assistant transcribes Arabic voice notes and translates them into English.”","D"],
+  ["j2","“I chose a smaller translation tool we could audit over a stronger one we could not (solution design); we gave up a little accuracy so staff can explain every output.”","J"],
+  ["j3","“The dashboard has four colourful screens and runs smoothly in the demo.”","D"],
+  ["j4","“I dropped the caller-name field to protect privacy (governance); the trade-off is that staff must ask for a reference number instead.”","J"],
+  ["j5","“We added ten dialect test voice notes because one confident output was wrong (evaluation); testing takes longer, but accuracy rose from 6/10 to 9/10.”","J"],
+  ["j6","“The final version has more features than our first version.”","D"]
+];
+const JP_REASON = ["A mistranslated street name could send a resident to the wrong office","Replies take about two minutes longer","It makes the assistant look more professional","The demo needed one more step"];
+const JP_TRADE = ["Replies take about two minutes longer","A mistranslated street name could send a resident to the wrong office","None – a human check has no cost","The assistant now speaks English only"];
+const CANVAS_EL = ["Purpose & benefit","Risks & affected groups","Mitigations & owners","Data & privacy","Human oversight","Monitoring & review"];
+const CANVAS = [
+  ["c2","Dialect test set added – owner: evaluation lead. Names confirmed before translating – owner: desk supervisor.",2],
+  ["c0","Residents get a reply in their own language within the hour; staff save time on every voice note.",0],
+  ["c5","A sample of 20 replies is checked for errors every week, and the canvas is reviewed each term.",5],
+  ["c3","Caller names are removed before translation; voice notes are deleted after 30 days.",3],
+  ["c1","A mistranslated name could misdirect a resident; residents with strong regional dialects are most affected.",1],
+  ["c4","A staff member approves every reply before it is sent; a low-confidence transcript pauses for review.",4]
+];
+const GAP = ["Purpose & benefit","Monitoring & review","Human oversight","Data & privacy"];
+const GAP_WHY = ["A system is never ‘done’ at launch – it must be watched over time","Monitoring only matters for very large companies","It makes the canvas look complete","Purpose & benefit already covers monitoring"];
+const FOUR = [
+  ["f1","Errors made by the transcriber flow into the translator and summariser downstream, so cleaner input there improves every later step.","CU"],
+  ["f2","We built the 40 test voice notes into the pipeline as a test step that runs before each new version is released.","SD"],
+  ["f3","Dialect accuracy rose from 28/40 to 36/40, checked against transcripts written by staff.","CE"],
+  ["f4","Only non-personal, teacher-made voice notes were used, so no resident's voice or name enters the system.","GE"]
+];
+const VERIFY = ["The summaries looked fluent and confident, so they were correct.","The tool's website says it is 95% accurate.","On 20 test voice notes, 18 summaries matched the staff-written version, and I checked the 2 misses against the original audio.","Everyone in the class liked the output."];
+const VERIFY2 = ["Check it against the task and a trusted source before trusting it","Trust it – a confident output is an accurate one","Ask the tool whether it is sure","Use it, and only check if someone complains"];
+/* illustrative evidence pack for the worksheet */
+const PACK = [
+  ["Details captured from 10 test voice notes (5 details each)","31 / 50","47 / 50"],
+  ["Dialect voice notes transcribed correctly","28 / 40","36 / 40"],
+  ["Translation accuracy on a checked sample","94% (large tool, cannot be audited)","92% (smaller tool we can audit)"],
+  ["Replies approved by a person before sending","No","Yes – adds about 2 minutes"],
+  ["Caller names in the data","Kept","Removed before translation"],
+  ["Pilot","–","One service centre, 4 weeks, no serious errors reaching residents"]
+];
+const WS_REASON = ["Staff must be able to explain and audit every translation","Dialect voice notes caused most of the errors in version 1","The smaller tool has a nicer screen","Tests make the demo look more impressive"];
+const WS_TRADE = ["About 2 points of translation accuracy (94% → 92%)","Each release takes about a day longer to test","No trade-off – it only has upsides","Residents must now write in English"];
+const WSC = [
+  ["cw1","Mitigations & owners",["Be careful with names","Names confirmed before translating – owner: desk supervisor","The AI will fix itself over time","Hope residents report any errors"],1],
+  ["cw2","Data & privacy",["Keep every voice note forever in case it is useful","Share voice notes with any team that asks","Names removed before translation; voice notes deleted after 30 days","Data is not part of governance"],2],
+  ["cw3","Human oversight",["A staff member approves each reply; a low-confidence transcript pauses for review","The tool decides alone to save time","Residents check their own replies","Oversight is not needed for a pilot"],0],
+  ["cw4","Monitoring & review",["Checked once at launch, then done","Only if someone complains","Monitoring is the same as purpose","20 replies sampled and checked every week; canvas reviewed every term"],3]
+];
+const BRIEF = ["Deploy to every service centre at once, because the demo went well.","Pause for good, because any error at all means AI should never be used.","Scale to two more centres: 47/50 details captured, a person approves every reply, and a weekly check watches for errors – every risk has an owner.","Deploy without monitoring, because the system is finished."];
+const BRIEF2 = ["The decision plus the reason, linked to the evidence","A full list of every feature","A decision with no reason","Only the reason, with no decision"];
+const WSFOUR = [
+  ["fs1","Systems understanding",["Accuracy rose to 36/40 on the dialect test set","Errors at the transcriber flow into translation and summary, so names are checked at that first hand-off","The system uses AI","We liked the colours"],1],
+  ["fs2","Solution design",["It has four tools because more tools are always better","Names are removed before translation","Steps run transcribe → check → translate → summarise, so the check sits where errors start","It works"],2],
+  ["fs3","Critical evaluation",["18 of 20 summaries matched staff versions; the 2 misses were dialect words, checked against the audio","The output looked confident","More features were added","A staff member approves every reply"],0],
+  ["fs4","Governance & ethics",["We follow the rules","It is a school project, so risks do not matter","The pipeline is fast","Names are removed and a person approves every reply, because a wrong reply could misdirect a resident"],3]
+];
+const REFL1 = ["My project was good","The smaller, auditable translation tool – solution design – trade-off: about 2 points of accuracy","I used AI a lot this term","The demo ran without crashing"];
+const REFL2 = ["Get much better at AI","Use more tools next term","By half-term of Term 2, raise dialect accuracy from 36/40 to 38/40, checked on the same test set","Finish things faster"];
+const SHOW1 = ["Users said it felt nicer","The new prompt is shorter","Completion went from 6/10 to 9/10 users","It is the newest prompt we wrote"];
+const SHOW2 = ["Users finish faster","Completion went up","There is no trade-off","Fewer details are collected from each user (5 questions → 4)"];
+const SHOW3 = ["“This is our app – it does lots of things.”","“Sorry, it probably doesn't work very well.”","“I optimised the transcriber for dialect accuracy, and here is the evidence: 28/40 → 36/40.”"];
+const QUIZ = [
+  ["q1","What turns ‘here is what my solution does’ into a justification?",["Describing every feature of the solution in careful detail.","Naming the choice, its strand, the reason, and the trade-off you accepted.","Showing that the demo looks impressive and runs smoothly."],1],
+  ["q2","Which element is most often wrongly left off a governance canvas?",["Purpose & benefit – who the system helps.","Data & privacy – what data the system uses.","Monitoring & review – watching the system over time after launch."],2],
+  ["q3","Why does the four-strand task ask one item from each strand?",["To show the strands overlap in one system, on purpose.","To prove the four strands are completely separate boxes.","To fill time at the end of the showcase lesson."],0]
+];
+const TF = [
+  ["tf1","A showcase is about justifying your choices, not just running a demo.","T"],
+  ["tf2","A fast, confident, detailed output proves the system works.","F"],
+  ["tf3","Performance evidence means a before-and-after number or a comparison.","T"]
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["peer review","Reading each other's work against clear criteria to give useful, kind feedback."],
+  ["actionable feedback","A comment the maker can actually do something with, not just a judgement."],
+  ["ripple effect","The way changing one part of a system changes other parts too."],
+  ["prioritise","Choose the one goal that matters most to work on first."],
+  ["carousel","A routine where you rotate past several solutions, reviewing each in turn."]
+];
+const LSORT = [
+  ["la1","“It was good.”","N"],
+  ["la2","“Your governance is strong because you use only non-personal data, but your evaluation names no evidence – add one test case.”","A"],
+  ["la3","“You're not very good at presenting.”","N"],
+  ["la4","“Your pipeline map is clear; add a check after the transcriber, because that is where names go wrong.”","A"],
+  ["la5","“I didn't like it.”","N"],
+  ["la6","“Your canvas has no monitoring – add a weekly sample check with a named owner.”","A"]
+];
+const LSTRAND = [
+  ["ls1","“Add one test case with a dialect voice note and record the result before and after.”","CE"],
+  ["ls2","“Your map doesn't show where the summariser gets its input from – add that hand-off.”","CU"],
+  ["ls3","“Name an owner for the privacy mitigation on your canvas.”","GE"],
+  ["ls4","“Move the check before the translation step, so it catches errors earlier in the workflow.”","SD"]
+];
+const LENS_LABELS = ["Benefit","Risk","Control","Accountability"];
+const LENS_VALS = ["B","R","C","A"];
+const LLENS = [
+  ["ll3","A staff member must approve any reply that mentions a street name.","C"],
+  ["ll1","Residents get a reply in their own language within the hour.","B"],
+  ["ll4","The desk supervisor signs off the weekly error log and answers for any failure.","A"],
+  ["ll2","A misheard street name could send a resident with a strong dialect to the wrong office.","R"]
+];
+const LRIPPLE = [
+  ["lr1","Fix: add 20 dialect test cases to the evaluation.",["Nothing else in the system changes","It may expose a gap in the data – one dialect has too few examples","The translation tool becomes slower","The canvas no longer needs a purpose"],1],
+  ["lr2","Fix: hold every reply that mentions a street name until a person checks it.",["It makes the transcriber more accurate","It has no effect on staff","Replies are safer, but fewer cases are handled automatically and staff workload rises","It removes the need for monitoring"],2],
+  ["lr3","Fix: swap in a faster summariser.",["Replies are quicker, but summary quality must be re-measured because staff depend on it","Nothing else needs to be checked","Transcription accuracy improves","Privacy is automatically better"],0]
+];
+/* illustrative carousel exhibits */
+const EXHIBITS = [
+  ["rv1","Canteen waste forecaster","Menu + weather → forecast model → portion advice for kitchen staff","Forecast within ±10 portions on 8 of 10 test days. Non-personal data only. Canvas has purpose, risks, mitigations, data and oversight – but no monitoring after launch.","GE",0],
+  ["rv2","Library book suggester","Anonymised borrowing log → suggestion tool → librarian check","Clear pipeline map and a named owner for every risk. Evidence: ‘students liked it’ – no test results recorded.","CE",1],
+  ["rv3","Bus delay alert","Bus location feed → delay model → text alert to the school office","9 of 10 test alerts on time; risks owned; non-personal data. The map shows no link between the delay model and the alert sender.","CU",2]
+];
+const IMP = ["Add a weekly check of forecast against actual waste, with a named owner","Test on 10 held-back borrowing records and record how many suggestions the librarian accepts","Draw the hand-off from the delay model to the alert sender and say what data passes","Make the slides look nicer","It was good – no change needed"];
+const LFIX = ["Change the font on the slides","Add dialect test cases to the evaluation – most errors were dialect words","Add a dark mode to the dashboard"];
+const LFIX2 = ["Nothing else in the system changes","The privacy rules no longer apply","The summariser stops working","It shows the example data has too few dialect voice notes – so the data needs topping up too"];
+const LGOAL = ["Get much better at AI next term","By half-term of Term 2, raise dialect accuracy from 36/40 to 38/40 on the same test set","Try every AI tool available","Make the slides longer"];
+const LSTEP = ["Someday: think about it","Ask someone else to do it","This week: collect 10 more teacher-made, non-personal dialect voice notes for the test set","Wait until the end of term"];
+const LFF = ["“Nice solution, well done.”","“You should present better next time.”","“Strength: clear pipeline map. Improvement: add a verify step after the transcriber. Question: how do you handle a blank voice note?”"];
+const LMEAS = [
+  ["mg1","Raise completion from 6/10 to 9/10 users by half-term",1],
+  ["mg2","Be more creative with AI",0],
+  ["mg3","Cut the average reply time from 7 s to 5 s, measured on 20 test notes",1],
+  ["mg4","Learn lots more about AI",0],
+  ["mg5","Add dialect test cases until at least 38 of 40 are transcribed correctly",1]
+];
+const LQUIZ = [
+  ["lq1","Which is the most useful piece of peer feedback?",["A general comment that the solution was good overall.","A specific, strand-tied comment the maker can act on next.","A judgement of the person who made the solution."],1],
+  ["lq2","You tighten a governance safeguard and the tool now covers fewer cases. This is:",["A failure that means the safeguard was wrong.","Proof that governance and coverage are unrelated.","A ripple effect – a change in one part affects another."],2],
+  ["lq3","What makes a good Term-2 goal?",["Specific and prioritised, with a first step and a way to check it.","Broad and ambitious, like ‘get much better at AI’.","Whatever goal takes the longest time to complete."],0]
+];
+const LTF = [
+  ["ltf1","‘Nice solution’ is useful feed-forward.","F"],
+  ["ltf2","Feedback only counts once you act on it and re-measure.","T"],
+  ["ltf3","A good next-term goal is broad and has no specific target.","F"]
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CE_A,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"To justify is to give the reason and the trade-off behind a choice. A strand is one of the four course areas. A trade-off is what you gave up to gain something else. A governance canvas is a one-page summary of purpose, risks, mitigations, data, oversight and monitoring. A decision brief recommends deploy, scale or pause, with the reason."},
+ {id:"jsort",mount:"a-jsort",section:"Core · Part 1",title:"Justification or description?",sub:"Objective 1 · present and justify · "+CE_A,ico:"🗂️",
+  fields:JSORT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A description says what the solution does or how it looks. A justification names the choice, its strand, the reason, and the trade-off you accepted – the smaller auditable tool, the dropped caller-name field and the added dialect tests all do this. Polish and ‘more features’ are not reasons."},
+ {id:"jparts",mount:"a-jparts",section:"Core · Part 1",title:"Take a justification apart",sub:"Objective 1 · strand, reason and trade-off · "+SD_A,ico:"🔍",
+  fields:[{k:"jp1",ok:v=>eq(v,3)},{k:"jp2",ok:v=>eq(v,0)},{k:"jp3",ok:v=>eq(v,0)}],
+  explain:"A human check before a reply is sent is human oversight – governance & ethics. The reason is the risk it controls: a mistranslated street name could misdirect a resident. The trade-off is the cost accepted for that safety: replies take about two minutes longer."},
+ {id:"canvas",mount:"a-canvas",section:"Core · Part 2",title:"Which part of the canvas?",sub:"Govern the whole system · "+GE_P,ico:"🧩",
+  fields:CANVAS.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Purpose & benefit: who is helped and how. Risks & affected groups: what could go wrong, for whom. Mitigations & owners: each control with a named owner. Data & privacy: what data, minimised and protected. Human oversight: where a person approves or a pause is triggered. Monitoring & review: how the system is watched after launch."},
+ {id:"gap",mount:"a-gap",section:"Core · Part 2",title:"Spot the missing part",sub:"The classic mistake · "+GE_A,ico:"🕳️",
+  fields:[{k:"g1",radio:1,ok:v=>eq(v,1)},{k:"g2",ok:v=>eq(v,0)}],
+  explain:"Monitoring & review is the element most often left off. A system is never ‘done’ at launch: data, users and conditions change, so someone must keep watching it and review the canvas over time."},
+ {id:"four",mount:"a-four",section:"Core · Part 3",title:"One data choice, four strands",sub:"Objective 2 · show all four strands · "+CU_P,ico:"🧷",
+  fields:FOUR.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"One choice – a set of 40 non-personal dialect test voice notes – shows up in every strand. How errors flow downstream is systems understanding; building it in as a test step is solution design; the 28/40 → 36/40 check is critical evaluation; using only non-personal voice notes is governance. The strands overlap in one system."},
+ {id:"verify",mount:"a-verify",section:"Core · Part 3",title:"Verify before you trust",sub:"The evaluation item · "+CE_P,ico:"✔️",
+  fields:[{k:"vf1",radio:1,ok:v=>eq(v,2)},{k:"vf2",ok:v=>eq(v,0)}],
+  explain:"Strong evaluation gives evidence and says how it was checked: 18 of 20 summaries matched, and the 2 misses were checked against the audio. Looking fluent, a vendor's claim or the class liking it are not evidence. A confident-looking output can still be wrong – check it against the task and a trusted source first."},
+ {id:"wsjust",mount:"a-wsjust",section:"Core worksheet 1",title:"Justify two choices",sub:"Worksheet 1 · choice, strand, reason, trade-off · "+SD_A,ico:"📝",cls:"ws",
+  fields:[{k:"w1as",ok:v=>eq(v,1)},{k:"w1ar",ok:v=>eq(v,0)},{k:"w1at",ok:v=>eq(v,0)},{k:"w1bs",ok:v=>eq(v,2)},{k:"w1br",ok:v=>eq(v,1)},{k:"w1bt",ok:v=>eq(v,1)}],
+  explain:"Choosing the smaller translation tool is solution design: staff must be able to explain and audit every translation, and the trade-off is about 2 points of accuracy (94% → 92%). Adding 40 dialect test voice notes is critical evaluation: dialect notes caused most version-1 errors, and the trade-off is a day longer to test each release."},
+ {id:"wscanvas",mount:"a-wscanvas",section:"Core worksheet 2",title:"Complete the governance canvas",sub:"Worksheet 2 · fill each part well · "+GE_A,ico:"🗂️",cls:"ws",
+  fields:WSC.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A strong canvas entry is specific and owned. Mitigations name an owner; data & privacy minimises and deletes; human oversight says who approves and what triggers a pause; monitoring & review is regular and continues after launch – never ‘checked once, then done’."},
+ {id:"wsbrief",mount:"a-wsbrief",section:"Core worksheet 3",title:"Write the decision brief",sub:"Worksheet 3 · deploy, scale or pause – and why · "+GE_P,ico:"📣",cls:"ws",
+  fields:[{k:"db1",radio:1,ok:v=>eq(v,2)},{k:"db2",ok:v=>eq(v,0)}],
+  explain:"The pilot evidence supports scaling carefully: 47/50 details captured, a person approves every reply, a weekly check watches for errors and every risk has an owner. ‘The demo went well’ is not evidence, and deploying without monitoring repeats the classic mistake. A decision brief is one line: the decision plus the reason, linked to the evidence."},
+ {id:"wsfour",mount:"a-wsfour",section:"Core worksheet 4",title:"Four-strand task",sub:"Worksheet 4 · one justified item from each strand · "+CU_P,ico:"🧩",cls:"ws",
+  fields:WSFOUR.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Each item must belong to its strand and carry a reason. Systems: errors flow from the transcriber downstream, so names are checked at that hand-off. Design: the order places the check where errors start. Evaluation: 18 of 20 matched, with the misses checked against the audio. Governance: names removed and a person approves, because a wrong reply could misdirect a resident."},
+ {id:"wsrefl",mount:"a-wsrefl",section:"Core worksheet 5",title:"My reflection",sub:"Worksheet 5 · strongest choice and a checkable goal · "+CE_A,ico:"🪞",cls:"ws",
+  fields:[{k:"rf1",ok:v=>eq(v,1)},{k:"rf2",ok:v=>eq(v,2)}],
+  explain:"A strong reflection names a real choice, its strand and its trade-off. A good Term-2 goal is clear and checkable: it says what will improve, by how much, by when, and how you will check it – not ‘get much better at AI’."},
+ {id:"show",mount:"a-show",section:"Core · Unplugged",title:"Prepare a justified showcase",sub:"Unplugged activity · evidence, trade-off and opening line · "+CE_A,ico:"🎤",
+  fields:[{k:"sh1",ok:v=>eq(v,2)},{k:"sh2",ok:v=>eq(v,3)},{k:"sh3",radio:1,ok:v=>eq(v,2)}],
+  explain:"Performance evidence is a before-and-after number: completion went from 6/10 to 9/10. The trade-off is what the shorter prompt cost – fewer details collected from each user. A strong opening line names what you optimised, for what, and points straight to the evidence."},
+ {id:"quiz",mount:"a-quiz",section:"Core · Check",title:"Showcase check",sub:"Quick quiz · 3 questions and 3 true or false · "+CE_A,ico:"✅",cls:"quiz",
+  fields:[...QUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...TF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: A justification shows the thinking and the trade-off, not just the build. 2: Monitoring & review is the classic omission – a system is never ‘done’ at launch. 3: The task makes the overlap between the strands visible. True or false: justification with evidence is the point of a showcase (true); every ‘it works’ claim needs a check against the task and a trusted source (false); evidence is measurable, not just a description (true)."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+CE_P,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"Peer review = reading each other's work against clear criteria. Actionable feedback = a comment the maker can act on. Ripple effect = changing one part changes others. Prioritise = choose the one goal that matters most first. Carousel = rotating past several solutions, reviewing each in turn."},
+ {id:"lsort",mount:"a-lsort",section:"Lab · Part 1",title:"Actionable or not?",sub:"Objective 1 · review with criteria · "+CE_P,ico:"🎯",
+  fields:LSORT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Actionable feedback is specific, tied to a strand and kind: it says what works and exactly what to do next. ‘It was good’ and ‘I didn't like it’ give the maker nothing to act on, and a comment about the person rather than the work is never useful feedback."},
+ {id:"lstrand",mount:"a-lstrand",section:"Lab · Part 1",title:"Tie each comment to its strand",sub:"Objective 1 · one strand at a time · "+CE_P,ico:"🧷",
+  fields:LSTRAND.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Adding and recording a test case is critical evaluation. Showing where a component gets its input is systems understanding. Naming an owner for a privacy mitigation is governance. Re-ordering steps in the workflow is solution design."},
+ {id:"llens",mount:"a-llens",section:"Lab · Part 2",title:"Which lens?",sub:"Four lenses: benefit, risk, control, accountability · "+GE_P,ico:"🔭",
+  fields:LLENS.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Benefit: replies in residents' own language within the hour. Risk: a misheard street name could misdirect a resident with a strong dialect. Control: a person approves replies that mention a street name. Accountability: a named supervisor signs off the error log and answers for failures."},
+ {id:"lripple",mount:"a-lripple",section:"Lab · Part 2",title:"Follow the ripple",sub:"Objective 2 · act on feedback, watch the whole system · "+CU_A,ico:"🌊",
+  fields:LRIPPLE.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"In a system, one fix ripples. New test cases can expose a gap in the data; a tighter safeguard is safer but covers fewer cases automatically and adds staff work; a faster component must be re-measured because later steps and people depend on its output. Weigh the ripple – don't ignore it."},
+ {id:"lreview",mount:"a-lreview",section:"Lab worksheet 1",title:"Review three solutions",sub:"Worksheet 1 · strand and actionable improvement · "+CE_P,ico:"🔄",cls:"ws",
+  fields:EXHIBITS.flatMap(([k,,,,s,c])=>[{k:k+"s",ok:v=>eq(v,s)},{k:k+"i",ok:v=>eq(v,c)}]),
+  explain:"The waste forecaster's canvas has no monitoring – a governance gap fixed by a weekly forecast-against-waste check with an owner. The book suggester has no test evidence – an evaluation gap fixed by testing on held-back records. The bus alert's map misses a hand-off – a systems-understanding gap fixed by drawing what passes from the delay model to the alert sender."},
+ {id:"lfix",mount:"a-lfix",section:"Lab worksheet 2–3",title:"The highest-value fix and its ripple",sub:"Worksheet 2–3 · fix one part, watch the whole · "+SD_A,ico:"🔧",cls:"ws",
+  fields:[{k:"lf1",radio:1,ok:v=>eq(v,1)},{k:"lf2",ok:v=>eq(v,3)}],
+  explain:"The highest-value fix targets the biggest source of error: dialect words. Fonts and dark mode change looks, not performance. Adding dialect test cases ripples into the data – it shows there are too few dialect voice notes, so the data needs topping up too."},
+ {id:"lgoal",mount:"a-lgoal",section:"Lab worksheet 4–5",title:"A prioritised Term-2 goal",sub:"Worksheet 4–5 · goal, strand and first step · "+CE_A,ico:"🎯",cls:"ws",
+  fields:[{k:"lg1",radio:1,ok:v=>eq(v,1)},{k:"lg2",ok:v=>eq(v,"CE")},{k:"lg3",ok:v=>eq(v,2)}],
+  explain:"A good goal is specific and prioritised, with a target and a way to check it: raise dialect accuracy from 36/40 to 38/40 on the same test set. It targets critical evaluation (a measured result). A first step is something you can start this week – collecting more non-personal dialect test voice notes."},
+ {id:"lff",mount:"a-lff",section:"Lab · Unplugged",title:"Give feed-forward, on paper",sub:"Unplugged activity · strength, improvement, question; measurable goals · "+CE_A,ico:"✍️",
+  fields:[{k:"ff1",radio:1,ok:v=>eq(v,2)},...LMEAS.map(([k,,c])=>({k,box:1,ok:v=>v===!!c}))],
+  explain:"Useful feed-forward names a strength, one improvement and a question. A measurable goal has a target you can actually check – a number, a test set or a time. ‘Be more creative’ and ‘learn lots more’ have no target, so you could never tell when you had met them."},
+ {id:"lquiz",mount:"a-lquiz",section:"Lab · Check",title:"Review check",sub:"Quick quiz · 3 questions and 3 true or false · "+CE_P,ico:"✅",cls:"quiz",
+  fields:[...LQUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...LTF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: Specific, actionable, kind feedback tells the maker exactly what to do. 2: In a system one change ripples – you weigh it, not ignore it. 3: A checkable, prioritised goal with a first step is actionable. True or false: ‘Nice solution’ is not useful – feed-forward names a strength, an improvement and a question (false); change one component, re-measure, and see whether the number moved (true); a good goal is measurable, with a target you can check (false)."}
+];
+
+/* ---------- state ---------- */
+const KEY="g10-mw10-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#audit").innerHTML=`<header><small>Evidence pack · illustrative</small><b>Signature solution: the bilingual service-desk assistant</b></header>
+<div class="in">
+  <p class="task"><b>The solution:</b> a resident leaves an Arabic voice note; the pipeline transcribes it, translates it and summarises it in English for staff, and a staff member approves the Arabic reply. All test voice notes were made by the teacher – no real voices or names.</p>
+  <div class="ab"><div><b>Choice A · tool</b>Switched to a smaller translation tool the team can audit.</div><div><b>Choice B · testing</b>Added 40 dialect test voice notes, run before every release.</div></div>
+  <table class="t"><thead><tr><th>Evidence</th><th>Version 1</th><th>Final version</th></tr></thead>
+  <tbody>${PACK.map(([t,a,b])=>`<tr><td>${esc(t)}</td><td>${esc(a)}</td><td>${esc(b)}</td></tr>`).join("")}</tbody></table>
+</div>`;
+$("#carousel").innerHTML=`<header><small>Review carousel · illustrative exhibits</small><b>Three classmates' solutions</b></header>
+<div class="in">
+  <p class="task">Each round you review through one strand. For each exhibit, find the strand with the biggest gap and choose the improvement the maker can act on.</p>
+  <table class="t"><thead><tr><th>Exhibit</th><th>Pipeline</th><th>What the evidence pack shows</th></tr></thead>
+  <tbody>${EXHIBITS.map(([,n,p,e])=>`<tr><td><b>${esc(n)}</b></td><td>${esc(p)}</td><td>${esc(e)}</td></tr>`).join("")}</tbody></table>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+const pair=(k,label,opts,c,ph="Choose…",style="")=>`<div class="pair" data-item="${k}"${style?` style="${style}"`:""}><span class="t">${label}</span>${sel(k,opts,ph,ord(opts.length,c))}</div>`;
+const strandRow=(k,t)=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,STR_SHORT,STR_VALS,t)}</div>`;
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>pair("v"+i,esc(t),WORDS.map(w=>w[1]),i,"Choose the meaning…")).join("");
+  case "jsort":
+    return `<p class="how">Is each statement a justification (choice, strand, reason and trade-off) or only a description? <span class="illus">(Illustrative statements.)</span></p>`+
+      JSORT.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Justification","Description"],["J","D"],t)}</div>`).join("");
+  case "jparts":
+    return `<div class="quote">“I added a human check before any reply is sent, because a mistranslated street name could send a resident to the wrong office. The trade-off: replies take about two minutes longer.” <span class="illus">(Illustrative.)</span></div>`+
+      pair("jp1","Strand",STR4,3)+pair("jp2","Reason",JP_REASON,0)+pair("jp3","Trade-off",JP_TRADE,0);
+  case "canvas":
+    return `<p class="how">These entries come from the illustrative service-desk canvas. Which of the six parts does each belong in?</p>`+
+      CANVAS.map(([k,t,c])=>pair(k,esc(t),CANVAS_EL,c,"Choose the part…")).join("");
+  case "gap":
+    return `<div class="quote">Another team's canvas lists their purpose &amp; benefit, risks &amp; affected groups, mitigations &amp; owners, data &amp; privacy, and human oversight – and ends ‘Decision: deploy’. <span class="illus">(Illustrative.)</span></div>
+      <p class="q" id="q-g1">Which part is missing?</p>${radios("g1",GAP)}
+      ${pair("g2","Why it matters",GAP_WHY,0,"Choose…","margin-top:10px")}`;
+  case "four":
+    return `<p class="how">One data choice – a set of 40 teacher-made, non-personal dialect test voice notes – seen through all four strands. Which strand does each statement show? <span class="illus">(Illustrative.)</span></p>`+
+      FOUR.map(([k,t])=>strandRow(k,t)).join("");
+  case "verify":
+    return `<p class="q" id="q-vf1">Which is the strongest evaluation item for your four-strand task?</p>${radios("vf1",VERIFY)}
+      ${pair("vf2","An output looks confident and detailed. You should…",VERIFY2,0,"Choose…","margin-top:10px")}`;
+  case "wsjust":
+    return `<p class="how">1. Use the evidence pack above. For each choice, give its strand, the reason and the trade-off.</p>
+      <div class="scen"><p>Choice A · switched to a smaller translation tool the team can audit</p>${pair("w1as","Strand",STR4,1)}${pair("w1ar","Reason",WS_REASON,0)}${pair("w1at","Trade-off",WS_TRADE,0)}</div>
+      <div class="scen"><p>Choice B · added 40 dialect test voice notes, run before every release</p>${pair("w1bs","Strand",STR4,2)}${pair("w1br","Reason",WS_REASON,1)}${pair("w1bt","Trade-off",WS_TRADE,1)}</div>`;
+  case "wscanvas":
+    return `<p class="how">2. Complete the governance canvas for the service-desk assistant: choose the strongest entry for each part. (Purpose and risks are already filled in from Part 2.)</p>`+
+      WSC.map(([k,t,o,c])=>pair(k,esc(t),o,c)).join("");
+  case "wsbrief":
+    return `<p class="q" id="q-db1">3. Decision brief: do you recommend deploy, scale, or pause – and why?</p>${radios("db1",BRIEF)}
+      ${pair("db2","A complete decision brief is…",BRIEF2,0,"Choose…","margin-top:10px")}`;
+  case "wsfour":
+    return `<p class="how">4. Four-strand task: choose one short, justified item for each strand.</p>`+
+      WSFOUR.map(([k,t,o,c])=>pair(k,esc(t),o,c)).join("");
+  case "wsrefl":
+    return `<p class="how">5. My reflection.</p>`+pair("rf1","The strongest choice I can justify, its strand and its trade-off, is…",REFL1,1)+pair("rf2","My Term-2 goal is…",REFL2,2);
+  case "show":
+    return `<p class="how">1–2. Your choice: ‘a shorter prompt so users finish faster’. <span class="illus">(Illustrative.)</span></p>`+
+      pair("sh1","Performance evidence (before → after)",SHOW1,2)+pair("sh2","The trade-off you accepted",SHOW2,3)+
+      `<p class="q" id="q-sh3">3. Which is the strongest opening line: ‘I optimised X for Y, and here is the evidence…’?</p>${radios("sh3",SHOW3)}`;
+  case "quiz":
+    return quiz(QUIZ,TF);
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>pair("lv"+i,esc(t),LWORDS.map(w=>w[1]),i,"Choose the meaning…")).join("");
+  case "lsort":
+    return `<p class="how">Is each comment actionable feedback the maker could use, or not? <span class="illus">(Illustrative comments.)</span></p>`+
+      LSORT.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Actionable","Not useful"],["A","N"],t)}</div>`).join("");
+  case "lstrand":
+    return `<p class="how">In the carousel each round reviews one strand. Which strand is each comment about?</p>`+
+      LSTRAND.map(([k,t])=>strandRow(k,t)).join("");
+  case "llens":
+    return `<p class="how">Weigh the service-desk assistant through the four lenses in Figure 3. Which lens does each statement belong to? <span class="illus">(Illustrative.)</span></p>`+
+      LLENS.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,LENS_LABELS,LENS_VALS,t)}</div>`).join("");
+  case "lripple":
+    return `<p class="how">For each fix to the service-desk assistant, choose what it most likely ripples into elsewhere in the system.</p>`+
+      LRIPPLE.map(([k,t,o,c])=>`<div class="scen"><p>${esc(t)}</p>${pair(k,"Ripple effect",o,c)}</div>`).join("");
+  case "lreview":
+    return `<p class="how">1. For each exhibit in the carousel card above, choose the strand with the biggest gap and one actionable improvement.</p>`+
+      EXHIBITS.map(([k,n,,,s,c])=>`<div class="scen"><p>${esc(n)}</p><div class="row" data-item="${k}s"><span class="t">Strand with the biggest gap</span>${seg(k+"s",STR_SHORT,STR_VALS,n)}</div>${pair(k+"i","Improvement (actionable)",IMP,c)}</div>`).join("");
+  case "lfix":
+    return `<div class="quote">Feedback on the service-desk assistant: ‘change the font’ · ‘your evaluation has no dialect test cases, and most errors were dialect words’ · ‘add a dark mode’. <span class="illus">(Illustrative.)</span></div>
+      <p class="q" id="q-lf1">2. Which is the highest-value fix to make?</p>${radios("lf1",LFIX)}
+      ${pair("lf2","3. What does that fix ripple into?",LFIX2,3,"Choose…","margin-top:10px")}`;
+  case "lgoal":
+    return `<p class="q" id="q-lg1">4. Which is the best prioritised Term-2 goal?</p>${radios("lg1",LGOAL)}
+      <div class="row" data-item="lg2" style="margin-top:10px"><span class="t">The strand it targets</span>${seg("lg2",STR_SHORT,STR_VALS,"The strand it targets")}</div>
+      ${pair("lg3","5. My first step is…",LSTEP,2)}`;
+  case "lff":
+    return `<p class="q" id="q-ff1">1. Which is complete feed-forward for a peer: a strength, one improvement, and a question?</p>${radios("ff1",LFF)}`+
+      boxes(LMEAS,"<b>3. Measurable goals.</b> Tick every goal that has a target you could actually check. Leave the others unticked.");
+  case "lquiz":
+    return quiz(LQUIZ,LTF);
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 10 Main Course · Term 1 Week 10 (7 – 11 Dec 2026; Boys 10: 7 Jan 2027) · Core + Lab · Showcase &amp; Reflection + Peer Review &amp; Aim Higher</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
