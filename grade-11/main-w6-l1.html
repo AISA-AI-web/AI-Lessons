@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bringing the Strands Together + Run It End-to-End – Grade 11 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#4F46E5; --main2:#6366F1; --deep:#312E81;
+  --ink:#1E1B3A; --muted:#585670; --paper:#F6F6FD; --card:#FFFFFF;
+  --line:#DCDCF3; --soft:#EEEEFC;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#A5B4FC,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#7C74F0);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#1E1B3A,#433D7A)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#D6D6FB 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FAFAFE;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FBFBFF}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#7C74F0)}
+.act-head.ws{background:linear-gradient(120deg,#1E1B3A,#4A447F)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#EEEEFD}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #C4C4EE;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #A9A6F0;border-radius:12px;padding:10px 14px;background:#F8F8FE;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(30,27,58,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#1E1B3A;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+.flip{min-width:0}.flip .term{overflow-wrap:anywhere;hyphens:auto}
+/* Week 6: three-stage check cells */
+.st3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.st3 .cell>span{display:block;font-size:14px;line-height:1.35;margin-bottom:6px}
+.st3 .cell>span i{color:var(--muted)}
+@media (max-width:640px){.st3{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 11 Main Course, Term 1</span><span class="pill">Week 6 Core + Week 6 Lab</span><span class="pill">📅 Teach: week of 9 – 13 Nov 2026</span></div>
+    <h1>Bringing the Strands Together</h1>
+    <p>Today you bring together everything from this term – understanding, designing, evaluating and governing AI – to build one small integrated solution where three tools connect to serve a real request. You do not just make it work: you optimise it against three measures and govern its impact before you trust it. Then, in the Lab, you run the whole solution end-to-end, log a check and all three measures at every stage, trace where an error propagates, add one new rule and re-run to see how the system re-balances.</p>
+    <p class="meta"><b>Strand:</b> Bringing the Strands Together · all four strands &nbsp;·&nbsp; <b>Scenario:</b> a public-service request handler</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 11B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 6 of Term 1 – Monday 9 to Friday 13 November 2026.</b> Grade 11 has one AI period a week: <b>Boys 11 on Wednesday 11 November</b>, <b>Girls 11 on Friday 13 November</b>. Work through the Core first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Bringing the Strands Together</a>, then move on to the <a href="#lab">Lab: Run It End-to-End</a>. <span class="illus">Previously, in Weeks 2–5, you practised each strand on its own. Next, in Week 7, you start planning your own solution.</span></div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Build across four strands.</b> I can complete a guided task that uses all four strands to build, check and optimise one small integrated AI solution.</li>
+      <li><b>Connect and measure.</b> I can explain how the tools connect at each interface, how I check the outcome against a target and a trusted key, and how improving one measure can cost another.</li>
+      <li><b>Name a responsible choice.</b> I can name one responsible-use choice I made, such as a human sign-off gate or using no personal data.</li>
+      <li><b>Lab: run and log measures.</b> I can run my whole solution from start to finish, record every check and all three measures at each tool and interface, and judge the result against my targets.</li>
+      <li><b>Lab: add a constraint and re-run.</b> I can add a new criterion or risk rule and re-run my solution, re-balancing the three measures while keeping the governance rules.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 6 Core · Bringing the Strands Together</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Four strands, one optimised solution</b><small>Classify, route, draft – governed by a human gate</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Check every hand-off, measure three ways</b><small>Accuracy, efficiency, usability</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Optimising three measures at once</b><small>Systems thinking and trade-offs</small></a></li>
+      <li><span class="num">4</span><a href="#p4"><b>Core worksheet</b><small>Run the request cards and read the three gauges</small></a></li>
+      <li><span class="num">5</span><a href="#p5"><b>Run the handler, on paper</b><small>Unplugged activity and quick check</small></a></li>
+    </ol>
+    <h3 class="rh">Week 6 Lab · Run It End-to-End</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Inspect the data before you trust the result</b><small>Missing values, wrong labels, representativeness</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>From a few cards to a full, measured run</b><small>The optimisation log, accuracy and reliability</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Optimise, re-balance, and keep it governed</b><small>One aimed change, one constraint</small></a></li>
+      <li><span class="num">L4</span><a href="#l4"><b>Lab worksheet</b><small>Inspect, log, optimise, re-balance</small></a></li>
+      <li><span class="num">L5</span><a href="#l5"><b>Prepare data, then measure</b><small>Unplugged activity and end-to-end check</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 5</span><h2>Four strands, one optimised solution</h2><p>What happens when you use all four strands at once?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>You bring all four strands together in one solution: a <b>public-service request handler</b> that <b>classifies</b> each request, <b>routes</b> it, and <b>drafts</b> a reply – optimised across accuracy, efficiency and usability, with a human gate on anything sensitive. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">Four strands, one optimised solution</h3>
+    <p>Until now you have practised four strands in separate lessons: <b>understanding</b> how an integrated system fits together, <b>designing</b> and building a solution, <b>critically evaluating</b> an output, and <b>governing</b> AI and its impact. Today they click together on one solution. You classify each request with one tool, pass it to a second tool that routes it, then to a third that drafts a reply – and you check the outcome at every hand-off before a human gate signs it off. Then you go further than building: you read three gauges – <b>accuracy, efficiency and usability</b> – and make one aimed change to improve the weakest. Nothing here is brand new. You are using all four strands at once to optimise one solution, which is exactly how real AI solutions are designed, run and governed.</p>
+    <figure>
+      <svg viewBox="0 0 760 380" role="img" aria-labelledby="f1T">
+        <title id="f1T">Four strands feed one solution. Understand: how the parts connect. Design: build the handler. Evaluate: check and measure. Govern: keep a human gate. The handler runs: request (no people), Classify (category), Route (to a team), Draft (reply), Human gate (sign-off), Logged (outcome), with a check at every hand-off. Underneath, three measures to optimise: accuracy (right divided by total, against the key), efficiency (steps per request) and usability (a clear, actionable reply). Lift one measure and another may fall, so balance all three.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1E1B3A"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#1E1B3A">
+          <text x="380" y="24" font-size="15" font-weight="700" text-anchor="middle">The request handler – four strands, one optimised solution</text>
+          <g stroke="#4F46E5" stroke-width="1.6">
+            <rect x="14" y="42" width="170" height="58" rx="10" fill="#EEEEFC"/><rect x="202" y="42" width="170" height="58" rx="10" fill="#EEEEFC"/><rect x="390" y="42" width="170" height="58" rx="10" fill="#EEEEFC"/><rect x="578" y="42" width="170" height="58" rx="10" fill="#EEEEFC"/>
+          </g>
+          <g font-size="14" font-weight="700" text-anchor="middle" fill="#312E81"><text x="99" y="66">Understand</text><text x="287" y="66">Design</text><text x="475" y="66">Evaluate</text><text x="663" y="66">Govern</text></g>
+          <g font-size="13" text-anchor="middle" fill="#585670"><text x="99" y="88">how parts connect</text><text x="287" y="88">build the handler</text><text x="475" y="88">check and measure</text><text x="663" y="88">keep a human gate</text></g>
+          <g stroke="#4F46E5" stroke-width="2" marker-end="url(#ah)"><path d="M99 100V138"/><path d="M287 100V138"/><path d="M475 100V138"/><path d="M663 100V138"/></g>
+          <g fill="#fff" stroke="#1E1B3A" stroke-width="1.6">
+            <rect x="14" y="146" width="104" height="58" rx="10" fill="#F6F6FD"/><rect x="140" y="146" width="104" height="58" rx="10"/><rect x="266" y="146" width="104" height="58" rx="10"/><rect x="392" y="146" width="104" height="58" rx="10"/><rect x="518" y="146" width="104" height="58" rx="10" fill="#FFF7E8" stroke="#B45309"/><rect x="644" y="146" width="104" height="58" rx="10" fill="#F6F6FD"/>
+          </g>
+          <g font-size="14" font-weight="700" text-anchor="middle"><text x="66" y="171">Request</text><text x="192" y="171">Classify</text><text x="318" y="171">Route</text><text x="444" y="171">Draft</text><text x="570" y="171">Human gate</text><text x="696" y="171">Logged</text></g>
+          <g font-size="13" text-anchor="middle" fill="#585670"><text x="66" y="192">no people</text><text x="192" y="192">category</text><text x="318" y="192">to a team</text><text x="444" y="192">reply</text><text x="570" y="192">sign-off</text><text x="696" y="192">outcome</text></g>
+          <g stroke="#1E1B3A" stroke-width="2.2" marker-end="url(#ah)"><path d="M118 175H137"/><path d="M244 175H263"/><path d="M370 175H389"/><path d="M496 175H515"/><path d="M622 175H641"/></g>
+          <g font-size="13" font-weight="600" fill="#4F46E5" text-anchor="middle"><text x="129" y="226">✓ check</text><text x="255" y="226">✓ check</text><text x="381" y="226">✓ check</text><text x="507" y="226">✓ check</text><text x="633" y="226">✓ check</text></g>
+          <text x="380" y="262" font-size="14" font-weight="700" text-anchor="middle">Then optimise across three measures</text>
+          <g stroke="#4F46E5" stroke-width="1.6" fill="#fff">
+            <rect x="60" y="276" width="200" height="56" rx="10"/><rect x="280" y="276" width="200" height="56" rx="10"/><rect x="500" y="276" width="200" height="56" rx="10"/>
+          </g>
+          <g font-size="14" font-weight="700" text-anchor="middle" fill="#312E81"><text x="160" y="299">Accuracy</text><text x="380" y="299">Efficiency</text><text x="600" y="299">Usability</text></g>
+          <g font-size="13" text-anchor="middle" fill="#585670"><text x="160" y="320">right ÷ total, vs key</text><text x="380" y="320">steps per request</text><text x="600" y="320">clear, actionable reply</text></g>
+          <text x="380" y="364" font-size="13.5" text-anchor="middle">Lift one measure and another may fall – balance all three and defend the trade-off.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> One integrated solution, four strands, three measures: tools connect at interfaces, the outcome is checked and governed, then one part is optimised across accuracy, efficiency and usability.</figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-strands"></div>
+    <div id="a-order"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 5</span><h2>Check every hand-off, measure three ways</h2><p>A target and a trusted key turn ‘it seemed to work’ into evidence.</p></div>
+  <div class="part-body">
+    <p>Before you run anything, write your <b>defined problem</b> and a <b>target for each measure</b>. In this handler, each request card mentions only benches, lighting, litter or exits – never people. You check each card at every hand-off against its <b>trusted key</b>, then you read three gauges:</p>
+    <ul class="steps">
+      <li><b>Accuracy</b> – how many requests were right at every stage, out of the total (target: at least 8 of 10).</li>
+      <li><b>Efficiency</b> – how many steps each request used, compared with a <b>step budget</b> (target: at most 4 steps per request on average).</li>
+      <li><b>Usability</b> – how many replies a resident could read and act on: what happens, which team, by when (target: every reply).</li>
+    </ul>
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="f2T">
+        <title id="f2T">Checking one request card. Request card, then: is the class right? If no, re-classify. If yes: does the route match the rule sheet? If no, refine the route. If yes: is it a safety item such as a blocked exit? If yes, send it to the human gate, a named officer. If no, draft the reply and log it. Then score each gauge: accuracy is right divided by total, efficiency is steps used, usability is a clear reply. Confident is not the same as correct.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1E1B3A"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#1E1B3A">
+          <text x="380" y="24" font-size="15" font-weight="700" text-anchor="middle">Check one request card through the handler</text>
+          <g stroke-width="1.6">
+            <rect x="14" y="52" width="100" height="58" rx="10" fill="#F6F6FD" stroke="#1E1B3A"/>
+            <rect x="140" y="52" width="130" height="58" rx="29" fill="#EEF3FC" stroke="#2E5AAC"/>
+            <rect x="296" y="52" width="160" height="58" rx="29" fill="#EEF3FC" stroke="#2E5AAC"/>
+            <rect x="482" y="52" width="130" height="58" rx="29" fill="#EEF3FC" stroke="#2E5AAC"/>
+            <rect x="638" y="52" width="110" height="58" rx="10" fill="#E2F5EC" stroke="#0F8A5F"/>
+            <rect x="140" y="178" width="130" height="50" rx="10" fill="#FDE7EC" stroke="#C92A4B"/>
+            <rect x="296" y="178" width="160" height="50" rx="10" fill="#FDE7EC" stroke="#C92A4B"/>
+            <rect x="482" y="178" width="130" height="50" rx="10" fill="#FFF7E8" stroke="#B45309"/>
+          </g>
+          <g font-size="14" font-weight="700" text-anchor="middle">
+            <text x="64" y="77">Request</text><text x="64" y="96">card</text>
+            <text x="205" y="86">Class right?</text>
+            <text x="376" y="77">Route matches</text><text x="376" y="96">rule sheet?</text>
+            <text x="547" y="77">Safety item?</text><text x="547" y="96" font-size="13" font-weight="400" fill="#585670">e.g. blocked exit</text>
+            <text x="693" y="77">Draft</text><text x="693" y="96" font-size="13" font-weight="400" fill="#585670">reply + log</text>
+            <text x="205" y="208">Re-classify</text>
+            <text x="376" y="208">Refine the route</text>
+            <text x="547" y="199">Human gate</text><text x="547" y="218" font-size="13" font-weight="400" fill="#585670">named officer</text>
+          </g>
+          <g stroke="#1E1B3A" stroke-width="2.2" marker-end="url(#ah2)"><path d="M114 81H137"/><path d="M270 81H293"/><path d="M456 81H479"/><path d="M612 81H635"/><path d="M205 110V175"/><path d="M376 110V175"/><path d="M547 110V175"/></g>
+          <g font-size="13" font-weight="700" fill="#0F8A5F" text-anchor="middle"><text x="282" y="46">yes</text><text x="468" y="46">yes</text></g>
+          <text x="624" y="46" font-size="13" font-weight="700" fill="#C92A4B" text-anchor="middle">no</text>
+          <g font-size="13" font-weight="700" fill="#C92A4B"><text x="212" y="148">no</text><text x="383" y="148">no</text></g>
+          <text x="554" y="148" font-size="13" font-weight="700" fill="#0F8A5F">yes</text>
+          <text x="380" y="262" font-size="13.5" text-anchor="middle">Score each gauge: accuracy (right ÷ total), efficiency (steps used), usability (clear reply).</text>
+          <text x="380" y="284" font-size="13" text-anchor="middle" fill="#585670">Confident is not the same as correct – compare every outcome with the trusted key.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Check each request card at every hand-off – is the class right, does the route match the rule sheet, is it a safety item for a named person – then score all three gauges.</figcaption>
+    </figure>
+    <div id="a-measures"></div>
+    <div id="a-route"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head"><span class="pill">Core · Part 3 of 5</span><h2>Optimising three measures at once</h2><p>Systems thinking and trade-offs.</p></div>
+  <div class="part-body">
+    <p>A real solution is judged on more than one measure at the same time – here accuracy, efficiency and usability. Improving one often costs another, so you cannot max out all three; you choose a <b>sensible balance</b> and can defend it. Measure all three, change one part, and check that lifting one measure did not wreck the others.</p>
+    <figure>
+      <svg viewBox="0 0 760 330" role="img" aria-labelledby="f3T">
+        <title id="f3T">One change, three gauges. The change: add a check against the key at every interface. Accuracy rises from 70 percent to 90 percent, past its target of 80 percent. Efficiency goes from 3.5 to 5 steps per request, over its budget of 4 steps. Usability stays at 80 percent. Accuracy climbs but efficiency drops past the budget: a trade-off to re-balance.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#1E1B3A">
+          <text x="380" y="24" font-size="15" font-weight="700" text-anchor="middle">One change, three gauges: add a check at every interface</text>
+          <g font-size="13" fill="#585670"><rect x="200" y="38" width="22" height="12" rx="3" fill="#C7C5F7"/><text x="230" y="49">before</text><rect x="300" y="38" width="22" height="12" rx="3" fill="#4F46E5"/><text x="330" y="49">after</text><path d="M408 36V52" stroke="#C92A4B" stroke-width="2.4" stroke-dasharray="4 3"/><text x="418" y="49">target or budget</text></g>
+          <g font-size="14" font-weight="700"><text x="14" y="94">Accuracy</text><text x="14" y="174">Efficiency</text><text x="14" y="254">Usability</text></g>
+          <g font-size="13" fill="#585670"><text x="14" y="112">right ÷ total</text><text x="14" y="192">steps per request</text><text x="14" y="272">clear replies</text></g>
+          <g>
+            <rect x="200" y="72" width="280" height="20" rx="4" fill="#C7C5F7"/><rect x="200" y="98" width="360" height="20" rx="4" fill="#4F46E5"/>
+            <rect x="200" y="152" width="233" height="20" rx="4" fill="#C7C5F7"/><rect x="200" y="178" width="333" height="20" rx="4" fill="#4F46E5"/>
+            <rect x="200" y="232" width="320" height="20" rx="4" fill="#C7C5F7"/><rect x="200" y="258" width="320" height="20" rx="4" fill="#4F46E5"/>
+          </g>
+          <g stroke="#C92A4B" stroke-width="2.4" stroke-dasharray="4 3"><path d="M520 64V126"/><path d="M467 144V206"/><path d="M600 224V286"/></g>
+          <g font-size="13" font-weight="700" fill="#fff"><text x="208" y="87">70%</text><text x="208" y="113">90%</text><text x="208" y="167">3.5 steps</text><text x="208" y="193">5 steps</text><text x="208" y="247">80%</text><text x="208" y="273">80%</text></g>
+          <g font-size="13" font-weight="700"><text x="622" y="100" fill="#0F8A5F">▲ past target</text><text x="622" y="180" fill="#C92A4B">▼ over budget</text><text x="622" y="260" fill="#585670">= no change</text></g>
+          <text x="380" y="316" font-size="13.5" text-anchor="middle">Accuracy climbs but efficiency drops past the budget – a trade-off to re-balance.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> Measure all three, change one part, and check what moved: here a check at every interface lifts accuracy but costs efficiency. <span class="illus">(Illustrative numbers.)</span></figcaption>
+    </figure>
+    <h3 class="sub">Systems thinking and trade-offs</h3>
+    <p>A solution is a system, so its parts affect each other through their interfaces. If the first tool misclassifies a request, the second routes it wrongly and the third drafts a wrong reply – one early error <b>propagates</b> all the way through, which is why you check at every hand-off, not only at the end. Optimising adds a twist: the three measures pull against each other. Add checks and accuracy climbs but efficiency drops; shorten a reply and usability improves but you might lose a detail the resident needs. So you do not chase one number – you balance all three and pick a sensible trade-off. And you <b>govern from the start</b>: only non-personal requests go in, every safety item routes to a named person, every outcome is logged, and you keep asking whether the service is fast, clear and fair for everyone it serves.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, smart-city and government service teams connect several AI tools into one solution to sort, route and answer thousands of public requests – and it only helps residents if the whole system is optimised for speed, clarity and correctness together, checked at every stage against a trusted source, and governed so a human stays responsible for its impact, just like in your task.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Mathematics · Civics · Systems Science</h4><p>Tracking three measures at once and balancing them is <b>multi-criteria decision-making</b> in <b>Mathematics</b>. Routing sensitive requests through a human gate is <b>accountability</b> from <b>Civics</b>. Reasoning about error propagation across interfaces is <b>systems science</b>.</p></div>
+    <div class="call amber"><h4>Tool for this week: spreadsheet (trade-off matrix) + decision decks (teacher-mediated)</h4><p>1. Write your defined problem and three targets (accuracy, efficiency, usability) at the top. 2. Feed ten request cards through Classify, Route and Draft; check accuracy at each interface. 3. Route safety items through the human gate, name your weakest measure, and optimise one part. <b>Stay safe:</b> no personal data – request cards only. Every sensitive item goes through the human gate; verify outcomes against the key.</p></div>
+    <div id="a-tradeoff"></div>
+    <div id="a-prop"></div>
+  </div>
+</section>
+
+<!-- CORE PART 4: WORKSHEET -->
+<section class="part" id="p4">
+  <div class="part-head dark"><span class="pill">Core · Part 4 of 5 · Worksheet</span><h2>Bringing the Strands Together</h2><p>The public-service request handler – classify, route, draft – checked at every hand-off and read on three gauges.</p></div>
+  <div class="part-body">
+    <div class="ecard" id="rules"></div>
+    <div id="a-ws1"></div>
+    <div id="a-ws2"></div>
+    <div id="a-ws3"></div>
+    <div id="a-ws4"></div>
+    <div id="a-ws5"></div>
+  </div>
+</section>
+
+<!-- CORE PART 5: UNPLUGGED -->
+<section class="part" id="p5">
+  <div class="part-head"><span class="pill">Core · Part 5 of 5 · Unplugged</span><h2>Run the handler, on paper</h2><p>Targets, checks, a human gate – and your weakest measure.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>You build a public-service request handler: <b>Classify, Route, Draft</b>. Working on paper, run ten cards through and measure three ways. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Check at each interface: ‘Classify → Route → Draft; a misclassify at Classify routes it wrongly.’</div>
+    <div id="a-unplug"></div>
+    <div id="a-gate"></div>
+    <div id="a-quiz"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 6 Lab</span><h2>Run It End-to-End</h2><p>Today you run your whole solution properly from start to finish, record a check and all three measures at every tool and interface, trace where any error propagates, then add one new rule and re-run to see how your integrated system re-balances accuracy, efficiency and usability under a tougher target.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario – continued</h4><p>You run the request handler end-to-end on a bigger set, first inspecting the data it relies on, then logging accuracy, efficiency and usability at every stage – and you add one constraint to see how the solution adapts. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 5</span><h2>Inspect the data before you trust the result</h2><p>Rubbish in, rubbish out.</p></div>
+  <div class="part-body">
+    <p>A solution is only as good as the data it runs on. Before the full run, inspect the request set for three problems:</p>
+    <ul class="steps">
+      <li><b>Missing values</b> – a request with no category.</li>
+      <li><b>Wrong labels</b> – a request filed under the wrong type.</li>
+      <li><b>Representativeness</b> – does the set cover a fair range, or mostly one kind?</li>
+    </ul>
+    <p>Fix or flag each issue and note how a data problem would change the result. Rubbish in, rubbish out.</p>
+    <div id="a-ldata"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 5</span><h2>From a few cards to a full, measured run</h2><p>Turn ‘it seemed to work’ into real evidence.</p></div>
+  <div class="part-body">
+    <p>In the Core lesson you ran the solution on ten cards. Today you run it <b>end-to-end</b> on twelve or more, and at every tool and interface you record a check and all three measures in an <b>optimisation log</b> – was the input clean, did the classification match, was it routed right, is the reply usable, how many steps did it take. That log turns ‘it seemed to work’ into real evidence. You can total accuracy, average your steps for efficiency, total your usability ratings, compare each with its target, and spot where errors propagate – maybe one mislabel from the first tool spreads into a wrong route and a confused reply. Those totals tell you exactly which measure to aim your next change at.</p>
+    <figure>
+      <svg viewBox="0 0 760 340" role="img" aria-labelledby="f4T">
+        <title id="f4T">Run end to end and log every stage. Handler: 1 inspect data, 2 classify, 3 route, 4 draft, 5 human gate. An optimisation log for 15 cards, illustrative. Card 1: right at every stage, 3 steps, clear reply. Card 4: wrong class, so route and draft are wrong too, 4 steps, clear reply. Card 6: right class but wrong route and draft, 3 steps, clear reply. Card 14: right at every stage, 3 steps, but the reply is unclear. Totals: classify 13 of 15, route 10 of 15, draft 10 of 15, average 3.4 steps, 14 of 15 clear replies. Three gauges against targets: accuracy 10 of 15, 67 percent, target 80 percent, below. Efficiency 3.4 steps, budget 4, within. Usability 14 of 15, 93 percent, target every reply, just below. Weakest: accuracy, at Route. Re-run only cards 6, 11 and 12.</title>
+        <defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1E1B3A"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#1E1B3A">
+          <text x="380" y="24" font-size="15" font-weight="700" text-anchor="middle">Run end to end, log every stage, read all three gauges</text>
+          <g fill="#fff" stroke="#1E1B3A" stroke-width="1.6">
+            <rect x="14" y="42" width="140" height="44" rx="10" fill="#F6F6FD"/><rect x="178" y="42" width="110" height="44" rx="10"/><rect x="312" y="42" width="110" height="44" rx="10" fill="#FDE7EC" stroke="#C92A4B"/><rect x="446" y="42" width="110" height="44" rx="10"/><rect x="580" y="42" width="166" height="44" rx="10" fill="#FFF7E8" stroke="#B45309"/>
+          </g>
+          <g font-size="14" font-weight="700" text-anchor="middle"><text x="84" y="69">1 Inspect data</text><text x="233" y="69">2 Classify</text><text x="367" y="69">3 Route</text><text x="501" y="69">4 Draft</text><text x="663" y="69">5 Human gate</text></g>
+          <g stroke="#1E1B3A" stroke-width="2.2" marker-end="url(#ah4)"><path d="M154 64H175"/><path d="M288 64H309"/><path d="M422 64H443"/><path d="M556 64H577"/></g>
+          <text x="14" y="122" font-size="14" font-weight="700">Optimisation log · 15 cards (illustrative)</text>
+          <g stroke="#DCDCF3" stroke-width="1.2" fill="#fff">
+            <rect x="14" y="134" width="420" height="168"/>
+            <rect x="14" y="134" width="420" height="28" fill="#EEEEFC"/>
+            <rect x="14" y="274" width="420" height="28" fill="#EEEEFC"/>
+            <path d="M14 190H434M14 218H434M14 246H434M74 134V302M150 134V302M220 134V302M290 134V302M362 134V302"/>
+          </g>
+          <g font-size="13" font-weight="700" text-anchor="middle"><text x="44" y="153">Card</text><text x="112" y="153">Classify</text><text x="185" y="153">Route</text><text x="255" y="153">Draft</text><text x="326" y="153">Steps</text><text x="398" y="153">Clear?</text></g>
+          <g font-size="13" text-anchor="middle">
+            <text x="44" y="181">1</text><text x="44" y="209">4</text><text x="44" y="237">6</text><text x="44" y="265">14</text>
+            <text x="326" y="181">3</text><text x="326" y="209">4</text><text x="326" y="237">3</text><text x="326" y="265">3</text>
+            <g fill="#0F8A5F" font-weight="700"><text x="112" y="181">✓</text><text x="185" y="181">✓</text><text x="255" y="181">✓</text><text x="398" y="181">✓</text><text x="398" y="209">✓</text><text x="112" y="237">✓</text><text x="398" y="237">✓</text><text x="112" y="265">✓</text><text x="185" y="265">✓</text><text x="255" y="265">✓</text></g>
+            <g fill="#C92A4B" font-weight="700"><text x="112" y="209">✗</text><text x="185" y="209">✗</text><text x="255" y="209">✗</text><text x="185" y="237">✗</text><text x="255" y="237">✗</text><text x="398" y="265">✗</text></g>
+            <g font-weight="700"><text x="44" y="293">Total</text><text x="112" y="293">13/15</text><text x="185" y="293">10/15</text><text x="255" y="293">10/15</text><text x="326" y="293">3.4 avg</text><text x="398" y="293">14/15</text></g>
+          </g>
+          <text x="456" y="122" font-size="14" font-weight="700">Three gauges against targets</text>
+          <g font-size="13">
+            <text x="456" y="154" font-weight="700">Accuracy: 10 of 15 · 67%</text><text x="456" y="172" fill="#C92A4B">target 80% · below</text>
+            <text x="456" y="204" font-weight="700">Efficiency: 3.4 steps</text><text x="456" y="222" fill="#0F8A5F">budget 4 steps · within</text>
+            <text x="456" y="254" font-weight="700">Usability: 14 of 15 · 93%</text><text x="456" y="272" fill="#B45309">target every reply · just below</text>
+          </g>
+          <text x="456" y="300" font-size="13" font-weight="700" fill="#312E81">Weakest: accuracy, at Route.</text>
+          <text x="14" y="328" font-size="13" fill="#312E81" font-weight="600">Re-run only cards 6, 11 and 12 after the change.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 4.</b> Run every card end-to-end, log the check and all three measures at each stage, compare each gauge with its target, then aim your change at the weakest. <span class="illus">(Illustrative data.)</span></figcaption>
+    </figure>
+    <div class="call amber"><h4>Accuracy is a count; reliability is whether it holds</h4><p>At each stage you total how many items were right – that proportion is <b>accuracy</b> on this set. Whether that accuracy holds when you run a bigger, more varied set and re-run is what we mean by <b>reliability</b>. Optimise the weakest measure, then check that lifting it did not lower the others.</p></div>
+    <div id="a-llog"></div>
+    <div id="a-lrel"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head"><span class="pill">Lab · Part 3 of 5</span><h2>Optimise, re-balance, and keep it governed</h2><p>You do not rebuild from scratch – you adapt what you have.</p></div>
+  <div class="part-body">
+    <p>A solution is a system, so it is only as reliable as its <b>weakest interface</b>, and one early fault can cascade. Today you find your weakest measure, make one aimed change, then add one <b>constraint</b>: either a second criterion, like a response-time limit or a consistency check, or a risk rule, like flagging any ambiguous request for a person to review. Because the measures trade off, your change will move more than one gauge – so you <b>re-balance</b>, keeping all three near their targets rather than maxing one. You do not rebuild from scratch; you adapt the solution you already have and re-run only the cards the change touches. All the while you keep the governance rules: only non-personal requests go in, every safety item routes to a named person, and every outcome is verified against a trusted source before you trust it.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>Smart-city and government service teams in the UAE keep improving their multi-tool solutions by logging where each tool and interface fails, tracing how errors propagate, and testing every change against speed, clarity and correctness together – all under governance rules that keep a human in the loop – exactly the run, analyse and re-balance loop you are practising today.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Mathematics · Environmental Science · Data Science</h4><p>Totalling correct outcomes and comparing before and after is <b>applied statistics</b>. Inspecting a dataset for quality is core <b>data science</b>. Routing efficiently to cut fuel and delay ties to sustainability in <b>Environmental Science</b>.</p></div>
+    <div class="call amber"><h4>Tool for this week: spreadsheet (optimisation log) + decision decks (teacher-mediated)</h4><p>1. Choose twelve to fifteen request cards and inspect the set for missing values, wrong labels and representativeness. 2. Run every card through the full solution and log the check and all three measures at each stage. 3. Compare each measure with its target, optimise the weakest part, add one constraint, and re-run the affected cards through the governance gate. <b>Stay safe:</b> no personal data – request cards only. Verify outcomes against the key; every sensitive item goes through the human gate.</p></div>
+    <div id="a-lorder"></div>
+    <div id="a-lcons"></div>
+  </div>
+</section>
+
+<section class="part" id="l4">
+  <div class="part-head dark"><span class="pill">Lab · Part 4 of 5 · Worksheet</span><h2>Run It End-to-End</h2><p>Inspect the request set, run the handler end-to-end, log all three measures, optimise the weakest and re-balance.</p></div>
+  <div class="part-body">
+    <div class="ecard" id="dataset"></div>
+    <div id="a-lws1"></div>
+    <div id="a-lws2"></div>
+    <div id="a-lws3"></div>
+    <div id="a-lws4"></div>
+    <div id="a-lws5"></div>
+  </div>
+</section>
+
+<section class="part" id="l5">
+  <div class="part-head"><span class="pill">Lab · Part 5 of 5 · Unplugged</span><h2>Prepare data, then measure, on paper</h2><p>Printed rows, a small run, and what to re-check.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>You run the request handler end-to-end. Working on paper, inspect the request set for quality, then compute the accuracy of a small run. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Accuracy = right ÷ total. If 11 of 15 were right at Classify, accuracy = 11/15 = 73%.</div>
+    <div id="a-lunplug"></div>
+    <div id="a-lquiz"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Bring the strands together – then run it end-to-end and re-balance</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>One <b>integrated solution</b> connects tools at interfaces; each output becomes the next input.</li>
+      <li>You <b>optimise</b> across three measures at once – accuracy, efficiency, usability – accepting <b>trade-offs</b>.</li>
+      <li>A system is only as reliable as its <b>weakest interface</b>; an early error <b>propagates</b> downstream.</li>
+      <li>A <b>governance gate</b> keeps a person accountable for sensitive outcomes.</li>
+      <li><b>Inspect the data</b> first: missing values, wrong labels, representativeness. Then run <b>end-to-end</b> and log all three measures at every interface.</li>
+      <li><b>Accuracy</b> is right over total on this set; <b>reliability</b> is whether it holds across a bigger, varied run.</li>
+      <li>Optimise the weakest measure, then <b>re-balance</b> so the others do not fall.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 11 · Main Course · Term 1 Week 6 (9 – 13 Nov 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- strand + concept tags ---------- */
+const CU_E="CU · how AI solutions operate within broader systems";
+const CU_P="CU · interactions between data, tools and users";
+const CU_A="CU · trade-offs: accuracy, efficiency, usability, reliability";
+const SD_E="SD · designs AI-powered solutions for real-world tasks";
+const SD_P="SD · structured multi-step solutions addressing user needs";
+const SD_A="SD · optimises solutions for efficiency, usability and performance";
+const CE_E="CE · identifies limitations in solutions";
+const CE_P="CE · evaluates using multiple criteria and evidence";
+const CE_A="CE · justifies improvements using data and structured reasoning";
+const GE_P="GE · structured analysis of ethical and societal implications";
+const GE_A="GE · proposes responsible-use approaches considering broader impact";
+
+/* display order helper: never show the correct option first */
+const ord=(base,i)=>base[0]===i?[...base.slice(1),base[0]]:base;
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["integrated solution","Several AI tools connected so the output of one becomes the input of the next."],
+  ["interface (hand-off)","The point where one tool's output is passed to the next tool as its input."],
+  ["optimise","Improve a solution against several measures at once, accepting sensible trade-offs."],
+  ["trade-off","When improving one measure, such as accuracy, costs you another, such as efficiency."],
+  ["governance gate","A human sign-off and accountability check before any AI outcome is trusted or sent."]
+];
+const DEF_ORDER = [3,0,4,1,2];
+const STRANDS = ["Understanding the system","Designing the solution","Evaluating the output","Governing responsibly"];
+const STRAND_JOBS = [
+  "See how Classify, Route and Draft connect, and where one early error could spread",
+  "Build the three-tool handler, its rule sheet and three targets",
+  "Check every hand-off against the trusted key and read the three gauges",
+  "Non-personal requests only, safety items to a named person, every outcome logged"
+];
+const STRAND_ORDER = [2,3,1,0];
+const STEPS = [
+  "A request card goes in (benches, lighting, litter or exits – no people)",
+  "Classify the request by category",
+  "Route it to the right team by the rule sheet",
+  "Draft a reply: what happens, which team, by when",
+  "A named person signs off any safety item at the human gate, and the outcome is logged"
+];
+const STEP_ORDER = [3,0,4,2,1];
+const MEASURES = [
+  ["ms1","Accuracy",1],
+  ["ms2","Efficiency",0],
+  ["ms3","Usability",2]
+];
+const MEAS_OPTS = ["Steps used per request, compared with a step budget","Requests right at every stage ÷ total, checked against the trusted key","Replies rated readable and actionable ÷ total","How confident the tools sound"];
+const MEAS_WHY = ["Because accuracy cannot be measured on its own","Because improving one measure often costs another, so you must see all three to balance them","Because three numbers look more impressive in a report","Because usability is the only measure residents notice"];
+const ROUTE = [
+  ["r1","🪑","Broken bench slat – Classify says Bench (key: Bench), the route matches the rule sheet, no safety issue","D"],
+  ["r2","🚪","Emergency exit at the sports hall chained shut – the class and the route are both right","H"],
+  ["r3","💡","Streetlight out on a footpath – Classify says Litter (key: Lighting)","C"],
+  ["r4","🗑️","Overflowing bin – the class is right, but it is routed to the street-lighting team","M"]
+];
+const ROUTE_LABELS = ["Draft reply","Human gate","Re-classify","Refine route"];
+const ROUTE_VALS = ["D","H","C","M"];
+const TRADE = [
+  ["to1","Add a check against the key at every interface",0],
+  ["to2","Shorten every reply to one short line",1],
+  ["to3","Skip the Route check to save a step",2],
+  ["to4","Add a reply template: what happens, which team, by when",3]
+];
+const TRADE_OPTS = [
+  "Accuracy rises, but efficiency falls – more steps per request",
+  "Usability rises, but a detail the resident needs may be lost",
+  "Efficiency rises, but accuracy may fall – errors pass on unchecked",
+  "Usability rises, and efficiency falls slightly – one more step",
+  "All three measures rise – there is no cost"
+];
+const TRADE_ORDER = [4,2,0,3,1];
+const TAIM = ["Max out accuracy, whatever it costs","Balance all three near their targets and defend the trade-off you chose","Keep every measure exactly as it was","Max out efficiency, because speed is all residents notice"];
+const PROP1 = ["Route and Draft notice the mistake and correct it automatically","Nothing – each tool works independently","It is routed to the cleansing team and the reply promises a clean-up – the error propagates","The handler stops and refuses to run"];
+const PROP2 = ["Because an early error spreads through later tools and is hard to trace from the end alone","Because the last tool is always the least reliable","Because checking the end breaks the governance rules"];
+const PROP3 = ["Only after the handler meets its targets","From the start: non-personal requests only, safety items to a named person, every outcome logged","Only if a resident complains"];
+
+/* Core worksheet: illustrative run of request cards */
+const TGT = [
+  ["wt1","Accuracy target",["The tools should feel accurate","At least 8 of 10 requests right at every stage, checked against the key","10 of 10, however many steps it takes"],1,[0,1,2]],
+  ["wt2","Efficiency target",["As fast as possible","At most 4 steps per request on average – the step budget","Use as many steps as needed"],1,[0,2,1]],
+  ["wt3","Usability target",["Replies should be friendly","The longest, most detailed reply possible","Every reply readable and actionable: what happens, which team, by when"],2,[0,2,1]],
+  ["wt4","Governance gate",["Safety items are handled by the Draft tool","Every safety item is sent to a named person – the duty officer","Safety items are skipped to save steps"],1,[2,1,0]]
+];
+const STAGE_NAMES = ["Classify","Route","Draft"];
+const WS2 = [
+  ["wc1","🪑","Broken bench slat in the central park",[["Bench","Bench"],["Parks maintenance","Parks maintenance"],["Repair booked within 5 working days","Repair booked within 5 working days"]]],
+  ["wc2","💡","Streetlight flickering on the park path",[["Bench","Lighting"],["Parks maintenance","Street-lighting team"],["Repair booked within 5 working days","Light checked within 48 hours"]]],
+  ["wc3","🗑️","Overflowing bin by the bus shelter",[["Litter","Litter"],["Cleansing team","Cleansing team"],["Area cleaned within 24 hours","Area cleaned within 24 hours"]]],
+  ["wc4","🚪","Emergency exit at the community hall blocked by stacked chairs",[["Exit","Exit"],["Cleansing team","Human gate – duty officer"],["Area cleaned within 24 hours","Hold – the duty officer decides"]]],
+  ["wc5","🧃","Litter scattered around the playground",[["Litter","Litter"],["Cleansing team","Cleansing team"],["Thank you for your message.","Area cleaned within 24 hours"]]]
+];
+const STAGE_SUF = ["k","r","d"];
+const WS3 = [
+  ["m3a","Accuracy (7 of 10 right at every stage)",["7%","70%","30%","80%"],1,[0,1,2,3]],
+  ["m3b","Accuracy against its target (8 of 10)",["Meets the target","Below the target"],1,[0,1]],
+  ["m3c","Efficiency against its budget (3.5 steps; budget 4)",["Within the budget","Over the budget"],0,[1,0]],
+  ["m3d","Usability (6 of 10 clear replies)",["6%","40%","60%","66%"],2,[0,1,2,3]],
+  ["m3e","Your weakest measure",["Accuracy – 10 points below its target","Efficiency – it is within budget","Usability – 40 points below its target of every reply"],2,[0,1,2]]
+];
+const RESP = [
+  ["rp1","Only request cards about benches, lighting, litter or exits go in – no names or phone numbers",1],
+  ["rp2","Every safety item, such as a blocked exit, goes to the named duty officer before any reply",1],
+  ["rp3","Every outcome is logged with the role of the person who approved it",1],
+  ["rp4","Let the Draft tool send replies automatically to save steps",0],
+  ["rp5","Add each resident's home address so the team can visit them",0],
+  ["rp6","Skip the key check when the tools sound confident",0]
+];
+const W5A = ["Add a check against the key at every interface","Remove the human gate to save time","Change the Draft tool to use a reply template: what happens, which team, by when","Change all three tools at once"];
+const W5B = ["Usability rose 30 points to 90%; efficiency rose to 3.8 steps but stays within budget; accuracy held at 70% – a sensible trade-off","Every measure got worse, so undo the change","Usability rose by 3 points","Efficiency is now over budget, so the change failed"];
+
+/* Core unplugged */
+const TSET = ["Fast, accurate and nice to use","100% accuracy, nothing else","At least 8 of 10 right at every stage; at most 4 steps per request; every reply readable and actionable","At most 4 steps per request, nothing else"];
+const UNPLUG = [
+  ["u1","Classify → Route hand-off",1],
+  ["u2","Route → Draft hand-off",1],
+  ["u3","Draft → before the reply is sent",1],
+  ["u4","Nowhere – if each tool is accurate on its own, the system is too",0]
+];
+const GATE = [
+  ["gt1","🚪","An emergency exit at the sports hall is chained shut","H"],
+  ["gt2","🪑","Paint is peeling on a park bench","P"],
+  ["gt3","💡","A streetlight pole is leaning over a footpath after a storm","H"],
+  ["gt4","🗑️","Litter is piling up in the beach car park","P"]
+];
+const WEAK = ["Accuracy","Efficiency – over its budget of 4 steps","Usability","None – all three meet their targets"];
+const QUIZ = [
+  ["q1","Why can you not simply maximise accuracy, efficiency and usability all at once?",["Because only accuracy can ever be measured.","Improving one measure often costs another, so you balance them and defend the balance.","Because usability does not matter in public services."],1],
+  ["q2","The first tool misclassifies a request. What happens in the solution?",["The later tools automatically correct it.","Nothing, because each tool works independently.","The second tool routes it wrongly and the third drafts the wrong reply – the error propagates."],2],
+  ["q3","What is the role of the human governance gate?",["A person signs off on sensitive outcomes before they are trusted or sent.","It makes the solution run without any people involved.","It replaces the need to measure performance."],0]
+];
+const TF = [
+  ["tf1","You can maximise accuracy, efficiency and usability all at once.","F"],
+  ["tf2","A misclassify at the first tool can make the whole system produce a wrong result.","T"],
+  ["tf3","A governance gate keeps a person accountable for sensitive outcomes.","T"]
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["end-to-end","Running every tool and interface of the solution in order on a full data set."],
+  ["optimisation log","A table where you record the check and all three measures at each stage for every item."],
+  ["error propagation","How a mistake at an early tool spreads through the interfaces to later tools."],
+  ["re-balance","Adjust the solution so a change to one measure does not wreck the other two."],
+  ["constraint","A new criterion or risk rule you add to test how the system adapts."]
+];
+const LDEF_ORDER = [2,4,0,3,1];
+const LDATA = [
+  ["ld1","A request about a broken bench has an empty category box","M"],
+  ["ld2","A report of a streetlight that is out is filed under Litter","W"],
+  ["ld3","11 of the 15 cards are about litter – there is only one bench and one exit","R"],
+  ["ld4","A litter report has no category written in","M"],
+  ["ld5","A blocked fire exit is filed under Bench","W"],
+  ["ld6","Every card came from one district on one morning","R"]
+];
+const LLOG = [
+  ["ll1","Classify accuracy (13 of 15 right)",["13%","87%","15%","67%"],1,[0,1,2,3]],
+  ["ll2","Route accuracy (10 of 15 right)",["67%","10%","50%","33%"],0,[1,0,2,3]],
+  ["ll3","Whole solution (right at every stage, 10 of 15)",["90%","67%","40%","10%"],1,[3,1,0,2]],
+  ["ll4","Usability (14 of 15 clear replies)",["14%","93%","87%","1%"],1,[0,2,1,3]],
+  ["ll5","Efficiency (3.4 steps on average; budget 4)",["Within the budget","Over the budget"],0,[1,0]]
+];
+const LREL = [
+  ["la1","10 of 15 cards were right at every stage on today's set","A"],
+  ["la2","The same 67% held when the handler was re-run on 30 new, varied cards","R"],
+  ["la3","Right ÷ total, counted on this one set","A"],
+  ["la4","Whether the result holds across a bigger, more varied set and a re-run","R"]
+];
+const LSTEPS = [
+  "Find the weakest measure and the tool or interface behind it",
+  "Make one aimed change to that part",
+  "Add one constraint – a second criterion or a risk rule",
+  "Re-run only the cards the change touches, through the governance gate",
+  "Read all three gauges again and re-balance"
+];
+const LSTEP_ORDER = [2,4,0,3,1];
+const LCONS = [
+  ["lc1","Flag any ambiguous request for the duty officer to review",1],
+  ["lc2","Add a response-time limit: at most 4 steps per request",1],
+  ["lc3","Keep every safety item routed to a named person during the re-run",1],
+  ["lc4","Add residents' names and phone numbers so teams can call back",0],
+  ["lc5","Let the handler skip the human gate when it is 90% sure",0],
+  ["lc6","Throw the handler away and rebuild it with three new tools",0]
+];
+const DATASET = [
+  ["1","Overflowing bin by the bus shelter","Litter"],
+  ["2","Streetlight out on the cycle path","Litter"],
+  ["3","Plastic bags caught on the park fence","Litter"],
+  ["4","Broken slat on a shaded bench","–"],
+  ["5","Litter left after the weekend market","Litter"],
+  ["6","Drinks cans on the sand","Litter"],
+  ["7","Bin lid missing","Litter"],
+  ["8","Crisp packets blowing round the car park","Litter"]
+];
+const ROWS = ["Row 2","Row 4","Row 7"];
+const REPR = ["Yes – 15 cards is plenty","Yes – every card is a real request","No – 11 of 15 are litter, so results for benches, lighting and exits cannot be trusted"];
+const LWS2 = [
+  ["lb1","Accuracy (right at every stage) against its target of 80%",["67% – meets the target","67% – below the target","10% – below the target"],1,[0,1,2]],
+  ["lb2","Efficiency against the budget of 4 steps",["3.4 steps – over the budget","3.4 steps – within the budget"],1,[0,1]],
+  ["lb3","Usability against its target of every reply",["93% – meets the target","14% – below the target","93% – just below the target (one unclear reply)"],2,[0,2,1]]
+];
+const LMOST = ["Usability – the Draft tool","Accuracy – the Route tool, which made 3 new misses (cards 6, 11 and 12) even when the class was right","Efficiency – the human gate","Accuracy – the Draft tool, because it is last"];
+const LPROP = ["Card 14: one unclear reply","Cards 4 and 9: a wrong class from Classify flowed into the route and the reply","Cards 6, 11 and 12: the class was wrong","Nowhere – no error moved downstream"];
+const LCHANGE = ["Every measure improved, so the job is done","Usability fell to 87%","Accuracy fell, so the change failed","Accuracy rose 20 percentage points to 87%, but efficiency went over the 4-step budget – a trade-off to re-balance"];
+const LREB = ["Remove the human gate to save steps","Run the extra check only on the request types Route confuses, bringing the average back to 3.8 steps while accuracy stays at 87%","Ignore efficiency – accuracy is all that counts","Undo every change and start again"];
+const LREFL = [
+  "I maxed out accuracy and let efficiency go – speed does not matter",
+  "Route was the weakest part: the consistency check lifted accuracy from 67% to 87% (+20 points); after re-balancing, efficiency is 3.8 steps (within budget) and usability held at 93%, with the human gate kept",
+  "I changed nothing, because the first run was good enough",
+  "I removed the human gate, so all three measures rose"
+];
+const LPRINT = [
+  ["lu1","Bench with a broken slat · Bench · Central park","OK"],
+  ["lu2","Streetlight out · Litter · Footpath B","W"],
+  ["lu3","Overflowing bin · (blank category) · Bus shelter","M"]
+];
+const LACC = ["11%","73%","15%","27%"];
+const LNEXT = ["Optimise accuracy and stop measuring the others","Make the data set smaller so accuracy rises","Optimise the weakest measure, then re-check all three gauges so the others did not fall","Remove the human gate to make it faster"];
+const LQUIZ = [
+  ["lq1","Why inspect the request data before running the solution on it?",["Because inspecting the data makes the solution run faster.","Because a data problem – missing values or wrong labels – changes the result.","Because governance forbids running on any data at all."],1],
+  ["lq2","At the Classify stage you get 11 of 15 right. What is this number?",["The reliability of the whole solution forever.","The efficiency of the Classify stage.","The accuracy on this set – a proportion right out of the total."],2],
+  ["lq3","You optimise the weakest measure. What must you check next?",["That lifting one measure did not lower the other two.","That the solution now has more steps than before.","That the data set was made smaller."],0]
+];
+const LTF = [
+  ["ltf1","‘Accuracy’ on one set is the same as long-term ‘reliability’.","F"],
+  ["ltf2","A missing value or wrong label can change the handler's routing.","T"],
+  ["ltf3","After optimising the weakest measure, you can ignore the other two.","F"]
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CU_E,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"An integrated solution connects several tools so one output becomes the next input. The interface (hand-off) is where that output is passed on. To optimise is to improve against several measures at once, accepting sensible trade-offs. A trade-off is when improving one measure costs another. A governance gate is a human sign-off before any AI outcome is trusted or sent."},
+ {id:"strands",mount:"a-strands",section:"Core · Part 1",title:"Four strands, one solution",sub:"Objective 1 · build across four strands · "+CU_E,ico:"🧷",
+  fields:STRANDS.map((_,i)=>({k:"st"+i,ok:v=>eq(v,i)})),
+  explain:"Understanding the system means seeing how Classify, Route and Draft connect and where an error could spread. Designing builds the handler, its rule sheet and its three targets. Evaluating checks every hand-off against the key and reads the gauges. Governing keeps personal data out, sends safety items to a named person and logs every outcome."},
+ {id:"order",mount:"a-order",section:"Core · Part 1",title:"Put the handler in order",sub:"Objective 1 · one multi-step solution · "+SD_P,ico:"🔗",
+  fields:STEPS.map((_,i)=>({k:"o"+i,ok:v=>eq(v,i)})),
+  explain:"Request card in (no people) → Classify by category → Route by the rule sheet → Draft a reply → a named person signs off any safety item and the outcome is logged. Each arrow is an interface where you check the outcome before passing it on."},
+ {id:"measures",mount:"a-measures",section:"Core · Part 2",title:"Three measures, three numbers",sub:"Objective 2 · measure against a target and a key · "+CE_P,ico:"📏",
+  fields:[...MEASURES.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"mw",ok:v=>eq(v,1)}],
+  explain:"Accuracy = requests right at every stage ÷ total, checked against the trusted key. Efficiency = steps used per request, against a step budget. Usability = replies a resident can read and act on ÷ total. You measure all three because improving one often costs another – how confident a tool sounds is not a measure at all."},
+ {id:"route",mount:"a-route",section:"Core · Part 2",title:"Walk each card through Figure 2",sub:"Objective 2 · check every hand-off · "+GE_P,ico:"🚦",
+  fields:ROUTE.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Bench slat: every check passes, so draft the reply. Chained exit: the class and the route are right, but a blocked exit is a safety item – send it to the human gate. Streetlight: the class is wrong, so re-classify before anything is passed on. Overflowing bin: the route breaks the rule sheet, so refine the route."},
+ {id:"tradeoff",mount:"a-tradeoff",section:"Core · Part 3",title:"Read the trade-off",sub:"Objective 2 · improving one measure can cost another · "+CU_A,ico:"⚖️",
+  fields:[...TRADE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"taim",radio:1,ok:v=>eq(v,1)}],
+  explain:"A check at every interface lifts accuracy but adds steps. A one-line reply is easier to read but may drop a detail the resident needs. Skipping a check saves a step but lets errors pass on. A reply template makes replies clearer at the cost of one more step. No change lifts all three for free, so you balance them near their targets and defend the balance."},
+ {id:"prop",mount:"a-prop",section:"Core · Part 3",title:"Follow the error downstream",sub:"Systems thinking · error propagation · "+CU_P,ico:"🧭",
+  fields:[{k:"pr1",radio:1,ok:v=>eq(v,2)},{k:"pr2",radio:1,ok:v=>eq(v,0)},{k:"pr3",radio:1,ok:v=>eq(v,1)}],
+  explain:"A wrong class propagates: the request goes to the wrong team and the reply promises the wrong action. That is why you check every hand-off – an early error is hard to trace from the end alone. Governance starts from the start: non-personal requests only, safety items to a named person, every outcome logged."},
+ {id:"ws1",mount:"a-ws1",section:"Core worksheet 1",title:"Defined problem and three targets",sub:"Worksheet 1 · set a target for each measure · "+SD_E,ico:"🎯",cls:"ws",
+  fields:TGT.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Good targets are measurable: at least 8 of 10 right at every stage, at most 4 steps per request on average, and every reply readable and actionable. ‘Feel accurate’, ‘as fast as possible’ and ‘friendly’ cannot be checked, and 10 of 10 at any cost ignores the trade-off. Every safety item goes to a named person."},
+ {id:"ws2",mount:"a-ws2",section:"Core worksheet 2–4",title:"Run the request cards: check each stage",sub:"Worksheet 2–4 · check every stage against the key · "+CE_E,ico:"📝",cls:"ws",
+  fields:WS2.flatMap(([k,,,st])=>st.map(([o,t],j)=>({k:k+STAGE_SUF[j],ok:v=>eq(v,o===t?"R":"W")}))),
+  explain:"Compare each output with the true key. Cards 1 and 3 are right at every stage. Card 2: the wrong class (Bench, not Lighting) makes the route and the reply wrong too – the error propagated. Card 4: the class is right, but a blocked exit should go to the duty officer, so the route and the reply are wrong. Card 5: only the reply is wrong – ‘Thank you for your message’ says nothing the resident can act on."},
+ {id:"ws3",mount:"a-ws3",section:"Core worksheet 4",title:"Read the three gauges",sub:"Worksheet 4 · compare each measure with its target · "+CE_P,ico:"🧮",cls:"ws",
+  fields:WS3.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Accuracy: 7 ÷ 10 = 70%, below the target of 8 of 10. Efficiency: 3.5 steps is within the budget of 4. Usability: 6 ÷ 10 = 60%, 40 points short of every reply. Usability is furthest from its target, so it is the weakest measure – aim your change there."},
+ {id:"ws4",mount:"a-ws4",section:"Core worksheet 5",title:"Responsible-use choices",sub:"Worksheet 5 · name a responsible choice · "+GE_P,ico:"🛡️",cls:"ws",
+  fields:RESP.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Responsible choices: request cards only (no names or numbers), every safety item to the named duty officer before any reply, and every outcome logged with who approved it. Sending replies automatically skips the human gate, home addresses are personal data, and skipping the key check trusts confidence instead of evidence."},
+ {id:"ws5",mount:"a-ws5",section:"Core worksheet 5",title:"Optimise one part, read the gauges again",sub:"Worksheet 5 · change one component for the weakest measure · "+SD_A,ico:"🔧",cls:"ws",
+  fields:[{k:"w5a",radio:1,ok:v=>eq(v,2)},{k:"w5b",ok:v=>eq(v,0)}],
+  explain:"Aim the change at the weakest measure: a reply template in the Draft tool fixes unclear replies. Then read all three gauges: usability rose from 60% to 90% (30 points), efficiency rose a little to 3.8 steps but stays within the budget of 4, and accuracy held – a sensible trade-off you can defend. A check at every interface would target accuracy instead, and removing the gate breaks the governance rules."},
+ {id:"unplug",mount:"a-unplug",section:"Core · Part 5",title:"Run the handler, on paper",sub:"Unplugged activity · targets and checks · "+CU_P,ico:"🗺️",
+  fields:[{k:"u0",radio:1,ok:v=>eq(v,2)},...UNPLUG.map(([k,,c])=>({k,box:1,ok:v=>v===!!c}))],
+  explain:"A full set of targets covers all three measures with numbers: 8 of 10 right, at most 4 steps, every reply readable and actionable. Check accuracy at every hand-off – Classify → Route, Route → Draft, and before the reply is sent. Tools that work well alone do not guarantee the connected system works."},
+ {id:"gate",mount:"a-gate",section:"Core · Part 5",title:"Human gate and weakest measure",sub:"Unplugged activity · route safety to a person · "+GE_A,ico:"🛡️",
+  fields:[...GATE.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),{k:"gw",ok:v=>eq(v,1)}],
+  explain:"A chained emergency exit and a leaning streetlight pole are safety items: a named, accountable person must act, because a wrong automatic reply could put someone in danger. Peeling paint and litter can be routed by the handler – and are still logged. On the paper run, accuracy (9 of 10) and usability (10 of 10) meet their targets, but 5 steps is over the budget of 4, so efficiency is the weakest measure."},
+ {id:"quiz",mount:"a-quiz",section:"Core · Part 5",title:"Quick check – bringing the strands together",sub:"Quick quiz · 3 questions and 3 true or false · "+CU_A,ico:"✅",cls:"quiz",
+  fields:[...QUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...TF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: Improving one measure often costs another, so you balance them and defend the balance. 2: A misclassify propagates – wrong route, wrong reply. 3: The gate means a person signs off sensitive outcomes before they are trusted or sent. True or false: you cannot max out all three at once (false); an early misclassify can spoil the whole result (true); the gate keeps a person accountable (true)."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+CE_P,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"End-to-end = every tool and interface in order on a full set. An optimisation log records the check and all three measures at each stage for every item. Error propagation = an early mistake spreading to later tools. Re-balance = adjust so a change to one measure does not wreck the other two. A constraint is a new criterion or risk rule that tests how the system adapts."},
+ {id:"ldata",mount:"a-ldata",section:"Lab · Part 1",title:"Which data problem is it?",sub:"Objective 1 · inspect the data first · "+CE_E,ico:"🗂️",
+  fields:LDATA.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"An empty category box is a missing value. A streetlight filed under Litter and a fire exit filed under Bench are wrong labels – they would send requests to the wrong team. A set that is nearly all litter, or all from one district on one morning, is not representative – the result would not tell you how the handler copes with benches, lighting, exits or other places."},
+ {id:"llog",mount:"a-llog",section:"Lab · Part 2",title:"Read the optimisation log",sub:"Objective 2 · total all three measures · "+CE_P,ico:"🧮",
+  fields:LLOG.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Classify: 13 ÷ 15 ≈ 87%. Route: 10 ÷ 15 ≈ 67%. Whole solution: only 10 of 15 cards were right at every stage, so accuracy is 67% – never higher than the weakest stage. Usability: 14 ÷ 15 ≈ 93%. Efficiency: 3.4 steps on average is within the budget of 4."},
+ {id:"lrel",mount:"a-lrel",section:"Lab · Part 2",title:"Accuracy or reliability?",sub:"Objective 2 · a count, or whether it holds · "+CU_A,ico:"⚖️",
+  fields:LREL.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Accuracy is right ÷ total on this one set (10 of 15 today). Reliability is whether that accuracy holds across a bigger, more varied set and a re-run – such as the same 67% on 30 new cards."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 3",title:"Order the optimise loop",sub:"Objective 3 · adapt and re-run · "+SD_A,ico:"🔁",
+  fields:LSTEPS.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"Find the weakest measure and the part behind it → make one aimed change → add one constraint → re-run only the affected cards through the governance gate → read all three gauges and re-balance. You adapt what you have; you do not rebuild from scratch."},
+ {id:"lcons",mount:"a-lcons",section:"Lab · Part 3",title:"A good constraint keeps the rules",sub:"Objective 3 · add a constraint responsibly · "+GE_A,ico:"🚧",
+  fields:LCONS.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"A risk rule (flag ambiguous requests for a person) and a second criterion (a response-time limit) are good constraints, and safety items still go to a named person. Names and phone numbers are personal data, skipping the gate when ‘90% sure’ removes accountability, and rebuilding from scratch is not adapting."},
+ {id:"lws1",mount:"a-lws1",section:"Lab worksheet 1",title:"Inspect the request set",sub:"Worksheet 1 · missing value, wrong label, representativeness · "+CE_E,ico:"🔍",cls:"ws",
+  fields:[{k:"ls1",ok:v=>eq(v,1)},{k:"ls2",ok:v=>eq(v,0)},{k:"ls3",radio:1,ok:v=>eq(v,2)}],
+  explain:"Row 4 (the bench) has no category – a missing value. Row 2 files a streetlight under Litter – a wrong label that would send it to the cleansing team. With 11 litter cards out of 15 and only one bench and one exit, the set is not representative, so results for the other request types cannot be trusted."},
+ {id:"lws2",mount:"a-lws2",section:"Lab worksheet 2–3",title:"Log the run and compare with the targets",sub:"Worksheet 2–3 · all three measures before any change · "+CE_P,ico:"🧮",cls:"ws",
+  fields:LWS2.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Accuracy 10 ÷ 15 ≈ 67% is below the 80% target. Efficiency 3.4 steps is within the 4-step budget. Usability 14 ÷ 15 ≈ 93% is just below the target of every reply – one reply was unclear."},
+ {id:"lws3",mount:"a-lws3",section:"Lab worksheet 4",title:"Weakest measure, and where the error spread",sub:"Worksheet 4 · trace the misses to their source · "+CU_P,ico:"🔎",cls:"ws",
+  fields:[{k:"lt1",radio:1,ok:v=>eq(v,1)},{k:"lt2",ok:v=>eq(v,1)}],
+  explain:"Accuracy is furthest from its target, and counting where each miss started shows Route caused 3 new misses (cards 6, 11 and 12) – more than Classify (2) – so Route is the part to optimise. The early errors on cards 4 and 9 began at Classify and flowed into the route and the reply."},
+ {id:"lws4",mount:"a-lws4",section:"Lab worksheet 5",title:"Optimise, add a constraint, re-balance",sub:"Worksheet 5 · re-run and re-balance · "+SD_A,ico:"🚧",cls:"ws",
+  fields:[{k:"lk",radio:1,ok:v=>eq(v,3)},{k:"lrb",ok:v=>eq(v,1)}],
+  explain:"The consistency check fixed the three Route misses, so accuracy rose from 67% to 87% (20 percentage points) – but the extra check pushed efficiency to 4.4 steps, over the budget. Re-balance by running the check only where Route gets confused: efficiency comes back to 3.8 steps and accuracy holds. Removing the gate or ignoring efficiency breaks the rules or the balance."},
+ {id:"lws5",mount:"a-lws5",section:"Lab worksheet 5",title:"Justify your trade-off",sub:"Worksheet 5 · justify the improvement with data · "+CE_A,ico:"💭",cls:"ws",
+  fields:[{k:"lr",ok:v=>eq(v,1)}],
+  explain:"A defensible justification names the weakest part (Route), the evidence before and after (67% to 87%, +20 points), and shows the other gauges stayed near target after re-balancing (3.8 steps, 93% clear replies) with the human gate kept. Maxing one measure, changing nothing, or removing the gate cannot be defended."},
+ {id:"lunplug",mount:"a-lunplug",section:"Lab · Part 5",title:"Prepare data, then measure",sub:"Unplugged activity · data rows, accuracy, what to re-check · "+CE_P,ico:"🧾",
+  fields:[...LPRINT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"lua",ok:v=>eq(v,1)},{k:"lun",radio:1,ok:v=>eq(v,2)}],
+  explain:"The bench row is fine; a streetlight under Litter is a wrong label; a blank category is a missing value. 11 ÷ 15 ≈ 73%. Optimise the weakest measure, then re-check all three gauges – lifting one must not lower the others. Shrinking the data set or removing the gate only hides problems."},
+ {id:"lquiz",mount:"a-lquiz",section:"Lab · Part 5",title:"Quick check – run it end-to-end",sub:"Quick quiz · 3 questions and 3 true or false · "+CE_A,ico:"✅",cls:"quiz",
+  fields:[...LQUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...LTF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: A data problem – a missing value or a wrong label – changes the result. 2: 11 of 15 is the accuracy on this set, a proportion right out of the total. 3: Check that lifting one measure did not lower the other two. True or false: accuracy on one set is not reliability (false); a missing value or wrong label can change the routing (true); you must keep watching the other two measures (false)."}
+];
+
+/* ---------- state ---------- */
+const KEY="g11-mw6-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#rules").innerHTML=`<header><small>Rule sheet · illustrative</small><b>The public-service request handler</b></header>
+<div class="in">
+  <p class="task"><b>Defined problem, targets and governance gate:</b> classify, route and answer ten public-service request cards. Targets: <b>accuracy</b> – at least 8 of 10 right at every stage; <b>efficiency</b> – at most 4 steps per request on average; <b>usability</b> – every reply readable and actionable. Every safety item goes to a named person (the duty officer). Request cards mention only benches, lighting, litter or exits – no people.</p>
+  <table class="t"><thead><tr><th>Category</th><th>Route to</th><th>Draft reply</th></tr></thead>
+  <tbody><tr><td>Bench</td><td>Parks maintenance</td><td>Repair booked within 5 working days</td></tr>
+  <tr><td>Lighting</td><td>Street-lighting team</td><td>Light checked within 48 hours</td></tr>
+  <tr><td>Litter</td><td>Cleansing team</td><td>Area cleaned within 24 hours</td></tr>
+  <tr><td>Exit, or any safety item</td><td>Human gate – duty officer</td><td>Hold – the duty officer decides</td></tr></tbody></table>
+</div>`;
+$("#dataset").innerHTML=`<header><small>Request set · illustrative sample</small><b>Eight of the fifteen request cards</b></header>
+<div class="in">
+  <table class="t"><thead><tr><th>Row</th><th>Request (no people)</th><th>Category</th></tr></thead>
+  <tbody>${DATASET.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>
+  <p class="note">The full set has 15 cards: <b>11 litter</b>, 2 lighting, 1 bench and 1 exit. A dash (–) means the box was left empty.</p>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+const selq=list=>list.map(([k,t,o,,order])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,o,"Choose…",order)}</div>`).join("");
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",ord(DEF_ORDER,i))}</div>`).join("");
+  case "strands":
+    return `<p class="how">Each strand has a job in the request handler. Match each strand to the job it does today.</p>`+
+      STRANDS.map((t,i)=>`<div class="pair" data-item="st${i}"><span class="t">${esc(t)}</span>${sel("st"+i,STRAND_JOBS,"Choose the job…",ord(STRAND_ORDER,i))}</div>`).join("");
+  case "order":
+    return `<p class="how">Put the handler's steps in order, from first to last (Figure 1).</p>`+
+      STEPS.map((_,i)=>`<div class="pair" data-item="o${i}"><span class="t">Step ${i+1}</span>${sel("o"+i,STEPS,"Choose the step…",ord(STEP_ORDER,i))}</div>`).join("");
+  case "measures":
+    return `<p class="how">How do you put a number on each measure?</p>`+
+      MEASURES.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,MEAS_OPTS,"Choose the measure…",[3,1,0,2])}</div>`).join("")+
+      `<div class="pair" data-item="mw" style="margin-top:10px"><span class="t">Why read all three, not just accuracy?</span>${sel("mw",MEAS_WHY,"Choose…",[0,2,1,3])}</div>`;
+  case "route":
+    return `<p class="how">Follow Figure 2 for each request card. Where does it end up?</p>`+
+      ROUTE.map(([k,e,t])=>`<div class="row" data-item="${k}"><span class="t">${e} ${esc(t)}</span>${seg(k,ROUTE_LABELS,ROUTE_VALS,t)}</div>`).join("");
+  case "tradeoff":
+    return `<p class="how">Each change moves more than one gauge. Choose the trade-off each change makes.</p>`+
+      TRADE.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,TRADE_OPTS,"Choose the trade-off…",TRADE_ORDER)}</div>`).join("")+
+      `<p class="q" id="q-taim">So what is the aim when you optimise?</p>${radios("taim",TAIM)}`;
+  case "prop":
+    return `<p class="q" id="q-pr1">1. Classify labels a report of a flickering streetlight as ‘Litter’. What happens next?</p>${radios("pr1",PROP1)}
+      <p class="q" id="q-pr2">2. Why check at every hand-off, not only at the end?</p>${radios("pr2",PROP2)}
+      <p class="q" id="q-pr3">3. When does governance start?</p>${radios("pr3",PROP3)}`;
+  case "ws1":
+    return `<p class="how">1. Write your defined problem and three targets at the top – one for each measure – and your governance gate. Choose the measurable target for each.</p>`+selq(TGT);
+  case "ws2":
+    return `<p class="how">2–4. Pass each request card through Classify → Route → Draft, then flip it to its true key. For each stage, compare what the tool said with the key and mark it right or wrong. <span class="illus">(Illustrative cards, using the rule sheet above.)</span></p>`+
+      WS2.map(([k,e,t,st],n)=>`<div class="scen"><p>${e} Card ${n+1} · ${esc(t)}</p><div class="st3">`+
+        st.map(([o,key],j)=>`<div class="cell" data-item="${k}${STAGE_SUF[j]}"><span><b>${STAGE_NAMES[j]}</b> said: ${esc(o)}<br><i>Key: ${esc(key)}</i></span>${seg(k+STAGE_SUF[j],["✓ Right","✗ Wrong"],["R","W"],STAGE_NAMES[j]+" for card "+(n+1))}</div>`).join("")+
+      `</div></div>`).join("");
+  case "ws3":
+    return `<p class="how">4. Read your three gauges for all ten cards and compare each with its target.</p>
+      <table class="t record"><thead><tr><th>Measure</th><th>Your run</th><th>Target</th></tr></thead><tbody><tr><td>Accuracy</td><td>7 of 10 right at every stage</td><td>at least 8 of 10</td></tr><tr><td>Efficiency</td><td>3.5 steps per request on average</td><td>at most 4 steps</td></tr><tr><td>Usability</td><td>6 of 10 replies readable and actionable</td><td>every reply</td></tr></tbody><caption>Illustrative totals for all ten cards.</caption></table>`+selq(WS3);
+  case "ws4":
+    return boxes(RESP,"5. Which of these are responsible-use choices for the handler? Tick every one. Leave the others unticked.");
+  case "ws5":
+    return `<p class="q" id="q-w5a">5. Your weakest measure is usability (6 of 10 clear replies). Which one change is best aimed at it?</p>${radios("w5a",W5A)}
+      <div class="pair" data-item="w5b" style="margin-top:10px"><span class="t">You re-run the affected cards: accuracy 7 of 10, efficiency 3.8 steps, usability 9 of 10. What do the three gauges show?</span>${sel("w5b",W5B,"Choose…",[2,0,3,1])}</div>`;
+  case "unplug":
+    return `<p class="q" id="q-u0">1. Which is a complete set of three target measures?</p>${radios("u0",TSET)}`+
+      boxes(UNPLUG,"2. A request runs through Classify → Route → Draft. Tick every place where you would check accuracy.");
+  case "gate":
+    return `<p class="how">3. Which requests must go through the human gate?</p>`+
+      GATE.map(([k,e,t])=>`<div class="row" data-item="${k}"><span class="t">${e} ${esc(t)}</span>${seg(k,["Human gate","Handler can route it"],["H","P"],t)}</div>`).join("")+
+      `<div class="pair" data-item="gw"><span class="t">Your paper run: accuracy 9 of 10 (target 8), 5 steps per request on average (budget 4), 10 of 10 clear replies. Your weakest measure is…</span>${sel("gw",WEAK,"Choose…",[0,2,1,3])}</div>`;
+  case "quiz":
+    return quiz(QUIZ,TF);
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",ord(LDEF_ORDER,i))}</div>`).join("");
+  case "ldata":
+    return `<p class="how">Which data check finds each problem – a missing value, a wrong label, or a skewed set that is not representative? <span class="illus">(Illustrative rows.)</span></p>`+
+      LDATA.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Missing value","Wrong label","Skewed set"],["M","W","R"],t)}</div>`).join("");
+  case "llog":
+    return `<p class="how">Use the optimisation log in Figure 4. Accuracy = right ÷ total, rounded to the nearest whole percent.</p>`+selq(LLOG);
+  case "lrel":
+    return `<p class="how">Is each statement about accuracy or reliability?</p>`+
+      LREL.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Accuracy","Reliability"],["A","R"],t)}</div>`).join("");
+  case "lorder":
+    return `<p class="how">Put the optimise loop in order, from first to last.</p>`+
+      LSTEPS.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">Step ${i+1}</span>${sel("lo"+i,LSTEPS,"Choose the step…",ord(LSTEP_ORDER,i))}</div>`).join("");
+  case "lcons":
+    return boxes(LCONS,"Which of these are good constraints or changes for the re-run – ones that keep the governance rules? Tick every one.");
+  case "lws1":
+    return `<p class="how">1. Inspect the request set above before the full run.</p>
+      <div class="pair" data-item="ls1"><span class="t">One missing value is in…</span>${sel("ls1",ROWS,"Choose…")}</div>
+      <div class="pair" data-item="ls2"><span class="t">One wrong label is in…</span>${sel("ls2",ROWS,"Choose…",[1,0,2])}</div>
+      <p class="q" id="q-ls3">Is the set representative?</p>${radios("ls3",REPR)}`;
+  case "lws2":
+    return `<p class="how">2–3. Run every card through the full solution and log each stage (Figure 4). Then total all three measures before any change and compare each with its target.</p>
+      <table class="t record"><thead><tr><th>Log entry</th><th>Before any change</th></tr></thead><tbody><tr><td>Classify accuracy</td><td>13 / 15</td></tr><tr><td>Route accuracy</td><td>10 / 15</td></tr><tr><td>Draft accuracy</td><td>10 / 15</td></tr><tr><td>Right at every stage</td><td>10 / 15</td></tr><tr><td>Efficiency</td><td>3.4 steps per request on average</td></tr><tr><td>Usability</td><td>14 of 15 replies clear</td></tr></tbody><caption>Illustrative optimisation log for 15 cards.</caption></table>`+selq(LWS2);
+  case "lws3":
+    return `<div class="quote">Full log (illustrative): Classify missed cards 4 and 9. Route also missed cards 6, 11 and 12, where the class was right. Card 14's reply was correct but unclear.</div>
+      <p class="q" id="q-lt1">4. Which measure is weakest, and which tool or interface is behind it?</p>${radios("lt1",LMOST)}
+      <div class="pair" data-item="lt2" style="margin-top:10px"><span class="t">Where did an early error propagate?</span>${sel("lt2",LPROP,"Choose…",[0,2,1,3])}</div>`;
+  case "lws4":
+    return `<p class="q" id="q-lk">5. You add a consistency check to Route (the team must handle that category on the rule sheet) and a risk rule (flag any ambiguous request for the duty officer), then re-run cards 6, 11 and 12. After: accuracy 13 of 15, efficiency 4.4 steps, usability 14 of 15. What happened?</p>${radios("lk",LCHANGE)}
+      <div class="pair" data-item="lrb" style="margin-top:10px"><span class="t">How do you re-balance, keeping the governance rules?</span>${sel("lrb",LREB,"Choose…",[0,2,1,3])}</div>`;
+  case "lws5":
+    return `<div class="pair" data-item="lr"><span class="t">My reflection: the trade-off I made, and why it is defensible</span>${sel("lr",LREFL,"Choose…",[0,3,1,2])}</div>`;
+  case "lunplug":
+    return `<p class="how">1. Inspect three printed rows (request · category · location).</p>`+
+      LPRINT.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["OK","Missing value","Wrong label"],["OK","M","W"],t)}</div>`).join("")+
+      `<div class="pair" data-item="lua"><span class="t">2. A run of 15 with 11 right at Classify. Accuracy =</span>${sel("lua",LACC,"Choose…",[0,2,1,3])}</div>
+      <p class="q" id="q-lun">3. What would you optimise, and what would you re-check afterwards?</p>${radios("lun",LNEXT)}`;
+  case "lquiz":
+    return quiz(LQUIZ,LTF);
+  }
+}
+
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 11 Main Course · Term 1 Week 6 (9 – 13 Nov 2026) · Core + Lab · Bringing the Strands Together</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
