@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Three-Stage Shape + Build, Trace and Test a Workflow – Grade 7 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#2563EB; --main2:#3B82F6; --deep:#1E3A8A;
+  --ink:#14213D; --muted:#52607A; --paper:#F5F8FE; --card:#FFFFFF;
+  --line:#D8E2F5; --soft:#EAF0FD;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#93C5FD,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#3B82F6);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#14213D,#2C4470)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#C7D8FA 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#F9FBFF;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FCFDFF}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#22B8E0)}
+.act-head.ws{background:linear-gradient(120deg,#14213D,#2F4A7A)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#EEF3FE}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #B8C9EE;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%232563EB' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #A7C0EE;border-radius:12px;padding:10px 14px;background:#F8FAFF;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(20,33,61,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#14213D;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.ideas{display:grid;gap:10px;margin:0 0 6px}
+.idea{display:flex;gap:12px;border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 14px}
+.idea .n{flex:none;width:30px;height:30px;border-radius:9px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.idea h4{margin:0 0 4px;font-size:16px}
+.idea p{margin:0;font-size:15.5px}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.rh:first-of-type{margin-top:0}
+.route .num{font-size:14px}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 12px;font-size:12px;line-height:1.3}
+  body.print-results .results .actions{display:none}
+  body.print-results main{padding:0}
+  body.print-results .results{margin:0}
+  body.print-results .results .big{font-size:48px;margin:8px 0 2px}
+  body.print-results .results .top{padding:14px 18px}
+}
+</style>
+</head>
+<body>
+
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 7 Main Course, Term 1</span><span class="pill">Week 2 Core + Week 2 Lab</span><span class="pill">📅 Teach: week of 5 – 9 Oct 2026</span></div>
+    <h1>The Three-Stage Shape + Build, Trace and Test a Workflow</h1>
+    <p>Every AI tool you use follows the same simple shape. First you find the three stages hiding inside it – input, process, output – so you can explain how any tool works. Then, in the Lab, you become the tester: build a small workflow, change only the input, and watch how the output responds.</p>
+    <p class="meta"><b>Strand:</b> AI Conceptual Understanding &nbsp;·&nbsp; <b>Role:</b> Systems Detectives &nbsp;·&nbsp; <b>Tools:</b> simulated-AI cards (Core) · Teachable Machine, teacher-operated (Lab)</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 7B"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 2 of Term 1 – Monday 5 to Friday 9 October 2026.</b> Boys 7: Wednesday 7 October · Girls 7: Friday 9 October. Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: The Three-Stage Shape</a>, then move on to the <a href="#lab">Lab: Build, Trace and Test a Workflow</a>.</div>
+  </div>
+  <div class="pn">
+    <div class="box"><small>◀ Previously</small>Last week you compared examples and traced differences to a stage – now you name all three stages exactly.</div>
+    <div class="box"><small>Next ▶</small>In Week 3 you become a builder, making a workflow to finish a real task and testing it before you trust it.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Name the stages.</b> I can name the three stages of an AI workflow – input, process and output – in order.</li>
+      <li><b>Trace a worked example.</b> I can trace a worked example and explain to a partner how the input became the output.</li>
+      <li><b>Use the words.</b> I can use the words input, process and output correctly when I talk about a solution.</li>
+      <li><b>Lab: build and trace.</b> I can build a workflow with an input, a process and an output, and trace one item through it.</li>
+      <li><b>Lab: change the input.</b> I can change the input, compare the two outputs, and explain why the output changed.</li>
+      <li><b>Lab: find the weak spot.</b> I can point to where an error could enter the workflow and say how I would check the output.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 2 Core · The Three-Stage Shape</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Order the stages</b><small>Input, then process, then output</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Trace a worked example</b><small>Follow one item through each stage</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>The process is not magic</b><small>Use the words correctly to explain</small></a></li>
+      <li><span class="num">4</span><a href="#p4"><b>Systems Detectives mission and worksheet</b><small>Trace the worked example · exit ticket</small></a></li>
+    </ol>
+    <h3 class="rh">Week 2 Lab · Build, Trace and Test a Workflow</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Build and trace</b><small>Follow one item through all three stages</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Change the input</b><small>Same process, new input, compare outputs</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Find the weak spot</b><small>Where an error could enter, then verify</small></a></li>
+      <li><span class="num">L4</span><a href="#l4"><b>Lab mission and worksheet</b><small>Teachable Machine log · exit ticket</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>The three-stage shape</h2><p>Why does the order matter?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>Last week you compared examples and traced differences to a stage. Today you name all three stages exactly.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">Input, process, output</h3>
+    <p>Look inside almost any AI tool and you find the same three stages. First an <b>input</b> goes in – the text you type, the photo you choose or a number. Then a <b>process</b> changes it – this is the part you cannot see. Last, an <b>output</b> comes out – a label, a guess or something new.</p>
+    <p>The arrows only point one way, so <b>the order matters</b>. A <b>classifier</b> is a workflow whose output is a label, like ‘desert’ or ‘cat’. For a classifier the same input always gives the same output – it is <b>deterministic</b>; the answer only changes if the input changes. (Generative tools that sample can vary, but that is a different kind of AI.) Once you can spot the three stages, you can explain how any tool works.</p>
+    <figure>
+      <svg viewBox="0 0 760 236" role="img" aria-labelledby="f1T">
+        <title id="f1T">One workflow, three stages. An input – text, a photo or a number – goes into a process, where a learned model changes it, and an output – a label, a guess or something new – comes out. The arrows point one way, so the order matters.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#14213D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#14213D">
+          <rect x="24" y="40" width="200" height="120" rx="14" fill="#EEF3FC" stroke="#2563EB" stroke-width="2.2"/>
+          <rect x="280" y="40" width="200" height="120" rx="14" fill="#DCE7FB" stroke="#1E3A8A" stroke-width="2.6"/>
+          <rect x="536" y="40" width="200" height="120" rx="14" fill="#E6F4FA" stroke="#0E7490" stroke-width="2.2"/>
+          <g font-size="13" font-weight="700" fill="#52607A" text-anchor="middle"><text x="124" y="28">STAGE 1</text><text x="380" y="28">STAGE 2</text><text x="636" y="28">STAGE 3</text></g>
+          <g font-size="19" font-weight="800" text-anchor="middle"><text x="124" y="76" fill="#2563EB">INPUT</text><text x="380" y="76" fill="#1E3A8A">PROCESS</text><text x="636" y="76" fill="#0E7490">OUTPUT</text></g>
+          <g font-size="14" text-anchor="middle">
+            <text x="124" y="106">what goes in:</text><text x="124" y="126">text, a photo</text><text x="124" y="144">or a number</text>
+            <text x="380" y="106">a learned model</text><text x="380" y="126">changes it – the</text><text x="380" y="144">part you cannot see</text>
+            <text x="636" y="106">what comes out:</text><text x="636" y="126">a label, a guess</text><text x="636" y="144">or something new</text>
+          </g>
+          <g stroke="#14213D" stroke-width="3" marker-end="url(#ah)"><path d="M226 100H276"/><path d="M482 100H532"/></g>
+          <rect x="130" y="184" width="500" height="38" rx="19" fill="#fff" stroke="#9DB3DC" stroke-width="1.6" stroke-dasharray="5 4"/>
+          <text x="380" y="208" font-size="14" font-weight="600" text-anchor="middle">→ arrows point one way, so the order matters</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> One workflow, three stages: input flows into process, process produces output – the arrows point one way.</figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-order"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Trace a worked example</h2><p>Which piece plays which part?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Follow one item through</h3>
+    <p><b>Tracing</b> means following one piece of data through each stage and naming what happens to it. Once you can spot the three stages, you can explain how any tool works – from a photo filter to a translation app.</p>
+    <p>Each part of a workflow has a job: the <b>input</b> is what goes in, the <b>process</b> is where a learned model does its work, the <b>model</b> is the patterns it learned from many examples, and the <b>output</b> is what comes back.</p>
+    <figure>
+      <svg viewBox="0 0 760 230" role="img" aria-labelledby="f2T">
+        <title id="f2T">Tracing one item: a photo of a sand dune goes in as the input, the process matches it against patterns the model learned from many labelled photos, and the label ‘desert’ comes out as the output. A dotted line follows the same item through all three stages.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#14213D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#14213D">
+          <text x="380" y="26" font-size="14" font-weight="800" text-anchor="middle" fill="#1E3A8A">TRACE ONE ITEM: A PHOTO-LABEL APP</text>
+          <rect x="24" y="44" width="200" height="118" rx="14" fill="#EEF3FC" stroke="#2563EB" stroke-width="2.2"/>
+          <rect x="280" y="44" width="200" height="118" rx="14" fill="#DCE7FB" stroke="#1E3A8A" stroke-width="2.6"/>
+          <rect x="536" y="44" width="200" height="118" rx="14" fill="#E6F4FA" stroke="#0E7490" stroke-width="2.2"/>
+          <g font-size="13" font-weight="800" text-anchor="middle"><text x="124" y="66" fill="#2563EB">1 · INPUT</text><text x="380" y="66" fill="#1E3A8A">2 · PROCESS</text><text x="636" y="66" fill="#0E7490">3 · OUTPUT</text></g>
+          <rect x="74" y="78" width="100" height="56" rx="6" fill="#FDF3DC" stroke="#C9A24A"/>
+          <path d="M74 120Q100 96 124 112T174 104V134H74z" fill="#E7C27A"/><circle cx="152" cy="92" r="7" fill="#F2B233"/>
+          <text x="124" y="152" font-size="13" text-anchor="middle">a photo of a dune</text>
+          <circle cx="330" cy="104" r="20" fill="none" stroke="#1E3A8A" stroke-width="5" stroke-dasharray="7 4"/><rect x="321" y="95" width="18" height="18" rx="3" fill="#1E3A8A"/>
+          <g font-size="13"><text x="360" y="98">matches it with</text><text x="360" y="116">learned patterns</text></g>
+          <text x="380" y="152" font-size="13" text-anchor="middle">learned from many photos</text>
+          <rect x="586" y="88" width="100" height="36" rx="18" fill="#0E7490"/><text x="636" y="112" font-size="15" font-weight="700" text-anchor="middle" fill="#fff">‘desert’</text>
+          <text x="636" y="152" font-size="13" text-anchor="middle">the label comes back</text>
+          <g stroke="#14213D" stroke-width="3" marker-end="url(#ah2)"><path d="M226 104H276"/><path d="M482 104H532"/></g>
+          <path d="M124 166V190H636V170" fill="none" stroke="#2563EB" stroke-width="2.2" stroke-dasharray="6 5" marker-end="url(#ah2)"/>
+          <text x="380" y="216" font-size="14" font-weight="600" text-anchor="middle" fill="#2563EB">to trace = follow the SAME item through every stage</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> To trace is to follow one piece of data through each stage in turn. <span class="illus">(Illustrative example.)</span></figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>AI apps used across the UAE – from Arabic-English translation to smart parking sensors – all follow input, process, output. Knowing the shape lets you understand and question the tools around you.</p></div>
+    <div id="a-match"></div>
+    <div id="a-case2"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head"><span class="pill">Core · Part 3 of 3</span><h2>The process is not magic</h2><p>So can you trust every output?</p></div>
+  <div class="part-body">
+    <h3 class="sub">It matches, it does not think</h3>
+    <p>The process stage can feel like magic, but it is not. Inside, a model has learned patterns from many past examples, and it uses those patterns to turn your input into a likely output. It does not think or understand – it <b>matches</b>.</p>
+    <p>That is why an input that is unusual or unclear can lead to a strange output, and why you <b>check the output</b> instead of trusting it straight away. Using the words input, process and output correctly helps you say exactly where a problem could enter.</p>
+    <div class="call violet"><h4>Cross-curricular link · Geography</h4><p>In Geography, a river system has the same three stages: rainfall enters as the <b>input</b>, erosion and transport are the <b>process</b>, and deposition of sediment is the <b>output</b>. Trace one water drop through the stages just as you trace one item of data through an AI workflow.</p></div>
+    <div id="a-truths"></div>
+    <div id="a-case3"></div>
+  </div>
+</section>
+
+<!-- CORE MISSION + WORKSHEET -->
+<section class="part" id="p4">
+  <div class="part-head dark"><span class="pill">Core · Hands-on mission · Worksheet</span><h2>Systems Detectives: trace the worked example</h2><p>Study a worked example and map how the input becomes an output. Label every stage, then explain the reasoning to your partner in order.</p></div>
+  <div class="part-body">
+    <div class="call amber"><h4>Tool for this week: unplugged simulated-AI cards (teacher-led)</h4><p>This is an unplugged concept lesson: the teacher runs a simulated-AI card routine on the board – no live tool, no logins, and no live typing by students. You reason about pre-prepared example outputs on the cards, and no personal data is used. The live tools (Teachable Machine and Scratch) are used in the matching Lab period. <b>No board demo?</b> Post an input card into a ‘process’ envelope holding a fixed rule, and it returns the matching output card – same three stages, no device.</p></div>
+    <h3 class="sub">Let's try it</h3>
+    <ol class="steps">
+      <li>Look at the worked example your teacher shows on the board (below).</li>
+      <li>Find what goes in and write it next to Input.</li>
+      <li>Describe what happens inside and write it next to Process.</li>
+      <li>Find what comes out and write it next to Output.</li>
+      <li>Tell your partner how the input became the output, in order.</li>
+      <li>Check one output against the task – does it actually answer it?</li>
+    </ol>
+    <div class="ecard" id="audit"></div>
+    <div id="a-trace"></div>
+    <div id="a-spot"></div>
+    <div id="a-think"></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+    <div class="call blue"><h4>Local connection · AI in the UAE</h4><p>Dubai and Abu Dhabi smart-service apps show the three-stage shape clearly: your request is the input, the system processes it, and a result comes back as the output.</p></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 2 Lab</span><h2>Build, Trace and Test a Workflow</h2><p>You already know the three stages. Today you become the tester – build a small workflow, change only the input, and watch how the output responds.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In the Core lesson you named input, process and output. Today you build one and test it in Teachable Machine.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Build and trace</h2><p>How do you build the three stages?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Trace one item</h3>
+    <p>Tracing means picking <b>one item</b> and following it all the way through. You watch it go in as the input, see what the process turns it into, and read what comes out as the output. Writing down each stage for the same item keeps you honest – it stops you from mixing up two different items. A clear trace is how testers prove they know what a workflow really does, not just what they hope it does.</p>
+    <p>In Teachable Machine the <b>example images</b> you add are the input, clicking <b>Train</b> is the process, and the <b>label with its confidence score</b> is the output. Building the stages in the right order is what lets you trace them.</p>
+    <figure>
+      <svg viewBox="0 0 760 270" role="img" aria-labelledby="f3T">
+        <title id="f3T">Teachable Machine: three classes, each with example images, feed into Train. Training builds the model. In Preview a new example is tested and the output is a label with a confidence bar, for example open hand 86 per cent.</title>
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#14213D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#14213D">
+          <g font-size="14" font-weight="800" text-anchor="middle"><text x="130" y="24" fill="#2563EB">INPUT · examples</text><text x="380" y="24" fill="#1E3A8A">PROCESS · train</text><text x="630" y="24" fill="#0E7490">OUTPUT · label</text></g>
+          <g stroke="#2563EB" stroke-width="1.8" fill="#EEF3FC">
+            <rect x="20" y="40" width="220" height="56" rx="10"/><rect x="20" y="106" width="220" height="56" rx="10"/><rect x="20" y="172" width="220" height="56" rx="10"/>
+          </g>
+          <g font-size="14" font-weight="700"><text x="34" y="64">Class 1: open hand</text><text x="34" y="130">Class 2: fist</text><text x="34" y="196">Class 3: thumbs-up</text></g>
+          <g fill="#9DB3DC"><rect x="34" y="72" width="16" height="14" rx="2"/><rect x="54" y="72" width="16" height="14" rx="2"/><rect x="74" y="72" width="16" height="14" rx="2"/><rect x="94" y="72" width="16" height="14" rx="2"/><rect x="34" y="138" width="16" height="14" rx="2"/><rect x="54" y="138" width="16" height="14" rx="2"/><rect x="74" y="138" width="16" height="14" rx="2"/><rect x="94" y="138" width="16" height="14" rx="2"/><rect x="34" y="204" width="16" height="14" rx="2"/><rect x="54" y="204" width="16" height="14" rx="2"/><rect x="74" y="204" width="16" height="14" rx="2"/><rect x="94" y="204" width="16" height="14" rx="2"/></g>
+          <g font-size="13" fill="#52607A"><text x="118" y="84">~15 images</text><text x="118" y="150">~15 images</text><text x="118" y="216">~15 images</text></g>
+          <g stroke="#14213D" stroke-width="2.4" fill="none" marker-end="url(#ah3)"><path d="M242 68L304 120"/><path d="M242 134H304"/><path d="M242 200L304 148"/><path d="M458 134H508"/></g>
+          <rect x="308" y="94" width="148" height="80" rx="14" fill="#1E3A8A"/>
+          <text x="382" y="128" font-size="18" font-weight="800" text-anchor="middle" fill="#fff">Train</text>
+          <text x="382" y="152" font-size="13" text-anchor="middle" fill="#DCE7FB">builds the model</text>
+          <rect x="512" y="40" width="236" height="188" rx="12" fill="#E6F4FA" stroke="#0E7490" stroke-width="2"/>
+          <text x="630" y="64" font-size="14" font-weight="700" text-anchor="middle">Preview (test)</text>
+          <rect x="526" y="76" width="208" height="40" rx="8" fill="#fff" stroke="#9DB3DC" stroke-dasharray="4 3"/>
+          <text x="630" y="101" font-size="13" text-anchor="middle">a new, unseen example</text>
+          <g font-size="13"><text x="526" y="142">open hand</text><text x="526" y="172">fist</text><text x="526" y="202">thumbs-up</text></g>
+          <g><rect x="610" y="131" width="124" height="14" rx="7" fill="#fff" stroke="#9DB3DC"/><rect x="610" y="131" width="107" height="14" rx="7" fill="#0E7490"/><rect x="610" y="161" width="124" height="14" rx="7" fill="#fff" stroke="#9DB3DC"/><rect x="610" y="161" width="12" height="14" rx="7" fill="#0E7490"/><rect x="610" y="191" width="124" height="14" rx="7" fill="#fff" stroke="#9DB3DC"/><rect x="610" y="191" width="6" height="14" rx="3" fill="#0E7490"/></g>
+          <text x="663" y="142" font-size="13" font-weight="700" text-anchor="middle" fill="#fff">86%</text>
+          <text x="380" y="258" font-size="14" font-weight="600" text-anchor="middle" fill="#52607A">The bars show HOW SURE it is – not WHY it chose that label</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> Teachable Machine: example images feed training, which produces a label with a confidence score. <span class="illus">(Illustrative numbers.)</span></figcaption>
+    </figure>
+    <div id="a-lorder"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Change the input</h2><p>Same process – so why did the output change?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Compare the outputs</h3>
+    <p>Here is the <b>tester's trick</b>: keep the process exactly the same and change <b>only the input</b>. Run it again and compare the two outputs. If the output changes, that tells you the process is responding to its input – which is what it should do. A small change in input can cause a big change in output.</p>
+    <p>Some actions change the output because they change the input the model sees; other actions, like re-running the very same image, leave the output the same.</p>
+    <figure>
+      <svg viewBox="0 0 760 250" role="img" aria-labelledby="f4T">
+        <title id="f4T">The tester's trick. Run 1: an open hand goes into the trained model and the label open hand comes out. Run 2: only the input changes to a fist; the same trained model, unchanged, gives the label fist. Change only the input, then compare the two outputs.</title>
+        <defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#14213D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#14213D">
+          <g font-size="14" font-weight="800" text-anchor="middle"><text x="130" y="24" fill="#2563EB">INPUT – CHANGED</text><text x="380" y="24" fill="#1E3A8A">PROCESS – SAME</text><text x="630" y="24" fill="#0E7490">OUTPUT – COMPARE</text></g>
+          <g font-size="13" font-weight="700" fill="#52607A"><text x="10" y="74">RUN 1</text><text x="10" y="174">RUN 2</text></g>
+          <rect x="68" y="40" width="172" height="60" rx="12" fill="#EEF3FC" stroke="#2563EB" stroke-width="2"/>
+          <rect x="68" y="140" width="172" height="60" rx="12" fill="#FFF3D6" stroke="#B45309" stroke-width="2.4"/>
+          <text x="154" y="76" font-size="15" font-weight="700" text-anchor="middle">an open hand</text>
+          <text x="154" y="176" font-size="15" font-weight="700" text-anchor="middle">a fist</text>
+          <rect x="300" y="40" width="160" height="160" rx="16" fill="#1E3A8A"/>
+          <text x="380" y="112" font-size="16" font-weight="800" text-anchor="middle" fill="#fff">trained model</text>
+          <text x="380" y="136" font-size="13" text-anchor="middle" fill="#DCE7FB">not changed</text>
+          <g stroke="#14213D" stroke-width="2.6" marker-end="url(#ah4)"><path d="M242 70H296"/><path d="M242 170H296"/><path d="M462 70H516"/><path d="M462 170H516"/></g>
+          <rect x="520" y="40" width="220" height="60" rx="12" fill="#E6F4FA" stroke="#0E7490" stroke-width="2"/>
+          <rect x="520" y="140" width="220" height="60" rx="12" fill="#FFF3D6" stroke="#B45309" stroke-width="2.4"/>
+          <text x="630" y="76" font-size="15" font-weight="700" text-anchor="middle">‘open hand’ 0.93</text>
+          <text x="630" y="176" font-size="15" font-weight="700" text-anchor="middle">‘fist’ 0.88</text>
+          <text x="380" y="234" font-size="14" font-weight="600" text-anchor="middle" fill="#B45309">change ONLY the input → compare the two outputs</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 4.</b> The tester's trick: keep the process the same and change only the input. <span class="illus">(Illustrative scores.)</span></figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Testers who change inputs on purpose find problems before real users do. This is how teams in the UAE check an AI service behaves fairly before it is switched on for the public.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Design &amp; Technology</h4><p>In Design and Technology, you test a product by changing only one variable – such as the material – while keeping the method the same, then compare the results. That is exactly the tester's trick: change only the input and compare how the output changes.</p></div>
+    <div id="a-lchange"></div>
+    <div id="a-lcase2"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head"><span class="pill">Lab · Part 3 of 3</span><h2>Find the weak spot</h2><p>Where could an error sneak in?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Black box and verify</h3>
+    <p>A <b>black box</b> means you can see the input and the output but not the reason inside. Teachable Machine shows a <b>confidence score</b> next to each label (for example 0.90 = 90%), but it does not tell you <b>why</b> it chose that label – and a high score is <b>not</b> proof the answer is correct.</p>
+    <p>That is why testers ask where an error could enter: a poor <b>input</b>, a <b>process</b> trained on too few or too narrow examples, or an <b>output</b> trusted without checking. Before you rely on any output, <b>verify</b> it against something you know is correct.</p>
+    <div id="a-lweak"></div>
+    <div id="a-lcase3"></div>
+  </div>
+</section>
+
+<!-- LAB MISSION + WORKSHEET -->
+<section class="part" id="l4">
+  <div class="part-head dark"><span class="pill">Lab · Hands-on mission · Worksheet</span><h2>Systems Detectives: build, change, verify</h2><p>Build a small three-stage workflow, trace one item through it, then change only the input and compare how the output behaves – ending with a verify step.</p></div>
+  <div class="part-body">
+    <div class="call amber"><h4>Tool for this week: Google Teachable Machine (teacher-operated)</h4><p>1. As a class, name the three classes (for example: open hand, fist, thumbs-up). 2. Direct the teacher to add about 15 balanced, varied example images to each class, using the webcam pointed at <b>objects or hands only</b>. 3. Click <b>Train</b> – these examples are the input, training is the process. 4. Test in Preview with a new, unseen example and read the confidence output aloud. 5. Trace the full input → process → output path on the board and label each stage. If it is wrong, add better or more examples, keep the classes balanced, and re-train.</p>
+      <p style="margin-top:8px"><b>Stay safe:</b> the teacher operates the tool on the board and students never log in. Teachable Machine trains in the browser and the samples stay on the teacher's device. Use objects, hand gestures or drawings only – never faces, voices or names. Clear the project at the end of the lesson. <b>No live demo?</b> Use the simulated-AI card deck: run a ‘human classifier’ – agree a rule from example cards, then test it on new cards.</p></div>
+    <h3 class="sub">Let's try it</h3>
+    <ol class="steps">
+      <li>Set up your three stages: input, process and output.</li>
+      <li>Send one item through and write what happens at each stage.</li>
+      <li>Change just the input and send it through again.</li>
+      <li>Compare the two outputs – what changed?</li>
+      <li>Explain why the output changed even though the process stayed the same.</li>
+      <li>Check one output against a trusted answer before you trust it.</li>
+    </ol>
+    <div class="ecard" id="tmpack"></div>
+    <div id="a-ltm"></div>
+    <div id="a-lcompare"></div>
+    <div id="a-lwrong"></div>
+    <div id="a-lsafe"></div>
+    <div class="call"><h4>Reflect · Responsible use &amp; human in the loop</h4><p>The AI tool does the sorting, but a person stays in charge. A person chooses the classes and examples, checks the outputs, and decides what to do with them.</p></div>
+    <div id="a-lhuman"></div>
+    <div id="a-lexit"></div>
+    <div id="a-lchal"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>You found the three stages – then built a workflow, tested it and found where an error could enter</h2></div>
+  <div class="part-body">
+    <h3 class="sub">Key ideas to remember</h3>
+    <ul class="keys">
+      <li>Every AI workflow has three stages in order: <b>input, process, output</b>.</li>
+      <li><b>Tracing</b> means following one item through each stage in turn.</li>
+      <li>The process <b>matches</b> learned patterns – it does not think or understand.</li>
+      <li>A wrong or unclear input can lead to a wrong output, so we check it.</li>
+      <li>Keep the process the same and <b>change only the input</b> to see what the process does.</li>
+      <li>A high <b>confidence score</b> is not proof the output is correct – an error can enter at the input, the process or the output, so <b>verify</b> before you trust.</li>
+    </ul>
+    <h3 class="sub">Glossary</h3>
+    <dl class="gloss">
+      <dt>Input</dt><dd>the data that goes in, such as text, a photo or a number.</dd>
+      <dt>Process</dt><dd>what happens inside: a trained model or set of rules changes the input.</dd>
+      <dt>Output</dt><dd>what comes out: a label, a prediction or new content.</dd>
+      <dt>Trace</dt><dd>to follow one piece of data through each stage.</dd>
+      <dt>Test</dt><dd>to try an input on purpose to learn how the workflow behaves.</dd>
+      <dt>Verify</dt><dd>to check an output against a trusted answer before trusting it.</dd>
+      <dt>Black box</dt><dd>a process whose inside we cannot see, only its inputs and outputs.</dd>
+      <dt>Confidence score</dt><dd>a number showing how sure the tool is – not proof it is correct.</dd>
+    </dl>
+    <p><b>What to do next:</b> in Week 3 you become a builder, making a workflow to finish a real task and testing it before you trust it.</p>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 7 · Main Course · Term 1 Week 2 (5 – 9 Oct 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- scope & sequence concepts (Grade 7, Week 2: AI Conceptual Understanding) ---------- */
+const CU_E="CU · AI follows steps: input, process, output";
+const CU_P="CU · how workflows structure AI systems";
+const CU_A="CU · how workflow design affects outcomes";
+const SD_E="SD · builds simple AI solutions with guided steps";
+const CE_E="CE · identifies issues in outputs or workflow steps";
+const GE_E="GE · identifies risks in AI-generated outputs";
+const GE_P="GE · bias, misuse and limitations in workflows";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["input","The data that goes into the system, such as text, a photo or a number."],
+  ["process","What happens inside: a trained model or set of rules changes the input."],
+  ["output","What comes out: a label, a prediction or a new piece of content."],
+  ["workflow","The stages joined together in order, from input to output."],
+  ["trace","To follow one piece of data through each stage."]
+];
+const DEF_ORDER = [3,0,4,1,2];
+const STAGES = ["📥 You give an input – text or a photo","⚙️ The process changes it using a learned model","🏷️ An output comes out – a label or a guess","🔎 You check the output against the task"];
+const STAGE_ORDER = [1,3,2,0];
+const CASE1 = ["Output the label first, then process, then input.","Process first, then the input, then the output box.","Input the photo, process it, output the label.","Just an input and an output, with no process box."];
+const MATCH = [["mt1","🏷️ Output",0],["mt2","📥 Input",1],["mt3","🧩 Model",2],["mt4","⚙️ Process",3]];
+const MATCH_OPTS = ["📤 a label the tool returns","🖼️ the photo you choose","📚 patterns learned from many examples","🧠 a learned model matches patterns"];
+const CASE2 = ["The app truly understands words like a human would.","The process matches patterns, so an odd input misleads it.","The output simply changed for no reason at all.","The phone screen was simply far too bright to read."];
+const TRUTHS = [
+  ["t1","🏆 A confident output is always correct.",0],
+  ["t2","➡️ The arrows point one way: input, then process, then output.",1],
+  ["t3","🧠 The process thinks and understands like a person.",0],
+  ["t4","🔁 The same input gives a classifier the same output.",1],
+  ["t5","🔀 The output comes before the input.",0],
+  ["t6","🌀 An unclear input can lead to a strange output.",1]
+];
+const CASE3 = ["Yes – outputs are always right once they are printed.","Yes – once it leaves the process it must be correct.","No – a screen can never really be trusted at all.","No – a wrong input can produce a wrong output too."];
+const TRACE_OPTS = ["The photo of a leaf from the school garden","Comparing the leaf's shape and colour with learned patterns","The label ‘ghaf tree’ shown on screen","The phone's battery level"];
+const EXPLAIN = ["The photo went in, so the model compared it with patterns it had learned and returned the closest label, ‘ghaf tree’","The app knew it was a ghaf tree because it understands plants like a gardener does","The label appeared first, so the app then took the photo to match it","The model made up the label without needing any input"];
+const SPOT = [
+  ["sp1","📷 A photo you choose in a filter app","I"],
+  ["sp2","✨ The app finds the face and smooths it","P"],
+  ["sp3","🖼️ The new smoothed photo appears","O"],
+  ["sp4","💬 The answer is read aloud to you","O"],
+  ["sp5","🎙️ A spoken question to a voice assistant","I"],
+  ["sp6","🔤 The model matches the sounds to words it learned","P"]
+];
+const THINK = ["Yes – the process always fixes a bad input","Yes – if the output looks neat, it must be right","No – the process can only work with what goes in, so I would check the input and verify the output","No – AI outputs are never useful, so I would ignore them"];
+const STG3 = ["the input","the process","the output"];
+const EX_IN = ["A photo you choose to send in","The label the app returns","The model's learned patterns","The smoothed photo on screen"];
+const CHAL = [
+  ["cg1","Each stage can be built and tested one at a time.",1],
+  ["cg2","Splitting it into stages makes the AI think like a person.",0],
+  ["cg3","If an output is wrong, you can check each stage to find where the problem entered.",1],
+  ["cg4","Once it is split into stages, outputs never need checking.",0],
+  ["cg5","You can improve one stage – for example a clearer input – without rebuilding everything.",1],
+  ["cg6","A workflow means the stages can run in any order.",0]
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["trace","To follow one item of data through input, process and output."],
+  ["compare","To run different inputs through the same process and see how the output changes."],
+  ["test","To try an input on purpose to learn how the workflow behaves."],
+  ["verify","To check an output against a trusted answer before trusting it."],
+  ["black box","A process whose inside we cannot see, only its inputs and outputs."],
+  ["confidence score","A number showing how sure the tool is (0.90 = 90%) – not proof the answer is correct."]
+];
+const LDEF_ORDER = [2,5,0,4,1,3];
+const LSTEPS = ["🏷️ Name the three classes","📥 Add example images – the input","⚙️ Click Train – the process","🎥 Show a new, unseen item","📊 Read the confidence output"];
+const LSTEP_ORDER = [2,4,0,3,1];
+const LCASE1 = ["The mouse pointer moving on the screen surface.","The confidence score printed at the very end.","Nothing goes in until the output appears.","The example images the model is trained on."];
+const LCHANGE = [
+  ["cx1","🥤 Point the webcam at a new, unseen object","Y"],
+  ["cx2","🔁 Re-run the exact same image, unchanged","N"],
+  ["cx3","🌫️ Give a blurry, unclear image","Y"],
+  ["cx4","🖱️ Move the mouse on the desk","N"],
+  ["cx5","✊ Show a fist instead of an open hand","Y"],
+  ["cx6","⏳ Wait five seconds before testing","N"]
+];
+const LCASE2 = ["The screen just refreshed itself for a moment there.","The process rewrote its own rules with no new input.","The input changed, so the output changed as well.","The output just changed by pure luck this one time."];
+const LWEAK = [
+  ["wk1","🎯 The webcam was pointed at the wrong object","I"],
+  ["wk2","🔢 Just three images per class – far too few","P"],
+  ["wk3","🚀 The answer was used without checking it","O"],
+  ["wk4","🌫️ Only blurry photos were added as examples","I"],
+  ["wk5","📊 The label was trusted without reading the score","O"],
+  ["wk6","📚 The model learned from a narrow set of examples","P"]
+];
+const LCASE3 = ["Yes – a score as high as 0.95 must be fully correct.","No – a high score is not proof, so verify it first.","Yes – confidence scores simply never lie at all.","No – a cup simply cannot be photographed at all."];
+const TL_STEPS = [["tl1","Adding about 15 example images to each class",0],["tl2","Clicking Train",1],["tl3","The label with its confidence score",2]];
+const TL_FAIR = ["Show it a new, unseen example","Show it one of its own training images again","Ask it whether it is sure","Rename the three classes"];
+const CM_IN = ["An open hand","A fist","A cup"];
+const CM_OUT = ["‘open hand’ 0.93","‘fist’ 0.88","‘fist’ 0.95"];
+const CM_WHY = ["Only the input changed, so the same trained model gave a different label","The model retrained itself between the two runs","The output changed by luck","The process was rewritten for the second run"];
+const LW_WHERE = ["The input – a cup is not one of the three classes the model was trained on","The screen – it was too bright","Nowhere – a 0.95 score means it is right","The mouse – it moved during the test"];
+const LW_CHECK = ["Compare the label with what was really shown – a trusted answer","Run the same cup photo again until the score goes up","Trust it, because the score is high","Ask the model whether it is sure"];
+const LSAFE = [
+  ["sf1","Use objects, hand gestures or drawings only",1],
+  ["sf2","Train it on classmates' faces so the test is realistic",0],
+  ["sf3","The teacher operates the tool; students never log in",1],
+  ["sf4","Record our voices saying the class names",0],
+  ["sf5","Keep the samples on the teacher's device",1],
+  ["sf6","Clear the project at the end of the lesson",1]
+];
+const HU1 = ["Nowhere – the AI did everything by itself","People chose the classes and examples, and checked each label against what was really shown","Only when the screen needed cleaning","The model decided which classes to learn"];
+const HU2 = ["No – a model works the same for everyone","Yes – so we should never use any AI at all","Yes – it may get smaller hands or dim rooms wrong, so test it with varied examples first","No – a high confidence score proves it is fair"];
+const LEXIT = ["The process secretly retrained itself","Outputs change at random","The process responds to its input – a different input gave the same process different evidence, so it gave a different output","The screen refreshed between the runs"];
+const LCHAL = [
+  ["lg1","Each small step has its own input, process and output that you can test on its own.",1],
+  ["lg2","A bigger system never needs testing once its steps are joined.",0],
+  ["lg3","The output of one step can become the input of the next.",1],
+  ["lg4","Small steps make the AI understand like a person.",0],
+  ["lg5","Steps can be joined in any order and still work.",0],
+  ["lg6","If the big system goes wrong, you can test each step to find where.",1]
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CU_E,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"Input is the data that goes in; the process is what happens inside, where a trained model or set of rules changes the input; the output is what comes out; a workflow is the stages joined in order; to trace is to follow one piece of data through each stage."},
+ {id:"order",mount:"a-order",section:"Core · Part 1",title:"Put the workflow in order",sub:"Objective 1 · name the stages in order · "+CU_E,ico:"🧭",
+  fields:STAGES.map((_,i)=>({k:"o"+i,ok:v=>eq(v,i)})),
+  explain:"Data flows one way: you give an input, the process changes it using a learned model, an output comes out – and then you check that output against the task."},
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"Case 1 · The Photo Label",sub:"Systems Detectives · "+CU_E,ico:"🕵️",cls:"case",
+  fields:[{k:"c1",radio:1,ok:v=>eq(v,2)}],
+  explain:"Input the photo, process it, output the label. There is nothing to process until an input has gone in, the process is the stage that turns the input into the output, and the arrows point one way."},
+ {id:"match",mount:"a-match",section:"Core · Part 2",title:"Match the part to its job",sub:"Objective 2 · trace a worked example · "+CU_P,ico:"🧷",
+  fields:MATCH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Output = a label the tool returns. Input = the photo you choose. Model = patterns learned from many examples. Process = where a learned model matches patterns."},
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"Case 2 · The Strange Output",sub:"Systems Detectives · "+CU_A,ico:"🔬",cls:"case",
+  fields:[{k:"c2",radio:1,ok:v=>eq(v,1)}],
+  explain:"The process matches patterns, so a rare, unclear input can lead to a strange output. The app does not understand words like a human; screen brightness does not change what the process returns; and there was a reason – the input was rare and unclear."},
+ {id:"truths",mount:"a-truths",section:"Core · Part 3",title:"Which statements are true?",sub:"Objective 3 · use the vocabulary correctly · "+CU_E,ico:"🧩",
+  fields:TRUTHS.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"True: the arrows point one way (input, process, output); the same input gives a classifier the same output; an unclear input can lead to a strange output. A confident output can still be wrong, the process matches rather than thinks, and the input always comes first."},
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"Case 3 · The Wrong Reading",sub:"Systems Detectives · "+CE_E,ico:"⚖️",cls:"case",
+  fields:[{k:"c3",radio:1,ok:v=>eq(v,3)}],
+  explain:"No – if the input is wrong, the output can be wrong too. Leaving the process does not make an output correct, and printed outputs can still be wrong. The screen is fine; the problem is the wrong input."},
+ {id:"trace",mount:"a-trace",section:"Core worksheet",title:"Trace the workflow",sub:"Worksheet · trace the worked example · "+CU_P,ico:"📝",cls:"ws",
+  fields:[0,1,2].map(i=>({k:"tr"+(i+1),ok:v=>eq(v,i)})).concat([{k:"tex",ok:v=>eq(v,0)}]),
+  explain:"Input: the photo of a leaf. Process: comparing the leaf's shape and colour with learned patterns. Output: the label ‘ghaf tree’. The photo went in, so the model compared it with what it had learned and returned the closest label – it matches, it does not understand plants."},
+ {id:"spot",mount:"a-spot",section:"Core worksheet",title:"Spot the stage",sub:"Worksheet · input, process or output? · "+CU_E,ico:"🔍",cls:"ws",
+  fields:SPOT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"The photo you choose and the spoken question go in (input). Finding the face and smoothing it, and matching sounds to words, happen inside (process). The smoothed photo and the answer read aloud come out (output)."},
+ {id:"think",mount:"a-think",section:"Core worksheet",title:"Think about it",sub:"Reflect · "+CE_E,ico:"💭",
+  fields:[{k:"th",radio:1,ok:v=>eq(v,2)}],
+  explain:"The process can only work with the input it is given – it cannot fix a bad input. So if the input were wrong, check the input and verify the output before you trust it. A neat-looking output proves nothing, but that does not make every output useless."},
+ {id:"exit",mount:"a-exit",section:"Core worksheet",title:"Exit ticket",sub:"Name the stages in order · "+CU_E,ico:"🎫",
+  fields:[{k:"x1",ok:v=>eq(v,0)},{k:"x2",ok:v=>eq(v,1)},{k:"x3",ok:v=>eq(v,2)},{k:"x4",ok:v=>eq(v,0)}],
+  explain:"First the input, then the process, last the output. A photo you choose to send in is an input; the label and the smoothed photo are outputs, and the learned patterns belong to the process."},
+ {id:"chal",mount:"a-chal",section:"Core worksheet",title:"Challenge ⭐ Why split it into stages?",sub:"Stretch · "+CU_P,ico:"⭐",
+  fields:CHAL.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"A workflow lets a designer build and test each stage on its own, find the stage where a problem entered, and improve one stage without rebuilding everything. Stages do not make the AI think, the order still matters, and outputs still need checking."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+CU_P,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"Trace = follow one item through. Compare = run different inputs through the same process. Test = try an input on purpose. Verify = check against a trusted answer. Black box = you see only inputs and outputs. Confidence score = how sure the tool is – not proof it is correct."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 1",title:"Build the workflow in order",sub:"Objective 1 · build and trace the three stages · "+SD_E,ico:"🪜",
+  fields:LSTEPS.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"Name the three classes, add example images (the input), click Train (the process), show a new, unseen item, then read the confidence output."},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"Case 1 · The Training Set",sub:"Systems Detectives · "+CU_E,ico:"🕵️",cls:"case",
+  fields:[{k:"lc1",radio:1,ok:v=>eq(v,3)}],
+  explain:"The example images are what goes in to train the model – the input. The confidence score comes out at the end (the output), and the mouse pointer is not data going into the model."},
+ {id:"lchange",mount:"a-lchange",section:"Lab · Part 2",title:"Will it change the output?",sub:"Objective 2 · compare outputs when the input changes · "+CU_A,ico:"🔀",
+  fields:LCHANGE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A new object, a blurry image and a fist instead of an open hand all change the input the model sees, so the output can change. Re-running the exact same image gives the same output, and moving the mouse or waiting does not change the input at all."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"Case 2 · The Changed Label",sub:"Systems Detectives · "+CU_A,ico:"🔬",cls:"case",
+  fields:[{k:"lc2",radio:1,ok:v=>eq(v,2)}],
+  explain:"The input changed, so the output changed – the process responded to a different input. The process did not rewrite itself, a refresh does not change the output, and it was not luck."},
+ {id:"lweak",mount:"a-lweak",section:"Lab · Part 3",title:"Where could the error enter?",sub:"Objective 3 · locate where an error could enter · "+CE_E,ico:"🩺",
+  fields:LWEAK.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Input: the webcam pointed at the wrong object, or only blurry photos added as examples – poor data going in. Process: just three images per class, or a narrow set of examples – the training had too little to learn from. Output: the answer used without checking, or the label trusted without reading the score."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"Case 3 · The High Score",sub:"Systems Detectives · "+CE_E,ico:"⚖️",cls:"case",
+  fields:[{k:"lc3",radio:1,ok:v=>eq(v,1)}],
+  explain:"No – confidence is not the same as being right. The model still labelled a cup as a fist with 0.95, so always verify the output first. Cups can be photographed; the issue is the wrong label."},
+ {id:"ltm",mount:"a-ltm",section:"Lab worksheet",title:"Tool log: build and trace in Teachable Machine",sub:"Worksheet · tool log · "+SD_E,ico:"🤖",cls:"ws",
+  fields:[...TL_STEPS.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"tl4",ok:v=>eq(v,0)}],
+  explain:"Adding example images is the input, clicking Train is the process, and the label with its confidence score is the output. A fair test uses a new, unseen example – showing it its own training images only tells you what it has already seen."},
+ {id:"lcompare",mount:"a-lcompare",section:"Lab worksheet",title:"Change the input, compare the output",sub:"Worksheet · same process, two inputs · "+CU_A,ico:"⚖️",cls:"ws",
+  fields:[{k:"cm1",ok:v=>eq(v,0)},{k:"cm2",ok:v=>eq(v,1)},{k:"cm3",ok:v=>eq(v,0)},{k:"cm4",ok:v=>eq(v,1)},{k:"cm5",ok:v=>eq(v,0)}],
+  explain:"Run 1: an open hand gave ‘open hand’ 0.93. Run 2: a fist gave ‘fist’ 0.88. Nothing was retrained between the runs – only the input changed, so the same trained model gave a different label."},
+ {id:"lwrong",mount:"a-lwrong",section:"Lab worksheet",title:"Where could it go wrong?",sub:"Worksheet · find the weak spot and verify · "+CE_E,ico:"🚩",cls:"ws",
+  fields:[{k:"lw1",ok:v=>eq(v,0)},{k:"lw2",ok:v=>eq(v,0)}],
+  explain:"The model only knows three classes, so any input – even a cup – gets one of those labels. The error entered at the input. Check by comparing the label with what was really shown; re-running or asking the model cannot prove it is right."},
+ {id:"lsafe",mount:"a-lsafe",section:"Lab worksheet",title:"Safety check",sub:"Stay safe · "+GE_E,ico:"🛡️",
+  fields:LSAFE.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Use objects, hand gestures or drawings only; the teacher operates the tool and students never log in; the samples stay on the teacher's device; clear the project at the end. Faces and voices are personal data – never use them."},
+ {id:"lhuman",mount:"a-lhuman",section:"Lab worksheet",title:"Human in the loop",sub:"Responsible use · "+GE_P,ico:"🧑‍🏫",
+  fields:[{k:"hu1",radio:1,ok:v=>eq(v,1)},{k:"hu2",radio:1,ok:v=>eq(v,2)}],
+  explain:"People chose the classes and examples and checked each label – the AI did not decide those. A model trained on a narrow set of examples can work worse for people or places it has not seen, so test it with varied examples before anyone relies on it."},
+ {id:"lexit",mount:"a-lexit",section:"Lab worksheet",title:"Exit ticket",sub:"Explain it · "+CU_A,ico:"🎫",
+  fields:[{k:"le",radio:1,ok:v=>eq(v,2)}],
+  explain:"The process did not change – it responds to its input. A different input gave the same process different evidence, so it gave a different output. Nothing retrained, refreshed or happened at random."},
+ {id:"lchal",mount:"a-lchal",section:"Lab worksheet",title:"Challenge ⭐ Small steps, bigger system",sub:"Stretch · "+CU_P,ico:"⭐",
+  fields:LCHAL.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Thinking in workflows lets you build a bigger system from small steps: each step has its own input, process and output you can test, the output of one step can become the input of the next, and when something goes wrong you can test each step to find where. The order still matters and the joined system still needs testing."}
+];
+/* ---------- state ---------- */
+const KEY="g7-mw2-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#audit").innerHTML=`<header><small>Worked example · simulated-AI card · illustrative</small><b>A plant-identifier app</b></header>
+<div class="in">
+  <p class="task"><b>On the board:</b> a student points the app at a photo of a leaf from the school garden. Inside, a model compares the leaf's shape and colour with patterns it learned from thousands of labelled plant photos. The app shows the label ‘ghaf tree’ – the UAE's national tree.</p>
+  <table class="t"><thead><tr><th>Stage</th><th>What happens in the worked example</th></tr></thead>
+  <tbody><tr><td>📥 Input</td><td>The photo of a leaf from the school garden</td></tr><tr><td>⚙️ Process</td><td>Compares the leaf's shape and colour with learned patterns and picks the closest match</td></tr><tr><td>📤 Output</td><td>The label ‘ghaf tree’ shown on screen</td></tr></tbody></table>
+</div>`;
+$("#tmpack").innerHTML=`<header><small>Test log · illustrative class results</small><b>Teachable Machine: hand-gesture sorter (open hand · fist · thumbs-up)</b></header>
+<div class="in">
+  <p class="task"><b>Set-up:</b> three classes, about 15 varied example images of hands in each (no faces, voices or names). The teacher clicked Train once. Nothing was retrained between these runs.</p>
+  <table class="t"><thead><tr><th>Run</th><th>Input shown</th><th>Output</th></tr></thead>
+  <tbody><tr><td>Run 1</td><td>An open hand</td><td>‘open hand’ 0.93</td></tr>
+  <tr><td>Run 2</td><td>A fist</td><td>‘fist’ 0.88</td></tr>
+  <tr><td>Run 3</td><td>A cup</td><td>‘fist’ 0.95</td></tr></tbody></table>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quote=t=>`<div class="quote">“${esc(t)}”</div>`;
+const IPO_SEG=(k,t)=>seg(k,["📥 Input","⚙️ Process","📤 Output"],["I","P","O"],t);
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "order":
+    return `<p class="how">Put the steps in the order data really flows through an AI workflow, from first to last.</p>`+
+      STAGES.map((_,i)=>`<div class="pair" data-item="o${i}"><span class="t">Step ${i+1}</span>${sel("o"+i,STAGES,"Choose the step…",STAGE_ORDER)}</div>`).join("");
+  case "case1":
+    return quote("An app looks at a photo and returns the label ‘desert’. Detective, which sequence shows the workflow in the correct order?")+`<p class="q" id="q-c1">Which order is right?</p>${radios("c1",CASE1)}`;
+  case "match":
+    return `<p class="how">Match each part of a workflow to what it does.</p>`+
+      MATCH.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,MATCH_OPTS,"Choose what it does…",[3,1,0,2])}</div>`).join("");
+  case "case2":
+    return quote("A translate app meets a rare, blurry word and returns a strange output. Detective, why did that happen?")+`<p class="q" id="q-c2">Why did the output turn strange?</p>${radios("c2",CASE2)}`;
+  case "truths":
+    return boxes(TRUTHS,"Tick the THREE true statements about an AI workflow. Leave the others unticked.");
+  case "case3":
+    return quote("A parking sensor gets a wrong input reading and passes it into its process. Detective, would you trust the output it returns?")+`<p class="q" id="q-c3">Would you trust the output?</p>${radios("c3",CASE3)}`;
+  case "trace":
+    return `<p class="how">Use the worked example above. Choose what happens at each stage, then explain the reasoning.</p>`+
+      ["📥 Input","⚙️ Process","📤 Output"].map((t,i)=>`<div class="pair" data-item="tr${i+1}"><span class="t">${t}</span>${sel("tr"+(i+1),TRACE_OPTS,"Choose…",[[2,0,3,1],[1,3,0,2],[3,0,2,1]][i])}</div>`).join("")+
+      `<div class="pair" data-item="tex" style="margin-top:10px"><span class="t">Explain the reasoning: how did the input become the output?</span>${sel("tex",EXPLAIN,"Choose…",[1,3,0,2])}</div>`;
+  case "spot":
+    return `<p class="how">Read each line and choose which stage it describes. The first three are from the worksheet; the last three are extra practice <span class="illus">(illustrative)</span>.</p>`+
+      SPOT.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${IPO_SEG(k,t)}</div>`).join("");
+  case "think":
+    return `<p class="q" id="q-th">If the input were wrong, would you still trust the output? Why or why not?</p>${radios("th",THINK)}`;
+  case "exit":
+    return `<p class="how">Name the three stages of an AI workflow in order, and give one example of an input.</p>
+      <p class="sent">First <span data-item="x1">${sel("x1",STG3,"stage 1…",[1,2,0])}</span>, then <span data-item="x2">${sel("x2",STG3,"stage 2…",[1,0,2])}</span>, and last <span data-item="x3">${sel("x3",STG3,"stage 3…",[0,2,1])}</span>.</p>
+      <div class="pair" data-item="x4"><span class="t">One example of an input</span>${sel("x4",EX_IN,"Choose…",[2,0,3,1])}</div>`;
+  case "chal":
+    return boxes(CHAL,"How does splitting an AI system into input, process and output stages help a designer build it and fix it? Tick the THREE best reasons. Leave the others unticked.");
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word. Flip the cards above if you need a reminder.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lorder":
+    return `<p class="how">Put the steps in the order you would run them to build and test the model.</p>`+
+      LSTEPS.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">Step ${i+1}</span>${sel("lo"+i,LSTEPS,"Choose the step…",LSTEP_ORDER)}</div>`).join("");
+  case "lcase1":
+    return quote("The class adds fifteen hand photos to each class and clicks Train. Detective, in this workflow, what is the input?")+`<p class="q" id="q-lc1">What is the input here?</p>${radios("lc1",LCASE1)}`;
+  case "lchange":
+    return `<p class="how">The process stays the same. For each action, decide: does it change the input the model sees (so the output can change), or does it leave the output the same?</p>`+
+      LCHANGE.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🔀 Changes the output","➖ Leaves it the same"],["Y","N"],t)}</div>`).join("");
+  case "lcase2":
+    return quote("The tester keeps the trained model exactly the same but shows it a new gesture, and the label changes. Detective, why did the output change?")+`<p class="q" id="q-lc2">Why did the output change?</p>${radios("lc2",LCASE2)}`;
+  case "lweak":
+    return `<p class="how">For each problem, choose the stage where the error enters the workflow.</p>`+
+      LWEAK.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${IPO_SEG(k,t)}</div>`).join("");
+  case "lcase3":
+    return quote("The model labels a cup ‘fist’ with a confidence score of 0.95. Detective, is that high score proof the answer is right?")+`<p class="q" id="q-lc3">Is the high score proof it is correct?</p>${radios("lc3",LCASE3)}`;
+  case "ltm":
+    return `<p class="how">Build and trace: which stage is each part of today's Teachable Machine workflow?</p>`+
+      TL_STEPS.map(([k,t],i)=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,["Input","Process","Output"],"Which stage?",[[1,0,2],[1,2,0],[0,1,2]][i])}</div>`).join("")+
+      `<div class="pair" data-item="tl4"><span class="t">Which step tests the model fairly?</span>${sel("tl4",TL_FAIR,"Choose…",[2,0,3,1])}</div>`;
+  case "lcompare":
+    return `<p class="how">Use runs 1 and 2 of the test log above. Keep the process the same, change only the input, and compare.</p>
+      <div class="scen"><p>First run</p><div class="two">
+        <div data-item="cm1"><span>Input</span>${sel("cm1",CM_IN,"Choose…",[2,0,1])}</div>
+        <div data-item="cm3"><span>Output</span>${sel("cm3",CM_OUT,"Choose…",[1,2,0])}</div></div></div>
+      <div class="scen"><p>Second run</p><div class="two">
+        <div data-item="cm2"><span>Input</span>${sel("cm2",CM_IN,"Choose…",[1,0,2])}</div>
+        <div data-item="cm4"><span>Output</span>${sel("cm4",CM_OUT,"Choose…",[2,0,1])}</div></div></div>
+      <div class="pair" data-item="cm5"><span class="t">What changed and why?</span>${sel("cm5",CM_WHY,"Choose…",[1,0,3,2])}</div>`;
+  case "lwrong":
+    return `<p class="how">Look at run 3 of the test log: a cup was labelled ‘fist’ with 0.95.</p>
+      <div class="pair" data-item="lw1"><span class="t">Where did the error enter?</span>${sel("lw1",LW_WHERE,"Choose…",[2,0,3,1])}</div>
+      <div class="pair" data-item="lw2"><span class="t">How would you check the output?</span>${sel("lw2",LW_CHECK,"Choose…",[3,2,0,1])}</div>`;
+  case "lsafe":
+    return boxes(LSAFE,"Safety check: tick every rule that keeps our Teachable Machine work safe. Leave the others unticked.");
+  case "lhuman":
+    return `<p class="q" id="q-hu1">1. Where did a person decide or check in today's workflow – not the AI?</p>${radios("hu1",HU1)}
+      <p class="q" id="q-hu2">2. Imagine the model was trained only on photos of large adult hands in a bright room <span class="illus">(illustrative)</span>. Could it treat someone unfairly – and what would you check?</p>${radios("hu2",HU2)}`;
+  case "lexit":
+    return `<p class="q" id="q-le">You changed the input and the output changed, but the process stayed the same. Why?</p>${radios("le",LEXIT)}`;
+  case "lchal":
+    return boxes(LCHAL,"A workflow is a set of stages joined in order. How does thinking in workflows let you build a bigger AI system out of small, testable steps? Tick the THREE best answers. Leave the others unticked.");
+  }
+  return "";
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 7 Main Course · Week 2 Core + Lab · The Three-Stage Shape + Build, Trace and Test a Workflow</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
