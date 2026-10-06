@@ -34,8 +34,9 @@ using the rules in `TIER_RULES` (same file – one place to change them):
 | Proficient (year target) | Emerging, plus 85%+ on 5+ activities or 70%+ on ⭐ challenge activities |
 | Advanced | Only recorded by a teacher (e.g. from the Week 10 showcase rubric) |
 
-Teachers can set any student's tier in a strand from their dashboard (marked ✎);
-it overrides the automatic tier until they set it back to Auto. Only the
+Teachers can set any student's tier in a strand by clicking it in their dashboard's
+student table and choosing from the menu (marked ✎); it overrides the automatic
+tier until they set it back to Automatic. Only the
 student's own teachers, SLT and owners can do this.
 
 ### Keeping the framework wording private
@@ -70,13 +71,65 @@ Finisher badge, completion and "this week's lesson"). When the Islamic holiday
 dates are confirmed, update `NO_SCHOOL` in that file. `node app/test/calendar.test.js`
 checks the rules.
 
+The timetable runs in two weeks: **Week 1 is Days 1–5 and Week 2 is Days 6–10**
+(Monday–Friday). The calendar shows the day number on every lesson.
+`AICAL.dayNumber`, `lessonDate`, `nextLesson` and `lostPeriods` in
+`school-calendar.js` give the day, a class's lesson dates and the periods it lost
+to holidays.
+
 ## Home page by role
 
 Opening the web app link with no page chosen takes **teachers, SLT and owners**
-to the **teaching calendar on today's date**. Teachers see it filtered to
-**My classes** (their sections in the Roster tab, tutors included); they can
-switch to any grade. Owners and SLT see all grades. **Students** land on the
-grade selector. The public site is unchanged.
+to the **teaching calendar on today's date**. **Students** land on their **home
+page**. The public site works the same way without signing in.
+
+- **Students** see this week's lesson with when their class has it, a *Start /
+  Continue / Review* button and their progress, then **My AI lessons**: every
+  lesson for their grade with their class's date, period and subject, a "No
+  school" line where a break falls, and the foundation lessons. There is no grade
+  picker – the app knows their class from the Roster. Their menu is *My lessons ·
+  My progress*; the calendar is not shown to students (opening it takes them to
+  their home page).
+- **Teachers, SLT and owners** opening *Lessons* get the grade chooser, starting on
+  their own classes' grade, with each class's day for every lesson.
+- **Visitors to the public site** choose a grade (remembered on that device) and
+  see "This week in every grade" until they do.
+
+## The teaching calendar (staff)
+
+- **My lessons** (teachers): every AI lesson of their own classes in order, week by
+  week – date, period, day number, class, subject and the lesson. Breaks show as
+  one line; a holiday inside a week says which class's lesson moves and to when; a
+  class pushed back by a holiday gets the reason once, then a short "one lesson
+  behind" tag. *Show earlier weeks* and *Show 4 more weeks* page through the year.
+- **Whole school** (SLT, owners and the public site; teachers can switch to it):
+  one timetable for the week, periods down and days across, each class a small
+  chip with its grade colour. Click a class for its lesson and links; filter by
+  grade; a notice warns when next week has a break.
+- Every lesson has **Open lesson**, **Copy link** and **Share to Classroom**. In
+  the app the link is the signed-in address of the lesson, so students' answers
+  save to their accounts. *Share to Classroom* opens Google Classroom's share page
+  with the link and title filled in – choose the class and post it as an
+  assignment, material or announcement.
+
+## The teacher dashboard
+
+- **Class tabs** (a class menu when there are more than six classes); **Class
+  lists** keeps its red counter; **More** holds the student view, *Save as PDF* and
+  *Download data (CSV)*.
+- **Tiles:** this week's lesson for each class (started and finished, or the day it
+  will be taught); **Need a nudge** – students who haven't finished the last lesson
+  their class was taught before this week, with *Show them*; the average first try
+  with its trend; the share of strand ratings at Emerging or above.
+- **Lesson overview** (newest first, the latest four with *Show all*) and
+  **Attainment by strand**, each with a *Table* view.
+- **The student table keeps the same seven columns all year:** student · the
+  lesson (each class's lesson this week, or any lesson picked from the menu) ·
+  lessons so far (count, one square per lesson, overall first try) · CU · SD · CE ·
+  GE. Badges are not in the teacher table; students still see theirs. Search,
+  filters (*Need a nudge*, *Not started*, *Finished*) and sorting sit above it, and
+  "Which activities need reteaching?" follows the picked lesson. On phones each
+  student becomes a card.
 
 ## The student dashboard
 
@@ -109,12 +162,12 @@ switched off). Teachers can only pick students in their own sections.
 
 ## English / العربية
 
-The dashboard and the teaching calendar have an **العربية / English** button.
+The home page, the dashboard and the teaching calendar have an **العربية / English** button in the top bar.
 Arabic switches the page to right-to-left and translates every label, button,
 tooltip, message and badge (dates in Arabic, numbers stay 0–9). The choice is
 remembered per user and also applies to the top bar on lesson pages. Lesson
 content, lesson titles, names and the official framework descriptors stay in
-English. Translations live in `src/dashboard.html` (`AR`), `calendar.html` (`AR`)
+English. Translations live in `src/dashboard.html` (`AR`), `calendar.html` (`AR`), `index.html` (`AR`)
 and `school-calendar.js` (holiday names) – please have an Arabic-speaking
 colleague check the wording.
 
@@ -252,9 +305,25 @@ clasp push
 and in the editor **Deploy → Manage deployments → Edit → New version**. The
 web app URL stays the same.
 
+`build.py` also rewrites **`lessons.js`** – the lesson list the home page and the
+calendar read, with each lesson's title taken from its own heading. **Commit
+`lessons.js` after adding a lesson** so the public site lists it too
+(`node app/test/site.test.js` checks it is up to date).
+
 Every lesson's `update()` function must start with the `LessonHooks` line –
 `build.py` refuses to build if a lesson is missing it, so scores can't silently
 stop saving.
+
+## The look: AISA brand and logos
+
+The home page, calendar and dashboard share `site.css` (DM Sans, deep royal purple
+`#21076C`, warm gold `#D8B664`, white pages) and one top bar with the school logo.
+The logos are in `assets/aisa/` (white versions on purple, purple on white, the
+seal in the footer, the purple lockup on printed reports). Apps Script cannot serve
+image or CSS files, so `build.py` inlines `site.css`, `lessons.js`,
+`school-calendar.js` and the logos into each page of the app. Lesson pages keep
+their own design and the black "Signed in as" strip, which shows when answers are
+saved.
 
 ## Privacy checklist
 
@@ -273,4 +342,7 @@ stop saving.
 `node app/test/calendar.test.js` checks the school-calendar rules.
 `node app/test/server.test.js` runs the server code against stand-ins for the
 Google services and checks the sign-in gate, role filtering, first-try
-protection and input cleaning. Run `python3 app/build.py` first.
+protection, input cleaning and which page each role lands on. Run
+`python3 app/build.py` first (with the Scope & Sequence file in `app/private/`,
+which the framework check needs). `node app/test/site.test.js` checks that
+`lessons.js` matches the lesson files.

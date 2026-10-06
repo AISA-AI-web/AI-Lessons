@@ -1,7 +1,8 @@
 # UX proposal – home page, teaching calendar, dashboard
 
-**Status: proposal only.** Nothing on the live pages has changed. This folder holds three clickable
-mockups and the thinking behind them. Open the HTML files in a browser from this folder.
+**Status: built (October 2026).** The design below is now in the live pages – `index.html`,
+`calendar.html` and `app/src/dashboard.html` – with the decisions from round 3 (see the end).
+This folder keeps the clickable mockups and the thinking behind them for reference.
 
 | Mockup | What it shows | Switches (black bar, bottom right) |
 |---|---|---|
@@ -91,13 +92,13 @@ fictional (`dashboard-data.js`); lessons after Grade 8 Week 2 are placeholders.
 
 ## Branding and logo files
 
-| File (`assets/`) | Size | Used for |
+| File (`assets/aisa/` at the top of the repository) | Size | Used for |
 |---|---|---|
-| `aisa-lockup-white.png` | 558×96 | Top bar on wide screens (shown 40 px high) |
-| `aisa-monogram-white.png` | 96×96 | Top bar on narrow screens |
-| `aisa-seal-white.png` | 256×256 | Purple footer |
-| `aisa-lockup-purple.png` | 558×96 | Printed report header (Save as PDF) |
-| `aisa-monogram-purple.png`, `favicon.png` | 96×96, 64×64 | Light backgrounds, browser tab |
+| `lockup-white.png` | 558×96 | Top bar on wide screens (shown 40 px high) |
+| `monogram-white.png` | 96×96 | Top bar on narrow screens |
+| `seal-white.png` | 256×256 | Purple footer |
+| `lockup-purple.png` | 558×96 | Printed report header (Save as PDF) |
+| `monogram-purple.png`, `favicon.png` | 96×96, 64×64 | Light backgrounds, browser tab |
 
 Made from the files provided (trimmed and resized only, colours untouched). The logos' own purple is a little bluer than the brand purple `#21076C`, so the white versions are used on purple.
 **For the build:** Apps Script cannot serve image files, so `build.py` should inline these PNGs as data URIs (about 75 KB as files, about 100 KB once inlined). The tab icon in the app needs a public URL (`setFaviconUrl`), for example the GitHub Pages copy.
@@ -124,3 +125,15 @@ Made from the files provided (trimmed and resized only, colours untouched). The 
 - **"Need a nudge":** is "hasn't finished their last lesson" the right rule?
 - **Badges column:** keep it in the teacher table, or show badges only in the student view?
 - **Words:** "Timetable Week 1 / 2" – or do teachers say A / B? Is "✓ Taught" right for past lessons?
+
+---
+
+## Round 3 – decisions, and what was built
+
+| Decision | In the live pages |
+|---|---|
+| Staff land on the calendar. | Unchanged: teachers, SLT and owners open the app on the teaching calendar. |
+| Teachers want to share a lesson with students. | Every lesson in the calendar has **Copy link** and **Share to Classroom** (Google Classroom's share page, with the signed-in lesson link and title filled in). |
+| "Need a nudge" = hasn't finished their last lesson. | The tile and the filter use that rule (the last lesson the class was taught before this week). |
+| No badges column in the teacher table. | Removed; the table has seven columns. Students still see their badges. |
+| Timetable words: Week 1 / Week 2, Days 1–5 and 6–10. | The calendar shows "Timetable Week 2 (Days 6–10)" and the day number on every lesson. |
