@@ -228,4 +228,13 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   at('2026-10-06');
   ok(open('new@aisa.sch.ae', 'grade-9/main-w2-l1') && !open('new@aisa.sch.ae', 'grade-9/main-w4-l1'), 'a student not yet on a class list follows the school timetable');
 }
+/* Google's HtmlService cuts script lines at '//', even inside a quoted web address, so no
+   inline script the app serves may contain '://' (build.py writes it as ':\/\/'). */
+{
+  const fs = require('fs'), path = require('path'), B = path.join(__dirname, '..', 'build');
+  const pages = ['dashboard.html', 'bridge.html'].concat(fs.readdirSync(path.join(B, 'site'), { recursive: true }).filter(f => /\.html$/.test(f)).map(f => path.join('site', f)));
+  const hits = pages.filter(p => [...fs.readFileSync(path.join(B, p), 'utf8').matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi)].some(m => m[1].includes('://')));
+  ok(hits.length === 0, 'no inline script contains :// (Google would cut the line): ' + hits.join(', '));
+  ok(fs.statSync(path.join(B, 'bridge.html')).size > 1000, 'the built bridge is not empty');
+}
 console.log('All ' + n + ' server checks passed');

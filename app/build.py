@@ -19,9 +19,18 @@ open(os.path.join(OUT, 'SchoolCalendar.js'), 'w', encoding='utf-8').write(
     open(os.path.join(ROOT, 'school-calendar.js'), encoding='utf-8').read())
 # Public lesson pages carry a small "not open yet" check; in the app the server does this.
 GATE_RE = re.compile(r'<script src="\.\./school-calendar\.js(?:\?v=\d+)?"></script><script src="\.\./lesson-gate\.js(?:\?v=\d+)?"></script>')
+# Google's HtmlService treats '//' in a script as the start of a comment, even inside a
+# quoted web address, and cuts the rest of the line ("Invalid or unexpected token").
+# Inside every inline script, write '://' as ':\/\/' – the same string to the browser.
+def protect_urls(html):
+    return re.sub(r'(<script(?![^>]*\bsrc=)[^>]*>)(.*?)(</script>)',
+                  lambda m: m.group(1) + m.group(2).replace('://', ':\\/\\/') + m.group(3), html, flags=re.S | re.I)
 dash = os.path.join(OUT, 'dashboard.html')
-dash_html = inline_calendar(open(dash, encoding='utf-8').read())
+dash_html = protect_urls(inline_calendar(open(dash, encoding='utf-8').read()))
 open(dash, 'w', encoding='utf-8').write(dash_html)
+bridge = os.path.join(OUT, 'bridge.html')
+bridge_html = protect_urls(open(bridge, encoding='utf-8').read())   # read first: opening for 'w' empties the file
+open(bridge, 'w', encoding='utf-8').write(bridge_html)
 catalog = []
 pages = ['index.html', 'calendar.html'] + sorted(glob.glob('grade-*/*.html', root_dir=ROOT))
 for p in pages:
@@ -32,7 +41,7 @@ for p in pages:
         raise SystemExit(f'{p}: no <head> tag for the sign-in bridge')
     if p.startswith('grade-') and 'LessonHooks' not in html:
         raise SystemExit(f'{p}: missing the LessonHooks line in update() – scores would not be saved')
-    open(dest, 'w', encoding='utf-8').write(inline_calendar(GATE_RE.sub('', html)))
+    open(dest, 'w', encoding='utf-8').write(protect_urls(inline_calendar(GATE_RE.sub('', html))))
     m = re.match(r'grade-(\d+)/(main|bridging)-w(\d+)', p)
     if m:
         t = re.search(r'<title>([^<]*)</title>', html)
