@@ -4,192 +4,250 @@
 <meta charset="utf-8">
 <base target="_top">
 <title>AI Curriculum Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
 <style>
-:root{
-  color-scheme:light;
-  --surface:#fcfcfb;--card:#ffffff;--line:#e4e3df;--grid:#ecebe7;
-  --text:#0b0b0b;--text-2:#52514e;--text-3:#76746f;
-  --series:#2a78d6;
-  --s100:#cde2fb;--s200:#9ec5f4;--s300:#6da7ec;--s400:#3987e5;--s500:#256abf;--s600:#184f95;
-  --good:#0ca30c;--warning:#fab219;--critical:#d03b3b;--focus:#1C64F2;
+/* Names the student view and class lists still use, mapped onto the AISA look (site.css). */
+:root{--surface:#fff;--card:#fff;--grid:#ECEAF2;--text:var(--ink);--text-2:var(--muted);--text-3:#76746f;--series:#413a9a;--warning:var(--warn);--critical:var(--crit)}
+button{font:inherit;font-size:14px;border:1.5px solid var(--line);border-radius:8px;padding:7px 10px;background:#fff;color:var(--ink);cursor:pointer;font-weight:600}
+button:hover{border-color:var(--purple)}
+button:disabled{opacity:.55;cursor:default}
+.loading{padding:60px 0;text-align:center;color:var(--muted)}
+.err{background:#fde7ec;color:#8a1330;border-radius:10px;padding:12px 14px;margin:20px 0}
+.empty{color:var(--muted);font-size:14px;padding:12px 0}
+.note{color:var(--muted-2);font-size:12.5px;margin:12px 0 30px}
+/* title bar, class tabs, menus */
+.titlebar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin:22px 0 16px}
+.titlebar h1{font-size:clamp(22px,3vw,28px)}
+.titlebar .spacer{flex:1}
+.titlebar .seg .n{opacity:.75;font-weight:500}
+.badge{display:inline-block;min-width:18px;padding:0 5px;border-radius:999px;background:var(--crit);color:#fff;font-size:12px;line-height:18px;text-align:center;margin-inline-start:6px}
+details.menu{position:relative}
+details.menu summary{list-style:none;cursor:pointer}
+details.menu summary::-webkit-details-marker{display:none}
+details.menu .popm{position:absolute;inset-inline-end:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;display:grid;gap:6px;min-width:260px;z-index:6;box-shadow:0 10px 30px rgba(33,7,108,.14)}
+details.menu .popm label{font-size:12px;font-weight:700;color:var(--muted)}
+details.menu .popm button{text-align:start;border:0;padding:8px 10px;border-radius:8px}
+details.menu .popm button:hover{background:var(--tint)}
+/* stat tiles */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 14px}
+@media (max-width:900px){.tiles{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:480px){.tiles{grid-template-columns:1fr}}
+.tile{background:#fff;border:1px solid var(--line-2);border-top:4px solid var(--gold);border-radius:12px;padding:12px 14px;min-width:0}
+.tile>small{display:block;color:var(--muted);font-size:13px;font-weight:700}
+.tile>b{display:block;font-size:30px;line-height:1.15;color:var(--purple);letter-spacing:-.01em;margin:2px 0}
+.tile>b.t{font-size:16px;line-height:1.3;color:var(--ink);margin:4px 0 6px}
+.tile span{color:var(--muted);font-size:13px;display:block;line-height:1.45}
+.tile span b{color:var(--ink)}
+.tile .val{display:flex;align-items:center;gap:12px}
+.tile .val b{font-size:30px;line-height:1.15;color:var(--purple)}
+.tile a{font-weight:700}
+/* chart cards */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 22px}
+@media (max-width:860px){.grid2{grid-template-columns:1fr}}
+.card .hd{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.mini-seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:2px;flex:none}
+.mini-seg button{border:0;border-radius:999px;padding:3px 10px;font-size:12.5px;color:var(--muted);background:none}
+.mini-seg button[aria-pressed="true"]{background:var(--tint);color:var(--purple)}
+.rows{display:grid;gap:12px}
+.row{display:grid;grid-template-columns:minmax(110px,32%) 1fr 48px;gap:10px;align-items:center;font-size:13px}
+.row .lab b{display:block;color:var(--ink);font-size:13.5px}
+.row .lab small{display:block;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .lab .isnow{color:var(--purple);font-weight:700}
+.stack{display:flex;height:22px;gap:2px;background:#fff;direction:ltr}
+.seg2{display:grid;place-items:center;font-size:12px;font-weight:700;min-width:2px;cursor:default}
+.seg2:first-child{border-radius:4px 0 0 4px}.seg2:last-child{border-radius:0 4px 4px 0}.seg2:only-child{border-radius:4px}
+.seg2:hover,.seg2:focus-visible{filter:brightness(1.08)}
+.s-done{background:var(--good);color:#1A1A1A}.s-doing{background:var(--warn);color:#1A1A1A}.s-todo{background:var(--crit);color:#fff}.s-later{background:var(--none);color:var(--muted)}
+.tN{background:var(--t0);color:var(--muted)}.tW{background:var(--t1);color:#1A1A1A}.tO{background:var(--t2);color:#1A1A1A}.tE{background:var(--t3);color:#fff}.tP{background:var(--t4);color:#fff}.tA{background:var(--t5);color:#fff}
+.row .num{font-weight:700;color:var(--ink);text-align:end;font-size:14.5px;font-variant-numeric:tabular-nums}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:12.5px;color:var(--muted);margin:12px 0 0}
+.legend i{display:inline-block;width:14px;height:12px;border-radius:3px;vertical-align:-1px;margin-inline-end:5px}
+.morelink{font:inherit;font-size:13px;font-weight:700;color:var(--purple);background:none;border:0;padding:0;margin-top:10px;text-decoration:underline}
+table.mini{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+table.mini th,table.mini td{padding:5px 6px;border-bottom:1px solid var(--line-2);text-align:end}
+table.mini th:first-child,table.mini td:first-child{text-align:start}
+table.mini th{font-size:11.5px;color:var(--muted);font-weight:700}
+/* students */
+.stuhead{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin:0 0 10px}
+.stuhead h2{font-size:19px;margin-inline-end:auto}
+.stuhead h2 small{color:var(--muted);font-weight:500;font-size:14px}
+.stuhead input[type=search]{min-width:180px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+.chips button{font-size:13px;border-radius:999px;padding:4px 11px;color:var(--muted)}
+.chips button[aria-pressed="true"]{background:var(--tint);border-color:var(--purple);color:var(--purple)}
+.chips button i{font-style:normal;font-weight:700;color:var(--purple);margin-inline-start:5px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line-2);border-radius:12px;background:#fff}
+table.stable{border-collapse:separate;border-spacing:0;width:100%;table-layout:fixed;font-size:13.5px}
+table.stable{min-width:1022px} table.stable col.c-name{width:auto} table.stable col.c-les{width:176px} table.stable col.c-sofar{width:180px} table.stable col.c-str{width:124px}   /* the name column takes the leftover, so the strand columns stay equal */
+table.stable th,table.stable td{padding:8px 10px;border-bottom:1px solid var(--line-2);text-align:start;vertical-align:middle}
+table.stable th{position:sticky;top:0;background:var(--tint);color:var(--purple);font-size:12px;font-weight:700;line-height:1.25;z-index:2}
+table.stable th small{display:block;font-weight:500;color:var(--muted);font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+table.stable th.str,table.stable td.str{text-align:center;padding-left:6px;padding-right:6px}
+table.stable th.grp{text-align:center;border-bottom:0;padding-bottom:0;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+table.stable .name{position:sticky;inset-inline-start:0;background:#fff;z-index:1;box-shadow:1px 0 0 var(--line-2)}
+table.stable th.name{background:var(--tint);z-index:3}
+table.stable tr:last-child td{border-bottom:0}
+table.stable tbody tr:hover td{background:#FBFAFE}
+.stu{background:none;border:0;padding:0;color:var(--ink);font:inherit;font-weight:700;text-align:start;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stu:hover{text-decoration-color:currentColor}
+td.name small{display:block;color:var(--muted);font-size:12px}
+.ls{display:inline-flex;align-items:center;gap:6px;font-weight:700;border-radius:999px;padding:2px 10px 2px 8px;line-height:1.5;font-variant-numeric:tabular-nums}
+.ls i{width:10px;height:10px;border-radius:50%;flex:none;box-sizing:border-box}
+.ls.done{background:#E9F6E9}.ls.done i{background:var(--good)}
+.ls.doing{background:#FFF4D6}.ls.doing i{border:2px solid var(--warn);background:linear-gradient(90deg,var(--warn) 50%,#fff 50%)}
+.ls.todo{background:#FBE9E9}.ls.todo i{border:2px solid var(--crit);background:#fff}
+.ls.later{background:none;border:1.5px dashed var(--line);color:var(--muted);font-weight:500}
+td .sm{display:block;font-size:12px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sofar b{color:var(--ink)}
+.strip{display:flex;gap:3px;margin:5px 0 3px;direction:ltr;align-items:center}
+.strip i{width:11px;height:11px;border-radius:3px;box-sizing:border-box}
+.strip i.done{background:var(--good)}
+.strip i.doing{border:2px solid var(--warn);background:linear-gradient(90deg,var(--warn) 50%,#fff 50%)}
+.strip i.todo{border:2px solid var(--crit);background:#fff}
+.strip small{font-size:11px;color:var(--muted)}
+.tchip{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:34px;border:0;border-radius:8px;font-size:12px;font-weight:700;line-height:1.1;text-align:center;padding:0 6px}
+button.tchip{cursor:pointer}
+button.tchip:hover{filter:brightness(1.07)}
+.tchip .pen{position:absolute;top:2px;inset-inline-end:4px;font-size:10px;opacity:.9}
+/* tier menu */
+.tmenu{position:absolute;z-index:35;width:260px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 40px rgba(33,7,108,.18);padding:10px}
+.tmenu p{margin:2px 4px 8px;font-size:13px;color:var(--muted)}
+.tmenu p b{color:var(--ink);font-size:14px}
+.tmenu button{display:flex;align-items:center;gap:8px;width:100%;font-size:14px;text-align:start;border:0;border-radius:8px;padding:7px 8px;font-weight:500}
+.tmenu button:hover{background:var(--tint)}
+.tmenu button i{width:14px;height:14px;border-radius:4px;flex:none}
+.tmenu button[aria-checked="true"]{font-weight:700}
+.tmenu button[aria-checked="true"]::after{content:"✓";margin-inline-start:auto;color:var(--purple)}
+.tmenu hr{border:0;border-top:1px solid var(--line-2);margin:6px 0}
+@media (max-width:720px){
+  .tablewrap{border:0;background:none;overflow:visible}
+  table.stable,table.stable tbody,table.stable tr,table.stable td{display:block} table.stable thead,table.stable colgroup{display:none}
+  table.stable{min-width:0}
+  table.stable tr{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 8px;background:#fff;border:1px solid var(--line-2);border-radius:12px;padding:12px;margin:0 0 8px}
+  table.stable td{border:0;padding:0} table.stable td.name{position:static;box-shadow:none}
+  table.stable tbody tr:hover td{background:none}
+  td.name{grid-column:1/-1} td.les,td.sofar{grid-column:span 2}
+  td[data-l]::before{content:attr(data-l);display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;margin-bottom:4px;text-align:start}
+  .tchip{font-size:11px;padding:0 3px;height:36px}
 }
-@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){
-  color-scheme:dark;--surface:#1a1a19;--card:#232322;--line:#3a3936;--grid:#2e2d2b;
-  --text:#ffffff;--text-2:#c3c2b7;--text-3:#9a988f;--series:#3987e5;}}
-:root[data-theme="dark"]{color-scheme:dark;--surface:#1a1a19;--card:#232322;--line:#3a3936;--grid:#2e2d2b;--text:#ffffff;--text-2:#c3c2b7;--text-3:#9a988f;--series:#3987e5}
-*,*::before,*::after{box-sizing:border-box}
-body{margin:0;background:var(--surface);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
-:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
-header{padding:22px 0 8px;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:flex-end;justify-content:space-between}
-h1{margin:0;font-size:clamp(24px,4vw,32px);letter-spacing:-.01em}
-.who{color:var(--text-2);font-size:14px}
-.who a{color:var(--series);font-weight:600}
-.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin:12px 0 16px}
-.filters label{display:block;font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:3px}
-select{max-width:100%}
-.filters>div{min-width:0;max-width:100%}
-select,button{font:inherit;font-size:14px;border:1.5px solid var(--line);border-radius:8px;padding:7px 10px;background:var(--card);color:var(--text)}
-button{cursor:pointer;font-weight:600}
-button:hover{border-color:var(--text-2)}
-.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 16px}
-@media (max-width:760px){.tiles{grid-template-columns:repeat(2,1fr)}}
-.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
-.tile small{display:block;color:var(--text-2);font-size:12.5px;font-weight:600}
-.tile b{display:block;font-size:30px;line-height:1.15;letter-spacing:-.02em}
-.tile span{color:var(--text-3);font-size:12.5px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 16px}
-@media (max-width:900px){.grid2{grid-template-columns:1fr}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
-.card h2{margin:0 0 2px;font-size:16px}
-.card p.sub{margin:0 0 10px;color:var(--text-2);font-size:13px}
+/* reteach chart and the student's own view (unchanged parts, AISA colours) */
 .hbars{display:grid;gap:6px}
 .hb{display:grid;grid-template-columns:minmax(120px,38%) 1fr;gap:10px;align-items:center;font-size:13px}
-.hb .lab{color:var(--text-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hb .track{position:relative;height:22px;background:repeating-linear-gradient(90deg,transparent 0 calc(25% - 1px),var(--grid) calc(25% - 1px) 25%)}
+.hb .lab{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb .track{position:relative;height:22px;background:repeating-linear-gradient(90deg,transparent 0 calc(25% - 1px),var(--grid) calc(25% - 1px) 25%);direction:ltr}
 .hb .bar{position:absolute;left:0;top:3px;bottom:3px;background:var(--series);border-radius:0 4px 4px 0;min-width:2px}
-.hb .val{position:absolute;top:1px;font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;padding-left:6px}
+.hb .val{position:absolute;top:1px;font-size:12.5px;font-weight:600;color:var(--ink);white-space:nowrap;padding-left:6px}
 .hb .val.in{color:#fff;padding:0 6px 0 0;transform:translateX(-100%)}
 .hb .hit{position:absolute;inset:-3px 0;cursor:default}
 .axis{display:grid;grid-template-columns:minmax(120px,38%) 1fr;gap:10px;font-size:11px;color:var(--text-3)}
-.axis div:last-child{display:flex;justify-content:space-between}
-.empty{color:var(--text-2);font-size:14px;padding:12px 0}
-.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
-table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px}
-th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
-th{position:sticky;top:0;background:var(--card);font-size:12px;color:var(--text-2);font-weight:700;vertical-align:bottom}
-th.l{max-width:140px;white-space:normal;line-height:1.25}
-td.c{text-align:center;padding:4px}
-.cell{display:inline-block;min-width:76px;border-radius:6px;padding:3px 6px;font-weight:600;line-height:1.3}
-.cell small{display:block;font-weight:400;font-size:11px;opacity:.9}
-.cell.none{color:var(--text-3);font-weight:400;border:1px dashed var(--line)}
-.legend{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:12.5px;color:var(--text-2);margin:10px 0 0}
-.legend i{display:inline-block;width:22px;height:12px;border-radius:3px;vertical-align:middle;margin-right:4px}
-.status{display:inline-flex;align-items:center;gap:4px;font-weight:600;font-size:12.5px}
-.tip{position:fixed;z-index:9;pointer-events:none;background:var(--text);color:var(--surface);font-size:12.5px;padding:6px 9px;border-radius:7px;max-width:280px;display:none;line-height:1.35}
-#app>section.card,#body>section.card{margin:0 0 16px}
+.axis div:last-child{display:flex;justify-content:space-between;direction:ltr}
+#app>section.card,#body>section.card,#tbl+section.card{margin:0 0 16px}
 .tier{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 10px;white-space:nowrap}
-.tier.tN{background:var(--grid);color:var(--text-2)}.tier.tW{background:var(--s100);color:#0b0b0b}.tier.tO{background:var(--s200);color:#0b0b0b}.tier.tE{background:var(--s300);color:#0b0b0b}
-.tier.tP{background:var(--s500);color:#fff}.tier.tA{background:var(--s600);color:#fff}
-select.jsel{font-size:12px;padding:3px 4px;border-radius:999px;font-weight:700;width:146px}
-select.jsel.tW{background:var(--s100);color:#0b0b0b}select.jsel.tO{background:var(--s200);color:#0b0b0b}select.jsel.tE{background:var(--s300);color:#0b0b0b}select.jsel.tP{background:var(--s500);color:#fff}select.jsel.tA{background:var(--s600);color:#fff}
+.tier.tN{background:var(--t0);color:var(--muted)}
 .strands{display:grid;gap:12px}
 .strand{display:grid;grid-template-columns:minmax(180px,30%) 1fr auto;gap:6px 14px;align-items:center;padding:10px 0;border-top:1px solid var(--grid)}
 .strand:first-child{border-top:0}
-.strand .sh small{display:block;color:var(--text-2);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
-.strand .sbar .track{position:relative;height:12px;background:var(--grid);border-radius:6px;overflow:hidden}
+.strand .sh small{display:block;color:var(--muted);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.strand .sbar .track{position:relative;height:12px;background:var(--grid);border-radius:6px;overflow:hidden;direction:ltr}
 .strand .sbar .bar{position:absolute;inset:0 auto 0 0;background:var(--series);border-radius:0 6px 6px 0}
-.strand .sbar span{font-size:12.5px;color:var(--text-2)}
-.strand .next{grid-column:1/-1;margin:0;font-size:13.5px;color:var(--text-2)}
+.strand .sbar span{font-size:12.5px;color:var(--muted)}
+.strand .next{grid-column:1/-1;margin:0;font-size:13.5px;color:var(--muted)}
 @media (max-width:640px){.strand{grid-template-columns:1fr}}
-.stack{display:grid;gap:8px}
-.srow{display:grid;grid-template-columns:minmax(150px,32%) 1fr auto;gap:10px;align-items:center;font-size:13px}
-.srow .lab{color:var(--text-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sbarwrap{display:flex;height:24px;gap:2px}
-.seg{display:grid;place-items:center;font-size:12px;font-weight:700;min-width:3px}
-.seg:first-child{border-radius:4px 0 0 4px}.seg:last-child{border-radius:0 4px 4px 0}
-.srow-pct{font-size:12.5px;color:var(--text-2);white-space:nowrap}
-@media (max-width:640px){.srow{grid-template-columns:1fr}}
 .pill.later{background:var(--grid);color:var(--text-3)}
 .journey li.later .dot{border-style:dashed}
 .hello{display:grid;grid-template-columns:1fr minmax(240px,44%);gap:16px;align-items:center;margin:0 0 16px}
 @media (max-width:700px){.hello{grid-template-columns:1fr}}
 .hello h2{font-size:24px}
 .now{border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:4px}
-.now small{color:var(--text-2);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+.now small{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
 .now b{font-size:16px}
-.go{justify-self:start;background:var(--series);color:#fff;border-radius:8px;padding:6px 14px;font-weight:700;text-decoration:none;margin-top:4px}
+.go{justify-self:start;background:var(--purple);color:#fff;border-radius:8px;padding:6px 14px;font-weight:700;text-decoration:none;margin-top:4px}
 .pill{display:inline-block;justify-self:start;font-size:12px;font-weight:600;border-radius:999px;padding:2px 10px;margin-top:2px}
-.pill.done{background:rgba(12,163,12,.12);color:#0a6e0a}.pill.doing{background:rgba(250,178,25,.18);color:#7a5200}.pill.todo{background:var(--grid);color:var(--text-2)}
+.pill.done{background:#E3F4E3;color:#0a5d0a}.pill.doing{background:#FFF3C9;color:#7a5200}.pill.todo{background:var(--grid);color:var(--muted)}
 .journey{list-style:none;margin:0;padding:0;display:grid;gap:0}
 .journey li{display:grid;grid-template-columns:22px 1fr auto;gap:12px;align-items:center;padding:10px 0;position:relative}
 .journey li+li{border-top:1px solid var(--grid)}
-.journey .dot{width:14px;height:14px;border-radius:50%;border:2.5px solid var(--text-3);background:var(--card);justify-self:center}
-.journey li.done .dot{background:#0ca30c;border-color:#0ca30c}.journey li.doing .dot{border-color:#fab219;background:#fab219}
-.journey small{display:block;color:var(--text-2);font-size:12px}
+.journey .dot{width:14px;height:14px;border-radius:50%;border:2.5px solid var(--text-3);background:#fff;justify-self:center}
+.journey li.done .dot{background:var(--good);border-color:var(--good)}.journey li.doing .dot{border-color:var(--warn);background:var(--warn)}
+.journey small{display:block;color:var(--muted);font-size:12px}
 .journey b{display:block}
-.journey a,.journey .off{color:var(--series);font-weight:700;text-decoration:none;font-size:14px}
-.callouts{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0 0 10px;font-size:14px}
+.journey a,.journey .off{color:var(--purple);font-weight:700;text-decoration:none;font-size:14px}
 .badges{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
-.badges li{display:flex;gap:10px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;align-items:flex-start}
+.badges li{display:flex;gap:10px;border:1.5px solid var(--line-2);border-radius:12px;padding:10px 12px;align-items:flex-start}
 .badges .ico{font-size:30px;line-height:1;flex:none;width:40px;height:40px;display:grid;place-items:center;border-radius:50%;background:var(--grid)}
-.badges li.got{border-color:var(--series);background:rgba(42,120,214,.06)}
-.badges li.got .ico{background:#fff3c4;box-shadow:0 0 0 2px #e8b400}
+.badges li.got{border-color:var(--purple);background:var(--tint)}
+.badges li.got .ico{background:#fff3c4;box-shadow:0 0 0 2px var(--gold)}
 .badges li.locked .ico{filter:grayscale(1);opacity:.45}
 .badges b{display:block;font-size:14.5px}
-.badges span{display:block;font-size:12.5px;color:var(--text-2);line-height:1.35}
+.badges span{display:block;font-size:12.5px;color:var(--muted);line-height:1.35}
 .badges em{display:block;font-style:normal;font-size:12px;font-weight:700;color:var(--text-3);margin-top:3px}
-.badges li.got em{color:#0a6e0a}
+.badges li.got em{color:#0a5d0a}
 .badges.plain .ico{font-size:18px;width:28px;height:28px;font-weight:700;color:var(--text-3)}
-.badges.plain li.got .ico{background:#0ca30c;box-shadow:none;color:#fff;filter:none}
-.bcount{font-size:16px;letter-spacing:1px;white-space:nowrap}
-.note{color:var(--text-3);font-size:12.5px;margin:12px 0 30px}
-.stu{background:none;border:0;padding:0;color:inherit;font:inherit;font-weight:600;text-align:left;text-decoration:underline;text-decoration-color:var(--text-3);text-underline-offset:3px}
-.stu:hover{text-decoration-color:currentColor}
-.viewbar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;background:var(--card);border:1.5px solid var(--series);border-radius:12px;padding:10px 14px;margin:14px 0}
+.badges.plain li.got .ico{background:var(--good);box-shadow:none;color:#fff;filter:none}
+.viewbar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;background:#fff;border:1.5px solid var(--purple);border-radius:12px;padding:10px 14px;margin:14px 0}
+.viewbar div{display:flex;gap:8px;flex-wrap:wrap}
 .off{opacity:.55;cursor:default}
-.loading{padding:60px 0;text-align:center;color:var(--text-2)}
-.err{background:#fde7ec;color:#8a1330;border-radius:10px;padding:12px 14px;margin:20px 0}
-.rmsg{margin:0 0 12px;font-weight:600}.rmsg.ok{color:#0a6e0a}.rmsg.bad{color:#b3261e}
-.dot{display:inline-block;min-width:18px;padding:0 5px;border-radius:999px;background:#d03b3b;color:#fff;font-size:12px;line-height:18px;text-align:center;margin-left:4px}
-details.sec{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:0 0 10px}
+.tools{display:flex;justify-content:flex-end;gap:8px;margin:12px 0 0}
+#app>.tools+.printhead+.hello{margin-top:8px}
+/* class lists */
+.rmsg{margin:0 0 12px;font-weight:600}.rmsg.ok{color:#0a5d0a}.rmsg.bad{color:#b3261e}
+.dot{display:inline-block;min-width:18px;padding:0 5px;border-radius:999px;background:var(--crit);color:#fff;font-size:12px;line-height:18px;text-align:center;margin-inline-start:4px}
+details.sec{background:#fff;border:1px solid var(--line-2);border-radius:12px;margin:0 0 10px}
 details.sec>summary{cursor:pointer;padding:12px 16px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;list-style:none}
 details.sec>summary::-webkit-details-marker{display:none}
 details.sec>summary b{font-size:16px}
-details.sec .in{padding:0 16px 14px}
-.chip{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12.5px;font-weight:700}
-.chip.ok{background:rgba(12,163,12,.12);color:#0a6e0a}.chip.warn{background:rgba(250,178,25,.2);color:#7a5200}.chip.no{background:var(--grid);color:var(--text-2)}
-.rtable{width:100%;border-collapse:collapse;font-size:13.5px}.rtable td,.rtable th{padding:6px 8px;border-bottom:1px solid var(--grid);text-align:left;white-space:normal}
+details.sec .in{padding:0 16px 14px;overflow-x:auto}
+.chip.no{background:var(--grid);color:var(--muted)}
+.rtable{width:100%;border-collapse:collapse;font-size:13.5px}.rtable td,.rtable th{padding:6px 8px;border-bottom:1px solid var(--grid);text-align:start;white-space:normal}
 .rtable select{font-size:13px;padding:4px 6px}.rtable button{font-size:13px;padding:4px 10px}
-details.sec .in{overflow-x:auto}
 @media (max-width:600px){.rtable th:nth-child(2),.rtable td:nth-child(2){display:none}.rtable select{max-width:120px}}
 .form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;align-items:end}
-.form label{display:block;font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:3px}
-.form input{font:inherit;font-size:14px;border:1.5px solid var(--line);border-radius:8px;padding:7px 10px;width:100%;background:var(--card);color:var(--text)}
+.form label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.form input{width:100%}
 .req{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;border-top:1px solid var(--grid);padding:10px 0}
 .req:first-of-type{border-top:0}
-.log li{margin:2px 0;font-size:13.5px;color:var(--text-2)}
-.langbtn{font-size:13px;padding:3px 10px;border-radius:999px;border:1.5px solid var(--series);color:var(--series);background:var(--card);font-weight:700}
-html[dir="rtl"] body{font-family:"Segoe UI",Tahoma,"Noto Sans Arabic","Geeza Pro",system-ui,sans-serif}
-html[dir="rtl"] th,html[dir="rtl"] td{text-align:right}
-html[dir="rtl"] td.c{text-align:center}
-html[dir="rtl"] .hb .track,html[dir="rtl"] .axis div:last-child,html[dir="rtl"] .sbarwrap,html[dir="rtl"] .strand .sbar .track{direction:ltr}
-html[dir="rtl"] .printhead .r{text-align:left}
+.log li{margin:2px 0;font-size:13.5px;color:var(--muted)}
+/* Save as PDF: a report header with the school logo */
 .printhead{display:none}
-.tools{display:flex;justify-content:flex-end;gap:8px;margin:12px 0 0}
-.viewbar div{display:flex;gap:8px;flex-wrap:wrap}
 @page{size:A4 landscape;margin:10mm}
 @media print{
-  html:root{color-scheme:light;--surface:#fff;--card:#fff;--line:#d9d8d3;--grid:#ecebe7;--text:#0b0b0b;--text-2:#52514e;--text-3:#76746f;--series:#2a78d6}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  body{background:#fff;font-size:12px}
+  body{font-size:12px}
   .wrap{max-width:none;padding:0}
-  header,.filters,.tools,.viewbar,.tip,button:not(.stu),.go,.journey a,.journey .off{display:none!important}
+  .titlebar,.stuhead,.chips,.mini-seg,.morelink,.tip,.tmenu,.viewbar,.tools,.go,.journey a,.journey .off,.tile a{display:none!important}
   .stu{text-decoration:none}
-  .printhead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;border-bottom:3px solid #21076C;padding:0 0 8px;margin:0 0 12px}
-  .printhead h1{font-size:20px;color:#21076C}
-  .printhead p{margin:2px 0 0;font-size:12px;color:#52514e}
-  .printhead .r{text-align:right}
-  .grid2 .card,.tile,.hello,.strand,.hb,.srow,.badges li,.journey li,tr,.legend{break-inside:avoid}
+  .printhead{display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:3px solid var(--purple);padding:0 0 8px;margin:0 0 12px}
+  .printhead img{height:38px;width:auto}
+  .printhead h1{font-size:18px}
+  .printhead p{margin:2px 0 0;font-size:12px;color:var(--muted)}
+  .printhead .r{text-align:end}
+  .grid2 .card,.tile,.hello,.strand,.hb,.badges li,.journey li,tr,.legend,.row{break-inside:avoid}
   .card h2{break-after:avoid}
   .grid2{grid-template-columns:1fr 1fr}
   .tiles{grid-template-columns:repeat(4,1fr)}
   .tablewrap{overflow:visible;border:0}
-  th{position:static}
-  th,td{padding:4px 6px}
-  select.jsel{-webkit-appearance:none;appearance:none;width:auto;border:0;padding:2px 8px;background-image:none}
+  table.stable th{position:static}
   .note{margin-bottom:0}
 }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div><h1 id="title">AI Curriculum Dashboard</h1><div class="who" id="who"></div></div>
-  </header>
-  <div id="app"><div class="loading">Loading progress…</div></div>
-</div>
+<header class="top"><div class="wrap">
+  <a class="brand" id="homeLink" href="#" aria-label="AI Lessons home"><img class="lockup" src="assets/aisa/lockup-white.png" alt="American International School in Abu Dhabi" width="233" height="40"><img class="mono" src="assets/aisa/monogram-white.png" alt="AISA" width="34" height="34"><span class="product" data-i18n="AI Lessons">AI Lessons</span></a>
+  <nav class="main" id="nav" aria-label="Main"></nav>
+  <div class="right"><span class="me" id="me" dir="ltr"></span><button class="langbtn" type="button" id="langBtn" lang="ar">العربية</button></div>
+</div></header>
+<main class="wrap"><div id="app"><div class="loading">Loading progress…</div></div></main>
+<footer class="site"><div class="wrap">
+  <img src="assets/aisa/seal-white.png" alt="" width="64" height="64">
+  <div><b data-i18n="American International School in Abu Dhabi">American International School in Abu Dhabi</b><span data-i18n="AI Literacy · Grades 6–12">AI Literacy · Grades 6–12</span></div>
+  <p class="note" id="footNote" style="color:#fff"></p>
+</div></footer>
 <div class="tip" id="tip" role="tooltip"></div>
+<div class="tmenu" id="tmenu" role="menu" hidden></div>
 <script src="school-calendar.js"></script>
 <script>
 var CFG = <?!= cfg ?>;
@@ -438,18 +496,355 @@ var AR = {
   'First try {p}% on {n} activities': 'المحاولة الأولى {p}% في {n} من الأنشطة',
   'Automatic tier: {t}': 'المستوى التلقائي: {t}',
   'Set by {e}': 'حدّده {e}'
+  ,
+  /* home page, calendar and dashboard shell (October 2026) */
+  'AI Lessons': 'دروس الذكاء الاصطناعي', 'Lessons': 'الدروس', 'Calendar': 'التقويم', 'Dashboard': 'لوحة المتابعة', 'My lessons': 'دروسي',
+  'AI Literacy · Grades 6–12': 'محو أمية الذكاء الاصطناعي · الصفوف 6–12',
+  'Only you, your teachers and school leaders can see this page.': 'لا يرى هذه الصفحة إلا أنت ومعلموك وقيادة المدرسة.',
+  "Only the classes you can see are shown. Student data stays in the school's protected sheet.": 'تظهر الشعب المسموح لك برؤيتها فقط. تبقى بيانات الطلاب في جدول المدرسة المحمي.',
+  'All classes': 'جميع الشعب', 'All my classes': 'جميع شعبي', 'More': 'المزيد', 'Find a student': 'ابحث عن طالب', 'Find a student…': 'ابحث عن طالب…', 'Sort': 'الترتيب',
+  'Sort: class, then name': 'الترتيب: الشعبة ثم الاسم', 'Sort: lowest first try': 'الترتيب: الأدنى في المحاولة الأولى', 'Sort: most behind': 'الترتيب: الأكثر تأخرًا',
+  "Lesson: this week's lesson": 'الدرس: درس هذا الأسبوع', 'Lesson:': 'الدرس:', 'Week {n}': 'الأسبوع {n}',
+  'Lesson page not on the site yet': 'صفحة الدرس غير متوفرة على الموقع بعد', 'lesson page not on the site yet': 'صفحة الدرس غير متوفرة على الموقع بعد',
+  'Finished · {n} min': 'مكتمل · {n} دقيقة', '{d} of {a} activities': '{d} من {a} أنشطة', 'taught {d}': 'دُرِّس {d}', 'on {d}': 'يوم {d}',
+  'finished': 'مكتمل', 'in progress': 'قيد التنفيذ', 'not started': 'لم يبدأ', 'Finished': 'مكتمل', 'In progress': 'قيد التنفيذ',
+  '{p}% first try': '{p}% في المحاولة الأولى', '{a} of {b} finished': 'أكمل {a} من {b}', '{p}% first try overall': '{p}% في المحاولة الأولى إجمالًا',
+  'Click to record a tier': 'انقر لتسجيل مستوى', 'Automatic: {t}': 'تلقائي: {t}',
+  '{a} of {b} started, {c} finished': 'بدأ {a} من {b}، وأكمل {c}', 'teaching it {d}': 'يُدرَّس {d}', "This week's lessons": 'دروس هذا الأسبوع',
+  "{a} of {b} classes have had this week's lesson": 'درست {a} من {b} شعبة درس هذا الأسبوع', '{p}% of their students have started it': 'بدأه {p}% من طلابها',
+  'No AI lessons this week': 'لا توجد دروس ذكاء اصطناعي هذا الأسبوع', 'This week · Week {n}': 'هذا الأسبوع · الأسبوع {n}',
+  'Need a nudge': 'بحاجة إلى تذكير', "haven't finished their last lesson ({w})": 'لم يكملوا درسهم الأخير ({w})', "{n} haven't started it": 'لم يبدأه {n}',
+  'Show them': 'اعرضهم', 'Everyone has finished their last lesson.': 'أكمل الجميع درسهم الأخير.', 'Average first try': 'متوسط المحاولة الأولى',
+  'Week {a}: {p}% → Week {b}: {q}%': 'الأسبوع {a}: {p}% ← الأسبوع {b}: {q}%', 'across every activity checked': 'في جميع الأنشطة المصحَّحة',
+  'At Emerging or above': 'في مستوى ناشئ فأعلى', 'of strand ratings · {a} of {b} students in all four strands (the Term 1 goal)': 'من تقييمات المجالات · {a} من {b} طالبًا في المجالات الأربعة كلها (هدف الفصل الأول)',
+  'this week': 'هذا الأسبوع', 'Show the latest 4 only': 'اعرض آخر 4 فقط', 'Show all {n} lessons': 'اعرض جميع الدروس ({n})',
+  'Number = average first try': 'الرقم = متوسط المحاولة الأولى', 'Lesson overview': 'نظرة عامة على الدروس', 'Newest first. Where every student is in each lesson.': 'الأحدث أولًا. أين وصل كل طالب في كل درس.',
+  'Show as': 'اعرض على شكل', 'Chart': 'رسم بياني', 'Table': 'جدول', 'Strand': 'المجال', 'Emerging+': 'ناشئ فأعلى', 'Number = at Emerging or above': 'الرقم = في مستوى ناشئ فأعلى',
+  'Emerging is the Term 1 expected standard.': 'مستوى «ناشئ» هو المستوى المتوقع في الفصل الأول.', 'All': 'الكل', 'Not started {l}': 'لم يبدأوا {l}', 'Finished {l}': 'أكملوا {l}',
+  "this week's lesson": 'درس هذا الأسبوع', '{a} of {b}': '{a} من {b}', "each class's lesson for this week": 'درس كل شعبة لهذا الأسبوع', 'Lessons so far': 'الدروس حتى الآن',
+  'finished, oldest → newest': 'المكتملة، من الأقدم إلى الأحدث', 'Strand tier': 'مستوى المجال', 'No students match.': 'لا يوجد طلاب مطابقون.',
+  'after it was taught': 'بعد تدريسه', '% = first-try score': '% = درجة المحاولة الأولى', 'Tiers:': 'المستويات:', 'Your role can see the whole school.': 'تتيح لك صلاحيتك رؤية المدرسة كلها.'
 };
 
-function header(){
+/* ===================== the page shell: top bar with the school logo ===================== */
+function shell(){
   document.documentElement.lang = LANG; document.documentElement.dir = LANG === 'ar' ? 'rtl' : 'ltr';
   document.title = T('AI Curriculum Dashboard');
-  $('#title').textContent = CFG.role === 'student' ? T('My progress') : T('AI Curriculum Dashboard');
-  $('#who').innerHTML = T('Signed in as') + ' <b>' + esc(CFG.email) + '</b> · <a href="' + esc(home) + '">' + T('All lessons') + '</a> · ' +
-    '<button type="button" id="langBtn" class="langbtn" lang="' + (LANG === 'ar' ? 'en' : 'ar') + '">' + (LANG === 'ar' ? 'English' : 'العربية') + '</button>';
-  $('#langBtn').onclick = function(){ setLang(LANG === 'ar' ? 'en' : 'ar'); header(); if (D) render(); };
+  document.querySelectorAll('[data-i18n]').forEach(function(el){ el.textContent = T(el.getAttribute('data-i18n')); });
+  var items = CFG.role === 'student' ? [['My lessons', 'index'], ['My progress', '']] : [['Lessons', 'index'], ['Calendar', 'calendar'], ['Dashboard', '']];
+  $('#nav').innerHTML = items.map(function(x){ return '<a href="' + esc(CFG.base + '?p=' + (x[1] || 'dashboard')) + '"' + (x[1] ? '' : ' aria-current="page"') + '>' + esc(T(x[0])) + '</a>'; }).join('');
+  $('#homeLink').href = home;
+  $('#me').textContent = CFG.name || CFG.email;
+  $('#langBtn').textContent = LANG === 'ar' ? 'English' : 'العربية'; $('#langBtn').setAttribute('lang', LANG === 'ar' ? 'en' : 'ar');
+  $('#footNote').textContent = CFG.role === 'student' ? T('Only you, your teachers and school leaders can see this page.') : T('Only the classes you can see are shown. Student data stays in the school\'s protected sheet.');
 }
-header();
-if (!D) $('#app').innerHTML = '<div class="loading">' + T('Loading progress…') + '</div>';
+$('#langBtn').onclick = function(){ setLang(LANG === 'ar' ? 'en' : 'ar'); shell(); if (D) render(); else $('#app').innerHTML = '<div class="loading">' + T('Loading progress…') + '</div>'; };
+
+/* ===================== staff view: tiles, overview, one table with the same columns all year ===================== */
+var UI = { filter: 'all', sort: 'name', q: '', all: false, les: 'chart', str: 'chart' }, ROWS = {}, FACTS = null, RES = {};
+var DAY3 = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], MON3 = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+var TKEYS = ['', 'W', 'O', 'E', 'P', 'A'];
+var LST = [['done', 's-done', 'Finished'], ['doing', 's-doing', 'In progress'], ['todo', 's-todo', 'Not started'], ['later', 's-later', 'Not taught yet']];
+function fd(d){ return LANG === 'ar' ? d.toLocaleDateString(LOC, { weekday: 'short', day: 'numeric', month: 'short' }) : DAY3[d.getDay()] + ' ' + d.getDate() + ' ' + MON3[d.getMonth()]; }
+function inSchedule(sec){ return AICAL.SCHEDULE.some(function(r){ return r[0] === sec; }); }
+function sumMax(r){ return Object.keys(r.acts).reduce(function(n, k){ return n + r.acts[k][1]; }, 0); }
+function numSort(a, b){ return String(a).localeCompare(String(b), undefined, { numeric: true }); }
+function lessonShort(l){ return l.course === 'main' ? T('Week {n}', { n: l.week }) : T('Bridging · Week {n}', { n: l.week }); }
+function multiGrade(){ var g = {}; FACTS.students.forEach(function(s){ if (s.grade) g[s.grade] = 1; }); return Object.keys(g).length > 1; }
+
+/* where one student is in one lesson */
+function statusOf(s, l, R, taught){
+  var r = R[s.email + '|' + l.id], max = r ? sumMax(r) : 0;
+  var d = l.course === 'main' && inSchedule(s.section) ? AICAL.lessonDate(s.section, l.week) : null;
+  if (r && l.activities && r.done >= l.activities) return { st: 'done', r: r, pct: pct(r.score, max), date: d };
+  if (r) return { st: 'doing', r: r, pct: pct(r.score, max), date: d };
+  if (l.course !== 'main') return { st: 'sched' };
+  return { st: l.week <= taught ? 'todo' : 'later', date: d };
+}
+/* everything the staff view needs about one student. "Need a nudge" = the last lesson their class
+   was taught before this week is not finished. */
+function rowFor(s, R){
+  var st = studentStats(s.email, s.grade), lessons = catalogFor(s.grade), by = {}, now = new Date(), mon = AICAL.monday(now), known = inSchedule(s.section);
+  lessons.forEach(function(l){ by[l.id] = statusOf(s, l, R, st.taught); });
+  var main = lessons.filter(function(l){ return l.course === 'main'; });
+  var cur = known ? AICAL.currentLesson(s.section, now) : Math.max(1, st.taught);
+  var taughtL = main.filter(function(l){ return l.week <= st.taught; });
+  var earlier = taughtL.filter(function(l){ var d = by[l.id].date; return d ? d < mon : l.week < st.taught; });
+  var last = earlier[earlier.length - 1] || null;
+  return { s: s, st: st, by: by, cur: cur, curL: main.filter(function(l){ return l.week === cur; })[0] || null, taughtL: taughtL,
+    fin: taughtL.filter(function(l){ return by[l.id].st === 'done'; }).length, last: last,
+    nudge: !!last && by[last.id].st !== 'done', behind: taughtL.filter(function(l){ return by[l.id].st !== 'done'; }).length };
+}
+/* the lesson shown in the table: each class's lesson this week, or the one picked */
+function colLesson(row){ if (!F.lesson) return row.curL; var l = lessonInfo(F.lesson); return l.grade === row.s.grade ? l : 'na'; }
+
+function render(){
+  if (D.scope === 'self') return studentView();
+  if (VIEW) return studentView(VIEW);
+  if (MANAGE && D.roster) return manageView();
+  var secs = D.sections.slice().sort(numSort), reqs = D.roster ? D.roster.requests.filter(function(r){ return r.canDecide; }).length : 0;
+  var allLabel = D.scope === 'school' ? T('All classes') : T('All my classes');
+  var count = function(sec){ return D.students.filter(function(x){ return !sec || x.section === sec; }).length; };
+  if (F.section && secs.indexOf(F.section) < 0) F.section = '';
+  var picker = secs.length <= 6 ? '<div class="seg" role="group" aria-label="' + esc(T('Class')) + '">' + [''].concat(secs).map(function(sec){
+      return '<button type="button" data-tab="' + esc(sec) + '" aria-pressed="' + (F.section === sec) + '">' + esc(sec ? secName(sec) : allLabel) + ' <span class="n">' + count(sec) + '</span></button>'; }).join('') + '</div>'
+    : '<label class="sr" for="fSec">' + esc(T('Class')) + '</label><select id="fSec"><option value="">' + esc(allLabel) + ' (' + count('') + ')</option>' +
+      secs.map(function(sec){ return '<option value="' + esc(sec) + '"' + (F.section === sec ? ' selected' : '') + '>' + esc(secName(sec)) + ' (' + count(sec) + ')</option>'; }).join('') + '</select>';
+  var pool = D.students.filter(function(s){ return !F.section || s.section === F.section; }).sort(function(a, b){ return numSort(a.section, b.section) || a.name.localeCompare(b.name); });
+  $('#app').innerHTML = '<div class="titlebar"><h1>' + esc(T('Dashboard')) + '</h1>' + picker + '<span class="spacer"></span>' +
+    (D.roster ? '<button type="button" class="btn small" id="rosterBtn">👥 ' + esc(T('Class lists')) + (reqs ? '<span class="badge" title="' + esc(T('Requests')) + '">' + reqs + '</span>' : '') + '</button>' : '') +
+    '<details class="menu"><summary class="btn small quiet">' + esc(T('More')) + ' ▾</summary><div class="popm">' +
+      '<label for="fView">' + esc(T('Student view')) + '</label><select id="fView"><option value="">' + esc(T('See a student\'s dashboard…')) + '</option>' +
+      pool.map(function(s){ return '<option value="' + esc(s.email) + '">' + esc(s.name + ' · ' + secName(s.section)) + '</option>'; }).join('') + '</select>' +
+      '<button type="button" id="pdfBtn">🖨 ' + esc(T('Save as PDF')) + '</button><button type="button" id="exportBtn" title="' + esc(T('Raw data for spreadsheets')) + '">⬇ ' + esc(T('Download data (CSV)')) + '</button></div></details></div>' +
+    '<div id="body"></div>';
+  document.querySelectorAll('[data-tab]').forEach(function(b){ b.onclick = function(){ F.section = b.getAttribute('data-tab'); F.lesson = ''; UI.filter = 'all'; render(); }; });
+  if ($('#fSec')) $('#fSec').onchange = function(){ F.section = this.value; F.lesson = ''; UI.filter = 'all'; render(); };
+  $('#fView').onchange = function(){ if (this.value) viewAs(this.value); };
+  $('#pdfBtn').onclick = function(){ savePdf(); };
+  $('#exportBtn').onclick = exportCsv;
+  if ($('#rosterBtn')) $('#rosterBtn').onclick = function(){ MANAGE = true; render(); window.scrollTo(0, 0); };
+  draw();
+}
+
+function draw(){
+  FACTS = facts(); RES = {}; FACTS.res.forEach(function(r){ RES[r.email + '|' + r.lessonId] = r; });
+  ROWS = {}; FACTS.students.forEach(function(s){ ROWS[s.email] = rowFor(s, RES); });
+  $('#body').innerHTML = '<div id="ph"></div><div id="top"></div>' +
+    '<section aria-labelledby="stuH"><div class="stuhead"><h2 id="stuH">' + esc(T('Students')) + ' <small id="count"></small></h2>' +
+      '<label class="sr" for="q">' + esc(T('Find a student')) + '</label><input type="search" id="q" placeholder="' + esc(T('Find a student…')) + '" value="' + esc(UI.q) + '">' +
+      '<label class="sr" for="fLes">' + esc(T('Lesson')) + '</label><select id="fLes">' + lessonOptions() + '</select>' +
+      '<label class="sr" for="fSort">' + esc(T('Sort')) + '</label><select id="fSort">' + [['name', T('Sort: class, then name')], ['low', T('Sort: lowest first try')], ['behind', T('Sort: most behind')]].map(function(o){
+        return '<option value="' + o[0] + '"' + (UI.sort === o[0] ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select></div>' +
+      '<div class="chips" id="chips"></div><div id="tbl"></div><div class="legend" id="tlegend"></div></section><div id="reteach" style="margin-top:16px"></div>' +
+    '<p class="note">' + T('First-try scores are kept exactly as first checked; retries are for learning and don\'t change them. Time counts only while the lesson page is open, visible and in use (it pauses after 2 minutes without activity).') + ' ' +
+      (D.scope === 'school' ? T('Your role can see the whole school.') : T('Only the sections you teach are shown.')) + ' ' + T('Data refreshed {d}.', { d: new Date(D.generatedAt).toLocaleString(LOC) }) + '</p>';
+  $('#q').oninput = function(){ UI.q = this.value.trim().toLowerCase(); drawTable(); };
+  $('#fLes').onchange = function(){ F.lesson = this.value; if (UI.filter !== 'nudge') UI.filter = 'all'; drawTable(); };
+  $('#fSort').onchange = function(){ UI.sort = this.value; drawTable(); };
+  drawTop(); drawTable();
+}
+function refresh(email){   // after a change: recompute one student (or everyone) and redraw
+  FACTS.students.forEach(function(s){ if (!email || s.email === email) ROWS[s.email] = rowFor(s, RES); }); drawTop(); drawTable();
+}
+
+function lessonOptions(){
+  var grades = {}, maxCur = {};
+  FACTS.students.forEach(function(s){ if (!s.grade) return; grades[s.grade] = 1; maxCur[s.grade] = Math.max(maxCur[s.grade] || 0, ROWS[s.email].cur); });
+  var multi = Object.keys(grades).length > 1;
+  var ls = (D.catalog || []).filter(function(l){ return grades[l.grade] && (l.course !== 'main' || l.week <= (maxCur[l.grade] || 0)); })
+    .sort(function(a, b){ return (a.course === 'main' ? 0 : 1) - (b.course === 'main' ? 0 : 1) || b.week - a.week || a.grade - b.grade; });
+  if (F.lesson && !ls.some(function(l){ return l.id === F.lesson; })) F.lesson = '';
+  return '<option value="">' + esc(T('Lesson: this week\'s lesson')) + '</option>' + ls.map(function(l){
+    return '<option value="' + esc(l.id) + '"' + (F.lesson === l.id ? ' selected' : '') + '>' + esc(T('Lesson:') + ' ' + (multi ? lessonName(l) : lessonShort(l)) + ' – ' + lessonTitle(l)) + '</option>'; }).join('');
+}
+
+/* ---------- tiles and the two overview charts ---------- */
+function spark(vals){
+  if (vals.length < 2) return '';
+  var W = 96, H = 30, lo = Math.min.apply(null, vals) - 5, hi = Math.max.apply(null, vals) + 5;
+  var x = function(i){ return 4 + i * (W - 8) / (vals.length - 1); }, y = function(v){ return H - 4 - (v - lo) / ((hi - lo) || 1) * (H - 8); };
+  var pts = vals.map(function(v, i){ return x(i).toFixed(1) + ',' + y(v).toFixed(1); }).join(' '), l = vals.length - 1;
+  return '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" aria-hidden="true" style="direction:ltr"><polyline points="' + pts + '" fill="none" stroke="var(--t2)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>' +
+    '<circle cx="' + x(l) + '" cy="' + y(vals[l]) + '" r="4" fill="var(--purple)" stroke="#fff" stroke-width="2"/></svg>';
+}
+function drawTop(){
+  var rows = FACTS.students.map(function(s){ return ROWS[s.email]; });
+  var les = F.lesson && lessonInfo(F.lesson);
+  $('#ph').innerHTML = printHead(T('AI Literacy progress report'), (F.section ? secName(F.section) : (D.scope === 'school' ? T('Whole school') : T('All my classes'))) + ' · ' + (les ? lessonName(les) + ' – ' + lessonTitle(les) : T('This week\'s lesson')));
+  $('#top').innerHTML = tilesHtml(rows) + '<div class="grid2"><section class="card">' + lessonCard(rows) + '</section><section class="card">' + strandCard(rows) + '</section></div>';
+}
+function tilesHtml(rows){
+  var now = new Date(), secs = {};
+  rows.forEach(function(r){ if (inSchedule(r.s.section)) (secs[r.s.section] = secs[r.s.section] || []).push(r); });
+  var names = Object.keys(secs).sort(numSort), ids = {}, lines = '', title;
+  names.forEach(function(sec){ var r0 = secs[sec][0]; ids[r0.curL ? r0.curL.id : 'w' + r0.s.grade + '-' + r0.cur] = r0.curL; });
+  var keys = Object.keys(ids), only = keys.length === 1 ? ids[keys[0]] : null;
+  if (names.length && names.length <= 4) {
+    lines = names.map(function(sec){
+      var rs = secs[sec], r0 = rs[0], d = AICAL.lessonDate(sec, r0.cur);
+      if (!r0.curL) return '<b>' + esc(secName(sec)) + '</b> · ' + esc(T('Week {n}', { n: r0.cur })) + ' · ' + esc(T('lesson page not on the site yet'));
+      if (d && d <= now) { var id = r0.curL.id, started = rs.filter(function(r){ return r.by[id] && r.by[id].r; }).length, fin = rs.filter(function(r){ return r.by[id] && r.by[id].st === 'done'; }).length;
+        return '<b>' + esc(secName(sec)) + '</b> · ' + esc(T('taught {d}', { d: fd(d) })) + ' · ' + esc(T('{a} of {b} started, {c} finished', { a: started, b: rs.length, c: fin })); }
+      return '<b>' + esc(secName(sec)) + '</b> · ' + esc(T('teaching it {d}', { d: d ? fd(d) : '' }));
+    }).join('<br>');
+    title = only ? esc(lessonTitle(only)) : esc(T('This week\'s lessons'));
+  } else if (names.length) {
+    var had = names.filter(function(sec){ var d = AICAL.lessonDate(sec, secs[sec][0].cur); return d && d <= now; });
+    var studs = [].concat.apply([], had.map(function(sec){ return secs[sec]; }));
+    var started = studs.filter(function(r){ return r.curL && r.by[r.curL.id] && r.by[r.curL.id].r; }).length;
+    lines = esc(T('{a} of {b} classes have had this week\'s lesson', { a: had.length, b: names.length })) + (studs.length ? '<br>' + esc(T('{p}% of their students have started it', { p: pct(started, studs.length) })) : '');
+    title = esc(T('This week\'s lessons'));
+  } else title = esc(T('No AI lessons this week'));
+  var wk = only && rows[0] ? T('This week · Week {n}', { n: rows[0].cur }) : T('This week');
+  var nud = rows.filter(function(r){ return r.nudge; }), ns = nud.filter(function(r){ return r.by[r.last.id].st === 'todo'; }).length, lw = {};
+  nud.forEach(function(r){ lw[r.last.week] = 1; });
+  var lws = Object.keys(lw).map(Number).sort(function(a, b){ return a - b; }).map(function(w){ return T('Week {n}', { n: w }); }).join(', ');
+  var p = 0, m = 0, byW = {};
+  FACTS.res.forEach(function(r){ var l = FACTS.L[r.lessonId]; if (!l) return; var mx = sumMax(r); p += r.score; m += mx;
+    if (l.course === 'main') { var o = byW[l.week] || (byW[l.week] = { p: 0, m: 0 }); o.p += r.score; o.m += mx; } });
+  var weeks = Object.keys(byW).map(Number).sort(function(a, b){ return a - b; }), trend = weeks.map(function(w){ return pct(byW[w].p, byW[w].m); });
+  var eplus = 0, all4 = 0;
+  rows.forEach(function(r){ var k = 0; STRAND_ORDER.forEach(function(c){ if (TIER_RANK[r.st.strands[c].tier] >= 2) { eplus++; k++; } }); if (k === 4) all4++; });
+  return '<div class="tiles">' +
+    '<div class="tile"><small>' + esc(wk) + '</small><b class="t">' + title + '</b><span>' + lines + '</span></div>' +
+    '<div class="tile"><small>' + esc(T('Need a nudge')) + '</small><b>' + nud.length + '</b><span>' + (nud.length ? esc(T('haven\'t finished their last lesson ({w})', { w: lws })) + ' · ' + esc(T('{n} haven\'t started it', { n: ns })) +
+      ' · <a href="#stuH" data-f="nudge">' + esc(T('Show them')) + '</a>' : esc(T('Everyone has finished their last lesson.'))) + '</span></div>' +
+    '<div class="tile"><small>' + esc(T('Average first try')) + '</small><div class="val"><b>' + (m ? pct(p, m) + '%' : '–') + '</b>' + spark(trend) + '</div><span>' +
+      (weeks.length > 1 ? esc(T('Week {a}: {p}% → Week {b}: {q}%', { a: weeks[0], p: trend[0], b: weeks[weeks.length - 1], q: trend[trend.length - 1] })) : esc(T('across every activity checked'))) + '</span></div>' +
+    '<div class="tile"><small>' + esc(T('At Emerging or above')) + '</small><b>' + (rows.length ? pct(eplus, rows.length * 4) + '%' : '–') + '</b><span>' +
+      esc(T('of strand ratings · {a} of {b} students in all four strands (the Term 1 goal)', { a: all4, b: rows.length })) + '</span></div></div>';
+}
+function stack(parts, total, label){
+  var shown = parts.filter(function(x){ return x.n; });
+  return '<div class="stack" role="img" aria-label="' + esc(label + ': ' + shown.map(function(x){ return x.n + ' ' + x.name; }).join(', ')) + '">' + shown.map(function(x){
+    var w = x.n / (total || 1) * 100;
+    return '<span class="seg2 ' + x.cls + '" style="width:' + w + '%" tabindex="0" data-tip="' + esc('<b>' + x.n + '</b> · ' + esc(x.name) + '<br>' + esc(label)) + '">' + (w >= 9 ? x.n : '') + '</span>'; }).join('') + '</div>';
+}
+function viewToggle(k){
+  return '<div class="mini-seg" role="group" aria-label="' + esc(T('Show as')) + '"><button type="button" data-view="' + k + '|chart" aria-pressed="' + (UI[k] === 'chart') + '">' + esc(T('Chart')) + '</button>' +
+    '<button type="button" data-view="' + k + '|table" aria-pressed="' + (UI[k] === 'table') + '">' + esc(T('Table')) + '</button></div>';
+}
+function lessonCard(rows){
+  var grades = {}, maxCur = {};
+  rows.forEach(function(r){ if (!r.s.grade) return; grades[r.s.grade] = 1; maxCur[r.s.grade] = Math.max(maxCur[r.s.grade] || 0, r.cur); });
+  var multi = Object.keys(grades).length > 1;
+  var ls = (D.catalog || []).filter(function(l){ return grades[l.grade] && (l.course === 'main' ? l.week <= (maxCur[l.grade] || 0) : FACTS.res.some(function(r){ return r.lessonId === l.id; })); })
+    .sort(function(a, b){ return (a.course === 'main' ? 0 : 1) - (b.course === 'main' ? 0 : 1) || b.week - a.week || a.grade - b.grade; });
+  var data = ls.map(function(l){
+    var c = { done: 0, doing: 0, todo: 0, later: 0 }, p = 0, m = 0, n = 0;
+    rows.forEach(function(r){ if (r.s.grade !== l.grade) return; n++; var x = r.by[l.id] || { st: 'later' }; c[x.st === 'sched' ? 'later' : x.st]++; if (x.r) { p += x.r.score; m += sumMax(x.r); } });
+    return { l: l, c: c, n: n, avg: m ? pct(p, m) : null, now: rows.some(function(r){ return r.curL && r.curL.id === l.id; }) };
+  });
+  var label = function(l){ return multi ? lessonName(l) : lessonShort(l); }, body;
+  if (!data.length) body = '<div class="empty">' + esc(T('No lessons have been started yet.')) + '</div>';
+  else if (UI.les === 'table') body = '<table class="mini"><thead><tr><th>' + esc(T('Lesson')) + '</th>' + LST.map(function(s){ return '<th>' + esc(T(s[2])) + '</th>'; }).join('') + '<th>' + esc(T('Average first try')) + '</th></tr></thead><tbody>' +
+    data.map(function(x){ return '<tr><td>' + esc(label(x.l)) + '</td>' + LST.map(function(s){ return '<td>' + x.c[s[0]] + '</td>'; }).join('') + '<td>' + (x.avg === null ? '–' : x.avg + '%') + '</td></tr>'; }).join('') + '</tbody></table>';
+  else body = '<div class="rows">' + (UI.all ? data : data.slice(0, 4)).map(function(x){
+      return '<div class="row"><div class="lab"><b>' + esc(label(x.l)) + (x.now ? ' <span class="isnow">· ' + esc(T('this week')) + '</span>' : '') + '</b><small title="' + esc(lessonTitle(x.l)) + '">' + esc(lessonTitle(x.l)) + '</small></div>' +
+        stack(LST.map(function(s){ return { n: x.c[s[0]], cls: s[1], name: T(s[2]) }; }), x.n, label(x.l)) + '<div class="num">' + (x.avg === null ? '–' : x.avg + '%') + '</div></div>'; }).join('') + '</div>' +
+    (data.length > 4 ? '<button type="button" class="morelink" data-all>' + esc(UI.all ? T('Show the latest 4 only') : T('Show all {n} lessons', { n: data.length })) + '</button>' : '') +
+    '<div class="legend">' + LST.map(function(s){ return '<span><i class="' + s[1] + '"></i>' + esc(T(s[2])) + '</span>'; }).join('') + '<span>' + esc(T('Number = average first try')) + '</span></div>';
+  return '<div class="hd"><div><h2>' + esc(T('Lesson overview')) + '</h2><p class="sub">' + esc(T('Newest first. Where every student is in each lesson.')) + '</p></div>' + viewToggle('les') + '</div>' + body;
+}
+function strandCard(rows){
+  var g = rows.length && rows.every(function(r){ return r.s.grade === rows[0].s.grade; }) ? rows[0].s.grade : null;
+  var data = STRAND_ORDER.map(function(c){ var n = {}; TKEYS.forEach(function(k){ n[k] = 0; }); rows.forEach(function(r){ n[r.st.strands[c].tier]++; }); return { c: c, n: n, ep: pct(n.E + n.P + n.A, rows.length) }; });
+  var body;
+  if (!rows.length) body = '<div class="empty">' + esc(T('No results yet.')) + '</div>';
+  else if (UI.str === 'table') body = '<table class="mini"><thead><tr><th>' + esc(T('Strand')) + '</th>' + TKEYS.map(function(k){ return '<th>' + esc(TIER_SHORT[k]) + '</th>'; }).join('') + '<th>' + esc(T('Emerging+')) + '</th></tr></thead><tbody>' +
+    data.map(function(x){ return '<tr><td>' + x.c + ' · ' + esc(strandShort(x.c)) + '</td>' + TKEYS.map(function(k){ return '<td>' + x.n[k] + '</td>'; }).join('') + '<td>' + x.ep + '%</td></tr>'; }).join('') + '</tbody></table>';
+  else body = '<div class="rows">' + data.map(function(x){
+      return '<div class="row"><div class="lab"><b>' + x.c + ' · ' + esc(strandShort(x.c)) + '</b>' + (g ? '<small title="' + esc(strandName(x.c, g)) + '">' + esc(strandName(x.c, g)) + '</small>' : '') + '</div>' +
+        stack(TKEYS.map(function(k){ return { n: x.n[k], cls: 't' + (k || 'N'), name: TIER_SHORT[k] }; }), rows.length, x.c + ' · ' + strandShort(x.c)) + '<div class="num">' + x.ep + '%</div></div>'; }).join('') + '</div>' +
+    '<div class="legend">' + TKEYS.map(function(k){ return '<span><i class="t' + (k || 'N') + '"></i>' + esc(TIER_SHORT[k]) + '</span>'; }).join('') + '<span>' + esc(T('Number = at Emerging or above')) + '</span></div>';
+  return '<div class="hd"><div><h2>' + esc(T('Attainment by strand')) + '</h2><p class="sub">' + esc(g ? T('Each student\'s current tier in each strand (Grade {g}).', { g: g }) : T('Each student\'s current tier in each strand.')) + ' ' +
+    esc(T('Emerging is the Term 1 expected standard.')) + '</p></div>' + viewToggle('str') + '</div>' + body;
+}
+
+/* ---------- the students table: student · lesson · lessons so far · CU · SD · CE · GE ---------- */
+function lessonCell(row){
+  var l = colLesson(row), wk = !F.lesson ? T('Week {n}', { n: row.cur }) + ' · ' : '';
+  if (l === 'na') return '<span class="ls later">' + esc(T('n/a')) + '</span>';
+  if (!l) return '<span class="ls later">' + esc(T('Week {n}', { n: row.cur })) + '</span><span class="sm">' + esc(T('Lesson page not on the site yet')) + '</span>';
+  var x = row.by[l.id] || statusOf(row.s, l, RES, row.st.taught);
+  if (x.st === 'done') return '<span class="ls done"><i></i>' + x.pct + '%</span><span class="sm">' + esc(wk + T('Finished · {n} min', { n: mins(x.r.seconds) })) + '</span>';
+  if (x.st === 'doing') return '<span class="ls doing"><i></i>' + x.pct + '%</span><span class="sm">' + esc(wk + T('{d} of {a} activities', { d: x.r.done, a: l.activities })) + '</span>';
+  if (x.st === 'todo') return '<span class="ls todo"><i></i>' + esc(T('Not started')) + '</span><span class="sm">' + esc(wk + (x.date ? T('taught {d}', { d: fd(x.date) }) : '')) + '</span>';
+  if (x.st === 'sched') return '<span class="ls later">' + esc(T('To be scheduled')) + '</span>';
+  return '<span class="ls later">' + esc(T('Not taught yet')) + '</span><span class="sm">' + esc(wk + (x.date ? T('on {d}', { d: fd(x.date) }) : '')) + '</span>';
+}
+function sofarCell(row){
+  var L = row.taughtL, show = L.slice(-10), name = { done: T('finished'), doing: T('in progress'), todo: T('not started'), later: T('not started') };
+  var strip = show.map(function(l){ var x = row.by[l.id];
+    return '<i class="' + x.st + '" tabindex="0" data-tip="' + esc('<b>' + esc(T('Week {n}', { n: l.week })) + '</b> · ' + esc(name[x.st]) + (x.pct != null ? ' · ' + esc(T('{p}% first try', { p: x.pct })) : '')) + '"></i>'; }).join('');
+  return '<span class="sofar">' + T('{a} of {b} finished', { a: '<b>' + row.fin + '</b>', b: '<b>' + L.length + '</b>' }) + '</span>' +
+    (L.length ? '<span class="strip" role="img" aria-label="' + esc(L.map(function(l){ return T('Week {n}', { n: l.week }) + ' ' + name[row.by[l.id].st]; }).join(', ')) + '">' + (L.length > 10 ? '<small>+' + (L.length - 10) + '</small>' : '') + strip + '</span>' : '') +
+    '<span class="sm">' + esc(row.st.firstPct === null ? T('No activities yet') : T('{p}% first try overall', { p: row.st.firstPct })) + '</span>';
+}
+function tierCell(row, c){
+  var s = row.s, o = row.st.strands[c];
+  var tip = '<b>' + esc(s.name) + ' · ' + c + ' ' + esc(strandShort(c)) + '</b><br>' + esc(TIERS[o.tier]) + '<br>' + esc(o.pct === null ? T('No activities yet') : T('First try {p}% on {n} activities', { p: o.pct, n: o.n })) +
+    (o.judged ? '<br>✎ ' + esc(T('Set by {e}', { e: o.judged.by })) + ' · ' + esc(T('Automatic tier: {t}', { t: TIERS[o.auto] })) : '') + (D.canJudge ? '<br><i>' + esc(T('Click to record a tier')) + '</i>' : '');
+  var inner = esc(TIER_SHORT[o.tier]) + (o.judged ? '<span class="pen" aria-hidden="true">✎</span>' : '');
+  var label = esc(s.name + ', ' + strandName(c, s.grade) + ': ' + TIERS[o.tier] + (o.judged ? ' ✎' : ''));
+  return D.canJudge ? '<button type="button" class="tchip t' + (o.tier || 'N') + '" data-j="' + esc(s.email + '|' + c) + '" data-tip="' + esc(tip) + '" aria-haspopup="menu" aria-label="' + label + '">' + inner + '</button>'
+    : '<span class="tchip t' + (o.tier || 'N') + '" tabindex="0" data-tip="' + esc(tip) + '" aria-label="' + label + '">' + inner + '</span>';
+}
+function drawTable(){
+  var all = FACTS.students.map(function(s){ return ROWS[s.email]; }), colL = F.lesson ? lessonInfo(F.lesson) : null;
+  var stOf = function(r){ var l = colLesson(r); return l && l !== 'na' ? (r.by[l.id] || {}).st : null; };
+  var what = colL ? lessonShort(colL) : T('this week\'s lesson');
+  $('#chips').innerHTML = [['all', T('All'), all.length], ['nudge', T('Need a nudge'), all.filter(function(r){ return r.nudge; }).length],
+    ['todo', T('Not started {l}', { l: what }), all.filter(function(r){ return stOf(r) === 'todo'; }).length], ['done', T('Finished {l}', { l: what }), all.filter(function(r){ return stOf(r) === 'done'; }).length]]
+    .map(function(c){ return '<button type="button" data-f="' + c[0] + '" aria-pressed="' + (UI.filter === c[0]) + '">' + esc(c[1]) + '<i>' + c[2] + '</i></button>'; }).join('');
+  var rows = all.filter(function(r){ return !UI.q || r.s.name.toLowerCase().indexOf(UI.q) >= 0 || r.s.email.indexOf(UI.q) >= 0; });
+  if (UI.filter === 'nudge') rows = rows.filter(function(r){ return r.nudge; });
+  if (UI.filter === 'todo') rows = rows.filter(function(r){ return stOf(r) === 'todo'; });
+  if (UI.filter === 'done') rows = rows.filter(function(r){ return stOf(r) === 'done'; });
+  var key = function(r){ var l = colLesson(r), x = l && l !== 'na' ? r.by[l.id] : null; return !x ? 102 : x.pct != null ? x.pct : (x.st === 'todo' ? -1 : 101); };
+  rows.sort(function(a, b){ return UI.sort === 'low' ? key(a) - key(b) || a.s.name.localeCompare(b.s.name)
+    : UI.sort === 'behind' ? b.behind - a.behind || a.s.name.localeCompare(b.s.name) : numSort(a.s.section, b.s.section) || a.s.name.localeCompare(b.s.name); });
+  $('#count').textContent = rows.length === all.length ? '· ' + all.length : '· ' + T('{a} of {b}', { a: rows.length, b: all.length });
+  var head = colL ? esc(lessonShort(colL)) + (multiGrade() ? ' · ' + esc(T('Grade {g}', { g: colL.grade })) : '') + '<small title="' + esc(lessonTitle(colL)) + '">' + esc(lessonTitle(colL)) + '</small>'
+    : esc(T('This week\'s lesson')) + '<small>' + esc(T('each class\'s lesson for this week')) + '</small>';
+  $('#tbl').innerHTML = !all.length ? '<div class="card"><div class="empty">' + esc(T('No students on this list yet.')) + '</div></div>' :
+    '<div class="tablewrap"><table class="stable"><colgroup><col class="c-name"><col class="c-les"><col class="c-sofar"><col class="c-str"><col class="c-str"><col class="c-str"><col class="c-str"></colgroup><thead>' +
+    '<tr><th class="name" rowspan="2">' + esc(T('Student')) + '</th><th rowspan="2">' + head + '</th><th rowspan="2">' + esc(T('Lessons so far')) + '<small>' + esc(T('finished, oldest → newest')) + '</small></th><th class="grp" colspan="4">' + esc(T('Strand tier')) + '</th></tr>' +
+    '<tr>' + STRAND_ORDER.map(function(c){ return '<th class="str">' + c + '<small>' + esc(strandShort(c)) + '</small></th>'; }).join('') + '</tr></thead><tbody>' +
+    (rows.map(function(r){ var s = r.s;
+      return '<tr><td class="name"><button type="button" class="stu" data-e="' + esc(s.email) + '" title="' + esc(T('See {name}\'s dashboard', { name: s.name })) + '">' + esc(s.name) + '</button>' + (F.section ? '' : '<small>' + esc(secName(s.section)) + '</small>') + '</td>' +
+        '<td class="les" data-l="' + esc(colL ? lessonShort(colL) : T('This week')) + '">' + lessonCell(r) + '</td><td class="sofar" data-l="' + esc(T('Lessons so far')) + '">' + sofarCell(r) + '</td>' +
+        STRAND_ORDER.map(function(c){ return '<td class="str" data-l="' + c + '">' + tierCell(r, c) + '</td>'; }).join('') + '</tr>'; }).join('') ||
+      '<tr><td colspan="7" class="empty" style="padding:18px">' + esc(T('No students match.')) + '</td></tr>') + '</tbody></table></div>';
+  var pill = function(cls, txt){ return '<span class="ls ' + cls + '" style="padding:0 8px 0 6px"><i></i>' + esc(txt) + '</span>'; };
+  $('#tlegend').innerHTML = '<span>' + pill('done', '78%') + ' ' + esc(T('finished')) + '</span><span>' + pill('doing', '59%') + ' ' + esc(T('in progress')) + '</span><span>' + pill('todo', T('Not started')) + ' ' + esc(T('after it was taught')) + '</span>' +
+    '<span>' + esc(T('% = first-try score')) + '</span><span style="margin-inline-start:auto">' + esc(T('Tiers:')) + '</span>' + TKEYS.map(function(k){ return '<span><i class="t' + (k || 'N') + '"></i>' + esc(TIER_SHORT[k]) + '</span>'; }).join('');
+  var rid = F.lesson;
+  if (!rid) { var ids = {}; all.forEach(function(r){ if (r.curL) ids[r.curL.id] = 1; }); var ks = Object.keys(ids); if (ks.length === 1) rid = ks[0]; }
+  $('#reteach').innerHTML = rid && FACTS.res.some(function(r){ return r.lessonId === rid; }) ? activityChart(FACTS, rid) : '';
+  document.querySelectorAll('#tbl .stu').forEach(function(b){ b.onclick = function(){ viewAs(b.getAttribute('data-e')); }; });
+  wireTips();
+}
+
+/* ---------- recording a tier: a small menu instead of a drop-down on every row ---------- */
+var MENU = $('#tmenu');
+function openTierMenu(btn){
+  var k = btn.getAttribute('data-j').split('|'), email = k[0], c = k[1], s = D.students.filter(function(x){ return x.email === email; })[0];
+  if (!s || !ROWS[email]) return;
+  var o = ROWS[email].st.strands[c], cur = o.judged ? o.judged.tier : '';
+  MENU.innerHTML = '<p><b>' + esc(s.name) + ' · ' + c + '</b><br>' + esc(strandName(c, s.grade)) + (o.pct === null ? '' : ' · ' + esc(T('First try {p}% on {n} activities', { p: o.pct, n: o.n }))) + '</p>' +
+    '<button type="button" role="menuitemradio" data-t="" aria-checked="' + (cur === '') + '"><i class="t' + (o.auto || 'N') + '"></i>' + esc(T('Automatic: {t}', { t: TIER_SHORT[o.auto] })) + '</button><hr>' +
+    ['W', 'E', 'P', 'A'].map(function(t){ return '<button type="button" role="menuitemradio" data-t="' + t + '" aria-checked="' + (cur === t) + '"><i class="t' + t + '"></i>✎ ' + esc(TIERS[t]) + '</button>'; }).join('');
+  MENU.hidden = false; $('#tip').style.display = 'none';
+  var b = btn.getBoundingClientRect(), w = MENU.offsetWidth;
+  MENU.style.left = Math.max(8, Math.min(document.documentElement.clientWidth - w - 8, b.left + scrollX + b.width / 2 - w / 2)) + 'px';
+  MENU.style.top = (b.bottom + scrollY + 6) + 'px';
+  MENU.querySelectorAll('button').forEach(function(x){ x.onclick = function(){ setTier(email, c, x.getAttribute('data-t')); }; });
+  (MENU.querySelector('[aria-checked="true"]') || MENU.querySelector('button')).focus({ preventScroll: true });
+}
+function setTier(email, c, t){
+  var key = email + '|' + c;
+  MENU.querySelectorAll('button').forEach(function(x){ x.disabled = true; });
+  var done = function(){
+    if (t) D.judgements[key] = { tier: t, by: CFG.email, at: new Date().toISOString(), note: '' }; else delete D.judgements[key];
+    MENU.hidden = true; refresh(email);
+    var again = document.querySelector('[data-j="' + key.replace(/"/g, '') + '"]'); if (again) again.focus({ preventScroll: true });
+  };
+  if (window.google && google.script && google.script.run)
+    google.script.run.withSuccessHandler(done).withFailureHandler(function(e){ MENU.hidden = true; alert(errT(e.message || String(e))); }).setJudgement(email, c, t, '');
+  else done();
+}
+document.addEventListener('click', function(e){
+  if (!e.target.closest) return;
+  var j = e.target.closest('[data-j]'); if (j) { e.stopPropagation(); openTierMenu(j); return; }
+  if (!e.target.closest('#tmenu')) MENU.hidden = true;
+  var f = e.target.closest('[data-f]'); if (f && $('#tbl')) { if (f.tagName === 'A') e.preventDefault(); UI.filter = f.getAttribute('data-f'); drawTable(); if (f.tagName === 'A') $('#stuH').scrollIntoView({ behavior: 'smooth' }); return; }
+  var v = e.target.closest('[data-view]'); if (v) { var p = v.getAttribute('data-view').split('|'); UI[p[0]] = p[1]; drawTop(); return; }
+  if (e.target.closest('[data-all]')) { UI.all = !UI.all; drawTop(); return; }
+  var open = document.querySelector('details.menu[open]'); if (open && !e.target.closest('details.menu')) open.removeAttribute('open');
+});
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') { MENU.hidden = true; var open = document.querySelector('details.menu[open]'); if (open) open.removeAttribute('open'); } });
 
 var VIEW = null;   // staff: the student whose view is being previewed
 var MANAGE = false; // staff: the class-lists screen
@@ -471,7 +866,7 @@ function addCatalog(){
 }
 
 function lessonName(l){ return LANG === 'ar' ? 'ص' + l.grade + ' ' + (l.course === 'main' ? 'رئيسي' : 'تمهيدي') + ' – أسبوع ' + l.week : 'G' + l.grade + ' ' + (l.course === 'main' ? 'Main' : 'Bridging') + ' W' + l.week; }
-function lessonTitle(l){ return (l.title || '').replace(/ – Grade.*$/, ''); }
+function lessonTitle(l){ var c = (D && D.catalog || []).filter(function(x){ return x.id === l.id; })[0]; return c ? c.title : (l.title || '').replace(/ – Grade.*$/, ''); }   // the lesson's own heading
 
 /* one row per student × lesson with derived numbers */
 function facts(){
@@ -487,86 +882,10 @@ function facts(){
   return { L: L, S: S, students: students, lessons: lessons, res: res };
 }
 
-function render(){
-  var secs = D.sections.slice().sort(function(a, b){ return a.localeCompare(b, undefined, { numeric: true }); });
-  var lessons = D.lessons.slice().sort(function(a, b){ return a.grade - b.grade || a.week - b.week; });
-  var self = D.scope === 'self';
-  if (self) return studentView();
-  if (VIEW) return studentView(VIEW);
-  if (MANAGE && D.roster) return manageView();
-  var html = '';
-  if (!self) html += '<div class="filters">' +
-    '<div><label for="fSec">' + T('Section') + '</label><select id="fSec"><option value="">' + (D.scope === 'school' ? T('All sections') : T('All my sections')) + '</option>' +
-      secs.map(function(s){ return '<option value="' + esc(s) + '"' + (F.section === s ? ' selected' : '') + '>' + esc(secName(s)) + '</option>'; }).join('') + '</select></div>' +
-    '<div><label for="fLes">' + T('Lesson') + '</label><select id="fLes"><option value="">' + T('All lessons') + '</option>' +
-      lessons.map(function(l){ return '<option value="' + esc(l.id) + '"' + (F.lesson === l.id ? ' selected' : '') + '>' + esc(lessonName(l) + ' – ' + lessonTitle(l)) + '</option>'; }).join('') + '</select></div>' +
-    '<div><label for="fView">' + T('Student view') + '</label><select id="fView"><option value="">' + T('See a student\'s dashboard…') + '</option>' +
-      D.students.slice().sort(function(a, b){ return a.section.localeCompare(b.section, undefined, { numeric: true }) || a.name.localeCompare(b.name); })
-        .filter(function(s){ return !F.section || s.section === F.section; })
-        .map(function(s){ return '<option value="' + esc(s.email) + '">' + esc(s.name + ' · ' + secName(s.section)) + '</option>'; }).join('') + '</select></div>' +
-    (D.roster ? '<div><button type="button" id="rosterBtn">👥 ' + T('Class lists') + (D.roster.requests.some(function(r){ return r.canDecide; }) ? ' <span class="dot">' + D.roster.requests.filter(function(r){ return r.canDecide; }).length + '</span>' : '') + '</button></div>' : '') +
-    '<div><button type="button" id="pdfBtn">' + T('Save as PDF') + '</button></div>' +
-    '<div><button type="button" id="exportBtn" title="' + T('Raw data for spreadsheets') + '">' + T('Download data (CSV)') + '</button></div></div>';
-  html += '<div id="body"></div>';
-  $('#app').innerHTML = html;
-  if (!self) {
-    $('#fSec').onchange = function(){ F.section = this.value; render(); };
-    $('#fView').onchange = function(){ if (this.value) viewAs(this.value); };
-    $('#fLes').onchange = function(){ F.lesson = this.value; draw(); };
-    $('#exportBtn').onclick = exportCsv;
-    $('#pdfBtn').onclick = savePdf;
-    if ($('#rosterBtn')) $('#rosterBtn').onclick = function(){ MANAGE = true; render(); window.scrollTo(0, 0); };
-  }
-  draw();
-}
-
-function draw(){
-  var f = facts(), self = D.scope === 'self';
-  var byLesson = {};
-  f.lessons.forEach(function(l){ byLesson[l.id] = { l: l, started: 0, finished: 0, pts: 0, max: 0, secs: 0 }; });
-  f.res.forEach(function(r){
-    var b = byLesson[r.lessonId]; if (!b) return;
-    b.started++; if (r.done >= b.l.activities) b.finished++;
-    b.pts += r.score; b.max += Object.keys(r.acts).reduce(function(n, k){ return n + r.acts[k][1]; }, 0); b.secs += r.seconds;
-  });
-  var rows = Object.keys(byLesson).map(function(k){ return byLesson[k]; });
-  var tot = rows.reduce(function(a, b){ a.st += b.started; a.p += b.pts; a.m += b.max; a.s += b.secs; a.fin += b.finished; return a; }, { st: 0, p: 0, m: 0, s: 0, fin: 0 });
-
-  var h = '<div class="tiles">' +
-    tile(self ? T('Lessons started') : T('Students'), self ? tot.st : f.students.length, self ? T('of {n} lessons available', { n: f.lessons.length }) : (F.section ? secName(F.section) : (D.scope === 'school' ? T('whole school') : T('in my sections')))) +
-    tile(T('Lessons finished'), tot.fin, self ? T('every activity checked') : T('student-lessons with every activity checked')) +
-    tile(T('Average first-try score'), tot.m ? pct(tot.p, tot.m) + '%' : '–', T('across activities checked')) +
-    tile(T('Average time per lesson'), tot.st ? T('{n} min', { n: mins(tot.s / tot.st) }) : '–', T('active time on the page')) + '</div>';
-
-  if (!self) {
-    h += '<div class="grid2">' +
-      card(T('Average first-try score by lesson'), T('Mean of each student\'s first attempt, as a % of the points they attempted.'),
-        hbars(rows.filter(function(b){ return b.max; }).map(function(b){ return { label: lessonName(b.l), value: pct(b.pts, b.max), text: pct(b.pts, b.max) + '%',
-          tip: '<b>' + esc(lessonName(b.l)) + '</b><br>' + esc(lessonTitle(b.l)) + '<br>' + T('Average first try: {p}%', { p: pct(b.pts, b.max) }) + '<br>' + nStudents(b.started) }; }), 100, '%')) +
-      card(T('Completion by lesson'), T('Share of students who have checked every activity, out of those whose section has been taught the lesson.'),
-        hbars(rows.filter(function(b){ return (b.l.course === 'main' && rosterFor(f, b.l) > 0) || b.started; }).map(function(b){ var n = rosterFor(f, b.l); return { label: lessonName(b.l), value: pct(b.finished, n), text: b.finished + ' / ' + n,
-          tip: '<b>' + esc(lessonName(b.l)) + '</b><br>' + T('Finished: {n}', { n: b.finished }) + '<br>' + T('Started, not finished: {n}', { n: b.started - b.finished }) + '<br>' + T('Not started: {n}', { n: Math.max(0, n - b.started) }) }; }), 100, '%')) +
-      '</div>';
-    if (f.students.length) h += attainmentCard(f);
-    if (F.lesson) h += activityChart(f);
-  }
-  h += progressTable(f, self);
-  h += '<p class="note">' + T('First-try scores are kept exactly as first checked; retries are for learning and don\'t change them. Time counts only while the lesson page is open, visible and in use (it pauses after 2 minutes without activity).') + ' ' +
-       (self ? '' : (D.scope === 'school' ? T('Only the sections you teach are shown – your role can see the whole school.') : T('Only the sections you teach are shown.'))) + ' ' + T('Data refreshed {d}.', { d: new Date(D.generatedAt).toLocaleString(LOC) }) + '</p>';
-  var les = F.lesson && D.lessons.filter(function(l){ return l.id === F.lesson; })[0];
-  $('#body').innerHTML = printHead(T('AI Literacy progress report'),
-    (F.section ? secName(F.section) : (D.scope === 'school' ? T('Whole school') : T('All my sections'))) + ' · ' + (les ? lessonName(les) + ' – ' + lessonTitle(les) : T('All lessons'))) + h;
-  wireTips(); wireJudge();
-  document.querySelectorAll('#body .stu').forEach(function(b){ b.onclick = function(){ viewAs(b.getAttribute('data-e')); }; });
-}
-
 function viewAs(email){
   VIEW = D.students.filter(function(s){ return s.email === email; })[0] || null;
   render(); window.scrollTo(0, 0);
 }
-
-/* Students in this lesson's grade whose section has been taught it (Bridging: everyone in the grade). */
-function rosterFor(f, l){ return f.students.filter(function(s){ return (!s.grade || s.grade === l.grade) && (l.course !== 'main' || taughtFor(s.section) >= l.week); }).length; }
 function tile(k, v, s){ return '<div class="tile"><small>' + esc(k) + '</small><b>' + esc(v) + '</b><span>' + esc(s) + '</span></div>'; }
 function card(t, s, body){ return '<section class="card"><h2>' + esc(t) + '</h2><p class="sub">' + esc(s) + '</p>' + body + '</section>'; }
 
@@ -580,58 +899,20 @@ function hbars(items, max, unit){
   }).join('') + '</div><div class="axis" aria-hidden="true"><div></div><div><span>0</span><span>25</span><span>50</span><span>75</span><span>100' + unit + '</span></div></div>';
 }
 
-function activityChart(f){
+function activityChart(f, lid){
   var acts = {};
-  f.res.filter(function(r){ return r.lessonId === F.lesson; }).forEach(function(r){
+  f.res.filter(function(r){ return r.lessonId === lid; }).forEach(function(r){
     Object.keys(r.acts).forEach(function(k){ var a = r.acts[k]; var o = acts[k] || (acts[k] = { title: a[2], part: a[3], p: 0, m: 0, n: 0 }); o.p += a[0]; o.m += a[1]; o.n++; });
   });
   var items = Object.keys(acts).map(function(k){ var a = acts[k]; return { label: (a.part ? a.part + ': ' : '') + a.title, value: pct(a.p, a.m), text: pct(a.p, a.m) + '%',
     tip: '<b>' + esc(a.title) + '</b><br>' + esc(a.part) + '<br>' + T('Average first try: {p}%', { p: pct(a.p, a.m) }) + '<br>' + nStudents(a.n) }; })
     .sort(function(a, b){ return a.value - b.value; });
-  return card(T('Which activities need reteaching?'), T('Average first-try score for each activity in this lesson, lowest first.'), hbars(items, 100, '%'));
-}
-
-function shade(p){
-  var steps = [[90,'var(--s600)','#fff'],[75,'var(--s500)','#fff'],[60,'var(--s400)','#fff'],[40,'var(--s300)','#0b0b0b'],[20,'var(--s200)','#0b0b0b'],[0,'var(--s100)','#0b0b0b']];
-  for (var i = 0; i < steps.length; i++) if (p >= steps[i][0]) return steps[i];
-  return steps[5];
-}
-
-function progressTable(f, self){
-  if (!f.lessons.length) return '<div class="card"><div class="empty">' + T('No lessons have been started yet.') + '</div></div>';
-  var R = {}; f.res.forEach(function(r){ R[r.email + '|' + r.lessonId] = r; });
-  var students = f.students.slice().sort(function(a, b){ return a.section.localeCompare(b.section, undefined, { numeric: true }) || a.name.localeCompare(b.name); });
-  var h = '<div class="card" style="padding:0;border:0;background:none"><h2 style="margin:0 0 8px">' + (self ? T('My lessons') : T('Student progress')) + '</h2><div class="tablewrap"><table><thead><tr>' +
-    (self ? '' : '<th>' + T('Student') + '</th><th>' + T('Section') + '</th><th>' + T('Badges') + '</th>' + STRAND_ORDER.map(function(c){ return '<th class="l" title="' + esc(strandShort(c)) + '">' + c + '<br><span style="font-weight:400">' + esc(strandShort(c)) + '</span></th>'; }).join('')) +
-    f.lessons.map(function(l){ return '<th class="l" title="' + esc(lessonTitle(l)) + '">' + esc(lessonName(l)) + '</th>'; }).join('') + '</tr></thead><tbody>';
-  students.forEach(function(s){
-    var stt = studentStats(s.email, s.grade), bs = stt.earned;
-    h += '<tr>' + (self ? '' : '<td><button type="button" class="stu" data-e="' + esc(s.email) + '" title="' + esc(T('See {name}\'s dashboard', { name: s.name })) + '">' + esc(s.name) + '</button></td><td>' + esc(secName(s.section)) + '</td><td class="c"><span class="bcount" data-tip="' +
-      esc(bs.length ? '<b>' + s.name + '</b><br>' + bs.map(function(b){ return b.icon + ' ' + b.name; }).join('<br>') : T('{name} has no badges yet', { name: s.name })) + '">' +
-      (bs.length ? bs.slice(0, 4).map(function(b){ return b.icon; }).join('') + (bs.length > 4 ? ' +' + (bs.length - 4) : '') : '–') + '</span></td>' +
-      STRAND_ORDER.map(function(c){ return judgeCell(s, c, stt.strands[c]); }).join(''));
-    f.lessons.forEach(function(l){
-      if (s.grade && s.grade !== l.grade) { h += '<td class="c"><span class="cell none">' + T('n/a') + '</span></td>'; return; }
-      var r = R[s.email + '|' + l.id];
-      if (!r) { var nt = l.course === 'main' && taughtFor(s.section) < l.week;
-        h += '<td class="c"><span class="cell none" data-tip="' + esc(l.course === 'bridging' ? T('Bridging lessons have not been scheduled yet') : nt ? T('{section} has not been taught {lesson} yet', { section: secName(s.section), lesson: lessonName(l) }) : T('{name} has not started {lesson}', { name: s.name, lesson: lessonName(l) })) + '">' + (l.course === 'bridging' ? T('To be scheduled') : nt ? T('Not taught yet') : T('Not started')) + '</span></td>'; return; }
-      var max = Object.keys(r.acts).reduce(function(n, k){ return n + r.acts[k][1]; }, 0), p = pct(r.score, max), sh = shade(p);
-      var fin = r.done >= l.activities;
-      h += '<td class="c"><span class="cell" style="background:' + sh[1] + ';color:' + sh[2] + '" data-tip="' +
-        esc('<b>' + s.name + ' · ' + lessonName(l) + '</b><br>' + T('First try: {s} / {m} ({p}%)', { s: r.score, m: max, p: p }) + '<br>' + T('Activities checked: {d} of {a}', { d: r.done, a: l.activities }) + '<br>' + T('Active time: {n} min', { n: mins(r.seconds) })) + '">' +
-        p + '%<small>' + (fin ? T('✓ done') : r.done + '/' + l.activities) + ' · ' + mins(r.seconds) + T('m') + '</small></span></td>';
-    });
-    h += '</tr>';
-  });
-  h += '</tbody></table></div><div class="legend"><span>' + T('First-try score:') + '</span>' +
-    [['var(--s100)','0–19%'],['var(--s200)','20–39%'],['var(--s300)','40–59%'],['var(--s400)','60–74%'],['var(--s500)','75–89%'],['var(--s600)','90–100%']].map(function(x){ return '<span><i style="background:' + x[0] + '"></i>' + x[1] + '</span>'; }).join('') +
-    '<span>' + T('· “3/9” = activities checked · “12m” = active minutes') + '</span></div></div>';
-  return h;
+  return card(T('Which activities need reteaching?') + ' · ' + lessonName(lessonInfo(lid)), T('Average first-try score for each activity in this lesson, lowest first.'), hbars(items, 100, '%'));
 }
 
 /* ---------- Save as PDF: prints the dashboard as shown, with a report header ---------- */
 function printHead(title, scope){
-  return '<div class="printhead"><div><h1>' + esc(title) + '</h1><p>' + esc(scope) + '</p></div><div class="r"><p><b>' + T('American International School in Abu Dhabi') + '</b></p><p>' + T('Prepared by {e}', { e: esc(CFG.email) }) + ' · ' +
+  return '<div class="printhead"><img src="assets/aisa/lockup-purple.png" alt="' + esc(T('American International School in Abu Dhabi')) + '"><div><h1>' + esc(title) + '</h1><p>' + esc(scope) + '</p></div><div class="r"><p>' + T('Prepared by {e}', { e: esc(CFG.email) }) + ' · ' +
     new Date().toLocaleDateString(LOC, { day: 'numeric', month: 'long', year: 'numeric' }) + '</p><p>' + T('Confidential – contains student data') + '</p></div></div>';
 }
 function fitTables(){       // shrink wide tables to the page width (A4 landscape ≈ 1040px)
@@ -648,13 +929,15 @@ function savePdf(name){
   fitTables(); window.print(); unfitTables(); document.title = t;
 }
 
-function wireTips(){
+var TIPS_ON = false;
+function wireTips(){            // one listener for every tooltip on the page (hover and keyboard focus)
+  if (TIPS_ON) return; TIPS_ON = true;
   var tip = $('#tip');
-  document.querySelectorAll('[data-tip]').forEach(function(el){
-    el.addEventListener('mouseenter', function(){ tip.innerHTML = el.getAttribute('data-tip'); tip.style.display = 'block'; });
-    el.addEventListener('mousemove', function(e){ tip.style.left = Math.min(e.clientX + 14, innerWidth - 290) + 'px'; tip.style.top = (e.clientY + 14) + 'px'; });
-    el.addEventListener('mouseleave', function(){ tip.style.display = 'none'; });
-  });
+  var show = function(el, x, y){ tip.innerHTML = el.getAttribute('data-tip'); tip.style.display = 'block'; tip.style.left = Math.max(8, Math.min(x + 14, innerWidth - 290)) + 'px'; tip.style.top = (y + 14) + 'px'; };
+  document.addEventListener('mousemove', function(e){ var el = e.target.closest && e.target.closest('[data-tip]'); if (el && MENU.hidden) show(el, e.clientX, e.clientY); else tip.style.display = 'none'; });
+  document.addEventListener('focusin', function(e){ var el = e.target.closest && e.target.closest('[data-tip]'); if (el && MENU.hidden) { var b = el.getBoundingClientRect(); show(el, b.left, b.bottom); } else tip.style.display = 'none'; });
+  document.addEventListener('focusout', function(){ tip.style.display = 'none'; });
+  addEventListener('scroll', function(){ tip.style.display = 'none'; }, { passive: true });
 }
 
 /* ===================== class lists (teachers, SLT, owners) ===================== */
@@ -960,48 +1243,8 @@ function studentView(who){
   wireTips();
 }
 
-/* ===================== attainment (teacher, SLT) ===================== */
-function attainmentCard(f){
-  var rows = STRAND_ORDER.map(function(c){
-    var counts = { '': 0, W: 0, O: 0, E: 0, P: 0, A: 0 };
-    f.students.forEach(function(s){ counts[studentStats(s.email, s.grade).strands[c].tier]++; });
-    return { c: c, counts: counts, total: f.students.length };
-  });
-  var segs = [['', 'var(--grid)', TIERS['']], ['W', 'var(--s100)', TIER_SHORT.W], ['O', 'var(--s200)', TIERS.O], ['E', 'var(--s300)', TIERS.E], ['P', 'var(--s500)', TIERS.P], ['A', 'var(--s600)', TIERS.A]];
-  var g = f.students[0] && f.students.every(function(s){ return s.grade === f.students[0].grade; }) ? f.students[0].grade : null;
-  return card(T('Attainment by strand'), (g ? T('Each student\'s current tier in each strand (Grade {g}).', { g: g }) : T('Each student\'s current tier in each strand.')) + ' ' + T('Emerging is the Term 1 expected standard; Advanced is recorded by teachers. Use the menus in the table below to record a tier (✎).'),
-    '<div class="stack">' + rows.map(function(r){
-      return '<div class="srow"><span class="lab"><b>' + r.c + '</b> ' + esc(g ? strandName(r.c, g) : strandShort(r.c)) + '</span><div class="sbarwrap">' +
-        segs.map(function(s){ var n = r.counts[s[0]]; if (!n) return '';
-          var w = n / r.total * 100;
-          return '<span class="seg" style="width:' + w + '%;background:' + s[1] + ';color:' + (s[0] === 'P' || s[0] === 'A' ? '#fff' : '#0b0b0b') + '" data-tip="' + esc('<b>' + r.c + ' · ' + s[2] + '</b><br>' + T('{n} of {t} students ({p}%)', { n: n, t: r.total, p: Math.round(w) })) + '">' + (w >= 8 ? n : '') + '</span>'; }).join('') +
-        '</div><span class="srow-pct">' + T('{p}% at Emerging+', { p: pct(r.counts.E + r.counts.P + r.counts.A, r.total) }) + '</span></div>';
-    }).join('') + '</div><div class="legend">' + segs.map(function(s){ return '<span><i style="background:' + s[1] + '"></i>' + s[2] + '</span>'; }).join('') + '</div>');
-}
-
-function judgeCell(s, c, o){
-  var label = TIER_SHORT[o.tier] + (o.judged ? ' ✎' : '');
-  var tip = '<b>' + esc(s.name) + ' · ' + c + '</b><br>' + (o.pct === null ? T('No activities yet') : T('First try {p}% on {n} activities', { p: o.pct, n: o.n })) +
-    '<br>' + T('Automatic tier: {t}', { t: TIERS[o.auto] }) + (o.judged ? '<br>' + T('Set by {e}', { e: esc(o.judged.by) }) + (o.judged.note ? ': ' + esc(o.judged.note) : '') : '');
-  if (!D.canJudge) return '<td class="c"><span class="tier t' + (o.tier || 'N') + '" data-tip="' + esc(tip) + '">' + esc(label) + '</span></td>';
-  return '<td class="c" data-tip="' + esc(tip) + '"><select class="jsel t' + (o.tier || 'N') + '" data-j="' + esc(s.email + '|' + c) + '" aria-label="' + esc(s.name + ' ' + c) + '">' +
-    '<option value=""' + (o.judged ? '' : ' selected') + '>' + esc(TIER_SHORT[o.auto]) + '</option>' +
-    ['W', 'E', 'P', 'A'].map(function(t){ return '<option value="' + t + '"' + (o.judged && o.judged.tier === t ? ' selected' : '') + '>✎ ' + TIER_SHORT[t] + '</option>'; }).join('') + '</select></td>';
-}
-function wireJudge(){
-  document.querySelectorAll('select[data-j]').forEach(function(el){
-    el.onchange = function(){
-      var k = el.getAttribute('data-j').split('|'), t = el.value;
-      el.disabled = true;
-      var done = function(){ if (t) D.judgements[k.join('|')] = { tier: t, by: CFG.email, at: new Date().toISOString(), note: '' }; else delete D.judgements[k.join('|')]; draw(); };
-      if (window.google && google.script && google.script.run)
-        google.script.run.withSuccessHandler(done).withFailureHandler(function(e){ el.disabled = false; alert(errT(e.message || String(e))); }).setJudgement(k[0], k[1], t, '');
-      else done();
-    };
-  });
-}
-
-setLang(LANG); header();
+setLang(LANG); shell();
+$('#app').innerHTML = '<div class="loading">' + T('Loading progress…') + '</div>';
 load();
 </script>
 </body>
