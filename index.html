@@ -71,6 +71,21 @@ table.grid[data-show]:not([data-show="all"]){min-width:0}
 .grid td.none{color:#B9B4C8;text-align:center;padding:12px 6px}
 .grid a.ls{display:block;height:100%;padding:10px;text-decoration:none;color:var(--ink);font-size:13.5px;line-height:1.35}
 .grid a.ls b{font-weight:600}
+/* lesson pop-up (same as the teaching calendar): Open lesson, Copy link, Share to Classroom */
+.pop{position:absolute;z-index:35;width:330px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 40px rgba(33,7,108,.18);padding:14px 16px}
+.pop h3{font-size:17px;display:flex;align-items:center;gap:8px;padding-inline-end:24px}
+.pop h3 i{width:10px;height:10px;border-radius:50%;background:var(--gc);flex:none}
+.pop p{margin:4px 0;font-size:14px;color:var(--muted)}
+.pop .ln{color:var(--ink);font-size:14.5px;margin:10px 0 0}
+.pop .x{position:absolute;inset-inline-end:8px;top:8px;border:0;background:none;font-size:20px;line-height:1;cursor:pointer;color:var(--muted);padding:4px 8px}
+@media (max-width:760px){.pop{position:fixed;left:8px!important;right:8px;bottom:8px;top:auto!important;width:auto}}
+.pop .act{display:flex;gap:8px 10px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.crs{display:inline-flex;align-items:center;gap:6px;padding:4px 12px 4px 5px;border-radius:999px;background:#fff;border:1.5px solid #F4B400;color:#137333;font-weight:700;font-size:13.5px;line-height:1;text-decoration:none;white-space:nowrap;transition:transform .15s ease,box-shadow .15s ease}
+.crs img{display:block;width:30px;height:26px;margin:0}
+.crs svg{display:block;width:15px;height:15px;fill:currentColor;flex:none}
+.crs:hover,.crs:focus-visible{transform:scale(1.06);box-shadow:0 4px 12px rgba(19,115,51,.22);text-decoration:none}
+@media (prefers-reduced-motion:reduce){.crs:hover,.crs:focus-visible{transform:none}}
+@media print{.pop{display:none!important}}
 .grid a.ls:hover b{text-decoration:underline}
 table.grid[data-show="6"] .g:not(.g6){display:none}table.grid[data-show="7"] .g:not(.g7){display:none}table.grid[data-show="8"] .g:not(.g8){display:none}table.grid[data-show="9"] .g:not(.g9){display:none}table.grid[data-show="10"] .g:not(.g10){display:none}table.grid[data-show="11"] .g:not(.g11){display:none}table.grid[data-show="12"] .g:not(.g12){display:none}
 .grid tr.bridge>*{border-bottom:2px solid var(--line)}
@@ -124,6 +139,7 @@ table.grid[data-show="6"] tr.thisweek td.g6{border-inline-end:4px solid var(--pu
   <p class="note" id="footNote"></p>
 </div></footer>
 
+<div class="pop" id="pop" role="dialog" aria-modal="false" hidden></div>
 <div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
   <div class="qrbox">
     <h2 id="qrT" style="margin:0" data-i18n="Scan to open AI Lessons">Scan to open AI Lessons</h2>
@@ -156,6 +172,11 @@ const STAFF = APP && ROLE !== 'student';
 const link = id => APP ? APP.base + '?p=' + encodeURIComponent(id) : id + '.html';
 const appPage = p => APP ? APP.base + '?p=' + p : p + '.html';
 const tgt = APP ? ' target="_top"' : '';
+/* lesson pop-up links: Copy link gives the lesson's own address; Classroom posts point at the signed-in app
+   (on the public site via the short link app/, which forwards there) */
+const lessonUrl = id => APP ? link(id) : new URL(id + '.html', location.href).href;
+const shareUrl = id => APP ? link(id) : new URL('app/?p=' + encodeURIComponent(id), location.href).href;
+const CR_ICON = '<img src="assets/classroom.png" alt="" width="30" height="26"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>';
 let LANG = (() => { try { return localStorage.getItem('aisa-lang') === 'ar' ? 'ar' : 'en'; } catch (e) { return 'en'; } })();
 let GRADE = null, PROG = null;
 /* ---------- words (English / العربية). Lesson titles stay in English. ---------- */
@@ -164,7 +185,7 @@ const AR = {
   'Choose your grade': 'اختر صفّك', 'All grades': 'جميع الصفوف', 'All AI lessons': 'جميع دروس الذكاء الاصطناعي', 'Every lesson, by grade': 'جميع الدروس حسب الصف',
   '{n} lessons for Grades 6–12. Each class has its AI lesson on its own day – the teaching calendar has every date.': '{n} درسًا للصفوف 6–12. لكل شعبة يوم خاص لدرس الذكاء الاصطناعي – وفي تقويم التدريس جميع المواعيد.',
   'Main course lessons by week, then foundation lessons.': 'دروس البرنامج الرئيسي حسب الأسبوع، ثم الدروس التمهيدية.', 'Grade {g}': 'الصف {g}', '{n} lessons': '{n} دروس', '1 lesson': 'درس واحد',
-  'Grade {g} only': 'الصف {g} فقط', 'No lessons on the site yet.': 'لا توجد دروس على الموقع بعد.', 'Teaching calendar →': 'تقويم التدريس ←', 'This week in every grade': 'هذا الأسبوع في جميع الصفوف', 'Grade': 'الصف', 'Week {n}': 'الأسبوع {n}', 'All Grade {g} lessons': 'جميع دروس الصف {g}', 'American International School in Abu Dhabi': 'المدرسة الأمريكية الدولية في أبوظبي', 'AI Literacy · Grades 6–12': 'محو أمية الذكاء الاصطناعي · الصفوف 6–12',
+  'Grade {g} only': 'الصف {g} فقط', 'No lessons on the site yet.': 'لا توجد دروس على الموقع بعد.', 'Teaching calendar →': 'تقويم التدريس ←', 'Open lesson': 'افتح الدرس', 'Copy link': 'انسخ الرابط', 'Share to Classroom': 'شارك في Google Classroom', 'Link copied': 'تم نسخ الرابط', 'Copy this link:': 'انسخ هذا الرابط:', 'AI Literacy – Grade {g}, Week {n}: {t}': 'الثقافة في الذكاء الاصطناعي – الصف {g}، الأسبوع {n}: {t}', 'AI Literacy – Grade {g}: {t}': 'الثقافة في الذكاء الاصطناعي – الصف {g}: {t}', 'This week in every grade': 'هذا الأسبوع في جميع الصفوف', 'Grade': 'الصف', 'Week {n}': 'الأسبوع {n}', 'All Grade {g} lessons': 'جميع دروس الصف {g}', 'American International School in Abu Dhabi': 'المدرسة الأمريكية الدولية في أبوظبي', 'AI Literacy · Grades 6–12': 'محو أمية الذكاء الاصطناعي · الصفوف 6–12',
   'Scan to open AI Lessons': 'امسح الرمز لفتح دروس الذكاء الاصطناعي', 'Close': 'إغلاق',
   'Teaching week {n} · {a} – {b}': 'الأسبوع الدراسي {n} · {a} – {b}', 'Before the AI timetable starts': 'قبل بدء جدول الذكاء الاصطناعي',
   'Hi {name} – here is your lesson this week': 'مرحبًا {name} – هذا درسك لهذا الأسبوع', 'Hi {name} – no AI lesson this week': 'مرحبًا {name} – لا يوجد درس ذكاء اصطناعي هذا الأسبوع',
@@ -299,7 +320,7 @@ function tableView() {
   const cell = (g, l, bridging) => {
     if (!l) return `<td class="g g${g} none">–</td>`;
     const short = bridging ? l.title : l.title.split(' + ')[0], lock = !bridging && lockedPublic(g, l.week), d = lock && AICAL.opensOnGrade(g, l.week);
-    return `<td class="g g${g}"><a class="ls${lock ? ' locked' : ''}"${lock ? ' aria-disabled="true"' : ` href="${esc(link(l.id))}"${tgt}`} title="${esc(l.title)}">` +
+    return `<td class="g g${g}"><a class="ls${lock ? ' locked' : ''}"${lock ? ' aria-disabled="true"' : ` href="${esc(link(l.id))}"${tgt} data-pop="${esc(l.id)}" aria-haspopup="dialog"`} title="${esc(l.title)}">` +
       `<b lang="en" dir="ltr">${esc(short)}</b>${lock ? `<small class="opens">🔒 ${esc(T('Opens {d}', { d: d ? fdm(d) : '–' }))}</small>` : ''}</a></td>`;
   };
   let h = `<table class="grid" data-show="${esc(show)}"><thead><tr><th scope="col">${esc(T('Term 1'))}</th>` +
@@ -404,7 +425,37 @@ function render() {
 /* grade pills (staff and visitors), remembered on this device */
 $('#grades').insertAdjacentHTML('beforeend', `<button type="button" class="gp" style="--gc:var(--purple)" data-g="all" aria-pressed="false" data-i18n="All grades">All grades</button>`);
 for (let g = 6; g <= 12; g++) $('#grades').insertAdjacentHTML('beforeend', `<button type="button" class="gp" style="--gc:var(--g${g})" data-g="${g}" aria-pressed="false">${g}</button>`);
+const toast = msg => { const t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 1800); };
+async function copyLink(url) {
+  try { await navigator.clipboard.writeText(url); return toast(T('Link copied')); } catch (e) {}
+  const ta = document.createElement('textarea'); ta.value = url; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;top:0;opacity:0';
+  document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (e) {} ta.remove();
+  if (ok) toast(T('Link copied')); else window.prompt(T('Copy this link:'), url);
+}
+/* clicking a lesson in the table opens the same pop-up as the teaching calendar */
+function openPop(a) {
+  const l = LESSON_LIST.find(x => x.id === a.dataset.pop); if (!l) return;
+  const pop = $('#pop'), wk = WEEKS.find(w => w[0] === l.week), main = l.course === 'main';
+  const title = main ? T('AI Literacy – Grade {g}, Week {n}: {t}', { g: l.grade, n: l.week, t: l.title }) : T('AI Literacy – Grade {g}: {t}', { g: l.grade, t: l.title });
+  pop.style.setProperty('--gc', `var(--g${l.grade})`);
+  pop.innerHTML = `<button class="x" type="button" aria-label="${esc(T('Close'))}">×</button><h3><i></i>${esc(T('Grade {g}', { g: l.grade }))}</h3>` +
+    `<p>${main ? esc(T('Week {n}', { n: l.week })) + (wk ? ' · ' + esc(fdm(pd(wk[1]))) + ' – ' + esc(fdm(pd(wk[2]))) : '') : esc(T('Bridging')) + ' · ' + esc(T('Foundation lessons'))}</p>` +
+    `<div class="ln">${en(l.title)}</div>` +
+    `<div class="act"><a class="btn small primary" href="${esc(link(l.id))}"${tgt}>${esc(T('Open lesson'))}</a>` +
+    `<button type="button" class="btn small quiet" data-copy="${esc(lessonUrl(l.id))}">🔗 ${esc(T('Copy link'))}</button>` +
+    `<a class="crs" href="${esc('https://classroom.google.com/share?url=' + encodeURIComponent(shareUrl(l.id)) + '&title=' + encodeURIComponent(title))}" target="_blank" rel="noopener">${CR_ICON}${esc(T('Share to Classroom'))}</a></div>`;
+  pop.hidden = false;
+  const b = a.getBoundingClientRect(), w = pop.offsetWidth;
+  pop.style.left = Math.max(8, Math.min(document.documentElement.clientWidth - w - 8, b.left + scrollX)) + 'px'; pop.style.top = (b.bottom + scrollY + 6) + 'px';
+  pop.querySelector('.x').onclick = () => { pop.hidden = true; a.focus(); };
+  pop.querySelector('a').focus({ preventScroll: true });
+  if (pop.getBoundingClientRect().bottom > innerHeight) pop.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') $('#pop').hidden = true; });
 document.addEventListener('click', e => {
+  const cp = e.target.closest('[data-copy]'); if (cp) { copyLink(cp.dataset.copy); return; }
+  const lp = e.target.closest('a[data-pop]'); if (lp && !e.ctrlKey && !e.metaKey && !e.shiftKey) { e.preventDefault(); e.stopPropagation(); openPop(lp); return; }
+  if (!e.target.closest('#pop')) $('#pop').hidden = true;
   const b = e.target.closest('.gp, [data-pick]'); if (b) { const v = b.dataset.g || b.dataset.pick; GRADE = v === 'all' ? 'all' : Number(v); try { localStorage.setItem('home-grade', GRADE); } catch (x) {} render(); return; }
   if (e.target.closest('[data-qr]')) $('#qrBtn').click();
 });
