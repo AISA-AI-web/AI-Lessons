@@ -48,14 +48,17 @@ let page = env.call('doGet', { parameter: { p: 'grade-6/main-w1-l1' } });
 ok(/window\.APP = CFG/.test(page.getContent()) && /"email":"s1@aisa.sch.ae"/.test(page.getContent()), 'bridge injected with user');
 ok(/"role":"student"/.test(page.getContent()) && /"name":"Sara One"/.test(page.getContent()), 'name and role from roster');
 for (const p of ['../Code', 'site/../Code', 'bridge', 'dashboard2', 'grade-6/../../x']) {
-  page = env.call('doGet', { parameter: { p } }); ok(/<h1>AI Lessons<\/h1>/.test(page.getContent()), 'unknown page falls back to index: ' + p);
+  page = env.call('doGet', { parameter: { p } }); ok(/<title>AI Lessons<\/title>/.test(page.getContent()), 'unknown page falls back to index: ' + p);
 }
-page = env.call('doGet', { parameter: {} }); ok(/<h1>AI Lessons<\/h1>/.test(page.getContent()), 'students land on the grade selector');
+page = env.call('doGet', { parameter: {} }); ok(/<title>AI Lessons<\/title>/.test(page.getContent()), 'students land on their home page');
+ok(/"section":"Girls 6"/.test(page.getContent()) && /"grade":6/.test(page.getContent()), 'students get their class and grade for the home page');
+page = env.call('doGet', { parameter: { p: 'calendar' } }); ok(/<title>AI Lessons<\/title>/.test(page.getContent()), 'the calendar is for staff: students opening it get their home page');
+ok(/data-shell/.test(page.getContent()) && /data:image\/png;base64,/.test(page.getContent()) && !/src="school-calendar.js"/.test(page.getContent()), 'home page served with its shell, logos and calendar inlined');
 env.as('t6@aisa.sch.ae'); page = env.call('doGet', { parameter: {} });
-ok(/AI Teaching Calendar/.test(page.getContent()) && /"sections":\["Girls 6"\]/.test(page.getContent()), 'teachers land on the calendar with their own sections');
+ok(/<title>AI Teaching Calendar<\/title>/.test(page.getContent()) && /"sections":\["Girls 6"\]/.test(page.getContent()), 'teachers land on the calendar with their own sections');
 env.as('principal@aisa.sch.ae'); page = env.call('doGet', { parameter: {} });
-ok(/AI Teaching Calendar/.test(page.getContent()) && /"sections":\[\]/.test(page.getContent()), 'SLT land on the calendar (all grades)');
-page = env.call('doGet', { parameter: { p: 'index' } }); ok(/<h1>AI Lessons<\/h1>/.test(page.getContent()), 'staff can still open the grade selector');
+ok(/<title>AI Teaching Calendar<\/title>/.test(page.getContent()) && /"sections":\[\]/.test(page.getContent()), 'SLT land on the calendar (all grades)');
+page = env.call('doGet', { parameter: { p: 'index' } }); ok(/<title>AI Lessons<\/title>/.test(page.getContent()), 'staff can still open the home page');
 env.as('s1@aisa.sch.ae');
 page = env.call('doGet', { parameter: { p: 'dashboard' } }); ok(/AI Curriculum Dashboard/.test(page.getContent()), 'dashboard served');
 
@@ -69,9 +72,11 @@ throws(() => env.call('recordScores', 'grade-6/../../secret', meta, [{ id: 'a', 
 ok(JSON.stringify(env.call('getLessonState', L).done) === JSON.stringify({ vocab: 4, sort: 6 }), 'lesson state returns recorded scores');
 ok(sheets.Lessons.some(r => r[0] === L && r[1] === 6 && r[2] === 'main' && r[3] === 1), 'lesson registered with grade/course/week');
 ok(env.call('recordTime', L, 60).saved === 60 && env.call('recordTime', L, 99999).saved === 300, 'time recorded and capped');
+let mp = env.call('getMyProgress').lessons; ok(mp[L] && mp[L].done === 2 && mp[L].score === 10 && mp[L].max === 11, 'home page progress: first tries per lesson');
 env.as('s2@aisa.sch.ae'); env.call('recordScores', L, meta, [{ id: 'vocab', score: 2, max: 5 }]);
 env.as('b1@aisa.sch.ae'); env.call('recordScores', 'grade-7/main-w1-l1', { title: 'G7', activities: 2, maxPoints: 10 }, [{ id: 'vocab', score: 3, max: 5 }]);
 env.as('stray@aisa.sch.ae'); env.call('recordScores', L, meta, [{ id: 'vocab', score: 1, max: 5 }]);
+env.as('s2@aisa.sch.ae'); mp = env.call('getMyProgress').lessons; ok(mp[L].done === 1 && mp[L].score === 2 && Object.keys(mp).length === 1, 'home page progress shows only your own work');
 
 /* dashboard visibility */
 const dash = e => { env.as(e); return env.call('getDashboard'); };

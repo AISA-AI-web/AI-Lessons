@@ -82,6 +82,10 @@
     var nm = document.getElementById('nm');
     if (nm) { nm.value = CFG.name; nm.readOnly = true; nm.title = 'Filled in from your school account';
       try { nm.dispatchEvent(new Event('input', { bubbles: true })); } catch (e) {} }
+    if (document.querySelector('[data-shell]')) {   // home page and calendar have their own top bar with the user's name
+      ['qrBtn','qrTop'].forEach(function(id){ var b = document.getElementById(id); if (b) b.onclick = qrOpen; });
+      return;
+    }
     var bar = document.createElement('div');
     bar.className = 'app-bar';
     bar.innerHTML = '<span>' + T('Signed in as') + ' <b dir="ltr"></b></span>' + (lessonId ? '<span class="app-save" aria-live="polite"></span>' : '') +
@@ -91,13 +95,15 @@
     bar.querySelector('a').href = appUrl('dashboard');
     document.body.insertBefore(bar, document.body.firstChild);
     status = bar.querySelector('.app-save');
-    var qr = function(){ var url = appUrl(CFG.page), ov = document.getElementById('ov'); if (!ov) return;
+    var qr = qrOpen;
+    ['qrBtn','qrTop'].forEach(function(id){ var b = document.getElementById(id); if (b) b.onclick = qr; });
+  });
+  /* QR code for the app address of this page (lesson pages and the home page) */
+  function qrOpen(){ var url = appUrl(CFG.page), ov = document.getElementById('ov'); if (!ov) return;
       document.getElementById('qrUrl').textContent = url; ov.classList.add('on');
       var draw = function(){ var el = document.getElementById('qr'); el.innerHTML = ''; new QRCode(el, { text: url, width: 320, height: 320, correctLevel: QRCode.CorrectLevel.M }); };
       if (window.QRCode) return draw();
-      var sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; sc.onload = draw; document.head.appendChild(sc); };
-    ['qrBtn','qrTop'].forEach(function(id){ var b = document.getElementById(id); if (b) b.onclick = qr; });
-  });
+      var sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; sc.onload = draw; document.head.appendChild(sc); }
 })();
 </script>
 <style>
