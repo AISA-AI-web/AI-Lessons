@@ -126,8 +126,11 @@ html[dir="rtl"] tr.now th{box-shadow:inset -4px 0 0 var(--now-line)}
 
 <script>
 /* If anything on this page fails, say so in the banner instead of failing silently. */
-window.onerror=function(m,src,l){var b=document.getElementById("banner");if(b){b.hidden=false;b.className="banner off";
-  b.innerHTML="<div><h2>Something on this page did not load.</h2><p class=\"err\">"+String(m).replace(/</g,"&lt;")+" (line "+l+")</p></div>"}};
+window.onerror=function(m,src,l,c){var b=document.getElementById("banner");if(!b)return;
+  var esc=function(x){return String(x).replace(/[&<>]/g,function(ch){return ch==="&"?"&amp;":ch==="<"?"&lt;":"&gt;"})}, where=String(src||"").split("/").pop().split("?")[0]||"inline", snip=[];
+  try{[].forEach.call(document.scripts,function(sc,i){if(sc.src||!sc.text)return;var ln=sc.text.split(String.fromCharCode(10))[l-1];if(ln)snip.push("script "+i+": "+ln.slice(Math.max(0,(c||1)-60),(c||1)+60))})}catch(e){}
+  b.hidden=false;b.className="banner off";
+  b.innerHTML="<div><h2>Something on this page did not load.</h2><p class=\"err\">"+esc(m)+" – "+esc(location.host+" · "+where+" · line "+l+":"+c)+"</p><pre class=\"err\" style=\"white-space:pre-wrap;margin:6px 0 0\">"+esc(snip.join(String.fromCharCode(10)))+"</pre></div>"};
 </script>
 <script src="school-calendar.js?v=2"></script>
 <script>
