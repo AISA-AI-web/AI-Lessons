@@ -18,4 +18,10 @@ ok(A.currentLesson('Girls 6', d('2026-10-05')) === 2 && A.taughtCount('Girls 6',
 ok(A.taughtSoFar('', d('2026-10-14')) === 2, 'unknown sections fall back to the last teaching week');
 ok(A.eventOn(d('2027-02-03')) === 'Winter MAP & Semester Finals', 'exam weeks are flagged');
 ok(/Mid-Term Break/.test(A.weekLabel(d('2026-10-14'))) && /Teaching week 3/.test(A.weekLabel(d('2026-10-22'))), 'week labels');
+ok(A.releasedFor('Girls 8', d('2026-10-26')) === 4 && A.releasedFor('Girls 8', d('2026-10-23')) === 3, 'a lesson opens on the Monday of the week it is taught');
+ok(A.releasedFor('Boys 8', d('2026-12-01')) === 8 && A.releasedFor('Boys 8', d('2026-12-07')) === 9, 'a pushed-back lesson opens in its new week');
+ok(A.releasedFor('Boys 8', d('2026-10-14')) === 2, 'nothing new opens during a break');
+ok(A.iso(A.opensOn('Boys 8', 10)) === '2027-01-04' && A.iso(A.opensOn('Girls 12', 10)) === '2026-12-07', 'opening dates per section');
+ok(A.releasedForGrade(8, d('2026-10-06')) === 2 && A.iso(A.opensOnGrade(8, 3)) === '2026-10-19', 'grade-wide release for the public site');
+ok(A.releasedFor('Boys 8', d('2026-09-01')) === 1, 'Week 1 is always open');
 console.log('All ' + n + ' calendar checks passed');

@@ -120,6 +120,7 @@ const AR={
   "Pushed back: this section missed an AI period to a holiday, so it is on Week {n}'s lesson (other sections are on Week {w}).":"مؤجَّل: فاتت هذه الشعبةَ حصةٌ بسبب عطلة، لذا تدرس درس الأسبوع {n} (الشعب الأخرى في الأسبوع {w}).",
   "Period {p}":"الحصة {p}","via Arabic Studies":"ضمن مادة اللغة العربية","via Islamic Studies":"ضمن مادة التربية الإسلامية",
   "Lesson:":"الدرس:","Grade {g} Main · Week {n}":"الصف {g} · البرنامج الرئيسي · الأسبوع {n}",
+  "Opens on its teaching week – teachers can open it in the signed-in app.":"يُفتح في أسبوع تدريسه – يمكن للمعلمين فتحه من التطبيق بعد تسجيل الدخول.",
   "Grade {g} Main · Week {n} lesson is not on the site yet.":"درس الصف {g} · البرنامج الرئيسي · الأسبوع {n} غير متوفر على الموقع بعد.",
   "None of your classes have AI Literacy on this day.":"لا توجد حصص ذكاء اصطناعي لشعبك في هذا اليوم.",
   "No AI Literacy lessons for this grade on this day.":"لا توجد دروس ذكاء اصطناعي لهذا الصف في هذا اليوم.",
@@ -151,7 +152,7 @@ function render(){
     const n=AICAL.lessonOn(sec,cur), L=(LESSONS[n]||{})[gr];
     const pushed=n<tw?`<span class="pushed">⏪ ${T("Pushed back: this section missed an AI period to a holiday, so it is on Week {n}'s lesson (other sections are on Week {w}).",{n,w:tw})}</span>`:"";
     return `<li class="slot"><div class="when"><b dir="ltr">${esc(time)}</b><small>${T("Period {p}",{p:per})}</small></div><div><h3>${esc(secName(sec))}<span class="subj ${sub}">${T("via "+sub+" Studies")}</span></h3>
-      <div class="lesson">${L?`${T("Lesson:")} <a href="${esc(link(L[0]))}"${window.APP?' target="_top"':""}>${T("Grade {g} Main · Week {n}",{g:gr,n})} – <span lang="en">${esc(L[1])}</span></a>`:`<span class="none">${T("Grade {g} Main · Week {n} lesson is not on the site yet.",{g:gr,n})}</span>`}${pushed}</div></div></li>`}).join(""):
+      <div class="lesson">${L&&!window.APP&&n>AICAL.releasedForGrade(gr,new Date())?`${T("Lesson:")} ${T("Grade {g} Main · Week {n}",{g:gr,n})} – <span lang="en">${esc(L[1])}</span> <span class="none">🔒 ${T("Opens on its teaching week – teachers can open it in the signed-in app.")}</span>`:L?`${T("Lesson:")} <a href="${esc(link(L[0]))}"${window.APP?' target="_top"':""}>${T("Grade {g} Main · Week {n}",{g:gr,n})} – <span lang="en">${esc(L[1])}</span></a>`:`<span class="none">${T("Grade {g} Main · Week {n} lesson is not on the site yet.",{g:gr,n})}</span>`}${pushed}</div></div></li>`}).join(""):
     `<li class="empty">${$("#grade").value==="mine"?T("None of your classes have AI Literacy on this day."):$("#grade").value?T("No AI Literacy lessons for this grade on this day."):T("No AI Literacy lessons on this day.")}</li>`;
 }
 for(let g=6;g<=12;g++)$("#grade").insertAdjacentHTML("beforeend",`<option value="${g}">Grade ${g}</option>`);

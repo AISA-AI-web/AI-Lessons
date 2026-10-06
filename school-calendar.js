@@ -133,6 +133,44 @@ var AICAL = (function () {
     if (w === null) { for (var x = monday(d); w === null && x >= parse(TERM_START); x = addDays(x, -7)) w = teachingWeek(x); }
     return w || 0;
   }
+  /* ---- When students may open a Main course lesson ----
+     A student may open every lesson their section has been taught, plus this week's
+     lesson from the Monday of the week it is taught. Week 1 is always open. */
+  function secKnown(section) { return !!section && SCHEDULE.some(function (r) { return r[0] === section; }); }
+  /** Highest Main course week a student in this section may open on this date.
+      Unknown section: everything up to the current teaching week. */
+  function releasedFor(section, d) {
+    d = day0(d || new Date());
+    var n;
+    if (secKnown(section)) {
+      n = taughtCount(section, d);
+      for (var i = 0, mon = monday(d); i < 5; i++) n = Math.max(n, lessonOn(section, addDays(mon, i)));
+    } else n = taughtSoFar(null, d);
+    return Math.max(1, n);
+  }
+  /** Highest week open to any section of this grade (used where we do not know the section). */
+  function releasedForGrade(grade, d) {
+    var n = 1;
+    SCHEDULE.forEach(function (r) { if (r[1] === +grade) n = Math.max(n, releasedFor(r[0], d)); });
+    return n;
+  }
+  /** The Monday of the week this section is taught Main course week n (when it opens), or null. */
+  function opensOn(section, n) {
+    if (n <= 1) return parse(TERM_START);
+    var end = parse(YEAR_END), c = 0;
+    for (var x = parse(TERM_START); x <= end; x = addDays(x, 1)) {
+      c += slotsOn(x).filter(function (r) { return r[0] === section; }).length;
+      if (c >= n) return monday(x);
+    }
+    return null;
+  }
+  /** The earliest date any section of this grade opens week n, or null. */
+  function opensOnGrade(grade, n) {
+    var best = null;
+    SCHEDULE.forEach(function (r) { if (r[1] !== +grade) return; var d = opensOn(r[0], n); if (d && (!best || d < best)) best = d; });
+    return best;
+  }
+
   /** Label for the week containing this date, e.g. "Teaching week 3 · 19 – 23 Oct". */
   function weekLabel(d) {
     var mon = monday(d), fri = addDays(mon, 4), t = teachingWeek(d);
@@ -145,6 +183,7 @@ var AICAL = (function () {
   return { TERM_START: TERM_START, YEAR_END: YEAR_END, SCHEDULE: SCHEDULE, NO_SCHOOL: NO_SCHOOL, EVENTS: EVENTS, DAYS: DAYS,
            iso: iso, parse: parse, monday: monday, noSchool: noSchool, eventOn: eventOn, teachingWeek: teachingWeek,
            cycleOf: cycleOf, slotsOn: slotsOn, taughtCount: taughtCount, lessonOn: lessonOn, currentLesson: currentLesson,
-           taughtSoFar: taughtSoFar, weekLabel: weekLabel, label: label };
+           taughtSoFar: taughtSoFar, weekLabel: weekLabel, label: label,
+           releasedFor: releasedFor, releasedForGrade: releasedForGrade, opensOn: opensOn, opensOnGrade: opensOnGrade };
 })();
 if (typeof module !== 'undefined') module.exports = AICAL;

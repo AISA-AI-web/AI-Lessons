@@ -12,6 +12,12 @@ CAL_TAG = '<script src="school-calendar.js"></script>'
 CAL_JS = '<script>\n' + open(os.path.join(ROOT, 'school-calendar.js'), encoding='utf-8').read() + '</script>'
 def inline_calendar(html):
     return html.replace(CAL_TAG, CAL_JS)
+# The server uses the same calendar to decide which lessons a student may open.
+open(os.path.join(OUT, 'SchoolCalendar.js'), 'w', encoding='utf-8').write(
+    '/* Copied by build.py from school-calendar.js – edit that file, not this one. */\n' +
+    open(os.path.join(ROOT, 'school-calendar.js'), encoding='utf-8').read())
+# Public lesson pages carry a small "not open yet" check; in the app the server does this.
+GATE_TAG = '<script src="../school-calendar.js"></script><script src="../lesson-gate.js"></script>'
 dash = os.path.join(OUT, 'dashboard.html')
 dash_html = inline_calendar(open(dash, encoding='utf-8').read())
 open(dash, 'w', encoding='utf-8').write(dash_html)
@@ -25,7 +31,7 @@ for p in pages:
         raise SystemExit(f'{p}: no <head> tag for the sign-in bridge')
     if p.startswith('grade-') and 'LessonHooks' not in html:
         raise SystemExit(f'{p}: missing the LessonHooks line in update() – scores would not be saved')
-    open(dest, 'w', encoding='utf-8').write(inline_calendar(html))
+    open(dest, 'w', encoding='utf-8').write(inline_calendar(html.replace(GATE_TAG, '')))
     m = re.match(r'grade-(\d+)/(main|bridging)-w(\d+)', p)
     if m:
         t = re.search(r'<title>([^<]*)</title>', html)

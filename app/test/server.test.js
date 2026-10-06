@@ -205,4 +205,27 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   ok(sec('102@aisa.sch.ae') === 'Boys 7' && sec('201@aisa.sch.ae') === 'Boys 7' && r.classListFixesKept >= 1, 're-import keeps teachers\' transfers');
   ok(sec('150@aisa.sch.ae') === 'Girls 6', 'students added by teachers survive a re-import');
 }
+/* students only open Main course lessons their class has reached */
+{
+  const E = makeEnv(), RealDate = Date;
+  const at = iso => { E.ctx.Date = class extends RealDate { constructor(...a) { a.length ? super(...a) : super(iso + 'T09:00:00'); } static now() { return new RealDate(iso + 'T09:00:00').getTime(); } }; };
+  E.as('bbaki@aisa.sch.ae'); E.call('setup');
+  E.sheets.Roster.push(['g8@aisa.sch.ae', 'Boy Eight', 'student', 'Boys 8', 8, 'sis', '', ''], ['t8@aisa.sch.ae', 'Teacher Eight', 'teacher', 'Boys 8', 8, 'sis', '', '']);
+  const open = (who, p) => { E.as(who); return !/Not open yet/.test(E.call('doGet', { parameter: { p } }).getContent()); };
+  at('2026-10-06');
+  ok(open('g8@aisa.sch.ae', 'grade-8/main-w2-l1'), 'a student can open this week\'s lesson');
+  ok(!open('g8@aisa.sch.ae', 'grade-8/main-w3-l1'), 'a student cannot open next week\'s lesson');
+  ok(/Monday 19 October 2026/.test((E.as('g8@aisa.sch.ae'), E.call('doGet', { parameter: { p: 'grade-8/main-w3-l1' } }).getContent())), 'the locked page says when it opens');
+  ok(open('t8@aisa.sch.ae', 'grade-8/main-w10-l1') && open('bbaki@aisa.sch.ae', 'grade-12/main-w10-l1'), 'teachers and owners can open every week');
+  ok(open('g8@aisa.sch.ae', 'grade-9/bridging-w1-l1'), 'bridging lessons are not timetabled, so they are not locked');
+  E.as('g8@aisa.sch.ae'); const cfg = /var CFG = (\{.*?\});/.exec(E.call('doGet', { parameter: { p: 'index' } }).getContent());
+  ok(cfg && JSON.parse(cfg[1]).locked['grade-8/main-w3-l1'] && !JSON.parse(cfg[1]).locked['grade-8/main-w2-l1'], 'the index gets the list of locked lessons');
+  at('2026-12-01');
+  ok(open('g8@aisa.sch.ae', 'grade-8/main-w8-l1') && !open('g8@aisa.sch.ae', 'grade-8/main-w9-l1'), 'a National Day push keeps Week 9 locked for Boys 8 until its new week');
+  at('2026-12-07');
+  ok(open('g8@aisa.sch.ae', 'grade-8/main-w9-l1'), 'Week 9 opens on the Monday of the week Boys 8 are taught it');
+  E.sheets.Roster.push(['new@aisa.sch.ae', 'New Student', 'student', '', '', 'sis', '', '']);
+  at('2026-10-06');
+  ok(open('new@aisa.sch.ae', 'grade-9/main-w2-l1') && !open('new@aisa.sch.ae', 'grade-9/main-w4-l1'), 'a student not yet on a class list follows the school timetable');
+}
 console.log('All ' + n + ' server checks passed');

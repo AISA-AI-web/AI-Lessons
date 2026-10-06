@@ -46,6 +46,8 @@ a.qrbtn{text-decoration:none;display:inline-block}
 .grade li+li{margin-top:8px}
 .grade .tag{display:block;font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--c)}
 .grade .name{font-weight:600}
+.grade li a.locked{opacity:.6;cursor:not-allowed;border-style:dashed}
+.grade .opens{display:block;font-size:12.5px;font-weight:700;margin-top:2px}
 .grade .soon{margin:0 0 8px;padding:0 2px;color:var(--muted);font-size:14.5px}
 .legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin:0 0 18px;padding:0;list-style:none;font-size:14.5px;color:var(--muted)}
 .legend li{display:flex;align-items:center;gap:8px}
@@ -250,6 +252,18 @@ footer{padding:0 0 40px;color:var(--muted);font-size:14px;text-align:center}
   </div>
 </div>
 
+<script src="school-calendar.js"></script>
+<script>
+/* Public site: a Main course week stays locked until a class in that grade reaches it.
+   Signed-in students get the same rule per class from the app; staff see everything there. */
+if(!window.APP)document.querySelectorAll('.grade a[href*="/main-w"]').forEach(a=>{
+  const m=/grade-(\d+)\/main-w(\d+)-/.exec(a.getAttribute("href"));if(!m)return;
+  const g=+m[1],w=+m[2];if(w<=AICAL.releasedForGrade(g,new Date()))return;
+  const d=AICAL.opensOnGrade(g,w);
+  a.removeAttribute("href");a.classList.add("locked");a.setAttribute("aria-disabled","true");
+  a.insertAdjacentHTML("beforeend",`<small class="opens">🔒 Opens ${d?d.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"}):"later"}</small>`);
+});
+</script>
 <script>
 const $=s=>document.querySelector(s);
 $("#qrBtn").onclick=()=>{

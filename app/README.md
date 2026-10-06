@@ -70,6 +70,25 @@ Finisher badge, completion and "this week's lesson"). When the Islamic holiday
 dates are confirmed, update `NO_SCHOOL` in that file. `node app/test/calendar.test.js`
 checks the rules.
 
+## When students can open a lesson
+
+Students only see Main course lessons their class has reached. Each week opens
+on the **Monday of the week their section is taught it** (so a lesson pushed back
+by a holiday opens a week later too); every earlier week stays open for catching
+up. Week 1 and the Bridging lessons are always open.
+
+- **Signed-in app:** the server refuses a locked lesson to a student and shows
+  "Not open yet" with the date it opens. Locked lessons show 🔒 and their opening
+  date on the grade selector, the calendar and the student's dashboard.
+  Teachers, SLT and owners can open every week.
+- **Public site:** it has no sign-in, so a week opens there as soon as **any**
+  section of that grade reaches it (`lesson-gate.js`). This is a courtesy lock:
+  the files are public, so someone determined can still read them. Students
+  should use the signed-in app.
+
+The rule lives in `school-calendar.js` (`releasedFor`, `opensOn`) and is tested in
+`app/test/calendar.test.js` and `app/test/server.test.js`.
+
 ## Home page by role
 
 Opening the web app link with no page chosen takes **teachers, SLT and owners**

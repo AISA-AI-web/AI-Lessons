@@ -41,12 +41,15 @@ function doGet(e) {
   var p = String((e && e.parameter && e.parameter.p) || (me.role === 'student' ? 'index' : 'calendar'));
   if (p === 'dashboard') return dashboardPage_(me);
   if (!/^(index|calendar|grade-(6|7|8|9|10|11|12)\/(main|bridging)-w\d+-[a-z0-9-]+)$/.test(p)) p = 'index';
+  // Students only get Main course lessons their class has reached (see releasedWeeks_).
+  var rel = me.role === 'student' ? releasedWeeks_(me.email) : null, lm = /^grade-(\d+)\/main-w(\d+)-/.exec(p);
+  if (rel && lm && +lm[2] > rel[lm[1]]) return lockedPage_(+lm[1], +lm[2], me.email);
   var html;
   try { html = HtmlService.createHtmlOutputFromFile('site/' + p).getContent(); }
   catch (err) { html = HtmlService.createHtmlOutputFromFile('site/index').getContent(); p = 'index'; }
   var bridge = HtmlService.createTemplateFromFile('bridge');
   bridge.cfg = JSON.stringify({ email: me.email, name: me.name, role: me.role, page: p, base: ScriptApp.getService().getUrl(),
-    sections: me.role === 'teacher' ? visibleSections_(me) : [] });
+    sections: me.role === 'teacher' ? visibleSections_(me) : [], locked: rel ? lockedLinks_(rel, me.email) : {} });
   html = html.replace(/<head>/i, '<head>' + bridge.evaluate().getContent());
   return HtmlService.createHtmlOutput(html)
     .setTitle(titleOf_(html))
@@ -57,6 +60,42 @@ function dashboardPage_(me) {
   var t = HtmlService.createTemplateFromFile('dashboard');
   t.cfg = JSON.stringify({ email: me.email, name: me.name, role: me.role, base: ScriptApp.getService().getUrl() });
   return t.evaluate().setTitle('AI Curriculum Dashboard').addMetaTag('viewport', 'width=device-width, initial-scale=1');
+}
+
+/* ===================== which lessons a student may open ===================== */
+/* A student may open every Main course lesson their section has been taught, plus this
+   week's lesson from the Monday of its teaching week (AICAL.releasedFor, school-calendar.js).
+   Staff see every lesson. Bridging lessons are not on the timetable, so they stay open. */
+
+/** {grade: highest open week} for grades 6–12. Their own grade follows their section;
+    other grades (and students not yet on a class list) follow the school timetable. */
+function releasedWeeks_(email) {
+  var now = new Date(), out = {}, secs = studentRows_(email).map(function (r) { return String(r.section || ''); });
+  for (var g = 6; g <= 12; g++) {
+    var mine = secs.filter(function (s) { return gradeOf_(s) === g; });
+    out[g] = mine.length ? Math.max.apply(null, mine.map(function (s) { return AICAL.releasedFor(s, now); })) : AICAL.releasedForGrade(g, now);
+  }
+  return out;
+}
+function opensFor_(grade, week, email) {
+  var secs = studentRows_(email).map(function (r) { return String(r.section || ''); }).filter(function (s) { return gradeOf_(s) === grade; });
+  var ds = secs.map(function (s) { return AICAL.opensOn(s, week); }).filter(Boolean);
+  var d = ds.length ? new Date(Math.min.apply(null, ds)) : AICAL.opensOnGrade(grade, week);
+  return d ? ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()] + ' ' + d.getDate() + ' ' +
+    ['January','February','March','April','May','June','July','August','September','October','November','December'][d.getMonth()] + ' ' + d.getFullYear() : '';
+}
+/** Links a student's pages should show as locked: {"grade-8/main-w5-l1": "Monday 2 November 2026"}. */
+function lockedLinks_(rel, email) {
+  var out = {};
+  CATALOG.forEach(function (c) { if (c.course === 'main' && c.week > rel[c.grade]) out[c.id] = opensFor_(c.grade, c.week, email); });
+  return out;
+}
+function lockedPage_(grade, week, email) {
+  var when = opensFor_(grade, week, email), home = ScriptApp.getService().getUrl();
+  return page_('<h1>🔒 Not open yet</h1><p>Grade ' + grade + ' Main course <b>Week ' + week + '</b> opens for your class' +
+    (when ? ' on <b>' + when + '</b>' : ' when your class reaches it') + '.</p>' +
+    '<p dir="rtl" lang="ar">🔒 هذا الدرس غير متاح بعد. سيُفتح لصفّك عندما يصل إليه.</p>' +
+    '<p><a href="' + home + '?p=dashboard" target="_top">My progress</a> · <a href="' + home + '" target="_top">All lessons</a></p>', 'Not open yet');
 }
 
 function page_(body, title) {

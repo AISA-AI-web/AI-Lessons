@@ -390,6 +390,7 @@ var AR = {
   'Bridging · to be scheduled': 'البرنامج التمهيدي · لم يُجدوَل بعد',
   'Preview': 'معاينة',
   'Not taught yet · Lesson {n}': 'لم يُدرَّس بعد · الدرس {n}',
+  '🔒 Opens {d}': '🔒 يُفتح {d}',
   "This week's lesson": 'درس هذا الأسبوع',
   'Start': 'ابدأ',
   "You are seeing <b>{name}</b>'s dashboard exactly as they see it. Nothing here can be changed.": 'أنت ترى لوحة <b>{name}</b> كما يراها الطالب تمامًا. لا يمكن تغيير أي شيء هنا.',
@@ -972,12 +973,17 @@ function studentView(who){
   var curN = sec ? AICAL.currentLesson(sec, new Date()) : st.taught;
   var R = {}; st.res.forEach(function(r){ R[r.lessonId] = r; });
   var url = function(id){ return CFG.base + '?p=' + encodeURIComponent(id); };
-  var go = function(cls, id, text){ return preview ? '<span class="' + cls + ' off">' + text + '</span>' : '<a class="' + cls + '" href="' + esc(url(id)) + '">' + text + '</a>'; };
+  var go = function(cls, id, text){ return preview || !text ? '<span class="' + cls + ' off">' + (text || '🔒') + '</span>' : '<a class="' + cls + '" href="' + esc(url(id)) + '">' + text + '</a>'; };
+  /* Students only open Main course lessons their class has reached (the server enforces this too). */
+  var rel = AICAL.releasedFor(sec || null, new Date());
+  var opens = function(n){ var d = sec ? AICAL.opensOn(sec, n) : AICAL.opensOnGrade(me.grade, n);
+    return d ? d.toLocaleDateString(LOC, { weekday: 'short', day: 'numeric', month: 'short' }) : '–'; };
   var status = function(l){
     var r = R[l.id], m = r ? Object.keys(r.acts).reduce(function(n, k){ return n + r.acts[k][1]; }, 0) : 0;
     if (r && l.activities && r.done >= l.activities) return { cls: 'done', text: T('✓ Finished · {p}% first try', { p: pct(r.score, m) }), btn: T('Review') };
     if (r) return { cls: 'doing', text: T('{d} of {a} activities · {p}%', { d: r.done, a: l.activities, p: pct(r.score, m) }), btn: T('Continue') };
     if (l.course === 'bridging') return { cls: 'later', text: T('Bridging · to be scheduled'), btn: T('Preview') };
+    if (l.week > rel) return { cls: 'later', text: T('🔒 Opens {d}', { d: opens(l.week) }), btn: '' };
     if (l.week > st.taught && l.week !== curN) return { cls: 'later', text: T('Not taught yet · Lesson {n}', { n: l.week }), btn: T('Preview') };
     if (l.week > st.taught) return { cls: 'todo', text: T('This week\'s lesson'), btn: T('Start') };
     return { cls: 'todo', text: T('Not started'), btn: T('Start') };
@@ -989,7 +995,7 @@ function studentView(who){
   h += printHead(T('AI Literacy progress report') + ' – ' + me.name, gs + ' · ' + wk.label);
   h += '<section class="hello card"><div><h2>' + T('Hi {name} 👋', { name: esc(String(me.name).split(' ')[0]) }) + '</h2><p class="sub">' + esc(gs) + ' · ' + esc(wk.label) + '</p></div>' +
     (now ? '<div class="now"><small>' + T('This week\'s lesson') + '</small><b>' + esc(now.title) + '</b><span class="pill ' + status(now).cls + '">' + esc(status(now).text) + '</span>' +
-      go('go', now.id, status(now).btn + (LANG === 'ar' ? ' ←' : ' →')) + '</div>' : '<div class="now"><small>' + T('This week') + '</small><b>' + T('No new lesson on the site yet.') + '</b></div>') + '</section>';
+      go('go', now.id, status(now).btn && status(now).btn + (LANG === 'ar' ? ' ←' : ' →')) + '</div>' : '<div class="now"><small>' + T('This week') + '</small><b>' + T('No new lesson on the site yet.') + '</b></div>') + '</section>';
   h += '<div class="tiles">' +
     tile(T('Lessons finished'), st.finished.filter(function(l){ return l.course === 'main'; }).length + ' / ' + st.due.length, T('Main course lessons taught so far')) +
     tile(T('First-try score'), st.firstPct === null ? '–' : st.firstPct + '%', T('across {n} activities', { n: st.acts })) +
