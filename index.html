@@ -49,6 +49,10 @@
 .wk small{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--muted)}
 .wk b{font-size:20px}
 li.later .wk{background:#fff;border:1.5px dashed var(--line)}
+.lessons li.ghead{background:transparent;border:0;padding:16px 2px 0;grid-template-columns:auto 1fr auto;gap:10px}
+.lessons li.ghead:first-child{padding-top:0}
+.gbadge{display:inline-block;color:#fff;font-weight:700;border-radius:999px;padding:3px 12px;font-size:14px}
+.lessons li.ghead .n{color:var(--muted);font-size:14px}
 .empty{background:#fff;border:1.5px dashed var(--line);border-radius:14px;padding:22px;text-align:center;color:var(--muted)}
 @media (max-width:560px){.lessons li{grid-template-columns:auto 1fr;gap:8px 12px}.lessons li>.btn{grid-column:2;justify-self:start}.dt,.wk{width:54px;min-height:56px}.dt b{font-size:19px}}
 </style>
@@ -106,7 +110,10 @@ let GRADE = null, PROG = null;
 /* ---------- words (English / العربية). Lesson titles stay in English. ---------- */
 const AR = {
   'AI Lessons': 'دروس الذكاء الاصطناعي', 'Lessons': 'الدروس', 'My lessons': 'دروسي', 'My progress': 'تقدّمي', 'Teaching calendar': 'تقويم التدريس', 'Calendar': 'التقويم', 'Dashboard': 'لوحة المتابعة',
-  'Choose your grade': 'اختر صفّك', 'This week in every grade': 'هذا الأسبوع في جميع الصفوف', 'Grade': 'الصف', 'Week {n}': 'الأسبوع {n}', 'All Grade {g} lessons': 'جميع دروس الصف {g}', 'American International School in Abu Dhabi': 'المدرسة الأمريكية الدولية في أبوظبي', 'AI Literacy · Grades 6–12': 'محو أمية الذكاء الاصطناعي · الصفوف 6–12',
+  'Choose your grade': 'اختر صفّك', 'All grades': 'جميع الصفوف', 'All AI lessons': 'جميع دروس الذكاء الاصطناعي', 'Every lesson, by grade': 'جميع الدروس حسب الصف',
+  '{n} lessons for Grades 6–12. Each class has its AI lesson on its own day – the teaching calendar has every date.': '{n} درسًا للصفوف 6–12. لكل شعبة يوم خاص لدرس الذكاء الاصطناعي – وفي تقويم التدريس جميع المواعيد.',
+  'Main course lessons by week, then foundation lessons.': 'دروس البرنامج الرئيسي حسب الأسبوع، ثم الدروس التمهيدية.', 'Grade {g}': 'الصف {g}', '{n} lessons': '{n} دروس', '1 lesson': 'درس واحد',
+  'Grade {g} only': 'الصف {g} فقط', 'No lessons on the site yet.': 'لا توجد دروس على الموقع بعد.', 'Teaching calendar →': 'تقويم التدريس ←', 'This week in every grade': 'هذا الأسبوع في جميع الصفوف', 'Grade': 'الصف', 'Week {n}': 'الأسبوع {n}', 'All Grade {g} lessons': 'جميع دروس الصف {g}', 'American International School in Abu Dhabi': 'المدرسة الأمريكية الدولية في أبوظبي', 'AI Literacy · Grades 6–12': 'محو أمية الذكاء الاصطناعي · الصفوف 6–12',
   'Scan to open AI Lessons': 'امسح الرمز لفتح دروس الذكاء الاصطناعي', 'Close': 'إغلاق',
   'Teaching week {n} · {a} – {b}': 'الأسبوع الدراسي {n} · {a} – {b}', 'Before the AI timetable starts': 'قبل بدء جدول الذكاء الاصطناعي',
   'Hi {name} – here is your lesson this week': 'مرحبًا {name} – هذا درسك لهذا الأسبوع', 'Hi {name} – no AI lesson this week': 'مرحبًا {name} – لا يوجد درس ذكاء اصطناعي هذا الأسبوع',
@@ -209,13 +216,37 @@ function foundationRows(g) {
   const fl = LESSON_LIST.filter(l => l.grade === g && l.course === 'bridging');
   return fl.map(l => `<li class="later"><div class="wk"><small>${esc(T('Later'))}</small><b>–</b></div><div><b class="t">${en(l.title)}</b><div class="meta">${esc(T('Foundation lessons'))} · ${esc(T('Extra lessons for Grade {g} · dates to be announced', { g }))}</div></div><a class="btn small quiet" href="${esc(link(l.id))}"${tgt}>${esc(T('Open'))}</a></li>`);
 }
-/* ---------- staff and visitors: choose a grade ---------- */
+/* ---------- staff and visitors: every lesson, or one grade ---------- */
+function allView() {
+  $('#now').innerHTML = `<span class="eyebrow">${esc(weekLabel())}</span><h1>${esc(T('All AI lessons'))}</h1>` +
+    `<p>${esc(T('{n} lessons for Grades 6–12. Each class has its AI lesson on its own day – the teaching calendar has every date.', { n: LESSON_LIST.length }))}</p>` +
+    `<div class="acts"><a class="btn primary" href="${esc(appPage('calendar'))}"${tgt}>${esc(T('Teaching calendar →'))}</a></div>`;
+  $('#side').innerHTML = breakCard([]) + teacherCard();
+  $('#listH').textContent = T('Every lesson, by grade'); $('#listS').textContent = T('Main course lessons by week, then foundation lessons.');
+  const rows = [];
+  for (let g = 6; g <= 12; g++) {
+    const secs = sectionsOf(g), n = Math.max(0, ...secs.map(s => AICAL.currentLesson(s, NOW)));
+    const main = LESSON_LIST.filter(l => l.grade === g && l.course === 'main').sort((a, b) => a.week - b.week), count = LESSON_LIST.filter(l => l.grade === g).length;
+    rows.push(`<li class="ghead"><span class="gbadge" style="background:var(--g${g})">${esc(T('Grade {g}', { g }))}</span><span class="n">${esc(count === 1 ? T('1 lesson') : T('{n} lessons', { n: count }))}</span>` +
+      `<button type="button" class="btn small quiet" data-pick="${g}">${esc(T('Grade {g} only', { g }))}</button></li>`);
+    main.forEach(l => {
+      const ds = secs.map(s => { const d = AICAL.lessonDate(s, l.week); return d ? `${secName(s)}: ${fd(d)}` : ''; }).filter(Boolean), cur = l.week === n;
+      rows.push(`<li class="${cur ? 'cur' : ''}"><div class="wk"><small>${esc(T('Week'))}</small><b>${l.week}</b></div><div><b class="t">${en(l.title)}</b><div class="meta">${esc(ds.join(' · '))}${cur ? esc(T(' · this week')) : ''}</div></div>` +
+        `<a class="btn small" href="${esc(link(l.id))}"${tgt}>${esc(T('Open'))}</a></li>`);
+    });
+    rows.push(...foundationRows(g));
+    if (!count) rows.push(`<li class="later"><div class="wk"><small>${esc(T('Grade'))}</small><b>${g}</b></div><div class="meta">${esc(T('No lessons on the site yet.'))}</div></li>`);
+  }
+  $('#list').innerHTML = rows.join('');
+}
 function gradeView() {
   const pills = $('#grades'); pills.hidden = GRADE === null;
-  pills.querySelectorAll('.gp').forEach(b => b.setAttribute('aria-pressed', String(Number(b.dataset.g) === GRADE)));
+  pills.querySelectorAll('.gp').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.g === String(GRADE))));
+  if (GRADE === 'all') return allView();
   if (GRADE === null) {
     $('#now').innerHTML = `<span class="eyebrow">${esc(weekLabel())}</span><h1>${esc(T('Choose your grade'))}</h1><p>${esc(T('Pick your grade to see this week\'s AI lesson and every lesson for your grade.'))}</p>` +
-      `<div class="bigrades">${[6, 7, 8, 9, 10, 11, 12].map(g => `<button type="button" class="gp" style="--gc:var(--g${g})" data-g="${g}">${g}</button>`).join('')}</div>`;
+      `<div class="bigrades">${[6, 7, 8, 9, 10, 11, 12].map(g => `<button type="button" class="gp" style="--gc:var(--g${g})" data-g="${g}">${g}</button>`).join('')}` +
+      `<button type="button" class="gp" style="--gc:var(--purple)" data-g="all">${esc(T('All grades'))}</button></div>`;
     $('#side').innerHTML = breakCard([]) + teacherCard();
     $('#listH').textContent = T('This week in every grade'); $('#listS').textContent = T('Each class has its AI lesson on its own day.');
     $('#list').innerHTML = [6, 7, 8, 9, 10, 11, 12].map(g => {
@@ -270,15 +301,16 @@ function render() {
   if (ROLE === 'student') $('#now').insertAdjacentHTML('afterbegin', `<p class="notice">${esc(T('We could not find your class on the AI Literacy lists yet – ask your teacher. Meanwhile, choose your grade.'))}</p>`);
 }
 /* grade pills (staff and visitors), remembered on this device */
+$('#grades').insertAdjacentHTML('beforeend', `<button type="button" class="gp" style="--gc:var(--purple)" data-g="all" aria-pressed="false" data-i18n="All grades">All grades</button>`);
 for (let g = 6; g <= 12; g++) $('#grades').insertAdjacentHTML('beforeend', `<button type="button" class="gp" style="--gc:var(--g${g})" data-g="${g}" aria-pressed="false">${g}</button>`);
 document.addEventListener('click', e => {
-  const b = e.target.closest('.gp, [data-pick]'); if (b) { GRADE = Number(b.dataset.g || b.dataset.pick); try { localStorage.setItem('home-grade', GRADE); } catch (x) {} render(); if (b.closest('.bigrades') || b.dataset.pick) window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+  const b = e.target.closest('.gp, [data-pick]'); if (b) { const v = b.dataset.g || b.dataset.pick; GRADE = v === 'all' ? 'all' : Number(v); try { localStorage.setItem('home-grade', GRADE); } catch (x) {} render(); if (b.closest('.bigrades') || b.dataset.pick) window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
   if (e.target.closest('[data-qr]')) $('#qrBtn').click();
 });
 if (!STUDENT) {
-  let saved = null; try { saved = Number(localStorage.getItem('home-grade')) || null; } catch (x) {}
-  const mine = STAFF && Array.isArray(APP.sections) ? APP.sections.map(s => Number(String(s).replace(/\D/g, ''))).filter(Boolean).sort((a, b) => a - b) : [];
-  GRADE = saved >= 6 && saved <= 12 ? saved : mine[0] || null;
+  let saved = null; try { saved = localStorage.getItem('home-grade'); } catch (x) {}
+  /* teachers and admins see every lesson unless they picked a grade before; visitors choose a grade */
+  GRADE = saved === 'all' ? 'all' : Number(saved) >= 6 && Number(saved) <= 12 ? Number(saved) : STAFF || ROLE === 'student' ? 'all' : null;
 }
 $('#langBtn').onclick = () => { LANG = LANG === 'ar' ? 'en' : 'ar'; try { localStorage.setItem('aisa-lang', LANG); } catch (e) {} render(); };
 /* QR code for this page (the sign-in bridge swaps in the app link) */

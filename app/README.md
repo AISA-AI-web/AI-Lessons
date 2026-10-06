@@ -90,10 +90,17 @@ page**. The public site works the same way without signing in.
   picker – the app knows their class from the Roster. Their menu is *My lessons ·
   My progress*; the calendar is not shown to students (opening it takes them to
   their home page).
-- **Teachers, SLT and owners** opening *Lessons* get the grade chooser, starting on
-  their own classes' grade, with each class's day for every lesson.
-- **Visitors to the public site** choose a grade (remembered on that device) and
-  see "This week in every grade" until they do.
+- **Teachers, SLT and owners** opening *Lessons* see **All grades**: every lesson
+  on the site, Grades 6–12, grouped by grade with each class's date for every
+  week and the foundation lessons. The grade chooser above the list (or *Grade N
+  only* beside a grade) narrows it to one grade; the choice is remembered on that
+  device, and *All grades* goes back to the full list.
+- **Visitors to the public site** choose a grade or *All grades* (remembered on
+  that device) and see "This week in every grade" until they do.
+- A signed-in account the app can't find on the Roster or Roles sheet is treated
+  as a student without a class: it sees All grades with a note to ask their
+  teacher. Put teachers on the Roster with the role `teacher` (SLT and owners go
+  on the Roles sheet) so they get the staff pages.
 
 ## The teaching calendar (staff)
 
