@@ -532,7 +532,8 @@ function shell(){
   document.documentElement.lang = LANG; document.documentElement.dir = LANG === 'ar' ? 'rtl' : 'ltr';
   document.title = T('AI Curriculum Dashboard');
   document.querySelectorAll('[data-i18n]').forEach(function(el){ el.textContent = T(el.getAttribute('data-i18n')); });
-  var items = CFG.role === 'student' ? [['My lessons', 'index'], ['My progress', '']] : [['Lessons', 'index'], ['Calendar', 'calendar'], ['Dashboard', '']];
+  /* "AI Lessons" next to the logo is the lessons home page, so the menu only lists the other pages */
+  var items = CFG.role === 'student' ? [['My progress', '']] : [['Calendar', 'calendar'], ['Dashboard', '']];
   $('#nav').innerHTML = items.map(function(x){ return '<a href="' + esc(CFG.base + '?p=' + (x[1] || 'dashboard')) + '"' + (x[1] ? '' : ' aria-current="page"') + '>' + esc(T(x[0])) + '</a>'; }).join('');
   $('#homeLink').href = home;
   $('#me').textContent = CFG.name || CFG.email;

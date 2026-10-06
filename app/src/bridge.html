@@ -106,7 +106,7 @@
     var bar = document.createElement('div');
     bar.className = 'app-bar';
     /* the same AISA top bar and menu as the home page, calendar and dashboard, in a slimmer form */
-    var links = CFG.role === 'student' ? [['My lessons', 'index'], ['My progress', 'dashboard']] : [['Lessons', 'index'], ['Calendar', 'calendar'], ['Dashboard', 'dashboard']];
+    var links = CFG.role === 'student' ? [['My progress', 'dashboard']] : [['Calendar', 'calendar'], ['Dashboard', 'dashboard']];
     bar.innerHTML = '<a class="app-brand" target="_top"><img src="__AISA_MONOGRAM__" alt="AISA" width="28" height="28"><span>' + T('AI Lessons') + '</span></a>' +
       '<nav class="app-nav">' + links.map(function(l){ return '<a target="_top" data-p="' + l[1] + '">' + T(l[0]) + '</a>'; }).join('') + '</nav>' +
       '<span class="app-right">' + (lessonId ? '<span class="app-save" aria-live="polite"></span>' : '') + '<span class="app-me" dir="ltr"></span></span>';
