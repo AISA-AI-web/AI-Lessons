@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bringing the Strands Together + Run End-to-End and Measure – Grade 12 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#A61E4D; --main2:#C2255C; --deep:#6B1533;
+  --ink:#2A1520; --muted:#6A5560; --paper:#FBF6F8; --card:#FFFFFF;
+  --line:#EFDCE3; --soft:#FBEEF2;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#F9A8C0,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#D0436F);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#2A1520,#6E3346)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#F6CFDB 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FEFAFB;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FFFBFC}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#D0436F)}
+.act-head.ws{background:linear-gradient(120deg,#2A1520,#7A3A50)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#FCEEF2}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #E6BFCB;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #E0A3B6;border-radius:12px;padding:10px 14px;background:#FEF8FA;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(42,21,32,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#2A1520;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 12 Main Course, Term 1</span><span class="pill">Week 6 Core + Week 6 Lab</span><span class="pill">📅 Teach: Wed 11 Nov 2026</span></div>
+    <h1>Bringing the Strands Together</h1>
+    <p>Today you stop practising the four strands one at a time and run them together as a single working system – the way a real AI solution is actually built and checked. Then, in the Lab, you run that system for real, from input to output in one go: you prepare the data first, record the check you made at every hand-off in a log any other team could trust, trace a new constraint through the pipeline, and compute a metric from your own raw results.</p>
+    <p class="meta"><b>Strand:</b> Bringing the Strands Together · all four strands &nbsp;·&nbsp; <b>Scenario:</b> the Ne'ma surplus-food matcher – built, then run end-to-end and measured</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 12B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 6 of Term 1 – Monday 9 to Friday 13 November 2026.</b> Boys 12 and Girls 12 share the same AI period: <b>Wednesday 11 November</b>. Work through the Core first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Bringing the Strands Together</a>, then move on to the <a href="#lab">Lab: Run End-to-End and Measure</a>. <span class="illus">Previously, in Weeks 2–5, you practised understanding, designing, evaluating and governing AI one strand at a time. Next, in Week 7, you architect your own signature system.</span></div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Integrate four strands.</b> I can complete a guided challenge that combines all four strands on one unit task.</li>
+      <li><b>Verify at the joins.</b> I can explain how the parts of the system connect to produce and check an outcome.</li>
+      <li><b>Apply a responsible rule.</b> I can identify one responsible-use choice I made while completing the task.</li>
+      <li><b>Lab: prepare, then run end-to-end.</b> I can prepare the data and run the integrated task from input to output as one continuous workflow, recording the check I made at each hand-off in a clear verification log.</li>
+      <li><b>Lab: constrain and measure.</b> I can add one constraint and adapt my approach, then re-check the outcome with a metric I computed from the raw results.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 6 Core · Bringing the Strands Together</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Four strands, one system</b><small>The pipeline and what each strand does in it</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Why the joins matter most</b><small>Errors hide in the hand-offs; verify before you trust</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Core worksheet</b><small>Run the matcher and verify each pairing</small></a></li>
+      <li><span class="num">4</span><a href="#p4"><b>Verify at the joins, on paper</b><small>Unplugged activity and quick check</small></a></li>
+    </ol>
+    <h3 class="rh">Week 6 Lab · Run End-to-End and Measure</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Prepare the data before you trust the result</b><small>Missing values, wrong labels, representativeness</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Run it, then prove you checked it</b><small>The verification log and audit trail</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>A constraint ripples upstream</b><small>Trace it through the pipeline – don't bolt it on</small></a></li>
+      <li><span class="num">L4</span><a href="#l4"><b>Compute a metric from the raw results</b><small>Match precision = correct ÷ total</small></a></li>
+      <li><span class="num">L5</span><a href="#l5"><b>Lab worksheet</b><small>Log, measure, constrain, re-check</small></a></li>
+      <li><span class="num">L6</span><a href="#l6"><b>Prepare data, then compute, on paper</b><small>Unplugged activity and quick check</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 4</span><h2>Four strands, one system</h2><p>Understand, design, evaluate, govern – as stages of one pipeline.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Verified goal + Scenario</h4><p>You build one system that uses all four strands: a matcher that connects surplus food to charities. It supports Ne'ma, the UAE's National Food Loss and Waste Initiative, whose goal is to halve food loss and waste in the UAE by 2030. <span class="illus">(Verified goal – nema.ae; the matcher itself is an illustrative Scenario.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">Four strands, one system</h3>
+    <p>You have learned to understand AI systems, design them, evaluate them, and govern them. In a real solution these are not four separate jobs – they are stages of one <b>pipeline</b>. A design choice you make early changes what you have to evaluate later, and a failed evaluation can force a governance rule to kick in. When you bring the strands together, your job is to reason about the whole flow: how a decision at one stage ripples through the ones that follow. That whole-system reasoning is called <b>systems thinking</b>, and it is the skill your Term-1 project will be built on.</p>
+    <figure>
+      <svg viewBox="0 0 760 320" role="img" aria-labelledby="f1T">
+        <title id="f1T">The Ne'ma matcher as one pipeline. Input list of surplus items, then the model (the matcher), then the output plan of pairings, then governance (human sign-off). A check sits on every arrow between the boxes. A feedback arrow runs from governance back to the matcher: a failed check sends the item back to be re-matched.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2A1520"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1520">
+          <text x="380" y="40" font-size="16" font-weight="700" text-anchor="middle" fill="#A61E4D">One pipeline: understand · design · evaluate · govern</text>
+          <g stroke="#2A1520" stroke-width="1.6">
+            <rect x="15" y="110" width="130" height="80" rx="10" fill="#fff"/>
+            <rect x="215" y="110" width="130" height="80" rx="10" fill="#fff"/>
+            <rect x="415" y="110" width="130" height="80" rx="10" fill="#fff"/>
+            <rect x="615" y="110" width="130" height="80" rx="10" fill="#FBEEF2" stroke="#A61E4D" stroke-width="2.2"/>
+          </g>
+          <g stroke="#2A1520" stroke-width="2" fill="none" marker-end="url(#ah)">
+            <path d="M145 150H212"/><path d="M345 150H412"/><path d="M545 150H612"/>
+          </g>
+          <g fill="#E2F5EC" stroke="#0F8A5F" stroke-width="2">
+            <circle cx="180" cy="150" r="15"/><circle cx="380" cy="150" r="15"/><circle cx="580" cy="150" r="15"/>
+          </g>
+          <g stroke="#0F8A5F" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M173 150l5 5l9-10"/><path d="M373 150l5 5l9-10"/><path d="M573 150l5 5l9-10"/>
+          </g>
+          <g font-size="13" text-anchor="middle" fill="#0F8A5F" font-weight="600">
+            <text x="180" y="186">check</text><text x="380" y="186">check</text><text x="580" y="186">check</text>
+          </g>
+          <g font-size="15" font-weight="700" text-anchor="middle">
+            <text x="80" y="143">INPUT LIST</text><text x="280" y="143">MODEL</text><text x="480" y="143">OUTPUT PLAN</text><text x="680" y="143" fill="#A61E4D">GOVERNANCE</text>
+          </g>
+          <g font-size="13" text-anchor="middle" fill="#6A5560">
+            <text x="80" y="166">surplus items</text><text x="280" y="166">the matcher</text><text x="480" y="166">pairings</text><text x="680" y="166">human sign-off</text>
+          </g>
+          <path d="M680 190V255H280V194" stroke="#A61E4D" stroke-width="2" stroke-dasharray="7 5" fill="none" marker-end="url(#ah)"/>
+          <text x="480" y="282" font-size="13" text-anchor="middle" fill="#A61E4D">a failed check sends the item back to be re-matched</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> The four strands drawn as one connected pipeline, with a check placed at each hand-off.</figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-strands"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 4</span><h2>Why the joins matter most</h2><p>Integration is about guarding the joins, not just polishing the parts.</p></div>
+  <div class="part-body">
+    <p>You can do each strand well – understand the system, design it, evaluate it, govern it – and still ship a bad system, because errors hide in the <b>hand-offs</b> between stages. If the first tool mislabels an item, the matcher pairs it wrongly and the action delivers the wrong food. A matcher can also produce a confident plan that quietly sends food past its expiry date. So in an integrated system you <b>verify at every join</b>, not just at the end: check the output against a trusted rule sheet before it moves on, and keep a governance rule in place – never enter personal data, and have a human approve the final plan and anything sensitive.</p>
+    <figure>
+      <svg viewBox="0 0 760 345" role="img" aria-labelledby="f2T">
+        <title id="f2T">Two runs of the same mistake. Without checks at the joins: fresh milk is labelled dry goods in the input list, the matcher pairs it with the food bank which has no fridge, and the milk spoils before it can be used. With a check at every hand-off: the same mislabel is caught and fixed to chilled, the matcher pairs the milk with the shelter which has a fridge, the pairing passes the rule sheet, and the milk is delivered before its use-by date.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2A1520"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1520">
+          <text x="10" y="36" font-size="15" font-weight="700" fill="#C92A4B">Without checks at the joins – the error cascades</text>
+          <text x="10" y="206" font-size="15" font-weight="700" fill="#0F8A5F">With a check at every hand-off – the error is caught</text>
+          <g stroke="#2A1520" stroke-width="1.6" fill="#fff">
+            <rect x="10" y="52" width="180" height="90" rx="10"/><rect x="290" y="52" width="180" height="90" rx="10"/>
+            <rect x="570" y="52" width="180" height="90" rx="10" fill="#FDE7EC" stroke="#C92A4B" stroke-width="2"/>
+            <rect x="10" y="222" width="180" height="90" rx="10"/><rect x="290" y="222" width="180" height="90" rx="10"/>
+            <rect x="570" y="222" width="180" height="90" rx="10" fill="#E2F5EC" stroke="#0F8A5F" stroke-width="2"/>
+          </g>
+          <g stroke="#2A1520" stroke-width="2" fill="none" marker-end="url(#ah2)">
+            <path d="M190 97H287"/><path d="M470 97H567"/><path d="M190 267H287"/><path d="M470 267H567"/>
+          </g>
+          <g font-size="13" text-anchor="middle" fill="#C92A4B" font-weight="600"><text x="240" y="122">no check</text><text x="520" y="122">no check</text></g>
+          <g fill="#E2F5EC" stroke="#0F8A5F" stroke-width="2"><circle cx="240" cy="267" r="14"/><circle cx="520" cy="267" r="14"/></g>
+          <g stroke="#0F8A5F" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M233 267l5 5l8-9"/><path d="M513 267l5 5l8-9"/></g>
+          <g font-size="13" text-anchor="middle" fill="#0F8A5F" font-weight="600">
+            <text x="240" y="300">fix label</text><text x="240" y="316">to chilled</text>
+            <text x="520" y="300">passes</text><text x="520" y="316">rule sheet</text>
+          </g>
+          <g font-size="14" font-weight="700" text-anchor="middle">
+            <text x="100" y="80">INPUT LIST</text><text x="380" y="80">MATCHER</text><text x="660" y="80" fill="#C92A4B">ACTION</text>
+            <text x="100" y="250">INPUT LIST</text><text x="380" y="250">MATCHER</text><text x="660" y="250" fill="#0F8A5F">ACTION</text>
+          </g>
+          <g font-size="13" text-anchor="middle">
+            <text x="100" y="102">fresh milk labelled</text><text x="100" y="120">‘dry goods’</text>
+            <text x="380" y="102">pairs milk with the</text><text x="380" y="120">food bank (no fridge)</text>
+            <text x="660" y="102">milk spoils before</text><text x="660" y="120">it can be used</text>
+            <text x="100" y="272">fresh milk labelled</text><text x="100" y="290">‘dry goods’</text>
+            <text x="380" y="272">pairs milk with the</text><text x="380" y="290">shelter (has fridge)</text>
+            <text x="660" y="272">milk delivered</text><text x="660" y="290">before its use-by</text>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> The same mislabel, run twice: unchecked joins let it cascade to the action; a check at each hand-off catches it. <span class="illus">(Illustrative scenario.)</span></figcaption>
+    </figure>
+    <div id="a-prop"></div>
+    <div class="call blue"><h4>Verified or Scenario?</h4><p>As in every Grade 12 lesson, a <b>Verified</b> example is real and carries a named source – here, Ne'ma's goal to halve food loss and waste by 2030 (nema.ae). A <b>Scenario</b> is illustrative – the matcher, its charities and its data are made up to reason with. A claim with no source is <b>unverified</b>.</p></div>
+    <div id="a-label"></div>
+    <div id="a-sens"></div>
+    <div class="call blue"><h4>Why it matters</h4><p>The UAE's Ne'ma national food-loss initiative aims to cut food waste in half by 2030, and systems that match surplus food to people who need it are exactly the kind of strategic, multi-part AI solution you are learning to design and govern responsibly.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Environmental Science · Civics · Systems Science</h4><p>Reducing food loss and waste links directly to <b>sustainability</b> in <b>Environmental Science</b>. Designing a public matcher that treats charities fairly and keeps a human in the loop is <b>Civics</b>. Verifying at each hand-off is <b>systems-science</b> reasoning about error propagation.</p></div>
+    <div class="call amber"><h4>Tool for this week: decision decks + input-process-output cards (teacher-mediated)</h4><p>1. Read the task card: match surplus food items to charities that can use them. 2. List your components (input list, matcher, verify step) and draw the input-process-output flow, marking each hand-off. 3. Run the match, verify each suggested pairing, and apply one responsible-use rule (no personal data; human check on anything sensitive). <b>Stay safe:</b> no personal data – item and charity cards only. Verify at each hand-off; a human checks sensitive pairings.</p></div>
+  </div>
+</section>
+
+<!-- CORE PART 3: WORKSHEET -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 4 · Worksheet</span><h2>Bringing the Strands Together</h2><p>Read the task card, list the components, draw the flow, run the match – and verify every pairing before you trust it.</p></div>
+  <div class="part-body">
+    <div class="ecard" id="taskcard"></div>
+    <div id="a-ws1"></div>
+    <div id="a-ws2"></div>
+    <div id="a-ws3"></div>
+    <div id="a-ws4"></div>
+    <div id="a-ws5"></div>
+  </div>
+</section>
+
+<!-- CORE PART 4: UNPLUGGED -->
+<section class="part" id="p4">
+  <div class="part-head"><span class="pill">Core · Part 4 of 4 · Unplugged</span><h2>Verify at the joins, on paper</h2><p>Draw the flow and mark where to verify.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>You build a matcher that connects surplus food to charities, supporting Ne'ma, the UAE initiative to halve food loss and waste by 2030. Working on paper, draw the flow and mark where to verify. <span class="illus">(Verified goal – nema.ae; the matcher is an illustrative Scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Draw it: ‘Input list → Match → Verify → Action’, with a human check at the verify join.</div>
+    <div id="a-unplug"></div>
+    <div id="a-quiz"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 6 Lab</span><h2>Run End-to-End and Measure</h2><p>In the Core lesson you built the system; today you run it for real, from input to output in one go, and you keep a record any other team could trust.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario – continued</h4><p>You run the matcher end-to-end on a real dataset – but first you inspect and prepare that data, then compute a quantitative metric from the raw results and keep an audit trail. <span class="illus">(Scenario – illustrative, using the supplied non-personal dataset.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 6</span><h2>Prepare the data before you trust the result</h2><p>What you feed in decides what you can trust out.</p></div>
+  <div class="part-body">
+    <p>A system is only as good as its data. Before the full run, inspect the supplied surplus-item dataset for three problems, and fix or flag each one:</p>
+    <ul class="steps">
+      <li><b>Missing values</b> – an item with no category.</li>
+      <li><b>Wrong labels</b> – an item filed under the wrong type.</li>
+      <li><b>Representativeness</b> – a fair range of categories, or mostly one?</li>
+    </ul>
+    <p>This is the data spine of the whole term: what you feed in decides what you can trust out.</p>
+    <div class="ecard" id="dataset"></div>
+    <div id="a-ldata"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 6</span><h2>Run it, then prove you checked it</h2><p>A verification log turns ‘we checked’ into an audit trail.</p></div>
+  <div class="part-body">
+    <p>Building a system stage by stage is not the same as running it <b>end to end</b>. When you run the whole flow in one pass, errors show up at the joins and the order of steps starts to matter. A <b>verification log</b> is how you prove the checks really happened: one row per hand-off, naming what you checked, the trusted source you checked it against, and whether it passed or failed. That log is your <b>audit trail</b>. It is what lets a teacher, a reviewer, or a human signing off the plan see that verify-before-trust was actually applied – not just claimed.</p>
+    <div class="ecard" id="logeg"></div>
+    <div id="a-llog"></div>
+    <div class="call blue"><h4>Why it matters</h4><p>Public services in the UAE, from food redistribution under Ne'ma to utilities and transport, must be able to show an audit trail proving their automated decisions were checked – which is why keeping a clear verification log is a real, employable skill, not just classroom paperwork.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Mathematics · Environmental Science · Data Science</h4><p>Computing a precision metric from raw counts is <b>proportion and percentage</b> work in <b>Mathematics</b>. Inspecting a dataset for quality is core <b>data science</b>. Measuring how much surplus food is matched rather than wasted ties to <b>sustainability</b> in <b>Environmental Science</b>.</p></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head"><span class="pill">Lab · Part 3 of 6</span><h2>A constraint ripples upstream</h2><p>Trace it through the pipeline – don't patch the output.</p></div>
+  <div class="part-body">
+    <p>Real systems rarely keep the same requirements for long. When a new <b>constraint</b> arrives – a second criterion, or a risk such as allergen items – the beginner move is to bolt one rule onto the end. The systems-thinking move is to <b>trace</b> it: an allergen risk changes the input labels, changes the matching, and adds a new evaluation check, so you adapt several stages and re-run them, logging the re-checks. Handling constraints by tracing them through the pipeline, rather than patching the output, is exactly the discipline your Term-1 project will be graded on.</p>
+    <figure>
+      <svg viewBox="0 0 760 345" role="img" aria-labelledby="f3T">
+        <title id="f3T">A new constraint arrives: some items contain nuts and one recipient must be nut-free. The systems move traces it into three stages: input labels (add an allergen field to each item), matching (no nut items to a nut-free recipient) and evaluation (a new allergen check). The plan and log stage then re-runs and logs the re-checks. The beginner move, shown dashed, only patches the output at the end.</title>
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2A1520"/></marker>
+        <marker id="ah3m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#A61E4D"/></marker>
+        <marker id="ah3r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#C92A4B"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1520">
+          <rect x="100" y="12" width="560" height="58" rx="10" fill="#FFF7E8" stroke="#E8890C" stroke-width="2"/>
+          <text x="380" y="36" font-size="15" font-weight="700" text-anchor="middle" fill="#B45309">NEW CONSTRAINT · allergen risk</text>
+          <text x="380" y="58" font-size="13" text-anchor="middle">some items contain nuts; one recipient must be nut-free</text>
+          <g stroke="#A61E4D" stroke-width="2" fill="none" marker-end="url(#ah3m)">
+            <path d="M200 70L95 147"/><path d="M290 70L285 147"/><path d="M420 70L475 147"/>
+          </g>
+          <path d="M560 70L655 147" stroke="#C92A4B" stroke-width="2" stroke-dasharray="7 5" fill="none" marker-end="url(#ah3r)"/>
+          <g stroke="#2A1520" stroke-width="1.6" fill="#fff">
+            <rect x="15" y="150" width="160" height="56" rx="10"/><rect x="205" y="150" width="160" height="56" rx="10"/>
+            <rect x="395" y="150" width="160" height="56" rx="10"/><rect x="585" y="150" width="160" height="56" rx="10" fill="#FBEEF2"/>
+          </g>
+          <g stroke="#2A1520" stroke-width="2" fill="none" marker-end="url(#ah3)"><path d="M175 178H202"/><path d="M365 178H392"/><path d="M555 178H582"/></g>
+          <g font-size="14" font-weight="700" text-anchor="middle">
+            <text x="95" y="183">INPUT LABELS</text><text x="285" y="183">MATCHING</text><text x="475" y="183">EVALUATION</text><text x="665" y="183">PLAN + LOG</text>
+          </g>
+          <g font-size="13" text-anchor="middle" fill="#A61E4D">
+            <text x="95" y="230">add an allergen</text><text x="95" y="247">field to each item</text>
+            <text x="285" y="230">no nut items to a</text><text x="285" y="247">nut-free recipient</text>
+            <text x="475" y="230">new check:</text><text x="475" y="247">allergen match</text>
+            <text x="665" y="230">re-run, then log</text><text x="665" y="247">the re-checks</text>
+          </g>
+          <path d="M20 292H70" stroke="#A61E4D" stroke-width="2" marker-end="url(#ah3m)"/>
+          <text x="82" y="297" font-size="13">Systems move: trace the constraint upstream and adapt every stage it touches</text>
+          <path d="M20 324H70" stroke="#C92A4B" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#ah3r)"/>
+          <text x="82" y="329" font-size="13">Beginner move: bolt one rule onto the end and patch the output only</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> A constraint ripples upstream: trace it into the labels, the matching and the checks, then re-run and log the re-checks. <span class="illus">(Illustrative scenario.)</span></figcaption>
+    </figure>
+    <div id="a-lcons"></div>
+  </div>
+</section>
+
+<section class="part" id="l4">
+  <div class="part-head"><span class="pill">Lab · Part 4 of 6</span><h2>Compute a metric from the raw results</h2><p>A metric you computed yourself is evidence; an impression is not.</p></div>
+  <div class="part-body">
+    <p>Do not just say ‘it worked’. Count the raw results and compute a metric. For the matcher, <b>match precision = correct matches ÷ total matches suggested</b>, written as a percentage. Compute it from your own run, compare it with the target, and record it in the audit trail. A metric you computed yourself is evidence; an impression is not.</p>
+    <div class="worked"><b>Printable template – metric from raw counts.</b> Correct matches: ___ · Total matches suggested: ___ · Precision = correct ÷ total = ___ %. <span class="illus">For example, 15 correct out of 20 suggested = 15 ÷ 20 = 75%.</span></div>
+    <div id="a-lmetric"></div>
+    <div class="call amber"><h4>Tool for this week: spreadsheet (verification log + metric) with the supplied dataset (teacher-mediated)</h4><p>1. Inspect and prepare the supplied dataset: fix or flag missing values, wrong labels and check representativeness. 2. Run the matcher from input to output in one pass, logging what you checked at each hand-off. 3. Count correct vs total matches and compute match precision = correct ÷ total; compare with the target and record it. <b>Stay safe:</b> non-personal supplied dataset only. Keep an audit trail; verify each suggested match before counting it.</p></div>
+  </div>
+</section>
+
+<section class="part" id="l5">
+  <div class="part-head dark"><span class="pill">Lab · Part 5 of 6 · Worksheet</span><h2>Run End-to-End and Measure</h2><p>Label the log, run in one pass, count and compute, trace the added constraint, and make your log reproducible.</p></div>
+  <div class="part-body">
+    <div class="ecard" id="runlog"></div>
+    <div id="a-lws1"></div>
+    <div id="a-lws2"></div>
+    <div id="a-lws3"></div>
+    <div id="a-lws4"></div>
+  </div>
+</section>
+
+<section class="part" id="l6">
+  <div class="part-head"><span class="pill">Lab · Part 6 of 6 · Unplugged</span><h2>Prepare data, then compute, on paper</h2><p>Printed rows, a small run, and an audit trail.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>The matcher runs on a dataset of donated items. Working on paper, inspect the sample for quality, then compute the match precision from a small run. <span class="illus">(Illustrative scenario, using printed rows.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Match precision = correct ÷ total. If 15 of 20 suggested matches were correct, precision = 15 ÷ 20 = 75%.</div>
+    <div id="a-lunplug"></div>
+    <div id="a-lquiz"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Bring the strands together – then run it end-to-end and measure</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>One <b>integrated system</b> uses all four strands; the model is only part of it.</li>
+      <li>Errors hide in the <b>hand-offs</b>, so <b>verify at every join</b> – not only at the final output.</li>
+      <li>The Ne'ma goal – halve food loss and waste by 2030 – is a <b>Verified</b> fact (nema.ae); the matcher is a <b>Scenario</b>.</li>
+      <li>Apply a <b>responsible-use rule</b>: no personal data, fairness across recipients, a human check on sensitive actions.</li>
+      <li><b>Inspect and prepare the data</b> first: missing values, wrong labels, representativeness.</li>
+      <li>Run <b>end-to-end</b> and verify at each hand-off, keeping a <b>verification log</b> as your audit trail.</li>
+      <li>Trace a new <b>constraint</b> through every stage it touches, re-run, and log the re-checks.</li>
+      <li>Compute a metric from raw results – <b>match precision = correct ÷ total</b> – and compare it with the target.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 12 · Main Course · Term 1 Week 6 (9 – 13 Nov 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- strand + concept tags ---------- */
+const CU_E="CU · how AI solutions function in real-world contexts";
+const CU_P="CU · how components interact and influence outcomes";
+const SD_E="SD · designs AI-powered solutions for defined problems";
+const SD_P="SD · designs and refines solutions for complex challenges";
+const SD_A="SD · integrated, multi-component solutions with strategic intent";
+const CE_E="CE · identifies areas for improvement";
+const CE_P="CE · evaluates using evidence and defined criteria";
+const CE_A="CE · justifies refinements using data, evidence and structured reasoning";
+const GE_E="GE · identifies ethical and societal risks";
+const GE_A="GE · designs responsible-use approaches and defends decisions";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["integration","Connecting the parts of a system so they work as one, and checking the joins between them."],
+  ["pipeline","The ordered stages a task passes through: input, model, output, and the checks around them."],
+  ["hand-off","The point where one stage passes its result to the next, and where a check should happen."],
+  ["verify-before-trust","Checking an output against a trusted source before you rely on it, because a confident output can still be wrong."],
+  ["governance","The rules that keep a system responsible: no personal data, fairness, and a human signing off the result."]
+];
+const DEF_ORDER = [3,0,4,1,2];
+const STRANDS = ["Understanding the system","Designing the solution","Evaluating the output","Governing responsibly"];
+const STRAND_JOBS = [
+  "See how the input list, matcher and plan connect, and how a mislabel at one stage ripples into the next",
+  "Build the pipeline – input list, matcher, verify step – with a check at each hand-off",
+  "Verify each suggested pairing against the trusted rule sheet for expiry and suitability",
+  "No personal data, fairness across recipients, and a human signs off the final plan"
+];
+const STRAND_ORDER = [2,3,1,0];
+const PROP1 = ["The matcher spots the mistake and fixes it automatically","Nothing – the matcher works independently of the input list","The matcher pairs the milk with the dry-goods food bank, which has no fridge, and the milk spoils – the error cascades to the action","The system refuses to run"];
+const PROP2 = ["Only at the very end, after the food is delivered","At the input → matcher hand-off: is every item labelled with the right type?","Only inside the model"];
+const PROP3 = ["Check each pairing against the trusted rule sheet before the plan moves on, because a confident output can still be wrong","Trust it – a neat, complete plan is usually right","Ask the matcher whether it is sure"];
+const LABELS = [
+  ["b1","“Ne'ma, the UAE's National Food Loss and Waste Initiative, aims to halve food loss and waste in the UAE by 2030.” (Source: nema.ae)","VF"],
+  ["b2","“Our matcher pairs 40 cooked meals with a community kitchen.” (Illustrative scenario.)","SC"],
+  ["b3","“AI matchers have already ended food waste in every UAE city.”","UN"],
+  ["b4","“The supplied dataset of 20 donated items.” (Illustrative, non-personal.)","SC"],
+  ["b5","“Everyone knows a confident matcher is always right.”","UN"]
+];
+const SENS = [
+  ["se1","🥫","Tins of chickpeas for the dry-goods food bank","V"],
+  ["se2","🍼","Infant formula for the family shelter","H"],
+  ["se3","📋","A donor offers a list of the names and home addresses of families who will receive the food","X"],
+  ["se4","🥗","Gluten-free meals for a clinic's special-diet service","H"],
+  ["se5","🍛","Trays of cooked meals for the community kitchen, use-by tonight","V"],
+  ["se6","📷","Photos of people queuing at the shelter, uploaded to show demand","X"]
+];
+
+/* Core worksheet (illustrative task card) */
+const RECIP = [
+  ["Community kitchen","Has a fridge; cooks and serves hot meals; collects at 15:00 today"],
+  ["Dry-goods food bank","No fridge; takes tinned and packaged dry food only; collects tomorrow"],
+  ["Family shelter","Has a fridge; serves ready meals and breakfasts; collects at 18:00 today"]
+];
+const RULES = [
+  ["Expiry","The food must reach the recipient before its use-by date or time."],
+  ["Suitability","Chilled or cooked food only goes to a recipient with a fridge; each recipient only gets food types it accepts."],
+  ["Sensitive","Infant food and special-diet items need a human check before they are sent."],
+  ["Governance","No personal data; spread surplus fairly across recipients; a named adult signs off the final plan."]
+];
+const PAIRS = [
+  ["pa1","P1","40 cooked rice-and-chicken meals (use-by today 20:00)","Community kitchen","P"],
+  ["pa2","P2","30 tins of chickpeas (best before 2027)","Dry-goods food bank","P"],
+  ["pa3","P3","25 litres of fresh milk (use-by tomorrow)","Dry-goods food bank","S"],
+  ["pa4","P4","60 yoghurt pots (use-by today 16:00)","Family shelter","E"],
+  ["pa5","P5","15 tins of infant formula (best before 2027)","Family shelter","H"],
+  ["pa6","P6","20 sandwiches (use-by today 21:00)","Family shelter","P"]
+];
+const WS1A = ["Send all the surplus to the biggest charity as fast as possible","Predict how much food each donor will waste next year","Match surplus food items to community recipients so the plan is fair and nothing expires unused","Collect the names of families who need food"];
+const WS1B = ["Price and brand","Expiry and suitability","Distance and weather","How confident the matcher sounds"];
+const COMPS = ["Input list","Matcher","Verify step"];
+const DOES = ["Lists each surplus item with its type, quantity and use-by date","Suggests which recipient should get each item","Checks each suggested pairing against the trusted rule sheet before the plan moves on","Sets the national Ne'ma target"];
+const HANDS = ["Input → matcher: is every item labelled with the right type and date?","Matcher → plan: does each pairing pass expiry and suitability?","Plan → action: has a named adult signed off the plan and every sensitive pairing?","None – a component that works well needs no check"];
+const IPO = ["Output: a plan saying which recipient gets each item","Input: the list of surplus items","Process: the matcher pairs items with recipients"];
+const IPO_SLOTS = ["Input","Process","Output"];
+const IPO_KEY = [1,2,0];
+const JOINS = [
+  ["hj1","Between the input list and the matcher",1],
+  ["hj2","Before anyone writes the input list",0],
+  ["hj3","Between the matcher's suggestions and the final plan",1],
+  ["hj4","Only after the food has been delivered",0]
+];
+const RESP = [
+  ["rp1","Use item and charity cards only – no names, phone numbers or addresses",1],
+  ["rp2","Add the names of the families who will eat the food so the plan is more precise",0],
+  ["rp3","Spread the surplus fairly across recipients, not all to the first one on the list",1],
+  ["rp4","Send the plan straight out if the matcher is 95% confident",0],
+  ["rp5","A named adult signs off the final plan and every sensitive pairing",1]
+];
+const PLAN = [
+  "Send everything the matcher suggested – it is confident, so it is right",
+  "Cancel the whole plan because two pairings failed",
+  "Send P1, P2 and P6; re-match the milk to the family shelter (fridge) and the yoghurt to the community kitchen (collects 15:00, before its use-by); hold the infant formula for a human check – every pairing verified against the rule sheet, signed off by a named adult, no personal data",
+  "Send P1 to P6 and add family names so recipients know who gets what"
+];
+
+/* Core unplugged */
+const FLOW = ["Verify each pairing against the rule sheet","Input list of surplus items","Action: deliveries go out","Match: the matcher suggests pairings"];
+const FLOW_KEY = [1,3,0,2];
+const FLOW_ORDER = [2,0,3,1];
+const UHUMAN = ["Before the input list is written","At the verify join, before the action","After the food has been eaten"];
+const UCHECK = ["The matcher's confidence score","How quickly the matcher ran","Each pairing passes expiry and suitability on the rule sheet"];
+const URULE = ["Add family names so pairings are more precise","No personal data, and a human checks sensitive pairings","Let the matcher sign off its own plan"];
+const QUIZ = [
+  ["q1","Why can a system fail even when each strand is done well?",["Because four strands is too many to combine.","Errors hide in the hand-offs between stages, so the joins must be verified.","Because governance slows the system down."],1],
+  ["q2","The Ne'ma goal cited here is “to halve food loss and waste by 2030”. How is it labelled?",["Scenario, because all examples are illustrative.","Neither – facts do not need labels.","Verified, with a named source (nema.ae)."],2],
+  ["q3","Where should you verify in an integrated system?",["At every hand-off, not only at the final output.","Only at the very end.","Only inside the model."],0]
+];
+const TF = [
+  ["tf1","Doing each strand well guarantees the connected system works.","F"],
+  ["tf2","The Ne'ma goal to halve food loss and waste by 2030 is a Verified fact.","T"],
+  ["tf3","You only need to verify at the final output of an integrated system.","F"]
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["end-to-end run","Carrying a task through every stage in one continuous pass instead of one stage at a time."],
+  ["verification log","A record with a row for each hand-off showing what you checked, against what source, and the result."],
+  ["audit trail","The trace of checks that lets someone review or reproduce your system later."],
+  ["constraint","An added requirement, such as a second criterion or a risk, that your system must now handle."],
+  ["reproducible","Clear enough that another person could re-run your system and get the same checks."]
+];
+const LDEF_ORDER = [2,4,0,3,1];
+const DATASET = [
+  ["ld1","D1","40 cooked rice-and-chicken meals","Cooked meal","today 20:00","OK"],
+  ["ld2","D2","25 litres of fresh milk","Dry goods","tomorrow","W"],
+  ["ld3","D3","30 tins of chickpeas","Dry goods","2027","OK"],
+  ["ld4","D4","12 trays of fresh bread","–","today","M"],
+  ["ld5","D5","60 yoghurt pots","Chilled","today 16:00","OK"],
+  ["ld6","D6","18 tubs of cooked lentil soup","Dry goods","tomorrow","W"],
+  ["ld7","D7","50 packs of pasta","Dry goods","2027","OK"],
+  ["ld8","D8","20 boxes of dates","–","2027","M"]
+];
+const LREPR = ["Yes – 20 items is plenty","Yes – every item is real surplus","No – 14 of 20 are labelled dry goods, so results for chilled and cooked food rest on very few items"];
+const LFIX = ["Delete the whole dataset and start again","Run anyway – the matcher will cope","Fill each blank with a random category","Fix or flag each issue, and note how it would change the result"];
+const LOGROWS = ["Hand-off 1 · input list → matcher","Hand-off 2 · matcher → verify step","Hand-off 3 · verify step → action"];
+const LCHK = ["Every item has a category and a use-by date, and the label fits the item","Each suggested pairing passes expiry and suitability","The final plan and every sensitive pairing are approved","How confident the matcher sounded"];
+const LSRC = ["The dataset's category list and the item cards","The trusted rule sheet","A named adult's sign-off","The matcher's own explanation"];
+const LWHY = ["It makes the run faster","It replaces the human sign-off","It proves verify-before-trust was actually applied – not just claimed – and lets a reviewer check or reproduce the run","It is only needed if something goes wrong"];
+const LCONS = [
+  ["lc1","Input labels – add an allergen field to every item",1],
+  ["lc2","Nothing upstream – add one warning line to the end of the plan",0],
+  ["lc3","Matching – never pair a nut item with a nut-free recipient",1],
+  ["lc4","The Ne'ma 2030 goal – it must be rewritten",0],
+  ["lc5","Evaluation – add an allergen check to the rule sheet and the log",1]
+];
+const LMOVE = ["Bolt one rule onto the end of the plan","Ignore it until someone complains","Trace the constraint through the pipeline, adapt each stage it touches, re-run those stages and log the re-checks","Rebuild the whole system from scratch"];
+const LMET = [
+  ["lm1","Run 1: 21 of 25 suggested matches were correct. Match precision =",["25 ÷ 21 = 119%","21 ÷ 25 = 84%","4 ÷ 25 = 16%","21 – a count is the metric"],1,[0,2,1,3]],
+  ["lm2","Run 1 against the target of at least 90%",["Meets the target","Below the target – 6 points short"],1,[0,1]],
+  ["lm3","Run 2, after the allergen re-check: 23 of 24 correct. Match precision =",["24 ÷ 23 = 104%","23 ÷ 24 = 96%","1 ÷ 24 = 4%","23 ÷ 40 = 58%"],1,[2,1,0,3]],
+  ["lm4","Run 2 against the target of at least 90%",["Below the target","Meets the target"],1,[0,1]],
+  ["lm5","What goes in the audit trail?",["“It worked much better the second time.”","Only the final 96%","Run 1: 21/25 = 84% (target 90%, below); run 2 after the allergen re-check: 23/24 = 96% (meets) – raw counts, metric and target recorded","Nothing – the metric speaks for itself"],2,[0,3,2,1]]
+];
+
+/* Lab worksheet: illustrative run log */
+const RUN = [
+  ["1","40 cooked meals","Community kitchen","Pass"],
+  ["2","30 tins of chickpeas","Dry-goods food bank","Pass"],
+  ["3","25 L fresh milk","Dry-goods food bank","Fail – no fridge"],
+  ["4","50 packs of pasta","Dry-goods food bank","Pass"],
+  ["5","60 yoghurt pots (16:00)","Family shelter (18:00)","Fail – expiry"],
+  ["6","20 sandwiches","Family shelter","Pass"],
+  ["7","20 boxes of dates","Dry-goods food bank","Pass"],
+  ["8","18 tubs of lentil soup","Dry-goods food bank","Fail – no fridge"],
+  ["9","10 bags of rice","Community kitchen","Pass"],
+  ["10","12 trays of bread","Family shelter","Pass"],
+  ["11","15 tubs of hummus","Dry-goods food bank","Fail – no fridge"],
+  ["12","8 boxes of fruit","Community kitchen","Pass"]
+];
+const LWS1_ORDER = [1,2,0];
+const LMID = ["Stop the run and redesign the matcher now","Log it as a fail at that hand-off and keep going in one pass; adapt after the run","Delete the row so the log looks clean","Ignore it – one error will not matter"];
+const LCOUNT = [
+  ["lk1","Correct matches",["4","8","9","12"],1,[0,2,1,3]],
+  ["lk2","Total matches suggested",["8","20","12","4"],2,[0,1,2,3]],
+  ["lk3","Match precision = correct ÷ total",["150%","33%","67%","8%"],2,[0,1,2,3]],
+  ["lk4","Against the target of at least 85%",["Meets the target","Below the target"],1,[0,1]]
+];
+const LCAP = [
+  ["lp1","Input list – make sure every item records its quantity and whether it needs a fridge",1],
+  ["lp2","Only the final plan – write ‘check fridge space’ at the bottom",0],
+  ["lp3","Matcher – add up what each recipient is sent and stop at its capacity",1],
+  ["lp4","Verify step – add a capacity check to the rule sheet and the log",1],
+  ["lp5","No stages – fridge space is the charity's problem",0]
+];
+const LRERUN = ["The whole term's work, from Week 2 onwards","Only the final plan's wording","Only the stages the constraint touches – matching and verify for the affected items – with new log rows for the re-checks","Nothing – the first run already passed"];
+const LREPRO = [
+  ["lr1","Re-check · pairing 3 · milk → family shelter · expiry, suitability, capacity · rule sheet v2 · Pass",1],
+  ["lr2","Checked the rest – all looked fine",0],
+  ["lr3","Re-check · pairing 8 · soup → community kitchen · capacity (40 meals + 18 tubs = 58, limit 50) · rule sheet v2 · Fail – re-match",1],
+  ["lr4","Pairing 11 – fixed it",0]
+];
+const LSWAP = ["Guess roughly what you did","Re-run your system from your log and get the same checks and results","Copy your final number without checking it","Read only your conclusion"];
+
+/* Lab unplugged */
+const LPRINT = [
+  ["lu1","10 kg chilled chicken · Dry goods · use-by tomorrow","W"],
+  ["lu2","10 bags of rice · (blank) · 2027","M"],
+  ["lu3","50 packs of pasta · Dry goods · 2027","OK"]
+];
+const LUREP = ["Yes – ten rows is enough for anything","No – 9 of the 10 printed rows are dry goods, so the sample is mostly one category","Yes – the rows came from a real donor"];
+const LUPREC = ["20 ÷ 15 = 133%","15 ÷ 20 = 75%","5 ÷ 20 = 25%","15 out of everything in the dataset"];
+const LUTRAIL = ["Remember it and tell the teacher later","Write only ‘done’ at the bottom of the page","Keep a row for each check: what I checked, the trusted source, pass or fail – plus the raw counts and the metric"];
+const LQUIZ = [
+  ["lq1","Why inspect and prepare the dataset before running the matcher?",["Because it makes the matcher run faster.","A data problem – missing values or wrong labels – changes the result; what you feed in decides what you can trust out.","Because governance forbids running on any data."],1],
+  ["lq2","You suggested 20 matches and 15 were correct. What is the match precision?",["20 ÷ 15 = 133%.","15 out of everything in the dataset.","15 ÷ 20 = 75%."],2],
+  ["lq3","Why compute a metric instead of saying “it worked”?",["A metric you computed yourself is evidence you can compare with the target.","Because metrics always look impressive.","To avoid having to inspect the data."],0]
+];
+const LTF = [
+  ["ltf1","A data problem in the inputs can change what you can trust in the outputs.","T"],
+  ["ltf2","Match precision is total matches divided by correct matches.","F"],
+  ["ltf3","Saying ‘it worked’ is as good as computing a metric.","F"]
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CU_P,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"Integration connects the parts so they work as one and checks the joins. A pipeline is the ordered stages a task passes through. A hand-off is where one stage passes its result to the next – where a check should happen. Verify-before-trust means checking an output against a trusted source before relying on it. Governance is the rules that keep the system responsible."},
+ {id:"strands",mount:"a-strands",section:"Core · Part 1",title:"Four strands, one system",sub:"Objective 1 · integrate four strands · "+SD_A,ico:"🧷",
+  fields:STRANDS.map((_,i)=>({k:"st"+i,ok:v=>eq(v,i)})),
+  explain:"In the matcher, understanding the system means seeing how the stages connect and how an error ripples on. Designing builds the pipeline with a check at every hand-off. Evaluating verifies each pairing against the trusted rule sheet. Governing keeps personal data out, shares surplus fairly and puts a human sign-off on the final plan."},
+ {id:"prop",mount:"a-prop",section:"Core · Part 2",title:"Follow the error through the joins",sub:"Objective 2 · verify at the joins (Figure 2) · "+CU_P,ico:"🧭",
+  fields:[{k:"pr1",radio:1,ok:v=>eq(v,2)},{k:"pr2",radio:1,ok:v=>eq(v,1)},{k:"pr3",radio:1,ok:v=>eq(v,0)}],
+  explain:"A mislabel at the input does not stay there: the matcher trusts the label, pairs the milk with a recipient that has no fridge, and the action wastes the food. A check at the input → matcher hand-off catches it earliest. A confident, tidy plan can still be wrong, so you verify each pairing against the trusted rule sheet before it moves on."},
+ {id:"label",mount:"a-label",section:"Core · Part 2",title:"Verified, Scenario or unverified?",sub:"How we label examples · "+CE_P,ico:"🏷️",
+  fields:LABELS.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"The Ne'ma goal is Verified: it is real and carries a named source (nema.ae). The matcher and its dataset are illustrative Scenarios to reason with. ‘Ended food waste in every UAE city’ and ‘everyone knows’ are sweeping claims with no source – unverified."},
+ {id:"sens",mount:"a-sens",section:"Core · Part 2",title:"Pass, human check, or not allowed?",sub:"Objective 3 · responsible-use rules · "+GE_E,ico:"🛡️",
+  fields:SENS.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Ordinary items such as tinned chickpeas and cooked meals for a kitchen with a fridge are verified against the rule sheet, then passed. Infant formula and special-diet meals are sensitive, so a human checks them before they go. Lists of families' names and addresses, and photos of people, are personal data – they never go into the system."},
+ {id:"ws1",mount:"a-ws1",section:"Core worksheet 1",title:"Read the task card",sub:"Worksheet 1 · the defined problem · "+SD_E,ico:"🎯",cls:"ws",
+  fields:[{k:"w1a",radio:1,ok:v=>eq(v,2)},{k:"w1b",ok:v=>eq(v,1)}],
+  explain:"The task is to match surplus food to community recipients so the plan is fair and nothing expires unused – not to send everything to one place or collect anyone's details. Every pairing is checked for expiry (it arrives before its use-by) and suitability (the recipient can store and accepts that food)."},
+ {id:"ws2",mount:"a-ws2",section:"Core worksheet 2",title:"List your components",sub:"Worksheet 2 · what each part does and the hand-off to check · "+SD_P,ico:"🧩",cls:"ws",
+  fields:COMPS.flatMap((_,i)=>[{k:"cd"+i,ok:v=>eq(v,i)},{k:"ch"+i,ok:v=>eq(v,i)}]),
+  explain:"The input list records each item's type, quantity and use-by date – check its labels as it passes to the matcher. The matcher suggests a recipient for each item – check each pairing for expiry and suitability before it joins the plan. The verify step checks every pairing against the rule sheet – and before the action, a named adult signs off the plan and anything sensitive. Every component needs a check at its hand-off."},
+ {id:"ws3",mount:"a-ws3",section:"Core worksheet 3",title:"Draw the flow and mark the hand-offs",sub:"Worksheet 3 · input–process–output · "+CU_E,ico:"🔗",cls:"ws",
+  fields:[...IPO_SLOTS.map((_,i)=>({k:"io"+i,ok:v=>eq(v,IPO_KEY[i])})),...JOINS.map(([k,,c])=>({k,box:1,ok:v=>v===!!c}))],
+  explain:"Input: the list of surplus items. Process: the matcher pairs items with recipients. Output: the plan of who gets what. The two hand-offs where a check must happen are input → matcher and matcher → plan. Checking before the list exists is impossible, and checking only after delivery is too late."},
+ {id:"ws4",mount:"a-ws4",section:"Core worksheet 4",title:"Run the match, then verify every pairing",sub:"Worksheet 4 · check against the trusted rule sheet · "+CE_P,ico:"📝",cls:"ws",
+  fields:PAIRS.map(([k,,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"P1, P2 and P6 pass: each arrives before its use-by and the recipient can store and use it. P3 fails suitability – fresh milk needs a fridge and the dry-goods food bank has none. P4 fails expiry – the yoghurt's use-by is 16:00 but the shelter collects at 18:00. P5 is infant formula, a sensitive item, so a human checks it before it is sent."},
+ {id:"ws5",mount:"a-ws5",section:"Core worksheet 5",title:"Apply a responsible-use rule and write the plan",sub:"Worksheet 5 · check and safeguard beside the plan · "+GE_A,ico:"✍️",cls:"ws",
+  fields:[...RESP.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),{k:"w5p",radio:1,ok:v=>eq(v,2)}],
+  explain:"Responsible rules: item and charity cards only, a fair spread across recipients, and a named adult signs off the plan and every sensitive pairing. Adding families' names breaks the no-personal-data rule, and confidence is not a reason to skip the sign-off. The best one-line plan sends the pairings that passed, re-matches the two that failed to recipients that meet the rule sheet, holds the sensitive item for a human, and states the check and the safeguard."},
+ {id:"unplug",mount:"a-unplug",section:"Core · Part 4",title:"Verify at the joins, on paper",sub:"Unplugged activity · flow, hand-offs and a responsible rule · "+CU_P,ico:"🗺️",
+  fields:[...FLOW_KEY.map((c,i)=>({k:"uf"+i,ok:v=>eq(v,c)})),{k:"uh",ok:v=>eq(v,1)},{k:"uc",ok:v=>eq(v,2)},{k:"ur",ok:v=>eq(v,1)}],
+  explain:"The flow is input list → match → verify → action. You verify at the match → verify hand-off by checking each pairing against the rule sheet for expiry and suitability – not by trusting the matcher's confidence or speed. The human check sits at the verify join, before anything is acted on. Responsible rule: no personal data, and a human checks sensitive pairings."},
+ {id:"quiz",mount:"a-quiz",section:"Core · Part 4",title:"Quick check – integrating the strands",sub:"Quick quiz · 3 questions and 3 true or false · "+CU_P,ico:"✅",cls:"quiz",
+  fields:[...QUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...TF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: Errors hide in the hand-offs, so the joins must be verified. 2: The Ne'ma goal is a real, sourced fact – Verified (nema.ae). 3: Verify at every hand-off, so an early error is caught before it cascades. True or false: doing each strand well does not guarantee the system works (false); the Ne'ma goal is Verified (true); verifying only at the final output is not enough (false)."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+CE_P,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"An end-to-end run carries the task through every stage in one pass. A verification log has a row per hand-off: what you checked, against what source, and the result. The audit trail is the trace of checks that lets someone review or reproduce the work. A constraint is an added requirement the system must now handle. Reproducible means another person could re-run it and get the same checks."},
+ {id:"ldata",mount:"a-ldata",section:"Lab · Part 1",title:"Inspect and prepare the dataset",sub:"Prepare the data · missing values, wrong labels, representativeness · "+CE_E,ico:"🔍",
+  fields:[...DATASET.map(([k,,,,,c])=>({k,ok:v=>eq(v,c)})),{k:"ldr",radio:1,ok:v=>eq(v,2)},{k:"ldf",radio:1,ok:v=>eq(v,3)}],
+  explain:"D2 (fresh milk) and D6 (cooked lentil soup) are wrong labels – both need a fridge, so ‘dry goods’ would send them to a recipient with none. D4 (bread) and D8 (dates) are missing values – no category. The rest are fine. With 14 of 20 items labelled dry goods, the set is not representative: results for chilled and cooked food rest on very few items. Fix or flag each issue and note how it would change the result."},
+ {id:"llog",mount:"a-llog",section:"Lab · Part 2",title:"Build the verification log",sub:"Run and verify end-to-end · one row per hand-off · "+CE_P,ico:"🧾",
+  fields:[...LOGROWS.flatMap((_,i)=>[{k:"lg"+i,ok:v=>eq(v,i)},{k:"ls"+i,ok:v=>eq(v,i)}]),{k:"lgw",radio:1,ok:v=>eq(v,2)}],
+  explain:"Hand-off 1: check every item has a category and use-by date that fit it, against the category list and item cards. Hand-off 2: check each pairing passes expiry and suitability, against the trusted rule sheet. Hand-off 3: check the plan and every sensitive pairing are approved, by a named adult's sign-off. The matcher's confidence or its own explanation is never the trusted source. The log proves verify-before-trust actually happened, so a reviewer can check or reproduce it."},
+ {id:"lcons",mount:"a-lcons",section:"Lab · Part 3",title:"Trace the allergen constraint",sub:"A constraint ripples upstream (Figure 3) · "+SD_P,ico:"🌰",
+  fields:[...LCONS.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),{k:"lcm",radio:1,ok:v=>eq(v,2)}],
+  explain:"An allergen risk changes three stages: the input labels need an allergen field, the matching must never send nut items to a nut-free recipient, and the evaluation needs a new allergen check. A warning line at the end only patches the output, and the national goal does not change. The systems-thinking move is to trace the constraint, adapt each stage it touches, re-run them and log the re-checks."},
+ {id:"lmetric",mount:"a-lmetric",section:"Lab · Part 4",title:"Compute match precision",sub:"Compute a metric · correct ÷ total, against the target · "+CE_A,ico:"🧮",
+  fields:LMET.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Precision = correct ÷ total suggested. Run 1: 21 ÷ 25 = 84%, 6 points below the 90% target. Run 2: 23 ÷ 24 ≈ 96%, which meets it. Dividing the other way gives over 100%, which is impossible for a precision. The audit trail records the raw counts, the metric and the target for each run – not an impression like ‘it worked better’."},
+ {id:"lws1",mount:"a-lws1",section:"Lab worksheet 1–2",title:"Label the log and run in one pass",sub:"Worksheet 1–2 · stages and hand-offs from your Core pipeline · "+CU_P,ico:"🏷️",cls:"ws",
+  fields:[...LOGROWS.map((_,i)=>({k:"lw"+i,ok:v=>eq(v,i)})),{k:"lwm",radio:1,ok:v=>eq(v,1)}],
+  explain:"Your log follows the Core pipeline in order: input list → matcher, matcher → verify step, verify step → action. In an end-to-end run you do not stop to redesign: log the fail at the hand-off where you found it, keep going in one pass, and adapt after the run. Deleting or ignoring a fail destroys the audit trail."},
+ {id:"lws2",mount:"a-lws2",section:"Lab worksheet 3",title:"Count the raw results and compute the metric",sub:"Worksheet 3 · metric from raw counts · "+CE_A,ico:"📊",cls:"ws",
+  fields:LCOUNT.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"The run log shows 12 suggested matches; 8 passed the rule-sheet check and 4 failed (three with no fridge, one past its expiry). Precision = 8 ÷ 12 ≈ 67%, which is below the 85% target – so this run is evidence the matcher needs adapting, especially for chilled food."},
+ {id:"lws3",mount:"a-lws3",section:"Lab worksheet 4",title:"Take the added constraint and trace it",sub:"Worksheet 4 · adapt the stages it affects, then re-run · "+SD_P,ico:"🧊",cls:"ws",
+  fields:[...LCAP.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),{k:"lrr",radio:1,ok:v=>eq(v,2)}],
+  explain:"A fridge-capacity limit touches the input list (record quantity and whether it needs a fridge), the matcher (add up what each recipient gets and stop at capacity) and the verify step (a new capacity check in the rule sheet and log). Writing a note at the bottom of the plan only patches the output. You re-run only the stages and items the constraint touches, and add log rows for the re-checks."},
+ {id:"lws4",mount:"a-lws4",section:"Lab worksheet 5",title:"Add re-check rows and swap for reproducibility",sub:"Worksheet 5 · an audit trail another pair can trust · "+GE_A,ico:"🔁",cls:"ws",
+  fields:[...LREPRO.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),{k:"lsw",radio:1,ok:v=>eq(v,1)}],
+  explain:"A reproducible log row names the pairing, what was checked, the trusted source (and its version) and the result – including a fail. ‘All looked fine’ and ‘fixed it’ cannot be checked by anyone else. When you swap, the other pair should be able to re-run your system from your log and get the same checks and results – that is what makes the audit trail trustworthy."},
+ {id:"lunplug",mount:"a-lunplug",section:"Lab · Part 6",title:"Prepare data, then compute, on paper",sub:"Unplugged activity · inspect, compute, keep an audit trail · "+CE_E,ico:"📝",
+  fields:[...LPRINT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"lur",ok:v=>eq(v,1)},{k:"lup",ok:v=>eq(v,1)},{k:"lut",ok:v=>eq(v,2)}],
+  explain:"Chilled chicken filed as dry goods is a wrong label; rice with a blank category is a missing value; the pasta row is fine. A sample that is 9 of 10 dry goods is not representative. Precision = 15 ÷ 20 = 75%. Keep an audit trail with a row for each check – what, against which source, pass or fail – plus the raw counts and the metric."},
+ {id:"lquiz",mount:"a-lquiz",section:"Lab · Part 6",title:"Quick check – prepare, run, measure",sub:"Quick quiz · 3 questions and 3 true or false · "+CE_P,ico:"✅",cls:"quiz",
+  fields:[...LQUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...LTF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: A data problem changes the result – what you feed in decides what you can trust out. 2: 15 ÷ 20 = 75%; precision is correct ÷ total suggested. 3: A metric you computed is evidence you can compare with the target. True or false: data problems change what you can trust (true); precision is correct ÷ total, not the reverse (false); ‘it worked’ is an impression, not evidence (false)."}
+];
+
+/* ---------- state ---------- */
+const KEY="g12-mw6-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- static blocks ---------- */
+/* display order helper: never show the correct option first */
+const ordc=(base,c)=>eq(base[0],c)?[...base.slice(1),base[0]]:base;
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#taskcard").innerHTML=`<header><small>Task card · illustrative scenario</small><b>The Ne'ma surplus-food matcher – today's run</b></header>
+<div class="in">
+  <p class="task"><b>The task:</b> match surplus food items to community recipients so the plan is fair and nothing expires unused. Item and charity cards only – no personal data.</p>
+  <h4 class="rt">Recipient cards</h4>
+  <table class="t"><thead><tr><th>Recipient</th><th>What it can take</th></tr></thead>
+  <tbody>${RECIP.map(([a,b])=>`<tr><td><b>${esc(a)}</b></td><td>${esc(b)}</td></tr>`).join("")}</tbody></table>
+  <h4 class="rt">Trusted rule sheet</h4>
+  <table class="t"><tbody>${RULES.map(([a,b])=>`<tr><td><b>${esc(a)}</b></td><td>${esc(b)}</td></tr>`).join("")}</tbody></table>
+  <h4 class="rt">The matcher's suggested pairings</h4>
+  <table class="t"><thead><tr><th>#</th><th>Item</th><th>Suggested recipient</th></tr></thead>
+  <tbody>${PAIRS.map(([,n,it,r])=>`<tr><td>${n}</td><td>${esc(it)}</td><td>${esc(r)}</td></tr>`).join("")}</tbody></table>
+</div>`;
+$("#dataset").innerHTML=`<header><small>Supplied dataset · illustrative, non-personal</small><b>Surplus items – first 8 of 20 rows</b></header>
+<div class="in">
+  <table class="t"><thead><tr><th>Row</th><th>Item</th><th>Category</th><th>Use-by</th></tr></thead>
+  <tbody>${DATASET.map(([,r,it,c,u])=>`<tr><td>${r}</td><td>${esc(it)}</td><td>${esc(c)}</td><td>${esc(u)}</td></tr>`).join("")}</tbody></table>
+  <p class="note"><b>Whole set (20 items), as labelled:</b> dry goods 14 · chilled 3 · cooked meal 1 · blank 2.</p>
+</div>`;
+$("#logeg").innerHTML=`<header><small>Verification log · one example row · illustrative</small><b>What a good log row looks like</b></header>
+<div class="in">
+  <table class="t"><tbody><tr><th>Hand-off</th><td>Matcher → verify step</td></tr><tr><th>What I checked</th><td>Pairing 6: sandwiches → family shelter – use-by 21:00, collected 18:00, has a fridge</td></tr><tr><th>Against</th><td>Trusted rule sheet v1</td></tr><tr><th>Result</th><td>Pass</td></tr></tbody></table>
+  <p class="note">Named check, named source, clear result – anyone could repeat it.</p>
+</div>`;
+$("#runlog").innerHTML=`<header><small>Raw run log · hand-off 2 · illustrative</small><b>One end-to-end run: 12 suggested matches</b></header>
+<div class="in">
+  <table class="t"><thead><tr><th>#</th><th>Item</th><th>Suggested recipient</th><th>Rule-sheet check</th></tr></thead>
+  <tbody>${RUN.map(([n,it,r,c])=>`<tr><td>${n}</td><td>${esc(it)}</td><td>${esc(r)}</td><td>${esc(c)}</td></tr>`).join("")}</tbody></table>
+  <p class="note"><b>Added constraint (task 4):</b> fridge capacity – the community kitchen's fridge holds at most 50 meals or tubs at a time.</p>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",ordc(DEF_ORDER,i))}</div>`).join("");
+  case "strands":
+    return `<p class="how">Each strand becomes one job in the matcher. Choose the job for each strand.</p>`+
+      STRANDS.map((t,i)=>`<div class="pair" data-item="st${i}"><span class="t">${esc(t)}</span>${sel("st"+i,STRAND_JOBS,"Choose the job…",ordc(STRAND_ORDER,i))}</div>`).join("");
+  case "prop":
+    return `<p class="q" id="q-pr1">1. The input list labels 25 litres of fresh milk as ‘dry goods’. If nothing checks the joins, what happens?</p>${radios("pr1",PROP1)}
+      <p class="q" id="q-pr2">2. Where would a check have caught it earliest?</p>${radios("pr2",PROP2)}
+      <p class="q" id="q-pr3">3. The matcher produces a neat, confident plan. What does verify-before-trust mean here?</p>${radios("pr3",PROP3)}`;
+  case "label":
+    return `<p class="how">Is each statement Verified (real, with a named source), an illustrative Scenario, or an unverified claim?</p>`+
+      LABELS.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Verified","Scenario","Unverified"],["VF","SC","UN"],t)}</div>`).join("");
+  case "sens":
+    return `<p class="how">Governance rule: no personal data, and a human checks anything sensitive. For each item, should it be verified against the rule sheet and passed, held for a human check, or is it not allowed at all?</p>`+
+      SENS.map(([k,e,t])=>`<div class="row" data-item="${k}"><span class="t">${e} ${esc(t)}</span>${seg(k,["Verify, then pass","Human check","Not allowed"],["V","H","X"],t)}</div>`).join("");
+  case "ws1":
+    return `<p class="q" id="q-w1a">1. Read the task card. What is the task?</p>${radios("w1a",WS1A)}
+      <div class="pair" data-item="w1b" style="margin-top:10px"><span class="t">The two checks the rule sheet makes on every pairing</span>${sel("w1b",WS1B,"Choose…",[3,0,1,2])}</div>`;
+  case "ws2":
+    return `<p class="how">2. For each component, choose what it does and the hand-off you must check.</p>`+
+      COMPS.map((t,i)=>`<div class="scen"><p>${esc(t)}</p><div class="two">
+        <div data-item="cd${i}"><span>What it does</span>${sel("cd"+i,DOES,"Choose…",ordc([3,2,0,1],i))}</div>
+        <div data-item="ch${i}"><span>Hand-off to check</span>${sel("ch"+i,HANDS,"Choose…",ordc([3,1,2,0],i))}</div></div></div>`).join("");
+  case "ws3":
+    return `<p class="q">3. Draw the input–process–output flow: what goes in each box?</p>`+
+      IPO_SLOTS.map((t,i)=>`<div class="pair" data-item="io${i}"><span class="t">${esc(t)}</span>${sel("io"+i,IPO,"Choose…",ordc([2,0,1],IPO_KEY[i]))}</div>`).join("")+
+      `<p class="q">Now mark the two hand-offs where a check must happen. Tick both; leave the others unticked.</p><div class="opts">`+
+      JOINS.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+  case "ws4":
+    return `<p class="how">4. Verify each suggested pairing on the task card against the trusted rule sheet. Does it pass, fail on expiry, fail on suitability – or is it a sensitive item that needs a human check?</p>`+
+      PAIRS.map(([k,n,it,r])=>`<div class="row" data-item="${k}"><span class="t"><b>${n}</b> ${esc(it)} → ${esc(r)}</span>${seg(k,["Pass","Flag: expiry","Flag: suitability","Human check"],["P","E","S","H"],n)}</div>`).join("");
+  case "ws5":
+    return boxes(RESP,"5. Tick every responsible-use rule you would apply to this plan. Leave the others unticked.")+
+      `<p class="q" id="q-w5p">Your final one-line plan, with the check and the safeguard beside it:</p>${radios("w5p",PLAN)}`;
+  case "unplug":
+    return `<p class="q">1. List the components in order and draw the flow.</p>`+
+      FLOW_KEY.map((c,i)=>`<div class="pair" data-item="uf${i}"><span class="t">Box ${i+1}</span>${sel("uf"+i,FLOW,"Choose…",ordc(FLOW_ORDER,c))}</div>`).join("")+
+      `<p class="q">2. Mark each hand-off where you would verify.</p>
+      <div class="pair" data-item="uc"><span class="t">At the match → verify hand-off, check…</span>${sel("uc",UCHECK,"Choose…")}</div>
+      <div class="pair" data-item="uh"><span class="t">The human check sits…</span>${sel("uh",UHUMAN,"Choose…")}</div>
+      <p class="q">3. Name one responsible-use rule.</p>
+      <div class="pair" data-item="ur"><span class="t">Responsible-use rule</span>${sel("ur",URULE,"Choose…")}</div>`;
+  case "quiz":
+    return quiz(QUIZ,TF);
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",ordc(LDEF_ORDER,i))}</div>`).join("");
+  case "ldata":
+    return `<p class="how">Inspect each row of the supplied dataset. Is it a missing value, a wrong label, or fine?</p>`+
+      DATASET.map(([k,r,it,c])=>`<div class="row" data-item="${k}"><span class="t"><b>${r}</b> ${esc(it)} · ${esc(c==="–"?"(blank)":c)}</span>${seg(k,["Missing value","Wrong label","OK"],["M","W","OK"],r)}</div>`).join("")+
+      `<p class="q" id="q-ldr">Is the whole set representative?</p>${radios("ldr",LREPR)}
+      <p class="q" id="q-ldf">What do you do with each issue before the full run?</p>${radios("ldf",LFIX)}`;
+  case "llog":
+    return `<p class="how">Fill in your verification log: for each hand-off, what do you check, and against which trusted source?</p>`+
+      LOGROWS.map((t,i)=>`<div class="scen"><p>${esc(t)}</p><div class="two">
+        <div data-item="lg${i}"><span>What I checked</span>${sel("lg"+i,LCHK,"Choose…",ordc([3,1,2,0],i))}</div>
+        <div data-item="ls${i}"><span>Trusted source</span>${sel("ls"+i,LSRC,"Choose…",ordc([3,2,0,1],i))}</div></div></div>`).join("")+
+      `<p class="q" id="q-lgw">Why keep the log at all?</p>${radios("lgw",LWHY)}`;
+  case "lcons":
+    return boxes(LCONS,"New constraint: some donated items contain nuts, and the family shelter's children's breakfast must be nut-free. Tick every stage the constraint changes. Leave the others unticked.")+
+      `<p class="q" id="q-lcm">Which is the systems-thinking move?</p>${radios("lcm",LMOVE)}`;
+  case "lmetric":
+    return `<p class="how">The full run on the prepared dataset. Target: match precision of at least 90%. <span class="illus">(Illustrative numbers.)</span></p>`+
+      LMET.map(([k,t,o,,ord])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,o,"Choose…",ord)}</div>`).join("");
+  case "lws1":
+    return `<p class="how">1. Label your verification log with the hand-offs from your Core pipeline, in order.</p>`+
+      LOGROWS.map((_,i)=>`<div class="pair" data-item="lw${i}"><span class="t">Log row ${i+1}</span>${sel("lw"+i,LOGROWS,"Choose…",ordc(LWS1_ORDER,i))}</div>`).join("")+
+      `<p class="q" id="q-lwm">2. Halfway through the run you notice the matcher paired an item wrongly. What do you do?</p>${radios("lwm",LMID)}`;
+  case "lws2":
+    return `<p class="how">3. Use the raw run log above. Count, then compute.</p>`+
+      LCOUNT.map(([k,t,o,,ord])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,o,"Choose…",ord)}</div>`).join("");
+  case "lws3":
+    return boxes(LCAP,"4. Added constraint: the community kitchen's fridge holds at most 50 meals or tubs. Tick every stage it affects. Leave the others unticked.")+
+      `<p class="q" id="q-lrr">Which parts do you re-run?</p>${radios("lrr",LRERUN)}`;
+  case "lws4":
+    return boxes(LREPRO,"5. Tick every new log row another pair could check and reproduce. Leave the others unticked.")+
+      `<p class="q" id="q-lsw">You swap logs with another pair. What should they be able to do?</p>${radios("lsw",LSWAP)}`;
+  case "lunplug":
+    return `<p class="q">1. Inspect the printed rows: missing value, wrong label, or fine?</p>`+
+      LPRINT.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Missing value","Wrong label","OK"],["M","W","OK"],t)}</div>`).join("")+
+      `<div class="pair" data-item="lur"><span class="t">Is the printed sample representative?</span>${sel("lur",LUREP,"Choose…")}</div>
+      <p class="q">2. From 20 matches with 15 correct, compute the precision.</p>
+      <div class="pair" data-item="lup"><span class="t">Match precision</span>${sel("lup",LUPREC,"Choose…")}</div>
+      <p class="q">3. Say how you would keep an audit trail of what you checked.</p>
+      <div class="pair" data-item="lut"><span class="t">Audit trail</span>${sel("lut",LUTRAIL,"Choose…")}</div>`;
+  case "lquiz":
+    return quiz(LQUIZ,LTF);
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 12 Main Course · Term 1 Week 6 (9 – 13 Nov 2026) · Core + Lab · Bringing the Strands Together + Run End-to-End and Measure</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
