@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Judging Outputs + Rank and Defend – Grade 12 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#A61E4D; --main2:#C2255C; --deep:#6B1533;
+  --ink:#2A1520; --muted:#6A5560; --paper:#FBF6F8; --card:#FFFFFF;
+  --line:#EFDCE3; --soft:#FBEEF2;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#F9A8C0,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#D0436F);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#2A1520,#6E3346)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#F6CFDB 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FEFAFB;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FFFBFC}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#D0436F)}
+.act-head.ws{background:linear-gradient(120deg,#2A1520,#7A3A50)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#FCEEF2}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #E6BFCB;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #E0A3B6;border-radius:12px;padding:10px 14px;background:#FEF8FA;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(42,21,32,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#2A1520;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 12 Main Course, Term 1</span><span class="pill">Week 4 Core + Week 4 Lab</span><span class="pill">📅 Teach: Wed 28 Oct 2026 (week of 26 – 30 Oct)</span></div>
+    <h1>Judging Outputs</h1>
+    <p>Today you stop saying an output is just good or bad and start proving it – then improving it. You will judge AI system outputs against clear criteria and back every judgement, and every fix, with evidence. Then, in the Lab, you run an evaluation clinic: judge a whole set of outputs, rank them from strongest to weakest with a transparent weighted score, name the priority fixes, and defend your order.</p>
+    <p class="meta"><b>Strand:</b> Critical Evaluation &amp; Informed Interaction &nbsp;·&nbsp; <b>Scenario:</b> competing system outputs; ranking strategic options</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 12B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 4 of Term 1 – Monday 26 to Friday 30 October 2026.</b> One AI period this week: Wednesday 28 October, for Boys 12 and Girls 12. Core lesson first, then the Lab. Previously (Week 3): Designing a Solution + Refine Toward Complexity. Next (Week 5): Risks, Ethics &amp; Societal Impact + Measure Fairness and Govern.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Judging Outputs</a>, then move on to the <a href="#lab">Lab: Rank and Defend</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Pinpoint the shortfall.</b> I can pinpoint where an AI output falls short of a criterion and name the improvement it needs.</li>
+      <li><b>Back it with evidence.</b> I can back every judgement with evidence I can point to inside the output itself.</li>
+      <li><b>Use evaluation vocabulary.</b> I can use terms like criterion, evidence, area for improvement and trade-off correctly when I discuss a solution.</li>
+      <li><b>Lab: rank, explain, defend.</b> I can rank a set of outputs and say exactly why each one sits where it does, explain the trade-off and the priority fix that placed one output above another, and defend my ranking with evidence – or revise it if a partner’s evidence is stronger.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 4 Core · Judging Outputs</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>From reaction to improvement</b><small>Criterion + evidence + verdict + fix</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Confident is not the same as correct</b><small>Verify before you trust</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Worksheet and on-paper evaluation</b><small>Judge an output against four criteria, then check</small></a></li>
+    </ol>
+    <h3 class="rh">Week 4 Lab · Rank and Defend</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Ranking means weighing, not counting</b><small>Weighted scoring: normalise, weight, sum</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Lab worksheet</b><small>Weighted scoring matrix, ranking and priority fixes</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Defend, revise and check</b><small>Unplugged activity and clinic check</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>From reaction to improvement</h2><p>Name a criterion, point to evidence, give a verdict – then name the fix.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>A strategic brief has two AI-drafted outputs. Both read smoothly; one misses a key requirement. You move from reaction to evaluation: name a criterion, point to evidence, give a verdict, and record what to improve. <span class="illus">(Scenario – illustrative.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <div id="a-vocab"></div>
+    <h3 class="sub">From reaction to improvement</h3>
+    <p>Saying ‘this one is weak’ tells nobody what to do. Evaluation is different: you name a <b>criterion</b>, point to <b>evidence</b> in the output, give a <b>verdict</b>, and then name the <b>fix</b>. For example, ‘It falls short on accuracy because it lists one cause when the source gives two, so the fix is to add and cite the second.’ That sentence can be checked, argued with, and acted on. When you evaluate an AI solution you are not attacking it – you are locating exactly where it falls short so the wider system can be improved. Every <b>area for improvement</b> is really a clue about what to build next.</p>
+    <figure>
+      <svg viewBox="0 0 760 340" role="img" aria-labelledby="f1T">
+        <title id="f1T">Four boxes – Criterion, Evidence, Verdict and Fix – are joined by arrows into a Full evaluation box. Beneath it, a faded, crossed-out Reaction box reads: this one is weak – no criterion, no evidence, no fix.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2A1520"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1520">
+          <g stroke="#2A1520" stroke-width="1.6" fill="#fff">
+            <rect x="14" y="20" width="166" height="96" rx="10"/>
+            <rect x="204" y="20" width="166" height="96" rx="10"/>
+            <rect x="394" y="20" width="166" height="96" rx="10"/>
+            <rect x="584" y="20" width="166" height="96" rx="10" fill="#FBEEF2" stroke="#A61E4D" stroke-width="2"/>
+          </g>
+          <g font-size="22" font-weight="700" text-anchor="middle" fill="#A61E4D"><text x="192" y="76">+</text><text x="382" y="76">+</text><text x="572" y="76">+</text></g>
+          <g font-size="15" font-weight="800" text-anchor="middle"><text x="97" y="50">CRITERION</text><text x="287" y="50">EVIDENCE</text><text x="477" y="50">VERDICT</text><text x="667" y="50" fill="#A61E4D">FIX</text></g>
+          <g font-size="13" text-anchor="middle" fill="#6A5560">
+            <text x="97" y="76">the quality judged</text><text x="97" y="99">e.g. completeness</text>
+            <text x="287" y="76">what you point to</text><text x="287" y="99">no 16–24 age limit</text>
+            <text x="477" y="76">your judgement</text><text x="477" y="99">e.g. falls short</text>
+            <text x="667" y="76">what to change</text><text x="667" y="99">add the age limit</text>
+          </g>
+          <g stroke="#2A1520" stroke-width="2" fill="none" marker-end="url(#ah)">
+            <path d="M97 120L262 166"/><path d="M287 120L346 162"/><path d="M477 120L414 162"/><path d="M667 120L498 166"/>
+          </g>
+          <rect x="190" y="170" width="380" height="68" rx="12" fill="#FBEEF2" stroke="#A61E4D" stroke-width="2.6"/>
+          <text x="380" y="198" font-size="19" font-weight="800" text-anchor="middle" fill="#A61E4D">FULL EVALUATION</text>
+          <text x="380" y="222" font-size="13" text-anchor="middle">can be checked, argued with and acted on</text>
+          <g opacity=".6">
+            <rect x="200" y="262" width="360" height="64" rx="12" fill="#fff" stroke="#6A5560" stroke-width="1.6" stroke-dasharray="7 5"/>
+            <text x="380" y="289" font-size="15" font-weight="700" text-anchor="middle" fill="#6A5560">REACTION: ‘this one is weak’</text>
+            <text x="380" y="312" font-size="13" text-anchor="middle" fill="#6A5560">no criterion · no evidence · no fix</text>
+            <path d="M212 270L548 318M212 318L548 270" stroke="#C92A4B" stroke-width="2.4"/>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> A full evaluation is a criterion, its evidence, a verdict and the fix – joined together. A reaction has none of them.</figcaption>
+    </figure>
+    <div id="a-opeval"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Confident is not the same as correct</h2><p>Fluency is about how the words land, not whether they are true.</p></div>
+  <div class="part-body">
+    <p>AI outputs often read smoothly and sound sure of themselves. That fluency is about how the words land, not about whether they are true or complete. This is why you <b>verify before you trust</b>: you check each claim against a source you already rely on. A polished, confident answer can still hide a real area for improvement – a wrong figure, a missing step, a feature that is hard to use at scale. Judging well means looking past how good it sounds and testing it against your criteria – <b>accuracy</b>, <b>relevance</b>, <b>usability</b> and <b>completeness</b> – one at a time, with evidence, before you decide what to change. A trusted source is what turns a judgement into evidence.</p>
+    <div class="ecard" id="pack"></div>
+    <div id="a-verify"></div>
+    <div class="call blue" style="margin-top:20px"><h4>Why it matters</h4><p>In the UAE, AI is being built into services people depend on, from healthcare triage to government platforms – the people who can pinpoint a solution’s areas for improvement with evidence are the ones trusted to make it better.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Languages · Moral Education · Mathematics</h4><p>Separating fluent style from factual accuracy is <b>critical reading</b> in <b>Languages</b>. Insisting a consequential decision can be explained is <b>accountability</b> from <b>Moral Education</b>. Judging against fixed criteria is <b>structured measurement</b> drawing on <b>Mathematics</b>.</p></div>
+    <div class="call amber"><h4>Tool for this week: spreadsheet (rubric-based evaluation) + school-approved generative assistant (teacher-mediated)</h4><p>1. Read the strategic brief and the trusted source so you know the correct facts. 2. Judge the first output against each criterion: accuracy, relevance, usability, completeness. 3. For each criterion write a verdict and point to the exact evidence, then record each shortfall as an area for improvement. <b>Stay safe:</b> teacher-operated tools; illustrative outputs only. Verify every claim against the trusted source before judging.</p></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3 · Worksheet + Unplugged</span><h2>Judge an output against four criteria</h2><p>Accuracy, relevance, usability, completeness – a verdict and evidence for each, then the fix.</p></div>
+  <div class="part-body">
+    <p>Use the strategic brief, the trusted source and the two outputs in the pack above. Take Output 1 and judge it against each criterion in turn. For each one, give a verdict and point to the exact evidence in the output. Then record each shortfall as an area for improvement with its fix, and choose the one that would strengthen the solution most.</p>
+    <div id="a-wsjudge"></div>
+    <div id="a-wsimprove"></div>
+    <h3 class="sub" style="margin-top:22px">Unplugged: judge outputs, on paper</h3>
+    <div class="call"><h4>Scenario</h4><p>A strategic brief has two AI-drafted outputs; one misses a key requirement. Working on paper, evaluate them against four criteria. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Verdict with evidence: ‘Completeness fails – it omits the eligibility limit stated in the brief.’</div>
+    <div id="a-paper"></div>
+    <div id="a-quiz"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 4 Lab</span><h2>Rank and Defend</h2><p>In Core you found areas for improvement one output at a time. Today you run an evaluation clinic: judge a whole set, then rank them from best to weakest, name the priority fixes, and prove your order.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>You have a wider set of AI outputs for one strategic task. You rank them by weighing how much each shortfall matters – using a transparent weighted score – then defend your order and revise it fairly when shown stronger evidence. <span class="illus">(Scenario – illustrative.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Ranking means weighing, not counting</h2><p>Areas for improvement are not all worth the same.</p></div>
+  <div class="part-body">
+    <p>It is tempting to say the output with the fewest gaps wins. But areas for improvement are not all worth the same. A tiny efficiency gap barely matters if the task needs accuracy above all; a confusing layout might be decisive for a system the public will use. To rank well you <b>weigh</b> each area for improvement against the strategic use, then ask which output falls short in the ways that matter least. Counting faults is quick but wrong; weighing them is the real skill, and it forces you to say out loud why one shortfall costs more than another and which fix comes first.</p>
+    <div id="a-lweigh"></div>
+    <h3 class="sub" style="margin-top:22px">Mathematics you will use: weighted scoring</h3>
+    <p>Put every option on the same score scale: rate each criterion <b>1–5</b>, where 5 is best. This is <b>normalisation</b>, so criteria measured differently can be compared. Give each criterion a <b>weight</b> that shows how much it matters for this task; weights are fractions that <b>sum to 1</b> (for example 0.5, 0.3, 0.2). The option’s score is the <b>weighted sum</b>: score = (w1 × r1) + (w2 × r2) + (w3 × r3) + … Note the difference between an <b>ordinal</b> rank (1st, 2nd – order only) and an <b>interval</b> rating (a 1–5 score you can add and weight): treat your 1–5 ratings as interval, and the final order as ordinal.</p>
+    <div class="worked"><b>Worked example.</b> Weights 0.5, 0.3 and 0.2; ratings 4, 3 and 5. Weighted sum = (0.5 × 4) + (0.3 × 3) + (0.2 × 5) = 2.0 + 0.9 + 1.0 = 3.9.</div>
+    <div id="a-lnorm"></div>
+    <div class="call blue" style="margin-top:20px"><h4>Why it matters</h4><p>When a UAE team chooses between competing AI systems for a public service, they cannot keep every good feature – they rank the options, name the priority fixes, and defend the choice with evidence, exactly as you will today.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Mathematics · Moral Education</h4><p>Normalising to a common scale, weighting and computing a weighted sum is <b>multi-criteria decision analysis</b>; distinguishing an ordinal rank from an interval rating is <b>data literacy</b> in <b>Mathematics</b>. Revising a ranking fairly when shown stronger evidence is <b>integrity</b> from <b>Moral Education</b>.</p></div>
+    <div class="call amber"><h4>Tool for this week: spreadsheet (weighted scoring) + school-approved generative assistant (teacher-mediated)</h4><p>1. Evaluate every output against the four criteria and rate each 1–5 (5 best). 2. Set a weight for each criterion (weights sum to 1) and compute each option’s weighted sum. 3. Rank by weighted score, name the priority fix, and defend or revise your order with evidence. <b>Stay safe:</b> teacher-operated tools; illustrative outputs only. Show your weights and scores so the ranking is transparent.</p></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head dark"><span class="pill">Lab · Part 2 of 3 · Worksheet</span><h2>Score, rank and fix the set</h2><p>Three AI outputs for the same strategic task. Use the weighted scoring matrix, rank them, and name each one’s priority fix.</p></div>
+  <div class="part-body">
+    <div class="ecard" id="clinic"></div>
+    <div id="a-lscore"></div>
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="f2T">
+        <title id="f2T">Two lists side by side. Counting the areas for improvement puts Option B first, with only one. Weighing them puts B last, with a weighted sum of 3.8, below A at 4.4 and C at 4.0, because B’s one shortfall – a wrong discount – hits accuracy, the most heavily weighted criterion.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#C92A4B"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1520">
+          <text x="180" y="34" font-size="15" font-weight="800" text-anchor="middle">COUNTING THE GAPS</text>
+          <text x="580" y="34" font-size="15" font-weight="800" text-anchor="middle" fill="#A61E4D">WEIGHING THEM</text>
+          <g stroke-width="1.6">
+            <rect x="30" y="56" width="300" height="42" rx="8" fill="#FDE7EC" stroke="#C92A4B"/>
+            <rect x="30" y="110" width="300" height="42" rx="8" fill="#fff" stroke="#2A1520"/>
+            <rect x="30" y="164" width="300" height="42" rx="8" fill="#fff" stroke="#2A1520"/>
+            <rect x="430" y="56" width="300" height="42" rx="8" fill="#fff" stroke="#2A1520"/>
+            <rect x="430" y="110" width="300" height="42" rx="8" fill="#fff" stroke="#2A1520"/>
+            <rect x="430" y="164" width="300" height="42" rx="8" fill="#FDE7EC" stroke="#C92A4B"/>
+          </g>
+          <g font-size="15" font-weight="700">
+            <text x="46" y="82">1st  Option B</text><text x="46" y="136">=2nd  Option A</text><text x="46" y="190">=2nd  Option C</text>
+            <text x="446" y="82">1st  A</text><text x="446" y="136">2nd  C</text><text x="446" y="190">3rd  B</text>
+          </g>
+          <g font-size="13" text-anchor="end" fill="#6A5560"><text x="318" y="82">1 gap</text><text x="318" y="136">2 gaps</text><text x="318" y="190">2 gaps</text></g>
+          <g fill="#C2255C"><rect x="510" y="69" width="132" height="16" rx="4"/><rect x="510" y="123" width="120" height="16" rx="4"/><rect x="510" y="177" width="114" height="16" rx="4" fill="#C92A4B"/></g>
+          <g font-size="13" font-weight="700"><text x="650" y="82">4.4</text><text x="638" y="136">4.0</text><text x="632" y="190">3.8</text></g>
+          <path d="M334 77C380 77 384 185 426 185" stroke="#C92A4B" stroke-width="2" stroke-dasharray="6 5" fill="none" marker-end="url(#ah2)"/>
+          <text x="380" y="248" font-size="14" text-anchor="middle">B has the fewest gaps – but its one gap, a wrong discount, hits accuracy.</text>
+          <text x="380" y="274" font-size="13" text-anchor="middle" fill="#6A5560">Weighted sum = sum of (weight × rating), with the weights adding up to 1.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Ranking means weighing, not counting: the option with the fewest areas for improvement does not automatically win. <span class="illus">(Illustrative data.)</span></figcaption>
+    </figure>
+    <div id="a-lrank"></div>
+    <div id="a-lfix"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head"><span class="pill">Lab · Part 3 of 3 · Unplugged</span><h2>A good ranking is defensible, not final</h2><p>Defend your order with evidence – and revise it fairly when the evidence is stronger.</p></div>
+  <div class="part-body">
+    <p>Two careful people can rank the same outputs differently and both be reasonable, as long as each can back the order with evidence. That is what <b>defensible</b> means: your partner can follow your reasoning even if they disagree with it. It also means your ranking is not sacred. If someone shows you stronger evidence, changing your mind is good evaluation, not losing. The point of the clinic is not to win – it is to reach the order the evidence best supports, and the improvement roadmap it points to, together.</p>
+    <div id="a-ldefend"></div>
+    <h3 class="sub" style="margin-top:22px">Unplugged: rank with weighted scoring, on paper</h3>
+    <div class="call"><h4>Scenario</h4><p>You have a wider set of AI outputs for one strategic task. Working on paper, rank them with a transparent weighted score. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Weighted sum = (0.5 × 4) + (0.3 × 3) + (0.2 × 5) = 3.9.</div>
+    <div id="a-lpaper"></div>
+    <div id="a-lquiz"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Judge with evidence – then weigh, rank and defend</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li><b>Evaluation</b> = a named <b>criterion</b> + <b>evidence</b> + a <b>verdict</b> – and the <b>fix</b> that closes the gap.</li>
+      <li>Record each shortfall as an <b>area for improvement</b> with its evidence.</li>
+      <li>Fluent and confident is not the same as correct – <b>verify before you trust</b>. A trusted source is what turns a judgement into evidence.</li>
+      <li>Ranking is <b>weighing, not counting</b>: normalise to a common 1–5 scale.</li>
+      <li><b>Weights</b> show how much each criterion matters and sum to 1; an option’s score is the <b>weighted sum</b>: (w1 × r1) + (w2 × r2) + …</li>
+      <li>A rank is <b>ordinal</b>; a rating is <b>interval</b> – and a good ranking is <b>defensible</b> and <b>revisable</b>.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 12 · Main Course · Term 1 Week 4 (26 – 30 Oct 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- strand + concept tags ---------- */
+const CE_E="CE · identifies areas for improvement";
+const CE_P="CE · evaluates using evidence and defined criteria";
+const CE_A="CE · justifies refinements using data, evidence and structured reasoning";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["criterion","One agreed quality you judge a solution against, like accuracy or usability."],
+  ["evidence","The exact thing in the output you can point to that supports your judgement."],
+  ["area for improvement","An evidenced gap against a criterion, paired with the change that would close it."],
+  ["verify-before-trust","Checking an output against a trusted source before you believe it."],
+  ["trade-off","When strengthening one criterion means weakening another."]
+];
+const DEF_ORDER = [2,4,0,3,1];
+const rowOrder=(o,i)=>o[0]===i?o.slice(1).concat(o[0]):o;
+const OPEV = [
+  ["oe1","This one is weak.","OP"],
+  ["oe2","Output 1 falls short on completeness: it never states the 16–24 age limit the source gives, so the fix is to add it.","EV"],
+  ["oe3","Output 2 sounds cleverer, so it must be the better one.","OP"],
+  ["oe4","Output 2 meets accuracy: its discount, start date and length all match the source.","EV"],
+  ["oe5","I just prefer Output 1.","OP"]
+];
+const ANAT = [["an1","Criterion",0],["an2","Evidence",1],["an3","Verdict",2],["an4","Fix",3]];
+const ANAT_OPTS = ["‘accuracy’","‘it lists one cause when the source gives two’","‘it falls short’","‘add and cite the second cause’","‘it sounds confident’"];
+const SOURCE = [
+  "Eligibility: full-time students aged 16–24 only.",
+  "Discount: 50% off bus and metro fares.",
+  "How to apply: in the city transport app, uploading a valid student ID.",
+  "Dates: the scheme runs for 12 months from 1 January 2027."
+];
+const OUT1 = "Great news for students! From 1 January 2027 you can travel for half price on buses and the metro. Just apply in the city transport app and the discount is approved instantly. The scheme runs for six months, so sign up early and start saving!";
+const OUT2 = "Student Travel Discount (STD): elig. FT students 16–24; 50% off bus + metro fares; apply via CTA app w/ valid student ID; valid 12 mo. from 01/01/27.";
+const VERIFY = [
+  ["vf1","The scheme starts on 1 January 2027","M"],
+  ["vf2","Students travel for half price on buses and the metro","M"],
+  ["vf3","You apply in the city transport app","M"],
+  ["vf4","The discount is approved instantly","N"],
+  ["vf5","The scheme runs for six months","C"]
+];
+const VNEXT = ["Treat it as unverified – confirm it with the transport authority or remove it before publishing","Keep it – it sounds confident, so it is probably true","Assume it is true, because the other facts match the source","Delete the whole output and start again"];
+const CRITS4 = ["Accuracy","Relevance","Usability","Completeness"];
+const WSJ_VERDICT = ["F","M","M","F"];
+const EVOPTS = [
+  "It says the scheme runs for six months, but the source says 12 months",
+  "Every sentence is about the student travel discount",
+  "Short, plain sentences a student or parent can act on straight away",
+  "It never states the eligibility limit (full-time, aged 16–24) or the student ID",
+  "It sounds upbeat and confident"
+];
+const WSIMP = [
+  ["im1","Accuracy: it says six months – change it to 12 months, checked against the source",1],
+  ["im2","Completeness: add the eligibility limit – full-time students aged 16–24 only",1],
+  ["im3","Completeness: add that applicants must upload a valid student ID",1],
+  ["im4","Unsupported claim: remove ‘approved instantly’ or confirm it with the authority",1],
+  ["im5","Accuracy: the 1 January 2027 start date is wrong – change it",0],
+  ["im6","Usability: the sentences are short – make them longer",0]
+];
+const FIXF = ["Add the eligibility limit – the brief names it as a key requirement, and without it ineligible students apply and are refused","Make the tone more formal, because it sounds too cheerful","Change ‘half price’ to ‘50%’, because numbers look more professional","Shorten it, because shorter is always better"];
+const PAPER = [
+  ["pa1","Output 1 · accuracy","F"],
+  ["pa2","Output 1 · completeness","F"],
+  ["pa3","Output 2 · accuracy","M"],
+  ["pa4","Output 2 · completeness","M"]
+];
+const PIMP = ["Usability: rewrite it as full, plain sentences and spell out ‘FT’, ‘CTA’ and the date","Accuracy: change the discount to 40%","Relevance: remove the eligibility line","Completeness: add a paragraph about city parking"];
+const PDEV = ["Develop Output 2 – every fact is right and complete, and its one shortfall (usability) is quick to fix; Output 1 needs a fact corrected and a key requirement added","Develop Output 1 – it sounds more exciting, so more students will read it","Develop Output 1 – it is longer, so it must contain more","Neither – AI outputs can never be improved"];
+const QUIZ = [
+  ["q1","What are the three parts of an evaluation?",["A guess, a hope, and a score.","A named criterion, the evidence in the output, and a verdict.","The model, the prompt, and the output."],1],
+  ["q2","An output is fluent and confident. What does that prove about accuracy?",["That it is almost certainly correct.","That it is complete.","Nothing on its own – verify it against a trusted source."],2],
+  ["q3","What do you do with a shortfall you find?",["Record it as an area for improvement, with the evidence.","Ignore it if the output sounds good.","Rewrite the criterion to hide it."],0]
+];
+const TF = [
+  ["tf1","An evaluation is a criterion, its evidence, and a verdict, joined together.","T"],
+  ["tf2","A fluent, confident output proves it is correct.","F"],
+  ["tf3","A shortfall should be recorded as an area for improvement, with evidence.","T"]
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["rank","To order solutions from strongest to weakest against the criteria."],
+  ["weigh","To decide how much an area for improvement matters for this particular use."],
+  ["priority fix","The change that would do the most to strengthen a solution."],
+  ["defensible","A judgement someone else can follow, even if they would rank differently."],
+  ["revise","To change your judgement fairly when shown stronger evidence."]
+];
+const LDEF_ORDER = [3,0,4,1,2];
+const LWEIGH = [
+  ["lw1","States the wrong discount (40% instead of 50%)","D"],
+  ["lw2","Uses one sentence that is a little longer than it needs to be","M"],
+  ["lw3","Leaves out the age limit, so ineligible people apply","D"],
+  ["lw4","Takes 2 seconds longer to generate","M"],
+  ["lw5","Gives the wrong start date for the scheme","D"],
+  ["lw6","Writes ‘metro’ with a small letter","M"]
+];
+const LXY = ["X – the output with fewer gaps always wins","They tie, because every gap is worth the same","Y – its three gaps are minor, while X’s one gap stops people completing their application","Neither can be ranked until you know which one sounds better"];
+const NORMWHY = ["Normalisation – criteria measured in different ways end up on one common scale, so they can be compared and combined fairly","Because 1–5 is the only scale allowed","To make every option score the same","So you can skip collecting evidence"];
+const ORDINT = [
+  ["oi1","Option A came 1st in our ranking","ORD"],
+  ["oi2","Option B was rated 2 out of 5 for accuracy","INT"],
+  ["oi3","Option C was placed 2nd","ORD"],
+  ["oi4","Option A was rated 5 out of 5 for completeness","INT"]
+];
+const NWT = ["0.4, 0.1, 0.2 and 0.3 – they sum to 1","0.4, 0.2, 0.2 and 0.3 – they sum to 1.1","0.3, 0.1, 0.2 and 0.2 – they sum to 0.8","4, 1, 2 and 3 – bigger numbers are clearer"];
+const MCRIT = [["Accuracy",0.4],["Relevance",0.1],["Usability",0.2],["Completeness",0.3]];
+const CLIN = [
+  ["A","Fully accurate and complete – but a dense block of note form",[5,5,2,5],"Dense note form; unexplained abbreviations (‘FT’, ‘CTA’, ‘w/’)"],
+  ["B","Very clear and easy to read – but states the discount as 40%",[2,5,5,5],"States 40% off – the trusted source says 50%"],
+  ["C","Clear and correct on most facts – but leaves out a step",[4,5,5,3],"Says ‘early next year’, not 1 January 2027; never mentions the student ID"]
+];
+const SUMS = ["3.6","3.8","4.0","4.2","4.4","4.6"];
+const SUM_KEY = [4,1,2];
+const SUM_ORDERS = [[3,0,5,2,4,1],[2,5,0,4,1,3],[5,3,1,0,2,4]];
+const RANKS = ["1st","2nd","3rd"];
+const RANK_KEY = [0,2,1];
+const RANK_ORDERS = [[1,0,2],[0,1,2],[2,0,1]];
+const LTOFF = ["A is longer, so it must be better","C trades completeness for readability, while A trades readability for full accuracy and completeness – and accuracy and completeness carry 0.7 of the weight here","C has more gaps than A","Note form always beats full sentences"];
+const FIXES = ["Rewrite it in full, plain sentences and spell out the abbreviations (usability)","Correct the discount to 50%, checked against the source (accuracy)","Add the student-ID step and the exact start date (completeness and accuracy)","Make it sound more confident","Make it longer"];
+const FIX_KEY = [0,1,2];
+const FIX_ORDERS = [[3,1,0,4,2],[2,0,4,1,3],[0,4,1,3,2]];
+const LBIG = ["B’s fix: accuracy 2 → 5 adds 0.4 × 3 = 1.2, taking B from 3.8 to 5.0","A’s fix: usability 2 → 5 adds 0.2 × 3 = 0.6","C’s completeness fix: 3 → 5 adds 0.3 × 2 = 0.6","Every fix adds the same amount"];
+const LDEF = [
+  ["ld1","Asked the same question 5 different ways, A stated the old 40% discount 3 times","EV"],
+  ["ld2","B just feels friendlier","NE"],
+  ["ld3","C’s ‘early next year’ is vaguer than the source’s exact date, 1 January 2027","EV"],
+  ["ld4","Most of our group preferred A","NE"],
+  ["ld5","B states 40% where the trusted source says 50%","EV"]
+];
+const LNEW = ["3.2","3.8","4.0","4.4"];
+const LREV = ["Keep A first – changing your ranking would look like losing","Revise fairly: C (4.0) moves to first, B (3.8) second and A (3.2) third","Drop the criteria and pick the output that sounds best","Ask the class to vote instead"];
+const LPW = ["0.5 accuracy, 0.3 completeness, 0.2 usability","0.5 accuracy, 0.3 completeness, 0.3 usability","0.2 accuracy, 0.3 completeness, 0.5 usability","No weights – rank by gut feeling"];
+const LPS = ["3.3","3.7","4.0","10"];
+const LPR = ["Y ranks first (4.0 against 3.7); Y’s priority fix is accuracy – its lowest rating, on the most heavily weighted criterion","X ranks first, because it has the highest single rating","They tie, because both have one rating of 5","Y ranks first; its priority fix is usability"];
+const LQUIZ = [
+  ["lq1","Why put every criterion on the same 1–5 scale before weighting?",["Because 1–5 is the only scale allowed.","Normalisation lets criteria measured differently be compared and combined fairly.","To make every option score the same."],1],
+  ["lq2","How is an option’s weighted score computed?",["Add the ratings and ignore the weights.","Take the highest single rating.","Multiply each criterion rating by its weight and add the results (weighted sum)."],2],
+  ["lq3","What is the difference between ordinal and interval here?",["A rank (1st, 2nd) is ordinal – order only; a 1–5 rating is interval – you can add and weight it.","They mean the same thing.","Interval data cannot be weighted."],0]
+];
+const LTF = [
+  ["ltf1","Ranking means counting faults, not weighing them.","F"],
+  ["ltf2","Weights should sum to 1 (or 100) so the score stays on a common scale.","T"],
+  ["ltf3","A 1–5 rating carries the same information as a rank order.","F"]
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CE_E,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"A criterion is one agreed quality you judge against. Evidence is the exact thing in the output you can point to. An area for improvement is an evidenced gap against a criterion, paired with the change that would close it. Verify-before-trust means checking against a trusted source before you believe it. A trade-off is when strengthening one criterion weakens another."},
+ {id:"opeval",mount:"a-opeval",section:"Core · Part 1",title:"Reaction or evaluation?",sub:"Objectives 1–2 · criterion + evidence + verdict + fix (Figure 1) · "+CE_P,ico:"⚖️",
+  fields:[...OPEV.map(([k,,c])=>({k,ok:v=>eq(v,c)})),...ANAT.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"An evaluation names a criterion, points to evidence and gives a verdict – so ‘falls short on completeness: no 16–24 age limit’ and ‘meets accuracy: the facts match the source’ are evaluations. ‘This one is weak’, ‘sounds cleverer’ and ‘I just prefer it’ are reactions. In the example sentence the criterion is accuracy, the evidence is ‘one cause when the source gives two’, the verdict is ‘it falls short’ and the fix is ‘add and cite the second cause’. ‘It sounds confident’ is none of them."},
+ {id:"verify",mount:"a-verify",section:"Core · Part 2",title:"Verify before you trust",sub:"Check each claim against the trusted source · "+CE_E,ico:"🔎",
+  fields:[...VERIFY.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"vnext",ok:v=>eq(v,0)}],
+  explain:"The 1 January 2027 start, half price (50%) on buses and the metro, and applying in the app all match the source. ‘Six months’ conflicts with it – the source says 12 months. ‘Approved instantly’ is not in the source at all: it sounds confident, but it is unverified, so it must be confirmed or removed before the announcement is published."},
+ {id:"wsjudge",mount:"a-wsjudge",section:"Core worksheet 1–4",title:"Judge Output 1 against each criterion",sub:"Worksheet 1–4 · verdict and evidence for each criterion · "+CE_P,ico:"📋",cls:"ws",
+  fields:[...CRITS4.map((c,i)=>({k:"wj"+i,ok:v=>eq(v,WSJ_VERDICT[i])})),...CRITS4.map((c,i)=>({k:"we"+i,ok:v=>eq(v,i)}))],
+  explain:"Accuracy falls short: it says six months, but the source says 12. Relevance meets: every sentence is about the discount. Usability meets: short, plain sentences people can act on. Completeness falls short: it never states the eligibility limit (full-time, aged 16–24) or the student ID – the key requirement it misses. ‘Sounds upbeat and confident’ is never evidence for a criterion."},
+ {id:"wsimprove",mount:"a-wsimprove",section:"Core worksheet 5",title:"Record the areas for improvement, then choose the priority fix",sub:"Worksheet 5 · each shortfall with its fix · "+CE_A,ico:"🛠️",cls:"ws",
+  fields:[...WSIMP.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),{k:"fixf",ok:v=>eq(v,0)}],
+  explain:"Output 1’s areas for improvement are the wrong length of the scheme (accuracy), the missing eligibility limit and the missing student-ID step (completeness), and the unsupported ‘approved instantly’ claim. The start date is correct and the short sentences are a strength, not a shortfall. The eligibility limit strengthens it most: the brief names it as a key requirement, and without it ineligible students apply and are refused – whereas the six-month error understates the benefit, so nobody loses out by acting on it."},
+ {id:"paper",mount:"a-paper",section:"Core · Part 3",title:"Judge outputs, on paper",sub:"Unplugged activity · judge, improve, choose · "+CE_A,ico:"📝",cls:"ws",
+  fields:[...PAPER.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"pimp",ok:v=>eq(v,0)},{k:"pdev",ok:v=>eq(v,0)}],
+  explain:"Output 1 falls short on accuracy (six months, not 12) and completeness (no eligibility limit or student ID). Output 2 meets both: every fact matches the source and nothing required is missing. Output 2’s area for improvement is usability – full, plain sentences with the abbreviations spelled out. Develop Output 2: its shortfall is quick to fix, while Output 1 would mislead and miss a key requirement."},
+ {id:"quiz",mount:"a-quiz",section:"Core · Part 3",title:"Quick check – judging outputs",sub:"Quick quiz · 3 questions and 3 true or false · "+CE_P,ico:"✅",cls:"quiz",
+  fields:[...QUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...TF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: An evaluation is a named criterion, the evidence in the output, and a verdict. 2: Fluency proves nothing on its own – verify against a trusted source. 3: Record a shortfall as an area for improvement, with the evidence. True or false: an evaluation is criterion + evidence + verdict (true); a fluent, confident output is not proved correct (false); shortfalls are recorded with evidence (true)."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+CE_E,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"Rank = order from strongest to weakest against the criteria. Weigh = decide how much an area for improvement matters for this use. Priority fix = the change that would do the most to strengthen a solution. Defensible = someone else can follow your judgement, even if they would rank differently. Revise = change your judgement fairly when shown stronger evidence."},
+ {id:"lweigh",mount:"a-lweigh",section:"Lab · Part 1",title:"Weigh, don’t count",sub:"How much does each shortfall matter for this use? · "+CE_P,ico:"⚖️",
+  fields:[...LWEIGH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"lxy",radio:1,ok:v=>eq(v,2)}],
+  explain:"Students and parents act on the facts in a public announcement, so a wrong discount, a wrong start date or a missing age limit is decisive – people plan, pay or apply on the strength of it. A slightly long sentence, 2 seconds of extra generation time or a small letter are minor. That is why Y ranks above X: X has fewer gaps, but its one gap – the missing student-ID step – stops people completing their application."},
+ {id:"lnorm",mount:"a-lnorm",section:"Lab · Part 1",title:"Normalise, weight and tell ordinal from interval",sub:"Mathematics · weighted scoring · "+CE_P,ico:"🧮",
+  fields:[{k:"nwhy",ok:v=>eq(v,0)},...ORDINT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"nwt",ok:v=>eq(v,0)}],
+  explain:"Rating every criterion 1–5 is normalisation: it puts different kinds of measurement on one common scale so they can be combined fairly. Places such as 1st and 2nd are ordinal – order only. A 1–5 rating is interval – you can multiply it by a weight and add. Weights must sum to 1: 0.4 + 0.1 + 0.2 + 0.3 = 1.0; 1.1 and 0.8 would push the score off the 1–5 scale."},
+ {id:"lscore",mount:"a-lscore",section:"Lab worksheet 1–2",title:"Compute the weighted sums",sub:"Worksheet 1–2 · weighted scoring matrix · weight × rating · "+CE_P,ico:"🧮",cls:"ws",
+  fields:CLIN.map((c,i)=>({k:"ls"+i,ok:v=>eq(v,SUM_KEY[i])})),
+  explain:"A: (0.4 × 5) + (0.1 × 5) + (0.2 × 2) + (0.3 × 5) = 2.0 + 0.5 + 0.4 + 1.5 = 4.4. B: 0.8 + 0.5 + 1.0 + 1.5 = 3.8. C: 1.6 + 0.5 + 1.0 + 0.9 = 4.0."},
+ {id:"lrank",mount:"a-lrank",section:"Lab worksheet 3–4",title:"Rank the options and explain the trade-off",sub:"Worksheet 3–4 · rank with a weighing reason (Figure 2) · "+CE_A,ico:"🏆",cls:"ws",
+  fields:[...CLIN.map((c,i)=>({k:"lr"+i,ok:v=>eq(v,RANK_KEY[i])})),{k:"ltoff",radio:1,ok:v=>eq(v,1)}],
+  explain:"Ranked by weighted sum: A (4.4) first, C (4.0) second and B (3.8) last – even though B has the fewest areas for improvement (Figure 2). A sits above C because of a trade-off: A gives up readability but keeps every fact right and complete, while C reads easily but leaves out a step – and accuracy and completeness carry 0.7 of the weight for this task. Length has nothing to do with it, and A and C have the same number of gaps."},
+ {id:"lfix",mount:"a-lfix",section:"Lab worksheet 4",title:"Name each option’s priority fix",sub:"Worksheet 4 · the improvement roadmap · "+CE_A,ico:"🛠️",cls:"ws",
+  fields:[...CLIN.map((c,i)=>({k:"lf"+i,ok:v=>eq(v,FIX_KEY[i])})),{k:"lbig",ok:v=>eq(v,0)}],
+  explain:"A’s priority fix is usability – full, plain sentences with the abbreviations spelled out. B’s is accuracy – correct the discount to 50%. C’s is completeness – add the student-ID step and the exact start date. B’s fix gains the most: accuracy carries a weight of 0.4, so raising it from 2 to 5 adds 0.4 × 3 = 1.2, taking B from last to 5.0. A’s fix adds 0.2 × 3 = 0.6, and C’s completeness fix adds 0.3 × 2 = 0.6."},
+ {id:"ldefend",mount:"a-ldefend",section:"Lab · Part 3",title:"Defend and revise",sub:"Worksheet 5 · evidence, not opinion · revise fairly · "+CE_A,ico:"🤝",
+  fields:[...LDEF.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"lnew",ok:v=>eq(v,0)},{k:"lrev",radio:1,ok:v=>eq(v,1)}],
+  explain:"A tested result (A gave the old 40% in 3 of 5 rewordings), a vaguer date than the source, and a contradiction with the trusted source are evidence. ‘Feels friendlier’ and ‘most of our group preferred it’ are not. With A’s accuracy now 2: (0.4 × 2) + 0.5 + 0.4 + 1.5 = 3.2. Revise fairly: C (4.0), B (3.8), A (3.2). Changing your order for stronger evidence is good evaluation, not losing."},
+ {id:"lpaper",mount:"a-lpaper",section:"Lab · Part 3",title:"Rank with weighted scoring, on paper",sub:"Unplugged activity · weights, sums, rank, priority fix · "+CE_A,ico:"📝",cls:"ws",
+  fields:[{k:"lpw",ok:v=>eq(v,0)},{k:"lpx",ok:v=>eq(v,1)},{k:"lpy",ok:v=>eq(v,2)},{k:"lpr",ok:v=>eq(v,0)}],
+  explain:"Accuracy should get the largest weight, and the weights must sum to 1 (0.5 + 0.3 + 0.2); 0.5 + 0.3 + 0.3 = 1.1 is not valid. X: (0.5 × 5) + (0.3 × 2) + (0.2 × 3) = 2.5 + 0.6 + 0.6 = 3.7. Y: (0.5 × 3) + (0.3 × 5) + (0.2 × 5) = 1.5 + 1.5 + 1.0 = 4.0. Y ranks first, and its priority fix is accuracy – its lowest rating on the most heavily weighted criterion."},
+ {id:"lquiz",mount:"a-lquiz",section:"Lab · Part 3",title:"Quick check – weighted ranking",sub:"Quick quiz · 3 questions and 3 true or false · "+CE_P,ico:"✅",cls:"quiz",
+  fields:[...LQUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...LTF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: Normalisation lets criteria measured differently be compared and combined fairly. 2: Multiply each rating by its weight and add the results. 3: A rank is ordinal – order only; a 1–5 rating is interval – you can add and weight it. True or false: ranking means weighing, not counting (false); weights sum to 1 so the score stays on a common scale (true); a rating carries more information than a rank order (false)."}
+];
+
+/* ---------- state ---------- */
+const KEY="g12-mw4-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#pack").innerHTML=`<header><small>Strategic brief pack · illustrative</small><b>A student travel-discount scheme: two AI-drafted announcements</b></header>
+<div class="in">
+  <p class="task"><b>The strategic brief:</b> a city transport authority asks an AI assistant to draft the public announcement for a new student travel-discount scheme. Students and parents will act on it, so it must be accurate, relevant, easy to use and complete – and it must state who is eligible. (Made-up example – no personal data.)</p>
+  <div class="quote"><b>Trusted source (the scheme rules)</b><ul style="margin:6px 0 0;padding-left:20px">${SOURCE.map(s=>`<li>${esc(s)}</li>`).join("")}</ul></div>
+  <div class="ab"><div><b>Output 1</b>${esc(OUT1)}</div><div><b>Output 2</b>${esc(OUT2)}</div></div>
+</div>`;
+$("#clinic").innerHTML=`<header><small>Evaluation clinic · illustrative ratings</small><b>Three AI outputs for the same announcement</b></header>
+<div class="in">
+  <p class="task"><b>The task:</b> the same strategic brief and trusted source as in Core. The teacher rated each output 1–5 on the four criteria (5 = best). The weights show how much each criterion matters for a public announcement people will act on.</p>
+  <table class="t record"><caption>Ratings are 1–5 (5 = best). <b>Weighted sum</b> = sum of (weight × rating).</caption><thead><tr><th>Criterion</th><th>Weight</th>${CLIN.map(c=>`<th>${c[0]}</th>`).join("")}</tr></thead>
+  <tbody>${MCRIT.map(([n,w],j)=>`<tr><td>${n}</td><td>${w}</td>${CLIN.map(c=>`<td>${c[2][j]}</td>`).join("")}</tr>`).join("")}<tr><td><b>Weighted sum</b></td><td>1.0</td>${CLIN.map(()=>`<td>?</td>`).join("")}</tr></tbody>
+  </table>
+  <table class="t" style="margin-top:10px"><thead><tr><th>Option</th><th>In short</th><th>Logged areas for improvement</th></tr></thead>
+  <tbody>${CLIN.map(c=>`<tr><td><b>${c[0]}</b></td><td>${esc(c[1])}</td><td>${esc(c[3])}</td></tr>`).join("")}</tbody></table>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+const rows=(list,labels,vals)=>list.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,labels,vals,t)}</div>`).join("");
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",rowOrder(DEF_ORDER,i))}</div>`).join("");
+  case "opeval":
+    return `<p class="q">1. Is each comment a full evaluation or just a reaction? (Output 1 and Output 2 are in the pack in Part 2.)</p>`+rows(OPEV,["Evaluation","Reaction"],["EV","OP"])+
+      `<p class="q">2. Take this evaluation apart (Figure 1): ‘It falls short on accuracy because it lists one cause when the source gives two, so the fix is to add and cite the second.’</p>`+
+      ANAT.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,ANAT_OPTS,"Choose the words…",[4,2,0,3,1])}</div>`).join("");
+  case "verify":
+    return `<p class="how">Check each claim in Output 1 against the trusted source in the pack: does it match the source, conflict with it, or not appear in it at all?</p>`+rows(VERIFY,["Matches","Conflicts","Not in source"],["M","C","N"])+
+      `<div class="pair" data-item="vnext" style="margin-top:10px"><span class="t">What should happen to the claim that is not in the source?</span>${sel("vnext",VNEXT,"Choose…",[1,2,0,3])}</div>`;
+  case "wsjudge":
+    return `<p class="how">Output 1 (in the pack above). For each criterion, give a verdict and pick the exact evidence in the output.</p>`+
+      CRITS4.map((c,i)=>`<div class="rate"><h4>${c}</h4><div class="grid3"><div class="cell" data-item="wj${i}"><span>Verdict</span>${seg("wj"+i,["Meets","Falls short"],["M","F"],c+" verdict")}</div><div class="cell ev" data-item="we${i}"><span>Evidence in the output</span>${sel("we"+i,EVOPTS,"Choose the evidence…",[4,2,0,3,1])}</div></div></div>`).join("");
+  case "wsimprove":
+    return boxes(WSIMP,"Tick every real area for improvement in Output 1 – an evidenced shortfall with its fix. Leave the others unticked.")+
+      `<div class="pair" data-item="fixf" style="margin-top:12px"><span class="t">Which fix would strengthen the solution most, and why?</span>${sel("fixf",FIXF,"Choose…",[2,0,3,1])}</div>`;
+  case "paper":
+    return `<p class="q">1. Judge each output on accuracy and completeness, with the evidence in the pack.</p>`+rows(PAPER,["Meets","Falls short"],["M","F"])+
+      `<p class="q">2. Record Output 2’s shortfall as an area for improvement.</p>
+      <div class="pair" data-item="pimp"><span class="t">Area for improvement</span>${sel("pimp",PIMP,"Choose…",[1,0,3,2])}</div>
+      <p class="q">3. Choose which output to develop, and why.</p>
+      <div class="pair" data-item="pdev"><span class="t">Output to develop</span>${sel("pdev",PDEV,"Choose…",[3,1,0,2])}</div>`;
+  case "quiz":
+    return quiz(QUIZ,TF);
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",rowOrder(LDEF_ORDER,i))}</div>`).join("");
+  case "lweigh":
+    return `<p class="how">The strategic use: a public announcement that students and parents will act on. How much does each shortfall matter for this use?</p>`+rows(LWEIGH,["Decisive","Minor"],["D","M"])+
+      `<p class="q" id="q-lxy">Output X has one gap: it never mentions the student ID you must upload to apply. Output Y has three: one long sentence, a slightly formal greeting, and it takes 2 seconds longer to generate. Which should rank higher for this use?</p>${radios("lxy",LXY)}`;
+  case "lnorm":
+    return `<div class="pair" data-item="nwhy"><span class="t">Why rate every criterion 1–5 before weighting?</span>${sel("nwhy",NORMWHY,"Choose…",[2,0,3,1])}</div>
+      <p class="q">Ordinal (order only) or interval (a rating you can add and weight)?</p>`+rows(ORDINT,["Ordinal","Interval"],["ORD","INT"])+
+      `<div class="pair" data-item="nwt" style="margin-top:10px"><span class="t">Which set of four weights is valid?</span>${sel("nwt",NWT,"Choose…",[1,3,0,2])}</div>`;
+  case "lscore":
+    return `<p class="how">Use the matrix in the clinic pack. Work out each option’s weighted sum: multiply each rating by its weight, then add.</p>`+
+      CLIN.map((c,i)=>`<div class="pair" data-item="ls${i}"><span class="t">Option ${c[0]} · weighted sum</span>${sel("ls"+i,SUMS,"Choose…",SUM_ORDERS[i])}</div>`).join("");
+  case "lrank":
+    return `<p class="how">Rank the options from strongest to weakest by weighted sum.</p>`+
+      CLIN.map((c,i)=>`<div class="pair" data-item="lr${i}"><span class="t">Option ${c[0]} – ${esc(c[1])}</span>${sel("lr"+i,RANKS,"Choose the place…",RANK_ORDERS[i])}</div>`).join("")+
+      `<p class="q" id="q-ltoff">A is hard to read but fully accurate and complete; C is easy to read but leaves out a step. Which trade-off explains why A ranks above C?</p>${radios("ltoff",LTOFF)}`;
+  case "lfix":
+    return `<p class="how">Build the improvement roadmap: name the priority fix for each option.</p>`+
+      CLIN.map((c,i)=>`<div class="pair" data-item="lf${i}"><span class="t">Option ${c[0]} · priority fix</span>${sel("lf"+i,FIXES,"Choose…",FIX_ORDERS[i])}</div>`).join("")+
+      `<div class="pair" data-item="lbig" style="margin-top:10px"><span class="t">Which single priority fix raises its option’s weighted sum the most?</span>${sel("lbig",LBIG,"Choose…",[2,0,3,1])}</div>`;
+  case "ldefend":
+    return `<p class="q">1. Your partner ranks differently. Which arguments are evidence, and which are not?</p>`+rows(LDEF,["Evidence","Not evidence"],["EV","NE"])+
+      `<p class="q">2. Your partner’s test shows A stated the old 40% discount in 3 of 5 rewordings, so A’s accuracy rating drops from 5 to 2. Recompute A’s weighted sum.</p>
+      <div class="pair" data-item="lnew"><span class="t">Option A · new weighted sum</span>${sel("lnew",LNEW,"Choose…",[2,0,3,1])}</div>
+      <p class="q" id="q-lrev">3. What should you do with your ranking?</p>${radios("lrev",LREV)}`;
+  case "lpaper":
+    return `<p class="q">1. Set a weight for each criterion (weights sum to 1). Accuracy matters most for this task.</p>
+      <div class="pair" data-item="lpw"><span class="t">Valid weights</span>${sel("lpw",LPW,"Choose…",[1,2,0,3])}</div>
+      <p class="q">2. Rate each option 1–5 and compute its weighted sum, with weights 0.5 accuracy, 0.3 completeness and 0.2 usability.</p>
+      <div class="pair" data-item="lpx"><span class="t">Option X: accuracy 5, completeness 2, usability 3</span>${sel("lpx",LPS,"Choose…",[2,0,1,3])}</div>
+      <div class="pair" data-item="lpy"><span class="t">Option Y: accuracy 3, completeness 5, usability 5</span>${sel("lpy",LPS,"Choose…",[1,3,2,0])}</div>
+      <p class="q">3. Rank the options and name the priority fix.</p>
+      <div class="pair" data-item="lpr"><span class="t">Ranking and priority fix</span>${sel("lpr",LPR,"Choose…",[1,3,0,2])}</div>`;
+  case "lquiz":
+    return quiz(LQUIZ,LTF);
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 12 Main Course · Term 1 Week 4 (26 – 30 Oct 2026) · Core + Lab · Judging Outputs + Rank and Defend</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
