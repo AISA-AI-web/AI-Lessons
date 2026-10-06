@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rules vs Learning: How Each System Works + Train a Simple Model – Grade 6 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#E8590C; --main2:#F97316; --deep:#9A3412;
+  --ink:#2A1A10; --muted:#6E5847; --paper:#FFF8F1; --card:#FFFFFF;
+  --line:#F0DCC8; --soft:#FFF1E4;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#FDBA74,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#F59F00);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#2A1A10,#5C3317)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#FFD8B5 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FFFBF8;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FFFDFB}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#F59F00)}
+.act-head.ws{background:linear-gradient(120deg,#2A1A10,#6A3A17)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#FFF4EA}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #E5C7AC;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%23E8590C' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #F4B98A;border-radius:12px;padding:10px 14px;background:#FFFBF7;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(42,26,16,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#2A1A10;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 6 Main Course, Term 1</span><span class="pill">Week 2 Core + Week 2 Lab</span><span class="pill">📅 Teach: week of 5 – 9 Oct 2026</span></div>
+    <h1>Rules vs Learning: How Each System Works + Train a Simple Model</h1>
+    <p>Two machines can do the same job in totally different ways. Learn the two features that show which is which – and never be fooled by a shiny screen again. Then, in the Lab, you become a model trainer: you choose the examples, and the examples decide what your model learns – so choose wisely and keep them safe.</p>
+    <p class="meta"><b>Strand:</b> AI Conceptual Understanding &nbsp;·&nbsp; <b>Tools:</b> feature chart, system cards and a paper classifier (unplugged)</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 6B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 2 of Term 1 – Monday 5 to Friday 9 October 2026.</b> Boys 6: Wednesday 7 October · Girls 6: Friday 9 October. Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Rules vs Learning – How Each System Works</a>, then move on to the <a href="#lab">Lab: Train a Simple Model</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Two features.</b> I can name two features that separate rule-based and learning systems.</li>
+      <li><b>One example each.</b> I can give one real example of each and explain why it fits.</li>
+      <li><b>Say it right.</b> I can use the words rule-based, learning, data and model correctly.</li>
+      <li><b>Lab: train and test.</b> I can sort examples into training and testing sets, train a simple classifier, test it on new examples and record how it did.</li>
+      <li><b>Lab: examples shape it.</b> I can explain how my training examples changed what the model learned, and name one data-safety rule.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 2 Core · Rules vs Learning – How Each System Works</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Two features</b><small>Where logic comes from, how it meets the new</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>One example each</b><small>Classify everyday systems by feature</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Say it right</b><small>Use data and model correctly</small></a></li>
+      <li><span class="num">4</span><a href="#p4"><b>Core mission and worksheet</b><small>Build the feature chart</small></a></li>
+    </ol>
+    <h3 class="rh">Week 2 Lab · Train a Simple Model</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Train, then test</b><small>Learn from one set, check on another</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Keep data safe</b><small>Only non-personal examples</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Examples shape it</b><small>Your choices decide what it learns</small></a></li>
+      <li><span class="num">L4</span><a href="#l4"><b>Lab mission and worksheet</b><small>Train and test a model</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Two features</h2><p>Where does the logic come from, and how does it meet the new?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In Week 1 you sorted machines into ‘follows fixed rules’ and ‘learns from data’. Now you learn the two features that prove which kind a system is.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <figure>
+      <svg viewBox="0 0 760 262" role="img" aria-labelledby="f1T">
+        <title id="f1T">Two features tell the systems apart. Feature 1, where does the logic come from: rule-based – a person writes it; learning – it is learned from data. Feature 2, what happens with something new: rule-based – it only handles cases its rules cover; learning – it can handle new cases that look like its examples.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1A10">
+          <rect x="268" y="14" width="232" height="40" rx="10" fill="#2E5AAC"/><text x="384" y="40" font-size="16" font-weight="700" fill="#fff" text-anchor="middle">⚙️ Rule-based</text>
+          <rect x="512" y="14" width="232" height="40" rx="10" fill="#15803D"/><text x="628" y="40" font-size="16" font-weight="700" fill="#fff" text-anchor="middle">🌱 Learning</text>
+          <rect x="16" y="66" width="240" height="84" rx="12" fill="#FFF1E4" stroke="#E8590C" stroke-width="2"/>
+          <text x="32" y="94" font-size="14" font-weight="700" fill="#9A3412">FEATURE 1</text>
+          <text x="32" y="116" font-size="14">Where does the</text><text x="32" y="136" font-size="14">logic come from?</text>
+          <rect x="268" y="66" width="232" height="84" rx="12" fill="#EEF3FC" stroke="#2E5AAC" stroke-width="2"/>
+          <text x="384" y="104" font-size="15" font-weight="600" text-anchor="middle">🖊️ A person</text><text x="384" y="126" font-size="15" font-weight="600" text-anchor="middle">writes it</text>
+          <rect x="512" y="66" width="232" height="84" rx="12" fill="#ECF8F0" stroke="#15803D" stroke-width="2"/>
+          <text x="628" y="104" font-size="15" font-weight="600" text-anchor="middle">📊 It is learned</text><text x="628" y="126" font-size="15" font-weight="600" text-anchor="middle">from data</text>
+          <rect x="16" y="162" width="240" height="86" rx="12" fill="#FFF1E4" stroke="#E8590C" stroke-width="2"/>
+          <text x="32" y="190" font-size="14" font-weight="700" fill="#9A3412">FEATURE 2</text>
+          <text x="32" y="212" font-size="14">What happens with</text><text x="32" y="232" font-size="14">something new?</text>
+          <rect x="268" y="162" width="232" height="86" rx="12" fill="#EEF3FC" stroke="#2E5AAC" stroke-width="2"/>
+          <text x="384" y="190" font-size="14" text-anchor="middle">🧱 Only handles cases</text><text x="384" y="210" font-size="14" text-anchor="middle">its rules cover –</text><text x="384" y="230" font-size="14" text-anchor="middle">no rule, it breaks</text>
+          <rect x="512" y="162" width="232" height="86" rx="12" fill="#ECF8F0" stroke="#15803D" stroke-width="2"/>
+          <text x="628" y="190" font-size="14" text-anchor="middle">🧭 Can handle new</text><text x="628" y="210" font-size="14" text-anchor="middle">cases that look like</text><text x="628" y="230" font-size="14" text-anchor="middle">its examples</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> Two features tell the systems apart: where the logic comes from, and how it meets something new.</figcaption>
+    </figure>
+    <h3 class="sub">Two features that decide it</h3>
+    <p><b>Feature one – where does the logic come from?</b> In a rule-based system a person writes it. In a learning system it comes from data.</p>
+    <p><b>Feature two – what happens with something new?</b> A rule-based system only handles cases its rules cover. A learning system can handle new cases that look like its examples.</p>
+    <div id="a-vocab"></div>
+    <div id="a-match"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>One example each</h2><p>Classify everyday systems by feature.</p></div>
+  <div class="part-body">
+    <figure>
+      <svg viewBox="0 0 760 250" role="img" aria-labelledby="f2T">
+        <title id="f2T">To classify an everyday system, ask where the logic came from. If a person wrote it, it is rule-based – for example a metro gate that opens when your card has credit. If it was learned from data, it is a learning system – for example a voice assistant that improves as it listens.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2A1A10"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1A10">
+          <rect x="16" y="86" width="180" height="78" rx="12" fill="#fff" stroke="#2A1A10" stroke-width="1.8"/>
+          <text x="106" y="118" font-size="15" font-weight="700" text-anchor="middle">An everyday</text><text x="106" y="140" font-size="15" font-weight="700" text-anchor="middle">system</text>
+          <path d="M196 125H232" stroke="#2A1A10" stroke-width="2.5" marker-end="url(#ah2)"/>
+          <rect x="236" y="76" width="216" height="98" rx="14" fill="#FFF1E4" stroke="#E8590C" stroke-width="2.2"/>
+          <text x="344" y="106" font-size="14" font-weight="700" fill="#9A3412" text-anchor="middle">ASK</text>
+          <text x="344" y="130" font-size="15" text-anchor="middle">Where did the</text><text x="344" y="152" font-size="15" text-anchor="middle">logic come from?</text>
+          <path d="M452 110L496 66" stroke="#2A1A10" stroke-width="2.5" marker-end="url(#ah2)"/>
+          <path d="M452 140L496 184" stroke="#2A1A10" stroke-width="2.5" marker-end="url(#ah2)"/>
+          <rect x="500" y="14" width="244" height="104" rx="12" fill="#EEF3FC" stroke="#2E5AAC" stroke-width="2"/>
+          <text x="516" y="40" font-size="14" fill="#2E5AAC" font-weight="700">Written by a person</text>
+          <text x="516" y="66" font-size="16" font-weight="700">⚙️ Rule-based</text>
+          <text x="516" y="90" font-size="13.5">🚇 a metro gate that opens</text><text x="516" y="108" font-size="13.5">when your card has credit</text>
+          <rect x="500" y="132" width="244" height="104" rx="12" fill="#ECF8F0" stroke="#15803D" stroke-width="2"/>
+          <text x="516" y="158" font-size="14" fill="#15803D" font-weight="700">Learned from data</text>
+          <text x="516" y="184" font-size="16" font-weight="700">🌱 Learning</text>
+          <text x="516" y="208" font-size="13.5">🗣️ a voice assistant that</text><text x="516" y="226" font-size="13.5">improves as it listens</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Ask where the logic came from to classify an everyday system.</figcaption>
+    </figure>
+    <h3 class="sub">One example of each</h3>
+    <p>Once you know the two features, you can classify almost any system you meet. Ask where the logic came from, and whether it can handle a new case.</p>
+    <p>A metro gate follows fixed rules a person wrote. A voice assistant that improves as it listens learned its pattern from data.</p>
+    <div id="a-sort"></div>
+    <div id="a-case2"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head"><span class="pill">Core · Part 3 of 3</span><h2>Say it right</h2><p>Use data and model correctly.</p></div>
+  <div class="part-body">
+    <figure>
+      <svg viewBox="0 0 760 250" role="img" aria-labelledby="f3T">
+        <title id="f3T">The data is the examples: labelled cards such as apple – fruit, banana – fruit, cat – animal, rabbit – animal. The learning system builds a model from them: the model is the pattern built from the examples. A loop arrow shows that if you change the data, you can change the model.</title>
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2A1A10"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1A10">
+          <rect x="16" y="14" width="300" height="176" rx="14" fill="#FFF1E4" stroke="#E8590C" stroke-width="2"/>
+          <text x="166" y="42" font-size="16" font-weight="700" fill="#9A3412" text-anchor="middle">🧾 DATA = the examples</text>
+          <g font-size="14">
+            <rect x="34" y="58" width="128" height="52" rx="8" fill="#fff" stroke="#E5C7AC"/><text x="46" y="90">🍎 FRUIT</text>
+            <rect x="172" y="58" width="128" height="52" rx="8" fill="#fff" stroke="#E5C7AC"/><text x="184" y="90">🍌 FRUIT</text>
+            <rect x="34" y="122" width="128" height="52" rx="8" fill="#fff" stroke="#E5C7AC"/><text x="46" y="154">🐱 ANIMAL</text>
+            <rect x="172" y="122" width="128" height="52" rx="8" fill="#fff" stroke="#E5C7AC"/><text x="184" y="154">🐰 ANIMAL</text>
+          </g>
+          <path d="M316 102H396" stroke="#2A1A10" stroke-width="2.5" marker-end="url(#ah3)"/>
+          <text x="356" y="90" font-size="13" text-anchor="middle">builds</text>
+          <rect x="400" y="14" width="344" height="176" rx="14" fill="#ECF8F0" stroke="#15803D" stroke-width="2"/>
+          <text x="572" y="42" font-size="16" font-weight="700" fill="#15803D" text-anchor="middle">🧠 MODEL = the pattern</text>
+          <rect x="424" y="62" width="296" height="104" rx="10" fill="#fff" stroke="#15803D"/>
+          <text x="572" y="94" font-size="14" text-anchor="middle">“Things like these</text><text x="572" y="116" font-size="14" text-anchor="middle">are fruit; things like</text><text x="572" y="138" font-size="14" text-anchor="middle">these are animals.”</text>
+          <path d="M572 190V222H166V194" stroke="#E8590C" stroke-width="2.2" stroke-dasharray="7 5" fill="none" marker-end="url(#ah3)"/>
+          <rect x="200" y="208" width="360" height="30" rx="15" fill="#fff" stroke="#E8590C"/>
+          <text x="380" y="228" font-size="14" font-weight="700" fill="#9A3412" text-anchor="middle">change the data → change the model</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> The data is the examples; the model is the pattern built from them.</figcaption>
+    </figure>
+    <h3 class="sub">Data is not the model</h3>
+    <p>Be careful with words. The <b>data</b> is the examples. The <b>model</b> is the pattern built from them. Change the data and you can change the model.</p>
+    <p>A learning system does not understand meaning – it matches patterns. So always check its answers.</p>
+    <div id="a-words"></div>
+    <div id="a-case3"></div>
+  </div>
+</section>
+
+<!-- CORE MISSION + WORKSHEET -->
+<section class="part" id="p4">
+  <div class="part-head dark"><span class="pill">Core mission · Worksheet</span><h2>System detectives: build the feature chart</h2><p>Build a two-column feature chart, then use it to classify everyday UAE systems – defending each choice with a feature, not a shiny screen.</p></div>
+  <div class="part-body">
+    <div class="call amber"><h4>Tool for this week: feature chart and everyday-system cards (unplugged)</h4><p>You need the feature-chart handout, the everyday-system cards and a pencil – no devices and no logins. <b>No cards?</b> Classify systems your class names aloud – a metro gate, a photo app that groups pictures, a voice assistant – using only the feature chart.</p></div>
+    <h3 class="sub">Let's try it</h3>
+    <ol class="steps">
+      <li>Copy the two-column feature chart: where the logic comes from, and how each system meets something new.</li>
+      <li>Add one example to each row with your partner.</li>
+      <li>Classify two everyday systems using the chart.</li>
+      <li>For each, underline the feature that decided your answer.</li>
+      <li>Write two sentences that use <i>data</i> and <i>model</i> correctly.</li>
+      <li>Share one classification and name the feature that proved it.</li>
+    </ol>
+    <div class="ecard" id="audit"></div>
+    <div id="a-wsfeat"></div>
+    <div id="a-wsclass"></div>
+    <div id="a-wsrecord"></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 2 Lab</span><h2>Train a Simple Model</h2><p>Today you become a model trainer. You choose the examples, and the examples decide what your model learns – so choose wisely and keep them safe.</p></div>
+  <div class="part-body">
+    <div class="box lab-goals"><h2>Lab: I can…</h2><ul>
+      <li>I can sort examples into training and testing sets and train a simple classifier.</li>
+      <li>I can test the model on new examples and record how it did.</li>
+      <li>I can explain how my training examples changed what the model learned, and name one data-safety rule.</li></ul></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Train, then test</h2><p>Learn from one set, check on another.</p></div>
+  <div class="part-body">
+    <figure>
+      <svg viewBox="0 0 760 236" role="img" aria-labelledby="fL1T">
+        <title id="fL1T">Train, then test. Step 1: labelled training examples, such as circles and triangles. Step 2: training builds a model. Step 3: test the model on new examples it has never seen. If it still gets them right, it really learned; if not, it only memorised.</title>
+        <defs><marker id="ahl1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2A1A10"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1A10">
+          <rect x="16" y="14" width="220" height="168" rx="14" fill="#FFF1E4" stroke="#E8590C" stroke-width="2"/>
+          <text x="126" y="40" font-size="15" font-weight="700" fill="#9A3412" text-anchor="middle">1 · TRAINING SET</text>
+          <text x="126" y="60" font-size="13" text-anchor="middle">labelled examples</text>
+          <circle cx="44" cy="91" r="9" fill="#FDBA74" stroke="#9A3412" stroke-width="1.5"/><circle cx="144" cy="91" r="9" fill="#FDBA74" stroke="#9A3412" stroke-width="1.5"/><path d="M44 113L54 131H34Z" fill="#93C5FD" stroke="#2E5AAC" stroke-width="1.5"/><path d="M144 113L154 131H134Z" fill="#93C5FD" stroke="#2E5AAC" stroke-width="1.5"/><g font-size="14"><text x="60" y="96">circle</text><text x="160" y="96">circle</text><text x="60" y="128">triangle</text><text x="160" y="128">triangle</text></g>
+          <text x="126" y="162" font-size="13" text-anchor="middle">8–10 per category</text>
+          <path d="M236 98H272" stroke="#2A1A10" stroke-width="2.5" marker-end="url(#ahl1)"/>
+          <rect x="276" y="34" width="190" height="128" rx="14" fill="#fff" stroke="#2A1A10" stroke-width="1.8"/>
+          <text x="371" y="62" font-size="15" font-weight="700" text-anchor="middle">2 · TRAIN</text>
+          <text x="371" y="104" font-size="32" text-anchor="middle">🧠</text>
+          <text x="371" y="142" font-size="13.5" text-anchor="middle">builds a model</text>
+          <path d="M466 98H502" stroke="#2A1A10" stroke-width="2.5" marker-end="url(#ahl1)"/>
+          <rect x="506" y="14" width="238" height="168" rx="14" fill="#ECF8F0" stroke="#15803D" stroke-width="2"/>
+          <text x="625" y="40" font-size="15" font-weight="700" fill="#15803D" text-anchor="middle">3 · TESTING SET</text>
+          <text x="625" y="60" font-size="13" text-anchor="middle">new, never seen 🔒</text>
+          <circle cx="540" cy="91" r="9" fill="#FDBA74" stroke="#9A3412" stroke-width="1.5"/><path d="M540 113L550 131H530Z" fill="#93C5FD" stroke="#2E5AAC" stroke-width="1.5"/><g font-size="14"><text x="558" y="96">→ circle ✓</text><text x="558" y="128">→ triangle ✓</text></g>
+          <text x="625" y="162" font-size="13" text-anchor="middle">3 per category</text>
+          <text x="380" y="214" font-size="14" font-weight="700" text-anchor="middle" fill="#9A3412">Right on new examples = it really learned · wrong = it only memorised</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure L1.</b> Train on labelled examples, then test on new ones the model has never seen.</figcaption>
+    </figure>
+    <h3 class="sub">Train, then test</h3>
+    <p>First you show the model many labelled <b>training</b> examples. It finds the pattern and builds a model.</p>
+    <p>Then you <b>test</b> it on new examples it has never seen. If it still gets them right, it really learned. If not, it only memorised.</p>
+    <div id="a-lorder"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Keep data safe</h2><p>Only non-personal examples.</p></div>
+  <div class="part-body">
+    <figure>
+      <svg viewBox="0 0 760 214" role="img" aria-labelledby="fL2T">
+        <title id="fL2T">Golden rule: only non-personal examples. Safe to train on: shapes, objects and simple drawings. Never: faces, voices or names.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1A10">
+          <rect x="16" y="14" width="356" height="186" rx="14" fill="#ECF8F0" stroke="#15803D" stroke-width="2"/>
+          <text x="194" y="44" font-size="16" font-weight="700" fill="#15803D" text-anchor="middle">✅ SAFE · non-personal</text>
+          <g text-anchor="middle"><rect x="34" y="62" width="100" height="104" rx="10" fill="#fff" stroke="#15803D"/><text x="84" y="110" font-size="30">🔺</text><text x="84" y="148" font-size="14">shapes</text>
+          <rect x="144" y="62" width="100" height="104" rx="10" fill="#fff" stroke="#15803D"/><text x="194" y="110" font-size="30">🧱</text><text x="194" y="148" font-size="14">objects</text>
+          <rect x="254" y="62" width="100" height="104" rx="10" fill="#fff" stroke="#15803D"/><text x="304" y="110" font-size="30">✏️</text><text x="304" y="148" font-size="14">drawings</text></g>
+          <text x="194" y="188" font-size="13.5" text-anchor="middle">These can go into a training set.</text>
+          <rect x="388" y="14" width="356" height="186" rx="14" fill="#FDE7EC" stroke="#C92A4B" stroke-width="2"/>
+          <text x="566" y="44" font-size="16" font-weight="700" fill="#C92A4B" text-anchor="middle">🚫 NEVER · personal</text>
+          <g text-anchor="middle"><rect x="406" y="62" width="100" height="104" rx="10" fill="#fff" stroke="#C92A4B"/><text x="456" y="110" font-size="30">🧑</text><text x="456" y="148" font-size="14">faces</text>
+          <rect x="516" y="62" width="100" height="104" rx="10" fill="#fff" stroke="#C92A4B"/><text x="566" y="110" font-size="30">🎤</text><text x="566" y="148" font-size="14">voices</text>
+          <rect x="626" y="62" width="100" height="104" rx="10" fill="#fff" stroke="#C92A4B"/><text x="676" y="110" font-size="30">🪪</text><text x="676" y="148" font-size="14">names</text></g>
+          <text x="566" y="188" font-size="13.5" text-anchor="middle">Not in training – or testing.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure L2.</b> Only non-personal examples – shapes and objects, never faces, voices or names.</figcaption>
+    </figure>
+    <h3 class="sub">Keep your data safe</h3>
+    <p><b>Golden rule:</b> only non-personal examples. No faces, no voices and no names ever go into a training set.</p>
+    <p>Safe examples are things like shapes, objects and simple drawings. Personal data must always stay out.</p>
+    <div id="a-lsafe"></div>
+    <div id="a-lcase2"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head"><span class="pill">Lab · Part 3 of 3</span><h2>Examples shape it</h2><p>Your choices decide what it learns.</p></div>
+  <div class="part-body">
+    <figure>
+      <svg viewBox="0 0 760 228" role="img" aria-labelledby="fL3T">
+        <title id="fL3T">Training examples are all red apples labelled apple. The model learns ‘red means apple’. At test time a green apple appears and the model says ‘not apple’ – wrong, because the examples had no variety.</title>
+        <defs><marker id="ahl3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2A1A10"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1A10">
+          <rect x="16" y="14" width="228" height="170" rx="14" fill="#FFF1E4" stroke="#E8590C" stroke-width="2"/>
+          <text x="130" y="42" font-size="15" font-weight="700" fill="#9A3412" text-anchor="middle">TRAINING: red only</text>
+          <text x="130" y="96" font-size="30" text-anchor="middle">🍎 🍎 🍎</text>
+          <text x="130" y="132" font-size="14" text-anchor="middle">all labelled APPLE</text>
+          <text x="130" y="160" font-size="13" text-anchor="middle" fill="#6E5847">no other colours</text>
+          <path d="M244 98H280" stroke="#2A1A10" stroke-width="2.5" marker-end="url(#ahl3)"/>
+          <rect x="284" y="34" width="196" height="130" rx="14" fill="#fff" stroke="#2A1A10" stroke-width="1.8"/>
+          <text x="382" y="62" font-size="15" font-weight="700" text-anchor="middle">🧠 MODEL learns</text>
+          <text x="382" y="102" font-size="17" font-weight="700" fill="#C92A4B" text-anchor="middle">“red = apple”</text>
+          <text x="382" y="138" font-size="13.5" text-anchor="middle">not the real shape</text>
+          <path d="M480 98H516" stroke="#2A1A10" stroke-width="2.5" marker-end="url(#ahl3)"/>
+          <rect x="520" y="14" width="224" height="170" rx="14" fill="#FDE7EC" stroke="#C92A4B" stroke-width="2"/>
+          <text x="632" y="42" font-size="15" font-weight="700" fill="#C92A4B" text-anchor="middle">TEST: green apple</text>
+          <text x="632" y="96" font-size="30" text-anchor="middle">🍏</text>
+          <text x="632" y="132" font-size="14" text-anchor="middle">model says</text>
+          <text x="632" y="158" font-size="15" font-weight="700" fill="#C92A4B" text-anchor="middle">“not apple” ✗</text>
+          <text x="380" y="212" font-size="14" font-weight="700" text-anchor="middle" fill="#9A3412">Variety and fairness matter – not just how many examples</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure L3.</b> Red-only apple examples teach the model ‘red’, so it fails on a green apple.</figcaption>
+    </figure>
+    <h3 class="sub">Your examples shape the model</h3>
+    <p>If all your apple pictures are red, the model learns ‘red’, not ‘apple’, and fails on a green one. Variety and fairness matter, not just how many.</p>
+    <p>That is why you test on fresh examples – to check the model truly learned the pattern instead of just memorising.</p>
+    <div id="a-ltrue"></div>
+    <div id="a-lcase3"></div>
+  </div>
+</section>
+
+<section class="part" id="l4">
+  <div class="part-head dark"><span class="pill">Lab mission · Worksheet</span><h2>System detectives: train and test a model</h2><p>Build a training set of safe, non-personal examples, train a simple model, then test it on new examples and run a data-safety check.</p></div>
+  <div class="part-body">
+    <div class="call amber"><h4>Tool for this week: a paper classifier (no digital tool needed)</h4><p>You need labelled non-personal example cards (objects, shapes, drawings), a decision-chart or paper-classifier sheet, a results log and a pencil. Build a decision chart from your training cards and classify the held-back cards by hand – the same learning, with no devices. <b>Stay safe:</b> only non-personal examples – never faces, voices or names, in the training set or the testing set.</p></div>
+    <h3 class="sub">Let's try it</h3>
+    <ol class="steps">
+      <li>Choose two categories of non-personal items, such as dates versus dried lemons, or circles versus triangles.</li>
+      <li>Collect and label 8–10 clear training examples per category.</li>
+      <li>Set aside 3 testing examples per category and keep them hidden.</li>
+      <li>Train your paper classifier using the training examples only.</li>
+      <li>Predict, then test each held-back example and log correct or incorrect.</li>
+      <li>Explain how your training examples shaped what the model learned.</li>
+      <li>Run the data-safety check, then write one way to improve your training set.</li>
+    </ol>
+    <div class="ecard" id="tmpack"></div>
+    <div id="a-llog"></div>
+    <div id="a-lcheck"></div>
+    <div id="a-lexit"></div>
+    <div id="a-lchal"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>You turned the difference into two clear features – then trained a model by hand and saw how your examples shape it</h2></div>
+  <div class="part-body">
+    <h3 class="sub">Key ideas to remember</h3>
+    <ul class="keys">
+      <li><b>Feature one:</b> where the logic comes from – a person writes it, or it is learned from data.</li>
+      <li><b>Feature two:</b> how it meets something new – rules only cover their cases; learning can handle new cases that look like its examples.</li>
+      <li>The <b>data</b> is the examples; the <b>model</b> is the pattern built from them. A learning system matches patterns – it does not understand meaning – so always check its answers.</li>
+      <li>Train on one set of examples, then <b>test on new ones</b> to check it truly learned. Passing only the training examples might mean it just memorised.</li>
+      <li>Your examples shape the model: red-only apples teach ‘red’, not ‘apple’. Variety and fairness matter.</li>
+      <li><b>Golden rule:</b> only non-personal examples – never faces, voices or names.</li>
+    </ul>
+    <h3 class="sub">Glossary</h3>
+    <dl class="gloss">
+      <dt>Rule-based system</dt><dd>a system whose logic a person writes as fixed steps.</dd>
+      <dt>Learning system</dt><dd>a system whose logic is learned from data as a model.</dd>
+      <dt>Data</dt><dd>the labelled examples a learning system learns from.</dd>
+      <dt>Model</dt><dd>the pattern a learning system builds from its data.</dd>
+      <dt>Training set</dt><dd>the examples a model learns from.</dd>
+      <dt>Testing set</dt><dd>new examples used to check if the model really learned.</dd>
+      <dt>Data safety</dt><dd>using only non-personal examples – no faces, voices or names.</dd>
+    </dl>
+    <p><b>What to do next:</b> in Week 3 you keep building your AI skills – checking data quality and using AI helpers responsibly.</p>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 6 · Main Course · Term 1 Week 2 (5 – 9 Oct 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- scope & sequence concepts (Grade 6, Week 2: AI Conceptual Understanding) ---------- */
+const CU_E="CU · rule-based vs learning systems";
+const CU_P="CU · how AI systems learn from data to generate outputs";
+const CU_A="CU · how training data affects output quality";
+const SD_P="SD · simple structured processes (input to output)";
+const CE_P="CE · evaluates outputs for accuracy and relevance";
+const CE_A="CE · explains how changes to inputs or data improve outputs";
+const GE_P="GE · bias, privacy and responsible use";
+
+/* ---------- content: Core ---------- */
+const TERMS = [
+  ["rule-based system","A system whose logic a person writes as fixed steps."],
+  ["learning system","A system whose logic is learned from data as a model."],
+  ["data","The labelled examples a learning system learns from."],
+  ["model","The pattern a learning system builds from its data."]
+];
+const TERM_ORDER = [2,0,3,1];
+const CLUES = [
+  ["mc1","🖊️ A person writes every step",0],
+  ["mc2","📊 The logic is learned from data",1],
+  ["mc3","🧱 Breaks on a case with no rule",2],
+  ["mc4","🧭 Handles new cases that look like its examples",3]
+];
+const REVEAL = ["⚙️ Rule-based logic","🌱 Learning logic","🛑 Rule-based limit","📈 Learning strength"];
+const REVEAL_ORDER = [3,1,2,0];
+const RL = ["Rule-based","Learning"];
+const SORT = [
+  ["s1","🚇","A metro gate that opens when your card has credit","R"],
+  ["s2","🗣️","A voice assistant that improves as it hears more speech","L"],
+  ["s3","🅿️","A parking meter that charges one fixed rate","R"],
+  ["s4","🖼️","A photo app that groups pictures by what is in them","L"],
+  ["s5","📧","A spam filter trained on many past emails","L"],
+  ["s6","🧮","A calculator that always follows the same steps","R"]
+];
+const WORDS = [
+  ["d1","🗃️","The model is just the box of examples you collected",0],
+  ["d2","🔧","Change the data and you can change the model",1],
+  ["d3","⚙️","A model is a rule a person types out by hand",0],
+  ["d4","🧠","The data understands what each example means, like a person",0],
+  ["d5","🧾","The data is the examples; the model is the pattern built from them",1],
+  ["d6","🌱","A learning system builds its model from data, not from written rules",1]
+];
+const CASES = {
+  case1:{quote:"Two translation apps do the same job. One had a person write a rule for every phrase; the other was built by showing it lots of translated data. One app correctly translates a phrase nobody ever wrote a rule for. Detective, which feature reveals a learning system?",
+    clues:[["📊","Data"],["🧭","New case"],["🌱","Learns"]],q:"Which feature best reveals the learning system?",
+    opts:["It never makes a single mistake.","A person wrote a rule for every phrase it will ever meet.","It handles new cases that look like its examples.","It has a bright, modern-looking screen, which is the surest possible sign that a system has learned from data."]},
+  case2:{quote:"A classmate insists a chatbot must be a learning system “because it looks really modern.” As a system detective, you want to answer with a feature, not a first impression. What is the best reply?",
+    clues:[["🖥️","Looks modern"],["🔎","Check logic"],["⚖️","Verdict"]],q:"What is the best reply?",
+    opts:["Modern looks always mean rule-based.","I agree completely, because any tool with a modern-looking design has clearly learned everything it knows from data.","Only old systems can learn.","Looks don’t decide it – check where the logic comes from."]},
+  case3:{quote:"A pupil writes in their notebook: “The data is the pattern the system built.” As the class word-checker, you spot that the two key words have been swapped. What is the best correction?",
+    clues:[["🧾","Data"],["🧠","Model"],["🖊️","Fix words"]],q:"What is the best correction?",
+    opts:["Swap the words: the model is the pattern; the data is the examples.","Delete the sentence and use no words.","Both words really mean the written rules.","Leave the sentence exactly as it is written, because the words data and model always mean the very same thing anyway."]},
+  lcase1:{quote:"A group trains a model on ten cards, then tests it on those very same ten cards. It scores them all right, so they announce it learned perfectly. Detective, is that really proof?",
+    clues:[["🏷️","Train cards"],["🔬","Same cards"],["🚩","Not proof"]],q:"Is passing the training cards proof the model learned?",
+    opts:["Yes, the training cards are the only fair test.","No – you must test it on new, unseen examples.","Yes, scoring well on the exact same training cards is the strongest possible proof that a model has truly learned the pattern.","No, a model can never be tested at all."]},
+  lcase2:{quote:"To build the training set faster, a group wants to add a photo of a classmate’s face. As the group’s data-safety lead, you remember the golden rule. What is the best call?",
+    clues:[["🧑","A face"],["🚩","Personal"],["🗂️","Non-personal"]],q:"What is the best call?",
+    opts:["Don’t – use only non-personal examples.","Add it, but only to the testing set.","Add it right away, because a real face will always make the training set far more accurate than any drawing or object could.","Faces are fine as long as nobody looks."]},
+  lcase3:{quote:"A group trains an ‘apple’ model using only pictures of red apples. At test time a green apple appears, and the model announces ‘not apple’. Detective, why did it slip?",
+    clues:[["🍎","Red only"],["🍏","Green apple"],["🚩","Misses"]],q:"Why did the model miss the green apple?",
+    opts:["The model was given far too many kinds of apple.","Testing always breaks every model.","It learned ‘red’ instead of ‘apple’ from the examples.","Green apples are not really apples at all, so the model was completely correct to reject the green one every time."]}
+};
+/* Core worksheet */
+const FROM = ["a person who writes the steps","data – lots of labelled examples","how modern the screen looks"];
+const MEETS = ["it only handles cases its rules cover – with no rule, it breaks","it can handle new cases that look like its examples","it always gets everything right"];
+const EXR = ["🖼️ A photo app that groups pictures","🚇 A metro gate that opens when your card has credit","📧 A spam filter trained on many past emails"];
+const EXL = ["🧮 A calculator that follows the same steps","🅿️ A parking meter with one fixed rate","🗣️ A voice assistant that improves as it hears more speech"];
+const CLASSIFY = [
+  ["j1","🛗 A lift that goes to the floor whose button you press","R",["It looks modern","A person wrote the steps: press 3, go to floor 3","It learned from data about past trips","It is very big"],1],
+  ["j2","🗺️ A map app that predicts traffic jams from lots of data about past journeys","L",["It has a colourful screen","A person typed a rule for every road and every minute","It is on a phone","It learned the pattern from data about past journeys"],3]
+];
+const FEAT = ["Where the logic comes from","How it meets something new","How modern it looks","How much it costs"];
+const RECORD = [
+  ["r1","🧮 A calculator shows ‘Error’ when you divide by zero – no step covers it","R",1],
+  ["r2","✍️ A handwriting reader built by showing it thousands of labelled letters","L",0],
+  ["r3","🚦 A crossing light that turns green 30 seconds after you press the button, as a person set it","R",0],
+  ["r4","🌐 A translation app that gets a sentence right that nobody wrote a rule for","L",1]
+];
+const EX1 = ["the automatic door","the music app"];
+const EX2 = ["the door is older than the app","a person wrote the door’s rule, but the app’s pattern was learned from data about what you play","the app has nicer colours"];
+const CHAL = [
+  ["ch1","A feature that says rule-based",["It is used in the UAE","It learned when the family comes home","A person wrote a fixed rule: never below 20 °C"],2],
+  ["ch2","A feature that says learning",["It learned the home-time pattern from weeks of data","It is switched on","It has a remote control"],0],
+  ["ch3","My verdict",["It must be learning, because it is modern","It must be rule-based, because it has one rule","It is truly hard: it has a written rule AND a learned pattern, so name the feature for each part"],2]
+];
+
+/* ---------- content: Lab ---------- */
+const LTERMS = [
+  ["training set","The examples a model learns from."],
+  ["testing set","New examples used to check if the model really learned."],
+  ["model","The pattern a learning system builds from its training examples."],
+  ["data safety","Using only non-personal examples – no faces, voices or names."]
+];
+const LTERM_ORDER = [3,1,0,2];
+const LSTEPS = ["🗂️ Pick two categories of non-personal items","🏷️ Collect and label the training examples","🔒 Set aside some testing examples and keep them hidden","🧠 Train the model using training examples only","🔬 Test the held-back examples and log the results"];
+const LSTEP_ORDER = [1,4,2,0,3];
+const LSAFE = [
+  ["ls1","🔺","A drawing of a triangle","S"],
+  ["ls2","🧑","A photo of a classmate’s face","U"],
+  ["ls3","🫒","A photo of a date fruit","S"],
+  ["ls4","🎤","A recording of a pupil’s voice","U"],
+  ["ls5","🧱","A photo of a wooden block","S"],
+  ["ls6","🪪","A card showing a pupil’s full name","U"],
+  ["ls7","🔵","A drawing of a circle","S"]
+];
+const LTRUE = [
+  ["lt1","🧑","A model learns best from personal photos of your friends",0],
+  ["lt2","🍎","If every apple example is red, the model may learn ‘red’, not ‘apple’",1],
+  ["lt3","🏁","Passing only its training examples proves a model has truly learned",0],
+  ["lt4","🔬","Testing on new examples checks if it truly learned or only memorised",1],
+  ["lt5","📈","Variety and fairness matter, not just how many examples you have",1],
+  ["lt6","🎨","More examples of one single colour always makes the fairest model",0]
+];
+/* illustrative class test log (circles vs triangles) */
+const TLOG = [
+  ["tl1","🟠 an orange circle","circle","circle","C"],
+  ["tl2","🔷 a blue triangle","triangle","triangle","C"],
+  ["tl3","🔵 a blue circle","circle","triangle","I"],
+  ["tl4","🔶 an orange triangle","triangle","circle","I"],
+  ["tl5","🟠 a small orange circle","circle","circle","C"],
+  ["tl6","🔷 a big blue triangle","triangle","triangle","C"]
+];
+const SCORE = ["2 out of 6","6 out of 6","4 out of 6","3 out of 6"];
+const CHECK = [
+  ["k1","My data was safe because",["we used photos of our friends, but only a few","our cards showed only shapes – no faces, voices or names","we kept the names on the cards very small"],1],
+  ["k2","One risk was",["the cards were made of paper","we had too many shapes","every training circle was orange and every triangle blue, so the model could learn colour, not shape"],2],
+  ["k3","One improvement is",["add circles and triangles in many colours and sizes","add only more orange circles","test on the same training cards again"],0]
+];
+const LX1 = ["round","orange","big"];
+const LX2 = ["shape instead of colour","nothing at all","colour instead of shape"];
+const LCH = [
+  ["z1","My trick testing card",["an orange circle just like the training cards","a blue circle","a photo of a classmate holding a circle"],1],
+  ["z2","My prediction",["The model will call it a circle – it passes","The model will call it a triangle – it fails"],1],
+  ["z3","Why?",["Blue circles are not really circles","The trick card was too small to see","It learned ‘blue means triangle’, not the shape"],2]
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CU_E,ico:"📖",
+  fields:TERMS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"A rule-based system’s logic is written by a person as fixed steps. A learning system’s logic is learned from data as a model. The data is the labelled examples; the model is the pattern built from them."},
+ {id:"match",mount:"a-match",section:"Core · Part 1",title:"Match the clue to what it reveals",sub:"Objective 1 · name two features · "+CU_E,ico:"🧷",
+  fields:CLUES.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A person writing every step means the logic is rule-based. Logic learned from data means it is a learning system. Breaking on a case with no rule is a limit of rule-based systems. Handling new, similar cases is a strength of learning systems."},
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"Case 1 · The Two Apps",sub:"System Detectives · "+CU_E,ico:"🕵️",cls:"case",
+  fields:[{k:"case1",radio:1,ok:v=>eq(v,2)}],
+  explain:"Generalising to new, similar cases is the mark of a learning system. Writing a rule for every phrase is the rule-based feature, learning systems do make mistakes, and looks are a surface trait, not a feature."},
+ {id:"sort",mount:"a-sort",section:"Core · Part 2",title:"Sort it: rule-based or learning?",sub:"Objective 2 · give one example of each · "+CU_E,ico:"⚙️",
+  fields:SORT.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A person wrote the logic for the metro gate, the fixed-rate parking meter and the calculator – they are rule-based. The voice assistant that improves as it hears more speech, the photo app that groups pictures and the spam filter trained on many past emails learned their pattern from data."},
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"Case 2 · The Shiny Screen",sub:"System Detectives · "+CU_E,ico:"🔬",cls:"case",
+  fields:[{k:"case2",radio:1,ok:v=>eq(v,3)}],
+  explain:"Classify by feature, not by how modern something looks. Looks tell you nothing about the logic, either way – check where the logic comes from."},
+ {id:"words",mount:"a-words",section:"Core · Part 3",title:"Which sentences use data and model correctly?",sub:"Objective 3 · use the words correctly · "+CU_P,ico:"🧾",
+  fields:WORDS.map(([k,,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"The data is the examples; the model is the pattern built from them. Change the data and you can change the model, and a learning system builds its model from data, not from written rules. The model is not the box of examples, it is not a rule typed by hand, and data does not understand meaning."},
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"Case 3 · Data or Model?",sub:"System Detectives · "+CU_P,ico:"🖊️",cls:"case",
+  fields:[{k:"case3",radio:1,ok:v=>eq(v,0)}],
+  explain:"The model is the pattern built from the data, which is the examples – so swap the two words back. The two words are different, and neither means written rules."},
+ {id:"wsfeat",mount:"a-wsfeat",section:"Core worksheet",title:"Task 1 · Feature chart",sub:"Worksheet · feature and example for each type · "+CU_E,ico:"🗺️",cls:"ws",
+  fields:[{k:"f1",ok:v=>eq(v,0)},{k:"f2",ok:v=>eq(v,1)},{k:"f3",ok:v=>eq(v,0)},{k:"f4",ok:v=>eq(v,1)},{k:"f5",ok:v=>eq(v,1)},{k:"f6",ok:v=>eq(v,2)}],
+  explain:"Rule-based: the logic comes from a person who writes the steps, and it only handles cases its rules cover – like a metro gate. Learning: the logic comes from data, and it can handle new cases that look like its examples – like a voice assistant that improves as it hears more speech."},
+ {id:"wsclass",mount:"a-wsclass",section:"Core worksheet",title:"Task 2 · Classify and justify",sub:"Worksheet · name the deciding feature · "+CU_E,ico:"⚖️",cls:"ws",
+  fields:CLASSIFY.flatMap(([k,,c,,w])=>[{k:k+"a",ok:v=>eq(v,c)},{k:k+"b",ok:v=>eq(v,w)}]),
+  explain:"The lift is rule-based: a person wrote its steps. The map app is a learning system: it learned the traffic pattern from data about past journeys. Looks, size and screens never decide it."},
+ {id:"wsrecord",mount:"a-wsrecord",section:"Core worksheet",title:"Task 3 · Classification record",sub:"Worksheet · system, type and deciding feature · "+CU_E,ico:"📋",cls:"ws",
+  fields:RECORD.flatMap(([k,,c,f])=>[{k:k+"a",ok:v=>eq(v,c)},{k:k+"b",ok:v=>eq(v,f)}]),
+  explain:"Calculator: rule-based – it breaks on a case with no rule (how it meets something new). Handwriting reader: learning – its logic came from labelled examples (where the logic comes from). Crossing light: rule-based – a person set it (where the logic comes from). Translation app: learning – it handles a new case like its examples (how it meets something new)."},
+ {id:"exit",mount:"a-exit",section:"Core exit ticket",title:"Exit ticket",sub:"Show what you know · "+CU_E,ico:"🎟️",
+  fields:[{k:"x1",ok:v=>eq(v,1)},{k:"x2",ok:v=>eq(v,1)}],
+  explain:"The music app is the learning system. The feature that separates them is where the logic comes from: a person wrote the door’s rule, but the app’s pattern was learned from data."},
+ {id:"chal",mount:"a-chal",section:"Core challenge",title:"Challenge ⭐ A system that is hard to classify",sub:"Argue both sides with features · "+CU_E,ico:"⭐",
+  fields:CHAL.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"The fixed ‘never below 20 °C’ rule was written by a person – a rule-based feature. The home-time pattern was learned from weeks of data – a learning feature. Many real systems mix both, so a good detective names the feature for each part instead of judging by looks."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+CU_P,ico:"📖",
+  fields:LTERMS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"The training set is what the model learns from; the testing set is new examples that check whether it really learned. The model is the pattern built from the training examples. Data safety means only non-personal examples."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 1",title:"Put the train-and-test steps in order",sub:"Objective 1 · train, then test · "+SD_P,ico:"🧭",
+  fields:LSTEPS.map((s,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"Pick two categories of non-personal items; collect and label the training examples; set aside some testing examples and keep them hidden; train using the training examples only; then test the held-back examples and log the results."},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"Case 1 · Tested on the Same Cards",sub:"System Detectives · "+CU_P,ico:"🕵️",cls:"case",
+  fields:[{k:"lcase1",radio:1,ok:v=>eq(v,1)}],
+  explain:"Only fresh examples show whether it learned or just memorised. The training cards are the least fair test – the model has already seen them. Models can be tested; you just need new examples."},
+ {id:"lsafe",mount:"a-lsafe",section:"Lab · Part 2",title:"Sort it: safe or unsafe to train on?",sub:"Objective 3 · name a data-safety rule · "+GE_P,ico:"🗂️",
+  fields:LSAFE.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Drawings of shapes and photos of objects like a date fruit or a wooden block are non-personal – safe. A classmate’s face, a pupil’s voice and a pupil’s full name are personal data – they never go into a training set."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"Case 2 · The Classmate’s Photo",sub:"System Detectives · "+GE_P,ico:"🗂️",cls:"case",
+  fields:[{k:"lcase2",radio:1,ok:v=>eq(v,0)}],
+  explain:"Faces are personal data and never go into a training set. Personal data stays out of both sets – training and testing – whether anyone looks or not."},
+ {id:"ltrue",mount:"a-ltrue",section:"Lab · Part 3",title:"Which statements about training are true?",sub:"Objective 2 · explain how examples shape the model · "+CU_A,ico:"🧩",
+  fields:LTRUE.map(([k,,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Red-only apple examples can teach ‘red’, not ‘apple’. Testing on new examples checks whether the model truly learned or only memorised. Variety and fairness matter, not just how many. Personal photos are never used, passing only the training examples proves nothing, and one single colour makes an unfair set."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"Case 3 · The Green Apple",sub:"System Detectives · "+CU_A,ico:"🔬",cls:"case",
+  fields:[{k:"lcase3",radio:1,ok:v=>eq(v,2)}],
+  explain:"Red-only examples taught the colour, not the fruit. Green apples are apples – the problem was too little variety, and testing did not break the model; it revealed a gap in the training examples."},
+ {id:"llog",mount:"a-llog",section:"Lab worksheet",title:"Task 1 · Build and test log",sub:"Worksheet · predict, test and record · "+CE_P,ico:"📓",cls:"ws",
+  fields:TLOG.map(([k,,,,c])=>({k,ok:v=>eq(v,c)})).concat([{k:"tscore",ok:v=>eq(v,2)}]),
+  explain:"The model was right when the colour matched its training cards (orange circles, blue triangles) and wrong on the blue circle and the orange triangle – 4 out of 6. Its mistakes show it learned colour, not shape."},
+ {id:"lcheck",mount:"a-lcheck",section:"Lab worksheet",title:"Task 2 · Data-safety and risk check",sub:"Worksheet · safe data, one risk, one improvement · "+GE_P,ico:"🛡️",cls:"ws",
+  fields:CHECK.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"The data was safe because the cards showed only shapes – no faces, voices or names. The risk: every circle was orange and every triangle blue, so the model could learn colour, not shape. The fix: add circles and triangles in many colours and sizes."},
+ {id:"lexit",mount:"a-lexit",section:"Lab exit ticket",title:"Exit ticket",sub:"How did the examples change what it learned? · "+CU_A,ico:"🎟️",
+  fields:[{k:"y1",ok:v=>eq(v,1)},{k:"y2",ok:v=>eq(v,2)}],
+  explain:"Every training circle was orange, so the model learned colour instead of shape – and called a blue circle a triangle. Your examples decide what the model learns."},
+ {id:"lchal",mount:"a-lchal",section:"Lab challenge",title:"Challenge ⭐ Design a trick testing example",sub:"Predict, test and explain · "+CE_A,ico:"⭐",
+  fields:LCH.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A blue circle is a good trick card: it is safe and non-personal, and it breaks the colour pattern. The model will call it a triangle and fail, because it learned ‘blue means triangle’, not the shape. Changing the training data to include many colours would fix it."}
+];
+/* ---------- state ---------- */
+const KEY="g6-mw2-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- word cards and worked examples ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(TERMS,"");
+$("#flipsL").innerHTML=flipCards(LTERMS,"L");
+$("#audit").innerHTML=`<header><small>Worked example · feature chart · illustrative</small><b>Two everyday systems, checked by feature</b></header>
+<div class="in">
+  <p class="task"><b>On the board:</b> the teacher fills in one row of the feature chart for each kind of system. Notice that the answer is decided by a feature – never by how the screen looks.</p>
+  <table class="t"><thead><tr><th>System and verdict</th><th>Where the logic comes from</th><th>With something new</th></tr></thead>
+  <tbody><tr><td>🚇 Metro gate<br><b>⚙️ Rule-based</b></td><td>A person wrote the rule: credit on the card → open</td><td>A card with no rule → the gate stays shut</td></tr>
+  <tr><td>🖼️ Photo app that groups pictures<br><b>🌱 Learning</b></td><td>Learned from many labelled photos (data)</td><td>Groups a new photo that looks like its examples</td></tr></tbody></table>
+</div>`;
+$("#tmpack").innerHTML=`<header><small>Paper-classifier test log · illustrative class results</small><b>Circles vs triangles</b></header>
+<div class="in">
+  <p class="task"><b>Training set:</b> 8 circles and 8 triangles drawn on cards – no faces, voices or names. By chance, every circle was coloured <b>orange</b> and every triangle <b>blue</b>. The group’s decision chart said: <i>orange → circle, blue → triangle</i>. Then they tested 6 held-back cards the chart had never seen. You decide which results were correct in Task 1.</p>
+  <table class="t"><thead><tr><th>Testing example</th><th>Predicted</th><th>Model result</th></tr></thead>
+  <tbody>${TLOG.map(([,t,p,m])=>`<tr><td>${esc(t)}</td><td>${p}</td><td>${m}</td></tr>`).join("")}</tbody></table>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+function caseBody(id){
+  const c=CASES[id];
+  return `<div class="quote">“${esc(c.quote)}”</div><div class="clues" aria-hidden="true">${c.clues.map(([e,t])=>`<div class="clue">${e}<span>${esc(t)}</span></div>`).join("")}</div>
+    <p class="q" id="q-${id}">${esc(c.q)}</p>${radios(id,c.opts)}`;
+}
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,e,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${e?e+" ":""}${esc(t)}</span></label>`).join("")+`</div>`;
+const pairSel=(k,label,opts,order)=>`<div class="pair" data-item="${k}"><span class="t">${esc(label)}</span>${sel(k,opts,"Choose…",order)}</div>`;
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word.</p>`+
+      TERMS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,TERMS.map(w=>w[1]),"Choose the meaning…",TERM_ORDER)}</div>`).join("");
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each word.</p>`+
+      LTERMS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LTERMS.map(w=>w[1]),"Choose the meaning…",LTERM_ORDER)}</div>`).join("");
+  case "match":
+    return `<p class="how">For each clue you spot, choose what it reveals about the system.</p>`+
+      CLUES.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,REVEAL,"It reveals…",REVEAL_ORDER)}</div>`).join("");
+  case "case1": case "case2": case "case3": case "lcase1": case "lcase2": case "lcase3":
+    return caseBody(a.id);
+  case "sort":
+    return `<p class="how">Ask where its logic came from: written by a person, or learned from data?</p>`+
+      SORT.map(([k,e,t])=>`<div class="row" data-item="${k}"><span class="t">${e} ${esc(t)}</span>${seg(k,["⚙️ Rule-based","🌱 Learning"],["R","L"],t)}</div>`).join("");
+  case "words":
+    return boxes(WORDS,"Tick the THREE sentences that use the words <i>data</i> and <i>model</i> correctly. Leave the others unticked.");
+  case "wsfeat":
+    return `<p class="how">Complete the feature chart with a feature and an example for each system type.</p>
+      <div class="scen"><p>⚙️ Rule-based</p>${pairSel("f1","Logic comes from",FROM,[1,0,2])}${pairSel("f3","With something new",MEETS,[0,2,1])}${pairSel("f5","One example",EXR)}</div>
+      <div class="scen"><p>🌱 Learning</p>${pairSel("f2","Logic comes from",FROM,[2,0,1])}${pairSel("f4","With something new",MEETS,[1,2,0])}${pairSel("f6","One example",EXL)}</div>`;
+  case "wsclass":
+    return `<p class="how">Classify each system, then choose the feature that decided it. <span class="illus">(Illustrative systems.)</span></p>`+
+      CLASSIFY.map(([k,t,,o],i)=>`<div class="scen"><p>${i+1}. ${esc(t)}</p><div class="two">
+        <div class="cell" data-item="${k}a"><span>This is a… system</span>${seg(k+"a",RL,["R","L"],t)}</div>
+        <div data-item="${k}b"><span>because…</span>${sel(k+"b",o,"Choose…")}</div></div></div>`).join("");
+  case "wsrecord":
+    return `<p class="how">Record each system, your classification, and the deciding feature. Read the clue in each description. <span class="illus">(Illustrative systems.)</span></p>`+
+      RECORD.map(([k,t])=>`<div class="scen"><p>${esc(t)}</p><div class="two">
+        <div class="cell" data-item="${k}a"><span>Rule-based or learning?</span>${seg(k+"a",RL,["R","L"],t)}</div>
+        <div data-item="${k}b"><span>Deciding feature</span>${sel(k+"b",FEAT,"Choose…",[2,0,3,1])}</div></div></div>`).join("");
+  case "exit":
+    return `<p class="how">Your teacher names two systems: 🚪 an automatic door that opens when its sensor sees movement, and 🎵 a music app that learned which songs you like. <span class="illus">(Illustrative.)</span></p>
+      <p class="sent"><span data-item="x1">${sel("x1",EX1,"choose…")}</span> is the learning system. The feature that separates them: <span data-item="x2">${sel("x2",EX2,"choose…",[0,2,1])}</span>.</p>`;
+  case "chal":
+    return `<div class="quote"><b>A smart air-conditioner</b> <span class="illus">(illustrative)</span>. A person set the rule ‘never go below 20 °C’. It also learned from weeks of data when the family usually comes home, and cools the house just before.</div>
+      <p class="how">Argue both sides using features, then give your verdict.</p>`+
+      CHAL.map(([k,t,o])=>pairSel(k,t,o)).join("");
+  case "lorder":
+    return `<p class="how">Put the steps in the correct order to train a model and then test it fairly, from first to last.</p>`+
+      LSTEPS.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">Step ${i+1}</span>${sel("lo"+i,LSTEPS,"Choose the step…",LSTEP_ORDER)}</div>`).join("");
+  case "lsafe":
+    return `<p class="how">Ask: is this non-personal, or is it personal data?</p>`+
+      LSAFE.map(([k,e,t])=>`<div class="row" data-item="${k}"><span class="t">${e} ${esc(t)}</span>${seg(k,["🗂️ Safe","🚩 Unsafe"],["S","U"],t)}</div>`).join("");
+  case "ltrue":
+    return boxes(LTRUE,"Tick the THREE true statements about how your examples shape a model. Leave the others unticked.");
+  case "llog":
+    return `<p class="how">Use the illustrative test log above. For each testing card, compare the prediction with the model’s result: was the model correct? Then work out the score.</p>`+
+      TLOG.map(([k,t,p,m])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)} · predicted <b>${p}</b> · model said <b>${m}</b></span>${seg(k,["✓ Correct","✗ Incorrect"],["C","I"],t)}</div>`).join("")+
+      `<div class="pair" data-item="tscore"><span class="t">The model’s score on the testing set</span>${sel("tscore",SCORE,"Choose…")}</div>`;
+  case "lcheck":
+    return `<p class="how">Run the data-safety and risk check for the circles-and-triangles training set.</p>`+
+      CHECK.map(([k,t,o])=>pairSel(k,t,o)).join("");
+  case "lexit":
+    return `<p class="how">How did the training examples change what the model learned?</p>
+      <p class="sent">Because every training circle was <span data-item="y1">${sel("y1",LX1,"choose…")}</span>, the model learned <span data-item="y2">${sel("y2",LX2,"choose…")}</span> – so it called a blue circle a triangle.</p>`;
+  case "lchal":
+    return `<p class="how">Design a ‘trick’ testing card for the circles-and-triangles model, predict whether it will fail, and explain.</p>`+
+      LCH.map(([k,t,o])=>pairSel(k,t,o)).join("");
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 6 Main Course · Week 2 Core + Lab · Rules vs Learning: How Each System Works + Train a Simple Model</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
