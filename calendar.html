@@ -72,7 +72,11 @@
 .c2 b{font-size:13.5px}
 .c2 span{display:block;font-size:12px;color:var(--muted)}
 .c2 .rd{float:inline-end;font-size:11px;color:var(--purple);margin-top:2px}
-.c2.mine,.drow.mine{border-color:var(--purple);border-inline-start-color:var(--gc);box-shadow:inset 0 0 0 1px var(--purple)}
+.c2.mine,.drow.mine{border:2px solid var(--purple);border-inline-start:5px solid var(--gc);background:var(--tint);box-shadow:0 2px 6px rgba(33,7,108,.18)}
+.c2.mine b,.drow.mine b{font-weight:800;color:var(--purple)}
+.c2.mine b{font-size:14.5px}
+.c2.mine span:not(.rd),.drow.mine .w{color:var(--ink);font-weight:600}
+.tt.hasmine .c2:not(.mine) b,.dl.hasmine .drow:not(.mine) b{font-weight:600}
 .c2.past{opacity:.55}
 .legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted);margin:10px 0 0}
 .dl{display:none}
@@ -151,12 +155,12 @@ const shareUrl = id => APP ? lessonUrl(id) : new URL('app/?p=' + encodeURICompon
 const CR_ICON = '<img src="assets/classroom.png" alt="" width="30" height="26"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>';
 const classroomUrl = (id, title) => 'https://classroom.google.com/share?url=' + encodeURIComponent(shareUrl(id)) + '&title=' + encodeURIComponent(title);
 let LANG = (() => { try { return localStorage.getItem('aisa-lang') === 'ar' ? 'ar' : 'en'; } catch (e) { return 'en'; } })();
-let GRADE = (() => { try { return localStorage.getItem('cal-grade-filter') || ''; } catch (e) { return ''; } })();
+let GRADE = '';   // always opens on every grade; the teacher's own classes stand out
 let GMON = AICAL.monday(NOW);
 /* ---------- words (English / العربية). Lesson titles stay in English. ---------- */
 const AR = {
   'AI Lessons': 'دروس الذكاء الاصطناعي', 'Lessons': 'الدروس', 'Calendar': 'التقويم', 'Teaching calendar': 'تقويم التدريس', 'Dashboard': 'لوحة المتابعة',
-  'AI Teaching Calendar': 'تقويم تدريس الذكاء الاصطناعي', 'My lessons': 'دروسي', 'Whole school': 'المدرسة كلها', 'This week': 'هذا الأسبوع', 'Jump to': 'انتقل إلى', 'Print': 'طباعة', 'Grade': 'الصف',
+  'AI Teaching Calendar': 'تقويم تدريس الذكاء الاصطناعي', 'My lessons': 'دروسي', 'Whole school': 'المدرسة كلها', 'This week': 'هذا الأسبوع', 'All grades': 'كل الصفوف', 'Jump to': 'انتقل إلى', 'Print': 'طباعة', 'Grade': 'الصف',
   'American International School in Abu Dhabi': 'المدرسة الأمريكية الدولية في أبوظبي', 'AI Literacy · Grades 6–12': 'محو أمية الذكاء الاصطناعي · الصفوف 6–12',
   'Your classes: {list} – every AI lesson in order, with breaks and holidays.': 'شعبك: {list} – جميع دروس الذكاء الاصطناعي بالترتيب، مع العطل والإجازات.',
   'Every class\'s AI period this week. Your classes are outlined.': 'حصة الذكاء الاصطناعي لكل شعبة هذا الأسبوع. شعبك محددة بإطار.', 'Every class\'s AI period this week – click a class for its lesson and links.': 'حصة الذكاء الاصطناعي لكل شعبة هذا الأسبوع – انقر على شعبة لعرض درسها وروابطه.',
@@ -169,7 +173,7 @@ const AR = {
   '{k} behind the other classes': 'متأخرة {k} عن الشعب الأخرى', 'one lesson': 'درسًا واحدًا', '{n} lessons': '{n} دروس', 'One lesson behind the other classes': 'متأخرة درسًا واحدًا عن الشعب الأخرى',
   '↑ Show earlier weeks': '↑ اعرض الأسابيع السابقة', 'Show 4 more weeks ↓': 'اعرض 4 أسابيع أخرى ↓',
   'Next week: {list}. No AI lessons on those days – each class\'s lesson moves to its next AI period.': 'الأسبوع القادم: {list}. لا توجد دروس ذكاء اصطناعي في تلك الأيام – ينتقل درس كل شعبة إلى حصتها التالية.',
-  '● lesson page ready · ○ page coming': '● صفحة الدرس جاهزة · ○ قيد الإعداد', '⏪ class is a lesson behind because of a holiday': '⏪ الشعبة متأخرة درسًا بسبب عطلة', 'Outlined = your classes': 'المحددة بإطار = شعبك',
+  '● lesson page ready · ○ page coming': '● صفحة الدرس جاهزة · ○ قيد الإعداد', '⏪ class is a lesson behind because of a holiday': '⏪ الشعبة متأخرة درسًا بسبب عطلة', 'Bold and outlined = your classes': 'بخط عريض ومحاطة بإطار = شعبك',
   'Click a class for the lesson, a link to copy and Share to Classroom': 'انقر على شعبة لعرض الدرس ونسخ الرابط والمشاركة في Google Classroom',
   'No AI lessons': 'لا توجد دروس ذكاء اصطناعي', 'Your class': 'شعبتك', 'Period {p}': 'الحصة {p}', 'Arabic Studies': 'اللغة العربية', 'Islamic Studies': 'التربية الإسلامية', 'Arabic': 'عربي', 'Islamic': 'إسلامية',
   'No school': 'لا دوام', '● ready': '● جاهزة', '○ coming': '○ قيد الإعداد', 'Close': 'إغلاق', 'Previous week': 'الأسبوع السابق', 'Next week': 'الأسبوع التالي', 'Jump to a date': 'انتقل إلى تاريخ',
@@ -236,7 +240,7 @@ function grid() {
   $('#soon').innerHTML = soon.length ? `<span aria-hidden="true">📅</span><div>${esc(T('Next week: {list}. No AI lessons on those days – each class\'s lesson moves to its next AI period.', { list: soon.map(s => `${why(s.why)} (${range(s.from, s.to)})`).join(', ') }))}</div>` : '';
   if (!tw) { $('#gridOut').innerHTML = `<div class="banner"><b>${esc(tw === 0 ? T('The AI timetable starts on Monday 28 September 2026') : T('No school this week'))}</b>${tw === null ? esc(why(AICAL.noSchool(mon)) + ' · ' + fd(mon) + ' – ' + fd(fri)) : ''}</div>`; $('#legend').innerHTML = ''; return; }
   const days = [0, 1, 2, 3, 4].map(i => add(mon, i)), keep = r => !GRADE || String(r[1]) === GRADE;
-  let h = `<div class="tt${iso(mon) === iso(AICAL.monday(NOW)) ? ' cur' : ''}"><div class="corner" style="grid-row:1;grid-column:1"></div>`;
+  let h = `<div class="tt${iso(mon) === iso(AICAL.monday(NOW)) ? ' cur' : ''}${MINE.length ? ' hasmine' : ''}"><div class="corner" style="grid-row:1;grid-column:1"></div>`;
   days.forEach((d, i) => { const today = iso(d) === iso(NOW), ev = AICAL.eventOn(d);
     h += `<div class="dh${today ? ' today' : ''}" style="grid-row:1;grid-column:${i + 2}">${esc(wd(d))} ${d.getDate()}<small>${esc(today ? T('Today') : T('Day {n}', { n: AICAL.dayNumber(d) }))}</small>${ev ? `<span class="ev">📌 ${esc(AICAL.label(ev, LANG))}</span>` : ''}</div>`; });
   for (let p = 1; p <= 7; p++) h += `<div class="ph" style="grid-row:${p + 1};grid-column:1">P${p}</div>`;
@@ -247,14 +251,14 @@ function grid() {
     for (let p = 1; p <= 7; p++) { const here = slots.filter(s => s.per === p).sort((a, b) => a.sec.localeCompare(b.sec));
       h += `<div style="grid-row:${p + 1};grid-column:${i + 2}">${here.length ? `<div class="tm" dir="ltr">${esc(here[0].time.split(' - ')[0])}</div>` + here.map(s => chip(s, 'c2')).join('') : ''}</div>`; }
   });
-  h += '</div><div class="dl">';
+  h += `</div><div class="dl${MINE.length ? ' hasmine' : ''}">`;
   days.forEach(d => { const w = AICAL.noSchool(d), today = iso(d) === iso(NOW);
     h += `<h3>${esc(fd(d))} <small>${esc(T('Day {n}', { n: AICAL.dayNumber(d) }))}</small>${today ? ` <span class="chip gold">${esc(T('Today'))}</span>` : ''}</h3>`;
     if (w) { h += `<div class="closedrow">${esc(T('No school · {why}', { why: why(w) }))}</div>`; return; }
     const slots = AICAL.slotsOn(d).filter(keep).map(r => slot(r, d)).sort((a, b) => a.per - b.per || a.sec.localeCompare(b.sec));
     h += slots.length ? slots.map(s => chip(s, 'drow')).join('') : `<div class="closedrow" style="background:#fff;color:var(--muted);border:1px dashed var(--line)">${esc(T('No AI lessons'))}</div>`; });
   $('#gridOut').innerHTML = h + '</div>';
-  $('#legend').innerHTML = `<span>${esc(T('● lesson page ready · ○ page coming'))}</span><span>${esc(T('⏪ class is a lesson behind because of a holiday'))}</span>${MINE.length ? `<span>${esc(T('Outlined = your classes'))}</span>` : ''}<span>${esc(T('Click a class for the lesson, a link to copy and Share to Classroom'))}</span>`;
+  $('#legend').innerHTML = `<span>${esc(T('● lesson page ready · ○ page coming'))}</span><span>${esc(T('⏪ class is a lesson behind because of a holiday'))}</span>${MINE.length ? `<span>${esc(T('Bold and outlined = your classes'))}</span>` : ''}<span>${esc(T('Click a class for the lesson, a link to copy and Share to Classroom'))}</span>`;
 }
 function openPop(btn) {
   const [sec, ds] = btn.dataset.k.split('|'), d = parse(ds), r = AICAL.slotsOn(d).find(x => x[0] === sec); if (!r) return;
@@ -278,8 +282,9 @@ document.addEventListener('click', e => {
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') $('#pop').hidden = true; });
 /* ======================= shell and wiring ======================= */
+$('#gfilter').insertAdjacentHTML('beforeend', `<button type="button" class="gf" data-g="" aria-pressed="true" data-i18n="All grades">All grades</button>`);
 for (let g = 6; g <= 12; g++) $('#gfilter').insertAdjacentHTML('beforeend', `<button type="button" class="gf" style="--gc:var(--g${g})" data-g="${g}" aria-pressed="false"><i></i>${g}</button>`);
-$('#gfilter').onclick = e => { const b = e.target.closest('.gf'); if (!b) return; GRADE = GRADE === b.dataset.g ? '' : b.dataset.g; try { localStorage.setItem('cal-grade-filter', GRADE); } catch (x) {} render(); };
+$('#gfilter').onclick = e => { const b = e.target.closest('.gf'); if (!b) return; GRADE = GRADE === b.dataset.g ? '' : b.dataset.g; render(); };
 $('#prev').onclick = () => { GMON = add(GMON, -7); grid(); }; $('#next').onclick = () => { GMON = add(GMON, 7); grid(); };
 $('#todayB').onclick = () => { GMON = AICAL.monday(NOW); grid(); };
 $('#jump').onchange = () => { if ($('#jump').value) { GMON = AICAL.monday(parse($('#jump').value)); grid(); } };
