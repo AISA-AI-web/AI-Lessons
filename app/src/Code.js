@@ -77,17 +77,19 @@ function releasedWeeks_(email) {
   }
   return out;
 }
-function opensFor_(grade, week, email) {
+function opensFor_(grade, week, email, short) {
   var secs = studentRows_(email).map(function (r) { return String(r.section || ''); }).filter(function (s) { return gradeOf_(s) === grade; });
   var ds = secs.map(function (s) { return AICAL.opensOn(s, week); }).filter(Boolean);
   var d = ds.length ? new Date(Math.min.apply(null, ds)) : AICAL.opensOnGrade(grade, week);
-  return d ? ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()] + ' ' + d.getDate() + ' ' +
-    ['January','February','March','April','May','June','July','August','September','October','November','December'][d.getMonth()] + ' ' + d.getFullYear() : '';
+  if (!d) return '';
+  var day = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][d.getDay()],
+      mon = ['January','February','March','April','May','June','July','August','September','October','November','December'][d.getMonth()];
+  return short ? day.slice(0, 3) + ' ' + d.getDate() + ' ' + mon.slice(0, 3) : day + ' ' + d.getDate() + ' ' + mon + ' ' + d.getFullYear();
 }
-/** Links a student's pages should show as locked: {"grade-8/main-w5-l1": "Monday 2 November 2026"}. */
+/** Links a student's pages should show as locked: {"grade-8/main-w5-l1": "Mon 2 Nov"}. */
 function lockedLinks_(rel, email) {
   var out = {};
-  CATALOG.forEach(function (c) { if (c.course === 'main' && c.week > rel[c.grade]) out[c.id] = opensFor_(c.grade, c.week, email); });
+  CATALOG.forEach(function (c) { if (c.course === 'main' && c.week > rel[c.grade]) out[c.id] = opensFor_(c.grade, c.week, email, true); });
   return out;
 }
 function lockedPage_(grade, week, email) {

@@ -8,56 +8,67 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{
-  --ink:#1B1F2A; --muted:#5C6475; --paper:#F6F7FA; --card:#FFFFFF; --line:#E1E5EE;
-  --accent:#3B4CCA; --focus:#1C64F2;
-}
+:root{--ink:#1B1F2A;--muted:#5C6475;--paper:#F6F7FA;--card:#fff;--line:#E1E5EE;--accent:#3B4CCA;--focus:#1C64F2;--now:#FFF4D6;--now-line:#E0A100}
 *,*::before,*::after{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);
-  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:16px;line-height:1.5}
 :focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-.wrap{max-width:960px;margin:0 auto;padding:0 16px}
-
-header{padding:40px 0 26px}
-.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
-h1{margin:0 0 6px;font-size:clamp(30px,6vw,44px);line-height:1.1;letter-spacing:-.02em}
-header p{margin:0;color:var(--muted);max-width:56ch}
-.qrbtn{flex:none;border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:12px;padding:8px 14px;font:inherit;font-size:15px;font-weight:600;cursor:pointer}
-.qrbtn:hover{background:var(--ink);color:#fff}
-a.qrbtn{text-decoration:none;display:inline-block}
-.topbtns{display:flex;gap:8px;flex:none}
-@media (max-width:560px){.top{flex-direction:column}}
-
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:0 0 40px;padding:0;list-style:none}
-.grade{background:var(--card);border:1.5px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
-.grade h2{margin:0;padding:16px 18px;font-size:22px;color:#fff;background:var(--c,#8A93A6);display:flex;justify-content:space-between;align-items:baseline}
-.grade h2 small{font-size:13px;font-weight:600;opacity:.9}
-.grade ul{list-style:none;margin:0;padding:0}
-.course{padding:12px 12px 4px}
-.course+.course{border-top:1.5px dashed var(--line)}
-.course h3{margin:0 0 8px;font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
-.course h3::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--k)}
-.course.bridging{--k:#8A93A6}
-.course.main{--k:var(--ink)}
-.course:last-child{padding-bottom:14px}
-.grade li a{display:block;text-decoration:none;color:inherit;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px}
-.grade li a:hover{border-color:var(--c);background:color-mix(in srgb,var(--c) 7%,#fff)}
-.grade li+li{margin-top:8px}
-.grade .tag{display:block;font-size:12.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--c)}
-.grade .name{font-weight:600}
-.grade li a.locked{opacity:.6;cursor:not-allowed;border-style:dashed}
-.grade .opens{display:block;font-size:12.5px;font-weight:700;margin-top:2px}
-.grade .soon{margin:0 0 8px;padding:0 2px;color:var(--muted);font-size:14.5px}
-.legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin:0 0 18px;padding:0;list-style:none;font-size:14.5px;color:var(--muted)}
-.legend li{display:flex;align-items:center;gap:8px}
-.legend i{width:10px;height:10px;border-radius:3px;background:#8A93A6}
-.legend i.m{background:var(--ink)}
-.legend b{color:var(--ink)}
-.grade.empty h2{background:#AEB5C4}
-
-footer{padding:0 0 40px;color:var(--muted);font-size:14px;text-align:center}
-
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+header.wrap{padding-top:28px;padding-bottom:14px}
+.toprow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.nav{display:flex;gap:8px;flex-wrap:wrap}
+.navlink{color:var(--muted);text-decoration:none;font-weight:600;font-size:14px;padding:5px 0}
+.navlink:hover{text-decoration:underline}
+.pillbtn{font:inherit;font-size:14px;font-weight:700;padding:5px 14px;border-radius:999px;border:1.5px solid var(--accent);color:var(--accent);background:#fff;cursor:pointer}
+.pillbtn:hover{background:var(--accent);color:#fff}
+h1{margin:8px 0 4px;font-size:clamp(28px,5.5vw,40px);letter-spacing:-.02em;line-height:1.1}
+header p{margin:0;color:var(--muted)}
+.banner{background:var(--ink);color:#fff;border-radius:16px;padding:14px 18px;margin:16px 0 14px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.banner h2{margin:0;font-size:20px}
+.banner p{margin:2px 0 0;opacity:.9;font-size:14.5px}
+.banner a{color:#fff;font-weight:700}
+.banner.off{background:#5C3D00}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.chips button{font:inherit;font-size:14px;font-weight:700;min-width:44px;padding:6px 12px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--c,var(--ink));border-color:var(--c,var(--ink));color:#fff}
+.tablewrap{background:var(--card);border:1.5px solid var(--line);border-radius:16px;overflow-x:auto}
+table{border-collapse:separate;border-spacing:0;width:100%;table-layout:fixed;min-width:900px}
+table[data-show]:not([data-show="all"]){min-width:0}
+th,td{border-bottom:1px solid var(--line);padding:0;vertical-align:top;text-align:left}
+tr:last-child>*{border-bottom:0}
+thead th{background:var(--c,var(--ink));color:#fff;font-size:14px;font-weight:700;padding:10px 10px;text-align:center;position:sticky;top:0}
+thead th:first-child{background:var(--ink);width:118px}
+tbody th{width:118px;padding:10px 12px;background:#FAFBFD;border-right:1px solid var(--line);position:sticky;left:0;z-index:1}
+tbody th b{display:block;font-size:15px}
+tbody th small{display:block;font-size:12.5px;color:var(--muted);line-height:1.35}
+tbody th small.focus{font-weight:600;color:var(--ink);opacity:.75}
+td+td{border-left:1px solid var(--line)}
+td.none{color:#B6BCC9;text-align:center;padding:12px 6px}
+a.ls{display:block;height:100%;padding:10px 10px;text-decoration:none;color:var(--ink);font-size:13.5px;line-height:1.35}
+a.ls b{font-weight:600}
+a.ls:hover{background:#F1F3F9}
+a.ls:hover b{text-decoration:underline}
+tr.bridge th,tr.bridge td{background:#FBFBFD}
+tr.bridge a.ls b{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+tr.bridge th{border-bottom:2px solid var(--line)}
+tr.bridge td{border-bottom:2px solid var(--line)}
+tr.now th{background:var(--now);box-shadow:inset 4px 0 0 var(--now-line)}
+tr.now td{background:var(--now)}
+tr.now th b::after{content:attr(data-now);display:inline-block;margin-left:6px;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:var(--now-line);color:#fff;border-radius:999px;padding:1px 7px;vertical-align:2px}
+tr.done a.ls{color:var(--ink)}
+a.ls.locked,a.ls.app-locked{color:var(--muted);cursor:not-allowed;background:repeating-linear-gradient(135deg,transparent 0 8px,#F4F5F8 8px 9px)}
+a.ls.locked b,a.ls.app-locked b{font-weight:500}
+a.ls .opens,a.ls .app-lock{display:block;margin-top:4px;font-size:11.5px;font-weight:700;color:var(--muted)}
+.star{font-style:normal;color:#8A5A00;font-weight:800;cursor:help}
+.note{font-size:13.5px;color:var(--muted);margin:12px 0 40px}
+table[data-show="6"] .g:not(.g6){display:none}table[data-show="7"] .g:not(.g7){display:none}table[data-show="8"] .g:not(.g8){display:none}table[data-show="9"] .g:not(.g9){display:none}table[data-show="10"] .g:not(.g10){display:none}table[data-show="11"] .g:not(.g11){display:none}table[data-show="12"] .g:not(.g12){display:none}
+@media (max-width:720px){table{min-width:760px} tbody th,thead th:first-child{width:96px}}
+@media print{.nav,.pillbtn,.chips,.overlay{display:none!important}body{background:#fff}.tablewrap{overflow:visible;border:0}table{min-width:0}a.ls{font-size:11px;padding:6px}}
+html[dir="rtl"] body{font-family:"Segoe UI",Tahoma,"Noto Sans Arabic","Geeza Pro",system-ui,sans-serif}
+html[dir="rtl"] th,html[dir="rtl"] td{text-align:right}
+html[dir="rtl"] tbody th{border-right:0;border-left:1px solid var(--line)}
+html[dir="rtl"] td+td{border-left:0;border-right:1px solid var(--line)}
+html[dir="rtl"] [dir="ltr"]{text-align:right}
+html[dir="rtl"] tr.now th{box-shadow:inset -4px 0 0 var(--now-line)}
 .overlay{position:fixed;inset:0;background:rgba(27,31,42,.8);display:none;place-items:center;z-index:50;padding:20px}
 .overlay.on{display:grid}
 .qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
@@ -65,183 +76,41 @@ footer{padding:0 0 40px;color:var(--muted);font-size:14px;text-align:center}
 .qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
 .qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
 .btn{border:0;border-radius:12px;padding:11px 18px;font:inherit;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
-@media print{.qrbtn,.overlay{display:none!important}body{background:#fff}}
 </style>
 </head>
 <body>
-
-<header>
-  <div class="wrap top">
-    <div>
-      <h1>AI Lessons</h1>
-      <p>AI Fluency lessons for Grades 6 to 12. Choose your grade, then open your lesson.</p>
-    </div>
-    <div class="topbtns"><a class="qrbtn" href="calendar.html">📅 Teaching calendar</a><button class="qrbtn" id="qrBtn" type="button" aria-label="Show a QR code for this page">QR code</button></div>
+<header class="wrap">
+  <div class="toprow">
+    <a class="navlink" href="calendar.html" data-i18n="📅 Teaching calendar →">📅 Teaching calendar →</a>
+    <div class="nav"><button class="pillbtn" id="qrBtn" type="button" data-i18n="QR code">QR code</button><button type="button" class="pillbtn" id="langBtn" lang="ar">العربية</button></div>
   </div>
+  <h1 data-i18n="AI Lessons">AI Lessons</h1>
+  <p data-i18n="Every AI Literacy lesson for Grades 6 to 12, week by week. Each Main course lesson is a Core lesson and its Lab, taught together.">Every AI Literacy lesson for Grades 6 to 12, week by week. Each Main course lesson is a Core lesson and its Lab, taught together.</p>
 </header>
-
 <main class="wrap">
-  <ul class="legend">
-    <li><i></i><span><b>Bridging course</b> – the foundation lessons before the main unit</span></li>
-    <li><i class="m"></i><span><b>Main course</b> – the full unit lessons</span></li>
-  </ul>
-  <!-- To add a lesson: put the file in its grade folder (bridging-wX-lY.html or main-wX-lY.html)
-       and add a <li> link under the right course section of that grade's card. -->
-  <ul class="grid">
-    <li class="grade" id="grade-6" style="--c:#E0600A">
-      <h2>Grade 6 <small>11 lessons</small></h2>
-        <section class="course bridging"><h3>Bridging course</h3>
-          <ul>
-            <li><a href="grade-6/bridging-w1-l1.html"><span class="tag">Week 1 · Lesson 1</span><span class="name">Data Quality and AI Outputs</span></a></li>
-          </ul>
-        </section>
-        <section class="course main"><h3>Main course</h3>
-          <ul>
-            <li><a href="grade-6/main-w1-l1.html"><span class="tag">Week 1 · Core + Lab · Teach 28 Sep – 2 Oct 2026</span><span class="name">Rule-Based vs Learning Systems + Hands-On Exploration</span></a></li>
-            <li><a href="grade-6/main-w2-l1.html"><span class="tag">Week 2 · Core + Lab · Teach 5 – 9 Oct 2026</span><span class="name">Rules vs Learning: How Each System Works + Train a Simple Model</span></a></li>
-            <li><a href="grade-6/main-w3-l1.html"><span class="tag">Week 3 · Core + Lab · Teach 19 – 23 Oct 2026</span><span class="name">Structured Prompts to Complete a Task + Prompt-to-Task Workshop</span></a></li>
-            <li><a href="grade-6/main-w4-l1.html"><span class="tag">Week 4 · Core + Lab · Teach 26 – 30 Oct 2026</span><span class="name">Judging Outputs: Correct, Incorrect, Unclear + Output Triage Clinic</span></a></li>
-            <li><a href="grade-6/main-w5-l1.html"><span class="tag">Week 5 · Core + Lab · Teach 2 – 6 Nov 2026</span><span class="name">Risks and Responsible Use + Class AI Risk Audit</span></a></li>
-            <li><a href="grade-6/main-w6-l1.html"><span class="tag">Week 6 · Core + Lab · Teach 9 – 13 Nov 2026</span><span class="name">Bringing the Strands Together + Integrated Build-and-Check</span></a></li>
-            <li><a href="grade-6/main-w7-l1.html"><span class="tag">Week 7 · Core + Lab · Teach 16 – 20 Nov 2026</span><span class="name">Signature Solution: Planning + Prototype and Pressure-Test the Plan</span></a></li>
-            <li><a href="grade-6/main-w8-l1.html"><span class="tag">Week 8 · Core + Lab · Teach 23 – 27 Nov 2026</span><span class="name">Signature Solution: Building + Extended Build and Evaluation</span></a></li>
-            <li><a href="grade-6/main-w9-l1.html"><span class="tag">Week 9 · Core + Lab · Teach 30 Nov – 4 Dec 2026</span><span class="name">Signature Solution: Refining &amp; Finishing + Final Iteration and Risk Review</span></a></li>
-            <li><a href="grade-6/main-w10-l1.html"><span class="tag">Week 10 · Core + Lab · Teach 7 – 11 Dec 2026</span><span class="name">Showcase, Assessment &amp; Reflection + Showcase Carousel and Reflection</span></a></li>
-          </ul>
-        </section>
-    </li>
-    <li class="grade" id="grade-7" style="--c:#2563EB">
-      <h2>Grade 7 <small>10 lessons</small></h2>
-        <section class="course bridging"><h3>Bridging course</h3>
-          <p class="soon">Coming soon.</p>
-        </section>
-        <section class="course main"><h3>Main course</h3>
-          <ul>
-            <li><a href="grade-7/main-w1-l1.html"><span class="tag">Week 0 + Week 1 · Teach 28 Sep – 2 Oct 2026</span><span class="name">How Models Learn + AI as a Workflow</span></a></li>
-            <li><a href="grade-7/main-w2-l1.html"><span class="tag">Week 2 · Core + Lab · Teach 5 – 9 Oct 2026</span><span class="name">The Three-Stage Shape + Build, Trace and Test a Workflow</span></a></li>
-            <li><a href="grade-7/main-w3-l1.html"><span class="tag">Week 3 · Core + Lab · Teach 19 – 23 Oct 2026</span><span class="name">Building a Workflow + Test, Fix and Chain</span></a></li>
-            <li><a href="grade-7/main-w4-l1.html"><span class="tag">Week 4 · Core + Lab · Teach 26 – 30 Oct 2026</span><span class="name">Judging Outputs + The Evaluation Clinic</span></a></li>
-            <li><a href="grade-7/main-w5-l1.html"><span class="tag">Week 5 · Core + Lab · Teach 2 – 6 Nov 2026</span><span class="name">Spotting the Risks + The Risk Audit</span></a></li>
-            <li><a href="grade-7/main-w6-l1.html"><span class="tag">Week 6 · Core + Lab · Teach 9 – 13 Nov 2026</span><span class="name">Four Strands, One Task + The Full Run</span></a></li>
-            <li><a href="grade-7/main-w7-l1.html"><span class="tag">Week 7 · Core + Lab · Teach 16 – 20 Nov 2026</span><span class="name">Architect First, Build Second + Run It, Break It, Make It Safer</span></a></li>
-            <li><a href="grade-7/main-w8-l1.html"><span class="tag">Week 8 · Core + Lab · Teach 23 – 27 Nov 2026</span><span class="name">Build, Evaluate, Improve + Finish It, Then Prove It</span></a></li>
-            <li><a href="grade-7/main-w9-l1.html"><span class="tag">Week 9 · Core + Lab · Teach 7 – 11 Dec 2026</span><span class="name">Refining &amp; Finishing + Lock It &amp; Rehearse</span></a></li>
-            <li><a href="grade-7/main-w10-l1.html"><span class="tag">Week 10 · Core + Lab · Teach 4 – 8 Jan 2027</span><span class="name">Showcase &amp; Reflection + Peer Review &amp; Stress-Test</span></a></li>
-          </ul>
-        </section>
-    </li>
-    <li class="grade" id="grade-8" style="--c:#15803D">
-      <h2>Grade 8 <small>10 lessons</small></h2>
-        <section class="course bridging"><h3>Bridging course</h3>
-          <p class="soon">Coming soon.</p>
-        </section>
-        <section class="course main"><h3>Main course</h3>
-          <ul>
-            <li><a href="grade-8/main-w1-l1.html"><span class="tag">Week 1 · Core + Lab · Teach 28 Sep – 2 Oct 2026</span><span class="name">From ‘It Works’ to ‘How Well’ + Two Outputs, One Verdict</span></a></li>
-            <li><a href="grade-8/main-w2-l1.html"><span class="tag">Week 2 · Core + Lab · Teach 5 – 9 Oct 2026</span><span class="name">Inside the Pipeline + Change One Factor</span></a></li>
-            <li><a href="grade-8/main-w3-l1.html"><span class="tag">Week 3 · Core + Lab · Teach 19 – 23 Oct 2026</span><span class="name">Design the Workflow + Build, Test, Improve</span></a></li>
-            <li><a href="grade-8/main-w4-l1.html"><span class="tag">Week 4 · Core + Lab · Teach 26 – 30 Oct 2026</span><span class="name">Judge with Criteria + The Evaluation Clinic</span></a></li>
-            <li><a href="grade-8/main-w5-l1.html"><span class="tag">Week 5 · Core + Lab · Teach 2 – 6 Nov 2026</span><span class="name">Accurate Is Not Ethical + The Ethics Audit</span></a></li>
-            <li><a href="grade-8/main-w6-l1.html"><span class="tag">Week 6 · Core + Lab · Teach 9 – 13 Nov 2026</span><span class="name">One Model, Four Strands + Run It End to End</span></a></li>
-            <li><a href="grade-8/main-w7-l1.html"><span class="tag">Week 7 · Core + Lab · Teach 16 – 20 Nov 2026</span><span class="name">Architect the Plan + Prototype and Pressure-Test</span></a></li>
-            <li><a href="grade-8/main-w8-l1.html"><span class="tag">Week 8 · Core + Lab · Teach 23 – 27 Nov 2026</span><span class="name">The Build Loop + The Evaluation Log</span></a></li>
-            <li><a href="grade-8/main-w9-l1.html"><span class="tag">Week 9 · Core + Lab · Teach 7 – 11 Dec 2026</span><span class="name">Refining and Finishing + Lock It and Show It</span></a></li>
-            <li><a href="grade-8/main-w10-l1.html"><span class="tag">Week 10 · Core + Lab · Teach 4 – 8 Jan 2027</span><span class="name">Showcase and Reflect + Review, Measure, Aim</span></a></li>
-          </ul>
-        </section>
-    </li>
-    <li class="grade" id="grade-9" style="--c:#D7263D">
-      <h2>Grade 9 <small>11 lessons</small></h2>
-        <section class="course bridging"><h3>Bridging course</h3>
-          <ul>
-            <li><a href="grade-9/bridging-w1-l1.html"><span class="tag">Week 1 · Lesson 1</span><span class="name">Comparing Approaches</span></a></li>
-          </ul>
-        </section>
-        <section class="course main"><h3>Main course</h3>
-          <ul>
-            <li><a href="grade-9/main-w1-l1.html"><span class="tag">Week 1 · Core + Lab · Teach 28 Sep – 2 Oct 2026</span><span class="name">Open the Black Box + Change One Thing</span></a></li>
-            <li><a href="grade-9/main-w2-l1.html"><span class="tag">Week 2 · Core + Lab · Teach 5 – 9 Oct 2026</span><span class="name">Understanding the System + Test the System</span></a></li>
-            <li><a href="grade-9/main-w3-l1.html"><span class="tag">Week 3 · Core + Lab · Teach 19 – 23 Oct 2026</span><span class="name">Designing a Solution + Build, Test, Chain</span></a></li>
-            <li><a href="grade-9/main-w4-l1.html"><span class="tag">Week 4 · Core + Lab · Teach 26 – 30 Oct 2026</span><span class="name">Judging Outputs + The Evaluation Clinic</span></a></li>
-            <li><a href="grade-9/main-w5-l1.html"><span class="tag">Week 5 · Core + Lab · Teach 2 – 6 Nov 2026</span><span class="name">Risk Is a System Property + Auditing the Risks</span></a></li>
-            <li><a href="grade-9/main-w6-l1.html"><span class="tag">Week 6 · Core + Lab · Teach 9 – 13 Nov 2026</span><span class="name">Four Strands, One Workflow + Running It End-to-End</span></a></li>
-            <li><a href="grade-9/main-w7-l1.html"><span class="tag">Week 7 · Core + Lab · Teach 16 – 20 Nov 2026</span><span class="name">Designing the System + Prototype and Pressure-Test</span></a></li>
-            <li><a href="grade-9/main-w8-l1.html"><span class="tag">Week 8 · Core + Lab · Teach 23 – 27 Nov 2026</span><span class="name">Assemble, Evaluate, Refine + Test, Log, Iterate</span></a></li>
-            <li><a href="grade-9/main-w9-l1.html"><span class="tag">Week 9 · Core + Lab · Teach 30 Nov – 4 Dec 2026</span><span class="name">Refining &amp; Finishing the System + Lock It &amp; Rehearse the Demo</span></a></li>
-            <li><a href="grade-9/main-w10-l1.html"><span class="tag">Week 10 · Core + Lab · Teach 7 – 11 Dec 2026</span><span class="name">Showcase, Assess &amp; Reflect + Peer Review &amp; Aim Higher</span></a></li>
-          </ul>
-        </section>
-    </li>
-    <li class="grade" id="grade-10" style="--c:#0F766E">
-      <h2>Grade 10 <small>11 lessons</small></h2>
-        <section class="course bridging"><h3>Bridging course</h3>
-          <ul>
-            <li><a href="grade-10/bridging-w1-l1.html"><span class="tag">Week 1 · Lesson 1</span><span class="name">Design Choices Shape the Output</span></a></li>
-          </ul>
-        </section>
-        <section class="course main"><h3>Main course</h3>
-          <ul>
-            <li><a href="grade-10/main-w1-l1.html"><span class="tag">Week 1 · Core + Lab · Teach 28 Sep – 2 Oct 2026</span><span class="name">See the Whole System + Compare, Map, and Stress-Test</span></a></li>
-            <li><a href="grade-10/main-w2-l1.html"><span class="tag">Week 2 · Core + Lab · Teach 5 – 9 Oct 2026</span><span class="name">Understanding the System + Trace, Change, Compare</span></a></li>
-            <li><a href="grade-10/main-w3-l1.html"><span class="tag">Week 3 · Core + Lab · Teach 19 – 23 Oct 2026</span><span class="name">Designing a Solution + Build, Test, Improve</span></a></li>
-            <li><a href="grade-10/main-w4-l1.html"><span class="tag">Week 4 · Core + Lab · Teach 26 – 30 Oct 2026</span><span class="name">Judging &amp; Improving Outputs + The Evaluation Clinic</span></a></li>
-            <li><a href="grade-10/main-w5-l1.html"><span class="tag">Week 5 · Core + Lab · Teach 2 – 6 Nov 2026</span><span class="name">Locate the Risk in the System + Measure the Risk and Govern It</span></a></li>
-            <li><a href="grade-10/main-w6-l1.html"><span class="tag">Week 6 · Core + Lab · Teach 9 – 13 Nov 2026</span><span class="name">Bringing the Strands Together + Run It End-to-End</span></a></li>
-            <li><a href="grade-10/main-w7-l1.html"><span class="tag">Week 7 · Core + Lab · Teach 16 – 20 Nov 2026</span><span class="name">Architect Your Signature Solution + Prototype and Pressure-Test</span></a></li>
-            <li><a href="grade-10/main-w8-l1.html"><span class="tag">Week 8 · Core + Lab · Teach 23 – 27 Nov 2026</span><span class="name">Build, Evaluate, Improve + Finish It, Then Prove It</span></a></li>
-            <li><a href="grade-10/main-w9-l1.html"><span class="tag">Week 9 · Core + Lab · Teach 30 Nov – 4 Dec 2026</span><span class="name">Refining &amp; Finishing the System + Lock It and Rehearse the Demo</span></a></li>
-            <li><a href="grade-10/main-w10-l1.html"><span class="tag">Week 10 · Core + Lab · Teach 7 – 11 Dec 2026</span><span class="name">Showcase &amp; Reflection + Peer Review &amp; Aim Higher</span></a></li>
-          </ul>
-        </section>
-    </li>
-    <li class="grade" id="grade-11" style="--c:#4F46E5">
-      <h2>Grade 11 <small>11 lessons</small></h2>
-        <section class="course bridging"><h3>Bridging course</h3>
-          <ul>
-            <li><a href="grade-11/bridging-w1-l1.html"><span class="tag">Week 1 · Lesson 1</span><span class="name">Evaluating How Design Shapes Performance and Reliability</span></a></li>
-          </ul>
-        </section>
-        <section class="course main"><h3>Main course</h3>
-          <ul>
-            <li><a href="grade-11/main-w1-l1.html"><span class="tag">Week 1 · Core + Lab · Teach 28 Sep – 2 Oct 2026</span><span class="name">Optimising AI Solutions for Performance + Compare Two Versions</span></a></li>
-            <li><a href="grade-11/main-w2-l1.html"><span class="tag">Week 2 · Core + Lab · Teach 5 – 9 Oct 2026</span><span class="name">Understanding the System + Trace, Change, Compare</span></a></li>
-            <li><a href="grade-11/main-w3-l1.html"><span class="tag">Week 3 · Core + Lab · Teach 19 – 23 Oct 2026</span><span class="name">Designing a Solution + Build, Test, Improve</span></a></li>
-            <li><a href="grade-11/main-w4-l1.html"><span class="tag">Week 4 · Core + Lab · Teach 26 – 30 Oct 2026</span><span class="name">Judging Outputs + Rank and Defend</span></a></li>
-            <li><a href="grade-11/main-w5-l1.html"><span class="tag">Week 5 · Core + Lab · Teach 2 – 6 Nov 2026</span><span class="name">Risks, Ethics &amp; Responsible Use + Audit, Rate, Mitigate</span></a></li>
-            <li><a href="grade-11/main-w6-l1.html"><span class="tag">Week 6 · Core + Lab · Teach 9 – 13 Nov 2026</span><span class="name">Bringing the Strands Together + Run It End-to-End</span></a></li>
-            <li><a href="grade-11/main-w7-l1.html"><span class="tag">Week 7 · Core + Lab · Teach 16 – 20 Nov 2026</span><span class="name">Architect Your Signature Solution + Prototype and Pressure-Test</span></a></li>
-            <li><a href="grade-11/main-w8-l1.html"><span class="tag">Week 8 · Core + Lab · Teach 23 – 27 Nov 2026</span><span class="name">Build, Evaluate, Improve + Finish It, Then Prove It</span></a></li>
-            <li><a href="grade-11/main-w9-l1.html"><span class="tag">Week 9 · Core + Lab · Teach 30 Nov – 4 Dec 2026</span><span class="name">Refining and Finishing + Lock It and Rehearse</span></a></li>
-            <li><a href="grade-11/main-w10-l1.html"><span class="tag">Week 10 · Core + Lab · Teach 7 – 11 Dec 2026</span><span class="name">Showcase and Reflection + Peer Review and Aim Higher</span></a></li>
-          </ul>
-        </section>
-    </li>
-    <li class="grade" id="grade-12" style="--c:#A61E4D">
-      <h2>Grade 12 <small>11 lessons</small></h2>
-        <section class="course bridging"><h3>Bridging course</h3>
-          <ul>
-            <li><a href="grade-12/bridging-w1-l1.html"><span class="tag">Week 1 · Lesson 1</span><span class="name">Evaluating Trade-offs Across Accuracy, Efficiency, Usability and Reliability</span></a></li>
-          </ul>
-        </section>
-        <section class="course main"><h3>Main course</h3>
-          <ul>
-            <li><a href="grade-12/main-w1-l1.html"><span class="tag">Week 1 · Core + Lab · Teach 28 Sep – 2 Oct 2026</span><span class="name">Designing AI Systems for Strategic Use + Compare and Map the System</span></a></li>
-            <li><a href="grade-12/main-w2-l1.html"><span class="tag">Week 2 · Core + Lab · Teach 5 – 9 Oct 2026</span><span class="name">Understanding the System + Trace the Divergence</span></a></li>
-            <li><a href="grade-12/main-w3-l1.html"><span class="tag">Week 3 · Core + Lab · Teach 19 – 23 Oct 2026</span><span class="name">Designing a Solution + Refine Toward Complexity</span></a></li>
-            <li><a href="grade-12/main-w4-l1.html"><span class="tag">Week 4 · Core + Lab · Teach 26 – 30 Oct 2026</span><span class="name">Judging Outputs + Rank and Defend</span></a></li>
-            <li><a href="grade-12/main-w5-l1.html"><span class="tag">Week 5 · Core + Lab · Teach 2 – 6 Nov 2026</span><span class="name">Risks, Ethics &amp; Societal Impact + Measure Fairness and Govern</span></a></li>
-            <li><a href="grade-12/main-w6-l1.html"><span class="tag">Week 6 · Core + Lab · Teach 9 – 13 Nov 2026</span><span class="name">Bringing the Strands Together + Run End-to-End and Measure</span></a></li>
-            <li><a href="grade-12/main-w7-l1.html"><span class="tag">Week 7 · Core + Lab · Teach 16 – 20 Nov 2026</span><span class="name">Architect Your Signature System + Prototype and Pressure-Test</span></a></li>
-            <li><a href="grade-12/main-w8-l1.html"><span class="tag">Week 8 · Core + Lab · Teach 23 – 27 Nov 2026</span><span class="name">Build to Your Plan + Finish It and Handle Edge Cases</span></a></li>
-            <li><a href="grade-12/main-w9-l1.html"><span class="tag">Week 9 · Core + Lab · Teach 30 Nov – 4 Dec 2026</span><span class="name">Refining and Explainability + Lock the Architecture and Rehearse</span></a></li>
-            <li><a href="grade-12/main-w10-l1.html"><span class="tag">Week 10 · Core + Lab · Teach 7 – 11 Dec 2026</span><span class="name">Showcase and Reflection + Peer Review and Aim Higher</span></a></li>
-          </ul>
-        </section>
-    </li>
-  </ul>
+  <div class="banner" id="banner" hidden></div>
+  <div class="chips" id="chips" role="group" aria-label="Show grade"><button type="button" data-show="all" aria-pressed="true" data-i18n="All grades">All grades</button><button type="button" data-show="6" aria-pressed="false" style="--c:#E0600A">6</button><button type="button" data-show="7" aria-pressed="false" style="--c:#2563EB">7</button><button type="button" data-show="8" aria-pressed="false" style="--c:#15803D">8</button><button type="button" data-show="9" aria-pressed="false" style="--c:#D7263D">9</button><button type="button" data-show="10" aria-pressed="false" style="--c:#0F766E">10</button><button type="button" data-show="11" aria-pressed="false" style="--c:#4F46E5">11</button><button type="button" data-show="12" aria-pressed="false" style="--c:#A61E4D">12</button></div>
+  <!-- The lesson list comes from calendar.html (LESSONS). To add a lesson, add it there and here. -->
+  <div class="tablewrap">
+  <table id="lessons" data-show="all">
+    <thead><tr><th scope="col" data-i18n="Term 1">Term 1</th><th scope="col" class="g g6" style="--c:#E0600A" data-i18n-grade="6">Grade 6</th><th scope="col" class="g g7" style="--c:#2563EB" data-i18n-grade="7">Grade 7</th><th scope="col" class="g g8" style="--c:#15803D" data-i18n-grade="8">Grade 8</th><th scope="col" class="g g9" style="--c:#D7263D" data-i18n-grade="9">Grade 9</th><th scope="col" class="g g10" style="--c:#0F766E" data-i18n-grade="10">Grade 10</th><th scope="col" class="g g11" style="--c:#4F46E5" data-i18n-grade="11">Grade 11</th><th scope="col" class="g g12" style="--c:#A61E4D" data-i18n-grade="12">Grade 12</th></tr></thead>
+    <tbody>
+    <tr class="bridge"><th scope="row"><b data-i18n="Bridging">Bridging</b><small data-i18n="Foundation">Foundation</small></th><td class="g g6"><a class="ls" href="grade-6/bridging-w1-l1.html" title="Data Quality and AI Outputs"><b dir="ltr" lang="en">Data Quality and AI Outputs</b></a></td><td class="g g7 none">–</td><td class="g g8 none">–</td><td class="g g9"><a class="ls" href="grade-9/bridging-w1-l1.html" title="Comparing Approaches"><b dir="ltr" lang="en">Comparing Approaches</b></a></td><td class="g g10"><a class="ls" href="grade-10/bridging-w1-l1.html" title="Design Choices Shape the Output"><b dir="ltr" lang="en">Design Choices Shape the Output</b></a></td><td class="g g11"><a class="ls" href="grade-11/bridging-w1-l1.html" title="Evaluating How Design Shapes Performance and Reliability"><b dir="ltr" lang="en">Evaluating How Design Shapes Performance and Reliability</b></a></td><td class="g g12"><a class="ls" href="grade-12/bridging-w1-l1.html" title="Evaluating Trade-offs Across Accuracy, Efficiency, Usability and Reliability"><b dir="ltr" lang="en">Evaluating Trade-offs Across Accuracy, Efficiency, Usability and Reliability</b></a></td></tr>
+    <tr data-week="1" data-from="2026-09-28" data-to="2026-10-02"><th scope="row"><b><span data-i18n="Week">Week</span> 1</b><small class="dates"><bdi dir="ltr">28 Sep – 2 Oct</bdi></small><small class="focus" data-i18n="Launch">Launch</small></th><td class="g g6"><a class="ls" href="grade-6/main-w1-l1.html" title="Rule-Based vs Learning Systems + Hands-On Exploration"><b dir="ltr" lang="en">Rule-Based vs Learning Systems</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w1-l1.html" title="How Models Learn + AI as a Workflow"><b dir="ltr" lang="en">How Models Learn</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w1-l1.html" title="From ‘It Works’ to ‘How Well’ + Two Outputs, One Verdict"><b dir="ltr" lang="en">From ‘It Works’ to ‘How Well’</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w1-l1.html" title="Open the Black Box + Change One Thing"><b dir="ltr" lang="en">Open the Black Box</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w1-l1.html" title="See the Whole System + Compare, Map, and Stress-Test"><b dir="ltr" lang="en">See the Whole System</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w1-l1.html" title="Optimising AI Solutions for Performance + Compare Two Versions"><b dir="ltr" lang="en">Optimising AI Solutions for Performance</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w1-l1.html" title="Designing AI Systems for Strategic Use + Compare and Map the System"><b dir="ltr" lang="en">Designing AI Systems for Strategic Use</b></a></td></tr>
+    <tr data-week="2" data-from="2026-10-05" data-to="2026-10-09"><th scope="row"><b><span data-i18n="Week">Week</span> 2</b><small class="dates"><bdi dir="ltr">5 – 9 Oct</bdi></small><small class="focus" data-i18n="Understand">Understand</small></th><td class="g g6"><a class="ls" href="grade-6/main-w2-l1.html" title="Rules vs Learning: How Each System Works + Train a Simple Model"><b dir="ltr" lang="en">Rules vs Learning: How Each System Works</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w2-l1.html" title="The Three-Stage Shape + Build, Trace and Test a Workflow"><b dir="ltr" lang="en">The Three-Stage Shape</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w2-l1.html" title="Inside the Pipeline + Change One Factor"><b dir="ltr" lang="en">Inside the Pipeline</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w2-l1.html" title="Understanding the System + Test the System"><b dir="ltr" lang="en">Understanding the System</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w2-l1.html" title="Understanding the System + Trace, Change, Compare"><b dir="ltr" lang="en">Understanding the System</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w2-l1.html" title="Understanding the System + Trace, Change, Compare"><b dir="ltr" lang="en">Understanding the System</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w2-l1.html" title="Understanding the System + Trace the Divergence"><b dir="ltr" lang="en">Understanding the System</b></a></td></tr>
+    <tr data-week="3" data-from="2026-10-19" data-to="2026-10-23"><th scope="row"><b><span data-i18n="Week">Week</span> 3</b><small class="dates"><bdi dir="ltr">19 – 23 Oct</bdi></small><small class="focus" data-i18n="Design">Design</small></th><td class="g g6"><a class="ls" href="grade-6/main-w3-l1.html" title="Structured Prompts to Complete a Task + Prompt-to-Task Workshop"><b dir="ltr" lang="en">Structured Prompts to Complete a Task</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w3-l1.html" title="Building a Workflow + Test, Fix and Chain"><b dir="ltr" lang="en">Building a Workflow</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w3-l1.html" title="Design the Workflow + Build, Test, Improve"><b dir="ltr" lang="en">Design the Workflow</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w3-l1.html" title="Designing a Solution + Build, Test, Chain"><b dir="ltr" lang="en">Designing a Solution</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w3-l1.html" title="Designing a Solution + Build, Test, Improve"><b dir="ltr" lang="en">Designing a Solution</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w3-l1.html" title="Designing a Solution + Build, Test, Improve"><b dir="ltr" lang="en">Designing a Solution</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w3-l1.html" title="Designing a Solution + Refine Toward Complexity"><b dir="ltr" lang="en">Designing a Solution</b></a></td></tr>
+    <tr data-week="4" data-from="2026-10-26" data-to="2026-10-30"><th scope="row"><b><span data-i18n="Week">Week</span> 4</b><small class="dates"><bdi dir="ltr">26 – 30 Oct</bdi></small><small class="focus" data-i18n="Evaluate">Evaluate</small></th><td class="g g6"><a class="ls" href="grade-6/main-w4-l1.html" title="Judging Outputs: Correct, Incorrect, Unclear + Output Triage Clinic"><b dir="ltr" lang="en">Judging Outputs: Correct, Incorrect, Unclear</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w4-l1.html" title="Judging Outputs + The Evaluation Clinic"><b dir="ltr" lang="en">Judging Outputs</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w4-l1.html" title="Judge with Criteria + The Evaluation Clinic"><b dir="ltr" lang="en">Judge with Criteria</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w4-l1.html" title="Judging Outputs + The Evaluation Clinic"><b dir="ltr" lang="en">Judging Outputs</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w4-l1.html" title="Judging &amp; Improving Outputs + The Evaluation Clinic"><b dir="ltr" lang="en">Judging &amp; Improving Outputs</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w4-l1.html" title="Judging Outputs + Rank and Defend"><b dir="ltr" lang="en">Judging Outputs</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w4-l1.html" title="Judging Outputs + Rank and Defend"><b dir="ltr" lang="en">Judging Outputs</b></a></td></tr>
+    <tr data-week="5" data-from="2026-11-02" data-to="2026-11-06"><th scope="row"><b><span data-i18n="Week">Week</span> 5</b><small class="dates"><bdi dir="ltr">2 – 6 Nov</bdi></small><small class="focus" data-i18n="Ethics">Ethics</small></th><td class="g g6"><a class="ls" href="grade-6/main-w5-l1.html" title="Risks and Responsible Use + Class AI Risk Audit"><b dir="ltr" lang="en">Risks and Responsible Use</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w5-l1.html" title="Spotting the Risks + The Risk Audit"><b dir="ltr" lang="en">Spotting the Risks</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w5-l1.html" title="Accurate Is Not Ethical + The Ethics Audit"><b dir="ltr" lang="en">Accurate Is Not Ethical</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w5-l1.html" title="Risk Is a System Property + Auditing the Risks"><b dir="ltr" lang="en">Risk Is a System Property</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w5-l1.html" title="Locate the Risk in the System + Measure the Risk and Govern It"><b dir="ltr" lang="en">Locate the Risk in the System</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w5-l1.html" title="Risks, Ethics &amp; Responsible Use + Audit, Rate, Mitigate"><b dir="ltr" lang="en">Risks, Ethics &amp; Responsible Use</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w5-l1.html" title="Risks, Ethics &amp; Societal Impact + Measure Fairness and Govern"><b dir="ltr" lang="en">Risks, Ethics &amp; Societal Impact</b></a></td></tr>
+    <tr data-week="6" data-from="2026-11-09" data-to="2026-11-13"><th scope="row"><b><span data-i18n="Week">Week</span> 6</b><small class="dates"><bdi dir="ltr">9 – 13 Nov</bdi></small><small class="focus" data-i18n="Integrate">Integrate</small></th><td class="g g6"><a class="ls" href="grade-6/main-w6-l1.html" title="Bringing the Strands Together + Integrated Build-and-Check"><b dir="ltr" lang="en">Bringing the Strands Together</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w6-l1.html" title="Four Strands, One Task + The Full Run"><b dir="ltr" lang="en">Four Strands, One Task</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w6-l1.html" title="One Model, Four Strands + Run It End to End"><b dir="ltr" lang="en">One Model, Four Strands</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w6-l1.html" title="Four Strands, One Workflow + Running It End-to-End"><b dir="ltr" lang="en">Four Strands, One Workflow</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w6-l1.html" title="Bringing the Strands Together + Run It End-to-End"><b dir="ltr" lang="en">Bringing the Strands Together</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w6-l1.html" title="Bringing the Strands Together + Run It End-to-End"><b dir="ltr" lang="en">Bringing the Strands Together</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w6-l1.html" title="Bringing the Strands Together + Run End-to-End and Measure"><b dir="ltr" lang="en">Bringing the Strands Together</b></a></td></tr>
+    <tr data-week="7" data-from="2026-11-16" data-to="2026-11-20"><th scope="row"><b><span data-i18n="Week">Week</span> 7</b><small class="dates"><bdi dir="ltr">16 – 20 Nov</bdi></small><small class="focus" data-i18n="Plan">Plan</small></th><td class="g g6"><a class="ls" href="grade-6/main-w7-l1.html" title="Signature Solution: Planning + Prototype and Pressure-Test the Plan"><b dir="ltr" lang="en">Signature Solution: Planning</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w7-l1.html" title="Architect First, Build Second + Run It, Break It, Make It Safer"><b dir="ltr" lang="en">Architect First, Build Second</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w7-l1.html" title="Architect the Plan + Prototype and Pressure-Test"><b dir="ltr" lang="en">Architect the Plan</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w7-l1.html" title="Designing the System + Prototype and Pressure-Test"><b dir="ltr" lang="en">Designing the System</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w7-l1.html" title="Architect Your Signature Solution + Prototype and Pressure-Test"><b dir="ltr" lang="en">Architect Your Signature Solution</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w7-l1.html" title="Architect Your Signature Solution + Prototype and Pressure-Test"><b dir="ltr" lang="en">Architect Your Signature Solution</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w7-l1.html" title="Architect Your Signature System + Prototype and Pressure-Test"><b dir="ltr" lang="en">Architect Your Signature System</b></a></td></tr>
+    <tr data-week="8" data-from="2026-11-23" data-to="2026-11-27"><th scope="row"><b><span data-i18n="Week">Week</span> 8</b><small class="dates"><bdi dir="ltr">23 – 27 Nov</bdi></small><small class="focus" data-i18n="Build">Build</small></th><td class="g g6"><a class="ls" href="grade-6/main-w8-l1.html" title="Signature Solution: Building + Extended Build and Evaluation"><b dir="ltr" lang="en">Signature Solution: Building</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w8-l1.html" title="Build, Evaluate, Improve + Finish It, Then Prove It"><b dir="ltr" lang="en">Build, Evaluate, Improve</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w8-l1.html" title="The Build Loop + The Evaluation Log"><b dir="ltr" lang="en">The Build Loop</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w8-l1.html" title="Assemble, Evaluate, Refine + Test, Log, Iterate"><b dir="ltr" lang="en">Assemble, Evaluate, Refine</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w8-l1.html" title="Build, Evaluate, Improve + Finish It, Then Prove It"><b dir="ltr" lang="en">Build, Evaluate, Improve</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w8-l1.html" title="Build, Evaluate, Improve + Finish It, Then Prove It"><b dir="ltr" lang="en">Build, Evaluate, Improve</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w8-l1.html" title="Build to Your Plan + Finish It and Handle Edge Cases"><b dir="ltr" lang="en">Build to Your Plan</b></a></td></tr>
+    <tr data-week="9" data-from="2026-11-30" data-to="2026-12-04"><th scope="row"><b><span data-i18n="Week">Week</span> 9</b><small class="dates"><bdi dir="ltr">30 Nov – 4 Dec</bdi> <i class="star" title="Some sections are taught this lesson a week later – see the teaching calendar">*</i></small><small class="focus" data-i18n="Refine">Refine</small></th><td class="g g6"><a class="ls" href="grade-6/main-w9-l1.html" title="Signature Solution: Refining &amp; Finishing + Final Iteration and Risk Review"><b dir="ltr" lang="en">Signature Solution: Refining &amp; Finishing</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w9-l1.html" title="Refining &amp; Finishing + Lock It &amp; Rehearse"><b dir="ltr" lang="en">Refining &amp; Finishing</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w9-l1.html" title="Refining and Finishing + Lock It and Show It"><b dir="ltr" lang="en">Refining and Finishing</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w9-l1.html" title="Refining &amp; Finishing the System + Lock It &amp; Rehearse the Demo"><b dir="ltr" lang="en">Refining &amp; Finishing the System</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w9-l1.html" title="Refining &amp; Finishing the System + Lock It and Rehearse the Demo"><b dir="ltr" lang="en">Refining &amp; Finishing the System</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w9-l1.html" title="Refining and Finishing + Lock It and Rehearse"><b dir="ltr" lang="en">Refining and Finishing</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w9-l1.html" title="Refining and Explainability + Lock the Architecture and Rehearse"><b dir="ltr" lang="en">Refining and Explainability</b></a></td></tr>
+    <tr data-week="10" data-from="2026-12-07" data-to="2026-12-11"><th scope="row"><b><span data-i18n="Week">Week</span> 10</b><small class="dates"><bdi dir="ltr">7 – 11 Dec</bdi> <i class="star" title="Some sections are taught this lesson a week later – see the teaching calendar">*</i></small><small class="focus" data-i18n="Showcase">Showcase</small></th><td class="g g6"><a class="ls" href="grade-6/main-w10-l1.html" title="Showcase, Assessment &amp; Reflection + Showcase Carousel and Reflection"><b dir="ltr" lang="en">Showcase, Assessment &amp; Reflection</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w10-l1.html" title="Showcase &amp; Reflection + Peer Review &amp; Stress-Test"><b dir="ltr" lang="en">Showcase &amp; Reflection</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w10-l1.html" title="Showcase and Reflect + Review, Measure, Aim"><b dir="ltr" lang="en">Showcase and Reflect</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w10-l1.html" title="Showcase, Assess &amp; Reflect + Peer Review &amp; Aim Higher"><b dir="ltr" lang="en">Showcase, Assess &amp; Reflect</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w10-l1.html" title="Showcase &amp; Reflection + Peer Review &amp; Aim Higher"><b dir="ltr" lang="en">Showcase &amp; Reflection</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w10-l1.html" title="Showcase and Reflection + Peer Review and Aim Higher"><b dir="ltr" lang="en">Showcase and Reflection</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w10-l1.html" title="Showcase and Reflection + Peer Review and Aim Higher"><b dir="ltr" lang="en">Showcase and Reflection</b></a></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="note" id="note">Dates are the AISA 2026–27 teaching weeks (Mid-Term Break 12–16 Oct, PD days 19–20 Oct). * UAE National Day moves the Week 9 and Week 10 lessons of some sections a week later – the teaching calendar shows each section's exact day. A lesson opens to students in the week their class is taught it.</p>
 </main>
-
-<footer>Every lesson marks your answers as you go. Print your results at the end to show your teacher.</footer>
 
 <div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
   <div class="qrbox">
@@ -254,27 +123,72 @@ footer{padding:0 0 40px;color:var(--muted);font-size:14px;text-align:center}
 
 <script src="school-calendar.js"></script>
 <script>
-/* Public site: a Main course week stays locked until a class in that grade reaches it.
-   Signed-in students get the same rule per class from the app; staff see everything there. */
-if(!window.APP)document.querySelectorAll('.grade a[href*="/main-w"]').forEach(a=>{
-  const m=/grade-(\d+)\/main-w(\d+)-/.exec(a.getAttribute("href"));if(!m)return;
-  const g=+m[1],w=+m[2];if(w<=AICAL.releasedForGrade(g,new Date()))return;
-  const d=AICAL.opensOnGrade(g,w);
-  a.removeAttribute("href");a.classList.add("locked");a.setAttribute("aria-disabled","true");
-  a.insertAdjacentHTML("beforeend",`<small class="opens">🔒 Opens ${d?d.toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"}):"later"}</small>`);
-});
-</script>
-<script>
-const $=s=>document.querySelector(s);
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+/* ---------- English / العربية (lesson titles stay in English) ---------- */
+let LANG=(()=>{try{return localStorage.getItem("aisa-lang")==="ar"?"ar":"en"}catch(e){return "en"}})();
+const NOTE_EN=$("#note").textContent;
+const AR={"AI Lessons":"دروس الذكاء الاصطناعي","📅 Teaching calendar →":"📅 تقويم التدريس ←","QR code":"رمز QR",
+  "Every AI Literacy lesson for Grades 6 to 12, week by week. Each Main course lesson is a Core lesson and its Lab, taught together.":"جميع دروس محو أمية الذكاء الاصطناعي للصفوف من 6 إلى 12، أسبوعًا بأسبوع. كل درس في البرنامج الرئيسي يتكوّن من درس أساسي ومختبره، يُدرَّسان معًا.",
+  "All grades":"جميع الصفوف","Grade":"الصف","Term 1":"الفصل الأول","Week":"الأسبوع","Bridging":"تمهيدي","Foundation":"تأسيسي",
+  "Launch":"انطلاق","Understand":"الفهم","Design":"التصميم","Evaluate":"التقييم","Ethics":"الأخلاقيات","Integrate":"الدمج","Plan":"التخطيط","Build":"البناء","Refine":"التحسين","Showcase":"العرض",
+  "This week":"هذا الأسبوع","Teaching week {n} · {d}":"الأسبوع الدراسي {n} · {d}","This week's lessons are highlighted below.":"دروس هذا الأسبوع مظلّلة أدناه.",
+  "Open today's calendar":"افتح تقويم اليوم","No AI lessons this week – {why}.":"لا توجد دروس ذكاء اصطناعي هذا الأسبوع – {why}.",
+  "Lessons start again with Week {n} on {d}.":"تُستأنف الدروس بالأسبوع {n} في {d}.","Term 1 lessons are finished. See the teaching calendar for what comes next.":"انتهت دروس الفصل الأول. راجع تقويم التدريس لمعرفة ما يلي.",
+  "Before the AI Literacy timetable starts (Monday 28 September 2026).":"قبل بدء جدول محو أمية الذكاء الاصطناعي (الإثنين 28 سبتمبر 2026).",
+  "🔒 Opens {d}":"🔒 يُفتح {d}","Scan to open AI Lessons":"امسح لفتح دروس الذكاء الاصطناعي","Close":"إغلاق","Show grade":"عرض الصف",
+  [NOTE_EN]:"التواريخ هي أسابيع التدريس في تقويم المدرسة 2026–27 (إجازة منتصف الفصل 12–16 أكتوبر، أيام التطوير المهني 19–20 أكتوبر). * يؤخّر اليوم الوطني دروس الأسبوعين 9 و10 لبعض الشعب أسبوعًا – يعرض تقويم التدريس اليوم الدقيق لكل شعبة. يُفتح الدرس للطلاب في الأسبوع الذي يُدرَّس فيه لصفّهم."};
+function T(s,v){let t=LANG==="ar"&&AR[s]?AR[s]:s;if(v)Object.keys(v).forEach(k=>{t=t.split("{"+k+"}").join(v[k])});return t}
+const fmt=(d,o)=>d.toLocaleDateString(LANG==="ar"?"ar-AE-u-nu-latn":"en-GB",o);
+
+/* ---------- This week: hard-coded Term 1 teaching weeks (same dates as the table) ---------- */
+const WEEKS=[[1, "2026-09-28", "2026-10-02", "28 Sep \u2013 2 Oct"], [2, "2026-10-05", "2026-10-09", "5 \u2013 9 Oct"], [3, "2026-10-19", "2026-10-23", "19 \u2013 23 Oct"], [4, "2026-10-26", "2026-10-30", "26 \u2013 30 Oct"], [5, "2026-11-02", "2026-11-06", "2 \u2013 6 Nov"], [6, "2026-11-09", "2026-11-13", "9 \u2013 13 Nov"], [7, "2026-11-16", "2026-11-20", "16 \u2013 20 Nov"], [8, "2026-11-23", "2026-11-27", "23 \u2013 27 Nov"], [9, "2026-11-30", "2026-12-04", "30 Nov \u2013 4 Dec"], [10, "2026-12-07", "2026-12-11", "7 \u2013 11 Dec"]];
+const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+function thisWeek(today){const t=iso(today);return WEEKS.find(w=>t>=w[1]&&t<=w[2])||null}
+function nextWeek(today){const t=iso(today);return WEEKS.find(w=>w[1]>t)||null}
+function render(){
+  const today=new Date(), w=thisWeek(today), b=$("#banner");
+  $$("tbody tr[data-week]").forEach(tr=>{const n=+tr.dataset.week;tr.classList.toggle("now",!!w&&n===w[0]);tr.classList.toggle("done",!!w?n<w[0]:false);
+    tr.querySelector("th b").dataset.now=T("This week")});
+  const cal=window.APP?APP.base+"?p=calendar":"calendar.html", calLink=`<a href="${cal}"${window.APP?' target="_top"':""}>${T("Open today's calendar")}</a>`;
+  b.hidden=false;b.className="banner";
+  if(w) b.innerHTML=`<div><h2>${T("Teaching week {n} · {d}",{n:w[0],d:'<bdi dir="ltr">'+w[3]+'</bdi>'})}</h2><p>${T("This week's lessons are highlighted below.")}</p></div>${calLink}`;
+  else{const nx=nextWeek(today),off=window.AICAL&&AICAL.noSchool(today);b.className="banner off";
+    b.innerHTML=nx&&nx[0]===1?`<div><h2>${T("Before the AI Literacy timetable starts (Monday 28 September 2026).")}</h2></div>`:
+      nx?`<div><h2>${T("No AI lessons this week – {why}.",{why:window.AICAL?AICAL.label(AICAL.noSchool(AICAL.monday(today))||off||"No school",LANG):"No school"})}</h2><p>${T("Lessons start again with Week {n} on {d}.",{n:nx[0],d:fmt(new Date(nx[1]+"T00:00:00"),{weekday:"long",day:"numeric",month:"long"})})}</p></div>${calLink}`:
+      `<div><h2>${T("Term 1 lessons are finished. See the teaching calendar for what comes next.")}</h2></div>${calLink}`}
+}
+/* ---------- Public site: weeks no class in the grade has reached yet stay locked.
+   (Signed-in students get the same rule for their own class from the app; staff see everything.) ---------- */
+function lockPublic(){
+  if(window.APP||!window.AICAL)return;
+  $$("a.ls[href*='/main-w']").forEach(a=>{const m=/grade-(\d+)\/main-w(\d+)-/.exec(a.getAttribute("href"));if(!m)return;
+    const g=+m[1],n=+m[2];if(n<=AICAL.releasedForGrade(g,new Date()))return;
+    const d=AICAL.opensOnGrade(g,n);a.dataset.href=a.getAttribute("href");a.removeAttribute("href");a.classList.add("locked");a.setAttribute("aria-disabled","true");
+    const s=document.createElement("small");s.className="opens";s.dataset.date=d?iso(d):"";a.appendChild(s)});
+}
+function paintLocks(){$$("a.ls.locked .opens").forEach(s=>{s.textContent=T("🔒 Opens {d}",{d:s.dataset.date?fmt(new Date(s.dataset.date+"T00:00:00"),{day:"numeric",month:"short"}):"–"})})}
+/* ---------- Grade filter (remembered on this device) ---------- */
+function show(g){$("#lessons").dataset.show=g;$$("#chips button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.show===g)));try{localStorage.setItem("lessons-grade",g)}catch(e){}}
+$("#chips").onclick=e=>{const b=e.target.closest("button");if(b)show(b.dataset.show)};
+try{const g=localStorage.getItem("lessons-grade");if(g)show(g)}catch(e){}
+function applyLang(){
+  document.documentElement.lang=LANG;document.documentElement.dir=LANG==="ar"?"rtl":"ltr";document.title=T("AI Lessons");
+  $$("[data-i18n]").forEach(el=>{el.textContent=T(el.dataset.i18n)});
+  $$("[data-i18n-grade]").forEach(el=>{el.textContent=T("Grade")+" "+el.dataset.i18nGrade});
+  $("#note").textContent=T(NOTE_EN);$("#chips").setAttribute("aria-label",T("Show grade"));
+  $("#langBtn").textContent=LANG==="ar"?"English":"العربية";$("#langBtn").lang=LANG==="ar"?"en":"ar";
+  render();paintLocks();
+}
+$("#langBtn").onclick=()=>{LANG=LANG==="ar"?"en":"ar";try{localStorage.setItem("aisa-lang",LANG)}catch(e){}applyLang()};
+lockPublic();applyLang();
+/* ---------- QR code for this page ---------- */
 $("#qrBtn").onclick=()=>{
-  const url=location.href.split("#")[0];
+  const url=window.APP?APP.base:location.href.split("#")[0];
   $("#qrUrl").textContent=url;$("#ov").classList.add("on");
   const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
   if(window.QRCode)return draw();
-  const sc=document.createElement("script");
-  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
-  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
-  document.head.appendChild(sc);
+  const sc=document.createElement("script");sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};document.head.appendChild(sc);
 };
 $("#qrClose").onclick=()=>$("#ov").classList.remove("on");
 $("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
