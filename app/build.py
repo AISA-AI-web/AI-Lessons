@@ -42,15 +42,16 @@ if not os.path.exists(lessons_path) or read('lessons.js') != lessons_js:
 
 # ---- inlining: in the app every page is served on its own, so shared files go inside it ----
 SHARED_JS = ['school-calendar.js', 'lessons.js']
-def data_uri(name):
-    return 'data:image/png;base64,' + base64.b64encode(open(os.path.join(ROOT, 'assets', 'aisa', name), 'rb').read()).decode()
+def data_uri(name):   # name inside assets/aisa/, or 'assets/…' for other images
+    path = os.path.join(ROOT, name) if name.startswith('assets/') else os.path.join(ROOT, 'assets', 'aisa', name)
+    return 'data:image/png;base64,' + base64.b64encode(open(path, 'rb').read()).decode()
 def inline(html):
     for name in SHARED_JS:
         # the public pages may add ?v=N so browsers fetch a fresh copy after a change
         html = re.sub(r'<script src="%s(?:\?v=\d+)?"></script>' % re.escape(name), lambda m: '<script>\n' + read(name) + '</script>', html)
     html = re.sub(r'<link rel="stylesheet" href="site\.css(?:\?v=\d+)?">', lambda m: '<style>\n' + read('site.css') + '</style>', html)
     html = re.sub(r'<link rel="icon"[^>]*>\n?', '', html)              # the app's tab icon is Google's
-    return re.sub(r'(src|href)="assets/aisa/([a-z\-]+\.png)"', lambda m: '%s="%s"' % (m[1], data_uri(m[2])), html)
+    return re.sub(r'(src|href)="(assets/(?:aisa/)?[a-z\-]+\.png)"', lambda m: '%s="%s"' % (m[1], data_uri(m[2])), html)
 
 shutil.rmtree(OUT, ignore_errors=True)
 shutil.copytree(os.path.join(ROOT, 'app', 'src'), OUT)
@@ -75,7 +76,7 @@ dash = os.path.join(OUT, 'dashboard.html')
 dash_html = app_page(open(dash, encoding='utf-8').read())   # read first: opening for writing empties the file
 open(dash, 'w', encoding='utf-8').write(dash_html)
 bridge = os.path.join(OUT, 'bridge.html')
-bridge_html = protect_urls(open(bridge, encoding='utf-8').read().replace('__AISA_MONOGRAM__', data_uri('monogram-white.png')))
+bridge_html = protect_urls(open(bridge, encoding='utf-8').read().replace('__AISA_MONOGRAM__', data_uri('monogram-white.png')).replace('__AISA_LOCKUP__', data_uri('lockup-white.png')))
 open(bridge, 'w', encoding='utf-8').write(bridge_html)
 pages = ['index.html', 'calendar.html'] + sorted(glob.glob('grade-*/*.html', root_dir=ROOT))
 for p in pages:

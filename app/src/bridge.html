@@ -103,17 +103,23 @@
       ['qrBtn','qrTop'].forEach(function(id){ var b = document.getElementById(id); if (b) b.onclick = qrOpen; });
       return;
     }
-    var bar = document.createElement('div');
+    var bar = document.createElement('header');
     bar.className = 'app-bar';
-    /* the same AISA top bar and menu as the home page, calendar and dashboard, in a slimmer form */
+    /* the same AISA top bar and menu as the home page, calendar and dashboard (site.css .top) */
     var links = CFG.role === 'student' ? [['My progress', 'dashboard']] : [['Calendar', 'calendar'], ['Dashboard', 'dashboard']];
-    bar.innerHTML = '<a class="app-brand" target="_top"><img src="__AISA_MONOGRAM__" alt="AISA" width="28" height="28"><span>' + T('AI Lessons') + '</span></a>' +
-      '<nav class="app-nav">' + links.map(function(l){ return '<a target="_top" data-p="' + l[1] + '">' + T(l[0]) + '</a>'; }).join('') + '</nav>' +
-      '<span class="app-right">' + (lessonId ? '<span class="app-save" aria-live="polite"></span>' : '') + '<span class="app-me" dir="ltr"></span></span>';
+    bar.innerHTML = '<div class="app-wrap"><a class="app-brand" target="_top" aria-label="' + T('AI Lessons') + '">' +
+      '<img class="app-lockup" src="__AISA_LOCKUP__" alt="American International School in Abu Dhabi" width="233" height="40">' +
+      '<img class="app-mono" src="__AISA_MONOGRAM__" alt="AISA" width="34" height="34"><span class="app-product">' + T('AI Lessons') + '</span></a>' +
+      '<nav class="app-nav" aria-label="Main">' + links.map(function(l){ return '<a target="_top" data-p="' + l[1] + '">' + T(l[0]) + '</a>'; }).join('') + '</nav>' +
+      '<span class="app-right">' + (lessonId ? '<span class="app-save" aria-live="polite"></span>' : '') + '<span class="app-me" dir="ltr"></span>' +
+      '<button class="app-lang" type="button" lang="' + (ar ? 'en' : 'ar') + '">' + (ar ? 'English' : 'العربية') + '</button></span></div>';
     if (ar) { bar.dir = 'rtl'; bar.lang = 'ar'; }
     bar.querySelector('.app-me').textContent = CFG.name || CFG.email; bar.querySelector('.app-me').title = CFG.email;
     bar.querySelector('.app-brand').href = appUrl('index');
+    bar.querySelector('.app-lang').onclick = function(){ try { localStorage.setItem('aisa-lang', ar ? 'en' : 'ar'); } catch (e) {} location.reload(); };
     [].forEach.call(bar.querySelectorAll('[data-p]'), function(a){ a.href = appUrl(a.getAttribute('data-p')); });
+    var font = document.createElement('link'); font.rel = 'stylesheet';
+    font.href = 'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap'; document.head.appendChild(font);
     document.body.insertBefore(bar, document.body.firstChild);
     status = bar.querySelector('.app-save');
     var qr = qrOpen;
@@ -128,16 +134,27 @@
 })();
 </script>
 <style>
-.app-bar{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;padding:7px 16px;background:#21076C;color:#fff;font:14px/1.4 "DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;border-bottom:3px solid #D8B664}
+.app-bar{display:block;background:#21076C;color:#fff;font:16px/1.5 "DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;margin:0;padding:0;position:relative;z-index:50}
+.app-wrap{max-width:1080px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:18px;min-height:64px}
 .app-bar a{color:#fff;text-decoration:none}
-.app-brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px}
-.app-brand img{display:block}
-.app-nav{display:flex;gap:2px;flex-wrap:wrap}
-.app-nav a{font-weight:600;padding:4px 11px;border-radius:999px;opacity:.85}
-.app-nav a:hover{opacity:1;background:rgba(255,255,255,.12)}
-.app-right{margin-inline-start:auto;display:flex;align-items:center;gap:12px;font-size:13px}
-.app-me{opacity:.9;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-@media (max-width:560px){.app-me{display:none}.app-brand span{display:none}}
+.app-brand{display:flex;align-items:center;gap:12px;flex:none}
+.app-brand img{display:block;max-width:none}
+.app-lockup{height:40px;width:auto}
+.app-mono{display:none!important;height:34px;width:34px}
+.app-product{font-weight:700;font-size:16px;letter-spacing:.01em;padding-inline-start:12px;border-inline-start:1px solid rgba(255,255,255,.35);white-space:nowrap}
+.app-nav{display:flex;gap:2px}
+.app-nav a{font-weight:600;font-size:16px;padding:8px 13px;border-radius:999px;opacity:.85;white-space:nowrap}
+.app-nav a:hover{opacity:1;background:rgba(255,255,255,.1)}
+.app-right{margin-inline-start:auto;display:flex;align-items:center;gap:10px;font-size:14px}
+.app-me{opacity:.92;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.app-lang{font:inherit;font-size:13px;font-weight:700;padding:4px 12px;border-radius:999px;border:1.5px solid rgba(255,255,255,.65);color:#fff;background:transparent;cursor:pointer}
+@media (max-width:1000px){.app-lockup{display:none!important}.app-mono{display:block!important}}
+@media (max-width:640px){
+  .app-wrap{flex-wrap:wrap;gap:4px 12px;padding-top:10px;padding-bottom:6px;min-height:0}
+  .app-nav{order:3;width:100%;margin:0 -16px;padding:0 12px;overflow-x:auto;scrollbar-width:none}
+  .app-nav a{padding:7px 11px;font-size:14px}
+  .app-me{display:none}
+}
 .app-save{color:#9be59b}.app-save.bad{color:#ffb3b3}
 a.app-locked{opacity:.6;cursor:not-allowed}
 .app-lock{display:block;font-size:12px;font-weight:600;margin-top:2px}

@@ -75,10 +75,23 @@ table.grid[data-show]:not([data-show="all"]){min-width:0}
 table.grid[data-show="6"] .g:not(.g6){display:none}table.grid[data-show="7"] .g:not(.g7){display:none}table.grid[data-show="8"] .g:not(.g8){display:none}table.grid[data-show="9"] .g:not(.g9){display:none}table.grid[data-show="10"] .g:not(.g10){display:none}table.grid[data-show="11"] .g:not(.g11){display:none}table.grid[data-show="12"] .g:not(.g12){display:none}
 .grid tr.bridge>*{border-bottom:2px solid var(--line)}
 .grid tr.bridge a.ls b{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.grid tr.thisweek th{background:#FBF3DD;box-shadow:inset 4px 0 0 var(--gold)}
-html[dir="rtl"] .grid tr.thisweek th{box-shadow:inset -4px 0 0 var(--gold)}
-.grid tr.thisweek td{background:#FBF3DD!important}
-.grid .tw{display:inline-block;margin-top:3px;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--gold);color:var(--purple);border-radius:999px;padding:1px 7px}
+.grid td.g6{background-color:var(--gt6)}.grid td.g7{background-color:var(--gt7)}.grid td.g8{background-color:var(--gt8)}.grid td.g9{background-color:var(--gt9)}.grid td.g10{background-color:var(--gt10)}.grid td.g11{background-color:var(--gt11)}.grid td.g12{background-color:var(--gt12)}
+/* this week: a thick purple outline round the whole row, a gentle gold glow and a light sweeping across it */
+.grid tr.thisweek>*{border-top:4px solid var(--purple);border-bottom:4px solid var(--purple)!important;
+  background-color:#FBF3DD;background-image:linear-gradient(100deg,transparent 0 42%,rgba(255,255,255,.75) 50%,transparent 58% 100%);
+  background-size:200% 100%;background-repeat:no-repeat;background-attachment:fixed;animation:twGlow 2.6s ease-in-out infinite,twShine 3.8s ease-in-out infinite}
+.grid tr.thisweek th{border-inline-start:4px solid var(--purple)}
+.grid tr.thisweek td:last-child{border-inline-end:4px solid var(--purple)}
+table.grid[data-show]:not([data-show="all"]) tr.thisweek td:last-child{border-inline-end:1px solid var(--line-2)}
+table.grid[data-show="6"] tr.thisweek td.g6{border-inline-end:4px solid var(--purple)}table.grid[data-show="7"] tr.thisweek td.g7{border-inline-end:4px solid var(--purple)}table.grid[data-show="8"] tr.thisweek td.g8{border-inline-end:4px solid var(--purple)}table.grid[data-show="9"] tr.thisweek td.g9{border-inline-end:4px solid var(--purple)}table.grid[data-show="10"] tr.thisweek td.g10{border-inline-end:4px solid var(--purple)}table.grid[data-show="11"] tr.thisweek td.g11{border-inline-end:4px solid var(--purple)}table.grid[data-show="12"] tr.thisweek td.g12{border-inline-end:4px solid var(--purple)}
+.grid tr.thisweek th b{font-size:17px}
+@keyframes twGlow{0%,100%{background-color:#FBF3DD}50%{background-color:#F5DFA3}}
+@keyframes twShine{0%{background-position:160% 0}60%,100%{background-position:-60% 0}}
+.grid .tw::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--purple);margin-inline-end:5px;vertical-align:1px;animation:twDot 1.3s ease-in-out infinite}
+@keyframes twDot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.6);opacity:.45}}
+@media (prefers-reduced-motion:reduce){.grid tr.thisweek>*,.grid .tw::before{animation:none}}
+@media print{.grid tr.thisweek>*{animation:none;background-image:none}}
+.grid .tw{display:inline-block;white-space:nowrap;margin-top:4px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--gold);color:var(--purple);border-radius:999px;padding:1px 7px}
 .grid a.ls.locked,.grid a.ls.app-locked{color:var(--muted);cursor:not-allowed}
 .grid a.ls.locked b,.grid a.ls.app-locked b{font-weight:500}
 .grid a.ls .opens,.grid a.ls .app-lock{display:block;margin-top:4px;font-size:11.5px;font-weight:700;color:var(--muted)}
@@ -284,9 +297,9 @@ function tableView() {
     `<div class="acts"><a class="btn primary" href="${esc(appPage('calendar'))}"${tgt}>${esc(T('Teaching calendar →'))}</a></div>`;
   $('#side').innerHTML = breakCard([]) + teacherCard();
   const cell = (g, l, bridging) => {
-    if (!l) return `<td class="g g${g} none" style="background:var(--gt${g})">–</td>`;
+    if (!l) return `<td class="g g${g} none">–</td>`;
     const short = bridging ? l.title : l.title.split(' + ')[0], lock = !bridging && lockedPublic(g, l.week), d = lock && AICAL.opensOnGrade(g, l.week);
-    return `<td class="g g${g}" style="background:var(--gt${g})"><a class="ls${lock ? ' locked' : ''}"${lock ? ' aria-disabled="true"' : ` href="${esc(link(l.id))}"${tgt}`} title="${esc(l.title)}">` +
+    return `<td class="g g${g}"><a class="ls${lock ? ' locked' : ''}"${lock ? ' aria-disabled="true"' : ` href="${esc(link(l.id))}"${tgt}`} title="${esc(l.title)}">` +
       `<b lang="en" dir="ltr">${esc(short)}</b>${lock ? `<small class="opens">🔒 ${esc(T('Opens {d}', { d: d ? fdm(d) : '–' }))}</small>` : ''}</a></td>`;
   };
   let h = `<table class="grid" data-show="${esc(show)}"><thead><tr><th scope="col">${esc(T('Term 1'))}</th>` +
