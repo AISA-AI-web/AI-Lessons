@@ -19,6 +19,21 @@
 .week>header h2{font-size:17px}
 .week>header span{color:var(--muted);font-size:13.5px}
 .week.current>header{border-bottom-color:var(--purple)}
+/* this week (same look as the AI Lessons table): thick purple outline, a gentle gold glow and a light sweeping across */
+.week.current{border:4px solid var(--purple);border-radius:16px;padding:12px 12px 14px;
+  background-color:#FBF3DD;background-image:linear-gradient(100deg,transparent 0 42%,rgba(255,255,255,.75) 50%,transparent 58% 100%);
+  background-size:200% 100%;background-repeat:no-repeat;background-attachment:fixed;animation:twGlow 2.6s ease-in-out infinite,twShine 3.8s ease-in-out infinite}
+.week.current>header{border-bottom-color:rgba(33,7,108,.25)}
+.tw{display:inline-flex;align-items:center;white-space:nowrap;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--gold);color:var(--purple);border-radius:999px;padding:2px 9px;align-self:center}
+.tw::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--purple);margin-inline-end:6px;animation:twDot 1.3s ease-in-out infinite}
+.tt.cur{border:4px solid var(--purple)}
+.tt.cur .dh:not(.today){background-color:#FBF3DD;background-image:linear-gradient(100deg,transparent 0 42%,rgba(255,255,255,.75) 50%,transparent 58% 100%);
+  background-size:200% 100%;background-repeat:no-repeat;background-attachment:fixed;animation:twGlow 2.6s ease-in-out infinite,twShine 3.8s ease-in-out infinite}
+@keyframes twGlow{0%,100%{background-color:#FBF3DD}50%{background-color:#F5DFA3}}
+@keyframes twShine{0%{background-position:160% 0}60%,100%{background-position:-60% 0}}
+@keyframes twDot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.6);opacity:.45}}
+@media (prefers-reduced-motion:reduce){.week.current,.tt.cur .dh,.tw::before{animation:none}}
+@media print{.week.current,.tt.cur .dh{animation:none;background-image:none}}
 .evt{font-size:12.5px;font-weight:600;color:#5c3d00!important;background:#FFF3C9;border-radius:999px;padding:1px 9px}
 .rows{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .row{display:grid;grid-template-columns:62px 104px minmax(110px,150px) 1fr;gap:14px;align-items:center;background:#fff;border:1px solid var(--line-2);border-radius:12px;padding:10px 14px;padding-inline-start:10px}
@@ -54,6 +69,7 @@
 .weeknav .nav{font:inherit;font-size:18px;font-weight:700;width:36px;height:36px;border-radius:10px;border:1.5px solid var(--line);background:#fff;color:var(--purple);cursor:pointer}
 .weeknav h2{font-size:18px;margin:0 6px}
 .weeknav h2 span{display:block;font-size:13px;color:var(--muted);font-weight:500}
+.weeknav h2 span.tw{display:flex;width:max-content;font-size:11px;font-weight:800;color:var(--purple);margin:0 0 3px}
 .gridbar .spacer{flex:1}
 .gridbar label{font-size:13.5px;color:var(--muted)}
 .gfilter{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:0 0 12px;font-size:13.5px;color:var(--muted)}
@@ -265,7 +281,7 @@ function agenda() {
           `<div class="act">${s.past ? `<span class="state">${esc(T('✓ Taught'))}</span>` : s.today ? `<span class="chip gold">${esc(T('Today'))}</span>` : cls.includes('next') ? `<span class="chip purple">${esc(T('Next up'))}</span>` : ''}${actions(s)}</div></div></li>`;
       });
     }
-    html += `<section class="week${cur ? ' current' : ''}"><header><h2>${esc((cur ? T('This week · ') : '') + T('Teaching week {n}', { n: tw }))}</h2><span>${esc(fdm(wk))} – ${esc(fdm(fri))} · ${esc(T('Timetable Week {c} (Days {a}–{b})', { c, a: da, b: db }))}</span>` +
+    html += `<section class="week${cur ? ' current' : ''}"><header>${cur ? `<span class="tw">${esc(T('This week'))}</span>` : ''}<h2>${esc(T('Teaching week {n}', { n: tw }))}</h2><span>${esc(fdm(wk))} – ${esc(fdm(fri))} · ${esc(T('Timetable Week {c} (Days {a}–{b})', { c, a: da, b: db }))}</span>` +
       events.map(e => `<span class="evt">📌 ${esc(AICAL.label(e[0], LANG))} · ${esc(fd(e[1]))}</span>`).join('') + `</header><ol class="rows">${rows || `<li class="offrow">${esc(T('None of your classes has AI this week.'))}</li>`}</ol></section>`;
   }
   flushBreak();
@@ -282,7 +298,7 @@ function chip(s, tag) {
 }
 function grid() {
   const mon = GMON, fri = add(mon, 4), tw = AICAL.teachingWeek(mon), c = AICAL.cycleOf(mon);
-  $('#wtitle').innerHTML = esc(tw === 0 ? T('Before the AI timetable starts') : tw === null ? why(AICAL.noSchool(mon)) : (iso(mon) === iso(AICAL.monday(NOW)) ? T('This week · ') : '') + T('Teaching week {n}', { n: tw })) +
+  $('#wtitle').innerHTML = (tw && iso(mon) === iso(AICAL.monday(NOW)) ? `<span class="tw">${esc(T('This week'))}</span> ` : '') + esc(tw === 0 ? T('Before the AI timetable starts') : tw === null ? why(AICAL.noSchool(mon)) : T('Teaching week {n}', { n: tw })) +
     `<span>${esc(fd(mon))} – ${esc(fd(fri))}${c ? ' · ' + esc(T('Timetable Week {c} (Days {a}–{b})', { c, a: cycleDays(c)[0], b: cycleDays(c)[1] })) : ''}</span>`;
   $('#jump').value = iso(mon);
   const soon = weekdaySpans(add(fri, 3), add(fri, 7));
@@ -290,7 +306,7 @@ function grid() {
   $('#soon').innerHTML = soon.length ? `<span aria-hidden="true">📅</span><div>${esc(T('Next week: {list}. No AI lessons on those days – each class\'s lesson moves to its next AI period.', { list: soon.map(s => `${why(s.why)} (${range(s.from, s.to)})`).join(', ') }))}</div>` : '';
   if (!tw) { $('#gridOut').innerHTML = `<div class="banner"><b>${esc(tw === 0 ? T('The AI timetable starts on Monday 28 September 2026') : T('No school this week'))}</b>${tw === null ? esc(why(AICAL.noSchool(mon)) + ' · ' + fd(mon) + ' – ' + fd(fri)) : ''}</div>`; $('#legend').innerHTML = ''; return; }
   const days = [0, 1, 2, 3, 4].map(i => add(mon, i)), keep = r => !GRADE || String(r[1]) === GRADE;
-  let h = '<div class="tt"><div class="corner" style="grid-row:1;grid-column:1"></div>';
+  let h = `<div class="tt${iso(mon) === iso(AICAL.monday(NOW)) ? ' cur' : ''}"><div class="corner" style="grid-row:1;grid-column:1"></div>`;
   days.forEach((d, i) => { const today = iso(d) === iso(NOW), ev = AICAL.eventOn(d);
     h += `<div class="dh${today ? ' today' : ''}" style="grid-row:1;grid-column:${i + 2}">${esc(wd(d))} ${d.getDate()}<small>${esc(today ? T('Today') : T('Day {n}', { n: AICAL.dayNumber(d) }))}</small>${ev ? `<span class="ev">📌 ${esc(AICAL.label(ev, LANG))}</span>` : ''}</div>`; });
   for (let p = 1; p <= 7; p++) h += `<div class="ph" style="grid-row:${p + 1};grid-column:1">P${p}</div>`;
