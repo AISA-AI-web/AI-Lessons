@@ -1,105 +1,126 @@
 # UX proposal – home page, teaching calendar, dashboard
 
 **Status: proposal only.** Nothing on the live pages has changed. This folder holds three clickable
-mockups and the thinking behind them, so the ideas can be discussed before any real work starts.
+mockups and the thinking behind them. Open the HTML files in a browser from this folder.
 
-| Mockup | Open | What it shows |
+| Mockup | What it shows | Switches (black bar, bottom right) |
 |---|---|---|
-| Home page | `home.html` | Student-first home: *your* lesson this week, then your grade's lesson list. Switch "Preview as" (bottom right) to see the public, not-signed-in version. |
-| Teaching calendar | `calendar.html` | "My week" grid for a teacher of Boys 8 and Girls 8, with the break coming up. `calendar.html?view=all` shows every grade. |
-| Dashboard (teacher) | `dashboard.html` | Class tabs, four tiles that say what to do, one lesson-overview chart, and a lighter student table that turns into cards on a phone. |
+| `home.html` | A student's home: this week's lesson, then *their own* AI lessons with dates. | Signed-in student · Visitor (not signed in) |
+| `calendar.html` | Staff calendar: **My lessons** (an agenda of the teacher's classes) and **Whole school** (one compact timetable). | Teacher · School leader, and "today" = 7 Oct or 25 Nov |
+| `dashboard.html` | Teacher dashboard with a table that keeps the same eight columns however many lessons there are. | Data as of 7 Oct (2 lessons) · 25 Nov (8 lessons) |
 
-The clock in the mockups is fixed at **Wednesday 7 October 2026** so the week, the Mid-Term Break
-notice and the "pushed back" logic are real (they come from `school-calendar.js`). The students and
-scores in the dashboard are fictional (`dashboard-data.js`).
+Add `?clean` to any address to hide the switches (used for screenshots). Dates, periods, holidays
+and "pushed back" lessons come from the real `school-calendar.js`. Students and scores in the dashboard are
+fictional (`dashboard-data.js`); lessons after Grade 8 Week 2 are placeholders.
+
+---
+
+## Round 2 – what changed after feedback
+
+| Feedback | Change |
+|---|---|
+| The home page samples are good. | Kept the layout: hero with this week's lesson, "no school" card, badges. |
+| Why show students other grades, a grade picker and "your grade is remembered"? | **Removed** for signed-in students – the app already knows their grade. Their list is now **My AI lessons**, each with its date (*Mon 5 Oct*), period and subject, plus a "No school" line where a break falls. The grade chooser stays only on the public, not-signed-in page, where it is the only way to pick a grade. |
+| The calendar will get cluttered. Should students see a whole-school calendar? | **No – students only see their own AI lessons**, on their home page. The calendar becomes a staff page with two views: **My lessons**, an agenda of the teacher's own classes, week by week, with breaks as one line each; and **Whole school**, a periods × days timetable where each class is a small chip, with the details on click. Students' menus no longer show "Calendar". |
+| One column per lesson will get too crowded. | The table has **eight fixed columns**: student · the selected lesson (pick any week from a menu) · *Lessons so far* (count, a small square per lesson, overall first try) · CU · SD · CE · GE · badges. With 8 lessons it is exactly as wide as with 2. The lesson chart shows the latest four lessons, with "Show all". |
+| Strands should be symmetrical, in columns. | **Four equal columns** under one "Strand tier" heading. Each cell is the same-size tier chip. Clicking a chip opens a small menu to record a tier (no more drop-downs on every row). On phones the four strands sit side by side in each student card. |
+| Use the AISA logos. | Top bar: white lockup (monogram + "American International School in Abu Dhabi"); white monogram on narrow screens. Purple footer with the white seal. Favicon from the purple monogram. Purple lockup on the printed report header. |
 
 ---
 
 ## What gets in the way today
 
-Taken from the current pages (screenshots were made at 1280 px and 390 px):
+- **Three different looks and no shared navigation.** The home page and calendar use Lexend and indigo on grey; the dashboard uses the system font and blue. You cannot get from the dashboard to the calendar except through the small sign-in strip.
+- **The home page is a catalogue.** A Grade 8 student scrolls past Grades 6 and 7 and reads "Teach 5 – 9 Oct 2026" tags to find this week's lesson, and is never told "Continue".
+- **The calendar answers "what happens on this date", not "what do I teach".** Teachers click day by day; nothing warns about the coming break.
+- **The dashboard grows sideways.** A column per lesson plus four drop-downs per student – 144 menus for two classes – and on a phone the lesson columns are off-screen.
+- **Three hand-kept lesson lists** (`index.html`, the calendar's `LESSONS`, the generated catalog) drift apart.
 
-- **Three different looks.** The home page and calendar use Lexend and indigo on grey; the dashboard uses the system font and blue with its own dark mode; the PDF header already uses AISA purple. There is no shared top bar, so you cannot get from the dashboard to the calendar, or from the calendar to the dashboard, without the small black sign-in strip.
-- **The home page is a catalogue, not a starting point.** A Grade 8 student has to scroll past Grades 6 and 7 (3,200 px on a phone) and read "Teach 5 – 9 Oct 2026" tags to find this week's lesson. It never says "Continue" even though the app knows the student has done 14 of 19 activities.
-- **Teacher words on student screens.** "Bridging course", "Core + Lab", "Teach 28 Sep – 2 Oct", "Week 0 + Week 1". The footer still says "Print your results to show your teacher", which the signed-in app made unnecessary.
-- **The calendar answers "what happens on this date" rather than "what do I teach this week".** On 7 October the list is six rows of "lesson is not on the site yet". The teacher's own two classes are a filter at the end of the controls row. Nothing warns that next week is the Mid-Term Break, and the date box shows an ambiguous `10/07/2026`.
-- **The dashboard is a data wall.** Thirty-six rows, each with four drop-down menus (144 inputs on screen), emoji badges, and cells like "57% ✓ done · 35m". "Lessons finished 16" counts student-lessons, which nobody says out loud. On a phone only the name and badge columns fit; the lesson progress is off-screen to the right. There is no sort, no search and no "who hasn't started".
-- **Three hand-kept lesson lists.** `index.html`, the `LESSONS` map in `calendar.html` and the catalog that `build.py` generates all describe the same lessons. They drift (Grade 7 is "Week 0 + Week 1", the "Teach …" dates ignore pushed sections).
+## The direction (all three pages)
 
----
-
-## The direction (applies to all three pages)
-
-1. **One shell.** The same purple top bar on every page: *AISA · AI Lessons* · Lessons | Calendar | My progress (or Dashboard) · who is signed in · العربية. The language switch finally reaches the home page too.
-2. **Lead with "now".** Each page opens on what this person needs this week, and the detail follows.
-3. **Fewer controls, shown when needed.** Class tabs instead of a Section menu; tier drop-downs only after pressing ✎; PDF and CSV under "More".
-4. **Phone first for students, phone-capable for teachers.** Students arrive by QR code on phones; the dashboard table becomes one card per student under 720 px.
-5. **One source of truth for lessons.** Let `build.py` write a `lessons.js` the public site loads, so the home page, the calendar and the dashboard always agree on titles, dates and which lesson pages exist.
-6. **Brand, lightly.** AISA purple for structure, gold for emphasis, DM Sans; the grade colours stay so Grade 8 is still green on the way into a lesson. The layouts do not depend on this – they work in today's indigo and Lexend if the school prefers.
+1. **One shell** – the same purple top bar and footer, with the school logos, on every page.
+2. **Lead with "now"** – each page opens on what this person needs this week.
+3. **Show only what this person needs** – students see their own lessons; teachers see their own classes first; leaders see the whole school.
+4. **Fewer controls, shown when needed** – class tabs instead of menus, tier menus on click, PDF and CSV under "More".
+5. **Phone first for students, phone-capable for teachers.**
+6. **One source of truth for lessons** – `build.py` writes a `lessons.js` that the home page, calendar and dashboard all read.
 
 ---
 
 ## Home page
 
-**Ideas, most valuable first**
+**Signed-in student**
+- Hero: this week's lesson, when *your class* has (or had) it, progress, one *Continue* button.
+- "No school next week" card with the date of the next AI lesson; badges card.
+- **My AI lessons**: one row per lesson with a date tile, "Week 2 · Period 7 · Islamic Studies", status (*Finished · 78%*, *In progress · 14 of 19*, *Lesson page coming*) and *Review / Continue*. Breaks appear as a single "No school" line between lessons.
+- Menu: **My lessons · My progress** (no calendar, no grade picker).
 
-1. **"Your lesson this week" hero** – week label, lesson title, when your class has it (day, period, subject), progress bar, one big *Continue* button. For a visitor it becomes "This week's lesson for Grade 8" with both sections' periods.
-2. **Grade picker that remembers** – the seven grade pills; the signed-in app pre-selects the student's grade from the roster, the public site remembers the last choice on the device.
-3. **One grade's lessons as a list with status** – Week 1 *Finished · 78%* → *Review*; Week 2 *14 of 19* → *Continue*; Week 3 *Coming Wed 21 Oct · after the break*. Lessons that are not published yet are listed as "Lesson page coming" instead of being invisible.
-4. **A "no school" card** when a break or PD day is in the next three weeks, with the date of the next AI lesson.
-5. **Badges glimpse** (students) and a **Teachers** card pointing to the calendar.
-6. **"Browse all grades"** collapsed at the bottom for teachers and visitors – the current grid, one line per grade.
-7. Rewrite the student copy: *Bridging course → Foundation lessons*, drop "Core + Lab" from the home page, replace "Teach 28 Sep – 2 Oct" with *Taught Wed 30 Sept* / *This week · Mon 5 Oct, period 7* / *Coming Mon 26 Oct*.
-8. Hero states not mocked: when the week's lesson is finished, say so and offer *Review* or the ⭐ challenge; during a break week, show the next lesson's date.
+**Visitor (public site, not signed in)**
+- The same hero for the chosen grade, with both classes' days.
+- **Choose your grade** pills, then that grade's lessons. A "Teachers" card points to the teaching calendar.
 
-## Teaching calendar
+**Not mocked:** teachers opening "Lessons" in the app would get the visitor layout, starting on their own classes' grade.
 
-**Ideas, most valuable first**
+## Teaching calendar (staff only)
 
-1. **Week view, not day view** – Monday to Friday columns with every AI period as a card: period and time, class, subject chip, the lesson that class is on, *Open lesson* and *Class progress* links. Today's column is marked. On a phone the columns stack into an agenda.
-2. **"My classes" as the default and as a visible segmented switch**, with "All grades" plus a grade menu when needed.
-3. **"Coming up" notice** – the next break, holiday or PD days, and for each of my classes the date of its next lesson after them. This replaces having to click forward day by day.
-4. **Say "pushed back" on the card itself** – kept from today, now with the plain reason.
-5. **Week navigation in words** – ‹ *Teaching week 2 · Mon 5 – Fri 9 Oct · Timetable Week 2 of 2* › *Today*, with "Jump to a date" moved out of the way. (Worth agreeing what the school calls the two timetable weeks.)
-6. **"Lesson page coming"** instead of "lesson is not on the site yet" six times, and a legend that explains the two card styles and the hatched no-school days.
-7. **"About this calendar"** as a collapsed note rather than a paragraph under every view.
-8. Not mocked: a **print view of the week** for the staff room, and a link from a card straight into the dashboard filtered to that class and lesson.
+**My lessons** (default for teachers)
+- One row per lesson: date tile · period and time · class and subject · "Week 3 · lesson title" · *Open lesson* and *Class progress*.
+- Past lessons fade with "✓ Taught"; the next one is outlined with "Next up".
+- Breaks are one line ("No school · Mid-Term Break · Mon 12 – Fri 16 Oct"). A holiday inside a week says which lessons move and to when ("Boys 8's lesson moves to Mon 7 Dec").
+- A class pushed back by a holiday gets the full reason once, then a short "⏪ One lesson behind" tag.
+- Four teaching weeks by default, with *Show earlier weeks* and *Show 4 more weeks*.
 
-## Dashboard
+**Whole school** (default for school leaders)
+- Rows P1–P7 × Monday–Friday for one week. Each class is a small chip with its grade colour, "Week 2 · Islamic", and ● page ready / ○ page coming. The teacher's own classes are outlined.
+- Click a chip for the details and links. Grade filter. "Next week: Mid-Term Break" notice. A week with no school is one banner.
+- On phones the grid becomes a list by day.
 
-**Teacher view – ideas, most valuable first**
+**In the app:** the calendar would be staff-only – a student opening `?p=calendar` goes to their home page.
 
-1. **Class tabs** (All my classes · Boys 8 · Girls 8) instead of the Section menu; the student list and the Student-view menu fold into clickable names.
-2. **Four tiles that say what to do**: *This week* (the current lesson, started/finished per class, or the date it will be taught); *Need a nudge* (students who have not started last week's lesson, with *Show them*); *Average first try* with the week-to-week trend; *At Emerging or above*.
-3. **One lesson-overview chart** – per lesson, a stacked bar of finished / in progress / not started / not taught, and the average first-try score beside it. It replaces the two bar charts that showed the same lessons twice.
-4. **Lighter table**: current lesson first, then the previous one; cells read *✓ 78%*, *59% · 14 of 19 activities*, *Not started · taught Mon 5 Oct* or *Not yet · on Fri 9 Oct* (the date is more useful than "not taught yet"); strands as four small chips with a ✎ that turns them into menus only for that student; badges as a count with a tooltip.
-5. **Search, filter chips and sort** – find a student, *Needs a nudge*, *Finished Week 1*, sort by lowest first try or not-started first.
-6. **Phone layout** – one card per student with the same cells.
-7. **Secondary tools under "More"** (student view, Save as PDF, CSV); *Class lists* keeps its red counter.
-8. **Attainment by strand** kept, with a purple sequential scale whose six steps can be told apart, and the share at Emerging+ as the number.
+## Dashboard (teacher)
 
-**Student view ("My progress")** – already the strongest page; not mocked, smaller changes: the same top bar; the "Hi Yousef" card and "This week's lesson" merge into the same hero as the home page; the four tiles lose "First-try score across 39 activities" in favour of *Lessons finished*, *This week*, *Badges* and *Answers fixed*; each strand shows one concrete next step even without the private framework file ("Finish Week 2's Lab to add Design & build evidence").
+- **Class tabs** (All my classes · Boys 8 · Girls 8); *Class lists* keeps its red counter; *More* holds student view, Save as PDF and CSV.
+- **Tiles:** this week's lesson per class (started and finished, or the day it will be taught); **Need a nudge** – students who haven't finished their last lesson, with *Show them*; average first try with a small trend line; share at Emerging or above.
+- **Lesson overview:** latest four lessons, newest first, as finished / in progress / not started / not taught yet, with the average first try. *Show all*, and a **Table** view.
+- **Attainment by strand:** one bar per strand by tier, with the share at Emerging or above, and a **Table** view.
+- **Students table – always eight columns:** student · selected lesson · lessons so far · CU · SD · CE · GE · badges. Search, filter chips (*Need a nudge*, *Not started Week N*, *Finished Week N*), sort (class, lowest first try, most behind), and a lesson picker. Phone: one card per student.
+
+**Not changed this round:** the student's own "My progress" page and the class-lists screen.
+
+---
+
+## Branding and logo files
+
+| File (`assets/`) | Size | Used for |
+|---|---|---|
+| `aisa-lockup-white.png` | 558×96 | Top bar on wide screens (shown 40 px high) |
+| `aisa-monogram-white.png` | 96×96 | Top bar on narrow screens |
+| `aisa-seal-white.png` | 256×256 | Purple footer |
+| `aisa-lockup-purple.png` | 558×96 | Printed report header (Save as PDF) |
+| `aisa-monogram-purple.png`, `favicon.png` | 96×96, 64×64 | Light backgrounds, browser tab |
+
+Made from the files provided (trimmed and resized only, colours untouched). The logos' own purple is a little bluer than the brand purple `#21076C`, so the white versions are used on purple.
+**For the build:** Apps Script cannot serve image files, so `build.py` should inline these PNGs as data URIs (about 75 KB as files, about 100 KB once inlined). The tab icon in the app needs a public URL (`setFaviconUrl`), for example the GitHub Pages copy.
+
+## Colours in the charts
+
+- **Strand tiers** use one purple, light to dark: Not yet `#ECEAF2` (neutral) · Working towards `#a3a7d1` · On track `#8084c0` · Emerging `#6062af` · Proficient `#413a9a` · Advanced `#21076C`. Checked as an ordered scale (lightness always falls, steps ≥ 0.06 apart, lightest step 2.33:1 on white). Dark-mode steps for the real dashboard, checked the same way on `#1a1a19`: `#444582 · #5d5db1 · #7777e3 · #9598ff · #b9befe`.
+- **Lesson states** use green / amber / red / grey, always with a shape (●, ◐, ○) and a word, so they never rely on colour alone.
 
 ---
 
 ## Suggested order of work
 
-**Phase 1 – quick wins, one pull request each, no data changes**
-1. Shared top bar (and the language switch) on the three pages; "Lesson page coming" and the collapsed note on the calendar.
-2. Home page hero + grade pills + status list (the public site gets dates and titles from the calendar data; the app adds *Continue* and *Finished*).
-3. Calendar week grid with "My classes" default and the "Coming up" notice.
-4. Dashboard tabs, tiles, lesson overview and the new table cells; phone cards.
-
-**Phase 2**
-5. `build.py` writes `lessons.js`; `index.html` and `calendar.html` read it.
-6. Sort, filter and search; ✎ edit mode for tiers; "Show them" filter from the tile.
-7. Role-aware landing in the app (students: home; staff: calendar or dashboard – to decide).
-
-**Phase 3** – the brand restyle, if wanted, once the layouts are in.
+1. Shared top bar and footer with the logos on the three pages (`build.py` inlines the images).
+2. Student home page: hero + My AI lessons with dates; grade chooser only on the public page.
+3. Calendar: My lessons agenda and Whole school timetable; calendar staff-only in the app.
+4. Dashboard: tabs, tiles, lesson overview, the eight-column table with the tier menu; phone cards.
+5. `build.py` writes `lessons.js`; the home page and calendar read it instead of their own lists.
+6. Then: the student "My progress" page and class lists in the same style, Arabic for the new labels, dark mode for the dashboard.
 
 ## Decisions needed
 
-- **Look:** AISA purple/gold with DM Sans (as mocked), or keep today's indigo and Lexend?
-- **Staff landing page:** the calendar (today) or the dashboard "This week" tile?
-- **Words:** what do teachers call the two timetable weeks – "Week 1 / Week 2", "A / B"? And is *Taught Mon 5 Oct* / *on Fri 9 Oct* the right tone?
-- **Student home in the app:** should the home page replace the grade selector for students, with "My progress" kept as the detailed page?
+- **Staff landing page:** the calendar (today's behaviour) or the dashboard?
+- **"Need a nudge":** is "hasn't finished their last lesson" the right rule?
+- **Badges column:** keep it in the teacher table, or show badges only in the student view?
+- **Words:** "Timetable Week 1 / 2" – or do teachers say A / B? Is "✓ Taught" right for past lessons?
