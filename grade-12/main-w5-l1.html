@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Risks, Ethics &amp; Societal Impact + Measure Fairness and Govern – Grade 12 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#A61E4D; --main2:#C2255C; --deep:#6B1533;
+  --ink:#2A1520; --muted:#6A5560; --paper:#FBF6F8; --card:#FFFFFF;
+  --line:#EFDCE3; --soft:#FBEEF2;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#F9A8C0,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#D0436F);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#2A1520,#6E3346)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#F6CFDB 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FEFAFB;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FFFBFC}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#D0436F)}
+.act-head.ws{background:linear-gradient(120deg,#2A1520,#7A3A50)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#FCEEF2}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #E6BFCB;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #E0A3B6;border-radius:12px;padding:10px 14px;background:#FEF8FA;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(42,21,32,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#2A1520;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+.scen .three.eq{grid-template-columns:1fr 1fr 1fr}
+@media (max-width:640px){.scen .three.eq{grid-template-columns:1fr}}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 12 Main Course, Term 1</span><span class="pill">Week 5 Core + Week 5 Lab</span><span class="pill">📅 Teach: week of 2 – 6 Nov 2026</span></div>
+    <h1>Risks, Ethics &amp; Societal Impact</h1>
+    <p>Today you become the person who spots how a working AI system can still harm people – and who proposes the rules that keep it accountable. Then, in the Lab, you stop listing risks and start auditing them – measuring fairness with real numbers and building a case strong enough to defend in front of a decision-maker.</p>
+    <p class="meta"><b>Strand:</b> Governance, Ethics &amp; Societal Impact &nbsp;·&nbsp; <b>Scenario:</b> a CV-screening system, then auditing it for fairness</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 12B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 5 of Term 1 – Monday 2 to Friday 6 November 2026.</b> Boys 12 and Girls 12 both have this lesson on <b>Friday 6 November</b>. Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Risks, Ethics &amp; Societal Impact</a>, then move on to the <a href="#lab">Lab: Measure Fairness and Govern</a>. <span class="illus">Previously (Week 4): Judging Outputs + Rank and Defend. Next (Week 6): Bringing the Strands Together + Run End-to-End and Measure.</span></div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>See risk through lenses.</b> I can identify the ethical and societal risks in an AI scenario and say who is affected.</li>
+      <li><b>Propose measures that change outcomes.</b> I can propose a responsible-use measure for a risk and justify why it reduces harm.</li>
+      <li><b>Use the words precisely.</b> I can use terms like bias, privacy, accountability and governance correctly when I judge a system.</li>
+      <li><b>Lab: audit with evidence.</b> I can run a structured risk-and-impact audit, build a confusion matrix for each group, compare false-negative and false-positive rates, and prioritise mitigations by severity and likelihood.</li>
+      <li><b>Lab: mitigate and govern.</b> I can defend my findings, name the trade-off of closing a fairness gap, and give each mitigation an owner and a residual risk to monitor.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 5 Core · Risks, Ethics &amp; Societal Impact</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Working is not the same as fair</b><small>Three lenses: bias, privacy, societal impact</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Where bias enters – and measures that count</b><small>Five pipeline stages; measures that change the outcome</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Technical privacy and the worksheet</b><small>Minimisation, anonymisation, pseudonymisation</small></a></li>
+      <li><span class="num">4</span><a href="#p4"><b>Locate risk by stage and check</b><small>Unplugged activity and quick quiz</small></a></li>
+    </ol>
+    <h3 class="rh">Week 5 Lab · Measure Fairness and Govern</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>From a list to an audit</b><small>Priority, the confusion matrix, the gap and the trade-off</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Lab worksheet</b><small>Audit the CV-screener with real numbers</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Build a confusion matrix and check</b><small>Unplugged activity and quick quiz</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 4</span><h2>Working is not the same as fair</h2><p>How can a fast, accurate AI system still harm people?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>A company deploys an AI system to screen thousands of CVs and shortlist candidates. It is fast and accurate on average, yet it may treat some groups unfairly, expose personal data, or be used beyond its remit. High performance is not the same as fair or lawful. <span class="illus">(Scenario – illustrative.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">Working is not the same as fair</h3>
+    <p>An AI system can be highly accurate and still cause harm. A CV-screening model might sort thousands of applications quickly and be right most of the time – yet be consistently wrong for one group because the data it learned from was skewed. That is why we judge systems on more than accuracy. We look through three lenses: <b>bias</b> (is it fair?), <b>privacy</b> (whose data, used how?) and <b>societal impact</b> (what happens when this runs at scale?). Naming the affected group is the first real step.</p>
+    <figure>
+      <svg viewBox="0 0 760 330" role="img" aria-labelledby="f1T">
+        <title id="f1T">A CV-screening AI that is accurate on average is examined through three lenses. Bias asks whether it is fair to every group, for example applicants from one group being rejected more often. Privacy asks whose data is used and how, for example CVs kept and reused. Societal impact asks what happens at scale, for example one blind spot repeated by many employers. Each lens ends by naming who is affected.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#2A1520"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1520">
+          <rect x="14" y="110" width="190" height="110" rx="12" fill="#FBEEF2" stroke="#A61E4D" stroke-width="2.2"/>
+          <text x="109" y="146" font-size="16" font-weight="700" text-anchor="middle" fill="#A61E4D">CV-SCREENING AI</text>
+          <text x="109" y="172" font-size="13" text-anchor="middle">fast, and accurate</text>
+          <text x="109" y="190" font-size="13" text-anchor="middle">on average</text>
+          <g stroke="#2A1520" stroke-width="2" fill="none" marker-end="url(#ah)">
+            <path d="M204 140L262 66"/><path d="M204 165H262"/><path d="M204 190L262 264"/>
+          </g>
+          <g stroke="#2A1520" stroke-width="1.6" fill="#fff">
+            <rect x="266" y="20" width="480" height="88" rx="10"/>
+            <rect x="266" y="121" width="480" height="88" rx="10"/>
+            <rect x="266" y="222" width="480" height="88" rx="10"/>
+          </g>
+          <g font-size="15" font-weight="700" fill="#A61E4D">
+            <text x="284" y="48">BIAS · is it fair?</text>
+            <text x="284" y="149">PRIVACY · whose data, used how?</text>
+            <text x="284" y="250">SOCIETAL IMPACT · what happens at scale?</text>
+          </g>
+          <g font-size="13">
+            <text x="284" y="72">Equally qualified applicants from one group</text>
+            <text x="284" y="92">are rejected more often.</text>
+            <text x="284" y="173">Full CVs, with addresses and dates of birth,</text>
+            <text x="284" y="193">are kept and reused to train the next model.</text>
+            <text x="284" y="274">Hundreds of employers use the same tool, so</text>
+            <text x="284" y="294">one blind spot shuts the same people out.</text>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> Accuracy is not the whole story. Look through each lens and name the group that is affected. <span class="illus">(Illustrative examples.)</span></figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-lens"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 4</span><h2>Where bias enters – and measures that count</h2><p>Name the stage, then propose a control that changes what happens.</p></div>
+  <div class="part-body">
+    <h3 class="sub">Where bias enters – by pipeline stage</h3>
+    <p><b>Bias</b> is a systematic unfairness in outputs against a group – not a one-off error, and not only ‘bad data’. Using the five-stage pipeline, it can enter at named stages: <b>Input/data</b> (some groups under-represented), <b>Features</b> (a feature that stands in for a protected trait), <b>Model inference</b> (learned from uneven past decisions), <b>Post-processing</b> (a threshold set without checking each group), and <b>Action</b> (used on a group it was not built for). Naming the stage is the first step to fixing it.</p>
+    <figure>
+      <svg viewBox="0 0 760 290" role="img" aria-labelledby="f2T">
+        <title id="f2T">The five-stage pipeline: input and data, features, model inference, post-processing, and action. Under each stage is how bias can enter there: some groups under-represented; a feature that stands in for a protected trait; learned from uneven past decisions; a threshold not checked for each group; used on a group it was not built for.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#2A1520"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1520">
+          <g stroke="#2A1520" stroke-width="1.6" fill="#FBEEF2">
+            <rect x="10" y="30" width="132" height="66" rx="10"/><rect x="162" y="30" width="132" height="66" rx="10"/><rect x="314" y="30" width="132" height="66" rx="10"/><rect x="466" y="30" width="132" height="66" rx="10"/><rect x="618" y="30" width="132" height="66" rx="10"/>
+          </g>
+          <g stroke="#2A1520" stroke-width="2" fill="none" marker-end="url(#ah2)">
+            <path d="M142 63H159"/><path d="M294 63H311"/><path d="M446 63H463"/><path d="M598 63H615"/>
+          </g>
+          <g font-size="12.5" fill="#6A5560" text-anchor="middle"><text x="76" y="20">1</text><text x="228" y="20">2</text><text x="380" y="20">3</text><text x="532" y="20">4</text><text x="684" y="20">5</text></g>
+          <g font-size="14" font-weight="700" text-anchor="middle" fill="#A61E4D">
+            <text x="76" y="59">INPUT /</text><text x="76" y="77">DATA</text>
+            <text x="228" y="68">FEATURES</text>
+            <text x="380" y="59">MODEL</text><text x="380" y="77">INFERENCE</text>
+            <text x="532" y="59">POST-</text><text x="532" y="77">PROCESSING</text>
+            <text x="684" y="68">ACTION</text>
+          </g>
+          <g stroke="#C92A4B" stroke-width="1.8" fill="none" stroke-dasharray="5 4">
+            <path d="M76 96V130"/><path d="M228 96V130"/><path d="M380 96V130"/><path d="M532 96V130"/><path d="M684 96V130"/>
+          </g>
+          <g stroke="#C92A4B" stroke-width="1.6" fill="#FDE7EC">
+            <rect x="10" y="130" width="132" height="110" rx="10"/><rect x="162" y="130" width="132" height="110" rx="10"/><rect x="314" y="130" width="132" height="110" rx="10"/><rect x="466" y="130" width="132" height="110" rx="10"/><rect x="618" y="130" width="132" height="110" rx="10"/>
+          </g>
+          <g font-size="13" text-anchor="middle">
+            <text x="76" y="166">some groups</text><text x="76" y="184">under-</text><text x="76" y="202">represented</text>
+            <text x="228" y="157">a feature</text><text x="228" y="175">that stands in</text><text x="228" y="193">for a protected</text><text x="228" y="211">trait (proxy)</text>
+            <text x="380" y="166">learned from</text><text x="380" y="184">uneven past</text><text x="380" y="202">decisions</text>
+            <text x="532" y="157">a threshold</text><text x="532" y="175">set without</text><text x="532" y="193">checking each</text><text x="532" y="211">group</text>
+            <text x="684" y="157">used on a</text><text x="684" y="175">group it was</text><text x="684" y="193">not built for</text>
+          </g>
+          <text x="380" y="272" font-size="13" text-anchor="middle" fill="#C92A4B" font-weight="600">How bias can enter at each stage</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Bias can enter at any of the five pipeline stages, not only the data. Name the stage before you propose a fix.</figcaption>
+    </figure>
+    <div id="a-stage"></div>
+    <h3 class="sub">A measure only counts if it changes the outcome</h3>
+    <p>Responsible use is not a disclaimer at the bottom of a page. A real measure changes what happens when the system is wrong: a human reviews every rejection, sensitive data is minimised, an appeal route exists with a named owner. Every measure you propose should answer three questions – <b>which harm does it reduce</b>, <b>who owns it</b>, and <b>how would someone challenge a bad decision?</b> Governance is strongest when the depth of the control matches how much damage a wrong decision could do.</p>
+    <div id="a-measure"></div>
+    <div class="call blue"><h4>Why it matters</h4><p>Abu Dhabi and the wider UAE now run AI in services people depend on – and expect risks to be identified and mitigations documented before a system goes live, so being able to do this is a real professional skill.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Moral Education &amp; Civics · Mathematics · Law</h4><p>Weighing who is harmed and lawful data use is distributive justice and rights from <b>Moral Education and Civics</b>. Comparing outcomes across groups uses rates and proportions in <b>Mathematics</b>. Requiring an impact assessment for high-risk automated decisions connects to <b>data-protection law</b> (UAE PDPL 2021, Art. 21).</p></div>
+    <div class="call amber"><h4>Tool for this week: governance &amp; decision frameworks + decision decks – risk grid (teacher-mediated)</h4><p>1. Read the scenario and say in one sentence what the system decides and for whom. 2. Look through each lens – bias, privacy, societal impact – and locate each risk at a pipeline stage. 3. Rate each risk low/medium/high, and for each top risk write a responsible-use measure that changes the outcome when the system is wrong. <b>Stay safe:</b> no personal data – scenario cards only. Distinguish a <b>Verified</b> fact (with a source) from an illustrative <b>Scenario</b>.</p></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head"><span class="pill">Core · Part 3 of 4 · Worksheet</span><h2>Technical privacy – then the worksheet</h2><p>Minimisation, anonymisation and pseudonymisation; then find, rate and treat the risks.</p></div>
+  <div class="part-body">
+    <h3 class="sub">Technical privacy: minimisation, anonymisation, pseudonymisation</h3>
+    <p>‘No personal data’ is a strong rule; real systems also use technical protections. <b>Data minimisation</b> means collecting only what the task needs. <b>Anonymisation</b> removes identifiers so data can no longer be linked to a person. Replacing a name with a code is only <b>pseudonymisation</b> – still personal data, because the code links back.</p>
+    <div class="call blue"><h4>The law (as cited by the lesson)</h4><p>Under UAE Federal Decree-Law No. 45 of 2021 (Personal Data Protection Law), Article 21, high-risk automated processing requires a <b>data protection impact assessment</b>. <span class="illus">(The lesson notes: cite the exact wording and confirm with ADEK/legal before publishing.)</span></p></div>
+    <div id="a-privacy"></div>
+    <div id="a-ws1"></div>
+    <div id="a-ws2"></div>
+    <div id="a-ws3"></div>
+  </div>
+</section>
+
+<!-- CORE PART 4 -->
+<section class="part" id="p4">
+  <div class="part-head dark"><span class="pill">Core · Part 4 of 4 · Unplugged</span><h2>Locate risk by stage, on paper</h2><p>Find the risks, locate where each enters the pipeline, and propose a measure with an owner.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>A company deploys an AI system to screen CVs and shortlist candidates. Working on paper, find its risks and locate where each enters the five-stage pipeline. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Locate by stage: ‘Bias at Features – a feature that stands in for a protected trait.’</div>
+    <div id="a-paper"></div>
+    <div id="a-quiz"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 5 Lab</span><h2>Measure Fairness and Govern</h2><p>In the Core lesson you listed risks. Today you stop listing risks and start auditing them – building a case strong enough to defend in front of a decision-maker.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>You audit the CV-screener with real numbers. For two groups you build a confusion matrix, compute each group's false-positive and false-negative rates, state the gap, weigh the trade-off of closing it, and propose a stage-targeted mitigation. <span class="illus">(Scenario – anonymised, illustrative data.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>From a list to an audit</h2><p>Evidence, priority, the confusion matrix – and the trade-off of closing a gap.</p></div>
+  <div class="part-body">
+    <h3 class="sub">From a list to an audit</h3>
+    <p>In the Core lesson you listed risks. An audit is stronger: for every risk you record the <b>evidence</b> (the exact fact that makes it real), who is affected, how <b>severe</b> it is, and how <b>likely</b> it is. Severity and likelihood together give a <b>priority</b> – the number that decides what gets fixed first. This is why the worst-imaginable risk is not always the top priority: a moderate harm that happens often can outrank a catastrophe that is nearly impossible. Evidence is what lets you defend a finding instead of just asserting it.</p>
+    <figure>
+      <svg viewBox="0 0 760 360" role="img" aria-labelledby="f3T">
+        <title id="f3T">A risk grid. Severity runs up the side from low to high; likelihood runs along the bottom from low to high. Each cell's priority is severity times likelihood, scoring 1 to 9: 1 to 2 is low, 3 to 4 is medium, 6 to 9 is high. A severe but nearly impossible risk scores 3, medium; a moderate harm that happens often scores 6, high, so it is fixed first.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1520">
+          <g transform="translate(22 0)">
+          <text x="2" y="165" font-size="13" font-weight="700" text-anchor="middle" transform="rotate(-90 2 165)">SEVERITY (harm if it happens)</text>
+          <g font-size="13" text-anchor="end" fill="#6A5560"><text x="94" y="80">High · 3</text><text x="94" y="170">Medium · 2</text><text x="94" y="260">Low · 1</text></g>
+          <g stroke="#fff" stroke-width="3">
+            <rect x="104" y="30" width="130" height="90" fill="#F6CFDB"/><rect x="234" y="30" width="130" height="90" fill="#E07A9A"/><rect x="364" y="30" width="130" height="90" fill="#C2255C"/>
+            <rect x="104" y="120" width="130" height="90" fill="#FBEEF2"/><rect x="234" y="120" width="130" height="90" fill="#F6CFDB"/><rect x="364" y="120" width="130" height="90" fill="#E07A9A"/>
+            <rect x="104" y="210" width="130" height="90" fill="#FBEEF2"/><rect x="234" y="210" width="130" height="90" fill="#FBEEF2"/><rect x="364" y="210" width="130" height="90" fill="#F6CFDB"/>
+          </g>
+          <g font-size="14" font-weight="700" text-anchor="middle">
+            <text x="169" y="80">3 · Medium</text><text x="299" y="80" fill="#fff">6 · High</text><text x="429" y="80" fill="#fff">9 · High</text>
+            <text x="169" y="170">2 · Low</text><text x="299" y="170">4 · Medium</text><text x="429" y="170" fill="#fff">6 · High</text>
+            <text x="169" y="260">1 · Low</text><text x="299" y="260">2 · Low</text><text x="429" y="260">3 · Medium</text>
+          </g>
+          <g font-size="13" text-anchor="middle" fill="#6A5560"><text x="169" y="320">Low · 1</text><text x="299" y="320">Medium · 2</text><text x="429" y="320">High · 3</text></g>
+          <text x="299" y="346" font-size="13" font-weight="700" text-anchor="middle">LIKELIHOOD (how probable)</text>
+          </g>
+          <g stroke="#2A1520" stroke-width="1.6" fill="#fff">
+            <rect x="542" y="36" width="206" height="100" rx="10"/>
+            <rect x="542" y="160" width="206" height="100" rx="10" stroke="#A61E4D" stroke-width="2.2"/>
+          </g>
+          <g font-size="13">
+            <text x="556" y="60" font-weight="700">Nearly impossible</text>
+            <text x="556" y="80" font-weight="700">catastrophe</text>
+            <text x="556" y="102">severity 3 × likelihood 1</text>
+            <text x="556" y="122">= 3 · Medium</text>
+            <text x="556" y="184" font-weight="700" fill="#A61E4D">Moderate harm that</text>
+            <text x="556" y="204" font-weight="700" fill="#A61E4D">happens often</text>
+            <text x="556" y="226">severity 2 × likelihood 3</text>
+            <text x="556" y="246">= 6 · High – fix first</text>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> Priority = severity × likelihood. The worst-imaginable risk is not always the first to fix. <span class="illus">(Scoring scale used on this page.)</span></figcaption>
+    </figure>
+    <div id="a-lprio"></div>
+    <h3 class="sub">Technical fairness: the confusion matrix</h3>
+    <p>To judge fairness with evidence, compare the system's decisions to what was actually correct, <b>for each group separately</b> (disaggregated, or by subgroup). A <b>confusion matrix</b> is a 2×2 of predicted vs actual: true positives (<b>TP</b>, correctly shortlisted), false positives (<b>FP</b>, shortlisted but should not be), false negatives (<b>FN</b>, rejected but should have been shortlisted), and true negatives (<b>TN</b>). Two rates matter here: <b>FN rate = FN / (FN + TP)</b> – qualified people wrongly rejected; and <b>FP rate = FP / (FP + TN)</b>. Compute them for each group, then compare.</p>
+    <figure>
+      <svg viewBox="0 0 760 330" role="img" aria-labelledby="f4T">
+        <title id="f4T">A confusion matrix for one group. Columns: actually qualified, actually not qualified. Rows: predicted shortlist, predicted reject. Shortlisted and qualified is a true positive. Shortlisted but not qualified is a false positive. Rejected but qualified is a false negative, a qualified person wrongly rejected. Rejected and not qualified is a true negative. FN rate equals FN divided by FN plus TP, using the qualified column. FP rate equals FP divided by FP plus TN, using the not-qualified column.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1520">
+          <g font-size="13" font-weight="700" text-anchor="middle">
+            <text x="245" y="28">Actually qualified</text><text x="405" y="28">Actually not qualified</text>
+          </g>
+          <g font-size="13" font-weight="700" text-anchor="end">
+            <text x="156" y="90">Predicted:</text><text x="156" y="108">shortlist</text>
+            <text x="156" y="200">Predicted:</text><text x="156" y="218">reject</text>
+          </g>
+          <g stroke="#2A1520" stroke-width="1.6">
+            <rect x="166" y="42" width="158" height="110" fill="#E2F5EC"/><rect x="326" y="42" width="158" height="110" fill="#FDE7EC"/>
+            <rect x="166" y="154" width="158" height="110" fill="#FDE7EC" stroke="#C92A4B" stroke-width="2.6"/><rect x="326" y="154" width="158" height="110" fill="#E2F5EC"/>
+          </g>
+          <g font-size="22" font-weight="800" text-anchor="middle">
+            <text x="245" y="92" fill="#0F8A5F">TP</text><text x="405" y="92" fill="#C92A4B">FP</text>
+            <text x="245" y="204" fill="#C92A4B">FN</text><text x="405" y="204" fill="#0F8A5F">TN</text>
+          </g>
+          <g font-size="13" text-anchor="middle">
+            <text x="245" y="118">correctly</text><text x="245" y="136">shortlisted</text>
+            <text x="405" y="118">shortlisted but</text><text x="405" y="136">should not be</text>
+            <text x="245" y="230">qualified, but</text><text x="245" y="248">wrongly rejected</text>
+            <text x="405" y="230">correctly</text><text x="405" y="248">rejected</text>
+          </g>
+          <g stroke="#2A1520" stroke-width="1.6" fill="#fff">
+            <rect x="508" y="62" width="240" height="88" rx="10" stroke="#C92A4B" stroke-width="2.2"/>
+            <rect x="508" y="170" width="240" height="88" rx="10"/>
+          </g>
+          <g font-size="14" font-weight="700">
+            <text x="522" y="88" fill="#C92A4B">FN rate</text><text x="522" y="196">FP rate</text>
+          </g>
+          <g font-size="13">
+            <text x="522" y="112">= FN / (FN + TP)</text><text x="522" y="134">qualified people rejected</text>
+            <text x="522" y="220">= FP / (FP + TN)</text><text x="522" y="242">unqualified people shortlisted</text>
+          </g>
+          <text x="325" y="300" font-size="13" text-anchor="middle" fill="#6A5560">Build one matrix for each group – then compare the rates.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 4.</b> A confusion matrix compares predictions with what was actually correct. The FN rate uses the ‘actually qualified’ column.</figcaption>
+    </figure>
+    <div id="a-lmatrix"></div>
+    <h3 class="sub">The gap, the parity, and the trade-off</h3>
+    <p>If Group A's FN rate is much higher than Group B's, qualified people in Group A are rejected more often – that difference is the <b>gap</b>. <b>Parity</b> means the rate is similar across groups. Closing a gap usually has a <b>trade-off</b>: lowering one group's FN rate (say, by adjusting the threshold for that group) can raise its FP rate or lower overall accuracy. Name the trade-off, then propose a <b>stage-targeted mitigation</b> – fix the stage the bias entered (rebalance the data, drop a proxy feature, or set a per-group-checked threshold) rather than adding a disclaimer.</p>
+    <h3 class="sub">Governance does not stop at launch</h3>
+    <p>No mitigation removes a risk completely. After you add a control – say, human review of every rejection – some harm still remains: reviewers can rubber-stamp the model. That leftover is <b>residual risk</b>, and a real audit names it and assigns someone to monitor it after the system goes live. That is the difference between a system that looks governed and one that actually is. When you defend your top priority, use the vocabulary precisely – a decision-maker will only fund what you can justify.</p>
+    <div id="a-lfix"></div>
+    <div class="call blue"><h4>Why it matters</h4><p>Public bodies and companies in Abu Dhabi increasingly must document an impact assessment before deploying AI, so running a defensible audit is exactly the skill a regulator or employer will expect from you.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Mathematics (Statistics) · Civics · Economics</h4><p>Building a 2×2 confusion matrix per group and computing conditional rates (FN and FP rates) is disaggregated statistical analysis in <b>Mathematics</b> – the same reasoning as sensitivity and specificity in epidemiology. Deciding what fairness a public system owes each group, and who is accountable, is <b>Civics</b>. Closing a fairness gap is a constrained optimisation in <b>Economics</b>: equity is traded against accuracy.</p></div>
+    <div class="call amber"><h4>Tool for this week: spreadsheet – confusion matrix + FP/FN rates (teacher-mediated)</h4><p>1. Enter each group's counts into its confusion matrix (TP, FP, FN, TN) from the anonymised results pack. 2. Compute each group's FN rate = FN / (FN + TP) and FP rate = FP / (FP + TN); write the gap between groups. 3. Name the trade-off of closing the gap, and propose a stage-targeted mitigation with a governance sign-off and named role. <b>Stay safe:</b> anonymised, non-personal data only. A mitigation is a real change at the stage the bias entered, not a disclaimer.</p></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head dark"><span class="pill">Lab · Part 2 of 3 · Worksheet</span><h2>Audit the CV-screener</h2><p>Read the dossier, compute the rates, rate and rank the risks, then mitigate and govern.</p></div>
+  <div class="part-body">
+    <div class="ecard" id="audit"></div>
+    <div id="a-lws1"></div>
+    <div id="a-lrates"></div>
+    <div id="a-lregister"></div>
+    <div id="a-lmit"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head"><span class="pill">Lab · Part 3 of 3 · Unplugged</span><h2>Build a confusion matrix, on paper</h2><p>Compute and compare the false-negative rates, then name the trade-off and who is accountable.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>You audit the CV-screener with anonymised counts. For <b>Group A</b>: 35 correctly shortlisted, 10 wrongly shortlisted, 21 wrongly rejected, 84 correctly rejected. For <b>Group B</b>: 40, 9, 4, 97. Working on paper, compute and compare the false-negative rates. <span class="illus">(Illustrative, anonymised data.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> FN rate = FN / (FN + TP). Group A = 21 / (21 + 35) = 21/56 = 37.5%.</div>
+    <div id="a-lpaper"></div>
+    <div id="a-lquiz"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>See the risks – then measure fairness and govern</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li><b>Bias</b> is systematic unfairness; locate where it enters using the <b>five pipeline stages</b>.</li>
+      <li>Privacy is technical: <b>data minimisation</b>, and <b>anonymisation vs pseudonymisation</b> (coded data still links back).</li>
+      <li>High-risk automated processing requires an <b>impact assessment</b> (UAE PDPL 2021, Art. 21 – confirm exact wording with ADEK/legal).</li>
+      <li>A <b>responsible-use measure</b> only counts if it changes the outcome when the system is wrong.</li>
+      <li>Judge fairness with a <b>confusion matrix per group</b> (TP, FP, FN, TN) – disaggregated, not averaged.</li>
+      <li><b>FN rate = FN / (FN + TP)</b>; compute it for each group and compare. A large difference is the <b>gap</b>; <b>parity</b> means similar rates across groups.</li>
+      <li>Closing a gap has a <b>trade-off</b> – fix it with a <b>stage-targeted mitigation</b>, a governance sign-off, and a named owner for the <b>residual risk</b>.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 12 · Main Course · Term 1 Week 5 (2 – 6 Nov 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- strand + concept tags ---------- */
+const CE_P="CE · evaluates using evidence and defined criteria";
+const GE_E="GE · identifies ethical and societal risks";
+const GE_P="GE · structured impact analysis (bias, privacy, societal)";
+const GE_A="GE · designs responsible-use approaches and defends decisions";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["bias","When a system's data or goals unfairly disadvantage a particular group."],
+  ["privacy","A person's right to control how their personal data is collected, used and shared."],
+  ["accountability","A named person or office can be held responsible for a system's decisions and must offer redress."],
+  ["governance","The rules, roles and checks that keep an AI system responsible before and after it is deployed."],
+  ["responsible-use measure","A concrete control (audit, human review, appeal route) that reduces a specific harm."]
+];
+const DEF_ORDER = [3,0,4,1,2];
+const AFF = ["One group's qualified applicants","Every applicant whose CV is stored","Job-seekers everywhere","Current staff being ranked","The vendor's sales team"];
+/* [key, emoji, risk, lens, affected] */
+const LENS = [
+  ["le1","⚖️","Applicants from one region are shortlisted far less often, although they are just as qualified","B",0],
+  ["le2","🔐","Full CVs, including home addresses and dates of birth, are kept indefinitely and reused to train the next model","P",1],
+  ["le3","🌍","Hundreds of employers adopt the same screener, so one blind spot shuts the same people out of every job at once","S",2],
+  ["le4","📋","The screener is quietly reused to rank current staff for redundancy – a task it was never built for","S",3]
+];
+const STAGES = ["Input / data","Features","Model inference","Post-processing","Action"];
+const STAGE = [
+  ["st1","Only 1 in 10 CVs in the training set came from applicants who studied abroad",0],
+  ["st2","The model scores ‘gap in employment history’, which mostly flags people who took time off to care for family",1],
+  ["st3","The model learned from ten years of past hiring decisions that favoured one group",2],
+  ["st4","The shortlist cut-off score was set once for everyone, without checking pass rates for each group",3],
+  ["st5","A screener built for graduate roles is used to screen applicants for senior engineering posts",4]
+];
+const ONEOFF = [
+  ["bx1","One CV was misread once because the uploaded file was corrupted","O"],
+  ["bx2","Applicants over 45 are ranked lower, month after month","B"]
+];
+const MEAS = [
+  ["me1","A trained recruiter reviews every automatic rejection before it is sent","RM"],
+  ["me2","A line on the careers page says: ‘Our AI may not be perfect’","HD"],
+  ["me3","Rejected applicants can appeal to a named HR officer, who must reply within 10 working days","RM"],
+  ["me4","Collect only the fields the job needs – no photo, date of birth or home address","RM"],
+  ["me5","Stop publishing shortlist rates by group, so the gap is no longer visible","HD"],
+  ["me6","Remove the ‘employment gap’ feature and re-check pass rates for each group","RM"]
+];
+const MEQ = ["How much does it cost, how fast is it, and does it look professional?","Which model is used, how big is it, and who built it?","Which harm does it reduce, who owns it, and how would someone challenge a bad decision?"];
+const PRIV = ["Data minimisation","Anonymised","Pseudonymised (still personal)","Not protected"];
+const PRIVQ = [
+  ["pv1","Applicant names are replaced with codes; HR keeps a key file linking each code to a name",2],
+  ["pv2","The form asks only for skills, qualifications and experience – no photo, age or address – because screening needs nothing more",0],
+  ["pv3","Results are reported as counts per group, with every identifier removed so no one can be linked back",1],
+  ["pv4","Full CVs with phone numbers are emailed to an outside agency ‘for a second opinion’",3],
+  ["pv5","Email addresses are swapped for random IDs, and the lookup table is kept ‘just in case’",2]
+];
+const PDPL = ["Nothing extra, as long as the model is accurate","A data protection impact assessment","Only a disclaimer on the careers page"];
+const WS1 = ["It decides each employee's salary, for the finance team.","It writes job adverts for the marketing team.","It reads thousands of CVs and decides which candidates are shortlisted for interview – for the company's recruiters, affecting every applicant."];
+const LENSES = ["Bias","Privacy","Societal impact"];
+const WHO = ["Returning carers","All applicants","Job-seekers","The recruiters"];
+/* [key, risk, lens, stage, who] */
+const WSR = [
+  ["wr1","The model gives a low score to anyone with a career gap – which mostly affects carers returning to work",0,1,0],
+  ["wr2","Every CV, with date of birth and home address, is fed into the system and kept for future training",1,0,1],
+  ["wr3","The same screener is sold to hundreds of employers, so one blind spot repeats across the whole job market",2,4,2]
+];
+const LMH = ["Low","Medium","High"];
+const RATE = [
+  ["rt1","Career-gap penalty: qualified carers are rejected for jobs, every hiring round","H"],
+  ["rt2","An interview invitation goes to the wrong applicant's email, revealing the job one person applied for","M"],
+  ["rt3","One blind spot, repeated by hundreds of employers, shuts the same group out of the job market","H"],
+  ["rt4","Recruiters wait a few seconds longer for the shortlist to load","L"]
+];
+const M1 = ["Add a note asking carers to explain their career gap in a cover letter.","Remove the career-gap feature, re-check pass rates for each group, and have a recruiter review every rejection.","Hide the pass rates by group so the issue is not visible."];
+const O1 = ["The AI model itself","The applicants","Named Head of HR","Nobody (vendor)"];
+const M2 = ["Sell the tool to even more employers so errors average out.","Publish a statement that the vendor values fairness.","Require each employer to check pass rates by group before go-live, and give every applicant an appeal route."];
+const O2 = ["Job-seekers","Governance lead","The AI model itself","Nobody (market)"];
+const CROSS = [
+  ["x1","Add a disclaimer: ‘AI decisions may be imperfect’",1],
+  ["x2","A recruiter reviews every automatic rejection before it is sent",0],
+  ["x3","Ask rejected applicants to paste their CV and ID number into a chatbot to get feedback",1],
+  ["x4","An appeal route with a named HR officer who must reply within 10 working days",0],
+  ["x5","Stop reporting pass rates by group",1],
+  ["x6","Collect only job-relevant fields and delete CVs after the hiring round",0]
+];
+const PA3 = ["Replace names with codes and keep the key – that is enough.","Ask staff to be careful with the files.","Collect only job-relevant fields and remove identifiers before analysis (minimisation and anonymisation)."];
+const PA4 = ["A disclaimer on the careers page; no one is accountable because the AI decides.","A recruiter reviews every rejection, and the Head of HR is accountable for checking pass rates by group every month.","Make the screener faster; the vendor is accountable."];
+const QUIZ = [
+  ["q1","What is bias in an AI system?",["Any time the system is slow.","A systematic unfairness in outputs against a group, not a one-off error.","The opinion of the engineer who built it."],1],
+  ["q2","A threshold was set without checking outcomes for each group. Which stage did bias enter?",["Input – the raw data arriving.","Action – what the system does.","Post-processing – the threshold turns a score into a decision."],2],
+  ["q3","A team replaces names with codes. Is the data anonymous?",["No – it is pseudonymised and still personal data, because the code links back.","Yes, because names are hidden.","Yes, if the codes are stored securely."],0]
+];
+const TF = [
+  ["tf1","Bias can enter at any of the five pipeline stages, not only the data.","T"],
+  ["tf2","Replacing names with codes makes data fully anonymous.","F"],
+  ["tf3","A system that is accurate on average is therefore fair to every group.","F"]
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["audit","A structured check that records evidence, severity and likelihood for each risk so decisions can be defended."],
+  ["severity","How much harm results if a risk actually happens."],
+  ["likelihood","How probable it is that the risk happens."],
+  ["priority","Severity combined with likelihood, used to decide which risk to fix first."],
+  ["residual risk","The harm that still remains after a mitigation is applied, which someone must monitor."]
+];
+const LDEF_ORDER = [2,4,0,3,1];
+const PRI = ["Low (1–2)","Medium (3–4)","High (6–9)"];
+/* [key, risk, priority index] */
+const LPRIO = [
+  ["pr1","Qualified Group A applicants are wrongly rejected. Severity High (3) – a lost job chance. Likelihood High (3) – every hiring round.",2],
+  ["pr2","The whole CV database leaks. Severity High (3). Likelihood Low (1) – encrypted, access-logged, never happened.",1],
+  ["pr3","Recruiters rubber-stamp the shortlist without reading it. Severity Medium (2). Likelihood High (3).",2],
+  ["pr4","Shortlist emails arrive a day late. Severity Low (1). Likelihood Medium (2).",0]
+];
+const PR5 = ["Because data leaks never really matter.","Because a moderate harm that happens often can outrank a catastrophe that is nearly impossible.","Because risks are fixed in the order they were listed."];
+const CMO = ["True positive (TP)","False positive (FP)","False negative (FN)","True negative (TN)"];
+const CM = [
+  ["cm1","A qualified applicant is shortlisted",0],
+  ["cm2","A qualified applicant is rejected",2],
+  ["cm3","An applicant who is not qualified is shortlisted",1],
+  ["cm4","An applicant who is not qualified is rejected",3]
+];
+const FORM = ["FN / everyone","FN / (FN + TP)","TP / (TP + FP)","FP / (FP + TN)"];
+const CM7 = ["Because every group always has the same rates.","To make the spreadsheet look more detailed.","Because an overall average can hide a large gap for one group – so you disaggregate."];
+const FIX = [
+  ["fx1","Rebalance the training data so both groups are well represented",0],
+  ["fx2","Drop the postcode feature, which stands in for ethnicity",1],
+  ["fx3","Set the shortlist threshold with each group's FN rate checked",3]
+];
+const FIXR = [
+  ["fx4","Add ‘results may vary by group’ to the audit report","DI"],
+  ["fx5","Route every Group A rejection to a trained human reviewer before it is sent","RM"]
+];
+const FX6 = ["have no side effects at all.","raise Group A's FP rate or lower overall accuracy – a trade-off you must name.","make Group B's FN rate rise to 100%."];
+const FX7 = ["Reviewers may rubber-stamp the model – name it and assign someone to monitor it after launch.","None – human review removes the risk completely.","The model no longer needs any data."];
+/* Lab dossier (illustrative, anonymised) */
+const CMA = {TP:42,FP:14,FN:18,TN:126}, CMB = {TP:46,FP:9,FN:4,TN:141};
+const FACTS = [
+  ["F1","Group A makes up 22% of the training data"],
+  ["F2","Recruiters accepted 97% of shortlists without any change last quarter"],
+  ["F3","Rejected CVs are kept for 3 years and reused to retrain the model"],
+  ["F4","There is no appeal route – rejected applicants receive an automatic email only"],
+  ["F5","The tool's interface is available in English and Arabic"]
+];
+const LW1 = ["It decides the salary of about 4,000 staff a year, for the finance team.","It decides which of about 4,000 graduate applicants a year reach a human interview, for the company's recruiters.","It writes about 4,000 job adverts a year for the marketing team."];
+const EVO = ["FN 30% (A) vs 8% (B)","97% unchanged","CVs kept and reused","No appeal route","Bilingual interface"];
+const EVR = [
+  ["ev1","Qualified Group A applicants are rejected more often",0],
+  ["ev2","Human review is a rubber stamp, so mistakes are not caught",1],
+  ["ev3","Personal data is used beyond the purpose it was given for",2],
+  ["ev4","A wrong rejection cannot be challenged",3]
+];
+const RA = [
+  ["ra1","Group A FN rate = 18 / (18 + 42)",["43%","30%","9%","18%"],1],
+  ["ra2","Group B FN rate = 4 / (4 + 46)",["8%","2%","50%","4%"],0],
+  ["ra3","FN gap (A minus B)",["38 points","4 points","No gap","22 points"],3],
+  ["ra4","Group A FP rate = 14 / (14 + 126)",["14%","7%","10%","25%"],2],
+  ["ra5","Group B FP rate = 9 / (9 + 141)",["9%","6%","4.5%","16%"],1],
+  ["ra6","FP gap (A minus B)",["4 points","16 points","No gap","10 points"],0]
+];
+const RA7 = ["Group B – more of its applicants are shortlisted.","Neither – overall accuracy is high for both groups.","Group A – qualified applicants are rejected almost four times as often."];
+/* [key, risk, sev, lik, priority] */
+const REG = [
+  ["rg1","Qualified Group A applicants are wrongly rejected","Harm: a qualified person loses a job chance – it cannot be undone. How often: 18 of 60 qualified Group A applicants in the test, every round.","H","H",2],
+  ["rg2","Rejected CVs are reused to retrain the model without consent","Harm: data used for a purpose people did not agree to – it can be stopped and deleted. How often: every rejected CV, every round.","M","H",2],
+  ["rg3","The whole CV database leaks","Harm: personal data of thousands exposed – it cannot be undone. How often: rare – encrypted, access-logged, never happened.","H","L",1]
+];
+const RANK = ["rg3 → rg2 → rg1 – the worst-imaginable harm first","rg1 (9) → rg2 (6) → rg3 (3) – highest priority score first","rg2 → rg1 → rg3 – the order they were found"];
+const MIT = [
+  ["mi1","rg1 · Group A wrongly rejected",["Add ‘results may vary’ to the rejection email.","Stop measuring FN rates by group.","Rebalance the training data (Input) and set the threshold with each group's FN rate checked (Post-processing)."],2,["The AI model itself","Head of hiring","The applicants","Nobody"],1],
+  ["mi2","rg2 · CVs reused without consent",["Stop reusing rejected CVs for training without consent, and delete them after the hiring round.","Replace names with codes and keep reusing the CVs.","Ask applicants to read the privacy policy."],0,["Marketing team","The AI model itself","Data officer (DPO)","Nobody"],2],
+  ["mi3","rg3 · Database leak",["Remove the encryption so the system runs faster.","Keep encryption and access logs, and test the breach-response plan every term.","Do nothing – it has never happened."],1,["IT Security Lead","The applicants","The AI model itself","Nobody"],0]
+];
+const RES = ["No risk remains – the model is now fair for ever.","Applicants must monitor it themselves.","Some gap may return as new CVs arrive, and reviewers may rubber-stamp – the head of hiring reviews FN rates by group every month."];
+const LP = [
+  ["lp1","Group A FN rate = 21 / (21 + 35)",["21%","37.5%","60%","14%"],1],
+  ["lp2","Group B FN rate = 4 / (4 + 40)",["4%","10%","9.1%","2.7%"],2]
+];
+const LP3 = ["About 28 points – Group B is disadvantaged","17 points – Group A is disadvantaged","No meaningful gap","About 28 points – Group A is disadvantaged"];
+const LP4 = ["There is no trade-off – just lower every threshold.","Lowering Group A's threshold may raise its FP rate – so also rebalance the training data (Input stage) and re-check both rates.","Add a disclaimer to the shortlist."];
+const LP5 = ["The Head of HR signs off the mitigation, and a rejected applicant can request a human review from a named officer.","The model is accountable; applicants cannot appeal.","The vendor's sales team; appeals go to a chatbot."];
+const LQUIZ = [
+  ["lq1","In a confusion matrix, what is a false negative for the CV-screener?",["A candidate correctly shortlisted.","A qualified candidate the system rejected (FN).","A candidate correctly rejected."],1],
+  ["lq2","How do you compute a group's false-negative rate?",["FN divided by the total number of people.","FP divided by (FP + TN).","FN divided by (FN + TP) for that group."],2],
+  ["lq3","Group A's FN rate is 30%, Group B's is 8%. What have you found, and what comes next?",["A fairness gap – name the trade-off of closing it and propose a stage-targeted mitigation.","Nothing – the averages are probably fine.","That the system is broken and must be deleted."],0]
+];
+const LTF = [
+  ["ltf1","A false negative for a CV-screener is a qualified candidate it rejected.","T"],
+  ["ltf2","The false-negative rate is FN divided by the total number of people.","F"],
+  ["ltf3","A large gap between two groups' FN rates is evidence of a fairness problem.","T"]
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+GE_E,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"Bias is when data or goals unfairly disadvantage a group. Privacy is a person's right to control their personal data. Accountability means a named person or office answers for decisions and offers redress. Governance is the rules, roles and checks before and after deployment. A responsible-use measure is a concrete control that reduces a specific harm."},
+ {id:"lens",mount:"a-lens",section:"Core · Part 1",title:"Which lens – and who is affected?",sub:"Objective 1 · bias, privacy, societal impact (Figure 1) · "+GE_E,ico:"🔍",
+  fields:LENS.flatMap(([k,,,l,a])=>[{k:k+"l",ok:v=>eq(v,l)},{k:k+"a",ok:v=>eq(v,a)}]),
+  explain:"Unequal shortlisting of equally qualified people is a bias risk for that group. Keeping and reusing full CVs is a privacy risk for every applicant whose CV is stored. One tool used by hundreds of employers is a societal-impact risk at scale for job-seekers everywhere, and reusing it to rank staff for redundancy – beyond its remit – is a societal risk for current staff. The vendor's sales team is not the group harmed."},
+ {id:"stage",mount:"a-stage",section:"Core · Part 2",title:"Where did the bias enter?",sub:"Five pipeline stages (Figure 2) · "+GE_P,ico:"📍",
+  fields:[...STAGE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),...ONEOFF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"Too few CVs from one group is Input/data. An ‘employment gap’ feature standing in for caring responsibilities is a Features proxy. Learning from biased past decisions is Model inference. One unchecked cut-off for everyone is Post-processing. Using a graduate screener on senior posts is Action – a group it was not built for. A single corrupted file is a one-off error; older applicants ranked lower month after month is systematic bias."},
+ {id:"measure",mount:"a-measure",section:"Core · Part 2",title:"Real measure – or does it only hide the harm?",sub:"Objective 2 · measures that change the outcome · "+GE_A,ico:"🛡️",
+  fields:[...MEAS.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"meq",radio:1,ok:v=>eq(v,2)}],
+  explain:"Human review of every rejection, an appeal route with a named owner, data minimisation and removing a proxy feature all change what happens when the system is wrong. A ‘may not be perfect’ line and hiding group pass rates only hide the harm. Every measure must answer: which harm does it reduce, who owns it, and how would someone challenge a bad decision?"},
+ {id:"privacy",mount:"a-privacy",section:"Core · Part 3",title:"Minimised, anonymised – or still personal?",sub:"Technical privacy and the law · "+GE_P,ico:"🔐",
+  fields:[...PRIVQ.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"pv6",radio:1,ok:v=>eq(v,1)}],
+  explain:"Codes with a key file – or random IDs with a lookup table – are pseudonymised: still personal data, because the code links back. Asking only for what screening needs is data minimisation. Counts per group with every identifier removed are anonymised. Emailing full CVs to an outside agency is not protected. The lesson cites UAE PDPL 2021, Art. 21: high-risk automated processing requires a data protection impact assessment (confirm the exact wording with ADEK/legal)."},
+ {id:"ws1",mount:"a-ws1",section:"Core worksheet 1–2",title:"What it decides – and the risk under each lens",sub:"Worksheet 1–2 · lens, pipeline stage, who is affected · "+GE_P,ico:"📝",cls:"ws",
+  fields:[{k:"ws1",radio:1,ok:v=>eq(v,2)},...WSR.flatMap(([k,,l,s,w])=>[{k:k+"l",ok:v=>eq(v,l)},{k:k+"s",ok:v=>eq(v,s)},{k:k+"w",ok:v=>eq(v,w)}])],
+  explain:"The AI shortlists candidates from thousands of CVs for recruiters, and its decisions affect every applicant. The career-gap penalty is bias entering at Features (a proxy for caring) and hits carers. Feeding and keeping full CVs is a privacy risk at Input/data for all applicants. One screener sold to hundreds of employers is a societal-impact risk at the Action stage, affecting job-seekers across the region."},
+ {id:"ws2",mount:"a-ws2",section:"Core worksheet 3–4",title:"Rate the risks, then treat the top two",sub:"Worksheet 3–4 · rate, measure, owner · "+GE_A,ico:"🎯",cls:"ws",
+  fields:[...RATE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"wm1",radio:1,ok:v=>eq(v,1)},{k:"wo1",ok:v=>eq(v,2)},{k:"wm2",radio:1,ok:v=>eq(v,2)},{k:"wo2",ok:v=>eq(v,1)}],
+  explain:"Losing a job chance, again and again, and shutting a whole group out of the job market are High. A misdirected email harms one person but can be put right – Medium. A few seconds' wait is Low. For the career-gap penalty, remove the proxy feature, re-check pass rates by group and review every rejection, owned by a named Head of HR. For the scale risk, require a group-by-group check before go-live and an appeal route, owned by the vendor's named governance lead."},
+ {id:"ws3",mount:"a-ws3",section:"Core worksheet 5",title:"Check your own work – cross out weak measures",sub:"Worksheet 5 · only hides the harm, or needs personal data · "+GE_A,ico:"✂️",cls:"ws",
+  fields:CROSS.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Cross out the disclaimer and stopping group reporting – they only hide the harm – and the chatbot idea, which needs personal data (a CV and ID number) entered into a tool. Human review, an appeal route with a named officer, and minimisation with deletion all change the outcome and keep."},
+ {id:"paper",mount:"a-paper",section:"Core · Part 4",title:"Locate risk by stage, on paper",sub:"Unplugged activity · stage, privacy protection, measure and owner · "+GE_A,ico:"🗂️",
+  fields:[{k:"pa1",ok:v=>eq(v,0)},{k:"pa2",ok:v=>eq(v,3)},{k:"pa3",radio:1,ok:v=>eq(v,2)},{k:"pa4",radio:1,ok:v=>eq(v,1)}],
+  explain:"Too few older applicants in the training data is bias at Input/data; a threshold never checked for each age group is Post-processing. For stored CVs, photos and dates of birth, minimise what is collected and remove identifiers before analysis – codes with a key are only pseudonymised. A real measure changes the outcome (human review of rejections) and has someone accountable (the Head of HR, checking pass rates by group)."},
+ {id:"quiz",mount:"a-quiz",section:"Core · Part 4",title:"Quick check – risks, bias and privacy",sub:"Quick quiz · 3 questions and 3 true or false · "+GE_P,ico:"✅",cls:"quiz",
+  fields:[...QUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...TF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: Bias is a systematic unfairness in outputs against a group – a repeatable pattern, not a single mistake. 2: An unchecked threshold is a post-processing bias source. 3: Coding is pseudonymisation; anonymised data cannot be re-linked. True or false: bias can enter at any of the five stages (true); codes do not make data anonymous (false); a strong average can hide a large gap for a specific group (false)."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+GE_E,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"An audit records evidence, severity and likelihood for each risk so decisions can be defended. Severity is how much harm results; likelihood is how probable it is. Priority combines the two to decide what to fix first. Residual risk is the harm left after a mitigation, which someone must monitor."},
+ {id:"lprio",mount:"a-lprio",section:"Lab · Part 1",title:"Severity × likelihood = priority",sub:"From a list to an audit (Figure 3) · "+GE_P,ico:"📊",
+  fields:[...LPRIO.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"pr5",radio:1,ok:v=>eq(v,1)}],
+  explain:"Wrongful rejection: 3 × 3 = 9, High. A database leak: 3 × 1 = 3, Medium. Rubber-stamping: 2 × 3 = 6, High. Late emails: 1 × 2 = 2, Low. So the rubber-stamping risk outranks the catastrophic leak: a moderate harm that happens often can outrank a catastrophe that is nearly impossible."},
+ {id:"lmatrix",mount:"a-lmatrix",section:"Lab · Part 1",title:"Read the confusion matrix",sub:"TP, FP, FN, TN and the two rates (Figure 4) · "+CE_P,ico:"🧮",
+  fields:[...CM.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"cm5",ok:v=>eq(v,1)},{k:"cm6",ok:v=>eq(v,3)},{k:"cm7",radio:1,ok:v=>eq(v,2)}],
+  explain:"Qualified and shortlisted is TP; qualified but rejected is FN; not qualified but shortlisted is FP; not qualified and rejected is TN. FN rate = FN / (FN + TP) – qualified people wrongly rejected; FP rate = FP / (FP + TN). Compare each group separately, because an overall average can hide a large gap for one group."},
+ {id:"lfix",mount:"a-lfix",section:"Lab · Part 1",title:"Fix the stage – and name the trade-off",sub:"Gap, parity, trade-off and residual risk · "+GE_A,ico:"🔧",
+  fields:[...FIX.map(([k,,c])=>({k,ok:v=>eq(v,c)})),...FIXR.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"fx6",radio:1,ok:v=>eq(v,1)},{k:"fx7",radio:1,ok:v=>eq(v,0)}],
+  explain:"Rebalancing the data fixes Input/data; dropping a proxy such as postcode fixes Features; a per-group-checked threshold fixes Post-processing. A ‘results may vary’ line is a disclaimer; human review of rejections is a real mitigation. Lowering one group's threshold can raise its FP rate or lower overall accuracy – name that trade-off. Even after human review, reviewers can rubber-stamp: that residual risk needs a named monitor after launch."},
+ {id:"lws1",mount:"a-lws1",section:"Lab worksheet 1–2",title:"Read the dossier – back each risk with evidence",sub:"Worksheet 1–2 · the exact dossier fact for each risk · "+CE_P,ico:"🔎",cls:"ws",
+  fields:[{k:"lw1",radio:1,ok:v=>eq(v,1)},...EVR.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"The deployed system decides which of about 4,000 graduate applicants a year reach a human interview. Each risk is backed by an exact fact: the FN-rate gap (30% vs 8%) for wrongful rejections; 97% of shortlists accepted unchanged for rubber-stamping; CVs kept 3 years and reused for data misuse; and no appeal route for unchallengeable decisions. The bilingual interface is not evidence of any risk."},
+ {id:"lrates",mount:"a-lrates",section:"Lab worksheet tables",title:"Compute the rates and the gap",sub:"Worksheet tables · FN and FP rates by group · "+CE_P,ico:"🧮",cls:"ws",
+  fields:[...RA.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),{k:"ra7",radio:1,ok:v=>eq(v,2)}],
+  explain:"Group A FN rate = 18/60 = 30%; Group B = 4/50 = 8% – a gap of 22 points. Group A FP rate = 14/140 = 10%; Group B = 9/150 = 6% – a gap of 4 points. Qualified Group A applicants are rejected almost four times as often (30% vs 8%), even though both groups' overall accuracy looks high (84% and 93.5%)."},
+ {id:"lregister",mount:"a-lregister",section:"Lab worksheet 3–4",title:"Rate severity and likelihood, then rank",sub:"Worksheet 3–4 · severity, likelihood, priority, rank · "+GE_P,ico:"🎯",cls:"ws",
+  fields:[...REG.flatMap(([k,,,s,l,p])=>[{k:k+"s",ok:v=>eq(v,s)},{k:k+"l",ok:v=>eq(v,l)},{k:k+"p",ok:v=>eq(v,p)}]),{k:"rank",radio:1,ok:v=>eq(v,1)}],
+  explain:"Wrongful rejection: High severity (cannot be undone) × High likelihood (every round) = 9, High. Reuse without consent: Medium severity (can be stopped and deleted) × High likelihood (every CV) = 6, High. Database leak: High severity × Low likelihood (rare) = 3, Medium. Rank by priority score – 9, 6, 3 – not by the worst-imaginable harm."},
+ {id:"lmit",mount:"a-lmit",section:"Lab worksheet 4–5",title:"Mitigate, name the owner, and the residual risk",sub:"Worksheet 4–5 · stage-targeted mitigation, owner, monitor · "+GE_A,ico:"📋",cls:"ws",
+  fields:[...MIT.flatMap(([k,,,m,,o])=>[{k:k+"m",radio:1,ok:v=>eq(v,m)},{k:k+"o",ok:v=>eq(v,o)}]),{k:"mres",radio:1,ok:v=>eq(v,2)}],
+  explain:"Fix the stages the bias entered – rebalance the data and set a per-group-checked threshold – owned by the named head of hiring. Stop reuse without consent and delete CVs after the round, owned by the Data Protection Officer (DPO). Keep encryption and test the breach plan, owned by the IT Security Lead. No mitigation removes a risk completely: the gap may return and reviewers may rubber-stamp, so a named person monitors FN rates by group after launch."},
+ {id:"lpaper",mount:"a-lpaper",section:"Lab · Part 3",title:"Build a confusion matrix, on paper",sub:"Unplugged activity · FN rates, gap, trade-off, accountability · "+GE_A,ico:"🗂️",
+  fields:[...LP.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),{k:"lp3",radio:1,ok:v=>eq(v,3)},{k:"lp4",radio:1,ok:v=>eq(v,1)},{k:"lp5",radio:1,ok:v=>eq(v,0)}],
+  explain:"Group A FN rate = 21/56 = 37.5%; Group B = 4/44 ≈ 9.1%. The gap is about 28 points, and Group A is disadvantaged. Lowering Group A's threshold may raise its FP rate, so also fix the stage the bias entered (for example, rebalance the data) and re-check both rates. The Head of HR signs off the mitigation, and a rejected applicant can request a human review from a named officer."},
+ {id:"lquiz",mount:"a-lquiz",section:"Lab · Part 3",title:"Quick check – measuring fairness",sub:"Quick quiz · 3 questions and 3 true or false · "+GE_P,ico:"✅",cls:"quiz",
+  fields:[...LQUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...LTF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: FN = should have been shortlisted, but was rejected. 2: FN rate = FN / (FN + TP) – wrongly rejected out of all who were qualified. 3: Measure the gap, weigh the trade-off, fix the stage the bias entered. True or false: an FN is a qualified candidate rejected (true); the denominator is FN + TP, not everyone (false); a large per-group gap is a real fairness problem the average hides (true)."}
+];
+
+/* ---------- state ---------- */
+const KEY="g12-mw5-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+const cmTable=(g,c)=>`<table class="t"><thead><tr><th>Group ${g} (200 applicants)</th><th>Actually qualified</th><th>Actually not qualified</th></tr></thead>
+  <tbody><tr><td>Predicted: shortlist</td><td>TP = ${c.TP}</td><td>FP = ${c.FP}</td></tr><tr><td>Predicted: reject</td><td>FN = ${c.FN}</td><td>TN = ${c.TN}</td></tr></tbody></table>`;
+$("#audit").innerHTML=`<header><small>Audit dossier · anonymised, illustrative data</small><b>The CV-screener for graduate engineering roles</b></header>
+<div class="in">
+  <p class="task"><b>The deployed system:</b> reads about 4,000 graduate applications a year and decides which applicants reach a human interview with the company's recruiters. The audit team tested it on 400 past applicants whose correct outcome is known – 200 in Group A and 200 in Group B. No names or personal details are in this pack.</p>
+  <div class="ab"><div>${cmTable("A",CMA)}</div><div>${cmTable("B",CMB)}</div></div>
+  <table class="t"><thead><tr><th>Dossier facts</th></tr></thead><tbody>${FACTS.map(([k,t])=>`<tr><td><b>${k}</b> · ${esc(t)}</td></tr>`).join("")}</tbody></table>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+const pair=(k,label,opts,ph,order,style)=>`<div class="pair" data-item="${k}"${style?` style="${style}"`:""}><span class="t">${label}</span>${sel(k,opts,ph||"Choose…",order)}</div>`;
+const rq=(k,q,opts)=>`<p class="q" id="q-${k}">${q}</p>${radios(k,opts)}`;
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>pair("v"+i,esc(t),WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)).join("");
+  case "lens":
+    return `<p class="how">For each risk in the CV-screening scenario, choose the lens it falls under and the group it affects. <span class="illus">(Illustrative examples.)</span></p>`+
+      LENS.map(([k,e,t])=>`<div class="scen"><p>${e} ${esc(t)}</p><div class="two">
+        <div class="cell" data-item="${k}l"><span>Lens</span>${seg(k+"l",["Bias","Privacy","Societal"],["B","P","S"],t)}</div>
+        <div data-item="${k}a"><span>Who is affected</span>${sel(k+"a",AFF,"Choose…",[3,1,4,0,2])}</div></div></div>`).join("");
+  case "stage":
+    return `<p class="how">Use Figure 2. At which pipeline stage did the bias enter the CV-screener?</p>`+
+      STAGE.map(([k,t])=>pair(k,esc(t),STAGES,"Choose the stage…",[2,0,4,1,3])).join("")+
+      `<p class="q">Bias is systematic, not a one-off. Which is which?</p>`+
+      ONEOFF.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["One-off error","Systematic bias"],["O","B"],t)}</div>`).join("");
+  case "measure":
+    return `<p class="how">Does each proposal change what happens when the system is wrong (a real measure), or does it only hide the harm?</p>`+
+      MEAS.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Real measure","Only hides harm"],["RM","HD"],t)}</div>`).join("")+
+      rq("meq","Which three questions should every responsible-use measure answer?",MEQ);
+  case "privacy":
+    return `<p class="how">How is the applicants' data handled in each case?</p>`+
+      PRIVQ.map(([k,t])=>pair(k,esc(t),PRIV,"Choose…",[2,0,3,1])).join("")+
+      rq("pv6","The lesson cites UAE PDPL 2021, Article 21. What does high-risk automated processing, such as CV screening, require?",PDPL);
+  case "ws1":
+    return rq("ws1","1. In one sentence: what does the AI decide, and for whom?",WS1)+
+      `<p class="q">2. One specific risk under each lens: choose the lens, the pipeline stage it enters, and who is affected.</p>`+
+      WSR.map(([k,t])=>`<div class="scen"><p>${esc(t)}</p><div class="three eq">
+        <div data-item="${k}l"><span>Lens</span>${sel(k+"l",LENSES,"Choose…",[1,2,0])}</div>
+        <div data-item="${k}s"><span>Pipeline stage</span>${sel(k+"s",STAGES,"Choose…",[2,0,4,1,3])}</div>
+        <div data-item="${k}w"><span>Who is affected</span>${sel(k+"w",WHO,"Choose…",[3,1,0,2])}</div></div></div>`).join("");
+  case "ws2":
+    return `<p class="q">3. Rate each risk by how much harm a wrong decision causes.</p>
+      <p class="how"><b>High</b> = someone loses a job chance, or a whole group is affected. <b>Medium</b> = real harm to one person that can be put right. <b>Low</b> = an inconvenience with no lasting harm.</p>`+
+      RATE.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,LMH,["L","M","H"],t)}</div>`).join("")+
+      `<p class="q">4. For each top risk: one responsible-use measure and who owns it.</p>
+      <div class="scen"><p>Top risk 1 · the career-gap penalty</p>${rq("wm1","Measure",M1)}${pair("wo1","Who owns it",O1,"",[1,0,3,2],"margin-top:10px")}</div>
+      <div class="scen"><p>Top risk 2 · one blind spot repeated across the job market</p>${rq("wm2","Measure",M2)}${pair("wo2","Who owns it",O2,"",[2,0,1,3],"margin-top:10px")}</div>`;
+  case "ws3":
+    return boxes(CROSS,"5. Check your own work. Tick every measure you would <b>cross out</b> because it only hides the harm or needs someone's personal data entered into a tool. Leave the strong measures unticked.");
+  case "paper":
+    return `<p class="q">1. Name two risks and the pipeline stage each enters.</p>`+
+      pair("pa1","Older applicants' CVs make up only 3% of the training data",STAGES,"Choose the stage…",[3,1,0,4,2])+
+      pair("pa2","The shortlist threshold was never checked for each age group",STAGES,"Choose the stage…",[3,1,0,4,2])+
+      rq("pa3","2. The screener stores every applicant's full CV, photo and date of birth. Which technical protection fits?",PA3)+
+      rq("pa4","3. A responsible-use measure that changes the outcome, and who is accountable:",PA4);
+  case "quiz":
+    return quiz(QUIZ,TF);
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>pair("lv"+i,esc(t),LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)).join("");
+  case "lprio":
+    return `<p class="how">Use Figure 3: priority = severity × likelihood (Low = 1, Medium = 2, High = 3). Choose each risk's priority band. <span class="illus">(Illustrative risks.)</span></p>`+
+      LPRIO.map(([k,t])=>pair(k,esc(t),PRI,"Choose the priority…",[1,2,0])).join("")+
+      rq("pr5","Why is rubber-stamping ranked above the database leak?",PR5);
+  case "lmatrix":
+    return `<p class="how">Use Figure 4. Which cell of the confusion matrix is each outcome?</p>`+
+      CM.map(([k,t])=>pair(k,esc(t),CMO,"Choose the cell…",[2,0,3,1])).join("")+
+      pair("cm5","FN rate =",FORM,"Choose the formula…",[3,0,1,2])+
+      pair("cm6","FP rate =",FORM,"Choose the formula…",[3,0,1,2])+
+      rq("cm7","Why compute the rates for each group separately?",CM7);
+  case "lfix":
+    return `<p class="q">Which stage does each mitigation fix?</p>`+
+      FIX.map(([k,t])=>pair(k,esc(t),STAGES,"Choose the stage…",[2,0,4,1,3])).join("")+
+      `<p class="q">Real mitigation or disclaimer?</p>`+
+      FIXR.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Real mitigation","Disclaimer"],["RM","DI"],t)}</div>`).join("")+
+      rq("fx6","Lowering Group A's shortlist threshold to cut its FN rate is likely to…",FX6)+
+      rq("fx7","After adding human review of every rejection, what residual risk remains?",FX7);
+  case "lws1":
+    return rq("lw1","1. From the dossier: what does the deployed system decide, at what scale, and for whom?",LW1)+
+      `<p class="q">2. For each risk, choose the exact dossier fact that is its evidence.</p>`+
+      EVR.map(([k,t])=>pair(k,esc(t),EVO,"Choose the evidence…",[4,2,0,3,1])).join("");
+  case "lrates":
+    return `<p class="how">Use the dossier's two confusion matrices. FN rate = FN / (FN + TP); FP rate = FP / (FP + TN). Gaps are in percentage points.</p>`+
+      RA.map(([k,t,o])=>pair(k,esc(t),o,"Choose…")).join("")+
+      rq("ra7","Who is disadvantaged, and how?",RA7);
+  case "lregister":
+    return `<p class="how">Rate each risk from the dossier. <b>Severity:</b> High = harm that cannot be undone; Medium = harm that can be stopped or put right; Low = inconvenience. <b>Likelihood:</b> High = every round; Medium = sometimes; Low = rare. Then combine them using Figure 3.</p>`+
+      REG.map(([k,t,ev])=>`<div class="rate"><h4>${k} · ${esc(t)}</h4><p class="note" style="margin:0 0 8px">${esc(ev)}</p><div class="grid3">
+        <div class="cell" data-item="${k}s"><span>Severity</span>${seg(k+"s",LMH,["L","M","H"],"Severity")}</div>
+        <div class="cell" data-item="${k}l"><span>Likelihood</span>${seg(k+"l",LMH,["L","M","H"],"Likelihood")}</div>
+        <div class="cell ev" data-item="${k}p"><span>Priority</span>${sel(k+"p",PRI,"Choose the priority…",[1,2,0])}</div></div></div>`).join("")+
+      rq("rank","Rank the risks: which order should they be fixed in?",RANK);
+  case "lmit":
+    return `<p class="how">Attach a stage-targeted mitigation and a named owner to each of your top three risks.</p>`+
+      MIT.map(([k,t,m,,o])=>`<div class="scen"><p>${esc(t)}</p>${rq(k+"m","Mitigation",m)}${pair(k+"o","Named owner",o,"Choose…",[3,1,2,0],"margin-top:10px")}</div>`).join("")+
+      rq("mres","5. For the top risk (rg1): what residual risk remains, and who monitors it?",RES);
+  case "lpaper":
+    return `<p class="q">1. Compute the FN rate for Group A and Group B.</p>`+
+      LP.map(([k,t,o])=>pair(k,esc(t),o,"Choose…")).join("")+
+      rq("lp3","2. State the gap and who is disadvantaged.",LP3)+
+      rq("lp4","3. The trade-off of closing the gap, and one stage-targeted mitigation:",LP4)+
+      rq("lp5","4. Who is accountable for the mitigation, and how would a rejected applicant appeal?",LP5);
+  case "lquiz":
+    return quiz(LQUIZ,LTF);
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 12 Main Course · Term 1 Week 5 (2 – 6 Nov 2026) · Core + Lab · Risks, Ethics &amp; Societal Impact + Measure Fairness and Govern</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
