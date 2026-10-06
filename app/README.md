@@ -327,9 +327,13 @@ Add or change lessons in the repository as usual, then:
 ```
 python3 app/build.py
 clasp push
+clasp deploy -i AKfycbyxIhdUxnImhZOsjjFX3E0kWRcVJN2_XgwUKSkmxt-8qha9COPqqK1bdYORnjt8cbBL4w -d "Update"
 ```
-and in the editor **Deploy → Manage deployments → Edit → New version**. The
-web app URL stays the same.
+The last line makes a new version and points the existing web app deployment at
+it (the same as **Deploy → Manage deployments → Edit → New version** in the
+editor), so the web app URL – and the short link `…/AI-Lessons/app` – stay the
+same. Access settings come from `appsscript.json` (*Execute as* me, *Anyone
+within AISA*). Never use **New deployment**: that makes a new URL.
 
 `build.py` also rewrites **`lessons.js`** – the lesson list the home page and the
 calendar read, with each lesson's title taken from its own heading. **Commit
