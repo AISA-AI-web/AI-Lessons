@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Architect First, Build Second + Run It, Break It, Make It Safer – Grade 7 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#2563EB; --main2:#3B82F6; --deep:#1E3A8A;
+  --ink:#14213D; --muted:#52607A; --paper:#F5F8FE; --card:#FFFFFF;
+  --line:#D8E2F5; --soft:#EAF0FD;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#93C5FD,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#3B82F6);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#14213D,#2C4470)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#C7D8FA 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#F9FBFF;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FCFDFF}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#22B8E0)}
+.act-head.ws{background:linear-gradient(120deg,#14213D,#2F4A7A)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#EEF3FE}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #B8C9EE;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%232563EB' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #A7C0EE;border-radius:12px;padding:10px 14px;background:#F8FAFF;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(20,33,61,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#14213D;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.ideas{display:grid;gap:10px;margin:0 0 6px}
+.idea{display:flex;gap:12px;border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 14px}
+.idea .n{flex:none;width:30px;height:30px;border-radius:9px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.idea h4{margin:0 0 4px;font-size:16px}
+.idea p{margin:0;font-size:15.5px}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.rh:first-of-type{margin-top:0}
+.route .num{font-size:14px}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 12px;font-size:12px;line-height:1.3}
+  body.print-results .results .actions{display:none}
+  body.print-results main{padding:0}
+  body.print-results .results{margin:0}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 7 Main Course, Term 1</span><span class="pill">Week 7 Core + Week 7 Lab</span><span class="pill">📅 Teach: Wed 18 Nov 2026 (week of 16 – 20 Nov)</span></div>
+    <h1>Architect First, Build Second + Run It, Break It, Make It Safer</h1>
+    <p>Today you become the architect of your signature solution. Before you build anything, you plan how it works – and how you will know it is any good. Then, in the Lab, your plan meets reality: you run it as a prototype, try to break it on purpose, and make it safer when it fails.</p>
+    <p class="meta"><b>Focus:</b> Plan your signature solution – all four strands &nbsp;·&nbsp; <b>Role:</b> Systems Detectives &nbsp;·&nbsp; <b>Tools:</b> unplugged simulated-AI cards, plan cards + Scratch storyboard</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 7B"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 7 of Term 1 – Monday 16 to Friday 20 November 2026.</b> Boys 7 and Girls 7 both have their AI period on <b>Wednesday 18 November</b>. Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Architect First, Build Second</a>, then move on to the <a href="#lab">Lab: Run It, Break It, Make It Safer</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Write the goal.</b> I can write a clear goal for my workflow and list its input, process and output steps in order.</li>
+      <li><b>Name the resources.</b> I can name the inputs, the teacher-operated tool and the non-personal data my solution needs.</li>
+      <li><b>Guard with a check.</b> I can point to one risk and show the check step that catches it before the output is trusted.</li>
+      <li><b>Lab: walk it through.</b> I can walk my whole workflow through once, step by step, and confirm the output reaches the check step.</li>
+      <li><b>Lab: break it and make it safer.</b> I can test my plan with a hard input, show that my check step catches the bad output, and add a fallback path for when a check fails.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 7 Core · Architect First, Build Second</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Write the goal</b><small>One clear task, steps in order</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Name the resources</b><small>Inputs, tool, non-personal data only</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Guard with a check</b><small>One risk, one check step · worksheet</small></a></li>
+    </ol>
+    <h3 class="rh">Week 7 Lab · Run It, Break It, Make It Safer</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Walk it through</b><small>Trace one input to the check step</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Try to break it</b><small>Feed a tricky input on purpose</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Add a fallback</b><small>What to do when a check fails · worksheet</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Architect first, build second</h2><p>Why plan before you build?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>Last week (Week 6) you ran a full workflow with a check log. Now you plan your own <b>signature solution</b> first – before you build a single step of it.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">A deliberate chain of steps</h3>
+    <p>A <b>signature solution</b> is a small workflow that finishes one task using input, process and output steps. Planning it means designing the whole chain <b>before</b> you build. You write a clear <b>goal</b>, put your steps in order, and name what each step needs – the inputs, the teacher-operated tool, and non-personal data only.</p>
+    <p>A good plan is deliberate: every step is there on purpose, and you could hand it to a classmate and they would know exactly what to do.</p>
+    <figure>
+      <svg viewBox="0 0 760 256" role="img" aria-labelledby="f1T">
+        <title id="f1T">A signature-solution plan. On top: the goal, the one clear task the solution must finish. It drives every step below. Below: a chain in one direction – input (a photo of an item), process (the teacher-run tool), output (a bin label) – ending in a check step that compares the output with the answer key.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#14213D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#14213D">
+          <rect x="180" y="14" width="400" height="62" rx="12" fill="#EEF3FC" stroke="#2563EB" stroke-width="2.2"/>
+          <text x="380" y="40" font-size="16" font-weight="800" text-anchor="middle" fill="#1E3A8A">🎯 GOAL</text>
+          <text x="380" y="63" font-size="13.5" text-anchor="middle">one clear task the solution must finish</text>
+          <path d="M380 76V108" stroke="#2563EB" stroke-width="2.2" stroke-dasharray="6 4" fill="none" marker-end="url(#ah)"/>
+          <text x="392" y="98" font-size="13" font-weight="700" fill="#2563EB">drives every step</text>
+          <g stroke="#14213D" stroke-width="1.6">
+            <rect x="20" y="112" width="160" height="74" rx="10" fill="#EEF3FC" stroke="#2563EB"/>
+            <rect x="215" y="112" width="160" height="74" rx="10" fill="#ECF8F0" stroke="#15803D"/>
+            <rect x="410" y="112" width="160" height="74" rx="10" fill="#F4F0FC" stroke="#6B46C1"/>
+            <rect x="600" y="112" width="148" height="74" rx="10" fill="#14213D"/>
+          </g>
+          <g stroke="#14213D" stroke-width="2.4" fill="none" marker-end="url(#ah)"><path d="M180 149H211"/><path d="M375 149H406"/><path d="M570 149H596"/></g>
+          <g font-size="15" font-weight="700" text-anchor="middle"><text x="100" y="143" fill="#2563EB">📥 INPUT</text><text x="295" y="143" fill="#15803D">⚙️ PROCESS</text><text x="490" y="143" fill="#6B46C1">📤 OUTPUT</text><text x="674" y="143" fill="#fff">🔎 CHECK</text></g>
+          <g font-size="13" text-anchor="middle" fill="#3B4A66"><text x="100" y="167">photo of an item</text><text x="295" y="167">teacher-run tool</text><text x="490" y="167">a bin label</text><text x="674" y="167" fill="#DCE7FF">vs answer key</text></g>
+          <text x="380" y="222" font-size="14" font-weight="700" text-anchor="middle">One direction: goal → input → process → output → check</text>
+          <text x="380" y="244" font-size="13" text-anchor="middle" fill="#52607A">Every step names what it needs – non-personal data only</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> A signature-solution plan: the goal on top, an input-process-output chain below it, in one direction, with a check step guarding the output. Example values are illustrative.</figcaption>
+    </figure>
+    <div class="call violet"><h4>Concept link</h4><p>When you write your goal, note that it becomes your <b>success criteria</b> – the checklist you will judge the finished output against later.</p></div>
+    <div id="a-vocab"></div>
+    <div id="a-order"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Name the resources</h2><p>What does each step need?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Inputs, tool, non-personal data</h3>
+    <p>A plan is not finished until you name what each step needs – the <b>inputs</b>, the <b>teacher-operated tool</b>, and <b>non-personal data</b> only.</p>
+    <p>No names, faces or personal details ever go into your plan. The process step may use a teacher-operated, school-approved model, but you treat that model as one component whose output must still be checked.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, planners design smart systems – from traffic sensors in Abu Dhabi to farm-monitoring tools – the same way you will today: goal first, checks built in, no personal data. Good planning is what makes an AI solution trustworthy.</p></div>
+    <div id="a-res"></div>
+    <div id="a-case2"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3 · Worksheet</span><h2>Guard the output</h2><p>So can you trust the output on sight?</p></div>
+  <div class="part-body">
+    <h3 class="sub">The check step is the point</h3>
+    <p>The most important part of your plan is the <b>check step</b>. An AI output can look confident and still be wrong, so you never trust it on sight. Your check step compares the output against the task and a <b>trusted source</b> before you accept it.</p>
+    <p>Think about one <b>risk</b> in your plan – what could go wrong? Place a check step to catch it. If you want to go further, add a <b>fallback</b>: what your solution does when the check fails.</p>
+    <figure>
+      <svg viewBox="0 0 760 276" role="img" aria-labelledby="f2T">
+        <title id="f2T">A check step guards the output. The output, a label such as recycle, goes into the check step. A risk – an answer that sounds sure but is wrong – points at the check step. The check compares the output with the task and a trusted answer key. If it matches, the label is accepted and used. If not, a fallback path flags it for a person.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#14213D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#14213D">
+          <rect x="20" y="14" width="230" height="42" rx="21" fill="#FDE7EC" stroke="#C92A4B" stroke-width="1.8"/>
+          <text x="135" y="40" font-size="14" font-weight="700" text-anchor="middle" fill="#C92A4B">🚩 RISK: sure but wrong</text>
+          <path d="M250 35H300V66" stroke="#C92A4B" stroke-width="2.2" fill="none" marker-end="url(#ah2)"/>
+          <rect x="20" y="100" width="160" height="70" rx="10" fill="#F4F0FC" stroke="#6B46C1" stroke-width="1.8"/>
+          <text x="100" y="130" font-size="15" font-weight="700" text-anchor="middle" fill="#6B46C1">📤 OUTPUT</text>
+          <text x="100" y="152" font-size="13" text-anchor="middle">label: ‘recycle’</text>
+          <path d="M180 135H211" stroke="#14213D" stroke-width="2.4" fill="none" marker-end="url(#ah2)"/>
+          <path d="M300 70L385 135L300 200L215 135Z" fill="#14213D"/>
+          <text x="300" y="132" font-size="15" font-weight="700" text-anchor="middle" fill="#fff">🔎 CHECK</text>
+          <text x="300" y="152" font-size="13" text-anchor="middle" fill="#DCE7FF">does it match?</text>
+          <rect x="190" y="224" width="220" height="40" rx="10" fill="#EEF3FC" stroke="#2563EB" stroke-width="1.8"/>
+          <text x="300" y="249" font-size="13.5" font-weight="600" text-anchor="middle" fill="#1E3A8A">📗 task + answer key</text>
+          <path d="M300 224V204" stroke="#2563EB" stroke-width="2.2" fill="none" marker-end="url(#ah2)"/>
+          <path d="M385 135H436V65H466" stroke="#0F8A5F" stroke-width="2.4" fill="none" marker-end="url(#ah2)"/>
+          <path d="M385 135H436V185H466" stroke="#C92A4B" stroke-width="2.4" fill="none" marker-end="url(#ah2)"/>
+          <rect x="470" y="35" width="270" height="60" rx="10" fill="#E2F5EC" stroke="#0F8A5F" stroke-width="1.8"/>
+          <text x="605" y="61" font-size="14" font-weight="700" text-anchor="middle" fill="#0A5E41">✅ yes → accept it</text>
+          <text x="605" y="82" font-size="13" text-anchor="middle" fill="#0A5E41">the label can be used</text>
+          <rect x="470" y="155" width="270" height="60" rx="10" fill="#FDE7EC" stroke="#C92A4B" stroke-width="1.8"/>
+          <text x="605" y="181" font-size="14" font-weight="700" text-anchor="middle" fill="#C92A4B">🛟 no → fallback path</text>
+          <text x="605" y="202" font-size="13" text-anchor="middle" fill="#8A1330">flag it for a person</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> A check step compares the output against the task and a trusted source before it is accepted. One named risk points at the check that catches it.</figcaption>
+    </figure>
+    <div id="a-goodchk"></div>
+    <div id="a-case3"></div>
+    <div class="call violet"><h4>Cross-curricular link · Computing</h4><p>In computing, draw your workflow as a <b>flowchart</b>: ordered input, process and output boxes with a <b>decision diamond</b> for the check step. Sequencing steps and adding a decision branch is the same algorithm-design skill used to plan programs.</p></div>
+    <div class="call amber"><h4>Tool for this week: unplugged – simulated-AI cards (teacher-led)</h4><p>This is an unplugged concept lesson: the teacher runs a simulated-AI card routine on the board – no live tool, no logins. Students reason about pre-prepared example outputs on the cards (no personal data is used), sort or judge the cards, and explain their thinking with the key vocabulary. <b>No demo tool?</b> Run the process step as a simulated AI: a sealed envelope of pre-written response cards a student draws from, so the plan is still built and pressure-tested with no tool access. The live tools (Teachable Machine and Scratch) are used in the matching Lab period.</p></div>
+    <div class="call"><h4>Hands-on mission · Systems Detectives: architect the plan</h4>
+      <p>Design the plan for your Term 1 signature solution. <b>You need:</b> a paper planning frame with three boxes, a word bank of step verbs, sticky notes for the steps and a pencil.</p>
+      <ol class="steps">
+        <li>Write your goal in one sentence: what task will your solution complete?</li>
+        <li>Draw three boxes – Input, Process, Output – and write the ordered steps inside.</li>
+        <li>Under the boxes, list the inputs, the teacher-operated tool and the non-personal data each step needs.</li>
+        <li>Add a check step after the output: what will you compare the result against?</li>
+        <li>Name one risk and draw an arrow from it to the check step that catches it.</li>
+        <li>Write your success criteria: one sentence describing what a good output looks like.</li>
+      </ol></div>
+    <div class="ecard" id="audit"></div>
+    <div id="a-wsgoal"></div>
+    <div id="a-wsstruct"></div>
+    <div id="a-wsrisk"></div>
+    <div id="a-think"></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+    <div class="call blue"><h4>Local connection · AI in the UAE</h4><p>UAE missions such as the Emirates Mars (‘Hope’) mission show how careful planning comes before building – architect first, build second.</p></div>
+    <div id="a-miti"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 7 Lab</span><h2>Run It, Break It, Make It Safer</h2><p>Your plan meets reality today. You will run it as a prototype, try to break it on purpose, and make it safer when it fails.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In the Core you planned your signature solution. Today you run it as a prototype and try to break it.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div class="call amber"><h4>Tool for this week: Scratch – build an input-process-output workflow</h4>
+      <ol class="steps">
+        <li>The teacher opens Scratch (offline app or scratch.mit.edu) – no account needed; work saves as a local .sb3 file.</li>
+        <li>Find the three zones: Blocks (left), Code area (middle), Stage (top right).</li>
+        <li>Build the input → process → output chain: an input block (<b>ask</b>), the process step (a rule or an ML block, e.g. <b>classify</b>), then an output block (<b>say</b>).</li>
+        <li>Click the green flag to run; the red button stops it.</li>
+        <li>Change the input and run again – check the output changes as you expect.</li>
+        <li>Save to the computer (File → Save to your computer) as an .sb3 to reopen next week.</li>
+      </ol>
+      <p>🔒 Teacher-operated on the board; students never log in; non-personal data only (no names, faces or voices).</p></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>A plan is a guess</h2><p>Does the chain actually hold together?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Prototype the walk-through</h3>
+    <p>Your Core plan looks neat on paper, but paper hides gaps. A <b>prototype</b> is the first time you actually run it: you take one real, non-personal <b>test input</b> and <b>walk it through</b> every step in order until it reaches the output and the check step.</p>
+    <p>Say each step out loud. Where the input gets stuck or a step does not do what you expected, you have found a <b>gap</b> – and finding it now, by hand, is exactly the point. Prototyping turns a guess into something you have seen work.</p>
+    <figure>
+      <svg viewBox="0 0 760 252" role="img" aria-labelledby="f3T">
+        <title id="f3T">A prototype walk-through. One test input – a photo of a clean drinks can – is traced by hand through every step in order: 1 input, 2 process (say it aloud), 3 output (the label recycle), 4 check step (did the output reach it?). If the input gets stuck at a step, that is a gap to note in the log.</title>
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#14213D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#14213D">
+          <text x="380" y="24" font-size="14" font-weight="800" text-anchor="middle" fill="#1E3A8A">👣 ONE TEST INPUT, WALKED THROUGH BY HAND</text>
+          <g fill="#2563EB"><circle cx="100" cy="56" r="14"/><circle cx="295" cy="56" r="14"/><circle cx="490" cy="56" r="14"/><circle cx="674" cy="56" r="14"/></g>
+          <g font-size="14" font-weight="800" text-anchor="middle" fill="#fff"><text x="100" y="61">1</text><text x="295" y="61">2</text><text x="490" y="61">3</text><text x="674" y="61">4</text></g>
+          <g stroke="#14213D" stroke-width="1.6">
+            <rect x="20" y="80" width="160" height="70" rx="10" fill="#EEF3FC" stroke="#2563EB"/>
+            <rect x="215" y="80" width="160" height="70" rx="10" fill="#ECF8F0" stroke="#15803D"/>
+            <rect x="410" y="80" width="160" height="70" rx="10" fill="#F4F0FC" stroke="#6B46C1"/>
+            <rect x="600" y="80" width="148" height="70" rx="10" fill="#14213D"/>
+          </g>
+          <g stroke="#14213D" stroke-width="2.4" fill="none" marker-end="url(#ah3)"><path d="M180 115H211"/><path d="M375 115H406"/><path d="M570 115H596"/></g>
+          <g font-size="15" font-weight="700" text-anchor="middle"><text x="100" y="110" fill="#2563EB">📥 INPUT</text><text x="295" y="110" fill="#15803D">⚙️ PROCESS</text><text x="490" y="110" fill="#6B46C1">📤 OUTPUT</text><text x="674" y="110" fill="#fff">🔎 CHECK</text></g>
+          <g font-size="13" text-anchor="middle" fill="#3B4A66"><text x="100" y="134">clean drinks can</text><text x="295" y="134">say it aloud</text><text x="490" y="134">label: ‘recycle’</text><text x="674" y="134" fill="#DCE7FF">reached it? ✓</text></g>
+          <path d="M295 150V172" stroke="#C92A4B" stroke-width="2" stroke-dasharray="5 4" fill="none"/>
+          <text x="295" y="192" font-size="13" font-weight="700" text-anchor="middle" fill="#C92A4B">⚠️ stuck here? That is a gap –</text>
+          <text x="295" y="211" font-size="13" font-weight="700" text-anchor="middle" fill="#C92A4B">note it in the prototype log</text>
+          <text x="380" y="240" font-size="13" text-anchor="middle" fill="#52607A">The walk-through ends at the check step, not at the output</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> A prototype walk-through: one input traced along every step until it reaches the check. Example values are illustrative.</figcaption>
+    </figure>
+    <div id="a-lorder"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Try to break it</h2><p>Can anyone pass an easy test?</p></div>
+  <div class="part-body">
+    <p>Anyone can pass an easy test. To really trust your solution, <b>pressure-test</b> it: feed it a tricky input designed to fool it – a blurry photo, a strange example – and watch your check step.</p>
+    <p>Did the check catch the confident but wrong output? If not, <b>tighten the check</b>. First, make sure you know what each word in this test really means.</p>
+    <figure>
+      <svg viewBox="0 0 760 262" role="img" aria-labelledby="f4T">
+        <title id="f4T">Pressure-testing: a tricky input, such as a blurry photo or a strange example, is fed in on purpose. It runs through the same process to an output that sounds sure. The check step asks whether the output matches the answer key. If yes, it passes. If no, the fallback path fires: flag it for a human, reroute to a safer step, or return to the input.</title>
+        <defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#14213D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#14213D">
+          <text x="200" y="30" font-size="13.5" font-weight="700" text-anchor="middle" fill="#B45309">Fed in on purpose to try to break it</text>
+          <g stroke-width="1.8">
+            <rect x="14" y="60" width="140" height="66" rx="10" fill="#FFF7E8" stroke="#E8890C" stroke-width="2.2"/>
+            <rect x="184" y="60" width="124" height="66" rx="10" fill="#ECF8F0" stroke="#15803D"/>
+            <rect x="338" y="60" width="124" height="66" rx="10" fill="#F4F0FC" stroke="#6B46C1"/>
+          </g>
+          <path d="M572 28L654 93L572 158L490 93Z" fill="#14213D"/>
+          <g stroke="#14213D" stroke-width="2.4" fill="none" marker-end="url(#ah4)"><path d="M154 93H180"/><path d="M308 93H334"/><path d="M462 93H486"/></g>
+          <g font-size="14.5" font-weight="700" text-anchor="middle"><text x="84" y="89" fill="#B45309">🌀 TRICKY</text><text x="246" y="89" fill="#15803D">⚙️ PROCESS</text><text x="400" y="89" fill="#6B46C1">📤 OUTPUT</text></g>
+          <g font-size="13" text-anchor="middle" fill="#3B4A66"><text x="84" y="111">a blurry photo</text><text x="246" y="111">same chain</text><text x="400" y="111">sounds sure</text></g>
+          <text x="572" y="89" font-size="14.5" font-weight="700" text-anchor="middle" fill="#fff">🔎 CHECK</text>
+          <text x="572" y="110" font-size="13" text-anchor="middle" fill="#DCE7FF">matches key?</text>
+          <path d="M654 93H704V186" stroke="#0F8A5F" stroke-width="2.4" fill="none" marker-end="url(#ah4)"/>
+          <path d="M572 158V214H496" stroke="#C92A4B" stroke-width="2.4" fill="none" marker-end="url(#ah4)"/>
+          <text x="714" y="140" font-size="13" font-weight="800" fill="#0F8A5F">yes</text>
+          <text x="562" y="200" font-size="13" font-weight="800" text-anchor="end" fill="#C92A4B">no</text>
+          <rect x="620" y="190" width="126" height="56" rx="10" fill="#E2F5EC" stroke="#0F8A5F" stroke-width="1.8"/>
+          <text x="683" y="214" font-size="14" font-weight="700" text-anchor="middle" fill="#0A5E41">✅ pass</text>
+          <text x="683" y="234" font-size="13" text-anchor="middle" fill="#0A5E41">use it</text>
+          <rect x="14" y="180" width="478" height="68" rx="10" fill="#FDE7EC" stroke="#C92A4B" stroke-width="1.8"/>
+          <text x="253" y="206" font-size="14.5" font-weight="800" text-anchor="middle" fill="#C92A4B">🛟 FALLBACK PATH</text>
+          <text x="253" y="232" font-size="13" text-anchor="middle">flag for a human · reroute to a safer step · return to input</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 4.</b> A pressure-test feeds a tricky input – a blurry photo or strange example – to see if the check catches it. When the check fails, the fallback path decides what happens next.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Engineers testing self-driving features or medical tools in the UAE deliberately try to break their systems before people rely on them. Pressure-testing and fallbacks are how a smart solution earns trust.</p></div>
+    <div id="a-lmatch"></div>
+    <div id="a-lcase2"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Part 3 of 3 · Worksheet</span><h2>Add a fallback</h2><p>What happens the moment a check fails?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Fail safely, not silently</h3>
+    <p>A solution that has no plan for failure will simply trust a bad output. So build a <b>fallback path</b>: decide exactly what your solution does the moment a check fails.</p>
+    <p>It might reroute to a safer step, flag the output for a human, or return to the input. That is how real engineers make solutions fail gracefully instead of trusting a bad output.</p>
+    <div id="a-lfall"></div>
+    <div id="a-lcase3"></div>
+    <div class="call violet"><h4>Cross-curricular link · Physical Education</h4><p>Like a PE game plan, prototype your workflow, then pressure-test it against a tough case – as a coach tests a set play against strong defenders – and prepare a fallback tactic for when the first move fails.</p></div>
+    <div class="call amber"><h4>Today's tool: card decks (plan cards) + Scratch storyboard</h4>
+      <ol class="steps">
+        <li>Lay out the plan cards (goal, inputs, steps, checks, risk) and fill each one for your signature solution.</li>
+        <li>Sequence the Steps cards into the order the workflow will run.</li>
+        <li>Sketch the same sequence as Scratch blocks on the storyboard.</li>
+        <li>Pressure-test: pick one step and ask what happens if it fails.</li>
+        <li>Add a fallback card for that step.</li>
+      </ol>
+      <p><b>You will make:</b> a planned card layout plus a Scratch storyboard with a fallback path. <b>Stay safe:</b> planning only – no live tool or data. <b>No demo tool?</b> Run the prototype on paper: the process step is a simulated AI where a partner draws a pre-written response card, including one deliberately wrong card, so the pressure-test still works.</p></div>
+    <div class="call"><h4>Hands-on mission · Systems Detectives: prototype and pressure-test</h4>
+      <p><b>You need:</b> your Core planning frame, plan cards, a ready-made tricky test input, a fallback card and a pencil.</p>
+      <ol class="steps">
+        <li>Set up your Core plan and choose one normal, non-personal example input.</li>
+        <li>Walk that input through every step in order, saying each step aloud, until an output appears.</li>
+        <li>Run the output through your check step and record whether it passed.</li>
+        <li>Now send the tricky test input through the same chain.</li>
+        <li>Confirm your check catches the wrong output; if it does not, tighten the check and note the fix.</li>
+        <li>Add a fallback card: write exactly what your solution does the moment a check fails.</li>
+      </ol></div>
+    <div class="ecard" id="tmpack"></div>
+    <div id="a-llog"></div>
+    <div id="a-lpress"></div>
+    <div id="a-ltool"></div>
+    <div id="a-lsafe"></div>
+    <div id="a-lexit"></div>
+    <div id="a-lchal"></div>
+    <div class="call"><h4>Reflect · Responsible use &amp; human in the loop</h4><p>The AI tool does the sorting or drafting, but a person stays in charge.</p></div>
+    <div id="a-lhuman"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Plan it first – then try to break it and make it fail safely</h2></div>
+  <div class="part-body">
+    <h3 class="sub">Key ideas to remember</h3>
+    <ul class="keys">
+      <li>A plan starts with one clear <b>goal</b>, then orders the input-process-output steps.</li>
+      <li>Every step names its resources: inputs, the teacher-run tool, and non-personal data only.</li>
+      <li>The <b>check step</b> compares the output against the task and a trusted source. Name one risk and place a check step to catch it before the output is trusted.</li>
+      <li>A plan is only a guess until you walk a real input through every step – a <b>prototype</b> reveals the gaps a paper plan hides.</li>
+      <li>A <b>pressure-test</b> feeds a tricky input to prove the check catches a wrong output.</li>
+      <li>A <b>fallback path</b> defines what the solution does the moment a check fails.</li>
+    </ul>
+    <h3 class="sub">Glossary</h3>
+    <dl class="gloss">
+      <dt>Goal</dt><dd>the one task your solution is built to complete.</dd>
+      <dt>Structure</dt><dd>the ordered steps of your workflow: input, process, output.</dd>
+      <dt>Check step</dt><dd>a step that tests whether the output is correct, not just that the tool ran.</dd>
+      <dt>Risk</dt><dd>something that could go wrong, such as a confident but wrong answer.</dd>
+      <dt>Prototype</dt><dd>a first working version you walk through by hand to see if it holds together.</dd>
+      <dt>Pressure-test</dt><dd>feeding a hard input on purpose to see if your check catches a wrong output.</dd>
+      <dt>Fallback path</dt><dd>what your solution does when a check fails, instead of trusting the output.</dd>
+      <dt>Test input</dt><dd>the non-personal example input you use to try your workflow.</dd>
+    </dl>
+    <p><b>What to do next:</b> next week (Week 8) you stop planning and start building – run your solution for real and improve it.</p>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 7 · Main Course · Term 1 Week 7 (16 – 20 Nov 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- scope & sequence concepts (Grade 7, Week 7: Plan the signature solution) ---------- */
+const CU_E="CU · AI follows steps: input, process, output";
+const CU_P="CU · how workflows structure AI systems";
+const SD_E="SD · builds simple AI solutions with guided steps";
+const SD_P="SD · designs multi-step AI workflows";
+const SD_A="SD · refines workflow structure, sequence and tool choice";
+const CE_E="CE · identifies issues in outputs or workflow steps";
+const CE_P="CE · evaluates outputs for accuracy and usefulness";
+const CE_A="CE · improves workflows through iteration and explains the impact";
+const GE_E="GE · identifies risks in AI-generated outputs";
+const GE_P="GE · bias, misuse and limitations in workflows";
+const GE_A="GE · proposes ways to reduce risk and use AI responsibly";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["goal","The one task your solution is built to complete."],
+  ["structure","The ordered steps of your workflow: input, process, output."],
+  ["check step","A step that tests whether the output is correct, not just that the tool ran."],
+  ["risk","Something that could go wrong, such as a confident but wrong answer."],
+  ["success criteria","One sentence describing what a good output looks like."]
+];
+const DEF_ORDER = [2,4,0,3,1];
+const PLAN = ["🎯 Write one clear goal for your solution","📥 Plan the input step – what goes in","⚙️ Plan the process step – the teacher-run tool","📤 Plan the output step – what comes out","🔎 Add a check step to test the output"];
+const PLAN_ORDER = [4,0,2,1,3];
+const RES = [
+  ["rs1","🧑 A classmate’s face photo","N"],
+  ["rs2","🍃 A photo of a leaf you want sorted","Y"],
+  ["rs3","🖥️ The teacher-operated, school-approved tool","Y"],
+  ["rs4","🌡️ Non-personal sensor numbers","Y"],
+  ["rs5","🏠 A student’s home address","N"],
+  ["rs6","🪪 A pupil’s full name","N"]
+];
+const GOODCHK = [
+  ["gc1","🏆","It trusts any confident-looking output on sight.",0],
+  ["gc2","⏭️","It only checks that the tool ran, not the answer.",0],
+  ["gc3","🪜","When it fails, a fallback decides what to do next.",1],
+  ["gc4","🚩","It is aimed at one risk you named in your plan.",1],
+  ["gc5","🙈","It skips checking to save time.",0],
+  ["gc6","🔎","It compares the output against the task and a trusted source.",1]
+];
+const CASES = {
+  case1:{quote:"A team hands you two plans for the same task. One is neat and ordered; one starts at the end. Detective, which plan is built in the right order?",
+    clues:[["🎯","GOAL"],["⚙️","CHAIN"],["🔎","CHECK"]],q:"Which plan is in the right order?",
+    opts:["Build the output first, then invent a goal to fit it after.","Skip the goal and begin straight at the process step instead.","Put the check step before the input, ahead of the chain.","Goal first, then input, process and output, then a check."]},
+  case2:{quote:"Two pairs write the resources their plan needs. One list keeps pupils safe; one does not. Detective, which resource list is safe to use?",
+    clues:[["📥","INPUTS"],["🖥️","TOOL"],["🗂️","DATA"]],q:"Which resource list is safe?",
+    opts:["Only personal details about the pupils, and nothing else at all.","Every pupil’s name, face and home address so the tool knows them.","The tool, but let each student log in with their own account.","The input photos, the teacher-run tool and non-personal data."]},
+  case3:{quote:"A plan’s output looks sure of itself and arrives fast. The team wants to accept it straight away. Detective, what makes this plan trustworthy?",
+    clues:[["📤","OUTPUT"],["🚩","RISK"],["🔎","CHECK"]],q:"What makes the plan trustworthy?",
+    opts:["The tool sounded sure, so the answer needs no check at all.","A check step compares the output against a trusted source.","Trust the output simply because it appeared very quickly.","Remove the check step so that the plan turns out shorter."]},
+  lcase1:{quote:"A pair walks their first input through the chain and it gets stuck at step three. They look worried. Detective, what does finding this gap now really mean?",
+    clues:[["📥","INPUT IN"],["👣","STEP 3"],["🔎","GAP FOUND"]],q:"What does the gap mean?",
+    opts:["It means check steps are not really needed in the plan now.","It means the test input they chose was simply far too easy.","It proves the whole plan is worthless and should be scrapped.","They found a gap to fix – that is what a prototype is for."]},
+  lcase2:{quote:"A pair sends a deliberately blurry photo through their solution to try to fool it. The output comes back sounding confident. Detective, what should they watch?",
+    clues:[["🌀","TRICKY INPUT"],["⚙️","PROCESS"],["🔎","CHECK?"]],q:"What should they watch?",
+    opts:["Whether the check step catches the confident wrong output.","Whether the screen is bright enough to see the photo clearly.","Whether the tool runs quickly enough on the blurry photo.","Nothing, because sending a tricky input is completely unfair."]},
+  lcase3:{quote:"During a test, the check step fails and flags the output as wrong. The team is unsure what to do next. Detective, what should the solution do?",
+    clues:[["🔎","CHECK FAILS"],["🪜","FALLBACK"],["🙋","SAFER STEP"]],q:"What should the solution do?",
+    opts:["Accept the output anyway, since every step has already run.","Follow the fallback path instead of trusting the output.","Delete the whole solution because one single check failed.","Trust the output to save time and finish the run quicker."]}
+};
+const GOALS = ["Do something useful with AI and rubbish.","Sort each photo of a classroom item into ‘recycle’ or ‘general waste’.","Build the coolest AI app in the class.","Use AI to sort everything in the whole school at once."];
+const SUCCESS = ["The labels look sure of themselves.","The tool runs without crashing.","Each item gets the same bin label that the class answer key gives it.","It works well, more or less."];
+const STRUCT_ROWS = [["Input","si1","sn1"],["Process","si2","sn2"],["Output","si3","sn3"],["Check step","si4","sn4"]];
+const HAPPENS = ["One photo of a classroom item, such as a can or a crisp packet, is loaded","The tool compares the photo with patterns it learned and picks a bin","The label ‘recycle’ or ‘general waste’ is shown on the board","The label is compared with the class answer key before anyone uses it"];
+const NEEDS = ["Photos of objects only – non-personal data (no faces, voices or names)","The teacher-operated, school-approved tool","A board or sheet where the label is shown and written down","A trusted source: the class answer key of which items can be recycled"];
+const RISKS = ["A confident but wrong label – a greasy pizza box labelled ‘recycle’","The goal sentence is too short","The label appears in a small font","The tool ran, so nothing can go wrong"];
+const REDUCE = ["It compares each label with the class answer key, so a confident but wrong label is caught before anyone uses it","It only confirms that the tool ran","It trusts any label that sounds confident","It skips the check on busy days to save time"];
+const THINK = ["Trust the output anyway – every step ran","Remove the check step so it stops failing","Not trust it: follow a fallback – flag it for a person or try again with a clearer input","Pick whichever answer sounds most confident"];
+const EXIT = ["My sorter uses AI, and I will know it is good if it looks impressive.","My sorter puts each classroom-item photo into ‘recycle’ or ‘general waste’, and my check step compares each label with the class answer key, so I know the output is good.","My check step makes sure the tool ran, so the goal does not matter.","My goal is to sort photos, so I do not need a check step."];
+const CHAL = [
+  ["ch1","🛑 Stop the wrong label from being used",1],
+  ["ch2","🔠 Show the label anyway, in bigger letters",0],
+  ["ch3","🙋 Send the item to a person to sort by hand",1],
+  ["ch4","🙈 Ignore the failed check and carry on",0],
+  ["ch5","🔁 Ask for a clearer photo and run it again",1],
+  ["ch6","🗑️ Switch off the check step so it stops failing",0]
+];
+const MKIND = ["Bias – the training examples were unbalanced, so one kind of item is treated worse","Misuse – someone used the tool on purpose to cause harm","No risk – the tool is just a little slow","A spelling mistake in the labels"];
+const MEFFECT = ["The model learns paper and card as well as cans, so fewer paper items get the wrong label","Unsure labels are not used straight away – a person decides, so fewer wrong labels reach the bins","The tool runs faster","The labels sound more confident"];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["prototype","A first working version you walk through by hand to see if it holds together."],
+  ["walk-through","Tracing one input through every step, in order, to the output."],
+  ["pressure-test","Feeding a hard or tricky input on purpose to see if your check catches a wrong output."],
+  ["fallback path","What your solution does when a check step fails, instead of trusting the output."],
+  ["test input","The example, non-personal input you use to try your workflow."]
+];
+const LSTEPS = ["🧱 Set up your Core plan","📥 Choose one normal, non-personal test input","👣 Walk it through each step, saying each aloud","📤 Follow it until an output appears","🔎 Confirm the output reaches the check step"];
+const LSTEP_ORDER = [3,1,0,2,4];
+const LMATCH = [["lm1","🧱 Prototype"],["lm2","👣 Walk-through"],["lm3","📥 Test input"],["lm4","🌀 Pressure-test"]];
+const LMEAN = ["🏃 the first version you run by hand","➡️ trace one input through every step","🗂️ a non-personal example you try","🎯 feed a tricky input on purpose"];
+const LFALL = [
+  ["lf1","🙋","Flag the output for a human to review.",1],
+  ["lf2","⏩","Send the bad output straight to the user.",0],
+  ["lf3","↩️","Return to the input instead of trusting a bad output.",1],
+  ["lf4","🪜","Reroute to a safer step when a check fails.",1],
+  ["lf5","🏆","Trust the wrong output anyway.",0],
+  ["lf6","🙈","Ignore the failed check and carry on.",0]
+];
+const LOG = [
+  ["pl1","📥 Input · one clean drinks can photo, loaded from the class set","P"],
+  ["pl2","⚙️ Process · the plan never said which envelope of response cards to draw from, so the pair got stuck","F"],
+  ["pl3","📤 Output · the label ‘recycle’ was said aloud and written down","P"],
+  ["pl4","🔎 Check step · the label was compared with the answer key and it matched","P"]
+];
+const GAP = ["The output step – the label was said aloud","The process step – the plan did not say which response cards to draw from","The check step – the label matched the key","There was no gap – every step passed"];
+const PCAUGHT = ["Yes – the label did not match the answer key, so the check flagged it","No – the label sounded sure, so it should pass","No output appeared, so there is nothing to check","It cannot be judged without a louder label"];
+const PFAIR = ["Another clean, clear drinks can photo","A crumpled, greasy pizza box photographed in shadow","A photo of a classmate holding a can","No input at all – just guess the label"];
+const PFALL = ["Use the label anyway – it sounded sure","Do not use the label: flag the item for a person to sort and ask for a clearer photo","Delete the check step so it stops failing","Say the label more loudly"];
+const TOOLSTEPS = [["tl1","1 · Lay out the plan cards and fill each one"],["tl2","2 · Sequence the Steps cards into running order"],["tl3","3 · Sketch the same sequence as Scratch blocks"],["tl4","4 · Pressure-test: what if one step fails?"],["tl5","5 · Add a fallback card for that step"]];
+const TOOLRES = ["Five cards filled – goal, inputs, steps, checks, risk – with object photos only","Steps cards in order: input → process → output → check","Storyboard: ask → classify → say, then the check","If the process gives a wrong label, the check catches it – but nothing yet says what happens next","Fallback card: if the label does not match the key, flag the item for a person"];
+const BLOCK_ROWS = [["sb1","📥 Input"],["sb2","⚙️ Process"],["sb3","📤 Output"]];
+const BLOCKS = ["❓ ask – get the input","🧠 classify – a rule or an ML block","💬 say – show the result","🛑 red button – stop the program"];
+const LSAFE = [
+  ["sf1","Planning only – no live tool or data today",1],
+  ["sf2","The teacher operates Scratch on the board; students never log in",1],
+  ["sf3","Use a photo of a classmate’s face as the tricky input",0],
+  ["sf4","Use non-personal test inputs, such as photos of objects",1],
+  ["sf5","Make a Scratch account for each student",0],
+  ["sf6","Record a student’s voice reading out the labels",0]
+];
+const LEXIT = ["Our prototype worked first time, so we do not need a fallback.","Our pressure-test showed a greasy pizza box got a confident ‘recycle’ label, so we added a fallback: if a label does not match the answer key, the item is flagged for a person to sort.","The labels sounded sure, so we removed the check step.","We found a gap, so we will scrap the whole plan and start again."];
+const CH_FB = ["Flag the item for a person and do not use the label","Ask for a new, clearer photo before the process runs","Use the output anyway","No fallback – stop the whole lesson"];
+const CH_TRIG = ["The check after the output (the label does not match the answer key)","An input check before the process (is there a usable photo?)","No check – wait for someone to complain"];
+const HQ = [
+  ["hq1","Where did a person decide or check in today’s workflow (not the AI)?",
+   ["Nowhere – the AI did everything on its own","At the check step and the fallback: a person compared labels with the answer key and sorted the flagged items","Only when the tool was switched on","Only when choosing the colour of the cards"],1],
+  ["hq2","Could this workflow treat someone unfairly, or be misused – and what would you check?",
+   ["Nothing could ever go wrong with a recycling sorter","It could be misused, so make the labels sound more confident","Someone could point the camera at classmates instead of items – so check that only object photos go in and the teacher runs the tool","It could be unfair, so give every student their own login"],2],
+  ["hq3","Creator’s reflection: how is your design different from what an AI would produce on its own?",
+   ["I chose the goal, the order of the steps, the check and the fallback – an AI on its own would just give an output with no check","It is not different – the AI planned it all","An AI would plan it better, so my plan does not count","It is only different because of the colours"],0]
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CU_P,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"The goal is the one task to complete; the structure is the ordered input-process-output steps; a check step tests whether the output is correct, not just that the tool ran; a risk is something that could go wrong; success criteria describe what a good output looks like."},
+ {id:"order",mount:"a-order",section:"Core · Part 1",title:"Order your plan",sub:"Objective 1 · list the steps in order · "+SD_P,ico:"🧭",
+  fields:PLAN.map((_,i)=>({k:"o"+i,ok:v=>eq(v,i)})),
+  explain:"An architect writes one clear goal first, then plans the input, the process (the teacher-run tool) and the output in that order, and finally adds a check step to test the output."},
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"Case 1 · The Architect’s Plan",sub:"Systems Detectives · "+SD_P,ico:"🕵️",cls:"case",
+  fields:[{k:"case1",radio:1,ok:v=>eq(v,3)}],
+  explain:"Goal first, then input, process and output, then a check. A plan flows one way – without a goal no step knows what it is for, and the check tests the output, so it belongs at the end."},
+ {id:"res",mount:"a-res",section:"Core · Part 2",title:"Goes in the plan?",sub:"Objective 2 · name safe resources · "+GE_E,ico:"🗂️",
+  fields:RES.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A leaf photo, the teacher-operated school-approved tool and non-personal sensor numbers belong in the plan. A face photo, a home address and a full name are personal details – keep them out."},
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"Case 2 · The Resource List",sub:"Systems Detectives · "+GE_E,ico:"🔬",cls:"case",
+  fields:[{k:"case2",radio:1,ok:v=>eq(v,3)}],
+  explain:"Safe plans use the input photos, the teacher-run tool and non-personal data. Personal details never belong in a plan, and students stay account-free – the teacher operates the tool."},
+ {id:"goodchk",mount:"a-goodchk",section:"Core · Part 3",title:"What makes a good check?",sub:"Objective 3 · a risk and its check step · "+CE_P,ico:"🧩",
+  fields:GOODCHK.map(([k,,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"A good check compares the output against the task and a trusted source, is aimed at one risk you named, and has a fallback for when it fails. Trusting confident outputs, only checking that the tool ran, or skipping the check lets wrong answers through."},
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"Case 3 · The Confident Answer",sub:"Systems Detectives · "+CE_E,ico:"⚖️",cls:"case",
+  fields:[{k:"case3",radio:1,ok:v=>eq(v,1)}],
+  explain:"The check is what earns trust, not how confident the output looks. A confident output can still be wrong, speed does not make it correct, and removing the check removes the very part that makes the plan safe."},
+ {id:"wsgoal",mount:"a-wsgoal",section:"Core worksheet",title:"My signature solution: goal",sub:"Worksheet · "+SD_E,ico:"📝",cls:"ws",
+  fields:[{k:"wg",ok:v=>eq(v,1)},{k:"wsc",ok:v=>eq(v,2)}],
+  explain:"A clear goal names one task: sort each photo of a classroom item into ‘recycle’ or ‘general waste’. Good success criteria say what a good output looks like – the same bin label the class answer key gives – not just that it looks sure or runs."},
+ {id:"wsstruct",mount:"a-wsstruct",section:"Core worksheet",title:"My workflow structure",sub:"Worksheet · "+SD_P,ico:"🗂️",cls:"ws",
+  fields:STRUCT_ROWS.flatMap(([,a,b],i)=>[{k:a,ok:v=>eq(v,i)},{k:b,ok:v=>eq(v,i)}]),
+  explain:"Input: one photo of an item (objects only – non-personal). Process: the teacher-operated tool picks a bin. Output: the label is shown and written down. Check step: the label is compared with the class answer key before anyone uses it."},
+ {id:"wsrisk",mount:"a-wsrisk",section:"Core worksheet",title:"Risk and check",sub:"Worksheet · "+GE_A,ico:"🚩",cls:"ws",
+  fields:[{k:"wr",ok:v=>eq(v,0)},{k:"wk",ok:v=>eq(v,0)}],
+  explain:"The real risk is a confident but wrong label, like a greasy pizza box marked ‘recycle’. The check reduces it by comparing each label with a trusted source – the answer key – before anyone uses it, not by confirming the tool ran."},
+ {id:"think",mount:"a-think",section:"Core worksheet",title:"Think about it",sub:"Reflect · "+CE_A,ico:"💭",
+  fields:[{k:"th",radio:1,ok:v=>eq(v,2)}],
+  explain:"When the check fails, the solution should not trust the output. It follows a fallback – flag it for a person or try again with a clearer input. Removing the check or picking the most confident answer only hides the problem."},
+ {id:"exit",mount:"a-exit",section:"Core exit ticket",title:"Exit ticket",sub:"Link your goal to your check step · "+CE_P,ico:"🎫",
+  fields:[{k:"ex",radio:1,ok:v=>eq(v,1)}],
+  explain:"Only B links both: what the solution is for (sorting item photos into two bins) and how you will know its output is good (a check step that compares each label with the answer key)."},
+ {id:"chal",mount:"a-chal",section:"Core challenge",title:"Challenge ⭐ Design a fallback path",sub:"Stretch · "+SD_A,ico:"⭐",
+  fields:CHAL.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"A good fallback reroutes to a safer step: stop the wrong label being used, send the item to a person, or ask for a clearer photo and try again. Showing it anyway, ignoring the failed check or switching the check off would let a wrong output through."},
+ {id:"miti",mount:"a-miti",section:"Core extension",title:"Required · Advanced: design two mitigations",sub:"Extension · "+GE_A,ico:"🛡️",cls:"ws",
+  fields:[{k:"mk",ok:v=>eq(v,0)},{k:"m1",ok:v=>eq(v,0)},{k:"m2",ok:v=>eq(v,1)}],
+  explain:"Training mostly on cans is bias – the examples are unbalanced. Balancing the training examples helps the model learn paper and card too, so fewer paper items get the wrong label. Sending low-confidence results to a person means unsure labels are not used straight away – a person decides."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 1",title:"Order the walk-through",sub:"Objective 1 · walk one input to the check · "+CU_E,ico:"🪜",
+  fields:LSTEPS.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"Set up your Core plan, choose one normal, non-personal test input, walk it through each step saying each aloud, follow it until an output appears, and confirm the output reaches the check step – the walk-through ends at the check."},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"Case 1 · The Stuck Step",sub:"Systems Detectives · "+CE_E,ico:"🕵️",cls:"case",
+  fields:[{k:"lcase1",radio:1,ok:v=>eq(v,3)}],
+  explain:"Finding gaps by hand, before building, is the point of a prototype. A gap is useful information, not a reason to scrap the plan – the input revealed a real gap in the chain, and the check is still where the walk-through should end."},
+ {id:"lmatch",mount:"a-lmatch",section:"Lab · Part 2",title:"Match the word to its meaning",sub:"Objective 2 · pressure-test the plan · "+CE_E,ico:"🧷",
+  fields:LMATCH.map(([k],i)=>({k,ok:v=>eq(v,i)})),
+  explain:"A prototype is the first version you run by hand. A walk-through traces one input through every step, in order. A test input is the non-personal example you use. A pressure-test feeds a tricky input on purpose to see if the check catches it."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"Case 2 · The Blurry Photo",sub:"Systems Detectives · "+CE_P,ico:"🔬",cls:"case",
+  fields:[{k:"lcase2",radio:1,ok:v=>eq(v,0)}],
+  explain:"A pressure-test proves whether the check really catches a bad output. Speed and screen brightness are not what is being tested, and tricky inputs are exactly what a pressure-test is for."},
+ {id:"lfall",mount:"a-lfall",section:"Lab · Part 3",title:"Build a good fallback",sub:"Objective 3 · add a fallback path · "+GE_A,ico:"🛟",
+  fields:LFALL.map(([k,,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Good fallback actions: flag the output for a human, return to the input, or reroute to a safer step. Sending the bad output on, trusting it anyway or ignoring the failed check all let a wrong answer through."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"Case 3 · The Failed Check",sub:"Systems Detectives · "+SD_A,ico:"⚖️",cls:"case",
+  fields:[{k:"lcase3",radio:1,ok:v=>eq(v,1)}],
+  explain:"A failed check triggers the fallback, not blind trust. Running every step does not make an output correct, saving time by trusting a bad output is exactly the risk you planned for, and one failed check is handled by the fallback – not by deleting everything."},
+ {id:"llog",mount:"a-llog",section:"Lab worksheet",title:"Prototype log",sub:"Worksheet · walk-through · "+CE_E,ico:"📓",cls:"ws",
+  fields:[...LOG.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"pgap",ok:v=>eq(v,1)}],
+  explain:"Input, output and check passed. The process step failed: the plan never said which envelope of response cards to draw from, so the pair got stuck. That is the gap the prototype revealed – found by hand, before building."},
+ {id:"lpress",mount:"a-lpress",section:"Lab worksheet",title:"Pressure-test and fallback path",sub:"Worksheet · "+CE_A,ico:"🌀",cls:"ws",
+  fields:[{k:"pfair",ok:v=>eq(v,1)},{k:"pcaught",ok:v=>eq(v,0)},{k:"pfall",ok:v=>eq(v,1)}],
+  explain:"A fair pressure-test uses a tricky, non-personal input – a crumpled, greasy pizza box in shadow – not another easy can or a classmate’s photo. The check caught the confident wrong label because it did not match the answer key. The fallback: do not use the label; flag the item for a person and ask for a clearer photo."},
+ {id:"ltool",mount:"a-ltool",section:"Lab worksheet",title:"Tool log · plan cards + Scratch storyboard",sub:"Worksheet · tool log · "+SD_E,ico:"🧩",cls:"ws",
+  fields:[...TOOLSTEPS.map(([k],i)=>({k,ok:v=>eq(v,i)})),...BLOCK_ROWS.map(([k],i)=>({k,ok:v=>eq(v,i)}))],
+  explain:"Each tool step has its own result: five filled plan cards, Steps cards in running order, an ask → classify → say storyboard, a pressure-test question that shows a missing fallback, and a fallback card. In Scratch, ask gets the input, classify is the process and say shows the output."},
+ {id:"lsafe",mount:"a-lsafe",section:"Lab worksheet",title:"Safety check",sub:"Safety check · "+GE_E,ico:"🔒",
+  fields:LSAFE.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Today is planning only, the teacher operates Scratch and students never log in, and test inputs are non-personal (photos of objects). Faces, voices and student accounts are personal data – never use them."},
+ {id:"lexit",mount:"a-lexit",section:"Lab exit ticket",title:"Lab exit ticket",sub:"One gap and its fallback · "+CE_A,ico:"🎟️",
+  fields:[{k:"le",radio:1,ok:v=>eq(v,1)}],
+  explain:"A strong exit ticket names a real gap the prototype revealed (a greasy pizza box got a confident wrong label) and the fallback added to handle it (flag the item for a person). ‘It worked’, removing the check or scrapping the plan are not fallbacks."},
+ {id:"lchal",mount:"a-lchal",section:"Lab challenge",title:"Challenge ⭐ Two fallback paths",sub:"Stretch · "+SD_A,ico:"⭐",
+  fields:[{k:"cf1",ok:v=>eq(v,0)},{k:"ct1",ok:v=>eq(v,0)},{k:"cf2",ok:v=>eq(v,1)},{k:"ct2",ok:v=>eq(v,1)}],
+  explain:"A wrong output is caught by the check after the output, and its fallback flags the item for a person instead of using the label. A missing or unusable input is caught by an input check before the process, and its fallback asks for a new, clearer photo."},
+ {id:"lhuman",mount:"a-lhuman",section:"Lab reflection",title:"Responsible use & human in the loop",sub:"Reflect · "+GE_P,ico:"🧑‍🏫",
+  fields:HQ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),
+  explain:"A person stays in charge: they check labels against the answer key and sort flagged items. A camera pointed at people instead of objects would be misuse, so check that only object photos go in and the teacher runs the tool. Your design – goal, steps, check and fallback – is your own work, not something an AI made on its own."}
+];
+
+/* ---------- state ---------- */
+const KEY="g7-mw7-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#audit").innerHTML=`<header><small>Worked example · a pair's planning notes · illustrative</small><b>Signature solution: the classroom recycling sorter</b></header>
+<div class="in">
+  <p class="task"><b>The idea:</b> the class wants to put less rubbish in the wrong bin. A pair plans a small AI workflow that looks at a photo of an item and says which bin it goes in – photos of objects only, never people.</p>
+  <table class="t"><thead><tr><th>Their rough notes</th><th>Still to decide</th></tr></thead>
+  <tbody><tr><td>🎯 “Do something with AI and rubbish.”</td><td>A goal that names one task</td></tr>
+  <tr><td>⚙️ The teacher-operated, school-approved tool, trained on labelled photos of items (‘recycle’, ‘general waste’)</td><td>The order of the steps and what each one needs</td></tr>
+  <tr><td>📗 The class has an answer key of which items can be recycled</td><td>What a good output looks like, and what the check compares against</td></tr>
+  <tr><td>🚩 Greasy or crumpled items look a lot like clean ones</td><td>The risk – and the check step that catches it</td></tr></tbody></table>
+</div>`;
+$("#tmpack").innerHTML=`<header><small>Prototype log · illustrative paper prototype with simulated-AI cards</small><b>Recycling sorter: walk-through and pressure-test</b></header>
+<div class="in">
+  <p class="task"><b>Set-up:</b> the pair's Core plan, a partner drawing pre-written response cards as the ‘process’, and the class answer key. Photos of objects only – no personal data.</p>
+  <table class="t"><thead><tr><th>Step</th><th>What happened (normal input)</th></tr></thead>
+  <tbody><tr><td>📥 Input</td><td>One clean drinks can photo, loaded from the class set</td></tr>
+  <tr><td>⚙️ Process</td><td>The plan never said which envelope of response cards to draw from, so the pair got stuck for two minutes</td></tr>
+  <tr><td>📤 Output</td><td>The label ‘recycle’ was said aloud and written down</td></tr>
+  <tr><td>🔎 Check step</td><td>The label was compared with the answer key – it matched</td></tr></tbody></table>
+  <p class="note"><b>Pressure-test:</b> a crumpled, greasy pizza box photographed in shadow. The response card said ‘recycle’ and sounded very sure – but the answer key says greasy card goes in general waste.</p>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+function caseBody(id){
+  const c=CASES[id];
+  return `<div class="quote">“${esc(c.quote)}”</div><div class="clues" aria-hidden="true">${c.clues.map(([e,t])=>`<div class="clue">${e}<span>${esc(t)}</span></div>`).join("")}</div>
+    <p class="q" id="q-${id}">${esc(c.q)}</p>${radios(id,c.opts)}`;
+}
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,e,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${e?e+" ":""}${esc(t)}</span></label>`).join("")+`</div>`;
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "order":
+    return `<p class="how">Put the planning steps in the order an architect designs them, from first to last.</p>`+
+      PLAN.map((_,i)=>`<div class="pair" data-item="o${i}"><span class="t">Step ${i+1}</span>${sel("o"+i,PLAN,"Choose the step…",PLAN_ORDER)}</div>`).join("");
+  case "case1": case "case2": case "case3": case "lcase1": case "lcase2": case "lcase3":
+    return caseBody(a.id);
+  case "res":
+    return `<p class="how">Sort each item: does it belong in your plan’s resource list, or should you keep it out?</p>`+
+      RES.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🗂️ Goes in the plan","🚫 Keep it out"],["Y","N"],t)}</div>`).join("");
+  case "goodchk":
+    return boxes(GOODCHK,"Tick the THREE statements that describe a good check step. Leave the others unticked.");
+  case "wsgoal":
+    return `<p class="how">Turn the pair's rough notes (above) into a clear plan. Choose the best entry for each line.</p>
+      <div class="pair" data-item="wg"><span class="t">🎯 The goal in one sentence – one task</span>${sel("wg",GOALS,"Choose a goal…",[0,2,1,3])}</div>
+      <div class="pair" data-item="wsc"><span class="t">✅ Success criteria – what a good output looks like</span>${sel("wsc",SUCCESS,"Choose…",[1,3,2,0])}</div>`;
+  case "wsstruct":
+    return `<p class="how">Complete the structure table for the recycling sorter: what happens at each step, and what it needs. Non-personal data only.</p>`+
+      STRUCT_ROWS.map(([s,a,b],i)=>`<div class="scen"><p>Step ${i+1} · ${s}</p><div class="two">
+        <div data-item="${a}"><span>What happens</span>${sel(a,HAPPENS,"Choose…",[[2,0,3,1],[3,2,1,0],[1,3,0,2],[0,2,1,3]][i])}</div>
+        <div data-item="${b}"><span>What it needs (input / tool / data)</span>${sel(b,NEEDS,"Choose…",[[3,1,0,2],[0,2,3,1],[0,1,3,2],[1,3,2,0]][i])}</div></div></div>`).join("");
+  case "wsrisk":
+    return `<p class="how">Name one risk in the sorter's plan, then explain how the check step reduces it.</p>
+      <div class="pair" data-item="wr"><span class="t">🚩 One risk in the plan</span>${sel("wr",RISKS,"Choose a risk…",[1,3,0,2])}</div>
+      <div class="pair" data-item="wk"><span class="t">🔎 How the check step reduces it</span>${sel("wk",REDUCE,"Choose…",[3,1,0,2])}</div>`;
+  case "think":
+    return `<p class="q" id="q-th">If your check step failed and the output was wrong, what should your solution do next instead of trusting it?</p>${radios("th",THINK)}`;
+  case "exit":
+    return `<p class="q" id="q-ex">Which ONE sentence links a goal to a check step – what the solution is for, and how you will know its output is good?</p>${radios("ex",EXIT)}`;
+  case "chal":
+    return boxes(CHAL.map(([k,t])=>[k,"",t]),"Stretch: when the sorter's check step fails, its fallback path should reroute to a safer step instead of trusting a wrong output. Tick the THREE safer moves. Leave the others unticked.");
+  case "miti":
+    return `<div class="quote"><b>Illustrative situation:</b> the sorter was trained mostly on photos of drinks cans, with very few photos of paper or card. It often gives paper items the wrong label.</div>
+      <div class="pair" data-item="mk"><span class="t">What kind of risk is this?</span>${sel("mk",MKIND,"Choose…",[2,0,3,1])}</div>
+      <div class="scen"><p>Mitigation 1 · balance your training examples</p><div data-item="m1"><span class="illus" style="display:block;margin-bottom:3px">How it changes what the system does</span>${sel("m1",MEFFECT,"Choose…",[2,3,0,1])}</div></div>
+      <div class="scen"><p>Mitigation 2 · send low-confidence results to a person to check</p><div data-item="m2"><span class="illus" style="display:block;margin-bottom:3px">How it changes what the system does</span>${sel("m2",MEFFECT,"Choose…",[0,3,1,2])}</div></div>`;
+  case "lorder":
+    return `<p class="how">Put the steps in the order you walk a prototype through by hand, from first to last.</p>`+
+      LSTEPS.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">Step ${i+1}</span>${sel("lo"+i,LSTEPS,"Choose the step…",LSTEP_ORDER)}</div>`).join("");
+  case "lmatch":
+    return `<p class="how">Match each word to its meaning.</p>`+
+      LMATCH.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,LMEAN,"Choose the meaning…",[3,2,0,1])}</div>`).join("");
+  case "lfall":
+    return boxes(LFALL,"Tick the THREE actions that make a good fallback path. Leave the others unticked.");
+  case "llog":
+    return `<p class="how">Use the prototype log above. Mark each step of the normal walk-through as a pass or a fail, then name the gap.</p>`+
+      LOG.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["✅ Pass","❌ Fail"],["P","F"],t)}</div>`).join("")+
+      `<div class="pair" data-item="pgap" style="margin-top:10px"><span class="t">Where is the gap the prototype revealed?</span>${sel("pgap",GAP,"Choose…",[0,3,1,2])}</div>`;
+  case "lpress":
+    return `<p class="how">Use the pressure-test line in the log above.</p>
+      <div class="pair" data-item="pfair"><span class="t">🌀 Which tricky input is a fair pressure-test?</span>${sel("pfair",PFAIR,"Choose…",[0,2,1,3])}</div>
+      <div class="pair" data-item="pcaught"><span class="t">🔎 Did the check step catch the wrong output?</span>${sel("pcaught",PCAUGHT,"Choose…",[1,2,0,3])}</div>
+      <div class="pair" data-item="pfall"><span class="t">🛟 Fallback path: what does the solution do when a check fails?</span>${sel("pfall",PFALL,"Choose…",[0,2,1,3])}</div>`;
+  case "ltool":
+    return `<p class="how">Record as you work. For each tool step, choose what the pair saw or made (illustrative).</p>`+
+      TOOLSTEPS.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,TOOLRES,"Choose the result…",[3,0,4,2,1])}</div>`).join("")+
+      `<p class="q">Which Scratch block does each job in the storyboard?</p>`+
+      BLOCK_ROWS.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,BLOCKS,"Choose the block…",[2,3,0,1])}</div>`).join("");
+  case "lsafe":
+    return boxes(LSAFE.map(([k,t])=>[k,"",t]),"Safety check: tick every rule that keeps today's planning safe. Leave the others unticked.");
+  case "lexit":
+    return `<p class="q" id="q-le">Which sentence describes one gap a prototype revealed AND the fallback path added to handle it?</p>${radios("le",LEXIT)}`;
+  case "lchal":
+    return `<p class="how">Stretch: design two fallback paths for two different failures, and say which check step triggers each.</p>
+      <div class="scen"><p>Failure 1 · a wrong output (the label does not match the answer key)</p><div class="two">
+        <div data-item="cf1"><span>Fallback path</span>${sel("cf1",CH_FB,"Choose…",[2,1,0,3])}</div>
+        <div data-item="ct1"><span>Triggered by</span>${sel("ct1",CH_TRIG,"Choose…",[1,2,0])}</div></div></div>
+      <div class="scen"><p>Failure 2 · a missing or unusable input (no photo, or a black image)</p><div class="two">
+        <div data-item="cf2"><span>Fallback path</span>${sel("cf2",CH_FB,"Choose…",[0,3,2,1])}</div>
+        <div data-item="ct2"><span>Triggered by</span>${sel("ct2",CH_TRIG,"Choose…",[2,0,1])}</div></div></div>`;
+  case "lhuman":
+    return HQ.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("");
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 7 Main Course · Week 7 Core + Lab · Architect First, Build Second + Run It, Break It, Make It Safer</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
