@@ -98,17 +98,14 @@ select,input[type=search],input[type=date],input[type=email],input[type=text]{fo
 .qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
 @media print{.top,footer.site,.overlay,.toast{display:none!important}body{background:#fff}}
 
-/* ---- Google Classroom share button (teaching calendar and lessons table) ---- */
+/* ---- Google Classroom share button (teaching calendar and lessons table): no animation, zooms on hover ---- */
 .crs{position:relative;display:inline-flex;align-items:center;gap:5px;padding:3px 10px 3px 5px;border-radius:999px;background:#fff;border:1.5px solid #F4B400;
   color:#137333;font:700 12.5px/1 "DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;text-decoration:none;white-space:nowrap;overflow:hidden;
-  transition:transform .18s ease,box-shadow .18s ease;animation:crGlow 2.8s ease-in-out infinite;vertical-align:middle}
+  transition:transform .18s ease,box-shadow .18s ease;vertical-align:middle}
 .crs img{display:block;width:30px;height:26px;margin:0;max-width:none}
 .crs svg{display:block;width:15px;height:15px;fill:currentColor;flex:none}
-.crs::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.9) 50%,transparent 70%);transform:translateX(-130%);animation:crShine 3.4s ease-in-out infinite;pointer-events:none}
-.crs:hover,.crs:focus-visible{transform:scale(1.15);box-shadow:0 6px 16px rgba(19,115,51,.28),0 0 0 3px rgba(244,180,0,.35);animation-play-state:paused;z-index:3;text-decoration:none}
+.crs:hover,.crs:focus-visible{transform:scale(1.15);box-shadow:0 6px 16px rgba(19,115,51,.28),0 0 0 3px rgba(244,180,0,.35);z-index:3;text-decoration:none}
 .crs:active{transform:scale(1.05)}
-@keyframes crShine{0%,55%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
-@keyframes crGlow{0%,100%{box-shadow:0 1px 3px rgba(0,0,0,.12),0 0 0 0 rgba(244,180,0,.4)}50%{box-shadow:0 1px 3px rgba(0,0,0,.12),0 0 0 4px rgba(244,180,0,.22)}}
 .crs.sm{padding:3px 7px 3px 4px}.crs.sm .crl{display:none}
-@media (prefers-reduced-motion:reduce){.crs,.crs::after{animation:none}.crs::after{display:none}.crs:hover,.crs:focus-visible{transform:none}}
+@media (prefers-reduced-motion:reduce){.crs:hover,.crs:focus-visible{transform:none}}
 @media print{.crs{display:none!important}}
