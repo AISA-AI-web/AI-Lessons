@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Showcase and Reflection + Peer Review and Aim Higher – Grade 12 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#A61E4D; --main2:#C2255C; --deep:#6B1533;
+  --ink:#2A1520; --muted:#6A5560; --paper:#FBF6F8; --card:#FFFFFF;
+  --line:#EFDCE3; --soft:#FBEEF2;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#F9A8C0,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#D0436F);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#2A1520,#6E3346)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#F6CFDB 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FEFAFB;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FFFBFC}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#D0436F)}
+.act-head.ws{background:linear-gradient(120deg,#2A1520,#7A3A50)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#FCEEF2}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #E6BFCB;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #E0A3B6;border-radius:12px;padding:10px 14px;background:#FEF8FA;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(42,21,32,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#2A1520;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 12 Main Course, Term 1</span><span class="pill">Week 10 Core + Week 10 Lab</span><span class="pill">📅 Teach: week of 7 – 11 Dec 2026</span></div>
+    <h1>Showcase and Reflection</h1>
+    <p>This is your showcase. Today you present the integrated AI system you designed this term and, more importantly, argue why your design and evaluation choices serve its strategic purpose responsibly – and prove it with your own evidence. Then, in the Lab, you review each other's integrated systems like a real design team, act on the feedback to improve one part and re-check it, and turn your term's reflections into one clear, measurable goal for next term.</p>
+    <p class="meta"><b>Strand:</b> Showcase, Assessment &amp; Reflection · all four strands &nbsp;·&nbsp; <b>Scenario:</b> your signature-system showcase and the peer-review carousel</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 12B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 10 of Term 1 – Monday 7 to Friday 11 December 2026</b>, the last week before Winter Break. <b>Boys 12 and Girls 12</b> share the same AI period: <b>Wednesday 9 December</b>. Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Showcase and Reflection</a>, then move on to the <a href="#lab">Lab: Peer Review and Aim Higher</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Justify two choices.</b> I can present my integrated AI system and justify at least two design or evaluation choices against its strategic purpose.</li>
+      <li><b>Prove it works.</b> I can show what I have learned this term by completing a short task that samples all four strands.</li>
+      <li><b>Reflect on the system.</b> I can name one thing I learned and set one clear, specific goal for next term.</li>
+      <li><b>Lab: give feed-forward, set a measurable goal, plan for higher stakes.</b> I can give specific, evidence-based feedback to peers and use feedback to improve my own system against its purpose; turn my term's reflections into one measurable goal with clear success criteria; and explain how my system would change for a harder task or a higher-stakes context.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 10 Core · Showcase and Reflection</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>From what I built to why it serves the purpose</b><small>Serve the purpose, evidence it, manage the risk</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Prove it, then reflect on the whole system</b><small>Verify before you trust · one task, four strands</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Showcase worksheet and check</b><small>Worksheet, unplugged activity and quiz</small></a></li>
+    </ol>
+    <h3 class="rh">Week 10 Lab · Peer Review and Aim Higher</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Feedback that actually improves a system</b><small>Strength, one improvement, one question · calibration</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Close the loop, then aim higher</b><small>Act, re-check, audit, score, plan for higher stakes</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Peer-review carousel</b><small>Lab worksheet, unplugged activity and check</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>From what I built to why it serves the purpose</h2><p>Anyone can run a demo. Can you justify it?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In Week 9 you refined and finished your integrated system – one smart change traced through the whole system, made explainable – then locked the architecture and rehearsed your demo. Today it goes on show.</p></div>
+    <div class="call"><h4>Scenario</h4><p>At your Year 13 showcase you justify rather than just demo: pick two choices, show the evidence that each serves the strategic purpose, and prove every ‘it works’ claim against a trusted source. <span class="illus">(Scenario – illustrative.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">From what I built to why it serves the purpose</h3>
+    <p>A Year 13 showcase is not a show-and-tell. Your job is to <b>justify</b>: pick two choices – one about <b>design</b> (a component: your data, model or tool, prompt or interface, or human-in-the-loop) and one about <b>evaluation</b> (how you judged the system against its success criteria). For each, give the <b>evidence</b> that it serves the <b>strategic purpose</b> and name the ethical or societal <b>risk</b> it manages. Use the frame: <b>I chose X so the system could Y, I evaluated it by measuring Z, and I managed the risk by doing W.</b> Evidence is a result against your success criteria – a before-and-after, a comparison, a test log or a user-success rate. Marks come from reasoning, not polish.</p>
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="f1T">
+        <title id="f1T">Three linked boxes. Serves purpose: the strategic aim – for example, cut cooling energy and keep lessons comfortable. Evidence: the result against the success criteria – for example, a metered saving of 12 per cent against a target of at least 10 per cent. Manages risk: the societal risk controlled – for example, staff approve every setback and every decision is logged. Underneath, the frame: I chose X so the system could Y, I evaluated it by measuring Z, and I managed the risk by doing W.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2A1520"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1520">
+          <g stroke="#2A1520" stroke-width="1.6" fill="#FBEEF2">
+            <rect x="10" y="14" width="226" height="140" rx="14"/><rect x="267" y="14" width="226" height="140" rx="14" fill="#E2F5EC" stroke="#0F8A5F"/><rect x="524" y="14" width="226" height="140" rx="14" fill="#FFF7E8" stroke="#B45309"/>
+          </g>
+          <g stroke="#2A1520" stroke-width="2" fill="none" marker-end="url(#ah)"><path d="M238 84H263"/><path d="M495 84H520"/></g>
+          <g font-size="16" font-weight="800" text-anchor="middle"><text x="123" y="46" fill="#A61E4D">SERVES PURPOSE</text><text x="380" y="46" fill="#0F8A5F">EVIDENCE</text><text x="637" y="46" fill="#B45309">MANAGES RISK</text></g>
+          <g font-size="13" text-anchor="middle" fill="#6A5560"><text x="123" y="70">the strategic aim</text><text x="380" y="70">result vs success criteria</text><text x="637" y="70">the societal risk controlled</text></g>
+          <g stroke="#EFDCE3" stroke-width="1.4"><path d="M30 86H216"/><path d="M287 86H473"/><path d="M544 86H730"/></g>
+          <g font-size="14" font-weight="600" text-anchor="middle">
+            <text x="123" y="112">cut cooling energy,</text><text x="123" y="132">keep lessons comfortable</text>
+            <text x="380" y="112">metered saving 12%</text><text x="380" y="132">(target: at least 10%)</text>
+            <text x="637" y="112">staff approve every</text><text x="637" y="132">setback; all logged</text>
+          </g>
+          <path d="M380 158V180" stroke="#2A1520" stroke-width="2" marker-end="url(#ah)"/>
+          <rect x="20" y="186" width="720" height="100" rx="16" fill="#6B1533" stroke="#2A1520"/>
+          <text x="380" y="214" font-size="14" font-weight="700" text-anchor="middle" fill="#F9C9D8">THE FRAME</text>
+          <text x="380" y="242" font-size="16" font-weight="700" text-anchor="middle" fill="#fff">“I chose X so the system could Y, I evaluated it by measuring Z,</text>
+          <text x="380" y="268" font-size="16" font-weight="700" text-anchor="middle" fill="#fff">and I managed the risk by doing W.”</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> Turn a choice into a justified claim: serve the purpose, evidence it, manage the risk. (Illustrative example: a campus energy advisor.)</figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-frame"></div>
+    <div id="a-jsort"></div>
+    <div id="a-claim"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Prove it, then reflect on the whole system</h2><p>Fast, confident and detailed is not the same as correct.</p></div>
+  <div class="part-body">
+    <p>A fast, confident, detailed AI output can still be wrong, so every ‘it works’ claim needs a check against the task and a trusted source – <b>verify before you trust</b>. Keep your showcase account-free and use <b>no personal data</b>: no names, faces or voices, only non-personal examples, and keep any live tool teacher-operated. After the showcase, reflect across the <b>whole system</b>, not just the model: name one skill that carried across the term – understanding a system, designing it, evaluating it, or governing it – and set one clear goal for next term that you could measure.</p>
+    <div class="call amber"><h4>Justify with evidence, then verify</h4><p>Pick two choices – one about design (a component) and one about a trade-off or how you evaluated – and justify each with evidence that it serves the strategic purpose: a before-and-after or a comparison. Then check every ‘it works’ claim against the task and a trusted source before you say it out loud.</p></div>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, teams that deploy AI systems – in healthcare, finance and government – must justify to regulators and the public that a system serves its purpose safely and fairly, with evidence, not just show a working demo. Learning to justify, evidence and reflect now is exactly the habit those roles demand.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Mathematics · Languages</h4><p>Backing a claim with before-and-after evidence is <b>data-based argument</b> in <b>Mathematics</b>. Presenting a concise, justified case is <b>structured oral communication</b> in <b>Languages</b>.</p></div>
+    <div id="a-verify"></div>
+    <div id="a-four"></div>
+    <div id="a-reflect"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3 · Worksheet</span><h2>Showcase worksheet</h2><p>Justify two choices with evidence, clean your exhibit, present, and score a partner.</p></div>
+  <div class="part-body">
+    <div class="call amber"><h4>Tool for this week: decision decks + spreadsheet (results summary) for the showcase (teacher-mediated · frameworks)</h4><p>1. Pick two choices to justify: one design choice and one trade-off. 2. Write the evidence for each that it serves the strategic purpose. 3. Remove any personal data from your exhibit, then present for two minutes using ‘I chose X so that Y, and here is the evidence’. <b>Stay safe:</b> no personal data in the exhibit. Every performance claim is checked against the task and a trusted source.</p></div>
+    <p>The worksheet uses one example signature system so everyone practises on the same evidence. Then do the same on paper for your own system.</p>
+    <div class="ecard" id="audit"></div>
+    <div id="a-wsjust"></div>
+    <div id="a-wspd"></div>
+    <div id="a-wsframe"></div>
+    <div id="a-wsrubric"></div>
+    <h3 class="sub">Unplugged activity · prepare a justified showcase, on paper</h3>
+    <div class="call"><h4>Scenario</h4><p>Your signature system is finished. Working on paper, prepare a two-minute justification of two choices with evidence. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Justify: ‘I chose X so that Y – here is the before-and-after evidence.’</div>
+    <div id="a-paper"></div>
+    <div id="a-quiz"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 10 Lab</span><h2>Peer Review and Aim Higher</h2><p>Today you review each other's integrated systems like a real design team, act on the feedback to improve one part and re-check it, then turn your term's reflections into one clear, measurable goal for next term.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In the Core you showcased your integrated system and justified two choices with evidence that they serve its strategic purpose, verified against a trusted source.</p></div>
+    <div class="call"><h4>Scenario – the peer-review carousel</h4><p>In a peer-review carousel you give feedback that improves a system – a strength, one improvement, a question – then act on the most useful comment, re-check, and set a measurable goal for a higher-stakes context. <span class="illus">(Scenario – illustrative.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Feedback that actually improves a system</h2><p>‘Nice system’ changes nothing.</p></div>
+  <div class="part-body">
+    <p>‘Nice system’ changes nothing. Usable <b>feed-forward</b> has three parts: a specific <b>strength</b>, one concrete <b>improvement</b>, and a <b>question</b> – all aimed at the work, never the person, and at least one tied to the <b>evidence</b> or a <b>risk</b>, ideally at the weakest part. In the carousel you and other reviewers score each exhibit and its success-criteria table on the same rubric. When your scores differ, you do not argue about opinions; you point to the evidence, such as a test result. That is <b>calibration</b>: it makes review fair and comparable, not a matter of taste.</p>
+    <figure>
+      <svg viewBox="0 0 760 330" role="img" aria-labelledby="f2T">
+        <title id="f2T">A feed-forward slip with three stacked bars. Strength: your table makes the comfort gain clear. One improvement, linked to the evidence: only four weeks of testing – re-check through a hot month. One question: what if the timetable changes after approval? Notes beside the slip: aimed at the work, never the person; at least one part linked to evidence or a risk; and ‘nice system’ changes nothing.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1520">
+          <rect x="10" y="10" width="500" height="310" rx="16" fill="#fff" stroke="#2A1520" stroke-width="1.6"/>
+          <text x="30" y="40" font-size="15" font-weight="800" fill="#6B1533">FEED-FORWARD SLIP</text>
+          <g stroke-width="1.6"><rect x="30" y="56" width="460" height="74" rx="10" fill="#E2F5EC" stroke="#0F8A5F"/><rect x="30" y="142" width="460" height="74" rx="10" fill="#FBEEF2" stroke="#A61E4D"/><rect x="30" y="228" width="460" height="74" rx="10" fill="#FFF7E8" stroke="#E8890C"/></g>
+          <g font-size="15" font-weight="800"><text x="46" y="82" fill="#0F8A5F">1 · STRENGTH</text><text x="46" y="168" fill="#A61E4D">2 · ONE IMPROVEMENT</text><text x="46" y="254" fill="#B45309">3 · ONE QUESTION</text></g>
+          <g font-size="14"><text x="46" y="110">“Your table makes the comfort gain clear.”</text><text x="46" y="196">“Only 4 weeks tested – re-check in a hot month.”</text><text x="46" y="282">“What if the timetable changes after approval?”</text></g>
+          <rect x="350" y="152" width="128" height="24" rx="12" fill="#A61E4D"/><text x="414" y="169" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">evidence</text>
+          <g stroke="#2A1520" stroke-width="1.6" fill="#FBF6F8"><rect x="530" y="10" width="220" height="92" rx="14"/><rect x="530" y="118" width="220" height="92" rx="14"/></g>
+          <rect x="530" y="226" width="220" height="94" rx="14" fill="#FDE7EC" stroke="#C92A4B" stroke-width="1.6"/>
+          <g font-size="14" font-weight="700" text-anchor="middle"><text x="640" y="44">Aimed at the work,</text><text x="640" y="64">never the person</text>
+            <text x="640" y="152">At least one part</text><text x="640" y="172">linked to evidence</text>
+            <text x="640" y="262" fill="#C92A4B">✗ “Nice system”</text></g>
+          <g font-size="13" text-anchor="middle" fill="#6A5560"><text x="640" y="86">kind and specific</text><text x="640" y="194">or a risk</text><text x="640" y="290">changes nothing –</text><text x="640" y="308">no next step</text></g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Feed-forward in three parts: strength, one improvement, one question – aimed at the work and linked to evidence or a risk. (Illustrative example.)</figcaption>
+    </figure>
+    <div class="call violet"><h4>Cross-curricular link · Moral Education · Mathematics</h4><p>Giving specific, useful, respectful feedback is <b>constructive collaboration</b> from <b>Moral Education</b>. Setting a goal with a checkable target is a <b>measurable objective</b> in <b>Mathematics</b>.</p></div>
+    <div id="a-lff"></div>
+    <div id="a-lcalib"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Close the loop, then aim higher</h2><p>Feedback only counts if you act on it.</p></div>
+  <div class="part-body">
+    <p>Feedback only counts if you act on it. Pick the <b>single most useful comment</b> on your exhibit, change <b>one component</b> – your data, model, tool, prompt or human-in-the-loop – and <b>re-check</b> it against the success criteria. Then consolidate your term's reflections into one <b>measurable goal</b> with success criteria, so you can prove whether you met it. Finally, think bigger: how would your system change for a harder task or a <b>higher-stakes context</b>? Name the component you would strengthen, the trade-off you would rebalance, and the verification and governance control to add.</p>
+    <h3 class="sub">Audit, score, then aim at the next iteration</h3>
+    <figure>
+      <svg viewBox="0 0 760 340" role="img" aria-labelledby="f3T">
+        <title id="f3T">Left: a governance canvas with five ticked rows – accountability (a named owner answers for it), transparency (people can see why it decided), data governance (only the data it needs, protected), human oversight (a person can check and override) and redress (a way to report and fix harm). Right: a rubric scorecard – Understand 4 of 4, Design 3 of 4, Evaluate 2 of 4 (the weakest), Govern 3 of 4. Below it, an arrow to the next iteration: aim at the weakest strand, Evaluate.</title>
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2A1520"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1520">
+          <rect x="10" y="10" width="340" height="320" rx="16" fill="#fff" stroke="#2A1520" stroke-width="1.6"/>
+          <text x="180" y="38" font-size="15" font-weight="800" text-anchor="middle" fill="#6B1533">GOVERNANCE CANVAS</text>
+          <g stroke="#0F8A5F" stroke-width="1.6" fill="#E2F5EC"><rect x="26" y="62" width="24" height="24" rx="6"/><rect x="26" y="114" width="24" height="24" rx="6"/><rect x="26" y="166" width="24" height="24" rx="6"/><rect x="26" y="218" width="24" height="24" rx="6"/><rect x="26" y="270" width="24" height="24" rx="6"/></g>
+          <g font-size="15" font-weight="800" fill="#0F8A5F" text-anchor="middle"><text x="38" y="80">✓</text><text x="38" y="132">✓</text><text x="38" y="184">✓</text><text x="38" y="236">✓</text><text x="38" y="288">✓</text></g>
+          <g font-size="14" font-weight="700"><text x="62" y="72">Accountability</text><text x="62" y="124">Transparency</text><text x="62" y="176">Data governance</text><text x="62" y="228">Human oversight</text><text x="62" y="280">Redress</text></g>
+          <g font-size="13" fill="#6A5560"><text x="62" y="92">a named owner answers for it</text><text x="62" y="144">people can see why it decided</text><text x="62" y="196">only the data it needs, protected</text><text x="62" y="248">a person can check and override</text><text x="62" y="300">a way to report and fix harm</text></g>
+          <g stroke="#EFDCE3" stroke-width="1.4"><path d="M26 104H334"/><path d="M26 156H334"/><path d="M26 208H334"/><path d="M26 260H334"/></g>
+          <rect x="380" y="10" width="370" height="222" rx="16" fill="#FBF6F8" stroke="#2A1520" stroke-width="1.6"/>
+          <text x="565" y="38" font-size="15" font-weight="800" text-anchor="middle" fill="#6B1533">RUBRIC SCORECARD</text>
+          <g font-size="14" font-weight="700"><text x="398" y="78">Understand</text><text x="398" y="122">Design</text><text x="398" y="166" fill="#C92A4B">Evaluate</text><text x="398" y="210">Govern</text></g>
+          <g stroke="#A61E4D" stroke-width="1.2">
+            <g fill="#A61E4D"><rect x="500" y="62" width="40" height="22"/><rect x="540" y="62" width="40" height="22"/><rect x="580" y="62" width="40" height="22"/><rect x="620" y="62" width="40" height="22"/>
+            <rect x="500" y="106" width="40" height="22"/><rect x="540" y="106" width="40" height="22"/><rect x="580" y="106" width="40" height="22"/>
+            <rect x="500" y="194" width="40" height="22"/><rect x="540" y="194" width="40" height="22"/><rect x="580" y="194" width="40" height="22"/></g>
+            <g fill="#fff"><rect x="620" y="106" width="40" height="22"/><rect x="580" y="150" width="40" height="22"/><rect x="620" y="150" width="40" height="22"/><rect x="620" y="194" width="40" height="22"/></g>
+          </g>
+          <g fill="#C92A4B" stroke="#C92A4B" stroke-width="1.2"><rect x="500" y="150" width="40" height="22"/><rect x="540" y="150" width="40" height="22"/></g>
+          <g font-size="14" font-weight="700"><text x="674" y="78">4/4</text><text x="674" y="122">3/4</text><text x="674" y="166" fill="#C92A4B">2/4</text><text x="674" y="210">3/4</text></g>
+          <path d="M565 234V252" stroke="#2A1520" stroke-width="2" marker-end="url(#ah3)" fill="none"/>
+          <path d="M380 258H708L746 294L708 330H380Z" fill="#6B1533" stroke="#2A1520" stroke-width="1.6"/>
+          <text x="400" y="288" font-size="15" font-weight="800" fill="#fff">NEXT ITERATION</text>
+          <text x="400" y="314" font-size="13" fill="#F9C9D8">aim at the weakest strand: Evaluate</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> Governance canvas audit alongside a rubric scorecard, and a reflection arrow to the next iteration. (Illustrative scores.)</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Design and engineering teams in the UAE improve their systems through structured peer review, evidence against clear criteria, and measurable goals – the same routine you practise here is how real AI teams raise quality and stay accountable to the public.</p></div>
+    <div id="a-lloop"></div>
+    <div id="a-lcanvas"></div>
+    <div id="a-lscore"></div>
+    <div id="a-lhigh"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Part 3 of 3 · Worksheet</span><h2>Peer-review carousel</h2><p>Calibrate, leave feed-forward, act on one comment, re-check, and set a measurable goal.</p></div>
+  <div class="part-body">
+    <div class="call amber"><h4>Tool for this week: decision decks + spreadsheet (results summary) for the carousel (teacher-mediated · decks + spreadsheet)</h4><p>1. Calibrate: score the sample exhibit and its metrics so everyone marks to the same standard. 2. At each station, leave feed-forward: a strength, one improvement, and a question. 3. On your own exhibit, act on the most useful comment, re-check, and write one measurable goal for a higher-stakes context. <b>Stay safe:</b> no personal data in any exhibit. Feedback stays specific, evidence-based and respectful.</p></div>
+    <div class="ecard" id="carousel"></div>
+    <div id="a-lws"></div>
+    <div id="a-lrecheck"></div>
+    <div id="a-lgoal"></div>
+    <h3 class="sub">Unplugged activity · give feed-forward, on paper</h3>
+    <div class="call"><h4>Scenario</h4><p>In a peer-review carousel you review a partner's exhibit. Working on paper, write feed-forward and set a measurable goal for a higher-stakes context. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Feed-forward: ‘Strength: clear architecture. Improvement: add a fairness check. Question: how would it scale to 10× users?’</div>
+    <div id="a-lpaper"></div>
+    <div id="a-lquiz"></div>
+    <div class="call"><h4>Next</h4><p>Term 2: carry your measurable goal – and its success criteria – into the new term's work, and check it against its target.</p></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Justify it, prove it, review it – then aim higher</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>A showcase <b>justifies</b> choices with evidence that they serve the strategic purpose; it is not show-and-tell.</li>
+      <li>Use the frame: I chose X so the system could Y, I evaluated it by measuring Z, and I managed the risk by doing W.</li>
+      <li>Every ‘it works’ claim is <b>verified</b> against the task and a trusted source; no personal data in any exhibit.</li>
+      <li>Reflect on the <b>whole system</b>, not just the model – then set one specific, measurable next goal.</li>
+      <li><b>Feed-forward</b> = a strength + one improvement + a question, aimed at the weakest part.</li>
+      <li>Feedback counts only when you <b>act</b> on it and <b>re-check</b>.</li>
+      <li>Set a <b>measurable goal</b> with a target you can check, and say how the system would change for a <b>higher-stakes</b> context.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 12 · Main Course · Term 1 Week 10 (7 – 11 Dec 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- strand + concept tags ---------- */
+const CU_E="CU · how AI solutions function in real-world contexts";
+const CU_P="CU · how components interact and influence outcomes";
+const CU_A="CU · system effectiveness: performance, risk, scalability";
+const SD_P="SD · designs and refines solutions for complex challenges";
+const SD_A="SD · integrated, multi-component solutions with strategic intent";
+const CE_P="CE · evaluates using evidence and defined criteria";
+const CE_A="CE · justifies refinements using data, evidence and structured reasoning";
+const GE_P="GE · structured impact analysis (bias, privacy, societal)";
+const GE_A="GE · designs responsible-use approaches and defends decisions";
+
+/* display order for dropdowns: shuffled, and never with the right answer first */
+const PERM={3:[2,0,1],4:[2,0,3,1],5:[3,0,4,1,2],6:[4,1,5,0,3,2]};
+function ord(n,c){const p=PERM[n].slice();while(p[0]===c)p.push(p.shift());return p}
+
+const STR_SHORT=["Systems","Design","Evaluation","Governance"];
+const STR_VALS=["CU","SD","CE","GE"];
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["integrated system","A solution made of several parts (data, model or tool, prompt or interface, human-in-the-loop) that work together to serve one purpose."],
+  ["strategic purpose","The real-world aim a system is designed to achieve, which every design choice should serve."],
+  ["evidence","A result that proves a claim against your success criteria, such as a test log, an accuracy figure or a user-success rate."],
+  ["verify-before-trust","Checking an output against the task and a trusted source before believing it, because confidence is not correctness."],
+  ["governance","The rules and controls that keep an AI system safe, fair and accountable, such as using no personal data and adding human review."]
+];
+/* the frame, applied to the Week 1 government service */
+const FR_X = ["A confidence check that sends uncertain requests to staff for review","A brighter colour scheme on the request form","More buttons on the citizen's screen","A bigger company logo on the app"];
+const FR_Y = ["Get every citizen's request to the right department, with a person accountable","Route as many requests per second as possible","Replace every member of staff","Look more modern than other services"];
+const FR_Z = ["Wrong departments reaching citizens on 20 test requests: 4/20 → 1/20","Staff said it felt better","The system now looks smarter","It was the newest version"];
+const FR_W = ["Unaccountable automatic decisions – by logging who decided each request and why","No risk – the model is accurate, so nothing can go wrong","Slow internet – by buying faster servers","A boring design – by adding animations"];
+const JSORT = [
+  ["j1","“Watch – it recommends a setting for every room in under a second!”","S"],
+  ["j2","“I added a staff-approval step so the system could save energy without cooling rooms in use: setbacks in occupied rooms fell from 11 to 0 in four weeks, and every approval is logged so someone is accountable.”","J"],
+  ["j3","“Our dashboard has animated charts and a dark mode.”","S"],
+  ["j4","“I evaluated the system on the school's utility meter, not the model's own estimate: it saved 12% against our target of at least 10%, so we report 12%, not the 20% the model claimed.”","J"],
+  ["j5","“The final version has twice as many features as version 1.”","S"],
+  ["j6","“I removed the corridor camera and used aggregate meter data only, so the system serves its purpose without tracking anyone – and the saving stayed above our 10% target.”","J"]
+];
+const CLAIM_LABELS = ["Serves purpose","Evidence","Manages risk"];
+const CLAIM_VALS = ["P","E","R"];
+const CLAIM = [
+  ["cp1","… so the system could cut cooling energy without making lessons uncomfortable","P"],
+  ["cp2","… setbacks applied to occupied rooms fell from 11 to 0 over four weeks","E"],
+  ["cp3","… I removed the corridor camera, so no one is tracked","R"],
+  ["cp4","… measured on the school's utility meter: 12% saved against a 10% target","E"],
+  ["cp5","… every approval is logged with who decided and why","R"],
+  ["cp6","… so facilities staff can plan cooling around the real timetable","P"]
+];
+const VERIFY = ["Yes – detail and confidence prove correctness.","Yes – it answered instantly.","No – every ‘it works’ claim needs a check against the task and a trusted source."];
+const VERIFY2 = ["The school's utility-meter readings – the trusted source for energy use","The system itself – ask it whether it is sure","Whoever in the audience answers first","Nothing – it already looked right"];
+const VERIFY3 = ["Teacher-operated and account-free, with non-personal example data only","Logged in to a student's own account so it feels real","Showing live camera images of people in the corridor","Using a teacher's real name and timetable as the example"];
+const FOUR = [
+  ["f1","Savings depend on the timetable data and the staff approvals as well as the model, so I traced how a late timetable change ripples through to a rejected setback.","CU"],
+  ["f2","I placed the human-approval step between the model's recommendation and the building controls, so no setback runs without a person.","SD"],
+  ["f3","Over four weeks I compared the metered saving with our success criteria, and traced the drop from 14% to 12% to recommendations that staff rejected.","CE"],
+  ["f4","I replaced the corridor camera with aggregate meter data and wrote an override and redress rule for staff.","GE"]
+];
+const REFL = ["“My model was good, so the project went well.”","“The biggest gains came from outside the model: better timetable data and the staff-approval step did more for comfort and trust than any model change.”","“I used a lot of AI tools this term.”","“The demo ran without crashing.”"];
+const GOAL = ["Get much better at AI next term","By half-term of Term 2, raise the metered saving from 12% to 14% while keeping setbacks in occupied rooms at 0, over the same four-week test","Use more AI tools","Make the slides look more professional"];
+/* illustrative evidence pack for the worksheet */
+const PACK = [
+  ["Cooling energy saved vs the baseline month (school's utility meter)","14%","12%"],
+  ["Setbacks applied to a room that was actually in use (4 weeks)","11","0"],
+  ["Comfort complaints from rooms in use (per week)","9","1"],
+  ["Setbacks approved by facilities staff","– (all ran automatically)","86 of 100"],
+  ["How it was evaluated","the model's own saving estimate (20%)","4-week test on the utility meter against the success criteria"],
+  ["Personal data","a corridor camera counted people","aggregate meter and timetable data only – camera removed"]
+];
+const WS_EVID = ["Setbacks in occupied rooms 11 → 0 and complaints 9 → 1 a week, with the saving still 12% (target: at least 10%)","Measured on the school's utility meter over four weeks: 12% saved – the model's own estimate claimed 20%","The dashboard looks much more professional","Facilities staff said they liked it"];
+const WS_RISK = ["Cooling switched off in an occupied room, such as an exam hall, with no one accountable","Overclaiming the saving to school leaders with a number nobody checked","No risk – it only saves energy","The system might save too much energy"];
+const PD = [
+  ["pd1","A corridor-camera clip used for counting people","R"],
+  ["pd2","The energy chart: 14% → 12% saving against the baseline month","K"],
+  ["pd3","A dashboard screenshot showing a teacher's name next to a room booking","R"],
+  ["pd4","The success-criteria table","K"],
+  ["pd5","A voice note from a member of the facilities staff explaining an override","R"],
+  ["pd6","Aggregate room-temperature readings listed by room number","K"]
+];
+const OPEN = ["“This is our energy system – it does loads of things, let me show you.”","“Sorry, it probably doesn't work that well.”","“I chose to have facilities staff approve every setback so the system could cut cooling energy without cooling rooms in use; I evaluated it by measuring the four-week saving on the school's meter – 12% against a 10% target; and I managed the risk of unaccountable automatic decisions by logging who approved each one.”"];
+const ANSWERQ = ["“The model is very advanced, so 20% is probably right.”","“Because 12% is what the school's utility meter measured over four weeks – the model's 20% was never checked against a trusted source, so we report the verified figure.”","“We rounded it down to be modest.”","“Nobody has complained about the number so far.”"];
+const RUBRIC = [
+  ["rb1","Names a design choice and the strategic purpose it serves",1],
+  ["rb2","Gives evidence against the success criteria",1],
+  ["rb3","Names the ethical or societal risk the choice manages",0],
+  ["rb4","Verifies the ‘it works’ claim against the task and a trusted source",0]
+];
+const RFF = ["“Great job, I liked it!”","“Strength: clear before-and-after waiting times. Improvement: name the risk you manage – crowd data could track individuals, so show how you keep it aggregate. Question: how many predictions matched the official ridership counts?”","“Your presentation was a bit boring.”","“Add more features next time.”"];
+const PAPER1 = ["The kitchen staff felt happier","Food waste fell from 18 kg to 9 kg a day over three weeks, weighed on the kitchen scales, and no day ran out of meals","The forecast looks very precise – to three decimal places","It uses the newest model"];
+const PAPER2 = ["There is no trade-off","The model became larger","Portions are fixed 30 minutes later each day, so the kitchen has less preparation time","Students must now give their names at the counter"];
+const PAPER3 = ["“I chose to plan portions from the forecast plus the day's attendance count so the system could cut food waste without anyone going hungry; I evaluated it by weighing waste for three weeks – 18 kg → 9 kg a day; and I managed the risk of running out by keeping a reserve batch.”","“The forecast is a cool feature I added.”","“It wastes less food now – trust me.”"];
+const QUIZ = [
+  ["q1","What lifts a showcase above show-and-tell?",["Making the demo longer.","Justifying your choices with evidence that they serve the strategic purpose.","The most advanced-looking interface."],1],
+  ["q2","An output is fast, confident and detailed. Does that prove it works?",["Yes – detail and confidence prove correctness.","Yes, if it was fast.","No – every ‘it works’ claim needs a check against the task and a trusted source."],2],
+  ["q3","What should you reflect on at the end?",["The whole system, not just the model.","Only the model's accuracy.","Only how the demo looked."],0]
+];
+const TF = [
+  ["tf1","A showcase justifies choices with evidence, not just runs a demo.","T"],
+  ["tf2","A fast, confident, detailed output proves the system works.","F"],
+  ["tf3","You should reflect on the whole system, not just the model.","T"]
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["feed-forward","Feedback that names a specific next step, not just praise for what is done."],
+  ["calibration","Reviewers agreeing on a standard so scores are comparable, settled by the evidence."],
+  ["peer-review carousel","A routine where you move between stations reviewing each exhibit against the same rubric."],
+  ["measurable goal","A goal with success criteria and a way to check whether you met it."],
+  ["higher-stakes context","A situation where a wrong output matters more, like real users, live data or a healthcare setting."]
+];
+const FF_LABELS = ["Strength","Improvement","Question","Not useful"];
+const FF_VALS = ["S","I","Q","N"];
+const LFF = [
+  ["ff1","“Your before-and-after table makes the comfort gain clear: complaints fell from 9 to 1 a week.”","S"],
+  ["ff2","“You only tested for four cooler weeks – re-check the saving and the comfort criterion through a hot month, when cooling matters most.”","I"],
+  ["ff3","“What happens if the timetable changes after staff approve a setback?”","Q"],
+  ["ff4","“Nice system!”","N"],
+  ["ff5","“You don't seem very confident when you present.”","N"],
+  ["ff6","“Swapping the camera for aggregate meter data protects everyone's privacy – clear governance.”","S"]
+];
+const CAL1 = ["The louder reviewer's score stands","Average the two scores and move on","Point to the evidence: check whether the 25% was measured against the success criteria and a trusted source","Go with whoever liked the exhibit more"];
+const CAL2 = ["4/4 – the exhibit clearly says ‘25%’","2/4 – the figure is the model's own estimate, not checked against the meter or a baseline, so it is not yet evidence against the criteria","0/4 – there are no numbers at all"];
+const LOOP_C = ["“Love the colours on the dashboard.”","“14 of your 100 recommendations were rejected because the timetable feed only updates weekly – update it daily and re-check.”","“Make it control the lights as well.”","“Add a logo.”"];
+const LOOP_STEPS = ["Pick the single most useful comment","Change one component – data, model, tool, prompt or human-in-the-loop","Re-check it against the success criteria","Record the before and after"];
+const CANVAS = ["Accountability","Transparency","Data governance","Human oversight","Redress"];
+const LCANVAS = [
+  ["gv1","A named facilities manager owns the system and answers for its decisions",0],
+  ["gv2","The dashboard shows why each setback was recommended – room empty in the timetable, temperature trend",1],
+  ["gv3","Only aggregate meter and timetable data are used: no camera, no names, deleted after one term",2],
+  ["gv4","Staff approve every setback before it runs and can override it at any time",3],
+  ["gv5","A teacher whose room was cooled off by mistake can report it, have it fixed the same day and the case reviewed",4]
+];
+const STR4 = ["Understand","Design","Evaluate","Govern"];
+const LS2 = ["Add a new colour theme to the dashboard","Re-run the four-week test through a hot month on the utility meter and compare it with every success criterion","Present more confidently so all scores rise","Add more components to the system"];
+const HI_COMP = ["Human-in-the-loop – clinical staff confirm any change in a patient area, and some rooms are never set back","The colour scheme of the dashboard","Nothing – the same system works anywhere","Make the model as large as possible"];
+const HI_TRADE = ["Accept a smaller saving for patient safety – comfort and safety now outweigh energy","Keep the energy saving first, whatever the risk","Cut testing so it can launch sooner","Drop staff approval to save time"];
+const HI_VERIFY = ["Check every setback against the ward's live occupancy log before it runs","Trust recommendations that look confident","Ask patients to check the settings themselves","Check only if someone complains"];
+const HI_GOV = ["Test it with real patients' records to make it realistic","No personal health data, a named clinical owner, a redress route and a pause rule if any patient area is set back","Let the system decide alone to save staff time","Governance is not needed for a pilot"];
+/* illustrative carousel exhibits */
+const EXHIBITS = [
+  ["xa","Bus-stop crowding advisor","Aggregate ticket-gate counts → a model predicts crowding → the app suggests a quieter stop → transport staff review alerts","Average wait 11 → 7 min in a two-week trial. Predictions vs official ridership counts: 34/40. Weakest: tested on weekdays only."],
+  ["xb","Library study-space finder","Room bookings + Wi-Fi device counts → a model predicts free seats → a screen shows where to go","Students finding a seat first time 5/10 → 8/10. Weakest: no data rule – device counts could identify individuals."]
+];
+const XA_S = ["Waits fell from 11 to 7 minutes, checked against official ridership counts – clear evidence","The app looks nice","You worked hard","It uses AI"];
+const XA_I = ["Make it more colourful","Test at weekends and on event days too, then re-check the predictions against the ridership counts","Add more features","Nothing – it is perfect"];
+const XA_Q = ["Why did you choose that colour?","How accurate is it on the busiest days, when crowding matters most?","Are you happy with it?","Did you enjoy the project?"];
+const XB_S = ["Seat-finding rose from 5/10 to 8/10 first-time students – a measured gain","Good effort","The name is catchy","It has a logo"];
+const XB_I = ["Add sound effects","Make it even faster","Write a data rule: count devices in aggregate only, store no device IDs, and delete counts daily","Remove the seat test"];
+const XB_Q = ["Do you like libraries?","Could anyone be identified from the Wi-Fi counts, and who checks that they cannot?","Who designed the screen?","How long did it take to build?"];
+const RM = [
+  ["Cooling energy saved (utility meter, 4 weeks)","12%","14%"],
+  ["Setbacks applied to occupied rooms","0","0"],
+  ["Setbacks approved by staff","86 of 100","95 of 100"],
+  ["Comfort complaints per week","1","1"]
+];
+const RM_TRADE = ["Staff spend about 10 minutes more each morning checking the daily timetable import","Running cost tripled","Comfort complaints rose","There was no change at all"];
+const RM_WHY = ["So you know the change caused the difference, not a different test or easier criteria","Because new criteria always give better numbers","To make the table longer","It does not matter which criteria you use"];
+const LGOAL = ["“Be better at AI next term.”","“By half-term of Term 2, keep setbacks in occupied rooms at 0 and raise the metered saving from 14% to 15%, on the same four-week test.”","“Try every AI tool I can find.”","“Work harder on my projects.”"];
+const LCHECK = ["Re-run the same four-week metered test and the occupied-room log, and compare with the target","Ask a friend if it seems better","Check once at the end of the year and hope","There is no way to check a goal"];
+const LPF = ["“Nice system, well done.”","“You should present better.”","“Strength: clear architecture. Improvement: add a fairness check on which rooms get set back. Question: how would it scale to every school in the city?”"];
+const LPF2 = ["Ignore every comment – the system already works","The comment about rejected recommendations – update the timetable data daily, then re-check","Act on all twelve comments at once","Only act on comments that agree with you"];
+const LMEAS = [
+  ["mg1","In a hospital-ward pilot, keep setbacks in occupied patient areas at 0 over eight weeks, checked against the ward log",1],
+  ["mg2","Make the system safer for hospitals",0],
+  ["mg3","Have clinical staff confirm 100% of changes in patient areas, audited weekly from the decision log",1],
+  ["mg4","Learn a lot more about governance",0],
+  ["mg5","Reach at least a 10% metered saving in non-patient areas by the end of Term 2",1]
+];
+const LQUIZ = [
+  ["lq1","What makes feedback ‘feed-forward’?",["Saying the system is nice.","A specific strength, one concrete improvement, and a question aimed at the weakest part.","Listing everything wrong at once."],1],
+  ["lq2","When does feedback count?",["When you collect as much as possible.","When it agrees with what you did.","When you act on it – change one component and re-check whether it improved."],2],
+  ["lq3","What makes a next-term goal a good one?",["It is measurable – it has a target you could actually check.","It is as broad as possible.","It avoids any specific number."],0]
+];
+const LTF = [
+  ["ltf1","‘Nice system’ is useful feed-forward.","F"],
+  ["ltf2","Feedback only counts once you act on it and re-check.","T"],
+  ["ltf3","A good next-term goal is measurable, with a target you can check.","T"]
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CU_E,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"An integrated system is several parts working together for one purpose. The strategic purpose is the real-world aim every choice should serve. Evidence is a result that proves a claim against your success criteria. Verify-before-trust means checking an output against the task and a trusted source, because confidence is not correctness. Governance is the rules and controls that keep a system safe, fair and accountable."},
+ {id:"frame",mount:"a-frame",section:"Core · Part 1",title:"Fill the frame",sub:"Objective 1 · chose X so it could Y, measured Z, managed W · "+SD_A,ico:"🧩",
+  fields:[{k:"fx",ok:v=>eq(v,0)},{k:"fy",ok:v=>eq(v,0)},{k:"fz",ok:v=>eq(v,0)},{k:"fw",ok:v=>eq(v,0)}],
+  explain:"The design choice (X) was the confidence check that sends uncertain requests to staff. It serves the strategic purpose (Y): every request reaches the right department, with a person accountable. It was evaluated by a measured result (Z): wrong departments fell from 4/20 to 1/20. The risk it manages (W) is unaccountable automatic decisions – handled by logging who decided and why. Colours, logos and ‘it felt better’ are neither choices that serve the purpose nor evidence."},
+ {id:"jsort",mount:"a-jsort",section:"Core · Part 1",title:"Justified claim or show-and-tell?",sub:"Objective 1 · justify, don't just demo · "+CE_A,ico:"🗂️",
+  fields:JSORT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A justified claim names the choice, the purpose it serves, the evidence against the success criteria and the risk it manages – the staff-approval step, the metered evaluation and removing the camera all do this. A fast demo, a dark mode or ‘more features’ is show-and-tell: it shows the build, not the reasoning."},
+ {id:"claim",mount:"a-claim",section:"Core · Part 1",title:"Purpose, evidence or risk?",sub:"Figure 1 · the three parts of a justified claim · "+CU_A,ico:"🧷",
+  fields:CLAIM.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Serves purpose: cutting cooling energy without uncomfortable lessons, and planning around the real timetable. Evidence: results against the criteria – 11 → 0 setbacks in occupied rooms, 12% on the meter against a 10% target. Manages risk: no camera so no one is tracked, and a logged approval so someone is accountable."},
+ {id:"verify",mount:"a-verify",section:"Core · Part 2",title:"Verify before you trust",sub:"Prove the ‘it works’ claim · stay safe · "+CE_P,ico:"✔️",
+  fields:[{k:"vf1",radio:1,ok:v=>eq(v,2)},{k:"vf2",ok:v=>eq(v,0)},{k:"vf3",ok:v=>eq(v,0)}],
+  explain:"Speed, detail and confidence are not correctness. Check the 23% against a trusted source – the school's utility-meter readings – before you put it on your exhibit; asking the system whether it is sure is not a check. Keep the live demo teacher-operated and account-free, with non-personal example data only: no names, faces or voices."},
+ {id:"four",mount:"a-four",section:"Core · Part 2",title:"Prove it works: one system, four strands",sub:"Objective 2 · a task that samples all four strands · "+CU_P,ico:"🧭",
+  fields:FOUR.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Tracing how a timetable change ripples through to a rejected setback is systems understanding. Placing the approval step between the model and the building controls is solution design. Comparing the metered saving with the success criteria and tracing the drop is critical evaluation. Replacing the camera and writing override and redress rules is governance, ethics and societal impact."},
+ {id:"reflect",mount:"a-reflect",section:"Core · Part 2",title:"Reflect on the whole system, then set a goal",sub:"Objective 3 · one thing learned, one specific goal · "+CU_A,ico:"🪞",
+  fields:[{k:"rf1",radio:1,ok:v=>eq(v,1)},{k:"rf2",ok:v=>eq(v,1)}],
+  explain:"A strong reflection looks across the whole system: the biggest gains came from the data (the timetable) and the human-in-the-loop (staff approval), not only the model. A good goal is specific and measurable – what will improve, by how much, by when and on which test – not ‘get much better at AI’."},
+ {id:"wsjust",mount:"a-wsjust",section:"Core worksheet 1–2",title:"Justify two choices with evidence",sub:"Worksheet 1–2 · evidence it serves the purpose, and the risk it manages · "+SD_A,ico:"📝",cls:"ws",
+  fields:[{k:"jae",ok:v=>eq(v,0)},{k:"jar",ok:v=>eq(v,0)},{k:"jbe",ok:v=>eq(v,1)},{k:"jbr",ok:v=>eq(v,1)}],
+  explain:"Design choice – staff approve every setback: setbacks in occupied rooms fell from 11 to 0 and complaints from 9 to 1 a week, with the saving still above the 10% target. It manages the risk of cooling an occupied room with no one accountable. Evaluation choice – a four-week test on the utility meter: it gives a verified 12% instead of the model's unchecked 20%, managing the risk of overclaiming to school leaders."},
+ {id:"wspd",mount:"a-wspd",section:"Core worksheet 3",title:"Remove the personal data",sub:"Worksheet 3 · keep it, or replace it with a label or icon · "+GE_A,ico:"🛡️",cls:"ws",
+  fields:PD.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"No personal data in the exhibit: camera footage of people, a teacher's name and a staff member's voice are replaced with a label or icon. The energy chart, the success-criteria table and aggregate readings by room number identify no one, so they stay."},
+ {id:"wsframe",mount:"a-wsframe",section:"Core worksheet 4",title:"Present with the frame",sub:"Worksheet 4 · opening line and one question · "+CE_A,ico:"🎤",cls:"ws",
+  fields:[{k:"op",radio:1,ok:v=>eq(v,2)},{k:"aq",ok:v=>eq(v,1)}],
+  explain:"The strongest opening uses the whole frame: the choice, the purpose it serves, how it was evaluated and the risk it manages. When asked why you claim 12% and not 20%, answer with verification: 12% is what the trusted source – the utility meter – measured; the model's estimate was never checked."},
+ {id:"wsrubric",mount:"a-wsrubric",section:"Core worksheet 5",title:"Score a partner's showcase",sub:"Worksheet 5 · rubric and one piece of feed-forward · "+CE_P,ico:"🧾",cls:"ws",
+  fields:[...RUBRIC.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),{k:"rff",ok:v=>eq(v,1)}],
+  explain:"The partner names the choice and its purpose (spreading riders across stops) and gives evidence against a criterion (waits 11 → 7 minutes). But no risk is named, and ‘every prediction in the demo looked right’ is not verification against a trusted source such as official ridership counts. Specific feed-forward says exactly that, with a strength and a question."},
+ {id:"paper",mount:"a-paper",section:"Core · Unplugged",title:"Prepare a justified showcase, on paper",sub:"Unplugged activity · evidence, trade-off and opening line · "+SD_P,ico:"✍️",
+  fields:[{k:"pp1",ok:v=>eq(v,1)},{k:"pp2",ok:v=>eq(v,2)},{k:"pp3",radio:1,ok:v=>eq(v,0)}],
+  explain:"Evidence is a before-and-after against the purpose: waste fell from 18 kg to 9 kg a day, weighed on the scales, and no day ran out of meals. The trade-off is what the choice costs – portions are fixed later, leaving less preparation time. The opening line puts the whole frame in one sentence, including the risk it manages."},
+ {id:"quiz",mount:"a-quiz",section:"Core · Check",title:"Showcase check",sub:"Quick quiz · 3 questions and 3 true or false · "+CE_P,ico:"✅",cls:"quiz",
+  fields:[...QUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...TF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: Justification with evidence is the point; length and appearance are not. 2: Polished output can still be wrong – verify before you trust, however polished. 3: Strategic systems are judged as wholes, so reflect on the whole system. True or false: a showcase justifies choices with evidence (true); a fast, confident, detailed output does not prove it works (false); reflect on the whole system, not just the model (true)."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+CE_P,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"Feed-forward names a specific next step. Calibration means reviewers agree a standard, settled by the evidence. A peer-review carousel moves you between stations, reviewing each exhibit against the same rubric. A measurable goal has success criteria and a way to check it. A higher-stakes context is one where a wrong output matters more."},
+ {id:"lff",mount:"a-lff",section:"Lab · Part 1",title:"Strength, improvement, question – or not useful?",sub:"Objective 1 · feed-forward in three parts · "+CE_P,ico:"🎯",
+  fields:LFF.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Strengths are specific and point to evidence or governance (the complaints table, the switch to aggregate data). The improvement is concrete and aimed at the weakest part – testing only in cooler weeks. The question probes a real gap (timetable changes after approval). ‘Nice system!’ changes nothing, and a comment about the person is never feed-forward."},
+ {id:"lcalib",mount:"a-lcalib",section:"Lab · Part 1",title:"Calibrate with the evidence",sub:"Settle score gaps with the evidence, not opinion · "+CE_A,ico:"⚖️",
+  fields:[{k:"lk1",radio:1,ok:v=>eq(v,2)},{k:"lk2",ok:v=>eq(v,1)}],
+  explain:"Calibration settles differences with evidence, not volume or taste. The sample exhibit's ‘25%’ is the model's own estimate, with no meter reading or baseline, so it is not yet evidence against the success criteria – 2/4 is the score the evidence supports."},
+ {id:"lloop",mount:"a-lloop",section:"Lab · Part 2",title:"Close the loop",sub:"Objective 1 · act on one comment, re-check · "+SD_P,ico:"🔁",
+  fields:[{k:"lm",radio:1,ok:v=>eq(v,1)},{k:"lo1",ok:v=>eq(v,0)},{k:"lo2",ok:v=>eq(v,1)},{k:"lo3",ok:v=>eq(v,2)},{k:"lo4",ok:v=>eq(v,3)}],
+  explain:"The most useful comment targets a weak part and says why – a weekly timetable feed causes rejected recommendations. Then: pick that one comment, change one component, re-check it against the success criteria, and record the before and after. Changing one thing at a time is how you know what made the difference."},
+ {id:"lcanvas",mount:"a-lcanvas",section:"Lab · Part 2",title:"Audit with the governance canvas",sub:"Figure 3 · accountability, transparency, data, oversight, redress · "+GE_P,ico:"🛡️",
+  fields:LCANVAS.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Accountability: a named owner answers for the system. Transparency: people can see why each setback was recommended. Data governance: only the data it needs, protected and deleted. Human oversight: staff approve and can override. Redress: a way to report a mistake, get it fixed and have it reviewed."},
+ {id:"lscore",mount:"a-lscore",section:"Lab · Part 2",title:"Score, then aim at the next iteration",sub:"Figure 3 · rubric scorecard and next step · "+CE_A,ico:"📊",
+  fields:[{k:"ls1",ok:v=>eq(v,2)},{k:"ls2",ok:v=>eq(v,1)}],
+  explain:"The scorecard shows Evaluate is the weakest strand (2/4), so the next iteration aims there. A good action strengthens the evidence: re-run the test in the conditions that matter most (a hot month) on the trusted meter and compare with every criterion. Themes, confidence or extra components do not fix weak evaluation."},
+ {id:"lhigh",mount:"a-lhigh",section:"Lab · Part 2",title:"Plan for a higher-stakes context",sub:"Objective 3 · component, trade-off, verification, governance · "+GE_A,ico:"🏥",
+  fields:[{k:"hc",ok:v=>eq(v,0)},{k:"ht",ok:v=>eq(v,0)},{k:"hv",ok:v=>eq(v,0)},{k:"hg",ok:v=>eq(v,1)}],
+  explain:"When a wrong setback could harm a patient, strengthen the human-in-the-loop (clinical staff confirm, some rooms never set back), rebalance the trade-off towards safety over saving, verify each setback against the ward's live occupancy log, and govern it: no personal health data, a named clinical owner, a redress route and a pause rule."},
+ {id:"lws",mount:"a-lws",section:"Lab worksheet 1–2",title:"Leave feed-forward at each station",sub:"Worksheet 1–2 · strength, improvement, question · "+CE_P,ico:"🔄",cls:"ws",
+  fields:[{k:"xas",ok:v=>eq(v,0)},{k:"xai",ok:v=>eq(v,1)},{k:"xaq",ok:v=>eq(v,1)},{k:"xbs",ok:v=>eq(v,0)},{k:"xbi",ok:v=>eq(v,2)},{k:"xbq",ok:v=>eq(v,1)}],
+  explain:"Each piece of feed-forward is about the work and tied to the evidence or a risk. The crowding advisor's strength is its checked wait-time gain; its weakest part is weekday-only testing, so test at weekends and on event days and ask about the busiest days. The study-space finder's strength is 5/10 → 8/10; its weakest part is governance, so write an aggregate-only data rule and ask who checks that no one can be identified."},
+ {id:"lrecheck",mount:"a-lrecheck",section:"Lab worksheet 3–4",title:"Did it improve against the criteria?",sub:"Worksheet 3–4 · revise one component, re-check · "+CE_A,ico:"📈",cls:"ws",
+  fields:[{k:"rm1",ok:v=>eq(v,"U")},{k:"rm2",ok:v=>eq(v,0)},{k:"rm3",ok:v=>eq(v,0)}],
+  explain:"After making the timetable feed update daily, the metered saving rose from 12% to 14% and staff approved 95 of 100 recommendations, with occupied-room setbacks still 0 – it improved. The trade-off is about 10 minutes more staff time each morning. Re-checking against the same success criteria and test is what lets you say the change caused the improvement."},
+ {id:"lgoal",mount:"a-lgoal",section:"Lab worksheet 5",title:"One measurable goal for next term",sub:"Worksheet 5 · success criteria and how to check · "+CE_A,ico:"🎯",cls:"ws",
+  fields:[{k:"lg1",radio:1,ok:v=>eq(v,1)},{k:"lg2",ok:v=>eq(v,0)}],
+  explain:"A measurable goal names a target and a deadline – 0 occupied-room setbacks and 15% saving by half-term on the same test – so you can prove whether you met it. You check it by re-running the same metered test and occupied-room log and comparing with the target, not by asking whether it ‘seems better’."},
+ {id:"lpaper",mount:"a-lpaper",section:"Lab · Unplugged",title:"Give feed-forward, on paper",sub:"Unplugged activity · feed-forward and a higher-stakes goal · "+CE_P,ico:"✍️",
+  fields:[{k:"pf1",radio:1,ok:v=>eq(v,2)},{k:"pf2",ok:v=>eq(v,1)},...LMEAS.map(([k,,c])=>({k,box:1,ok:v=>v===!!c}))],
+  explain:"Complete feed-forward names a strength, one improvement and a question. Act on the single most useful comment and change one thing. A measurable goal for a higher-stakes context has a target you can check – a count, a percentage or an audit. ‘Make it safer’ and ‘learn a lot more’ have no target, so you could never tell when you had met them."},
+ {id:"lquiz",mount:"a-lquiz",section:"Lab · Check",title:"Feed-forward check",sub:"Quick quiz · 3 questions and 3 true or false · "+CE_A,ico:"✅",cls:"quiz",
+  fields:[...LQUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...LTF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: Feed-forward is specific and actionable. 2: Feedback matters only if it changes something measurable – act and re-check. 3: A measurable goal can be tracked. True or false: ‘nice system’ is not feed-forward (false); feedback counts once you act and re-check (true); a good goal is measurable, with a target you can check (true)."}
+];
+
+/* ---------- state ---------- */
+const KEY="g12-mw10-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#audit").innerHTML=`<header><small>Evidence pack · illustrative</small><b>Example signature system: the campus energy advisor</b></header>
+<div class="in">
+  <p class="task"><b>The strategic purpose:</b> cut the school's cooling energy without making lessons uncomfortable. <b>The system:</b> meter and timetable data → a model predicts which rooms will be empty and recommends a cooling setback → a facilities dashboard → staff approve each setback → a decision log under the school's rules. <b>Success criteria:</b> at least 10% saving on the utility meter, no setback in a room in use, no more than 2 comfort complaints a week. All data is made up by the teacher – no real names, faces or voices.</p>
+  <div class="ab"><div><b>Choice A · design</b>Added a human-in-the-loop: facilities staff approve every setback instead of it running automatically.</div><div><b>Choice B · evaluation</b>Replaced the model's own saving estimate with a four-week test on the school's utility meter against the success criteria.</div></div>
+  <table class="t"><thead><tr><th>Evidence</th><th>Version 1</th><th>Final version</th></tr></thead>
+  <tbody>${PACK.map(([t,a,b])=>`<tr><td>${esc(t)}</td><td>${esc(a)}</td><td>${esc(b)}</td></tr>`).join("")}</tbody></table>
+</div>`;
+$("#carousel").innerHTML=`<header><small>Peer-review carousel · illustrative exhibits</small><b>Two stations to review</b></header>
+<div class="in">
+  <p class="task"><b>Calibrate first</b> (Lab Part 1), then at each station find the strongest evidence and the weakest part, and leave feed-forward aimed at the work.</p>
+  <table class="t"><thead><tr><th>Exhibit</th><th>How the system works</th><th>Evidence</th></tr></thead>
+  <tbody>${EXHIBITS.map(([,n,d,m])=>`<tr><td><b>${esc(n)}</b></td><td>${esc(d)}</td><td>${esc(m)}</td></tr>`).join("")}</tbody></table>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+const pair=(k,label,opts,c,ph="Choose…",style="")=>`<div class="pair" data-item="${k}"${style?` style="${style}"`:""}><span class="t">${label}</span>${sel(k,opts,ph,ord(opts.length,c))}</div>`;
+const segRow=(k,t,labels,vals)=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,labels,vals,t)}</div>`;
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>pair("v"+i,esc(t),WORDS.map(w=>w[1]),i,"Choose the meaning…")).join("");
+  case "frame":
+    return `<p class="how">Back to the Week 1 government service, where a full AI system routed citizens' requests. Fill each slot of the frame in Figure 1. <span class="illus">(Illustrative numbers.)</span></p>
+      <div class="quote">“I chose <b>X</b> so the system could <b>Y</b>, I evaluated it by measuring <b>Z</b>, and I managed the risk <b>W</b>.”</div>`+
+      pair("fx","X · the design choice",FR_X,0)+pair("fy","Y · the strategic purpose it serves",FR_Y,0)+pair("fz","Z · the evidence measured",FR_Z,0)+pair("fw","W · the risk managed, and how",FR_W,0);
+  case "jsort":
+    return `<p class="how">Is each showcase line a justified claim (choice, purpose, evidence, risk) or only show-and-tell? <span class="illus">(Illustrative statements.)</span></p>`+
+      JSORT.map(([k,t])=>segRow(k,t,["Justified","Show-and-tell"],["J","S"])).join("");
+  case "claim":
+    return `<p class="how">Use Figure 1. Each phrase completes part of a justified claim about the campus energy advisor. Does it show the purpose served, the evidence, or the risk managed? <span class="illus">(Illustrative.)</span></p>`+
+      CLAIM.map(([k,t])=>segRow(k,t,CLAIM_LABELS,CLAIM_VALS)).join("");
+  case "verify":
+    return `<div class="quote">In a live demo the energy advisor replies instantly, with a detailed, confident line: ‘This week's setbacks will save 23% of cooling energy.’ <span class="illus">(Illustrative.)</span></div>
+      <p class="q" id="q-vf1">1. Does that prove it works?</p>${radios("vf1",VERIFY)}
+      ${pair("vf2","2. Before you put 23% on your exhibit, check it against…",VERIFY2,0,"Choose…","margin-top:10px")}
+      ${pair("vf3","3. The safe way to run the live system at the showcase",VERIFY3,0)}`;
+  case "four":
+    return `<p class="how">One example system – the campus energy advisor – seen through all four strands. Which strand does each statement show? <span class="illus">(Illustrative.)</span></p>`+
+      FOUR.map(([k,t])=>segRow(k,t,STR_SHORT,STR_VALS)).join("");
+  case "reflect":
+    return `<p class="q" id="q-rf1">1. Which reflection looks across the whole system, not just the model?</p>${radios("rf1",REFL)}
+      ${pair("rf2","2. Which next-term goal is clear, specific and measurable?",GOAL,1,"Choose…","margin-top:10px")}`;
+  case "wsjust":
+    return `<p class="how">1–2. Use the evidence pack above. For each choice, give the evidence that it serves the strategic purpose and the ethical or societal risk it manages.</p>
+      <div class="scen"><p>Design choice · staff approve every setback (human-in-the-loop)</p>${pair("jae","Evidence it serves the purpose",WS_EVID,0)}${pair("jar","Risk it manages",WS_RISK,0)}</div>
+      <div class="scen"><p>Evaluation choice · a four-week test on the utility meter</p>${pair("jbe","Evidence it serves the purpose",WS_EVID,1)}${pair("jbr","Risk it manages",WS_RISK,1)}</div>`;
+  case "wspd":
+    return `<p class="how">3. Check your exhibit. Keep each item, or replace it with a label or icon?</p>`+
+      PD.map(([k,t])=>segRow(k,t,["Keep","Replace"],["K","R"])).join("");
+  case "wsframe":
+    return `<p class="q" id="q-op">4. Which is the strongest opening line for your two-minute showcase?</p>${radios("op",OPEN)}
+      ${pair("aq","Then a judge asks: ‘Your model said 20%. Why do you claim only 12%?’ Best answer:",ANSWERQ,1,"Choose…","margin-top:10px")}`;
+  case "wsrubric":
+    return `<div class="quote">Partner's showcase: “I added a crowding model to our bus-stop advisor so the system could spread riders across stops: average waits fell from 11 to 7 minutes in a two-week trial. It definitely works – every prediction in the demo looked right.” <span class="illus">(Illustrative.)</span></div>`+
+      boxes(RUBRIC,"5. Tick every rubric criterion this showcase meets. Leave the others unticked.")+
+      pair("rff","One specific piece of feed-forward",RFF,1,"Choose…","margin-top:12px");
+  case "paper":
+    return `<p class="how">1–2. Your system: a canteen food-waste predictor. Your choice: ‘I plan portions from the forecast plus the day's attendance count.’ <span class="illus">(Illustrative.)</span></p>`+
+      pair("pp1","Evidence it serves the purpose (before → after)",PAPER1,1)+pair("pp2","The trade-off it costs",PAPER2,2)+
+      `<p class="q" id="q-pp3">3. Which is the strongest opening line?</p>${radios("pp3",PAPER3)}`;
+  case "quiz":
+    return quiz(QUIZ,TF);
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>pair("lv"+i,esc(t),LWORDS.map(w=>w[1]),i,"Choose the meaning…")).join("");
+  case "lff":
+    return `<p class="how">Comments left on the campus energy advisor's exhibit. Which part of feed-forward is each one – or is it not useful? <span class="illus">(Illustrative comments.)</span></p>`+
+      LFF.map(([k,t])=>segRow(k,t,FF_LABELS,FF_VALS)).join("");
+  case "lcalib":
+    return `<div class="quote">Sample exhibit: “Our system saves 25% energy!” Its success-criteria table shows <b>saving – 25% (model's own estimate)</b>, with no meter reading and no baseline. You score its <b>Evidence</b> criterion 4/4; your partner scores it 2/4. <span class="illus">(Illustrative.)</span></div>
+      <p class="q" id="q-lk1">1. How do you settle the gap?</p>${radios("lk1",CAL1)}
+      ${pair("lk2","2. Which score does the evidence support?",CAL2,1,"Choose…","margin-top:10px")}`;
+  case "lloop":
+    return `<p class="q" id="q-lm">1. Comments on your exhibit. Which is the single most useful one to act on? <span class="illus">(Illustrative.)</span></p>${radios("lm",LOOP_C)}
+      <p class="q">2. Put closing the loop in order.</p>`+
+      [1,2,3,4].map(n=>pair("lo"+n,"Step "+n,LOOP_STEPS,n-1)).join("");
+  case "lcanvas":
+    return `<p class="how">Use the governance canvas in Figure 3. Which part of the canvas does each control for the campus energy advisor cover? <span class="illus">(Illustrative.)</span></p>`+
+      LCANVAS.map(([k,t,c])=>pair(k,esc(t),CANVAS,c)).join("");
+  case "lscore":
+    return `<p class="how">Use the rubric scorecard in Figure 3: Understand 4/4, Design 3/4, Evaluate 2/4, Govern 3/4. <span class="illus">(Illustrative scores.)</span></p>`+
+      pair("ls1","1. Which strand should the next iteration aim at?",STR4,2)+pair("ls2","2. A good next-iteration action for that strand",LS2,1);
+  case "lhigh":
+    return `<div class="quote">Suppose the campus energy advisor were adapted to control cooling in a hospital ward, using live occupancy data. A wrong setback now matters far more. <span class="illus">(Illustrative.)</span></div>`+
+      pair("hc","The component you would strengthen",HI_COMP,0)+pair("ht","The trade-off you would rebalance",HI_TRADE,0)+
+      pair("hv","The verification you would add",HI_VERIFY,0)+pair("hg","The governance control you would add",HI_GOV,1);
+  case "lws":
+    return `<p class="how">1–2. For each station in the carousel card above, choose a strength, one improvement aimed at the weakest part, and a question.</p>
+      <div class="scen"><p>Station 1 · Bus-stop crowding advisor</p>${pair("xas","Strength",XA_S,0)}${pair("xai","One improvement",XA_I,1)}${pair("xaq","Question",XA_Q,1)}</div>
+      <div class="scen"><p>Station 2 · Library study-space finder</p>${pair("xbs","Strength",XB_S,0)}${pair("xbi","One improvement",XB_I,2)}${pair("xbq","Question",XB_Q,1)}</div>`;
+  case "lrecheck":
+    return `<p class="how">3–4. You acted on the most useful comment: the timetable feed now updates daily instead of weekly (one component – the data), and you re-checked against the same success criteria. <span class="illus">(Illustrative numbers.)</span></p>
+      <table class="t record"><thead><tr><th>Measure</th><th>Before</th><th>After the change</th></tr></thead><tbody>${RM.map(([t,a,b])=>`<tr><td>${esc(t)}</td><td>${esc(a)}</td><td>${esc(b)}</td></tr>`).join("")}</tbody></table>`+
+      segRow("rm1","Against its success criteria, the system…",["Improved","No change","Got worse"],["U","S","D"])+
+      pair("rm2","The trade-off to record",RM_TRADE,0)+pair("rm3","Why re-check against the same criteria and test?",RM_WHY,0);
+  case "lgoal":
+    return `<p class="q" id="q-lg1">5. Which is a measurable goal for next term, with clear success criteria?</p>${radios("lg1",LGOAL)}
+      ${pair("lg2","How will you check whether you met it?",LCHECK,0,"Choose…","margin-top:10px")}`;
+  case "lpaper":
+    return `<p class="q" id="q-pf1">1. Which is complete feed-forward for a partner: a strength, one improvement and a question?</p>${radios("pf1",LPF)}`+
+      pair("pf2","2. The most useful comment on your exhibit, and what you would change",LPF2,1,"Choose…","margin-top:10px")+
+      boxes(LMEAS,"<b>3. A measurable goal for a higher-stakes context.</b> The energy advisor moves to a hospital. Tick every goal that has a target you could actually check. Leave the others unticked.");
+  case "lquiz":
+    return quiz(LQUIZ,LTF);
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 12 Main Course · Term 1 Week 10 (7 – 11 Dec 2026) · Core + Lab · Showcase and Reflection + Peer Review and Aim Higher</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
