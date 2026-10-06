@@ -13,17 +13,7 @@
 .calhead{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:flex-end;justify-content:space-between;margin:24px 0 18px}
 .calhead h1{font-size:clamp(22px,3vw,28px)}
 .calhead p{margin:4px 0 0;color:var(--muted);font-size:14.5px}
-/* ---------- my lessons: one agenda for the teacher's own classes ---------- */
-.week{margin:0 0 20px}
-.week>header{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px;padding:0 2px 8px;border-bottom:2px solid var(--line-2);margin:0 0 10px}
-.week>header h2{font-size:17px}
-.week>header span{color:var(--muted);font-size:13.5px}
-.week.current>header{border-bottom-color:var(--purple)}
 /* this week (same look as the AI Lessons table): thick purple outline, a gentle gold glow and a light sweeping across */
-.week.current{border:4px solid var(--purple);border-radius:16px;padding:12px 12px 14px;
-  background-color:#FBF3DD;background-image:linear-gradient(100deg,transparent 0 42%,rgba(255,255,255,.75) 50%,transparent 58% 100%);
-  background-size:200% 100%;background-repeat:no-repeat;background-attachment:fixed;animation:twGlow 2.6s ease-in-out infinite,twShine 3.8s ease-in-out infinite}
-.week.current>header{border-bottom-color:rgba(33,7,108,.25)}
 .tw{display:inline-flex;align-items:center;white-space:nowrap;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--gold);color:var(--purple);border-radius:999px;padding:2px 9px;align-self:center}
 .tw::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--purple);margin-inline-end:6px;animation:twDot 1.3s ease-in-out infinite}
 .tt.cur{border:4px solid var(--purple)}
@@ -32,37 +22,20 @@
 @keyframes twGlow{0%,100%{background-color:#FBF3DD}50%{background-color:#F5DFA3}}
 @keyframes twShine{0%{background-position:160% 0}60%,100%{background-position:-60% 0}}
 @keyframes twDot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.6);opacity:.45}}
-@media (prefers-reduced-motion:reduce){.week.current,.tt.cur .dh,.tw::before{animation:none}}
-@media print{.week.current,.tt.cur .dh{animation:none;background-image:none}}
-.evt{font-size:12.5px;font-weight:600;color:#5c3d00!important;background:#FFF3C9;border-radius:999px;padding:1px 9px}
-.rows{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-.row{display:grid;grid-template-columns:62px 104px minmax(110px,150px) 1fr;gap:14px;align-items:center;background:#fff;border:1px solid var(--line-2);border-radius:12px;padding:10px 14px;padding-inline-start:10px}
-.row.past{background:#FCFBFE}
-.row.past .dt,.row.past .when,.row.past .cls{opacity:.65}
-.row.next{border-color:var(--purple);box-shadow:0 0 0 3px var(--tint)}
-.when b{display:block;color:var(--purple);font-size:15px}
-.when span{font-size:13px;color:var(--muted)}
-.cls b{display:block;font-size:16px}
-.via{display:inline-block;font-size:11px;font-weight:700;border-radius:999px;padding:1px 8px;color:#fff;margin-top:2px}
-.via.Arabic{background:#0F766E}.via.Islamic{background:#7C3AED}
-.les{font-size:14.5px;line-height:1.4;min-width:0}
-.les .ttl b{color:var(--purple)}
-.les .pg{color:var(--muted)}
+/* a teacher's own class on the day they teach it */
+.c2.now,.drow.now{border:3px solid var(--purple);border-inline-start:6px solid var(--gc);box-shadow:0 0 0 3px rgba(216,182,100,.55);
+  background-color:#FBF3DD;background-image:linear-gradient(100deg,transparent 0 42%,rgba(255,255,255,.8) 50%,transparent 58% 100%);
+  background-size:200% 100%;background-repeat:no-repeat;background-attachment:fixed;animation:twGlow 2.6s ease-in-out infinite,twShine 3.8s ease-in-out infinite}
+.c2.now:hover,.drow.now:hover{background-color:#F5DFA3}
+.c2 .tdy,.drow .tdy{display:inline-flex;align-items:center;margin-top:3px;font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--gold);color:var(--purple);border-radius:999px;padding:1px 7px;width:max-content}
+.c2 .tdy::before,.drow .tdy::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--purple);margin-inline-end:5px;animation:twDot 1.3s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.tt.cur .dh,.tw::before,.c2.now,.drow.now,.tdy::before{animation:none}}
+@media print{.tt.cur .dh,.c2.now,.drow.now{animation:none;background-image:none}}
 .pushed{font-size:13px;color:#7a5200;margin-top:3px}
 .act{display:flex;gap:8px 10px;align-items:center;flex-wrap:wrap;margin-top:8px}
 .act .state{font-size:12.5px;font-weight:700;color:var(--muted);white-space:nowrap}
 .lnk{font:inherit;font-weight:700;font-size:14px;color:var(--purple);background:none;border:0;padding:0;cursor:pointer;text-decoration:none;white-space:nowrap}
 .lnk:hover{text-decoration:underline}
-.offrow{display:flex;gap:10px;align-items:flex-start;background:var(--tint);color:var(--purple);border-radius:12px;padding:9px 14px;font-size:14px;line-height:1.45}
-.offrow small{display:block;color:var(--muted);font-size:13px}
-.brk{margin:0 0 20px}
-.more{display:flex;gap:10px;justify-content:center;margin:6px 0 0}
-@media (max-width:760px){
-  .row{grid-template-columns:56px 1fr;gap:4px 12px;padding:10px 12px;padding-inline-start:10px}
-  .row .dt{grid-row:span 3;align-self:start}
-  .when{display:flex;gap:8px;align-items:baseline}
-  .cls{display:flex;gap:8px;align-items:center}
-}
 /* ---------- whole school: one compact timetable for the week ---------- */
 .gridbar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin:0 0 12px}
 .weeknav{display:flex;align-items:center;gap:6px}
@@ -122,7 +95,7 @@
 .pop .ln{color:var(--ink);font-size:14.5px;margin:10px 0 0}
 .pop .x{position:absolute;inset-inline-end:8px;top:8px;border:0;background:none;font-size:20px;line-height:1;cursor:pointer;color:var(--muted);padding:4px 8px}
 @media (max-width:760px){.pop{position:fixed;left:8px!important;right:8px;bottom:8px;top:auto!important;width:auto}}
-@media print{.gridbar .spacer,.gridbar label,.weeknav .nav,#views,.more,.gfilter,.act,.pop{display:none!important}}
+@media print{.gridbar .spacer,.gridbar label,.weeknav .nav,.gfilter,.act,.pop{display:none!important}}
 </style>
 </head>
 <body>
@@ -135,10 +108,8 @@
 <main class="wrap">
   <div class="calhead">
     <div><h1 data-i18n="AI Teaching Calendar">AI Teaching Calendar</h1><p id="who"></p></div>
-    <div class="seg" id="views" role="group" aria-label="View" hidden><button type="button" data-v="mine" data-i18n="My lessons">My lessons</button><button type="button" data-v="school" data-i18n="Whole school">Whole school</button></div>
   </div>
-  <section id="mineV" hidden></section>
-  <section id="schoolV" hidden>
+  <section id="schoolV">
     <div class="gridbar">
       <div class="weeknav"><button class="nav" id="prev" type="button">‹</button><h2 id="wtitle"></h2><button class="nav" id="next" type="button">›</button></div>
       <button class="btn small quiet" id="todayB" type="button" data-i18n="This week">This week</button>
@@ -180,9 +151,8 @@ const shareUrl = id => APP ? lessonUrl(id) : new URL('app/?p=' + encodeURICompon
 const CR_ICON = '<img src="assets/classroom.png" alt="" width="30" height="26"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>';
 const classroomUrl = (id, title) => 'https://classroom.google.com/share?url=' + encodeURIComponent(shareUrl(id)) + '&title=' + encodeURIComponent(title);
 let LANG = (() => { try { return localStorage.getItem('aisa-lang') === 'ar' ? 'ar' : 'en'; } catch (e) { return 'en'; } })();
-let VIEW = (() => { try { const v = localStorage.getItem('cal-view'); return MINE.length && v !== 'school' ? 'mine' : 'school'; } catch (e) { return MINE.length ? 'mine' : 'school'; } })();
 let GRADE = (() => { try { return localStorage.getItem('cal-grade-filter') || ''; } catch (e) { return ''; } })();
-let SHOW = 4, EARLIER = false, GMON = AICAL.monday(NOW);
+let GMON = AICAL.monday(NOW);
 /* ---------- words (English / العربية). Lesson titles stay in English. ---------- */
 const AR = {
   'AI Lessons': 'دروس الذكاء الاصطناعي', 'Lessons': 'الدروس', 'Calendar': 'التقويم', 'Teaching calendar': 'تقويم التدريس', 'Dashboard': 'لوحة المتابعة',
@@ -237,7 +207,6 @@ function behindNote(sec, d, n, tw) {
 }
 function weekdaySpans(from, to) { const out = []; for (let d = new Date(from); d <= to; d = add(d, 1)) { if (d.getDay() === 0 || d.getDay() === 6) continue; const w = AICAL.noSchool(d); if (!w || /After the last/.test(w)) continue;
   const l = out[out.length - 1]; if (l && l.why === w && d - l.to <= 3 * 864e5) l.to = new Date(d); else out.push({ why: w, from: new Date(d), to: new Date(d) }); } return out; }
-const dt = (d, cls = '') => `<div class="dt ${cls}"><small>${esc(wd(d))}</small><b>${d.getDate()}</b><small>${esc(mo(d))}</small></div>`;
 /* one slot = a class's AI period on a date */
 function slot(r, d) {
   const [sec, gr, sub, , , per, time] = r, n = AICAL.lessonOn(sec, d), tw = AICAL.teachingWeek(d), L = lessonFor(gr, n);
@@ -250,51 +219,12 @@ function actions(s) {
     `<a class="crs" href="${esc(classroomUrl(s.L.id, shareTitle(s)))}" target="_blank" rel="noopener">${CR_ICON}${esc(T('Share to Classroom'))}</a>` : '') +
     (APP ? `<a class="lnk" href="${esc(appPage('dashboard'))}"${tgt}>${esc(T('Class progress'))}</a>` : '');
 }
-/* ======================= My lessons ======================= */
-function agenda() {
-  const thisMon = AICAL.monday(NOW); let start = EARLIER ? add(thisMon, -28) : thisMon, ahead = 0, html = '', nextMarked = false, brk = null;
-  if (start < parse(AICAL.TERM_START)) start = parse(AICAL.TERM_START);
-  const flushBreak = () => { if (!brk) return; html += `<div class="offrow brk"><span aria-hidden="true">🏖️</span><div><b>${esc(T('No school · {why}', { why: why(brk.why) }))}</b><small>${esc(T('{range} · no AI lessons', { range: range(brk.from, brk.to) }))}</small></div></div>`; brk = null; };
-  for (let wk = start; ahead < SHOW && wk <= parse(AICAL.YEAR_END); wk = add(wk, 7)) {
-    const tw = AICAL.teachingWeek(wk), fri = add(wk, 4);
-    if (tw === null) { const w = AICAL.noSchool(wk); if (brk && brk.why === w) brk.to = fri; else { flushBreak(); brk = { why: w, from: wk, to: fri }; } continue; }
-    if (tw === 0) continue;
-    flushBreak(); if (wk >= thisMon) ahead++;
-    const cur = iso(wk) === iso(thisMon), c = AICAL.cycleOf(wk), [da, db] = cycleDays(c), events = [];
-    for (let i = 0; i < 5; i++) { const e = AICAL.eventOn(add(wk, i)); if (e && !events.some(x => x[0] === e)) events.push([e, add(wk, i)]); }
-    let rows = '';
-    for (let i = 0; i < 5; i++) {
-      const d = add(wk, i), w = AICAL.noSchool(d);
-      if (w) {
-        if (i > 0 && AICAL.noSchool(add(d, -1)) === w) continue;
-        let end = d; while (end.getDay() < 5 && AICAL.noSchool(add(end, 1)) === w) end = add(end, 1);
-        const moves = [];
-        for (let x = new Date(d); x <= end; x = add(x, 1)) AICAL.SCHEDULE.filter(r => MINE.includes(r[0]) && r[3] === AICAL.cycleOf(x) && r[4] === AICAL.DAYS[x.getDay()]).forEach(r => { const nx = AICAL.nextLesson(r[0], x); if (nx) moves.push(T('{sec}\'s lesson moves to {d}', { sec: secName(r[0]), d: fd(nx.date) })); });
-        rows += `<li class="offrow"><span aria-hidden="true">📅</span><div><b>${esc(T('No school · {why}', { why: why(w) }))}</b><small>${esc(range(d, end) + (moves.length ? ' · ' + moves.join(' · ') : ''))}</small></div></li>`;
-        continue;
-      }
-      AICAL.slotsOn(d).filter(r => MINE.includes(r[0])).sort((a, b) => a[5] - b[5]).forEach(r => {
-        const s = slot(r, d); let cls = s.past ? 'past' : ''; if (!s.past && !nextMarked) { cls += ' next'; nextMarked = true; }
-        rows += `<li class="row ${cls}">${dt(d, s.today ? 'today' : '')}<div class="when"><b>P${s.per} · ${esc(T('Day {n}', { n: AICAL.dayNumber(d) }))}</b><span dir="ltr">${esc(s.time.replace(' - ', '–'))}</span></div>` +
-          `<div class="cls"><b>${esc(secName(s.sec))}</b><span class="via ${s.sub}">${esc(T(s.sub))}</span></div>` +
-          `<div class="les"><div class="ttl"><b>${esc(T('Week {n}', { n: s.n }))}</b> · ${s.L ? en(s.L.title) : `<span class="pg">${esc(T('lesson page coming'))}</span>`}</div>${behindNote(s.sec, d, s.n, tw)}` +
-          `<div class="act">${s.past ? `<span class="state">${esc(T('✓ Taught'))}</span>` : s.today ? `<span class="chip gold">${esc(T('Today'))}</span>` : cls.includes('next') ? `<span class="chip purple">${esc(T('Next up'))}</span>` : ''}${actions(s)}</div></div></li>`;
-      });
-    }
-    html += `<section class="week${cur ? ' current' : ''}"><header>${cur ? `<span class="tw">${esc(T('This week'))}</span>` : ''}<h2>${esc(T('Teaching week {n}', { n: tw }))}</h2><span>${esc(fdm(wk))} – ${esc(fdm(fri))} · ${esc(T('Timetable Week {c} (Days {a}–{b})', { c, a: da, b: db }))}</span>` +
-      events.map(e => `<span class="evt">📌 ${esc(AICAL.label(e[0], LANG))} · ${esc(fd(e[1]))}</span>`).join('') + `</header><ol class="rows">${rows || `<li class="offrow">${esc(T('None of your classes has AI this week.'))}</li>`}</ol></section>`;
-  }
-  flushBreak();
-  $('#mineV').innerHTML = (EARLIER ? '' : `<div class="more" style="margin:0 0 14px;justify-content:flex-start"><button class="btn small quiet" id="earlier" type="button">${esc(T('↑ Show earlier weeks'))}</button></div>`) + html +
-    `<div class="more"><button class="btn small quiet" id="moreB" type="button">${esc(T('Show 4 more weeks ↓'))}</button><button class="btn small quiet" type="button" data-print>${esc(T('Print'))}</button></div>`;
-  $('#moreB').onclick = () => { SHOW += 4; agenda(); };
-  if ($('#earlier')) $('#earlier').onclick = () => { EARLIER = true; agenda(); };
-}
 /* ======================= Whole school ======================= */
 function chip(s, tag) {
-  const k = esc(s.sec + '|' + iso(s.d)), cls = `${tag}${s.mine ? ' mine' : ''}${s.past ? ' past' : ''}`, st = `style="--gc:var(--g${s.gr})"`;
-  if (tag === 'drow') return `<button type="button" class="${cls}" ${st} data-k="${k}"><span class="p"><b>P${s.per}</b> · <span dir="ltr">${esc(s.time.split(' - ')[0])}</span></span><span><b>${esc(secName(s.sec))}</b><span class="w">${esc(T('Week {n}', { n: s.n }))}${s.behind ? ' · ⏪' : ''} · ${esc(T(s.sub))}</span></span><small>${esc(T(s.L ? '● ready' : '○ coming'))}</small></button>`;
-  return `<button type="button" class="${cls}" ${st} data-k="${k}" aria-label="${esc(`${secName(s.sec)}, ${T('Period {p}', { p: s.per })}, ${T('Week {n}', { n: s.n })}`)}"><span class="rd" aria-hidden="true">${s.L ? '●' : '○'}</span><b>${esc(secName(s.sec))}</b><span>${esc(T('Week {n}', { n: s.n }))}${s.behind ? ' · ⏪' : ''} · ${esc(T(s.sub))}</span></button>`;
+  const now = s.mine && s.today, tdy = now ? `<em class="tdy">${esc(T('Today'))}</em>` : '';
+  const k = esc(s.sec + '|' + iso(s.d)), cls = `${tag}${s.mine ? ' mine' : ''}${now ? ' now' : s.past ? ' past' : ''}`, st = `style="--gc:var(--g${s.gr})"`;
+  if (tag === 'drow') return `<button type="button" class="${cls}" ${st} data-k="${k}"><span class="p"><b>P${s.per}</b> · <span dir="ltr">${esc(s.time.split(' - ')[0])}</span></span><span><b>${esc(secName(s.sec))}</b><span class="w">${esc(T('Week {n}', { n: s.n }))}${s.behind ? ' · ⏪' : ''} · ${esc(T(s.sub))}</span>${tdy}</span><small>${esc(T(s.L ? '● ready' : '○ coming'))}</small></button>`;
+  return `<button type="button" class="${cls}" ${st} data-k="${k}" aria-label="${esc(`${secName(s.sec)}, ${T('Period {p}', { p: s.per })}, ${T('Week {n}', { n: s.n })}`)}"><span class="rd" aria-hidden="true">${s.L ? '●' : '○'}</span><b>${esc(secName(s.sec))}</b><span>${esc(T('Week {n}', { n: s.n }))}${s.behind ? ' · ⏪' : ''} · ${esc(T(s.sub))}</span>${tdy}</button>`;
 }
 function grid() {
   const mon = GMON, fri = add(mon, 4), tw = AICAL.teachingWeek(mon), c = AICAL.cycleOf(mon);
@@ -353,7 +283,6 @@ $('#gfilter').onclick = e => { const b = e.target.closest('.gf'); if (!b) return
 $('#prev').onclick = () => { GMON = add(GMON, -7); grid(); }; $('#next').onclick = () => { GMON = add(GMON, 7); grid(); };
 $('#todayB').onclick = () => { GMON = AICAL.monday(NOW); grid(); };
 $('#jump').onchange = () => { if ($('#jump').value) { GMON = AICAL.monday(parse($('#jump').value)); grid(); } };
-$('#views').onclick = e => { const b = e.target.closest('[data-v]'); if (b) { VIEW = b.dataset.v; try { localStorage.setItem('cal-view', VIEW); } catch (x) {} render(); } };
 $('#langBtn').onclick = () => { LANG = LANG === 'ar' ? 'en' : 'ar'; try { localStorage.setItem('aisa-lang', LANG); } catch (e) {} render(); };
 function shell() {
   document.documentElement.lang = LANG; document.documentElement.dir = LANG === 'ar' ? 'rtl' : 'ltr';
@@ -371,13 +300,10 @@ function shell() {
 }
 function render() {
   shell();
-  $('#views').hidden = !MINE.length;
-  document.querySelectorAll('#views [data-v]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === VIEW)));
   document.querySelectorAll('.gf').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.g === GRADE)));
-  $('#who').textContent = VIEW === 'mine' ? T('Your classes: {list} – every AI lesson in order, with breaks and holidays.', { list: MINE.map(secName).join(' · ') })
-    : T(MINE.length ? 'Every class\'s AI period this week. Your classes are outlined.' : 'Every class\'s AI period this week – click a class for its lesson and links.');
-  $('#mineV').hidden = VIEW !== 'mine'; $('#schoolV').hidden = VIEW !== 'school'; $('#pop').hidden = true;
-  if (VIEW === 'mine') agenda(); else grid();
+  $('#who').textContent = T(MINE.length ? 'Every class\'s AI period this week. Your classes are outlined – the one you teach today glows.' : 'Every class\'s AI period this week – click a class for its lesson and links.');
+  $('#pop').hidden = true;
+  grid();
 }
 render();
 </script>
