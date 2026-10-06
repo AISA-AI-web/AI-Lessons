@@ -3,7 +3,7 @@
    Signed-in staff see every lesson through the app; there the server decides instead,
    and build.py leaves this script out. */
 (function () {
-  if (window.APP || !window.AICAL) return;
+  if (window.APP || !window.AICAL || typeof AICAL.releasedForGrade !== 'function') return;
   var m = /grade-(\d+)\/main-w(\d+)-/.exec(location.pathname);
   if (!m) return;
   var grade = +m[1], week = +m[2];
