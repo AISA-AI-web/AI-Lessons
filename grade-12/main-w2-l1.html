@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Understanding the System + Trace the Divergence – Grade 12 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#A61E4D; --main2:#C2255C; --deep:#6B1533;
+  --ink:#2A1520; --muted:#6A5560; --paper:#FBF6F8; --card:#FFFFFF;
+  --line:#EFDCE3; --soft:#FBEEF2;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#F9A8C0,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#D0436F);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#2A1520,#6E3346)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#F6CFDB 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FEFAFB;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FFFBFC}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#D0436F)}
+.act-head.ws{background:linear-gradient(120deg,#2A1520,#7A3A50)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#FCEEF2}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #E6BFCB;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F766E' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #E0A3B6;border-radius:12px;padding:10px 14px;background:#FEF8FA;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(42,21,32,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#2A1520;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+.box li b{color:var(--main)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 12 Main Course, Term 1</span><span class="pill">Week 2 Core + Week 2 Lab</span><span class="pill">📅 Teach: week of 5 – 9 Oct 2026</span></div>
+    <h1>Understanding the System</h1>
+    <p>Today you look inside an AI solution to see how it really works – the path an item takes from data going in to a result coming out, through five named stages. Then, in the Lab, you become an investigator: you run the same system on two inputs that differ in only one way, find the stage where the two traces split, and work out exactly what made the answers differ.</p>
+    <p class="meta"><b>Strand:</b> AI Systems Understanding &nbsp;·&nbsp; <b>Scenario:</b> the ramp-metering pipeline; two inputs, one pipeline</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 12B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 2 of Term 1 – Monday 5 to Friday 9 October 2026.</b> Boys 12 and Girls 12: Wednesday 7 October. Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Understanding the System</a>, then move on to the <a href="#lab">Lab: Trace the Divergence</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Explain input to output.</b> I can explain how a real-world AI solution turns inputs into outputs.</li>
+      <li><b>Map a worked example.</b> I can map a worked example and justify to a partner why the system produced that result.</li>
+      <li><b>Use pipeline vocabulary.</b> I can use AI systems vocabulary correctly to describe how a solution works and where it could go wrong.</li>
+      <li><b>Lab: trace, compare, name the decisive component.</b> I can trace a pipeline step by step, compare the system's behaviour on two inputs and explain why the outputs differ, then point to the component that changed the outcome and say how I would check the result.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 2 Core · Understanding the System</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>A system, not a magic box</b><small>The five-stage pipeline, and locating a fault by its stage</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>How the model learns – and why it can be confidently wrong</b><small>Training vs inference; verify before you trust</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Core worksheet</b><small>Map a worked-example card through the pipeline</small></a></li>
+      <li><span class="num">4</span><a href="#p4"><b>Trace the five stages on paper and check</b><small>Unplugged activity and quick quiz</small></a></li>
+    </ol>
+    <h3 class="rh">Week 2 Lab · Trace the Divergence</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Change one thing, learn a lot</b><small>Controlled comparison; robustness vs reliability over time</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Lab worksheet</b><small>Trace two inputs and mark the divergence point</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Trace the divergence on paper and check</b><small>Unplugged activity and quick quiz</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 4</span><h2>A system, not a magic box</h2><p>What path does an item take from data in to action out?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In Week 1 you saw that a real-world AI solution is a whole system – data, model, interface, oversight and governance – designed for a strategic purpose. What is new this week: you look <b>inside</b> the system and follow one input through its five named stages, so you can explain why it produced a result and where it could slip.</p></div>
+    <div class="call"><h4>Scenario</h4><p>Trace the traffic system as a pipeline: sensor readings come in, are turned into features, a model infers the predicted flow, a post-processing step decides the signal timing, and the action releases vehicles. Follow one input all the way to the action. <span class="illus">(Scenario based on the Verified Abu Dhabi ramp-metering system.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">A system, not a magic box</h3>
+    <p>An AI solution is not one clever brain. It is a chain of stages working together. Raw data comes in and is tidied up. The model then looks for patterns it learned during training and produces a best guess – a label, a number or a recommendation. Other parts around the model, like rules and human checks, shape the final result. When you understand the whole chain, you can explain how the system works and spot where it might slip.</p>
+    <figure>
+      <svg viewBox="0 0 760 330" role="img" aria-labelledby="f1T">
+        <title id="f1T">The five-stage pipeline, left to right: 1 Input (sensor counts), 2 Features (numbers per lane), 3 Model inference (predicted flow, highlighted), 4 Post-processing (signal timing), 5 Action (release vehicles). A dashed feedback loop runs from Action back to Input: what happens on the road becomes the next readings.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2A1520"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1520">
+          <g stroke="#2A1520" stroke-width="1.6" fill="#fff">
+            <rect x="10" y="90" width="132" height="92" rx="10"/>
+            <rect x="162" y="90" width="132" height="92" rx="10"/>
+            <rect x="314" y="80" width="132" height="112" rx="10" fill="#FBEEF2" stroke="#A61E4D" stroke-width="2.4"/>
+            <rect x="466" y="90" width="132" height="92" rx="10"/>
+            <rect x="618" y="90" width="132" height="92" rx="10"/>
+          </g>
+          <g stroke="#2A1520" stroke-width="2" fill="none" marker-end="url(#ah)">
+            <path d="M142 136H159"/><path d="M294 136H311"/><path d="M446 136H463"/><path d="M598 136H615"/>
+          </g>
+          <path d="M684 182V250H76V185" stroke="#6A5560" stroke-width="1.8" stroke-dasharray="7 6" fill="none" marker-end="url(#ah)"/>
+          <g font-size="13" text-anchor="middle" fill="#6A5560">
+            <text x="76" y="76">stage 1</text><text x="228" y="76">stage 2</text><text x="380" y="66">stage 3</text><text x="532" y="76">stage 4</text><text x="684" y="76">stage 5</text>
+          </g>
+          <g font-size="15" font-weight="700" text-anchor="middle">
+            <text x="76" y="122">INPUT</text><text x="228" y="122">FEATURES</text><text x="380" y="112" fill="#A61E4D">MODEL</text><text x="380" y="130" fill="#A61E4D">INFERENCE</text><text x="532" y="114">POST-</text><text x="532" y="131">PROCESSING</text><text x="684" y="122">ACTION</text>
+          </g>
+          <g font-size="13" text-anchor="middle" fill="#6A5560">
+            <text x="76" y="150">sensor counts</text><text x="76" y="167">arrive</text>
+            <text x="228" y="150">numbers</text><text x="228" y="167">per lane</text>
+            <text x="380" y="158">learned pattern</text><text x="380" y="175">→ predicted flow</text>
+            <text x="532" y="152">rule sets the</text><text x="532" y="169">signal timing</text>
+            <text x="684" y="150">signal releases</text><text x="684" y="167">vehicles</text>
+          </g>
+          <text x="380" y="272" font-size="13" text-anchor="middle" fill="#6A5560">feedback: what happens on the road becomes the next readings</text>
+          <text x="380" y="312" font-size="14" text-anchor="middle" font-weight="600">A mistake at any stage flows on to the action.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> How an AI solution turns an input into an action, one stage at a time.</figcaption>
+    </figure>
+    <div class="call"><h4>The five-stage pipeline</h4><p>Every AI solution in this course follows the same five stages, and we name them consistently: <b>1. Input</b> – the raw data arrives; <b>2. Features</b> – the input is cleaned and turned into the numbers the model reads; <b>3. Model inference</b> – the model applies its learned pattern to those features; <b>4. Post-processing</b> – the model's raw output is turned into a usable decision (for example, a threshold or a ranking); <b>5. Action</b> – the system does something with that decision. A mistake at any stage flows to the action, so you can locate a fault by naming its stage.</p></div>
+    <div id="a-vocab"></div>
+    <div id="a-stages"></div>
+    <div id="a-fault"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 4</span><h2>How the model learns – and why it can be confidently wrong</h2><p>What is the difference between training and inference?</p></div>
+  <div class="part-body">
+    <h3 class="sub">How the model learns: training vs inference</h3>
+    <p>The model at stage 3 is usually a <b>neural network</b> – a system of many simple units whose connection strengths are adjusted, during <b>training</b>, until it reproduces patterns in a large set of past examples. Training happens once, in advance. What happens in a lesson is <b>inference</b>: the trained pattern is applied to a new input.</p>
+    <div id="a-traininf"></div>
+    <h3 class="sub">Why the model can be confidently wrong</h3>
+    <p>The model never truly understands your data. It matches what it sees now against patterns from what it was trained on. If your input looks different from that training data, the model can still hand back an answer that sounds sure but is wrong. That is why we <b>verify before we trust</b> – we check the output against the task and a reliable source. A high confidence score tells you the model found a strong pattern match, not that the answer is true.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>Understanding how AI systems work matters in the UAE, where AI already runs in smart-city services, healthcare triage and logistics; the people who design and govern these systems must be able to explain and question how they reach a result.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Mathematics · Biology · Computer Science</h4><p>Turning raw input into features the model reads is <b>data representation</b> in <b>Mathematics</b>. The neural network adjusting connection strengths during training is loosely modelled on <b>neurons</b> in <b>Biology</b>. Naming five pipeline stages and separating training from inference is <b>Computer Science</b>.</p></div>
+    <div id="a-confident"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 4 · Worksheet</span><h2>Understanding the System</h2><p>Pick a worked-example card, map it through the five stages, check the output and explain it.</p></div>
+  <div class="part-body">
+    <div class="call amber"><h4>Tool for this week: school-approved generative assistant (worked-example interrogation) + pipeline-map cards (teacher-mediated)</h4><p>1. Pick a worked-example card and read the input. 2. On your five-stage pipeline map, write what happens at Input, Features, Model inference, Post-processing and Action. 3. Check the output against the correct answer and explain why the system produced it. <b>Stay safe:</b> teacher-operated assistant; no personal data – illustrative cards only. Verify each output against the correct answer.</p></div>
+    <div class="ecard" id="card"></div>
+    <div id="a-wsmap"></div>
+    <div id="a-wsexplain"></div>
+  </div>
+</section>
+
+<!-- CORE PART 4 -->
+<section class="part" id="p4">
+  <div class="part-head"><span class="pill">Core · Part 4 of 4 · Unplugged</span><h2>Trace the five stages, on paper</h2><p>No devices needed – then a quick check.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>Trace the traffic system as a five-stage pipeline: sensor readings in, features, the model infers flow, a post-processing step sets signal timing, and the action releases vehicles. Working on paper, follow one input all the way through. <span class="illus">(Scenario based on a Verified deployment.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Write each stage: ‘Input: sensor counts → Features: numbers per lane → Inference: predicted flow → Post-processing: signal time → Action: release.’</div>
+    <div id="a-paper"></div>
+    <div id="a-quiz"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 2 Lab</span><h2>Trace the Divergence</h2><p>Today you become an investigator – you run the same AI system on two inputs and work out exactly what made its answers differ.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>You trace two inputs that differ in only one way through the five-stage pipeline, find the divergence point where the two traces split, and name the component that caused the different outcome – and how robust the system is to that change. <span class="illus">(Scenario – illustrative.)</span></p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Change one thing, learn a lot</h2><p>How do you find out which part of a system is driving the result?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Change one thing, learn a lot</h3>
+    <p>If you change everything at once and the answer shifts, you cannot tell why. So investigators change only one thing – say, swapping a clear photo for a blurry one – and keep the rest the same. If the output changes, that one change must be the cause. This is a <b>controlled comparison</b>, and it is the fairest way to find out how a system really behaves and which part of it is driving the result you see.</p>
+    <div id="a-lcontrol"></div>
+    <h3 class="sub">Robustness is not reliability over time</h3>
+    <p>Two words that are easy to confuse. <b>Robustness</b> is whether the system holds up when an input is unusual, noisy or hard – an edge case here and now. <b>Reliability over time</b> is whether it keeps performing as inputs and conditions drift over weeks and months. A change to one input tests robustness; repeated checks over time test reliability. A strategic system needs both, and they are measured differently.</p>
+    <div id="a-lrobust"></div>
+    <h3 class="sub">Following the divergence</h3>
+    <p>When two traces start the same but end differently, there is a point where they split – the <b>divergence point</b>. Finding it tells you which stage is responsible. Often the split happens because the input data changed the features, so the model matched a different pattern. Naming the divergence point stops you blaming ‘the AI’ in general and lets you say exactly which component interacted with which. Then you verify the output against a trusted key before you trust it.</p>
+    <figure>
+      <svg viewBox="0 0 760 330" role="img" aria-labelledby="f2T">
+        <title id="f2T">Two traces through the five stages. Input A and input B differ in one way only. Through features and model inference the two traces match. At post-processing a threshold flips them apart: trace A goes above the threshold and the action is to meter traffic; trace B stays below and the action is to release. The divergence point is marked at post-processing.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2A1520"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1520">
+          <g font-size="13" font-weight="700" text-anchor="middle" fill="#6A5560">
+            <text x="76" y="30">1 INPUT</text><text x="228" y="30">2 FEATURES</text><text x="380" y="30">3 INFERENCE</text><text x="532" y="30">4 POST-PROC.</text><text x="684" y="30">5 ACTION</text>
+          </g>
+          <rect x="466" y="44" width="132" height="244" rx="12" fill="#FBEEF2" stroke="#C92A4B" stroke-width="2" stroke-dasharray="7 5"/>
+          <g stroke="#2A1520" stroke-width="1.6">
+            <rect x="10" y="62" width="132" height="58" rx="9" fill="#fff"/>
+            <rect x="10" y="212" width="132" height="58" rx="9" fill="#fff"/>
+            <rect x="162" y="62" width="132" height="58" rx="9" fill="#F3EEF0"/>
+            <rect x="162" y="212" width="132" height="58" rx="9" fill="#F3EEF0"/>
+            <rect x="314" y="62" width="132" height="58" rx="9" fill="#F3EEF0"/>
+            <rect x="314" y="212" width="132" height="58" rx="9" fill="#F3EEF0"/>
+            <rect x="476" y="62" width="112" height="58" rx="9" fill="#fff" stroke="#A61E4D" stroke-width="2"/>
+            <rect x="476" y="212" width="112" height="58" rx="9" fill="#fff" stroke="#A61E4D" stroke-width="2"/>
+            <rect x="618" y="62" width="132" height="58" rx="9" fill="#E2F5EC" stroke="#0F8A5F"/>
+            <rect x="618" y="212" width="132" height="58" rx="9" fill="#EEF3FC" stroke="#2E5AAC"/>
+          </g>
+          <g stroke="#2A1520" stroke-width="2" fill="none" marker-end="url(#ah2)">
+            <path d="M142 91H159"/><path d="M294 91H311"/><path d="M446 91H473"/><path d="M588 91H615"/>
+            <path d="M142 241H159"/><path d="M294 241H311"/><path d="M446 241H473"/><path d="M588 241H615"/>
+          </g>
+          <g font-size="14" font-weight="700" text-anchor="middle">
+            <text x="76" y="88">Input A</text><text x="76" y="238">Input B</text>
+            <text x="228" y="96">same</text><text x="228" y="246">same</text>
+            <text x="380" y="96">same</text><text x="380" y="246">same</text>
+            <text x="532" y="88">above</text><text x="532" y="238">below</text>
+            <text x="684" y="96" fill="#0F8A5F">meter</text><text x="684" y="246" fill="#2E5AAC">release</text>
+          </g>
+          <g font-size="13" text-anchor="middle" fill="#6A5560">
+            <text x="76" y="107">baseline</text><text x="76" y="257">one change</text>
+            <text x="532" y="107">threshold</text><text x="532" y="257">threshold</text>
+          </g>
+          <g font-size="13" text-anchor="middle" font-weight="600">
+            <text x="532" y="158" fill="#C92A4B">divergence</text><text x="532" y="175" fill="#C92A4B">point</text>
+          </g>
+          <text x="228" y="166" font-size="13" text-anchor="middle" fill="#6A5560">traces match …</text>
+          <text x="380" y="166" font-size="13" text-anchor="middle" fill="#6A5560">… still match</text>
+          <text x="684" y="166" font-size="13" text-anchor="middle" fill="#6A5560">outcomes differ</text>
+          <text x="380" y="316" font-size="14" text-anchor="middle" font-weight="600">The first stage where the traces differ names the stage responsible.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Following the divergence: two traces match until one stage splits them – here a post-processing threshold, as in the worked example.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>In the UAE's smart-city and healthcare AI, engineers must know how a system behaves when real inputs are messy – a blurry scan or a missing field – so they can catch failures before the system is trusted with a decision.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Science · Mathematics</h4><p>Changing one input feature and finding where two runs diverge is <b>controlled experiment design</b> from <b>Science</b>. Recording sensitivity as a comparison is <b>data handling</b> in <b>Mathematics</b>.</p></div>
+    <div class="call amber"><h4>Tool for this week: school-approved generative assistant + pipeline-map cards (teacher-mediated)</h4><p>1. Pick two input cards that differ in only one way and trace the first through all five stages. 2. Trace the second the same way and mark the stage where the two traces first diverge. 3. Explain which component caused the difference, and say whether this is a robustness or a reliability-over-time question. <b>Stay safe:</b> teacher-operated assistant; illustrative inputs only. Change one thing at a time so the cause is clear.</p></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head dark"><span class="pill">Lab · Part 2 of 3 · Worksheet</span><h2>Trace the Divergence</h2><p>Two input cards that differ in one feature. Trace both, mark where they split, and check both outputs against the key.</p></div>
+  <div class="part-body">
+    <div class="ecard" id="pack"></div>
+    <div id="a-ltrace"></div>
+    <div id="a-ldiverge"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head"><span class="pill">Lab · Part 3 of 3 · Unplugged</span><h2>Trace the divergence, on paper</h2><p>Find the divergence point and name the decisive component.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Scenario</h4><p>You trace two inputs that differ in only one way through the five-stage pipeline. Working on paper, find the divergence point and name the decisive component. <span class="illus">(Illustrative scenario.)</span></p></div>
+    <div class="worked"><b>Worked example.</b> Record: ‘Both traces match until post-processing, where a threshold flips one to Action – that stage is decisive.’</div>
+    <div id="a-lpaper"></div>
+    <div id="a-lquiz"></div>
+    <div class="call"><h4>Where this leads</h4><p>Next week (Week 3: Designing a Solution) you move from understanding a system to designing one – using the five stages, and what you now know about where a pipeline can slip, to plan a solution for a defined problem.</p></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Follow the pipeline – then find where two traces split</h2></div>
+  <div class="part-body">
+    <ul class="keys">
+      <li>Every AI solution here follows five named stages: <b>Input, Features, Model inference, Post-processing, Action</b>.</li>
+      <li>The model is usually a <b>neural network</b> trained on past examples; <b>training</b> builds the pattern, <b>inference</b> applies it.</li>
+      <li>The model matches patterns without understanding, so an unfamiliar input can give a <b>confident but wrong</b> output – verify before you trust.</li>
+      <li>A fault can be located by naming the stage it occurs at.</li>
+      <li>Trace one input through all five stages, then compare a second that differs in <b>one way</b>; the <b>divergence point</b> names the stage responsible.</li>
+      <li><b>Robustness</b> = coping with a hard input now; <b>reliability over time</b> = holding up as conditions drift.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 12 · Main Course · Term 1 Week 2 (5 – 9 Oct 2026) · Core + Lab</div>
+</footer>
+
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- strand + concept tags ---------- */
+const CU_E="CU · how AI solutions function in real-world contexts";
+const CU_P="CU · how components interact and influence outcomes";
+const CU_A="CU · system effectiveness: performance, risk, scalability";
+const CE_E="CE · identifies areas for improvement";
+const CE_P="CE · evaluates using evidence and defined criteria";
+
+/* ---------- content: Core ---------- */
+const STAGES = ["Input","Features","Model inference","Post-processing","Action"];
+const WORDS = [
+  ["pipeline","The full path an AI solution follows, from data in to action out."],
+  ["input","The data the system takes in, such as a photo or a sensor reading."],
+  ["model","The trained part that applies patterns learned from past data to produce an output."],
+  ["inference","The moment the model uses those patterns to make a prediction on new data."],
+  ["output","The result the system gives, which is then turned into an action."]
+];
+const DEF_ORDER = [2,4,0,3,1];
+/* parcel sorting at a logistics hub – illustrative */
+const STG = [
+  ["st1","The trained network suggests a destination hub for the parcel, with a confidence score",2],
+  ["st2","A camera photographs the address label on a parcel",0],
+  ["st3","A conveyor arm pushes the parcel onto the lane for the chosen hub",4],
+  ["st4","The photo is cropped, straightened and turned into numbers for each character",1],
+  ["st5","If confidence is below 0.80 the parcel goes to a person; otherwise the top hub is chosen",3]
+];
+/* ramp-metering faults – illustrative */
+const FAULTS = [
+  ["f1","The rule that turns predicted flow into a release rate uses an out-of-date limit, so cars are held too long",3],
+  ["f2","A loop sensor under the road is damaged and reports zero cars",0],
+  ["f3","On a holiday morning unlike anything in its training data, the network predicts heavy traffic that never comes",2],
+  ["f4","The ramp signal's lamp fails and stays on red",4],
+  ["f5","Raw counts are converted to vehicles per hour with the wrong time window, so every number the model reads is doubled",1]
+];
+const TI = [
+  ["ti1","Engineers adjust the network's connection strengths using two years of past traffic counts","T"],
+  ["ti2","At 07:40 the model predicts the next ten minutes' flow from this morning's readings","I"],
+  ["ti3","The network is shown thousands of past mornings until its predictions match what really happened","T"],
+  ["ti4","A parcel-sorting model reads a brand-new label and suggests a hub","I"],
+  ["ti5","It happens once, in advance, before the system goes live","T"],
+  ["ti6","It happens every time a new input arrives","I"]
+];
+const CONF_1 = ["The model understood that a holiday is coming and was being careful","The input looked unlike its training data, so it matched the closest pattern it knew – normal weekday mornings – and still gave a sure-sounding answer","The interface added extra confidence to the prediction","The sensors were broken, so nothing could be predicted"];
+const CONF_2 = ["The prediction is 94% certain to be true","The model found a strong pattern match – not that the answer is true","The model has checked the answer against the real road","The model has seen this exact morning before"];
+const CONF_3 = ["Trust it – 94% is high enough","Verify before you trust: check the output against the task and a reliable source, such as live counts and the engineers on duty","Retrain the model during the morning rush","Switch off the post-processing step"];
+/* worked-example card (illustrative) */
+const WSMAP = [
+  ["Loop sensors report the main-road and ramp counts at 07:40",0],
+  ["Counts are cleaned and turned into numbers per lane: main road 1,620 vehicles per hour, 9 cars queuing on the ramp",1],
+  ["The trained network predicts the main-road flow for the next 10 minutes: about 1,750 vehicles per hour",2],
+  ["A rule turns that prediction into a timing: above 1,700 → release one car every 6 seconds",3],
+  ["The ramp signal releases one car every 6 seconds",4]
+];
+const WSMAP_ORDER = [3,0,4,2,1];
+const PATTERN = ["It compares this morning's features with patterns learned from many past mornings to predict the coming flow","It decides the signal timing from a fixed rule","It counts the cars passing the sensor","It understands why drivers are travelling"];
+const EXPL = ["“The input – sensor counts – was turned into features per lane; at inference the model matched them to busy past mornings and predicted about 1,750 vehicles per hour; post-processing turned that into a 6-second release.”","“The AI knew the road was busy, so it slowed the cars down.”","“The signal changed because the computer decided to.”","“The model saw the traffic on camera and understood it was rush hour.”"];
+const WRONG = [
+  ["wg1","Input: a sensor covered in dust under-counts the cars",1],
+  ["wg2","Model inference: an unusual morning (a road closure or holiday) unlike its training data gives a confident but wrong prediction",1],
+  ["wg3","Post-processing: the 1,700 limit in the timing rule is set wrongly",1],
+  ["wg4","Nowhere – a model that understands traffic cannot go wrong",0],
+  ["wg5","The colour of the engineers' dashboard",0]
+];
+const FIX_WHERE = STAGES;
+const FIX_WHY = ["It is a rule people can change and test quickly, without retraining the model","The model has to be trained again from scratch","The sensors must be dug up and replaced","Nothing can be changed after the system goes live"];
+const WHY_CONF = ["It matches patterns without understanding, so an input unlike its training data still gets a sure-sounding guess","It always tells the truth, so it is never wrong","The signal light adds confidence to the answer","It is confident only when it is right"];
+const QUIZ = [
+  ["q1","What are the five stages of the pipeline, in order?",["Action, model, input, output, review.","Input, features, model inference, post-processing, action.","Input, model, output – just three stages."],1],
+  ["q2","What is the difference between training and inference?",["They are two words for the same step.","Inference happens before training.","Training adjusts the model on past examples in advance; inference applies the trained pattern to a new input."],2],
+  ["q3","Why can a model be confidently wrong?",["It matches a new input against training patterns without understanding; an unfamiliar input still gets a confident guess.","Because it always tells the truth.","Because the interface adds confidence."],0]
+];
+const TF = [
+  ["tf1","The five stages are input, features, model inference, post-processing, action.","T"],
+  ["tf2","Training and inference happen at the same time, on every input.","F"],
+  ["tf3","A model can be confidently wrong on an input unlike its training data.","T"]
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["controlled comparison","Changing one input at a time so any change in the output has a clear cause."],
+  ["divergence point","The stage in the pipeline where two traces first give different results."],
+  ["component","One part of the system, such as the data, the model, or a rule."],
+  ["sensitivity","How much the output changes when the input changes a little."],
+  ["failure mode","A specific way a system gives a wrong or unwanted output."]
+];
+const LDEF_ORDER = [3,0,4,2,1];
+const CTRL = [
+  ["c1","The same pothole, same angle and time – one photo sharp, one blurred","Y"],
+  ["c2","A pothole photo at noon vs a different road's crack at dusk","N"],
+  ["c3","Monday's 07:40 ramp readings vs the same readings with one sensor's count set to zero","Y"],
+  ["c4","Readings from a weekday morning in October vs a Friday evening in March","N"],
+  ["c5","The same parcel label, once clean and once with a coffee stain over the postcode","Y"]
+];
+const ROB = [
+  ["r1","Feeding the pothole model a photo taken in heavy rain","R"],
+  ["r2","Checking each month whether the ramp model's predictions still match real counts","T"],
+  ["r3","Testing the parcel reader on a crumpled, half-torn label","R"],
+  ["r4","Noticing a triage model's accuracy has slipped since a new clinic opened last year","T"],
+  ["r5","Seeing whether one missing sensor field breaks today's prediction","R"],
+  ["r6","Re-running the same test set every term to see whether results drift","T"]
+];
+/* road-damage pack (illustrative) */
+const PACK_A = [
+  ["1. Input","Photo of a pothole, taken in daylight"],
+  ["2. Features","Sharp outline found; width about 40 cm; deep shadow inside"],
+  ["3. Model inference","Label: severe pothole – confidence 0.86"],
+  ["4. Post-processing","Rule: severe pothole → urgent"],
+  ["5. Action","Repair crew sent within 24 hours"]
+];
+const BLOG = [
+  ["lt1","Label: surface crack – confidence 0.71",2],
+  ["lt2","Low-contrast outline; edges unclear; width about 40 cm; no clear shadow",1],
+  ["lt3","Added to the routine repair list (2–3 weeks)",4],
+  ["lt4","Rule: not a severe pothole → routine",3]
+];
+const CAUSE = ["The low light changed the features (a faint, low-contrast outline), so the model matched a different pattern – a surface crack","The repair crew chose to ignore input B","The post-processing rule is different for input B","The model was retrained between the two runs"];
+const CHECKHOW = ["Check both outputs against the answer key (an inspector's rating) before trusting either","Trust trace B because its confidence is above 0.70","Average the two labels","Run input B again until it agrees with A"];
+const PAPER = [
+  ["pp1","Ramp metering: input B is the same morning, but light sandstorm dust hides some vehicles from the camera. Features: A counts 38 vehicles a minute, B counts 21. The model then predicts lighter traffic for B and the signal releases cars faster.",1,"R"],
+  ["pp2","Ramp metering: input B is identical except the ramp-queue sensor reads 18 waiting cars instead of 12. The features the model reads (main-road flow) are the same, and so is its prediction: 1,750 vehicles per hour. The timing rule says ‘meter, unless more than 15 cars are queuing’ – so A meters and B releases faster.",3,"R"],
+  ["pp3","Ramp metering: a typical 07:40 weekday input is traced in October and again in March, after a new road opened nearby. The features look alike and the model, trained on last year's patterns, predicts a similar flow both times – but by March the real flow is 30% higher than predicted: the learned pattern no longer fits.",2,"T"]
+];
+const LQUIZ = [
+  ["lq1","What is a “divergence point” in a trace?",["The final action of the pipeline.","The stage where two traces that started the same first produce different results.","The moment the model is trained."],1],
+  ["lq2","You feed a noisy, unusual input and the system copes well. What have you tested?",["Reliability over time – how it drifts over months.","Its training accuracy.","Robustness – how it holds up on a hard input here and now."],2],
+  ["lq3","Why change only one thing between the two inputs?",["So any divergence can be attributed to that one change.","Because the pipeline can only accept one input.","To make the traces identical."],0]
+];
+const LTF = [
+  ["ltf1","Robustness and reliability over time mean the same thing.","F"],
+  ["ltf2","A divergence point is the stage where two traces first differ.","T"],
+  ["ltf3","You should change one thing at a time to attribute a divergence.","T"]
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CU_E,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"The pipeline is the whole path from data in to action out. The input is the data taken in; the model is the trained part that applies learned patterns; inference is the moment it uses them on new data; the output is the result, which is then turned into an action."},
+ {id:"stages",mount:"a-stages",section:"Core · Part 1",title:"Name the stage: a parcel-sorting hub",sub:"Objective 1 · input to output in a new system · "+CU_E,ico:"📦",
+  fields:STG.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Photographing the label is the input; cropping it and turning characters into numbers makes the features; the network's suggested hub with a confidence score is model inference; the ‘below 0.80 goes to a person’ rule is post-processing; the conveyor arm moving the parcel is the action. The same five stages appear in every AI solution."},
+ {id:"fault",mount:"a-fault",section:"Core · Part 1",title:"Locate the fault by naming its stage",sub:"A mistake at any stage flows to the action · "+CU_P,ico:"🔧",
+  fields:FAULTS.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"A damaged sensor is an input fault; a wrong conversion of counts corrupts the features; an unfamiliar holiday morning misleads model inference; an out-of-date limit in the timing rule is post-processing; a failed signal lamp is the action. Each fault flows on to what happens on the road – naming its stage tells you where to fix it."},
+ {id:"traininf",mount:"a-traininf",section:"Core · Part 2",title:"Training or inference?",sub:"How the model learns · "+CU_E,ico:"🧠",
+  fields:TI.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Training adjusts the network's connection strengths on many past examples – once, in advance, before the system goes live. Inference applies that trained pattern to each new input, every time one arrives: today's 07:40 prediction and the parcel reader's suggestion are inference."},
+ {id:"confident",mount:"a-confident",section:"Core · Part 2",title:"Confident – but wrong",sub:"Verify before you trust · "+CU_A,ico:"⚠️",
+  fields:[{k:"cf1",radio:1,ok:v=>eq(v,1)},{k:"cf2",radio:1,ok:v=>eq(v,1)},{k:"cf3",radio:1,ok:v=>eq(v,1)}],
+  explain:"The model never understands the road – it matches the input to the closest pattern from training. A holiday morning unlike its training data still gets a sure-sounding answer. A 94% confidence score means a strong pattern match, not truth, so the output is verified against live counts and the engineers before it is trusted."},
+ {id:"wsmap",mount:"a-wsmap",section:"Core worksheet 1–3",title:"Map the card through the five stages",sub:"Worksheet 1–3 · what happens at each stage; the model's pattern work · "+CU_E,ico:"🗺️",cls:"ws",
+  fields:[...STAGES.map((_,i)=>({k:"wm"+i,ok:v=>eq(v,i)})),{k:"wmp",ok:v=>eq(v,0)}],
+  explain:"Input: the 07:40 sensor counts arrive. Features: cleaned into numbers per lane. Model inference: the network predicts about 1,750 vehicles per hour. Post-processing: the ‘above 1,700’ rule sets a 6-second release. Action: the signal releases the cars. The model stage is doing pattern work – matching this morning's features to patterns from many past mornings – not counting cars or setting the timing."},
+ {id:"wsexplain",mount:"a-wsexplain",section:"Core worksheet 4–5",title:"Check the output and explain it",sub:"Worksheet 4–5 · check, explain with key terms, where it could go wrong · "+CU_P,ico:"💬",cls:"ws",
+  fields:[{k:"wx1",ok:v=>eq(v,"M")},{k:"wx2",radio:1,ok:v=>eq(v,0)},...WRONG.map(([k,,c])=>({k,box:1,ok:v=>v===!!c}))],
+  explain:"The system's output (one car every 6 seconds) matches the correct answer on the card. A strong explanation uses the key terms – input, features, inference, post-processing – rather than ‘the AI decided’. It could go wrong at the input (a dusty sensor), at inference (an unfamiliar morning) or in post-processing (a wrong limit). A model never truly understands traffic, so ‘nowhere’ is wrong, and a dashboard colour does not change the result."},
+ {id:"paper",mount:"a-paper",section:"Core · Part 4",title:"Trace the five stages, on paper",sub:"Unplugged activity · stages, where to fix a fault, confident but wrong · "+CE_E,ico:"📝",
+  fields:[...STAGES.map((_,i)=>({k:"po"+i,ok:v=>eq(v,i)})),{k:"pfw",ok:v=>eq(v,3)},{k:"pfy",ok:v=>eq(v,0)},{k:"pcw",ok:v=>eq(v,0)}],
+  explain:"The order is always Input → Features → Model inference → Post-processing → Action. When the predictions are right but the timing is too strict, the fault is in post-processing – a rule people can change and test quickly without retraining the model. The model can be confident but wrong because it matches patterns without understanding."},
+ {id:"quiz",mount:"a-quiz",section:"Core · Part 4",title:"Quick check – the pipeline and the model",sub:"Quick quiz · 3 questions and 3 true or false · "+CU_E,ico:"✅",cls:"quiz",
+  fields:[...QUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...TF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: Input, features, model inference, post-processing, action. 2: Training adjusts the model on past examples in advance; inference applies the trained pattern to a new input. 3: It pattern-matches without understanding, so an unfamiliar input still gets a confident guess. True or false: the five stages are named correctly (true); training builds the pattern once, in advance – it does not happen on every input (false); a model can be confidently wrong on unfamiliar input (true)."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+CU_P,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"A controlled comparison changes one input at a time so a change in output has a clear cause. The divergence point is where two traces first give different results. A component is one part, such as the data, the model or a rule. Sensitivity is how much the output changes when the input changes a little. A failure mode is a specific way a system goes wrong."},
+ {id:"lcontrol",mount:"a-lcontrol",section:"Lab · Part 1",title:"Controlled comparison – or not?",sub:"Change one thing at a time · "+CE_P,ico:"🧪",
+  fields:CTRL.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Sharp vs blurred, one sensor set to zero, and clean vs stained label each change only one thing – so any change in the output has a clear cause. A different road at a different time of day, or a different day, month and time, changes several things at once, so you cannot tell which one caused the difference."},
+ {id:"lrobust",mount:"a-lrobust",section:"Lab · Part 1",title:"Robustness or reliability over time?",sub:"Two different questions, measured differently · "+CU_A,ico:"🌦️",
+  fields:ROB.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Heavy rain, a torn label and a missing field are hard inputs here and now – robustness. Monthly checks against real counts, a slip since a new clinic opened, and re-running a test set every term look at how performance drifts over weeks and months – reliability over time."},
+ {id:"ltrace",mount:"a-ltrace",section:"Lab worksheet 1–4",title:"Trace input B and mark the split",sub:"Worksheet 1–4 · trace the second input; first divergence · "+CU_P,ico:"🧭",cls:"ws",
+  fields:[...BLOG.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"ltd",ok:v=>eq(v,1)}],
+  explain:"Input B's run log: the low-contrast outline is the features stage; ‘surface crack – 0.71’ is model inference; ‘not severe → routine’ is post-processing; the routine repair list is the action. Both inputs show the same pothole, so the traces first split at the features: the low light changed what the model could read."},
+ {id:"ldiverge",mount:"a-ldiverge",section:"Lab worksheet 5",title:"Explain the cause and check against the key",sub:"Worksheet 5 · decisive component, answer key, robustness · "+CE_P,ico:"🎯",cls:"ws",
+  fields:[{k:"ldc",radio:1,ok:v=>eq(v,0)},{k:"lka",ok:v=>eq(v,"C")},{k:"lkb",ok:v=>eq(v,"W")},{k:"ldq",ok:v=>eq(v,"R")},{k:"ldh",ok:v=>eq(v,0)}],
+  explain:"The one change (low light) altered the features, so the model matched a different pattern and labelled the pothole a surface crack; the same rule then sent it to the routine list. Against the inspector's key (severe pothole, urgent), trace A is correct and trace B is wrong – a failure mode on dim photos. One hard input, here and now, is a robustness question. Check outputs against the key before trusting either – a confidence of 0.71 does not make B right."},
+ {id:"lpaper",mount:"a-lpaper",section:"Lab · Part 3",title:"Trace the divergence, on paper",sub:"Unplugged activity · divergence point; robustness or reliability · "+CU_P,ico:"📝",
+  fields:PAPER.flatMap(([k,,d,q])=>[{k:k+"a",ok:v=>eq(v,d)},{k:k+"b",ok:v=>eq(v,q==="R"?0:1)}]),
+  explain:"Sandstorm: the counts already differ at the features, so the split starts there – a hard input now, so robustness. Queue sensor: features and prediction match, and the timing rule flips the outcome – the divergence point is post-processing, as in the worked example; one changed input now tests robustness. October vs March: features match but the model's learned pattern no longer fits drifted traffic – model inference, and a reliability-over-time question."},
+ {id:"lquiz",mount:"a-lquiz",section:"Lab · Part 3",title:"Quick check – trace and diverge",sub:"Quick quiz · 3 questions and 3 true or false · "+CU_P,ico:"✅",cls:"quiz",
+  fields:[...LQUIZ.map(([k,,,c])=>({k,radio:1,ok:v=>eq(v,c)})),...LTF.map(([k,,c])=>({k,ok:v=>eq(v,c)}))],
+  explain:"1: The stage where two traces that started the same first produce different results. 2: Robustness – coping with a hard input here and now. 3: So any divergence can be attributed to that one change. True or false: robustness and reliability over time are different (false); a divergence point is where traces first differ (true); change one thing at a time (true)."}
+];
+
+
+/* ---------- state ---------- */
+const KEY="g12-mw2-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#card").innerHTML=`<header><small>Worked-example card · illustrative</small><b>Ramp metering at 07:40 on a weekday morning</b></header>
+<div class="in">
+  <p class="task"><b>Input:</b> loop sensors on the main road and the on-ramp send their counts at 07:40 – main road 1,620 vehicles per hour, 9 cars queuing on the ramp. (Made-up numbers, no personal data.)</p>
+  <div class="ab"><div><b>Output the system gave</b>Meter the ramp: release one car every 6 seconds.</div><div><b>Correct answer on the card</b>Meter the ramp at one car every 6 seconds – the main road is about to pass 1,700 vehicles per hour.</div></div>
+</div>`;
+$("#pack").innerHTML=`<header><small>Input cards and run log · illustrative</small><b>A road-damage reporting system: two photos of the same pothole</b></header>
+<div class="in">
+  <p class="task"><b>The pipeline:</b> a photo of road damage goes in; the model labels it; the rule ‘severe pothole → urgent, anything else → routine’ decides the repair. The teacher ran both cards through the same system (no personal data).</p>
+  <div class="ab"><div><b>Input card A</b>The pothole photographed in daylight.</div><div><b>Input card B · the one change</b>The same pothole, same angle and phone – photographed at dusk, in low light.</div></div>
+  <table class="t"><caption style="caption-side:top;text-align:left;font-weight:700;padding-bottom:6px">Trace of input A</caption><thead><tr><th>Stage</th><th>Trace of input A</th></tr></thead>
+  <tbody>${PACK_A.map(([s,a])=>`<tr><td>${esc(s)}</td><td>${esc(a)}</td></tr>`).join("")}</tbody></table>
+  <p class="note"><b>Run log for input B</b> (the assistant printed the four lines after the input out of order): ${BLOG.map(([,t],i)=>`<b>${"WXYZ"[i]}</b> ${esc(t)}`).join(" · ")}</p>
+  <p class="note"><b>Answer key:</b> a road inspector rated this pothole <b>severe – urgent repair</b>.</p>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${esc(t)}</span></label>`).join("")+`</div>`;
+const quiz=(mcq,tf)=>mcq.map(([k,q,o],i)=>`<p class="q" id="q-${k}">${i+1}. ${esc(q)}</p>${radios(k,o)}`).join("")+
+  `<p class="q">${mcq.length+1}. True or false? Decide for each statement.</p>`+
+  tf.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["True","False"],["T","F"],t)}</div>`).join("");
+const stageSel=(k,order)=>sel(k,STAGES,"Choose the stage…",order);
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "stages":
+    return `<p class="how">A logistics hub sorts parcels with AI <span class="illus">(illustrative)</span>. The steps below are jumbled – name the pipeline stage of each.</p>`+
+      STG.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${stageSel(k,[3,1,4,0,2])}</div>`).join("");
+  case "fault":
+    return `<p class="how">Each fault below happens in the ramp-metering pipeline <span class="illus">(illustrative)</span>. At which stage is the fault?</p>`+
+      FAULTS.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${stageSel(k,[2,4,1,3,0])}</div>`).join("");
+  case "traininf":
+    return `<p class="how">Is each statement about training (building the pattern in advance) or inference (applying it to a new input)?</p>`+
+      TI.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Training","Inference"],["T","I"],t)}</div>`).join("");
+  case "confident":
+    return `<div class="quote">The ramp model was trained on two years of ordinary weekday mornings. On the first morning of a public holiday the roads are almost empty – but at 07:40 it predicts heavy traffic with a confidence of 94%. <span class="illus">(Illustrative scenario.)</span></div>
+      <p class="q" id="q-cf1">1. Why did the model give a confident but wrong answer?</p>${radios("cf1",CONF_1)}
+      <p class="q" id="q-cf2">2. What does the 94% confidence actually tell you?</p>${radios("cf2",CONF_2)}
+      <p class="q" id="q-cf3">3. What should happen before the output is trusted?</p>${radios("cf3",CONF_3)}`;
+  case "wsmap":
+    return `<p class="q">1–2. Use the worked-example card above. On your pipeline map, what happens to this input at each stage?</p>`+
+      STAGES.map((s,i)=>`<div class="pair" data-item="wm${i}"><span class="t">${i+1}. ${esc(s)}</span>${sel("wm"+i,WSMAP.map(w=>w[0]),"Choose what happens…",WSMAP_ORDER)}</div>`).join("")+
+      `<p class="q">3. Mark the model stage: what pattern work is it doing?</p>
+      <div class="pair" data-item="wmp"><span class="t">At model inference the network…</span>${sel("wmp",PATTERN,"Choose…",[2,0,3,1])}</div>`;
+  case "wsexplain":
+    return `<p class="q">4. Check the output against the correct answer on the card.</p>
+      <div class="row" data-item="wx1"><span class="t">The system's output and the card's correct answer…</span>${seg("wx1",["Match","Do not match"],["M","D"],"Check the output")}</div>
+      <p class="q" id="q-wx2">5. Which explanation to a partner uses the key terms correctly?</p>${radios("wx2",EXPL)}
+      <p class="q">5 (continued). Point to where it could go wrong.</p>`+
+      boxes(WRONG,"Tick every place this pipeline could really go wrong. Leave the others unticked.");
+  case "paper":
+    return `<p class="q">1. For one input, put the five stages in order.</p>`+
+      STAGES.map((_,i)=>`<div class="pair" data-item="po${i}"><span class="t">Step ${i+1}</span>${stageSel("po"+i,[4,2,0,3,1])}</div>`).join("")+
+      `<p class="q">2. Engineers find the predictions are right, but whenever predicted flow is just above 1,700 the timing rule holds cars far too long. <span class="illus">(Illustrative.)</span> At which stage is this fault, and why is it the easiest kind to fix?</p>
+      <div class="pair" data-item="pfw"><span class="t">Stage</span>${stageSel("pfw",[1,4,3,0,2])}</div>
+      <div class="pair" data-item="pfy"><span class="t">Why it is easiest to fix</span>${sel("pfy",FIX_WHY,"Choose…",[1,3,0,2])}</div>
+      <p class="q">3. In one line: why could the model be confident but wrong?</p>
+      <div class="pair" data-item="pcw"><span class="t">Because…</span>${sel("pcw",WHY_CONF,"Choose…",[1,2,0,3])}</div>`;
+  case "quiz":
+    return quiz(QUIZ,TF);
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lcontrol":
+    return `<p class="how">Does each pair of inputs differ in only one way (a controlled comparison), or in several ways at once?</p>`+
+      CTRL.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Controlled","Several changes"],["Y","N"],t)}</div>`).join("");
+  case "lrobust":
+    return `<p class="how">Is each check about robustness (a hard input here and now) or reliability over time (holding up as conditions drift)?</p>`+
+      ROB.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["Robustness","Reliability over time"],["R","T"],t)}</div>`).join("");
+  case "ltrace":
+    return `<p class="q">1–3. Trace input B: which stage does each line of B's run log belong to?</p>`+
+      BLOG.map(([k,t],i)=>`<div class="pair" data-item="${k}"><span class="t"><b>${"WXYZ"[i]}</b> ${esc(t)}</span>${stageSel(k,[3,0,4,2,1])}</div>`).join("")+
+      `<p class="q">4. Mark the stage where your two traces first split.</p>
+      <div class="pair" data-item="ltd"><span class="t">Divergence point</span>${stageSel("ltd",[4,2,1,3,0])}</div>`;
+  case "ldiverge":
+    return `<p class="q" id="q-ldc">5. Which component caused the difference?</p>${radios("ldc",CAUSE)}
+      <p class="q">5 (continued). Check both outputs against the answer key.</p>
+      <div class="row" data-item="lka"><span class="t">Trace A: severe pothole → urgent</span>${seg("lka",["Correct","Wrong"],["C","W"],"Trace A")}</div>
+      <div class="row" data-item="lkb"><span class="t">Trace B: surface crack → routine</span>${seg("lkb",["Correct","Wrong"],["C","W"],"Trace B")}</div>
+      <div class="row" data-item="ldq"><span class="t">Is this a robustness or a reliability-over-time question?</span>${seg("ldq",["Robustness","Reliability over time"],["R","T"],"Question type")}</div>
+      <div class="pair" data-item="ldh"><span class="t">How I would check the result</span>${sel("ldh",CHECKHOW,"Choose…",[1,3,0,2])}</div>`;
+  case "lpaper":
+    return `<p class="how">1–3. For each pair of traces, mark the stage where they first diverge, and say whether it is a robustness or a reliability-over-time question.</p>`+
+      PAPER.map(([k,t])=>`<div class="scen"><p>${esc(t)}</p><div class="two">
+        <div data-item="${k}a"><span>First diverge at</span>${sel(k+"a",STAGES,"Choose…",[2,4,1,3])}</div>
+        <div data-item="${k}b"><span>Question type</span>${sel(k+"b",["Robustness","Reliability over time"],"Choose…",[1,0])}</div></div></div>`).join("");
+  case "lquiz":
+    return quiz(LQUIZ,LTF);
+  }
+}
+
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 12 Main Course · Term 1 Week 2 (5 – 9 Oct 2026) · Core + Lab · Understanding the System + Trace the Divergence</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
