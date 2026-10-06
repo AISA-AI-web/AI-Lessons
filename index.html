@@ -73,6 +73,16 @@ table.grid[data-show]:not([data-show="all"]){min-width:0}
 .grid a.ls b{font-weight:600}
 .grid td .share{padding:0 10px 10px}
 .grid a.ls+.share{margin-top:-2px}
+/* All grades: a small, still Share button in the same corner of every cell (one grade: the full button) */
+table.grid[data-show="all"] td.g{position:relative}
+table.grid[data-show="all"] td.g a.ls{padding-bottom:40px}
+table.grid[data-show="all"] td .share{position:absolute;inset-inline-end:8px;bottom:8px;padding:0}
+table.grid[data-show="all"] .crs{padding:2px 6px 2px 3px;gap:3px;border-width:1px;animation:none;box-shadow:none}
+table.grid[data-show="all"] .crs::after{display:none}
+table.grid[data-show="all"] .crs img{width:21px;height:18px}
+table.grid[data-show="all"] .crs svg{width:11px;height:11px}
+table.grid[data-show="all"] .crs .crl{display:none}
+table.grid[data-show="all"] .crs:hover,table.grid[data-show="all"] .crs:focus-visible{transform:scale(1.2);box-shadow:0 3px 8px rgba(19,115,51,.25)}
 .grid a.ls:hover b{text-decoration:underline}
 table.grid[data-show="6"] .g:not(.g6){display:none}table.grid[data-show="7"] .g:not(.g7){display:none}table.grid[data-show="8"] .g:not(.g8){display:none}table.grid[data-show="9"] .g:not(.g9){display:none}table.grid[data-show="10"] .g:not(.g10){display:none}table.grid[data-show="11"] .g:not(.g11){display:none}table.grid[data-show="12"] .g:not(.g12){display:none}
 .grid tr.bridge>*{border-bottom:2px solid var(--line)}
