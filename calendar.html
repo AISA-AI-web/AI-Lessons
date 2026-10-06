@@ -49,6 +49,7 @@
 .gf{font:inherit;font-size:13px;font-weight:700;border:1.5px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;padding:3px 11px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 .gf i{width:9px;height:9px;border-radius:50%;background:var(--gc)}
 .gf[aria-pressed="true"]{border-color:var(--purple);color:var(--purple);background:var(--tint)}
+.gf.gmine[aria-pressed="true"]{background:var(--purple);color:#fff}
 .tt{display:grid;grid-template-columns:48px repeat(5,minmax(0,1fr));border:1px solid var(--line-2);border-radius:12px;overflow:hidden;background:#fff}
 .tt>div{border-top:1px solid var(--line-2);border-inline-start:1px solid var(--line-2);padding:6px;min-height:46px;min-width:0}
 .tt .corner,.tt .dh{border-top:0}
@@ -122,7 +123,7 @@
       <button class="btn small quiet" type="button" data-print data-i18n="Print">Print</button>
     </div>
     <div class="notice" id="soon" hidden></div>
-    <div class="gfilter" id="gfilter"><span data-i18n="Grade">Grade</span></div>
+    <div class="gfilter" id="gfilter"><span data-i18n="Show">Show</span></div>
     <div id="gridOut"></div>
     <div class="legend" id="legend"></div>
   </section>
@@ -155,7 +156,9 @@ const shareUrl = id => APP ? lessonUrl(id) : new URL('app/?p=' + encodeURICompon
 const CR_ICON = '<img src="assets/classroom.png" alt="" width="30" height="26"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>';
 const classroomUrl = (id, title) => 'https://classroom.google.com/share?url=' + encodeURIComponent(shareUrl(id)) + '&title=' + encodeURIComponent(title);
 let LANG = (() => { try { return localStorage.getItem('aisa-lang') === 'ar' ? 'ar' : 'en'; } catch (e) { return 'en'; } })();
-let GRADE = '';   // always opens on every grade; the teacher's own classes stand out
+/* Teachers open on their own classes (their timetable); All grades or one grade shows other classes. */
+const HOME = MINE.length ? 'mine' : '';
+let GRADE = HOME;
 let GMON = AICAL.monday(NOW);
 /* ---------- words (English / العربية). Lesson titles stay in English. ---------- */
 const AR = {
@@ -163,7 +166,8 @@ const AR = {
   'AI Teaching Calendar': 'تقويم تدريس الذكاء الاصطناعي', 'My lessons': 'دروسي', 'Whole school': 'المدرسة كلها', 'This week': 'هذا الأسبوع', 'All grades': 'كل الصفوف', 'Jump to': 'انتقل إلى', 'Print': 'طباعة', 'Grade': 'الصف',
   'American International School in Abu Dhabi': 'المدرسة الأمريكية الدولية في أبوظبي', 'AI Literacy · Grades 6–12': 'محو أمية الذكاء الاصطناعي · الصفوف 6–12',
   'Your classes: {list} – every AI lesson in order, with breaks and holidays.': 'شعبك: {list} – جميع دروس الذكاء الاصطناعي بالترتيب، مع العطل والإجازات.',
-  'Every class\'s AI period this week. Your classes are outlined.': 'حصة الذكاء الاصطناعي لكل شعبة هذا الأسبوع. شعبك محددة بإطار.', 'Every class\'s AI period this week – click a class for its lesson and links.': 'حصة الذكاء الاصطناعي لكل شعبة هذا الأسبوع – انقر على شعبة لعرض درسها وروابطه.',
+  'Every class\'s AI period this week. Your classes are bold and outlined – the one you teach today glows.': 'حصة الذكاء الاصطناعي لكل شعبة هذا الأسبوع. شعبك بخط عريض ومحاطة بإطار – ويتوهّج درس اليوم.',
+  'Your AI lessons this week – today\'s glows. Choose All grades or a grade to see other classes.': 'دروس الذكاء الاصطناعي الخاصة بك هذا الأسبوع – يتوهّج درس اليوم. اختر «كل الصفوف» أو صفًا لعرض الشعب الأخرى.', 'My classes': 'شعبي', 'Show': 'عرض', 'Every class\'s AI period this week – click a class for its lesson and links.': 'حصة الذكاء الاصطناعي لكل شعبة هذا الأسبوع – انقر على شعبة لعرض درسها وروابطه.',
   'This week · ': 'هذا الأسبوع · ', 'Teaching week {n}': 'الأسبوع الدراسي {n}', 'Timetable Week {c} (Days {a}–{b})': 'أسبوع الجدول {c} (الأيام {a}–{b})', 'Day {n}': 'اليوم {n}',
   'Before the AI timetable starts': 'قبل بدء جدول الذكاء الاصطناعي', 'No school this week': 'لا دوام هذا الأسبوع', 'The AI timetable starts on Monday 28 September 2026': 'يبدأ جدول الذكاء الاصطناعي يوم الإثنين 28 سبتمبر 2026',
   'No school · {why}': 'لا دوام · {why}', '{range} · no AI lessons': '{range} · لا توجد دروس ذكاء اصطناعي', '{sec}\'s lesson moves to {d}': 'ينتقل درس {sec} إلى {d}',
@@ -239,7 +243,7 @@ function grid() {
   $('#soon').hidden = !soon.length || !tw;
   $('#soon').innerHTML = soon.length ? `<span aria-hidden="true">📅</span><div>${esc(T('Next week: {list}. No AI lessons on those days – each class\'s lesson moves to its next AI period.', { list: soon.map(s => `${why(s.why)} (${range(s.from, s.to)})`).join(', ') }))}</div>` : '';
   if (!tw) { $('#gridOut').innerHTML = `<div class="banner"><b>${esc(tw === 0 ? T('The AI timetable starts on Monday 28 September 2026') : T('No school this week'))}</b>${tw === null ? esc(why(AICAL.noSchool(mon)) + ' · ' + fd(mon) + ' – ' + fd(fri)) : ''}</div>`; $('#legend').innerHTML = ''; return; }
-  const days = [0, 1, 2, 3, 4].map(i => add(mon, i)), keep = r => !GRADE || String(r[1]) === GRADE;
+  const days = [0, 1, 2, 3, 4].map(i => add(mon, i)), keep = r => !GRADE || (GRADE === 'mine' ? MINE.includes(r[0]) : String(r[1]) === GRADE);
   let h = `<div class="tt${iso(mon) === iso(AICAL.monday(NOW)) ? ' cur' : ''}${MINE.length ? ' hasmine' : ''}"><div class="corner" style="grid-row:1;grid-column:1"></div>`;
   days.forEach((d, i) => { const today = iso(d) === iso(NOW), ev = AICAL.eventOn(d);
     h += `<div class="dh${today ? ' today' : ''}" style="grid-row:1;grid-column:${i + 2}">${esc(wd(d))} ${d.getDate()}<small>${esc(today ? T('Today') : T('Day {n}', { n: AICAL.dayNumber(d) }))}</small>${ev ? `<span class="ev">📌 ${esc(AICAL.label(ev, LANG))}</span>` : ''}</div>`; });
@@ -282,9 +286,10 @@ document.addEventListener('click', e => {
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') $('#pop').hidden = true; });
 /* ======================= shell and wiring ======================= */
-$('#gfilter').insertAdjacentHTML('beforeend', `<button type="button" class="gf" data-g="" aria-pressed="true" data-i18n="All grades">All grades</button>`);
+if (MINE.length) $('#gfilter').insertAdjacentHTML('beforeend', `<button type="button" class="gf gmine" data-g="mine" aria-pressed="true" data-i18n="My classes">My classes</button>`);
+$('#gfilter').insertAdjacentHTML('beforeend', `<button type="button" class="gf" data-g="" aria-pressed="false" data-i18n="All grades">All grades</button>`);
 for (let g = 6; g <= 12; g++) $('#gfilter').insertAdjacentHTML('beforeend', `<button type="button" class="gf" style="--gc:var(--g${g})" data-g="${g}" aria-pressed="false"><i></i>${g}</button>`);
-$('#gfilter').onclick = e => { const b = e.target.closest('.gf'); if (!b) return; GRADE = GRADE === b.dataset.g ? '' : b.dataset.g; render(); };
+$('#gfilter').onclick = e => { const b = e.target.closest('.gf'); if (!b) return; GRADE = GRADE === b.dataset.g ? HOME : b.dataset.g; render(); };
 $('#prev').onclick = () => { GMON = add(GMON, -7); grid(); }; $('#next').onclick = () => { GMON = add(GMON, 7); grid(); };
 $('#todayB').onclick = () => { GMON = AICAL.monday(NOW); grid(); };
 $('#jump').onchange = () => { if ($('#jump').value) { GMON = AICAL.monday(parse($('#jump').value)); grid(); } };
@@ -306,7 +311,7 @@ function shell() {
 function render() {
   shell();
   document.querySelectorAll('.gf').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.g === GRADE)));
-  $('#who').textContent = T(MINE.length ? 'Every class\'s AI period this week. Your classes are outlined – the one you teach today glows.' : 'Every class\'s AI period this week – click a class for its lesson and links.');
+  $('#who').textContent = T(GRADE === 'mine' ? 'Your AI lessons this week – today\'s glows. Choose All grades or a grade to see other classes.' : MINE.length ? 'Every class\'s AI period this week. Your classes are bold and outlined – the one you teach today glows.' : 'Every class\'s AI period this week – click a class for its lesson and links.');
   $('#pop').hidden = true;
   grid();
 }
