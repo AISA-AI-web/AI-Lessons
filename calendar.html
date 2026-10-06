@@ -17,8 +17,6 @@
 .tw{display:inline-flex;align-items:center;white-space:nowrap;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--gold);color:var(--purple);border-radius:999px;padding:2px 9px;align-self:center}
 .tw::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--purple);margin-inline-end:6px;animation:twDot 1.3s ease-in-out infinite}
 .tt.cur{border:4px solid var(--purple)}
-.tt.cur .dh:not(.today){background-color:#FBF3DD;background-image:linear-gradient(100deg,transparent 0 42%,rgba(255,255,255,.75) 50%,transparent 58% 100%);
-  background-size:200% 100%;background-repeat:no-repeat;background-attachment:fixed;animation:twGlow 2.6s ease-in-out infinite,twShine 3.8s ease-in-out infinite}
 @keyframes twGlow{0%,100%{background-color:#FBF3DD}50%{background-color:#F5DFA3}}
 @keyframes twShine{0%{background-position:160% 0}60%,100%{background-position:-60% 0}}
 @keyframes twDot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.6);opacity:.45}}
@@ -29,8 +27,8 @@
 .c2.now:hover,.drow.now:hover{background-color:#F5DFA3}
 .c2 .tdy,.drow .tdy{display:inline-flex;align-items:center;margin-top:3px;font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--gold);color:var(--purple);border-radius:999px;padding:1px 7px;width:max-content}
 .c2 .tdy::before,.drow .tdy::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--purple);margin-inline-end:5px;animation:twDot 1.3s ease-in-out infinite}
-@media (prefers-reduced-motion:reduce){.tt.cur .dh,.tw::before,.c2.now,.drow.now,.tdy::before{animation:none}}
-@media print{.tt.cur .dh,.c2.now,.drow.now{animation:none;background-image:none}}
+@media (prefers-reduced-motion:reduce){.tw::before,.c2.now,.drow.now,.tdy::before{animation:none}}
+@media print{.c2.now,.drow.now{animation:none;background-image:none}}
 .pushed{font-size:13px;color:#7a5200;margin-top:3px}
 .act{display:flex;gap:8px 10px;align-items:center;flex-wrap:wrap;margin-top:8px}
 .act .state{font-size:12.5px;font-weight:700;color:var(--muted);white-space:nowrap}
