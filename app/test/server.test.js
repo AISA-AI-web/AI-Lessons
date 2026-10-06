@@ -233,6 +233,40 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   at('2026-10-06');
   ok(open('new@aisa.sch.ae', 'grade-9/main-w2-l1') && !open('new@aisa.sch.ae', 'grade-9/main-w4-l1'), 'a student not yet on a class list follows the school timetable');
 }
+/* a section split between teachers: each sees their own class first, can see the whole section,
+   and can move a wrongly listed student into their own class (fresh environment) */
+{
+  const E = makeEnv(), sh = E.sheets;
+  E.as('bbaki@aisa.sch.ae'); E.call('setup');
+  sh.Roster.push(
+    ['t1@aisa.sch.ae', 'Teacher One', 'teacher', 'Boys 8', 8, 'sis', '8B1', ''], ['t2@aisa.sch.ae', 'Teacher Two', 'teacher', 'Boys 8', 8, 'sis', '8B2', ''],
+    ['t0@aisa.sch.ae', 'Teacher Zero', 'teacher', 'Boys 9', 9, '', '', ''],
+    ['801@aisa.sch.ae', 'Ali A', 'student', 'Boys 8', 8, 'sis', '8B1', ''], ['802@aisa.sch.ae', 'Badr B', 'student', 'Boys 8', 8, 'sis', '8B1', ''],
+    ['803@aisa.sch.ae', 'Fahad F', 'student', 'Boys 8', 8, 'sis', '8B2', ''], ['804@aisa.sch.ae', 'Hadi H', 'student', 'Boys 8', 8, '', '', ''],
+    ['901@aisa.sch.ae', 'Omar O', 'student', 'Boys 9', 9, 'sis', '9B1', '']);
+  const mine = e => { E.as(e); const d = E.call('getDashboard'); return d.students.filter(s => s.mine).map(s => s.email.slice(0, 3)).sort().join(); };
+  E.as('t1@aisa.sch.ae'); let d = E.call('getDashboard');
+  ok(d.students.length === 4, 'a teacher can still see the whole section (Show all)');
+  ok(mine('t1@aisa.sch.ae') === '801,802,804', 'Teacher One\'s own students: their class, plus a student with no class name');
+  ok(mine('t2@aisa.sch.ae') === '803,804', 'Teacher Two\'s own students');
+  ok(d.myClasses['Boys 8'].join() === '8B1' && d.students.find(s => s.email === '803@aisa.sch.ae').classes.join() === '8B2', 'the dashboard gets class names');
+  ok(mine('t0@aisa.sch.ae') === '901', 'a teacher with no class names sees the whole section as their own');
+  E.as('t1@aisa.sch.ae');
+  throws(() => E.call('setJudgement', '803@aisa.sch.ae', 'CU', 'A', ''), /students you teach/, 'no judgement for another teacher\'s student in the same section');
+  ok(E.call('setJudgement', '804@aisa.sch.ae', 'CU', 'A', '').saved, 'judgement for a student with no class name is allowed');
+  throws(() => E.call('claimStudent', '803@aisa.sch.ae', '8B2', ''), /own classes/, 'cannot move a student into a class that is not yours');
+  throws(() => E.call('claimStudent', '901@aisa.sch.ae', '8B1', ''), /Add or request/, 'a student from another section needs a request');
+  let r = E.call('claimStudent', '803@aisa.sch.ae', '8B1', 'listed with the wrong teacher');
+  ok(r.moved && r.from === '8B2' && r.to === '8B1', 'a teacher moves a student into their own class');
+  ok(sh.Changes[0].length === 13 && sh.Changes.slice(1).some(c => c[1] === 'class' && c[2] === '803@aisa.sch.ae' && c[11] === '8B2' && c[12] === '8B1' && c[6] === 't1@aisa.sch.ae'), 'the class move is logged with from and to class');
+  ok(mine('t1@aisa.sch.ae') === '801,802,803,804' && mine('t2@aisa.sch.ae') === '804', 'after the move the student is Teacher One\'s, not Teacher Two\'s');
+  E.as('t1@aisa.sch.ae'); throws(() => E.call('claimStudent', '803@aisa.sch.ae', '8B1', ''), /already in 8B1/, 'no double move');
+  ok(E.call('getDashboard').roster.recent.some(c => c.type === 'class' && c.toClass === '8B1'), 'the class move shows in recent changes');
+  E.as('803@aisa.sch.ae'); throws(() => E.call('claimStudent', '803@aisa.sch.ae', '8B1', ''), /own classes/, 'students cannot move themselves');
+  E.as('t2@aisa.sch.ae'); ok(E.call('addStudent', '805@aisa.sch.ae', 'New Boy', 'Boys 8', '').cls === '8B2' && mine('t2@aisa.sch.ae') === '804,805', 'a student a teacher adds goes into that teacher\'s class');
+  sh.Roster.push(['bbaki@aisa.sch.ae', '', 'teacher', 'Boys 8', 8, '', '', '']);
+  E.as('bbaki@aisa.sch.ae'); ok(E.call('getDashboard').students.every(s => s.mine), 'owners see everyone as theirs');
+}
 /* Google's HtmlService cuts script lines at '//', even inside a quoted web address, so no
    inline script the app serves may contain '://' (build.py writes it as ':\/\/'). */
 {

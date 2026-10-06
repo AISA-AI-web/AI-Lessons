@@ -202,6 +202,9 @@ details.sec>summary b{font-size:16px}
 details.sec .in{padding:0 16px 14px;overflow-x:auto}
 .chip.no{background:var(--grid);color:var(--muted)}
 .rtable{width:100%;border-collapse:collapse;font-size:13.5px}.rtable td,.rtable th{padding:6px 8px;border-bottom:1px solid var(--grid);text-align:start;white-space:normal}
+.allsw{display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:600;color:var(--purple);background:var(--tint);border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer}
+.allsw input{width:16px;height:16px;margin:0;accent-color:var(--purple)}
+.rtable tr.minerow td{background:#F7F5FC}
 .rtable select{font-size:13px;padding:4px 6px}.rtable button{font-size:13px;padding:4px 10px}
 @media (max-width:600px){.rtable th:nth-child(2),.rtable td:nth-child(2){display:none}.rtable select{max-width:120px}}
 .form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;align-items:end}
@@ -292,7 +295,8 @@ var AR_ERRORS = [
   [/^Request not found\.$/, 'لم يتم العثور على الطلب.'],
   [/^This request has already been decided\.$/, 'تم البتّ في هذا الطلب مسبقًا.'],
   [/^Only (.+)'s teacher, an owner or SLT can decide this request\.$/, function(m){ return 'يبتّ في هذا الطلب معلم شعبة ' + secName(m[1]) + ' أو مسؤول النظام أو فريق القيادة فقط.'; }],
-  [/^You can only record judgements for students you teach\.$/, 'يمكنك تسجيل المستويات للطلاب الذين تدرّسهم فقط.'],
+  [/^You can only record judgements for students you teach\./, 'يمكنك تسجيل المستويات لطلاب صفّك فقط. إن كان الطالب يتبع صفّك فانقله إليه من «قوائم الشعب».'],
+  [/^You can only move students into your own classes\.(?: .+ is in (.+) – )?/, function(m){ return 'يمكنك نقل الطلاب إلى صفوفك فقط.' + (m[1] ? ' الطالب في ' + secName(m[1]) + ' – لإحضاره من شعبة أخرى استخدم «إضافة طالب أو طلب نقله».' : ''); }],
   [/^Only @.+ accounts can use this site\.$/, 'هذا الموقع متاح لحسابات المدرسة (@aisa.sch.ae) فقط.']
 ];
 function errT(t){
@@ -392,10 +396,23 @@ var AR = {
   'e.g. joined this week': 'مثال: انضم هذا الأسبوع',
   'Add student': 'إضافة الطالب',
   'Email': 'البريد الإلكتروني',
-  'In the wrong class? Move to…': 'في شعبة خاطئة؟ انقله إلى…',
+  'Wrong section? Move to…': 'في شعبة خاطئة؟ انقله إلى…',
   'Move {name} to': 'انقل {name} إلى',
   'Choose class…': 'اختر الشعبة…',
   'Move': 'نقل',
+  'Show all of {section}': 'عرض كل طلاب {section}',
+  'Show all students in my sections': 'عرض كل الطلاب في شعبي',
+  'not your class': 'ليس في صفّك',
+  'Only your own classes are shown – tick “Show all” to see the whole section.': 'يظهر طلاب صفوفك فقط – اختر «عرض الكل» لرؤية الشعبة كاملة.',
+  'Teaching group': 'مجموعة التدريس',
+  'Your class': 'صفّك',
+  'Yours': 'في صفّك',
+  'Move to my class': 'انقل إلى صفّي',
+  'Move to my class ({c})': 'انقل إلى صفّي ({c})',
+  'Move {name} into your class {c}?': 'نقل {name} إلى صفّك {c}؟',
+  '{name} is now in your class {c}.': '{name} الآن في صفّك {c}.',
+  'Added to {to}, in your class {c}.': 'أُضيف إلى {to}، في صفّك {c}.',
+  'moved from group {fc} to {tc} in {to} by {who}': 'نُقل من المجموعة {fc} إلى {tc} في {to} بواسطة {who}',
   'No students on this list yet.': 'لا يوجد طلاب في هذه القائمة بعد.',
   '✓ This list is correct ({n} students)': '✓ هذه القائمة صحيحة (عدد الطلاب: {n})',
   'Recent changes': 'آخر التغييرات',
@@ -544,6 +561,12 @@ $('#langBtn').onclick = function(){ setLang(LANG === 'ar' ? 'en' : 'ar'); shell(
 
 /* ===================== staff view: tiles, overview, one table with the same columns all year ===================== */
 var UI = { filter: 'all', sort: 'name', q: '', all: false, les: 'chart', str: 'chart' }, ROWS = {}, FACTS = null, RES = {};
+/* A section can be split between teachers (classes such as 8B1, 8B2): teachers see their own students
+   first and can switch to the whole section. Remembered on this device. */
+var SHOWALL = (function(){ try { return localStorage.getItem('dash-show-all') === '1'; } catch (e) { return false; } })();
+function splitSecs(){ var o = {}; (D.students || []).forEach(function(s){ if (s.mine === false) o[s.section] = 1; }); return Object.keys(o).sort(numSort); }
+function shown(s){ return SHOWALL || s.mine !== false; }
+function clsOf(s){ return (s.classes || []).join(', '); }
 var DAY3 = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], MON3 = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 var TKEYS = ['', 'W', 'O', 'E', 'P', 'A'];
 var LST = [['done', 's-done', 'Finished'], ['doing', 's-doing', 'In progress'], ['todo', 's-todo', 'Not started'], ['later', 's-later', 'Not taught yet']];
@@ -586,14 +609,17 @@ function render(){
   if (MANAGE && D.roster) return manageView();
   var secs = D.sections.slice().sort(numSort), reqs = D.roster ? D.roster.requests.filter(function(r){ return r.canDecide; }).length : 0;
   var allLabel = D.scope === 'school' ? T('All classes') : T('All my classes');
-  var count = function(sec){ return D.students.filter(function(x){ return !sec || x.section === sec; }).length; };
+  var count = function(sec){ return D.students.filter(function(x){ return (!sec || x.section === sec) && shown(x); }).length; };
   if (F.section && secs.indexOf(F.section) < 0) F.section = '';
   var picker = secs.length <= 6 ? '<div class="seg" role="group" aria-label="' + esc(T('Class')) + '">' + [''].concat(secs).map(function(sec){
       return '<button type="button" data-tab="' + esc(sec) + '" aria-pressed="' + (F.section === sec) + '">' + esc(sec ? secName(sec) : allLabel) + ' <span class="n">' + count(sec) + '</span></button>'; }).join('') + '</div>'
     : '<label class="sr" for="fSec">' + esc(T('Class')) + '</label><select id="fSec"><option value="">' + esc(allLabel) + ' (' + count('') + ')</option>' +
       secs.map(function(sec){ return '<option value="' + esc(sec) + '"' + (F.section === sec ? ' selected' : '') + '>' + esc(secName(sec)) + ' (' + count(sec) + ')</option>'; }).join('') + '</select>';
-  var pool = D.students.filter(function(s){ return !F.section || s.section === F.section; }).sort(function(a, b){ return numSort(a.section, b.section) || a.name.localeCompare(b.name); });
-  $('#app').innerHTML = '<div class="titlebar"><h1>' + esc(T('Dashboard')) + '</h1>' + picker + '<span class="spacer"></span>' +
+  var pool = D.students.filter(function(s){ return (!F.section || s.section === F.section) && shown(s); }).sort(function(a, b){ return numSort(a.section, b.section) || a.name.localeCompare(b.name); });
+  var split = splitSecs(), swSecs = F.section ? split.filter(function(x){ return x === F.section; }) : split;
+  var sw = swSecs.length ? '<label class="allsw"><input type="checkbox" id="showAll"' + (SHOWALL ? ' checked' : '') + '> ' +
+    esc(swSecs.length === 1 ? T('Show all of {section}', { section: secName(swSecs[0]) }) : T('Show all students in my sections')) + '</label>' : '';
+  $('#app').innerHTML = '<div class="titlebar"><h1>' + esc(T('Dashboard')) + '</h1>' + picker + sw + '<span class="spacer"></span>' +
     (D.roster ? '<button type="button" class="btn small" id="rosterBtn">👥 ' + esc(T('Class lists')) + (reqs ? '<span class="badge" title="' + esc(T('Requests')) + '">' + reqs + '</span>' : '') + '</button>' : '') +
     '<details class="menu"><summary class="btn small quiet">' + esc(T('More')) + ' ▾</summary><div class="popm">' +
       '<label for="fView">' + esc(T('Student view')) + '</label><select id="fView"><option value="">' + esc(T('See a student\'s dashboard…')) + '</option>' +
@@ -603,6 +629,7 @@ function render(){
   document.querySelectorAll('[data-tab]').forEach(function(b){ b.onclick = function(){ F.section = b.getAttribute('data-tab'); F.lesson = ''; UI.filter = 'all'; render(); }; });
   if ($('#fSec')) $('#fSec').onchange = function(){ F.section = this.value; F.lesson = ''; UI.filter = 'all'; render(); };
   $('#fView').onchange = function(){ if (this.value) viewAs(this.value); };
+  if ($('#showAll')) $('#showAll').onchange = function(){ SHOWALL = this.checked; try { localStorage.setItem('dash-show-all', SHOWALL ? '1' : ''); } catch (e) {} UI.filter = 'all'; render(); };
   $('#pdfBtn').onclick = function(){ savePdf(); };
   $('#exportBtn').onclick = exportCsv;
   if ($('#rosterBtn')) $('#rosterBtn').onclick = function(){ MANAGE = true; render(); window.scrollTo(0, 0); };
@@ -620,7 +647,7 @@ function draw(){
         return '<option value="' + o[0] + '"' + (UI.sort === o[0] ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select></div>' +
       '<div class="chips" id="chips"></div><div id="tbl"></div><div class="legend" id="tlegend"></div></section><div id="reteach" style="margin-top:16px"></div>' +
     '<p class="note">' + T('First-try scores are kept exactly as first checked; retries are for learning and don\'t change them. Time counts only while the lesson page is open, visible and in use (it pauses after 2 minutes without activity).') + ' ' +
-      (D.scope === 'school' ? T('Your role can see the whole school.') : T('Only the sections you teach are shown.')) + ' ' + T('Data refreshed {d}.', { d: new Date(D.generatedAt).toLocaleString(LOC) }) + '</p>';
+      (D.scope === 'school' ? T('Your role can see the whole school.') : splitSecs().length && !SHOWALL ? T('Only your own classes are shown – tick “Show all” to see the whole section.') : T('Only the sections you teach are shown.')) + ' ' + T('Data refreshed {d}.', { d: new Date(D.generatedAt).toLocaleString(LOC) }) + '</p>';
   $('#q').oninput = function(){ UI.q = this.value.trim().toLowerCase(); drawTable(); };
   $('#fLes').onchange = function(){ F.lesson = this.value; if (UI.filter !== 'nudge') UI.filter = 'all'; drawTable(); };
   $('#fSort').onchange = function(){ UI.sort = this.value; drawTable(); };
@@ -795,7 +822,7 @@ function drawTable(){
     '<tr><th class="name" rowspan="2">' + esc(T('Student')) + '</th><th rowspan="2">' + head + '</th><th rowspan="2">' + esc(T('Lessons so far')) + '<small>' + esc(T('finished, oldest → newest')) + '</small></th><th class="grp" colspan="4">' + esc(T('Strand tier')) + '</th></tr>' +
     '<tr>' + STRAND_ORDER.map(function(c){ return '<th class="str">' + c + '<small>' + esc(strandShort(c)) + '</small></th>'; }).join('') + '</tr></thead><tbody>' +
     (rows.map(function(r){ var s = r.s;
-      return '<tr><td class="name"><button type="button" class="stu" data-e="' + esc(s.email) + '" title="' + esc(T('See {name}\'s dashboard', { name: s.name })) + '">' + esc(s.name) + '</button>' + (F.section ? '' : '<small>' + esc(secName(s.section)) + '</small>') + '</td>' +
+      return '<tr><td class="name"><button type="button" class="stu" data-e="' + esc(s.email) + '" title="' + esc(T('See {name}\'s dashboard', { name: s.name })) + '">' + esc(s.name) + '</button>' + ((F.section ? '' : secName(s.section)) + (clsOf(s) && splitSecs().length ? (F.section ? '' : ' · ') + clsOf(s) : '') ? '<small>' + esc((F.section ? '' : secName(s.section)) + (clsOf(s) && splitSecs().length ? (F.section ? '' : ' · ') + clsOf(s) : '')) + (s.mine === false ? ' · ' + esc(T('not your class')) : '') + '</small>' : '') + '</td>' +
         '<td class="les" data-l="' + esc(colL ? lessonShort(colL) : T('This week')) + '">' + lessonCell(r) + '</td><td class="sofar" data-l="' + esc(T('Lessons so far')) + '">' + sofarCell(r) + '</td>' +
         STRAND_ORDER.map(function(c){ return '<td class="str" data-l="' + c + '">' + tierCell(r, c) + '</td>'; }).join('') + '</tr>'; }).join('') ||
       '<tr><td colspan="7" class="empty" style="padding:18px">' + esc(T('No students match.')) + '</td></tr>') + '</tbody></table></div>';
@@ -874,7 +901,7 @@ function lessonTitle(l){ var c = (D && D.catalog || []).filter(function(x){ retu
 function facts(){
   var L = {}; D.lessons.forEach(function(l){ L[l.id] = l; });
   var S = {}; D.students.forEach(function(s){ S[s.email] = s; });
-  var students = D.students.filter(function(s){ return !F.section || s.section === F.section; });
+  var students = D.students.filter(function(s){ return (!F.section || s.section === F.section) && shown(s); });
   var keep = {}; students.forEach(function(s){ keep[s.email] = 1; });
   var grades = {}, anyGrade = false; students.forEach(function(s){ if (s.grade) { grades[s.grade] = 1; anyGrade = true; } });
   var lessons = D.lessons.filter(function(l){
@@ -981,9 +1008,15 @@ function manageView(){
     '<div><button type="button" id="adBtn">' + T('Add student') + '</button></div></div></section>';
   mine.forEach(function(sec){
     var list = D.students.filter(function(x){ return x.section === sec; }).sort(function(a, b){ return a.name.localeCompare(b.name); });
+    var own = (D.myClasses || {})[sec] || [], hasCls = list.some(function(x){ return (x.classes || []).length; });
     h += '<details class="sec"' + (many ? '' : ' open') + '><summary><b>' + esc(secName(sec)) + '</b><span class="sub">' + nStudents(list.length) + '</span>' + confChip(R.confirmations[sec]) + '</summary><div class="in">' +
-      (list.length ? '<table class="rtable"><thead><tr><th>' + T('Student') + '</th><th>' + T('Email') + '</th><th>' + T('In the wrong class? Move to…') + '</th></tr></thead><tbody>' +
-        list.map(function(x){ return '<tr><td>' + esc(x.name) + '</td><td dir="ltr">' + esc(x.email) + '</td><td><select data-to="' + esc(x.email) + '" aria-label="' + esc(T('Move {name} to', { name: x.name })) + '">' +
+      (list.length ? '<table class="rtable"><thead><tr><th>' + T('Student') + '</th><th>' + T('Email') + '</th>' + (hasCls ? '<th>' + T('Teaching group') + '</th>' : '') + (own.length ? '<th>' + T('Your class') + '</th>' : '') + '<th>' + T('Wrong section? Move to…') + '</th></tr></thead><tbody>' +
+        list.map(function(x){ var inMine = (x.classes || []).some(function(c){ return own.indexOf(c) >= 0; });
+          return '<tr' + (inMine ? ' class="minerow"' : '') + '><td>' + esc(x.name) + '</td><td dir="ltr">' + esc(x.email) + '</td>' + (hasCls ? '<td>' + esc(clsOf(x) || '–') + '</td>' : '') +
+          (own.length ? '<td>' + (inMine ? '<span class="chip ok">✓ ' + esc(T('Yours')) + '</span>' :
+            (own.length > 1 ? '<select data-cls="' + esc(x.email) + '" aria-label="' + esc(T('Move {name} to', { name: x.name })) + '">' + own.map(function(c){ return '<option value="' + esc(c) + '">' + esc(c) + '</option>'; }).join('') + '</select> ' : '') +
+            '<button type="button" data-claim="' + esc(x.email) + '" data-name="' + esc(x.name) + '" data-cls1="' + esc(own[0]) + '">' + esc(own.length > 1 ? T('Move to my class') : T('Move to my class ({c})', { c: own[0] })) + '</button>') + '</td>' : '') +
+          '<td><select data-to="' + esc(x.email) + '" aria-label="' + esc(T('Move {name} to', { name: x.name })) + '">' +
           '<option value="">' + T('Choose class…') + '</option>' + R.sections.filter(function(s){ return s !== sec; }).map(function(s){ return '<option value="' + esc(s) + '">' + esc(secName(s)) + '</option>'; }).join('') +
           '</select> <button type="button" data-move="' + esc(x.email) + '" data-name="' + esc(x.name) + '" data-from="' + esc(sec) + '">' + T('Move') + '</button></td></tr>'; }).join('') + '</tbody></table>'
         : '<p class="empty">' + T('No students on this list yet.') + '</p>') +
@@ -993,7 +1026,8 @@ function manageView(){
     (R.canExport ? '<p class="sub">' + T('Send these to IT so the school information system is corrected too.') + ' <button type="button" id="itCsv">' + T('Download changes for IT (CSV)') + '</button></p>' : '') +
     '<ul class="log">' + R.recent.slice(0, 30).map(function(c){
     var v = { from: esc(secName(c.from)), to: esc(secName(c.to)), who: esc(who(c.by)) };
-    var what = c.type === 'add' ? T('added to {to} by {who}', v) : c.type === 'join' ? T('moved from {from} to {to} (request approved) by {who}', v) : T('moved from {from} to {to} by {who}', v);
+    if (c.type === 'class') { v.fc = esc(c.fromClass || '–'); v.tc = esc(c.toClass); }
+    var what = c.type === 'class' ? T('moved from group {fc} to {tc} in {to} by {who}', v) : c.type === 'add' ? T('added to {to} by {who}', v) : c.type === 'join' ? T('moved from {from} to {to} (request approved) by {who}', v) : T('moved from {from} to {to} by {who}', v);
     return '<li><b>' + esc(c.name || who(c.student)) + '</b> ' + what + ' · ' + fmtDate(c.at) + '</li>'; }).join('') + '</ul></section>';
   $('#app').innerHTML = h;
   if (LASTMSG) { msg(LASTMSG); LASTMSG = null; }
@@ -1001,7 +1035,8 @@ function manageView(){
   if ($('#itCsv')) $('#itCsv').onclick = function(){
     var q = function(v){ v = String(v == null ? '' : v); if (/^[=+\-@]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; };
     var rows = [['Date', 'Change', 'Student email', 'Student name', 'From class', 'To class', 'Changed by']].concat(R.recent.map(function(c){
-      return [c.at.slice(0, 10), c.type === 'add' ? 'Added' : c.type === 'join' ? 'Moved (request approved)' : 'Moved', c.student, c.name, c.from, c.to, c.by]; }));
+      return [c.at.slice(0, 10), c.type === 'add' ? 'Added' : c.type === 'join' ? 'Moved (request approved)' : c.type === 'class' ? 'Moved teaching group' : 'Moved', c.student, c.name,
+        c.type === 'class' ? c.from + ' ' + (c.fromClass || '') : c.from, c.type === 'class' ? c.to + ' ' + c.toClass : c.to, c.by]; }));
     var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([rows.map(function(r){ return r.map(q).join(','); }).join('\n')], { type: 'text/csv' }));
     a.download = 'class-list-changes-' + new Date().toISOString().slice(0, 10) + '.csv'; document.body.appendChild(a); a.click(); a.remove();
   };
@@ -1009,7 +1044,7 @@ function manageView(){
     var e = $('#adEmail').value.trim(), n = $('#adName').value.trim(), sc = $('#adSec').value, note = $('#adNote').value.trim();
     if (!e) return msg(T('Type the student\'s school email.'), true);
     call('addStudent', [e, n, sc, note], function(r){
-      reloadWith(r.requested ? T('Request sent: they are in {from}, so {from}\'s teacher will be asked to approve the move to {to}.', { from: secName(r.from), to: secName(r.to) }) : T('Added to {to}.', { to: secName(r.to) })); });
+      reloadWith(r.requested ? T('Request sent: they are in {from}, so {from}\'s teacher will be asked to approve the move to {to}.', { from: secName(r.from), to: secName(r.to) }) : r.cls ? T('Added to {to}, in your class {c}.', { to: secName(r.to), c: r.cls }) : T('Added to {to}.', { to: secName(r.to) })); });
   };
   document.querySelectorAll('[data-move]').forEach(function(b){ b.onclick = function(){
     var em = b.getAttribute('data-move'), to = document.querySelector('select[data-to="' + em + '"]').value;
@@ -1017,6 +1052,11 @@ function manageView(){
     if (!to) return msg(T('Choose the class to move {name} to.', { name: nm }), true);
     if (!confirm(T('Move {name} from {from} to {to}?', { name: nm, from: secName(b.getAttribute('data-from')), to: secName(to) }))) return;
     call('transferStudent', [em, to, ''], function(r){ reloadWith(T('{name} moved from {from} to {to}.', { name: nm, from: secName(r.from), to: secName(r.to) })); });
+  }; });
+  document.querySelectorAll('[data-claim]').forEach(function(b){ b.onclick = function(){
+    var em = b.getAttribute('data-claim'), nm = b.getAttribute('data-name'), pick = document.querySelector('select[data-cls="' + em + '"]'), c = pick ? pick.value : b.getAttribute('data-cls1');
+    if (!confirm(T('Move {name} into your class {c}?', { name: nm, c: c }))) return;
+    call('claimStudent', [em, c, ''], function(r){ reloadWith(T('{name} is now in your class {c}.', { name: nm, c: r.to })); });
   }; });
   document.querySelectorAll('[data-confirm]').forEach(function(b){ b.onclick = function(){
     var sc = b.getAttribute('data-confirm');

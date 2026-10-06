@@ -209,6 +209,15 @@ their lists are right:
   **request**: that class's teacher (or an owner / SLT) approves or declines it
   from their own Class lists screen (a red number on the button shows waiting
   requests).
+- **Sections shared by several teachers** (e.g. Boys 8 taught as 8B1 and 8B2):
+  each student's and teacher's teaching group comes from the *Class Name*
+  column of the school export (Roster → `courseName`). A teacher's dashboard
+  shows only their own group; **Show all of Boys 8** shows the whole section.
+  Tiers can be recorded for their own students only. If the export put a
+  student with the wrong teacher, **Move to my class** (Class lists, *Your
+  class* column) moves them straight away; it is logged (type `class`) and
+  wins over later imports while the student stays in that section. Students or
+  teachers with no class name fall back to the whole section.
 - **✓ This list is correct** records who confirmed each class and when; the
   stamp turns amber ("changed since …") if the list changes afterwards, so SLT
   can see which lists are checked.

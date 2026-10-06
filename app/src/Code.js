@@ -18,7 +18,7 @@ var TABS = {
   Time:      ['timestamp', 'email', 'lessonId', 'seconds'],
   Retries:   ['timestamp', 'email', 'lessonId', 'activityId', 'score', 'max'],
   Judgements:['timestamp', 'student', 'strand', 'tier', 'teacher', 'note'],
-  Changes:   ['timestamp', 'type', 'student', 'name', 'fromSection', 'toSection', 'by', 'status', 'decidedBy', 'decidedAt', 'note'],
+  Changes:   ['timestamp', 'type', 'student', 'name', 'fromSection', 'toSection', 'by', 'status', 'decidedBy', 'decidedAt', 'note', 'fromClass', 'toClass'],
   Confirmations: ['timestamp', 'section', 'teacher', 'students', 'note']
 };
 /* Every AI Literacy section, e.g. Boys 6 … Girls 12. */
@@ -153,6 +153,39 @@ function visibleSections_(me) {
   return Object.keys(s);
 }
 
+/* A section (e.g. Boys 8) can be split between teachers. The Roster's courseName column holds the
+   class names (e.g. "8B1"; several are joined with ", "); a teacher's own students are those who
+   share one of their classes. A teacher-made class move (Changes type 'class') wins over the
+   import while the student stays in that section. Anyone without class names falls back to
+   the whole section, so nobody is locked out. */
+function splitClasses_(s) { return String(s || '').split(/\s*,\s*/).filter(String); }
+function classMap_() {
+  var stu = {}, tea = {}, moved = {};
+  rows_('Changes').forEach(function (c) {           // in time order: the latest move wins
+    if (c.type === 'class' && c.status === 'done' && c.toClass) moved[lc_(c.student)] = { section: c.toSection, cls: String(c.toClass) };
+  });
+  rows_('Roster').forEach(function (r) {
+    var e = lc_(r.email), cls = splitClasses_(r.courseName);
+    if (r.role === 'student') {
+      var s = stu[e] || (stu[e] = { section: r.section, classes: [] });
+      if (r.section === s.section) cls.forEach(function (c) { if (s.classes.indexOf(c) < 0) s.classes.push(c); });
+    } else if (r.role === 'teacher' && r.section) {
+      var t = tea[e] || (tea[e] = {}), l = t[r.section] || (t[r.section] = []);
+      cls.forEach(function (c) { if (l.indexOf(c) < 0) l.push(c); });
+    }
+  });
+  Object.keys(moved).forEach(function (e) { if (stu[e] && stu[e].section === moved[e].section) stu[e].classes = [moved[e].cls]; });
+  return { students: stu, teachers: tea };
+}
+/** True if this student is one of the teacher's own (owners and SLT: everyone). */
+function isMine_(me, vis, cm, email, section) {
+  if (vis === null) return true;
+  if (vis.indexOf(section) < 0) return false;
+  var mine = ((cm.teachers[me.email] || {})[section]) || [], theirs = (cm.students[email] || {}).classes || [];
+  if (!mine.length || !theirs.length) return true;
+  return theirs.some(function (c) { return mine.indexOf(c) >= 0; });
+}
+
 /* ===================== called from lesson pages ===================== */
 
 /** Activity ids this student already has a first-try score for in a lesson. */
@@ -243,8 +276,8 @@ function setJudgement(studentEmail, strand, tier, note) {
   if (me.role === 'student') throw new Error('Only teachers can record a judgement.');
   var vis = visibleSections_(me);
   if (vis !== null) {
-    var sec = rows_('Roster').filter(function (r) { return lc_(r.email) === student && r.role === 'student'; }).map(function (r) { return r.section; });
-    if (!sec.some(function (x) { return vis.indexOf(x) >= 0; })) throw new Error('You can only record judgements for students you teach.');
+    var cm = classMap_(), st = cm.students[student];
+    if (!st || !isMine_(me, vis, cm, student, st.section)) throw new Error('You can only record judgements for students you teach. If they belong in your class, move them to it under Class lists.');
   }
   append_('Judgements', [[new Date(), student, strand, tier, me.email, cleanText_(note, 200)]]);
   return { saved: true };
@@ -277,8 +310,10 @@ function checkEmail_(e) {
   return e;
 }
 function studentRows_(email) { return rows_('Roster').filter(function (r) { return r.role === 'student' && lc_(r.email) === email; }); }
-function logChange_(type, email, name, from, to, by, status, note) {
-  append_('Changes', [[new Date(), type, email, cleanText_(name, 80), from || '', to || '', by, status, '', '', cleanText_(note, 200)]]);
+function logChange_(type, email, name, from, to, by, status, note, fromClass, toClass) {
+  var sh = sheet_('Changes'), head = sh.getDataRange().getValues()[0] || [];
+  if (head.length < TABS.Changes.length) sh.getRange(1, 1, 1, TABS.Changes.length).setValues([TABS.Changes]);   // sheets made before class moves
+  append_('Changes', [[new Date(), type, email, cleanText_(name, 80), from || '', to || '', by, status, '', '', cleanText_(note, 200), fromClass || '', toClass || '']]);
   return sheet_('Changes').getLastRow();
 }
 /** Moves every Roster row of a student to another section (adds a row if they had none). */
@@ -308,6 +343,23 @@ function transferStudent(studentEmail, toSection, note) {
   });
 }
 
+/** Moves a student in one of your sections into your own class within it (e.g. 8B2 → 8B1),
+    when the school list put them with the wrong teacher. Logged; a fresh import does not undo it. */
+function claimStudent(studentEmail, toClass, note) {
+  var me = requireUser_(), email = checkEmail_(studentEmail), cls = cleanText_(toClass, 60);
+  if (me.role === 'student') throw new Error('You can only move students into your own classes.');
+  return withLock_(function () {
+    var rows = studentRows_(email);
+    if (!rows.length) throw new Error('That student is not on the class lists.');
+    var cm = classMap_(), sec = rows[0].section, mine = (cm.teachers[me.email] || {})[sec] || [];
+    if (mine.indexOf(cls) < 0) throw new Error('You can only move students into your own classes. ' + (rows[0].name || email) + ' is in ' + sec + ' – to bring them into another section, use Add or request a missing student.');
+    var from = ((cm.students[email] || {}).classes || []).join(', ');
+    if (from === cls) throw new Error('That student is already in ' + cls + '.');
+    logChange_('class', email, rows[0].name, sec, sec, me.email, 'done', note, from, cls);
+    return { moved: true, section: sec, from: from, to: cls };
+  });
+}
+
 /** Adds a missing student to one of your classes. If they are already in another class,
     it becomes a request for that class's teacher (or an owner / SLT) to approve. */
 function addStudent(studentEmail, name, section, note) {
@@ -325,8 +377,10 @@ function addStudent(studentEmail, name, section, note) {
     var nm = cleanText_(name, 80);
     if (nm.length < 2) throw new Error('Type the student\'s name.');
     append_('Roster', [[email, nm, 'student', section, gradeOf_(section), '', 'Added by ' + me.email, new Date()]]);
+    var own = (classMap_().teachers[me.email] || {})[section] || [];
     logChange_('add', email, nm, '', section, me.email, 'done', note);
-    return { added: true, to: section };
+    if (own.length === 1) logChange_('class', email, nm, section, section, me.email, 'done', 'Added by their teacher', '', own[0]);
+    return { added: true, to: section, cls: own.length === 1 ? own[0] : '' };
   });
 }
 
@@ -378,7 +432,7 @@ function rosterInfo_(me, vis) {
     if (c.status === 'done' || c.status === 'approved') {
       [c.fromSection, c.toSection].forEach(function (s) { if (s) lastChange[s] = Math.max(lastChange[s] || 0, t); });
       if (mine(c.fromSection) || mine(c.toSection))
-        recent.push({ type: c.type, student: email, name: c.name, from: c.fromSection, to: c.toSection, by: c.by, at: new Date(c.timestamp).toISOString(), status: c.status });
+        recent.push({ type: c.type, student: email, name: c.name, from: c.fromSection, to: c.toSection, fromClass: c.fromClass || '', toClass: c.toClass || '', by: c.by, at: new Date(c.timestamp).toISOString(), status: c.status });
     }
   });
   var conf = {};
@@ -429,7 +483,9 @@ function getDashboard() {
     if (!vis.length) return s.email === me.email;
     return vis.indexOf(s.section) >= 0;
   };
+  var cm = classMap_(), myClasses = vis === null ? {} : (cm.teachers[me.email] || {});
   var outStudents = Object.keys(students).map(function (e) { return students[e]; }).filter(allowed);
+  outStudents.forEach(function (s) { s.classes = (cm.students[s.email] || {}).classes || []; s.mine = me.role === 'student' || isMine_(me, vis, cm, s.email, s.section); });
   var keep = {}; outStudents.forEach(function (s) { keep[s.email] = 1; });
   var results = Object.keys(per).map(function (k) { return per[k]; }).filter(function (c) { return keep[c.email]; });
   return {
@@ -442,6 +498,7 @@ function getDashboard() {
     judgements: judgementsFor_(keep),
     framework: typeof FRAMEWORK === 'undefined' ? null : FRAMEWORK,
     canJudge: me.role !== 'student',
+    myClasses: myClasses,
     roster: rosterInfo_(me, vis),
     catalog: typeof CATALOG === 'undefined' ? [] : CATALOG,
     termStart: TERM_START,
