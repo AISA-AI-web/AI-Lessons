@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Four Strands, One Task + The Full Run – Grade 7 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#2563EB; --main2:#3B82F6; --deep:#1E3A8A;
+  --ink:#14213D; --muted:#52607A; --paper:#F5F8FE; --card:#FFFFFF;
+  --line:#D8E2F5; --soft:#EAF0FD;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#93C5FD,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#3B82F6);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#14213D,#2C4470)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#C7D8FA 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#F9FBFF;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FCFDFF}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#22B8E0)}
+.act-head.ws{background:linear-gradient(120deg,#14213D,#2F4A7A)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#EEF3FE}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #B8C9EE;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%232563EB' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #A7C0EE;border-radius:12px;padding:10px 14px;background:#F8FAFF;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(20,33,61,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#14213D;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.ideas{display:grid;gap:10px;margin:0 0 6px}
+.idea{display:flex;gap:12px;border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 14px}
+.idea .n{flex:none;width:30px;height:30px;border-radius:9px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.idea h4{margin:0 0 4px;font-size:16px}
+.idea p{margin:0;font-size:15.5px}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.rh:first-of-type{margin-top:0}
+.route .num{font-size:14px}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:2px 14px;font-size:11.5px;line-height:1.3}
+  body.print-results .results .big{font-size:40px;margin:4px 0 2px}
+  body.print-results .results .top{padding:10px 18px;font-size:13px}
+  body.print-results .results .actions{display:none}
+  body.print-results .results{margin:0}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 7 Main Course, Term 1</span><span class="pill">Week 6 Core + Week 6 Lab</span><span class="pill">📅 Teach: week of 9 – 13 Nov 2026</span></div>
+    <h1>Four Strands, One Task + The Full Run</h1>
+    <p>Today you bring together everything from this term – understanding, building, checking and using AI responsibly – to run one small workflow that sorts items and checks its own answers. Then, in the Lab, you run the whole sorting workflow from start to finish, keep a full record of every check, and add one new rule to see how your workflow copes.</p>
+    <p class="meta"><b>Strands:</b> all four – Understanding, Solution Design, Critical Evaluation, Ethics &amp; Governance &nbsp;·&nbsp; <b>Role:</b> Systems Detectives &nbsp;·&nbsp; <b>Tools:</b> simulated-AI cards (Core) · Teachable Machine + Scratch (Lab)</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 7B"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 6 of Term 1 – Monday 9 to Friday 13 November 2026.</b> Boys 7: Wednesday 11 November · Girls 7: Friday 13 November. Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Four Strands, One Task</a>, then move on to the <a href="#lab">Lab: The Full Run</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Use all four strands.</b> I can complete a guided task that uses all four strands together.</li>
+      <li><b>Connect the parts.</b> I can explain how the parts of my workflow connect to make and check a result.</li>
+      <li><b>Choose responsibly.</b> I can name one responsible choice I made while doing the task.</li>
+      <li><b>Lab: the full run.</b> I can run my whole workflow from start to finish and write down every check I make, use my check log to say how reliable it was and where it went wrong, then add a new rule or risk and run it again responsibly.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 6 Core · Four Strands, One Task</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Four skills click</b><small>Understand, build, check, use safely</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Run the one task</b><small>Input, process, output, check</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Confident can be wrong</b><small>Verify against a trusted guide · worksheet</small></a></li>
+    </ol>
+    <h3 class="rh">Week 6 Lab · The Full Run</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Run end-to-end</b><small>Every item, every check logged</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Read the log</b><small>Count accuracy, spot patterns</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Add a constraint</b><small>Adapt, re-check, stay safe · worksheet</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Four skills, one task</h2><p>What is really new today?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>Last week you rated risks and built fixes. Now you combine understanding, building, checking and safety on one task.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">The pieces click together</h3>
+    <p>Until now you have practised four skills in separate lessons: <b>understanding</b> the parts of a workflow, <b>building</b> the steps, <b>checking</b> the output, and <b>using AI responsibly</b>. Today they click together on a single task.</p>
+    <p>You prepare an input, let a simple <b>classifier</b> process it, read the output, and then check that output against a trusted guide. Nothing here is brand new – you are just using all four skills at once, which is exactly how real AI solutions are built. Joining several skills into one working task is called <b>integration</b>.</p>
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="f1T">
+        <title id="f1T">Four strands act on one sorting task. Understand: name the parts – input, process, output. Build: put the steps together and run the classifier. Check: compare each label with a trusted guide. Use responsibly: object words only, no names or faces. All four point at one task in the middle.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#14213D">
+          <g stroke="#2563EB" stroke-width="2.4" stroke-dasharray="6 5" fill="none"><path d="M250 70L300 124"/><path d="M510 70L460 124"/><path d="M250 230L300 176"/><path d="M510 230L460 176"/></g>
+          <g stroke="#14213D" stroke-width="1.6" fill="#fff">
+            <rect x="20" y="20" width="230" height="96" rx="12"/>
+            <rect x="510" y="20" width="230" height="96" rx="12"/>
+            <rect x="20" y="184" width="230" height="96" rx="12"/>
+            <rect x="510" y="184" width="230" height="96" rx="12"/>
+          </g>
+          <rect x="300" y="114" width="160" height="72" rx="14" fill="#2563EB"/>
+          <g font-size="18" font-weight="700" fill="#1E3A8A"><text x="38" y="52">🧠 Understand</text><text x="528" y="52">⚙️ Build</text><text x="38" y="216">🔎 Check</text><text x="528" y="216">🛡️ Use responsibly</text></g>
+          <g font-size="14" fill="#52607A"><text x="38" y="78">name the parts: input,</text><text x="38" y="98">process and output</text>
+            <text x="528" y="78">put the steps together,</text><text x="528" y="98">run the classifier</text>
+            <text x="38" y="242">compare each label</text><text x="38" y="262">with a trusted guide</text>
+            <text x="528" y="242">object words only –</text><text x="528" y="262">no names or faces</text></g>
+          <g text-anchor="middle" fill="#fff" font-weight="700"><text x="380" y="145" font-size="16">ONE TASK</text><text x="380" y="168" font-size="14">sort and check</text></g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> One task, four strands: understanding, building, checking and responsible use all act on the same job.</figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-match"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Run the one task</h2><p>How does the workflow make a result?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Good data, good classifier</h3>
+    <p>You prepare an input, a simple classifier processes it into a label – <b>Recycle</b>, <b>Compost</b> or <b>Landfill</b> – you record the output, and then you check it. Before you trust a classifier, though, look at the examples it learned from.</p>
+    <p>Three <b>dataset rules</b> keep it fair: <b>balanced classes</b> – roughly the same number of examples in each group; <b>no repeats</b> – never the same example twice; and a <b>separate test set</b> – always check it on new examples it did not learn from (a train/test split). Messy, one-sided or repeated data makes a classifier that looks fine but fails on real items.</p>
+    <figure>
+      <svg viewBox="0 0 760 260" role="img" aria-labelledby="f2T">
+        <title id="f2T">The one task as a workflow. Input: object words only. Process: the classifier gives each item a label. Output: record it in the workflow table. Check: agree, keep it; disagree, fix it. A trusted recycling guide feeds the check step, and a fix arrow goes back to the output. Below the input: never a name, face or voice.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#14213D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#14213D">
+          <g stroke-width="2">
+            <rect x="20" y="30" width="150" height="104" rx="12" fill="#EEF3FC" stroke="#2563EB"/>
+            <rect x="210" y="30" width="150" height="104" rx="12" fill="#ECF8F0" stroke="#15803D"/>
+            <rect x="400" y="30" width="150" height="104" rx="12" fill="#F4F0FC" stroke="#6B46C1"/>
+            <rect x="590" y="30" width="150" height="104" rx="12" fill="#FFF7E8" stroke="#B45309"/>
+          </g>
+          <g font-size="16" font-weight="700" text-anchor="middle"><text x="95" y="60" fill="#2563EB">📥 Input</text><text x="285" y="60" fill="#15803D">⚙️ Process</text><text x="475" y="60" fill="#6B46C1">🧾 Output</text><text x="665" y="60" fill="#B45309">🔎 Check</text></g>
+          <g font-size="14" text-anchor="middle" fill="#52607A">
+            <text x="95" y="88">object words</text><text x="95" y="108">only</text>
+            <text x="285" y="88">classifier gives</text><text x="285" y="108">each a label</text>
+            <text x="475" y="88">record it in the</text><text x="475" y="108">workflow table</text>
+            <text x="665" y="88">agree? keep it</text><text x="665" y="108">disagree? fix it</text></g>
+          <g stroke="#14213D" stroke-width="2.4" fill="none" marker-end="url(#ah)"><path d="M170 82H206"/><path d="M360 82H396"/><path d="M550 82H586"/><path d="M665 192V140"/></g>
+          <path d="M620 136C605 176 500 176 482 140" stroke="#B45309" stroke-width="2" stroke-dasharray="5 4" fill="none" marker-end="url(#ah)"/>
+          <text x="540" y="196" font-size="14" font-weight="700" fill="#B45309" text-anchor="middle">🖊️ fix it</text>
+          <rect x="590" y="196" width="150" height="50" rx="10" fill="#fff" stroke="#B45309" stroke-width="1.6"/>
+          <g font-size="13" text-anchor="middle" font-weight="700" fill="#B45309"><text x="665" y="217">📑 trusted</text><text x="665" y="235">recycling guide</text></g>
+          <rect x="20" y="196" width="340" height="50" rx="10" fill="#fff" stroke="#9DB3DC" stroke-width="1.6" stroke-dasharray="5 4"/>
+          <text x="190" y="226" font-size="14" text-anchor="middle" fill="#1E3A8A">🛡️ never a name, face or voice</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Prepare the input, process it, read the output, then check it against a trusted guide – and fix any label the guide disagrees with.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Across the UAE, sorting and recycling systems use classifiers like this to reduce waste – and they only help if their outputs are checked and their data is handled responsibly, just like in your task.</p></div>
+    <div class="call violet"><h4>Cross-curricular links</h4><p><b>Maths</b> – when you count how many labels are correct ‘out of the total’, write it as a fraction and convert it to a percentage. <b>Science</b> – checking a classifier by changing one thing at a time is a fair test. <b>Language</b> – many UAE classifiers do Arabic–English translation, which links to your language study.</p></div>
+    <div id="a-order"></div>
+    <div id="a-case2"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3 · Worksheet</span><h2>Confident can be wrong</h2><p>So do you trust every label?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Check, and keep it safe</h3>
+    <p>A classifier gives every item a label, and it can sound very sure. Sure is not the same as correct. That is why the check step matters: you compare each label with a trusted recycling guide, and if they disagree you fix the label – you <b>verify</b> before you trust.</p>
+    <p>You also keep the task safe by feeding in only object words – never a person's name, face or voice, which are <b>personal data</b>. Checking and keeping data safe are part of the workflow, not extras added at the end.</p>
+    <div class="call violet"><h4>Think about it</h4><p>If the classifier labels a greasy pizza box as Recycle but the guide says Landfill, which one should you trust, and how do you decide?</p></div>
+    <div id="a-resp"></div>
+    <div id="a-case3"></div>
+    <div class="call amber"><h4>Tool for this week: unplugged simulated-AI cards (teacher-led)</h4><p>This is an unplugged concept lesson: the teacher runs a simulated-AI card routine on the board – no live tool, no logins. You reason about pre-prepared example outputs on the cards – no personal data is used – and use the worksheet to sort or judge the cards, explaining your thinking with the key vocabulary. <b>No board tool?</b> The classifier is already just cards – sort by hand using the trusted guide, the same input-process-output-check routine. The live tools (Teachable Machine and Scratch) are used in the matching Lab period.</p></div>
+    <h3 class="sub">Hands-on mission · Systems Detectives: sort it and check it</h3>
+    <p>In pairs, run a small three-step waste-sorting workflow with simulated-AI cards, then check every output against a trusted guide and note one responsible choice you made. You need six object-word item cards, the simulated-AI classifier cards, a trusted recycling guide card, a workflow table and a pencil.</p>
+    <ol class="steps">
+      <li>Prepare your input: choose six cards, each showing only an object word.</li>
+      <li>Run the process: pass each card through the simulated classifier for a label.</li>
+      <li>Record the output: write each item and its label in your workflow table.</li>
+      <li>Check the output: compare every label with the trusted guide and tick agree or flag disagree.</li>
+      <li>Correct and note: fix any flagged label using the guide, and mark the one you changed.</li>
+      <li>Write down one responsible choice you made, such as using only object words.</li>
+    </ol>
+    <div id="a-wmap"></div>
+    <div class="ecard" id="sheet"></div>
+    <div id="a-wlog"></div>
+    <div id="a-wdata"></div>
+    <div id="a-wresp"></div>
+    <div class="call"><h4>My reflection</h4><p>The part of the workflow I trust most, and the part I trust least, is … because …</p></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+    <div class="call violet"><h4>Cross-curricular link · Social Studies / Moral Education</h4><p>In a Moral Education unit on sustainability, sort classroom waste into recycle, compost and landfill using the emirate's official recycling guide – the same trusted-source check your AI classifier used – while keeping personal data out.</p></div>
+    <div class="call blue"><h4>Local connection · AI in the UAE</h4><p>UAE smart-city services combine many AI workflows at once (transport, energy, public services) – the same ‘bring the strands together’ idea at national scale.</p></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 6 Lab</span><h2>The Full Run</h2><p>Previously you ran the four-strand workflow on a few items – today you run ten or more, log every check, then add one new rule and see how your workflow copes.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Concept link</h4><p>Remember <b>iteration</b> from Week 2 – the same run-check-adapt loop you used to improve your first build.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Run it end-to-end</h2><p>Why run the whole batch?</p></div>
+  <div class="part-body">
+    <h3 class="sub">From one example to a full run</h3>
+    <p>In the Core lesson you tried the workflow on a few items. Today you run it <b>end-to-end</b> on ten or more, and you write down every check in a <b>check log</b>. That log is powerful: it turns ‘I checked it’ into real evidence.</p>
+    <p>You can count how many labels the classifier got right, see which were corrected, and spot patterns – maybe messy or mixed items trip it up most. That count is your workflow's <b>accuracy</b>, and it tells you how much to trust the output.</p>
+    <div class="call blue"><h4>Why it matters</h4><p>Recycling and sorting services in the UAE keep improving their systems by logging errors and adding new rules – exactly the run, check and adapt loop you are practising today.</p></div>
+    <div id="a-lorder"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Read the log</h2><p>What does your record tell you?</p></div>
+  <div class="part-body">
+    <figure>
+      <svg viewBox="0 0 760 290" role="img" aria-labelledby="f3T">
+        <title id="f3T">A check log of twelve items. Each row shows the item, the classifier's label, what the guide says, and a tick or cross. Plastic bottle, Recycle, Recycle, tick. Banana peel, Compost, Compost, tick. Greasy pizza box, Recycle, Landfill, cross. Drinks can, Recycle, Recycle, tick. Oily takeaway box, Recycle, Landfill, cross. On the right: accuracy 9 out of 12, or 75 percent; pattern: all three misses are greasy boxes.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#14213D">
+          <text x="235" y="26" font-size="16" font-weight="700" text-anchor="middle">🧾 Check log · 12 items</text>
+          <rect x="20" y="40" width="430" height="210" rx="8" fill="#fff" stroke="#14213D" stroke-width="1.2"/>
+          <rect x="21" y="41" width="428" height="29" rx="7" fill="#EAF0FD"/>
+          <g stroke="#D8E2F5" stroke-width="1.2"><path d="M20 70H450M20 100H450M20 130H450M20 160H450M20 190H450M20 220H450"/><path d="M200 40V250M300 40V250M400 40V250"/></g>
+          <g font-size="13" font-weight="700"><text x="32" y="61">Item</text><text x="250" y="61" text-anchor="middle">Label</text><text x="350" y="61" text-anchor="middle">Guide</text><text x="425" y="61" text-anchor="middle">✓?</text></g>
+          <g font-size="14">
+            <text x="32" y="90">plastic bottle</text><text x="250" y="90" text-anchor="middle">Recycle</text><text x="350" y="90" text-anchor="middle">Recycle</text><text x="425" y="90" text-anchor="middle" fill="#0F8A5F" font-weight="700">✓</text>
+            <text x="32" y="120">banana peel</text><text x="250" y="120" text-anchor="middle">Compost</text><text x="350" y="120" text-anchor="middle">Compost</text><text x="425" y="120" text-anchor="middle" fill="#0F8A5F" font-weight="700">✓</text>
+            <text x="32" y="150">greasy pizza box</text><text x="250" y="150" text-anchor="middle">Recycle</text><text x="350" y="150" text-anchor="middle">Landfill</text><text x="425" y="150" text-anchor="middle" fill="#C92A4B" font-weight="700">✗</text>
+            <text x="32" y="180">drinks can</text><text x="250" y="180" text-anchor="middle">Recycle</text><text x="350" y="180" text-anchor="middle">Recycle</text><text x="425" y="180" text-anchor="middle" fill="#0F8A5F" font-weight="700">✓</text>
+            <text x="32" y="210">oily takeaway box</text><text x="250" y="210" text-anchor="middle">Recycle</text><text x="350" y="210" text-anchor="middle">Landfill</text><text x="425" y="210" text-anchor="middle" fill="#C92A4B" font-weight="700">✗</text>
+            <text x="32" y="240">…</text><text x="250" y="240" text-anchor="middle">…</text><text x="350" y="240" text-anchor="middle">…</text><text x="425" y="240" text-anchor="middle">…</text></g>
+          <g stroke-width="2.2"><rect x="490" y="40" width="250" height="96" rx="12" fill="#EEF3FC" stroke="#2563EB"/><rect x="490" y="154" width="250" height="96" rx="12" fill="#FDE7EC" stroke="#C92A4B"/></g>
+          <g text-anchor="middle"><text x="615" y="70" font-size="16" font-weight="700" fill="#2563EB">🧮 Accuracy</text><text x="615" y="96" font-size="15">9 right out of 12</text><text x="615" y="120" font-size="15" font-weight="700">9/12 = 75%</text>
+            <text x="615" y="184" font-size="16" font-weight="700" fill="#C92A4B">🚩 Pattern</text><text x="615" y="210" font-size="15">all 3 misses are</text><text x="615" y="234" font-size="15" font-weight="700">greasy boxes</text></g>
+          <text x="380" y="278" font-size="14" text-anchor="middle" fill="#52607A">the log gives a count and a pattern – that is evidence</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> A check log turns ‘I checked it’ into evidence: a count of right answers and the patterns behind the wrong ones.</figcaption>
+    </figure>
+    <h3 class="sub">Accuracy and patterns</h3>
+    <p>Your check log is more than a list. Count how many labels matched the trusted guide out of the total, and you have your accuracy – say it as a fraction and a percentage. (Keep the word <b>reliable</b> for a workflow that stays consistent across different inputs.)</p>
+    <p>Then look for patterns. If the same kind of item keeps getting corrected, that is a weak spot to watch, not bad luck. Reading the log this way is how you judge how reliable the workflow really is.</p>
+    <div class="call violet"><h4>Cross-curricular link · Mathematics</h4><p>Take your check log's score, such as 9 out of 12, and convert it to a fraction and then a percentage – the exact fraction-to-percentage skill from maths – to state how accurate your sorting workflow was.</p></div>
+    <div class="call violet"><h4>Think about it</h4><p>If your workflow gets 9 out of 12 right, is that reliable enough to use for real recycling? What would make you trust it more?</p></div>
+    <div id="a-lmatch"></div>
+    <div id="a-lcase2"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Part 3 of 3 · Worksheet</span><h2>Add a constraint</h2><p>How do you improve without starting over?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Adapt, do not restart</h3>
+    <p>A real workflow rarely stays the same – you add rules as you learn. Today you add one <b>constraint</b>: either a second criterion, like labelling each item ‘reusable’ or not, or a risk rule, like flagging any item that might be contaminated. Then you re-check only the items the new rule touches.</p>
+    <p>Notice that you do not start over – you adapt the workflow you already have. That run-check-adapt loop is called <b>iteration</b>. All the while you keep the safe rules: only object words go in, and every output is verified before you trust it.</p>
+    <figure>
+      <svg viewBox="0 0 760 290" role="img" aria-labelledby="f4T">
+        <title id="f4T">The four strands as one loop. Build: train the classifier. Run: every item, end to end. Evaluate: log checks, count accuracy. Check the risk: object words only, verify every output. Arrows go round in a circle. In the middle: add one rule, then re-check only what it touches.</title>
+        <defs><marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#14213D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#14213D">
+          <g stroke="#14213D" stroke-width="1.6" fill="#fff">
+            <rect x="40" y="20" width="240" height="84" rx="12"/>
+            <rect x="480" y="20" width="240" height="84" rx="12"/>
+            <rect x="480" y="186" width="240" height="84" rx="12"/>
+            <rect x="40" y="186" width="240" height="84" rx="12"/>
+          </g>
+          <g stroke="#2563EB" stroke-width="2.6" fill="none" marker-end="url(#ah4)"><path d="M282 62H476"/><path d="M600 106V182"/><path d="M478 228H284"/><path d="M160 184V108"/></g>
+          <g font-size="17" font-weight="700" fill="#1E3A8A"><text x="58" y="54">🧱 Build</text><text x="498" y="54">▶️ Run</text><text x="498" y="220">📊 Evaluate</text><text x="58" y="220">🛡️ Check the risk</text></g>
+          <g font-size="14" fill="#52607A"><text x="58" y="82">train the classifier</text><text x="498" y="82">every item, end to end</text><text x="498" y="248">log checks, count accuracy</text><text x="58" y="248">object words only, verify</text></g>
+          <rect x="296" y="108" width="168" height="76" rx="12" fill="#2563EB"/>
+          <g text-anchor="middle" fill="#fff" font-weight="700" font-size="14"><text x="380" y="132">🔧 add one rule,</text><text x="380" y="153">re-check only</text><text x="380" y="174">what it touches</text></g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 4.</b> The four strands as one loop: build, run, evaluate, check the risk – then adapt by adding one rule and re-checking.</figcaption>
+    </figure>
+    <div id="a-liter"></div>
+    <div id="a-lcase3"></div>
+    <h3 class="sub">Hands-on mission · Systems Detectives: run, log, and adapt</h3>
+    <p>In pairs, run the full sorting workflow end-to-end on ten to twelve items with simulated-AI cards, keep a complete check log, then add one constraint and re-check the items it affects. Account-free, with only object words used.</p>
+    <ol class="steps">
+      <li>Select ten to twelve item cards, each showing only an object word.</li>
+      <li>Run every item through the simulated classifier and record its label in the check log.</li>
+      <li>Check each label against the trusted guide, tick agree or flag disagree, and write the correction.</li>
+      <li>Count your accuracy: how many were right out of the total, as a fraction and a percentage.</li>
+      <li>Add one constraint – a second criterion or a risk rule – and re-check only the items it affects.</li>
+      <li>Write one sentence on how the constraint changed your workflow and which items needed a second look.</li>
+    </ol>
+    <div class="ecard" id="rlog"></div>
+    <div id="a-llog"></div>
+    <div id="a-lfair"></div>
+    <div id="a-lcons"></div>
+    <div class="call amber"><h4>Today's tool: Teachable Machine + Scratch – integrated run (teacher-operated)</h4><p>1. Train the model in Teachable Machine: name the classes, add balanced examples, click Train, then test in Preview. 2. Open Scratch (account-free) and add the machine-learning blocks so the trained model becomes the <b>process</b> step. 3. Wire the workflow: input (what you feed in) → model (classifies) → output (what Scratch shows), and click the green flag to run the whole system end to end. 4. Test with new inputs; if the output is wrong, improve the model's examples or the Scratch logic, then run again. 5. Save the Scratch project as an .sb3 file. <b>Stay safe:</b> the teacher operates the tool on the board and students never log in; Teachable Machine trains in the browser and the samples stay on the teacher's device; use objects, hand gestures or drawings only – never faces, voices or names; clear the project at the end of the lesson; reuse only the non-personal model. <b>No board tool?</b> The routine is already card-based – run the whole batch by hand with the trusted guide and the same check log.</p></div>
+    <div class="ecard" id="tlog"></div>
+    <div id="a-ltool"></div>
+    <div id="a-lsafe"></div>
+    <div class="call"><h4>Reflect · Responsible use &amp; human in the loop</h4><p>The AI tool does the sorting, but a person stays in charge. Where did a person decide or check in today's workflow? Could this workflow treat something unfairly, or be misused – and what would you check? <b>My reflection:</b> after running it end-to-end, the part of my workflow I would improve first is … because …</p></div>
+    <div id="a-lhuman"></div>
+    <div id="a-lexit"></div>
+    <div id="a-lchal"></div>
+    <div class="call blue"><h4>Local connection · AI in the UAE</h4><p>UAE smart-city services combine many AI workflows at once (transport, energy, public services) – and each one keeps improving by running, checking and adapting, just like your sorting workflow.</p></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>You ran one task with all four strands – then ran it in full, logged every check and adapted it</h2></div>
+  <div class="part-body">
+    <h3 class="sub">Key ideas to remember</h3>
+    <ul class="keys">
+      <li>An AI solution is a pipeline: input, process and output, wrapped in checking and responsible use.</li>
+      <li><b>Integration</b> means understanding, building, checking and responsible use act on one task together.</li>
+      <li>Good data is <b>balanced</b>, has <b>no repeats</b>, and is tested on a <b>separate set</b> of new examples.</li>
+      <li>A confident label can still be wrong, so you <b>verify</b> it against a trusted guide.</li>
+      <li>Running <b>end-to-end</b> means every stage, in order, on a full batch – and a <b>check log</b> turns ‘I checked it’ into evidence.</li>
+      <li><b>Accuracy</b> is how many were right out of the total, written as a fraction and a percentage.</li>
+      <li>You improve a workflow by adding a <b>constraint</b> and re-checking – <b>iteration</b>, not a restart.</li>
+    </ul>
+    <h3 class="sub">Glossary</h3>
+    <dl class="gloss">
+      <dt>Workflow</dt><dd>the steps a task goes through, from input to process to output.</dd>
+      <dt>Classifier</dt><dd>a process that sorts each item into a group, such as Recycle or Compost.</dd>
+      <dt>Verify</dt><dd>to check an answer against a trusted source before you trust it.</dd>
+      <dt>Personal data</dt><dd>information about a real person, such as a name, face or voice, which never goes into the tool.</dd>
+      <dt>End-to-end</dt><dd>running every stage of the workflow in order on a full set of items.</dd>
+      <dt>Check log</dt><dd>a table where you record each output and whether the trusted guide agreed.</dd>
+      <dt>Accuracy</dt><dd>how often the workflow got the answer right, counted out of the total.</dd>
+      <dt>Constraint</dt><dd>a new rule or limit you add, such as a second criterion or a risk to watch for.</dd>
+    </dl>
+    <p class="note"><b>Next:</b> in Week 7 you carry these four strands into your very own Term-1 signature project.</p>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 7 · Main Course · Term 1 Week 6 (9 – 13 Nov 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- scope & sequence concepts (Grade 7, Week 6: Integrate – all four strands) ---------- */
+const CU_E="CU · AI follows steps: input, process, output";
+const CU_P="CU · how workflows structure AI systems";
+const SD_E="SD · builds simple AI solutions with guided steps";
+const SD_P="SD · designs multi-step AI workflows";
+const SD_A="SD · refines workflow structure, sequence and tool choice";
+const CE_E="CE · identifies issues in outputs or workflow steps";
+const CE_P="CE · evaluates outputs for accuracy and usefulness";
+const CE_A="CE · improves workflows through iteration and explains the impact";
+const GE_E="GE · identifies risks in AI-generated outputs";
+const GE_P="GE · bias, misuse and limitations in workflows";
+const GE_A="GE · proposes ways to reduce risk and use AI responsibly";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["workflow","The steps a task goes through, from input to process to output."],
+  ["classifier","A process that sorts each item into a group, such as Recycle or Compost."],
+  ["verify","To check an answer against a trusted source before you trust it."],
+  ["personal data","Information about a real person, such as a name, face or voice, which never goes into the tool."],
+  ["integration","Joining several skills into one working task."]
+];
+const DEF_ORDER = [2,4,0,3,1];
+const MATCH = [["m1","🧠 Understand",0],["m2","⚙️ Build",1],["m3","🔎 Check",2],["m4","🛡️ Use responsibly",3]];
+const MATCH_OPTS = ["🧭 name the parts of the workflow","🧱 put the steps together and train a classifier","📑 compare each output with a trusted guide","🗃️ keep personal data out and follow the rules"];
+const STEPS = ["📥 Prepare the input: object words only","⚙️ Process it: the classifier labels each item","🧾 Record the output in your workflow table","🔎 Check each label against the trusted guide","🖊️ Fix any label the guide disagrees with"];
+const STEP_ORDER = [3,1,4,0,2];
+const RESP = [
+  ["rs1","🔎","Check every label against the trusted guide.",1],
+  ["rs2","🧾","Use only object words, never a name or face.",1],
+  ["rs3","📸","Feed in a photo of a classmate.",0],
+  ["rs4","🖊️","Fix a label when the guide disagrees.",1],
+  ["rs5","🏆","Trust a confident label without checking it.",0],
+  ["rs6","🚩","Keep a label the guide says is wrong.",0]
+];
+const CASES = {
+  case1:{quote:"A classmate groans that today must be a whole new algorithm to learn. Detective, what is today's task really about?",
+    clues:[["🧩","Four pieces"],["🔧","One task"],["🏁","Click together"]],q:"What is today's task really about?",
+    opts:["Learning a brand-new algorithm unrelated to the stages.","Only checking the output, right at the very end of it.","Joining four skills you already have into one task.","Only building – the other three skills are not needed."]},
+  case2:{quote:"A team says their sorter is perfect – but they only ever tested it on the very same cards it learned from. Detective, can you trust that score?",
+    clues:[["🗂️","Same cards"],["⚙️","Perfect score"],["🔎","Test set?"]],q:"Can you trust that perfect score?",
+    opts:["No, because classifiers simply never work at all here.","Yes, a perfect training score is always the real one.","Yes – a perfect score on its own cards proves it works.","No – test it on new examples it did not learn from."]},
+  case3:{quote:"Your classifier labels a greasy pizza box as Recycle, but the trusted guide says Landfill. Detective, which one should you trust?",
+    clues:[["⚙️","Says Recycle"],["📑","Guide: Landfill"],["🏁","Decide"]],q:"Which should you trust?",
+    opts:["Whichever one happens to be the easier one to pick.","The trusted guide – check the label against it.","Neither of them – just guess an answer and move on.","The classifier – a confident label beats any guide."]},
+  lcase1:{quote:"A pair runs a single item through their workflow, gets it right, and says the job is done. Detective, is one item enough to judge the workflow?",
+    clues:[["⚙️","One item"],["🧾","One check"],["🏁","Done?"]],q:"Is one item enough to judge the workflow?",
+    opts:["No – run the full batch end-to-end and log every check.","No, because no number of items could ever be quite enough.","Yes – one lucky item shows how it handles them all.","Yes, one item is plenty of evidence on its own here."]},
+  lcase2:{quote:"Your workflow scored 9 out of 12, and all three misses were greasy boxes. Detective, what does the check log tell you?",
+    clues:[["🧮","9 of 12"],["🍕","Greasy misses"],["📈","Read it"]],q:"What does the check log show?",
+    opts:["Nothing useful about the workflow at all, not really.","That the workflow is completely reliable and fully done.","A 75% accuracy and a clear weak spot with greasy items.","That accuracy simply cannot be counted here at all."]},
+  lcase3:{quote:"You add a new rule to flag contaminated items. A teammate wants to throw away the whole workflow and rebuild it. Detective, what is the smart move?",
+    clues:[["🔧","New rule"],["🔁","Rebuild?"],["🏁","Decide"]],q:"What should you do?",
+    opts:["Add the rule but skip every check from now on entirely.","Throw it all away and rebuild, pasting in each owner's photo.","Start over completely from scratch every single time.","Keep the workflow and re-check only the items it touches."]}
+};
+const MAP = [["mp1","📥 Input",0],["mp2","⚙️ Process",1],["mp3","📤 Output",2],["mp4","🔎 Check",3]];
+const MAP_OPTS = ["Six object-word item cards, such as ‘drinks can’","The simulated classifier gives each card a label","A label for each item – Recycle, Compost or Landfill – written in the workflow table","Each label compared with the trusted recycling guide"];
+const LOG6 = [["wl1","plastic bottle","A"],["wl2","banana peel","A"],["wl3","greasy pizza box","F"],["wl4","drinks can","A"],["wl5","crisp packet","F"],["wl6","apple core","A"]];
+const WL_RIGHT = ["4 out of 6","6 out of 6","2 out of 6","5 out of 6"];
+const WL_PIZZA = ["Landfill","Recycle","Compost"];
+const DATA = [
+  ["d1","⚖️ Five example cards for each group: Recycle, Compost and Landfill","Y"],
+  ["d2","📚 Twelve Recycle examples but only two Compost and one Landfill","N"],
+  ["d3","🔁 The same ‘drinks can’ card used three times in training","N"],
+  ["d4","🆕 Testing with new item cards the classifier never learned from","Y"],
+  ["d5","🗂️ Testing only with the cards it was trained on","N"]
+];
+const MISSING = ["Greasy or dirty items – so messy items may be sorted wrongly","Photos of classmates' faces","Cards printed in more than one colour","Item words longer than ten letters"];
+const RC_CHOICE = ["We used only object words – no names, faces or voices","We trusted every confident label","We added a classmate's name to test it","We skipped the guide to save time"];
+const RC_WHY = ["It keeps personal data out of the tool, so nobody's privacy is put at risk","It makes the classifier work faster","It means we never need to check the labels","It makes our score look higher"];
+const EXIT = [
+  "The classifier sounded sure, so every label was right and nothing needed checking.",
+  "Object-word cards went in, the classifier labelled each one, I recorded the labels and checked them against the guide, fixing two – and I used only object words, never names.",
+  "I changed the guide until it agreed with the classifier, so the workflow was correct.",
+  "The output was right because the classifier is a computer, and computers do not make mistakes."
+];
+const CHAL = [
+  "Start a brand-new workflow that only sorts reusable items.",
+  "Add the reusable label but stop checking against the guide.",
+  "Drop the Recycle, Compost and Landfill labels so only the new one counts.",
+  "Keep the workflow, add a reusable / not reusable label to each item, re-run the check, and explain what changed."
+];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["end-to-end","Running every stage of the workflow in order on a full set of items."],
+  ["check log","A table where you record each output and whether the trusted guide agreed."],
+  ["accuracy","How often the workflow got the answer right, counted out of the total – as a fraction or a percentage."],
+  ["constraint","A new rule or limit you add, such as a second criterion or a risk to watch for."],
+  ["iteration","Improving a workflow by running it, checking it, and adjusting it."]
+];
+const LDEF_ORDER = [3,0,4,2,1];
+const LSTEPS = ["🗂️ Choose ten to twelve object-word cards","⚙️ Run every item through the classifier","🧾 Log each label in your check log","🔎 Check each label against the trusted guide","🧮 Count how many were right – your accuracy"];
+const LSTEP_ORDER = [2,4,1,3,0];
+const LMATCH = [["lm1","🔁 Same label every run",0],["lm2","🍕 Greasy items always wrong",1],["lm3","🖊️ Three labels corrected",2],["lm4","🧮 9 of 12 correct",3]];
+const LMATCH_OPTS = ["📶 the process is consistent","🚩 a pattern of failure to watch","📑 outputs the guide disagreed with","📈 an accuracy of 75%"];
+const LITER = [
+  ["li1","🏆","Trust the new labels without checking them.",0],
+  ["li2","📸","Enter a classmate's name to test the new rule.",0],
+  ["li3","🔁","Throw the workflow away and rebuild from scratch.",0],
+  ["li4","🛡️","Keep the rule that only object words go in.",1],
+  ["li5","🔎","Verify every new output before you trust it.",1],
+  ["li6","🔧","Add one constraint, then re-check only the items it touches.",1]
+];
+const LOG12 = [
+  ["1","plastic bottle","Recycle","Recycle","clean"],["2","drinks can","Recycle","Recycle","clean"],["3","newspaper","Recycle","Recycle","clean"],
+  ["4","banana peel","Compost","Compost","clean"],["5","greasy pizza box","Recycle","Landfill","greasy"],["6","glass jar","Recycle","Recycle","clean"],
+  ["7","apple core","Compost","Compost","clean"],["8","oily takeaway box","Recycle","Landfill","greasy"],["9","cardboard box","Recycle","Recycle","clean"],
+  ["10","greasy paper napkin","Compost","Compost","greasy"],["11","greasy burger box","Recycle","Landfill","greasy"],["12","egg shells","Compost","Compost","clean"]
+];
+const LG_RIGHT = ["9 out of 12","12 out of 12","3 out of 12","8 out of 12"];
+const LG_PCT = ["9/12 = 75%","9/12 = 90%","3/12 = 25%","12/9 = 133%"];
+const LG_FIX = ["3 – items 5, 8 and 11","None","1 – item 5 only","4 – every greasy item"];
+const LG_WEAK = ["Greasy boxes – all three misses","Clean plastic and cans","Food scraps for compost","No pattern – the misses were random"];
+const FR_A = ["8 out of 8 = 100%","7 out of 8 = 88%","8 out of 12 = 67%","9 out of 12 = 75%"];
+const FR_B = ["1 out of 4 = 25%","3 out of 4 = 75%","0 out of 4 = 0%","1 out of 12 = 8%"];
+const FR_CMP = ["Greasy items are clearly worse – the start of a fairness problem","The rates are the same, so it is fair","Cannot determine – the two rates are too close","Clean items are clearly worse"];
+const FR_WHY = ["The training examples had few or no greasy items","The item cards were printed in colour","The guide was wrong about greasy boxes","Greasy items are always Landfill, so it does not matter"];
+const CN_WHICH = ["Only the items the rule touches – the four greasy items","All twelve, after throwing the workflow away","None – a new rule does not need checking","Only the items that were already right"];
+const CN_SAFE = ["Only object words go in, and every new flag is checked against the guide","Add classmates' names so the flags look real","Trust the new flags because the rule is new","Skip the guide this time to save time"];
+const CN_CHANGE = ["It added one extra check step: greasy items are flagged for a person, and the clean items did not need re-running","Nothing changed at all","The whole workflow had to be rebuilt from scratch","The classifier now never makes mistakes"];
+const TL_WIRE = ["The process step – between the input and the output","The input – it is what you feed in","The output – it is what Scratch shows","Outside the workflow – it is not connected"];
+const TL_FIRST = ["The greasy item – its confidence is low (0.55)","The recyclable item – 0.92 is the highest","None – every label has a confidence score","The organic item – it is in the middle"];
+const TL_SURE = ["No – confident is not the same as correct; check it against the guide","Yes – anything above 0.9 is always right","Yes – the model never makes mistakes on bottles"];
+const TL_WRONG = ["Improve the model's examples or the Scratch logic, then run it again","Delete the wrong output and carry on","Add photos of classmates to the training data","Change the guide so it agrees with the model"];
+const TL_REC = ["One responsible-use choice I made while running it","The name of the student who ran it","Only the outputs that were right","The model's highest confidence score"];
+const LSAFE = [
+  ["sf1","The teacher operates the tool on the board; students never log in",1],
+  ["sf2","Use objects, hand gestures or drawings only",1],
+  ["sf3","Train on classmates' faces so the test is realistic",0],
+  ["sf4","Samples stay on the teacher's device; clear the project at the end",1],
+  ["sf5","Record students' voices saying the class names",0],
+  ["sf6","Reuse only the non-personal model",1],
+  ["sf7","Add each student's name to the class labels",0]
+];
+const HUMAN = [
+  "Nowhere – the classifier made every decision on its own.",
+  "A person compared each label with the trusted guide and decided every correction.",
+  "The AI checked its own answers, so no person was needed.",
+  "Only when the cards were printed before the lesson."
+];
+const LEXIT = [
+  "It felt reliable, so I trusted it and did not need a constraint.",
+  "I took the greasy items out, so it scored 8 out of 8 and is now perfect.",
+  "It got 9 out of 12 right (75%) and the weak spot was greasy boxes. I added a ‘flag contamination’ rule, re-checked only those items against the guide, and used only object words.",
+  "I added classmates' names to test the new rule and re-ran everything from scratch."
+];
+const LCHAL = [
+  "Add both constraints at once and look only at the final score.",
+  "Predict which matters more, then add one constraint at a time, re-check after each and compare the changes.",
+  "Skip the prediction and keep whichever constraint sounds better.",
+  "Throw away the first constraint so only the second one is tested."
+];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CU_E,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"A workflow is the steps from input to process to output. A classifier sorts each item into a group. To verify is to check against a trusted source before you trust it. Personal data – a name, face or voice – never goes into the tool. Integration joins several skills into one working task."},
+ {id:"match",mount:"a-match",section:"Core · Part 1",title:"Match the skill to what you do",sub:"Objective 1 · "+CU_P,ico:"🧷",
+  fields:MATCH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"To understand is to name the parts of the workflow. To build is to put the steps together and train a classifier. To check is to compare each output with a trusted guide. To use responsibly is to keep personal data out and follow the rules."},
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"Case 1 · The Brand-New Idea?",sub:"Systems Detectives · "+CU_P,ico:"🕵️",cls:"case",
+  fields:[{k:"case1",radio:1,ok:v=>eq(v,2)}],
+  explain:"Nothing is new – the four skills you already have just click together on one task. It is not a new algorithm, and checking or building alone is only one strand of four."},
+ {id:"order",mount:"a-order",section:"Core · Part 2",title:"Run the sorting task in order",sub:"Objective 2 · "+SD_P,ico:"🧭",
+  fields:STEPS.map((_,i)=>({k:"o"+i,ok:v=>eq(v,i)})),
+  explain:"Prepare the input (object words only), process it (the classifier labels each item), record the output in your workflow table, check each label against the trusted guide, then fix any label the guide disagrees with."},
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"Case 2 · The Perfect Score",sub:"Systems Detectives · "+CE_P,ico:"🔬",cls:"case",
+  fields:[{k:"case2",radio:1,ok:v=>eq(v,3)}],
+  explain:"A score on the cards it learned from can hide failures on new ones. A fair test uses a separate set of new examples. Classifiers can work well – they just need that fair test."},
+ {id:"resp",mount:"a-resp",section:"Core · Part 3",title:"Choose the responsible moves",sub:"Objective 3 · "+GE_E,ico:"🧩",
+  fields:RESP.map(([k,,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Responsible moves: check every label against the trusted guide, use only object words, and fix a label when the guide disagrees. A classmate's photo is personal data, and trusting or keeping a wrong label skips the check."},
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"Case 3 · The Greasy Pizza Box",sub:"Systems Detectives · "+CE_E,ico:"⚖️",cls:"case",
+  fields:[{k:"case3",radio:1,ok:v=>eq(v,1)}],
+  explain:"A confident label can be wrong, so the trusted guide wins here. Ease is not the rule, and guessing skips the check step."},
+ {id:"wmap",mount:"a-wmap",section:"Core worksheet",title:"My workflow map",sub:"Worksheet · "+CU_E,ico:"🗺️",cls:"ws",
+  fields:MAP.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Input: the object-word item cards. Process: the classifier gives each card a label. Output: the label written in your workflow table. Check: each label compared with the trusted recycling guide."},
+ {id:"wlog",mount:"a-wlog",section:"Core worksheet",title:"My check log",sub:"Worksheet · "+CE_P,ico:"🧾",cls:"ws",
+  fields:[...LOG6.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"wl7",ok:v=>eq(v,0)},{k:"wl8",ok:v=>eq(v,0)}],
+  explain:"The guide agrees with the plastic bottle, banana peel, drinks can and apple core, so keep those. It disagrees on the greasy pizza box and the crisp packet – flag and fix them. That is 4 out of 6 right, and the pizza box's corrected label is Landfill."},
+ {id:"wdata",mount:"a-wdata",section:"Core worksheet",title:"Dataset rules check",sub:"Worksheet · fairness · "+GE_P,ico:"⚖️",cls:"ws",
+  fields:[...DATA.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"wd6",ok:v=>eq(v,0)}],
+  explain:"Five examples per group is balanced, and testing on new cards is a separate test set – both follow the rules. Twelve Recycle against two Compost is not balanced, the same card three times is a repeat, and testing on training cards is not a fair test. A dataset with no greasy or dirty items could make the classifier unfair to messy items – leaving out classmates' faces is a good thing."},
+ {id:"wresp",mount:"a-wresp",section:"Core worksheet",title:"My responsible-use choice",sub:"Worksheet · "+GE_A,ico:"🛡️",cls:"ws",
+  fields:[{k:"rc1",ok:v=>eq(v,0)},{k:"rc2",ok:v=>eq(v,0)}],
+  explain:"Using only object words – no names, faces or voices – keeps personal data out of the tool, so nobody's privacy is put at risk. Trusting labels, adding names or skipping the guide are not responsible choices."},
+ {id:"exit",mount:"a-exit",section:"Core worksheet",title:"Exit ticket",sub:"Explain it · "+CU_P,ico:"🎫",
+  fields:[{k:"ex",radio:1,ok:v=>eq(v,1)}],
+  explain:"A complete answer says how the workflow made a result (cards in, classifier labels, labels recorded), how it was checked (against the guide, with fixes) and one responsible choice. Sounding sure, changing the guide or ‘computers don't make mistakes’ are not checks."},
+ {id:"chal",mount:"a-chal",section:"Core worksheet",title:"Challenge ⭐ Add a second criterion",sub:"Stretch · "+SD_A,ico:"⭐",
+  fields:[{k:"ch",radio:1,ok:v=>eq(v,3)}],
+  explain:"Adapting an approach means keeping what works, adding the new reusable / not reusable label, re-running the check and explaining how the constraint changed the workflow. Starting again, dropping the old labels or skipping the check do not show that."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+CE_P,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"End-to-end = every stage in order on a full set of items. Check log = each output and whether the guide agreed. Accuracy = how often it was right, out of the total. Constraint = a new rule or limit. Iteration = run, check, adjust."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 1",title:"Order the end-to-end run",sub:"Objective 1 · "+SD_P,ico:"🧭",
+  fields:LSTEPS.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"Choose ten to twelve object-word cards, run every item through the classifier, log each label, check each label against the trusted guide, then count how many were right – your accuracy."},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"Case 1 · The Lucky One",sub:"Systems Detectives · "+CE_E,ico:"🕵️",cls:"case",
+  fields:[{k:"lcase1",radio:1,ok:v=>eq(v,0)}],
+  explain:"One lucky item proves nothing about the rest. A full, logged batch is enough evidence to judge the workflow – one item is not."},
+ {id:"lmatch",mount:"a-lmatch",section:"Lab · Part 2",title:"Match the log to what it tells you",sub:"Objective 2 · "+CE_P,ico:"🧷",
+  fields:LMATCH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"The same label every run shows the process is consistent. Greasy items always wrong is a pattern of failure to watch. Three labels corrected are the outputs the guide disagreed with. 9 of 12 correct is an accuracy of 75%."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"Case 2 · Nine Out of Twelve",sub:"Systems Detectives · "+CE_P,ico:"🔬",cls:"case",
+  fields:[{k:"lcase2",radio:1,ok:v=>eq(v,2)}],
+  explain:"The count gives the accuracy – 9/12 = 75% – and the misses reveal a pattern: greasy items. Mostly right is not ‘completely reliable’; the greasy-item weak spot still needs work."},
+ {id:"liter",mount:"a-liter",section:"Lab · Part 3",title:"Choose the responsible-iteration moves",sub:"Objective 3 · "+GE_A,ico:"🧩",
+  fields:LITER.map(([k,,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Keep the object-words-only rule, verify every new output, and add one constraint then re-check only the items it touches. Trusting new labels unchecked, entering a classmate's name or rebuilding from scratch all break the routine."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"Case 3 · The Rebuild Temptation",sub:"Systems Detectives · "+SD_A,ico:"⚖️",cls:"case",
+  fields:[{k:"lcase3",radio:1,ok:v=>eq(v,3)}],
+  explain:"Iteration adapts what you have instead of starting over: keep the workflow and re-check only the items the rule touches. Every output is still verified, and you never paste in anyone's photo."},
+ {id:"llog",mount:"a-llog",section:"Lab worksheet",title:"Full check log and accuracy count",sub:"Worksheet · "+CE_P,ico:"🧮",cls:"ws",
+  fields:[{k:"lg1",ok:v=>eq(v,0)},{k:"lg2",ok:v=>eq(v,0)},{k:"lg3",ok:v=>eq(v,0)},{k:"lg4",ok:v=>eq(v,0)}],
+  explain:"The guide disagrees on items 5, 8 and 11, so 9 out of 12 were right: 9/12 = 75%. All three misses were greasy boxes – that is the weakest kind of item. (The greasy napkin was labelled correctly.)"},
+ {id:"lfair",mount:"a-lfair",section:"Lab worksheet",title:"Fairness check – accuracy by group",sub:"Worksheet · fairness · "+GE_P,ico:"⚖️",cls:"ws",
+  fields:[{k:"fr1",ok:v=>eq(v,0)},{k:"fr2",ok:v=>eq(v,0)},{k:"fr3",ok:v=>eq(v,0)},{k:"fr4",ok:v=>eq(v,0)}],
+  explain:"Clean items: 8 out of 8 = 100%. Greasy items: 1 out of 4 = 25%. Greasy items are clearly worse – the start of a fairness problem – and the likely cause is that the training examples had few or no greasy items. (With only four greasy items, a bigger test set would make you surer.)"},
+ {id:"lcons",mount:"a-lcons",section:"Lab worksheet",title:"My added constraint",sub:"Worksheet · "+CE_A,ico:"🔧",cls:"ws",
+  fields:[{k:"cn1",ok:v=>eq(v,0)},{k:"cn2",ok:v=>eq(v,0)},{k:"cn3",ok:v=>eq(v,0)}],
+  explain:"Re-check only the items the rule touches – the four greasy items – keep object words only and check every new flag against the guide. The constraint adds one extra check step for a person, without rebuilding the workflow."},
+ {id:"ltool",mount:"a-ltool",section:"Lab worksheet",title:"Tool log: Teachable Machine + Scratch",sub:"Worksheet · tool log · "+SD_E,ico:"🤖",cls:"ws",
+  fields:[{k:"tl1",ok:v=>eq(v,0)},{k:"tl2",ok:v=>eq(v,0)},{k:"tl3",ok:v=>eq(v,0)},{k:"tl4",ok:v=>eq(v,0)},{k:"tl5",ok:v=>eq(v,0)}],
+  explain:"In Scratch the trained model is the process step between input and output. The greasy item's low confidence (0.55) means a person should check it first – and even 0.92 is not proof, so check it against the guide. If an output is wrong, improve the examples or the Scratch logic and run again. Step 5 records one responsible-use choice."},
+ {id:"lsafe",mount:"a-lsafe",section:"Lab worksheet",title:"Safety check",sub:"Safety check · "+GE_E,ico:"🛡️",
+  fields:LSAFE.map(([k,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"The teacher operates the tool and students never log in; use objects, hand gestures or drawings only; samples stay on the teacher's device and the project is cleared at the end; reuse only the non-personal model. Faces, voices and names are personal data – never use them."},
+ {id:"lhuman",mount:"a-lhuman",section:"Lab worksheet",title:"Human in the loop",sub:"Reflect · "+GE_P,ico:"🧑‍🏫",
+  fields:[{k:"hu",radio:1,ok:v=>eq(v,1)}],
+  explain:"The AI does the sorting, but a person stays in charge: a person compared each label with the trusted guide and decided every correction. The AI cannot check its own answers."},
+ {id:"lexit",mount:"a-lexit",section:"Lab worksheet",title:"Exit ticket",sub:"Explain it · "+CE_A,ico:"🎫",
+  fields:[{k:"le",radio:1,ok:v=>eq(v,2)}],
+  explain:"A complete exit ticket gives the score out of the total (9/12 = 75%), names a weak spot (greasy boxes), describes the constraint and how it was re-checked, and says how the task stayed responsible. A feeling, removing hard items or adding names is not responsible evidence."},
+ {id:"lchal",mount:"a-lchal",section:"Lab worksheet",title:"Challenge ⭐ Two constraints",sub:"Stretch · "+SD_A,ico:"⭐",
+  fields:[{k:"lch",radio:1,ok:v=>eq(v,1)}],
+  explain:"Predict first, then change one thing at a time: add one constraint, re-check, add the next, re-check again. Only then can you say which change affected accuracy more and how to adapt the workflow further."}
+];
+
+/* ---------- state ---------- */
+const KEY="g7-mw6-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#sheet").innerHTML=`<header><small>Check log · simulated-AI cards · illustrative</small><b>Six object-word cards: Recycle, Compost or Landfill?</b></header>
+<div class="in">
+  <p class="task"><b>On the board:</b> six item cards went through the simulated classifier. The last column shows what the trusted recycling guide says. Use it for the check log below.</p>
+  <table class="t"><thead><tr><th>Item card</th><th>Classifier label</th><th>Trusted guide says</th></tr></thead>
+  <tbody>${[["plastic bottle","Recycle","Recycle"],["banana peel","Compost","Compost"],["greasy pizza box","Recycle","Landfill"],["drinks can","Recycle","Recycle"],["crisp packet","Recycle","Landfill"],["apple core","Compost","Compost"]].map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table>
+  <p class="note illus">Illustrative guide – in real life, always follow your emirate's official recycling guide.</p>
+</div>`;
+$("#rlog").innerHTML=`<header><small>Full check log · simulated classifier · illustrative class results</small><b>Twelve object-word cards, run end-to-end</b></header>
+<div class="in">
+  <p class="task"><b>The run:</b> every card went through the classifier, and every label was logged next to what the trusted guide says. Below the table, the items are split into two groups for the fairness check.</p>
+  <table class="t"><thead><tr><th>Item</th><th>Classifier label</th><th>Guide says</th></tr></thead>
+  <tbody>${LOG12.map(([n,i,c,g])=>`<tr><td>${n} · ${i}</td><td>${c}</td><td>${g}</td></tr>`).join("")}</tbody></table>
+  <p class="note"><b>Groups for the fairness check:</b> Group A – clean items (1, 2, 3, 4, 6, 7, 9, 12) · Group B – greasy items (5, 8, 10, 11).</p>
+  <p class="note"><b>Constraint added:</b> a risk rule – ‘flag any item that could be contaminated (greasy, or with food left on) for a person to check’.</p>
+</div>`;
+$("#tlog").innerHTML=`<header><small>Tool log · Teachable Machine + Scratch · sample outputs</small><b>Simulated Teachable Machine results</b></header>
+<div class="in">
+  <p class="task"><b>Set-up:</b> classes trained on objects only – no faces, voices or names. In Scratch: input (what you feed in) → model (classifies) → output (what Scratch shows), run with the green flag. If the tool is offline, use this sample panel – live results may differ.</p>
+  <table class="t"><thead><tr><th>Item shown</th><th>Model label</th><th>Confidence</th></tr></thead>
+  <tbody><tr><td>Recyclable</td><td>Recyclable</td><td>0.92</td></tr><tr><td>Organic</td><td>Organic</td><td>0.88</td></tr><tr><td>General waste</td><td>General waste</td><td>0.79</td></tr><tr><td>Greasy item</td><td>General waste</td><td>0.55 (low – check it)</td></tr></tbody></table>
+  <p class="note">Notice the low-confidence row: a confident label is not always right, and low-confidence items should be checked by a person.</p>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+function caseBody(id){
+  const c=CASES[id];
+  return `<div class="quote">“${esc(c.quote)}”</div><div class="clues" aria-hidden="true">${c.clues.map(([e,t])=>`<div class="clue">${e}<span>${esc(t)}</span></div>`).join("")}</div>
+    <p class="q" id="q-${id}">${esc(c.q)}</p>${radios(id,c.opts)}`;
+}
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,e,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${e?e+" ":""}${esc(t)}</span></label>`).join("")+`</div>`;
+const pairs=(rows,opts,ph,order)=>rows.map(([k,t])=>`<div class="pair" data-item="${k}"><span class="t">${esc(t)}</span>${sel(k,opts,ph,order)}</div>`).join("");
+const ask=(k,q,opts,order)=>`<div class="pair" data-item="${k}"><span class="t">${esc(q)}</span>${sel(k,opts,"Choose…",order)}</div>`;
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "match":
+    return `<p class="how">Match each skill to what you do with it on today's one task.</p>`+pairs(MATCH,MATCH_OPTS,"Choose what you do…",[2,0,3,1]);
+  case "case1": case "case2": case "case3": case "lcase1": case "lcase2": case "lcase3":
+    return caseBody(a.id);
+  case "order":
+    return `<p class="how">Put the steps into the order you run the one task, from first to last.</p>`+
+      STEPS.map((_,i)=>`<div class="pair" data-item="o${i}"><span class="t">Step ${i+1}</span>${sel("o"+i,STEPS,"Choose the step…",STEP_ORDER)}</div>`).join("");
+  case "resp":
+    return boxes(RESP,"Tick the THREE responsible moves for this task. Leave the others unticked.");
+  case "wmap":
+    return `<p class="how">Fill in what goes in each stage of your sorting task.</p>`+pairs(MAP,MAP_OPTS,"Choose what goes here…",[2,0,3,1]);
+  case "wlog":
+    return `<p class="how">Use the check log above. For each item, does the trusted guide agree with the classifier's label?</p>`+
+      LOG6.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["✓ Agree – keep it","🚩 Flag – fix it"],["A","F"],t)}</div>`).join("")+
+      ask("wl7","Labels the classifier got right",WL_RIGHT,[2,3,0,1])+
+      ask("wl8","Corrected label for the greasy pizza box",WL_PIZZA,[1,2,0]);
+  case "wdata":
+    return `<p class="how">Dataset rules: balanced classes, no repeats, and a separate test set. Does each example follow the rules or break one?</p>`+
+      DATA.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["✅ Follows the rules","⚠️ Breaks a rule"],["Y","N"],t)}</div>`).join("")+
+      ask("wd6","One thing the dataset does NOT contain that could make it unfair",MISSING,[1,2,0,3]);
+  case "wresp":
+    return `<p class="how">Choose one responsible choice you made, and why it mattered.</p>`+
+      ask("rc1","My responsible choice",RC_CHOICE,[1,2,0,3])+
+      ask("rc2","Why it mattered",RC_WHY,[2,0,3,1]);
+  case "exit":
+    return `<p class="q" id="q-ex">Which sentence explains how the workflow made a result, then checked it, and names one responsible choice?</p>${radios("ex",EXIT)}`;
+  case "chal":
+    return `<div class="quote">Stretch: add a second criterion to your sort – also label each item ‘reusable’ or ‘not reusable’. How should you adapt your approach?</div><p class="q" id="q-ch">Which is the best way to add the new criterion?</p>${radios("ch",CHAL)}`;
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lorder":
+    return `<p class="how">Put the steps into the order you run the full batch, from first to last.</p>`+
+      LSTEPS.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">Step ${i+1}</span>${sel("lo"+i,LSTEPS,"Choose the step…",LSTEP_ORDER)}</div>`).join("");
+  case "lmatch":
+    return `<p class="how">Match each thing you find in the log to what it tells you.</p>`+pairs(LMATCH,LMATCH_OPTS,"Choose what it tells you…",[3,1,0,2]);
+  case "liter":
+    return boxes(LITER,"Tick the THREE responsible ways to add your new rule. Leave the others unticked.");
+  case "llog":
+    return `<p class="how">Use the full check log above.</p>`+
+      ask("lg1","Labels the guide agreed with (right out of the total)",LG_RIGHT,[1,3,0,2])+
+      ask("lg2","Accuracy as a fraction and a percentage",LG_PCT,[2,0,3,1])+
+      ask("lg3","Labels you had to correct",LG_FIX,[3,1,0,2])+
+      ask("lg4","The weakest kind of item",LG_WEAK,[1,2,0,3]);
+  case "lfair":
+    return `<p class="how">Split the twelve items by group – clean items and greasy items – and count correct in each group. Then compare the rates.</p>`+
+      ask("fr1","Group A – clean items: correct out of total",FR_A,[2,0,3,1])+
+      ask("fr2","Group B – greasy items: correct out of total",FR_B,[1,2,0,3])+
+      ask("fr3","Compare the two rates",FR_CMP,[2,0,3,1])+
+      ask("fr4","The likely cause in the data",FR_WHY,[1,3,0,2]);
+  case "lcons":
+    return `<p class="how">Your constraint: flag any item that could be contaminated. Use the check log above.</p>`+
+      ask("cn1","Which items do you re-check?",CN_WHICH,[2,0,3,1])+
+      ask("cn2","How do you keep it responsible?",CN_SAFE,[1,3,0,2])+
+      ask("cn3","How did the constraint change the workflow?",CN_CHANGE,[3,1,0,2]);
+  case "ltool":
+    return `<p class="how">Use the tool log above.</p>`+
+      ask("tl1","In Scratch, where does the trained model sit?",TL_WIRE,[1,0,2,3])+
+      ask("tl2","Which output should a person check first?",TL_FIRST,[1,3,0,2])+
+      ask("tl3","Does 0.92 confidence prove the ‘Recyclable’ label is right?",TL_SURE,[1,0,2])+
+      ask("tl4","If an output is wrong, what do you do?",TL_WRONG,[2,0,3,1])+
+      ask("tl5","What do you record at step 5 of the tool log?",TL_REC,[1,3,0,2]);
+  case "lsafe":
+    return boxes(LSAFE.map(([k,t,c])=>[k,"",t,c]),"Safety check: tick every rule that keeps our Teachable Machine and Scratch work safe – I used no personal data (no faces, voices or names). Leave the others unticked.");
+  case "lhuman":
+    return `<p class="q" id="q-hu">Where did a person – not the AI – decide or check in today's workflow?</p>${radios("hu",HUMAN)}`;
+  case "lexit":
+    return `<p class="q" id="q-le">Which exit ticket states the workflow's score out of the total, names one weak spot, describes the constraint added and how the task stayed responsible?</p>${radios("le",LEXIT)}`;
+  case "lchal":
+    return `<div class="quote">Stretch: add a second constraint on top of the first – combine a ‘reusable’ criterion with a ‘flag contamination’ risk rule – and find out which change affects reliability more.</div><p class="q" id="q-lch">How should you test it?</p>${radios("lch",LCHAL)}`;
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 7 Main Course · Term 1 Week 6 (9 – 13 Nov 2026) · Core + Lab · Four Strands, One Task + The Full Run</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
