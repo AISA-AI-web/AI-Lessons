@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spotting the Risks + The Risk Audit – Grade 7 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#2563EB; --main2:#3B82F6; --deep:#1E3A8A;
+  --ink:#14213D; --muted:#52607A; --paper:#F5F8FE; --card:#FFFFFF;
+  --line:#D8E2F5; --soft:#EAF0FD;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#93C5FD,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#3B82F6);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#14213D,#2C4470)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#C7D8FA 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#F9FBFF;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FCFDFF}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#22B8E0)}
+.act-head.ws{background:linear-gradient(120deg,#14213D,#2F4A7A)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#EEF3FE}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #B8C9EE;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%232563EB' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #A7C0EE;border-radius:12px;padding:10px 14px;background:#F8FAFF;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(20,33,61,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#14213D;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.ideas{display:grid;gap:10px;margin:0 0 6px}
+.idea{display:flex;gap:12px;border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 14px}
+.idea .n{flex:none;width:30px;height:30px;border-radius:9px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.idea h4{margin:0 0 4px;font-size:16px}
+.idea p{margin:0;font-size:15.5px}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.rh:first-of-type{margin-top:0}
+.route .num{font-size:14px}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:5px 14px;font-size:13px}
+  body.print-results .results .big{font-size:48px;margin:8px 0 2px}
+  body.print-results .results .top{padding:14px 18px}
+  body.print-results .results td,body.print-results .results th{padding:2px 14px;font-size:12.5px;line-height:1.3}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 7 Main Course, Term 1</span><span class="pill">Week 5 Core + Week 5 Lab</span><span class="pill">📅 Teach: Wed 4 Nov 2026 (week of 2 – 6 Nov)</span></div>
+    <h1>Spotting the Risks + The Risk Audit</h1>
+    <p>AI tools are fast and confident, but confident does not always mean correct. Today you learn to spot the risks hidden in an AI output before anyone acts on it. Then, in the Lab, you become an auditor: you rate how likely and how harmful each risk is, and decide which fix a real AI workflow should build in first.</p>
+    <p class="meta"><b>Strand:</b> AI Ethics &amp; Governance &nbsp;·&nbsp; <b>Tool:</b> unplugged simulated-AI cards and risk-scenario card decks</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 7B"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 5 of Term 1 – Monday 2 to Friday 6 November 2026.</b> Boys 7 and Girls 7 both have their AI period on <b>Wednesday 4 November</b>. Core lesson first, then the Lab.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Spotting the Risks</a>, then move on to the <a href="#lab">Lab: The Risk Audit</a>.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li><b>Spot the risk.</b> I can spot risks in an AI output, such as a mistake, an unfair bias, or a made-up fact.</li>
+      <li><b>Suggest a rule.</b> I can read a scenario, name a risk, and suggest a responsible-use rule with a clear reason.</li>
+      <li><b>Use the words.</b> I can use words like bias, risk and responsible use correctly, and explain how a risk affects an AI workflow.</li>
+      <li><b>Lab: run a risk audit.</b> I can list the risks in a scenario, rate each for how likely it is and how much it would hurt, propose a mitigation with a reason, and argue which fix to build in first.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 5 Core · Spotting the Risks</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Name the risks</b><small>Error, bias and misuse</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Verify before trust</b><small>Check every output first</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>Protect people</b><small>Keep personal data out · worksheet</small></a></li>
+    </ol>
+    <h3 class="rh">Week 5 Lab · The Risk Audit</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Run the audit</b><small>List, rate, plot, prioritise</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Rate the priority</b><small>Likely and harmful goes first</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Build a real fix</b><small>A mitigation changes the workflow · audit worksheet</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Where risks hide</h2><p>Why is the output stage the riskiest?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>Last week (Week 4) you ranked outputs with evidence. Now you spot risks like errors, bias and misuse <b>before</b> anyone acts on an output.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <h3 class="sub">Confident is not correct</h3>
+    <p>An AI makes its output by <b>predicting</b> what usually comes next, based on patterns it has seen. That is powerful, but it means the output can be wrong, unfair or misleading and still sound sure of itself.</p>
+    <p>The riskiest moment in a workflow is the <b>output stage</b>, because that is the part a real person reads and acts on. If nobody checks it, an error or an unfair result travels straight to the user. Three risks turn up again and again: a factual <b>error</b> (a <b>hallucination</b>), an unfair <b>bias</b> from one-sided data, and <b>misuse or over-reliance</b> when people trust an output without checking.</p>
+    <figure>
+      <svg viewBox="0 0 760 296" role="img" aria-labelledby="f1T">
+        <title id="f1T">A workflow runs input, then process, then output. The output stage is highlighted as the riskiest moment, because a person reads it and acts on it. Three risks reach people there: an error or hallucination, a bias from one-sided data, and misuse or over-reliance.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#14213D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#14213D">
+          <text x="640" y="40" font-size="14" font-weight="700" fill="#C92A4B" text-anchor="middle">⚠️ riskiest moment</text>
+          <rect x="30" y="54" width="180" height="96" rx="12" fill="#EEF3FC" stroke="#2563EB" stroke-width="2"/>
+          <rect x="290" y="54" width="180" height="96" rx="12" fill="#EEF3FC" stroke="#2563EB" stroke-width="2"/>
+          <rect x="550" y="54" width="180" height="96" rx="12" fill="#FDE7EC" stroke="#C92A4B" stroke-width="3"/>
+          <g text-anchor="middle">
+            <text x="120" y="92" font-size="17" font-weight="800" fill="#1E3A8A">📥 INPUT</text><text x="120" y="122" font-size="14">a question or data</text>
+            <text x="380" y="92" font-size="17" font-weight="800" fill="#1E3A8A">⚙️ PROCESS</text><text x="380" y="122" font-size="14">the model predicts</text>
+            <text x="640" y="92" font-size="17" font-weight="800" fill="#8A1330">📤 OUTPUT</text><text x="640" y="122" font-size="14">a person acts on it</text>
+          </g>
+          <g stroke="#14213D" stroke-width="3" marker-end="url(#ah)"><path d="M212 102H286"/><path d="M472 102H546"/></g>
+          <text x="380" y="184" font-size="15" font-weight="700" fill="#8A1330" text-anchor="middle">Three risks that reach people at the output stage</text>
+          <g fill="#fff" stroke="#C92A4B" stroke-width="1.8"><rect x="30" y="198" width="220" height="84" rx="12"/><rect x="270" y="198" width="220" height="84" rx="12"/><rect x="510" y="198" width="220" height="84" rx="12"/></g>
+          <g text-anchor="middle">
+            <g font-size="15" font-weight="800" fill="#8A1330"><text x="140" y="224">🌀 ERROR</text><text x="380" y="224">⚖️ BIAS</text><text x="620" y="224">🚦 MISUSE</text></g>
+            <g font-size="13.5"><text x="140" y="248">a made-up fact that</text><text x="140" y="268">still sounds sure</text>
+            <text x="380" y="248">unfair, because the</text><text x="380" y="268">data was one-sided</text>
+            <text x="620" y="248">trusted or used</text><text x="620" y="268">without checking</text></g>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> Risks cluster at the output stage of a workflow, because that is the part a real person reads and acts on.</figcaption>
+    </figure>
+    <div id="a-vocab"></div>
+    <div id="a-match"></div>
+    <div id="a-case1"></div>
+    <h3 class="sub">See bias in the data – and fix it</h3>
+    <p>Bias is easiest to understand when you can see it. Your teacher shows a Teachable Machine image classifier that was trained on a <b>skewed</b> set – 15 clear photos of Class A but only 3 of Class B. It is tested on fresh items, then fixed with balanced examples and tested again.</p>
+    <div class="ecard" id="biasdemo"></div>
+    <div id="a-bias"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Verify before trust</h2><p>So which outputs can you act on?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Responsible use is your job</h3>
+    <p>Staying safe is not the tool's job – it is yours and the school's. <b>Responsible use</b> means three habits. <b>Verify before trust:</b> check every output against a source you already trust. <b>Protect people:</b> never put someone's name, face or private details into a tool. <b>Be honest about limits:</b> say what the tool cannot do well.</p>
+    <p><b>Governance</b> is simply the set of shared rules that makes these habits normal for everyone in a school or workplace.</p>
+    <figure>
+      <svg viewBox="0 0 760 252" role="img" aria-labelledby="f2T">
+        <title id="f2T">Every AI output is treated as a draft. It is checked against a trusted source such as a textbook, a teacher or an official website. Then it is either safe to use because it matches, verify first because no source has been checked yet, or do not use because it is wrong, unfair or private.</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#14213D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#14213D">
+          <rect x="20" y="78" width="190" height="96" rx="12" fill="#F4F0FC" stroke="#6B46C1" stroke-width="2"/>
+          <text x="115" y="114" font-size="16" font-weight="800" fill="#6B46C1" text-anchor="middle">📤 AI OUTPUT</text>
+          <text x="115" y="142" font-size="14" text-anchor="middle">= a draft, not a fact</text>
+          <rect x="262" y="66" width="230" height="120" rx="12" fill="#EEF3FC" stroke="#2563EB" stroke-width="2"/>
+          <text x="377" y="98" font-size="16" font-weight="800" fill="#1E3A8A" text-anchor="middle">🔎 CHECK IT</text>
+          <g font-size="14" text-anchor="middle"><text x="377" y="124">against a trusted source:</text><text x="377" y="146">textbook, teacher or</text><text x="377" y="166">an official website</text></g>
+          <g stroke="#14213D" stroke-width="2.6" fill="none" marker-end="url(#ah2)"><path d="M212 126H258"/><path d="M494 108L540 50"/><path d="M494 126H540"/><path d="M494 144L540 202"/></g>
+          <rect x="544" y="18" width="200" height="62" rx="12" fill="#E2F5EC" stroke="#0F8A5F" stroke-width="2"/>
+          <rect x="544" y="95" width="200" height="62" rx="12" fill="#FFF3D6" stroke="#B45309" stroke-width="2"/>
+          <rect x="544" y="172" width="200" height="62" rx="12" fill="#FDE7EC" stroke="#C92A4B" stroke-width="2"/>
+          <g text-anchor="middle">
+            <text x="644" y="44" font-size="15" font-weight="800" fill="#0A5E41">🛡️ SAFE TO USE</text><text x="644" y="66" font-size="13.5">it matches the source</text>
+            <text x="644" y="121" font-size="15" font-weight="800" fill="#6B4A00">🔎 VERIFY FIRST</text><text x="644" y="143" font-size="13.5">no source checked yet</text>
+            <text x="644" y="198" font-size="15" font-weight="800" fill="#8A1330">⛔ DO NOT USE</text><text x="644" y="220" font-size="13.5">wrong, unfair or private</text>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>Figure 2.</b> Responsible use means treating every output as a draft to be verified against a trusted source.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>Schools, hospitals and companies across the UAE are starting to use AI in real workflows, so being the person who can spot a risk and suggest a fix makes you genuinely useful and trusted.</p></div>
+    <div class="ecard" id="offline"></div>
+    <div id="a-safesort"></div>
+    <div id="a-case2"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head dark"><span class="pill">Core · Part 3 of 3 · Worksheet</span><h2>Protecting people</h2><p>How do we keep personal data safe?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Keep people out of the tool</h3>
+    <p>Protecting people is not only a rule – it has a technical side too. <b>De-identification</b> means removing anything that could name a person before data is used. <b>Data minimisation</b> means collecting only what the task truly needs and nothing more. <b>Retention and deletion</b> mean keeping data only as long as it is needed, then deleting it.</p>
+    <p>In the UAE these ideas are backed by law and policy – the <b>Personal Data Protection Law (PDPL)</b> and ADEK's data-protection rules – so responsible habits are also expected practice.</p>
+    <div class="call violet"><h4>Cross-curricular link · Moral Education</h4><p>In Moral Education you weigh privacy, fairness and honesty. Here you apply the same values to AI: never entering a person's name or face (privacy), spotting biased or unfair outputs (fairness), and following agreed responsible-use rules, connected to the UAE's Personal Data Protection Law.</p></div>
+    <div id="a-pdata"></div>
+    <div id="a-picks"></div>
+    <div id="a-case3"></div>
+    <div class="call"><h4>Think about it</h4><p>If an AI output is confident and well written but you cannot verify it anywhere, should you use it? Why or why not?</p></div>
+    <h3 class="sub">Systems Detectives: name the risk, propose the rule</h3>
+    <p>Study curated scenario cards, decide which risk each one shows, and propose a responsible-use measure with a clear reason. No live AI is used – you reason about outputs that were produced safely in advance.</p>
+    <ol class="steps">
+      <li>Read your scenario card and underline the AI output it describes.</li>
+      <li>Decide the risk type – error, bias, or misuse and over-reliance – and write it down.</li>
+      <li>Name who could be affected and what the impact on them might be.</li>
+      <li>Mark which workflow stage the risk sits at: input, process or output.</li>
+      <li>Finish the stem: <i>A responsible measure is … because …</i></li>
+      <li>Swap cards with another pair and check that their measure really reduces the risk.</li>
+    </ol>
+    <div class="call amber"><h4>Tool for this week: unplugged simulated-AI cards (teacher-led)</h4><p>This is an unplugged concept lesson: the teacher runs a simulated-AI card routine on the board – no live tool, no logins. You reason about pre-prepared example outputs on the cards – <b>no personal data is used</b> – and use the worksheet to sort or judge the cards and explain your thinking with the key vocabulary. The live tools (Teachable Machine and Scratch) are used in the matching Lab period. No board samples to show? Run the whole activity from the printed scenario cards alone – the reasoning steps are exactly the same.</p></div>
+    <div class="ecard" id="scards"></div>
+    <div id="a-analysis"></div>
+    <div id="a-measure"></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+    <div class="call blue"><h4>Local connection · AI in the UAE</h4><p>The UAE promotes responsible, ethical AI and data protection; spotting risks and using AI responsibly is exactly what national guidance asks of users.</p></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 5 Lab</span><h2>The Risk Audit</h2><p>Spotting a risk is step one. Today you become an auditor: you rate how likely and how harmful each risk is, then decide which fix a real AI workflow should build in first.</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>In the Core you spotted three big AI risks. Today you rate each one for likelihood and impact, then fix one.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Rate before you fix</h2><p>How do auditors decide what matters?</p></div>
+  <div class="part-body">
+    <h3 class="sub">List, then rate</h3>
+    <p>A long list of risks is not much use until you know which ones matter most. Auditors rate every risk two ways: <b>likelihood</b>, how often it is expected to happen, and <b>impact</b>, how much harm it does when it does happen.</p>
+    <p>Plotting them on a simple grid makes the priority obvious. A risk that is both likely and harmful sits in the <b>top corner</b> and gets fixed first; a rare, minor risk can wait. This is how real teams spend their limited time where it protects people most.</p>
+    <figure>
+      <svg viewBox="0 0 760 214" role="img" aria-labelledby="f3T">
+        <title id="f3T">The five audit steps in order: list every risk, rate its likelihood, rate its impact, plot it on the grid, then fix the top-corner risk first. Steps two and three together rate every risk two ways.</title>
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#14213D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#14213D">
+          <path d="M168 40V28H436V40" stroke="#2563EB" stroke-width="2" fill="none"/>
+          <text x="302" y="20" font-size="14" font-weight="700" fill="#2563EB" text-anchor="middle">rate every risk two ways</text>
+          <g stroke="#2563EB" stroke-width="2" fill="#EEF3FC"><rect x="14" y="52" width="128" height="112" rx="12"/><rect x="164" y="52" width="128" height="112" rx="12"/><rect x="314" y="52" width="128" height="112" rx="12"/><rect x="464" y="52" width="128" height="112" rx="12"/></g>
+          <rect x="614" y="52" width="132" height="112" rx="12" fill="#FDE7EC" stroke="#C92A4B" stroke-width="2.5"/>
+          <g stroke="#14213D" stroke-width="2.6" marker-end="url(#ah3)"><path d="M143 108H161"/><path d="M293 108H311"/><path d="M443 108H461"/><path d="M593 108H611"/></g>
+          <g text-anchor="middle">
+            <g font-size="13" font-weight="700" fill="#52607A"><text x="78" y="74">STEP 1</text><text x="228" y="74">STEP 2</text><text x="378" y="74">STEP 3</text><text x="528" y="74">STEP 4</text><text x="680" y="74">STEP 5</text></g>
+            <g font-size="16" font-weight="800" fill="#1E3A8A"><text x="78" y="104">📋 LIST</text><text x="228" y="104">📈 RATE</text><text x="378" y="104">💥 RATE</text><text x="528" y="104">🗺️ PLOT</text><text x="680" y="104" fill="#8A1330">🏁 FIX</text></g>
+            <g font-size="13.5"><text x="78" y="130">every risk in</text><text x="78" y="149">the outputs</text>
+            <text x="228" y="130">how likely</text><text x="228" y="149">it is</text>
+            <text x="378" y="130">how much</text><text x="378" y="149">harm it does</text>
+            <text x="528" y="130">each risk on</text><text x="528" y="149">the grid</text>
+            <text x="680" y="130">the top-corner</text><text x="680" y="149">risk first</text></g>
+          </g>
+          <text x="380" y="196" font-size="14" fill="#52607A" text-anchor="middle">An audit turns a long list of risks into a clear order of work.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> An audit rates every risk two ways – likelihood and impact – so a team knows which to fix first.</figcaption>
+    </figure>
+    <div id="a-lorder"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Rate the priority</h2><p>Where does each risk sit on the grid?</p></div>
+  <div class="part-body">
+    <h3 class="sub">Likelihood meets impact</h3>
+    <p>Every risk lands somewhere on the grid. A risk that happens often and causes serious harm is <b>urgent</b> and must be fixed first. A risk that is unlikely and would do little harm <b>can wait</b>.</p>
+    <p>The tricky ones sit in the middle – worth <b>watching</b>, but not the first thing you build a fix for. Rating each risk this way is what turns worry into a clear order of work.</p>
+    <figure>
+      <svg viewBox="0 0 760 340" role="img" aria-labelledby="f4T">
+        <title id="f4T">A likelihood-and-impact grid. Likelihood runs up the side from low to high; impact runs along the bottom from low to high. The top-right corner, high likelihood and high impact, is fix first. The middle squares are keep watching. The bottom-left corner, low likelihood and low impact, can wait.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#14213D">
+          <g stroke="#fff" stroke-width="3">
+            <rect x="170" y="14" width="180" height="84" fill="#FFF3D6"/><rect x="350" y="14" width="180" height="84" fill="#FDE2C4"/><rect x="530" y="14" width="180" height="84" fill="#FBC8D2"/>
+            <rect x="170" y="98" width="180" height="84" fill="#E2F5EC"/><rect x="350" y="98" width="180" height="84" fill="#FFF3D6"/><rect x="530" y="98" width="180" height="84" fill="#FDE2C4"/>
+            <rect x="170" y="182" width="180" height="84" fill="#CDEBD8"/><rect x="350" y="182" width="180" height="84" fill="#E2F5EC"/><rect x="530" y="182" width="180" height="84" fill="#FFF3D6"/>
+          </g>
+          <rect x="530" y="14" width="180" height="84" fill="none" stroke="#C92A4B" stroke-width="3"/>
+          <g text-anchor="middle">
+            <text x="620" y="50" font-size="15" font-weight="800" fill="#8A1330">🚑 FIX FIRST</text><text x="620" y="74" font-size="13.5" fill="#8A1330">likely and harmful</text>
+            <text x="440" y="134" font-size="15" font-weight="800" fill="#6B4A00">👀 KEEP WATCHING</text><text x="440" y="158" font-size="13.5" fill="#6B4A00">the middle squares</text>
+            <text x="260" y="218" font-size="15" font-weight="800" fill="#0A5E41">🌱 CAN WAIT</text><text x="260" y="242" font-size="13.5" fill="#0A5E41">rare and minor</text>
+          </g>
+          <g font-size="14" text-anchor="end" fill="#52607A"><text x="160" y="61">High</text><text x="160" y="145">Medium</text><text x="160" y="229">Low</text></g>
+          <g font-size="14" text-anchor="middle" fill="#52607A"><text x="260" y="288">Low</text><text x="440" y="288">Medium</text><text x="620" y="288">High</text></g>
+          <text x="440" y="322" font-size="15" font-weight="800" text-anchor="middle" fill="#1E3A8A">IMPACT – how much harm →</text>
+          <text transform="translate(52 140) rotate(-90)" font-size="15" font-weight="800" text-anchor="middle" fill="#1E3A8A">LIKELIHOOD – how often →</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 4.</b> High-likelihood, high-impact risks are urgent; rare, minor risks can wait.</figcaption>
+    </figure>
+    <div class="call blue"><h4>Why it matters</h4><p>When a UAE school, clinic or company adds an AI step to a real workflow, someone has to decide which risks to fix first. That auditor role is exactly the skill you are practising today.</p></div>
+    <div class="call violet"><h4>Cross-curricular link · Islamic Studies</h4><p>In Islamic Studies, the duty to prevent harm (‘la darar wa la dirar’) means tackling the most serious harm first. You apply this by fixing the AI risk that is both most likely and most damaging before dealing with the minor ones.</p></div>
+    <div id="a-lrate"></div>
+    <div id="a-lthink"></div>
+    <div id="a-lcase2"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head dark"><span class="pill">Lab · Part 3 of 3 · Worksheet</span><h2>Build a real fix</h2><p>What makes a fix a real mitigation?</p></div>
+  <div class="part-body">
+    <h3 class="sub">A mitigation changes the workflow</h3>
+    <p>A <b>mitigation</b> is not a warning label – it is a real change to how the workflow runs, and it works by lowering either the <b>likelihood</b> of a risk or its <b>impact</b>. Good examples are adding a <b>human-review checkpoint</b> at the output stage, <b>blocking any personal data</b> at the input stage, or <b>writing down what the tool cannot do well</b>.</p>
+    <p>Even after a strong mitigation, some <b>residual risk</b> usually remains, so <b>governance</b> means naming who keeps watching it.</p>
+    <figure>
+      <svg viewBox="0 0 760 262" role="img" aria-labelledby="f5T">
+        <title id="f5T">Mitigations change the workflow at a chosen stage. At the input stage, block personal data. At the output stage, add a human-review checkpoint. Written-down limits tell users what to distrust. Underneath, governance names a person who keeps watching the residual risk.</title>
+        <defs><marker id="ah5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#14213D"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#14213D">
+          <rect x="30" y="20" width="180" height="62" rx="12" fill="#EEF3FC" stroke="#2563EB" stroke-width="2"/>
+          <rect x="290" y="20" width="180" height="62" rx="12" fill="#EEF3FC" stroke="#2563EB" stroke-width="2"/>
+          <rect x="550" y="20" width="180" height="62" rx="12" fill="#EEF3FC" stroke="#2563EB" stroke-width="2"/>
+          <g font-size="17" font-weight="800" fill="#1E3A8A" text-anchor="middle"><text x="120" y="57">📥 INPUT</text><text x="380" y="57">⚙️ PROCESS</text><text x="640" y="57">📤 OUTPUT</text></g>
+          <g stroke="#14213D" stroke-width="3" marker-end="url(#ah5)"><path d="M212 51H286"/><path d="M472 51H546"/></g>
+          <g stroke="#0F8A5F" stroke-width="2" stroke-dasharray="5 4"><path d="M120 84V104"/><path d="M640 84V104"/><path d="M380 84V104"/></g>
+          <g fill="#E2F5EC" stroke="#0F8A5F" stroke-width="2"><rect x="20" y="106" width="200" height="66" rx="12"/><rect x="280" y="106" width="200" height="66" rx="12"/><rect x="540" y="106" width="200" height="66" rx="12"/></g>
+          <g text-anchor="middle">
+            <g font-size="14.5" font-weight="800" fill="#0A5E41"><text x="120" y="133">🛡️ Block personal</text><text x="380" y="133">🗒️ Write down</text><text x="640" y="133">🔎 Human-review</text></g>
+            <g font-size="14.5" font-weight="800" fill="#0A5E41"><text x="120" y="156">data going in</text><text x="380" y="156">the tool's limits</text><text x="640" y="156">checkpoint</text></g>
+          </g>
+          <rect x="20" y="194" width="720" height="56" rx="12" fill="#F4F0FC" stroke="#6B46C1" stroke-width="2"/>
+          <text x="380" y="218" font-size="15" font-weight="800" fill="#6B46C1" text-anchor="middle">⚖️ GOVERNANCE – name who keeps watch</text>
+          <text x="380" y="240" font-size="13.5" text-anchor="middle">some residual risk remains after any fix, so a named person keeps watching it</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 5.</b> A real mitigation changes the workflow at a chosen stage – and governance names who watches the risk that is left.</figcaption>
+    </figure>
+    <div id="a-lmatch"></div>
+    <div id="a-lcase3"></div>
+    <div class="call"><h4>Think about it</h4><p>Two risks have the same impact, but one is far more likely. Which should the team mitigate first, and how would you explain your choice to the person building the workflow?</p></div>
+    <h3 class="sub">Systems Detectives: run the risk audit</h3>
+    <p>In small teams, audit a real-style AI workflow scenario: list its risks, rate each on a likelihood-and-impact matrix, propose specific mitigations, and decide which to build in first. Everything is paper-based and account-free.</p>
+    <ol class="steps">
+      <li>Read your scenario pack and list every risk you can find in the AI outputs.</li>
+      <li>Rate each risk for likelihood as low, medium or high, then do the same for impact.</li>
+      <li>Plot each risk on the likelihood-and-impact matrix.</li>
+      <li>For each risk, write a specific mitigation and name the workflow stage it changes.</li>
+      <li>Rank your mitigations and choose the one to build in first, with a <i>because</i> reason.</li>
+      <li>Note who in the workflow would be responsible for that top mitigation.</li>
+    </ol>
+    <div class="call amber"><h4>Today's tool: card decks (risk-scenario cards) + pre-generated output packs</h4><p>The teacher lays out the pre-printed card deck and output pack – account-free, no devices. In groups: 1. Draw a scenario card and read it aloud. 2. Name one risk in the scenario and say who it could affect. 3. Match the risk to a responsible-use rule from the class charter. 4. Check the two flawed outputs and label the risk each shows. 5. Write one rule that would reduce the biggest risk you found. You will make a risk-spotting record with risks, who is affected and a proposed rule. <b>Stay safe:</b> unplugged; the outputs are pre-curated; use no personal data – no faces, voices or names. No printed output samples? Audit from the written scenario description alone – the same matrix and steps still work.</p></div>
+    <div class="ecard" id="pack"></div>
+    <div id="a-laudit"></div>
+    <div id="a-lplan"></div>
+    <div class="ecard" id="cards"></div>
+    <div id="a-ltool"></div>
+    <div id="a-lsafe"></div>
+    <div id="a-lexit"></div>
+    <div id="a-lchal"></div>
+    <div class="call"><h4>Reflect · Responsible use &amp; human in the loop</h4><p>The cards do the drafting, but a person stays in charge. Where did a person decide or check in today's workflow (not the AI)? Could this workflow treat someone unfairly, or be misused – and what would you check? What did you design today, and how is it different from what an AI would produce on its own?</p></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>Spot the risks – then audit them and build the first fix</h2></div>
+  <div class="part-body">
+    <h3 class="sub">Key ideas to remember</h3>
+    <ul class="keys">
+      <li>An AI output is a <b>prediction</b>, so it can be wrong, unfair or made-up while still sounding sure.</li>
+      <li>Risks cluster at the <b>output stage</b>, because that is what a real person acts on.</li>
+      <li><b>Responsible use</b> means verify before trust, protect people, and be honest about limits.</li>
+      <li>Protecting people has a technical side: <b>de-identify</b>, <b>minimise</b> data, and <b>delete</b> it when done.</li>
+      <li>An <b>audit</b> lists risks and rates each for <b>likelihood</b> and <b>impact</b>; high-likelihood, high-impact risks sit in the top corner and are fixed first.</li>
+      <li>A <b>mitigation</b> is a real change to the workflow that lowers a risk's likelihood or impact. Some <b>residual risk</b> usually remains, so <b>governance</b> names who keeps watching it.</li>
+    </ul>
+    <h3 class="sub">Glossary</h3>
+    <dl class="gloss">
+      <dt>Risk</dt><dd>the chance that an AI output causes harm, such as a mistake or something unfair.</dd>
+      <dt>Bias</dt><dd>when an output is unfair because the data it learned from was one-sided.</dd>
+      <dt>Hallucination</dt><dd>when an AI states something false as if it were true.</dd>
+      <dt>Responsible use</dt><dd>checking outputs, protecting personal data, and following the rules.</dd>
+      <dt>Audit</dt><dd>a careful check that lists risks and rates how serious each one is.</dd>
+      <dt>Mitigation</dt><dd>a specific change to a workflow that lowers a risk's likelihood or impact.</dd>
+    </dl>
+    <div class="call"><h4>Next week (Week 6)</h4><p>You bring all four strands together to run one small workflow from start to finish.</p></div>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 7 · Main Course · Term 1 Week 5 (2 – 6 Nov 2026) · Core + Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- scope & sequence concepts (Grade 7, Week 5: Ethics & Governance) ---------- */
+const CE_P="CE · evaluates outputs for accuracy and usefulness";
+const GE_E="GE · identifies risks in AI-generated outputs";
+const GE_P="GE · bias, misuse and limitations in workflows";
+const GE_A="GE · proposes ways to reduce risk and use AI responsibly";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["risk","The chance that an AI output causes harm, such as a mistake or something unfair."],
+  ["bias","When an output is unfair because the data it learned from was one-sided."],
+  ["hallucination","When an AI states something false as if it were true."],
+  ["responsible use","Checking outputs, protecting personal data, and following the rules."],
+  ["governance","The rules and roles that keep AI use safe in a school or workplace."]
+];
+const DEF_ORDER = [2,4,0,3,1];
+const MATCH = [["m1","🚩 Risk",3],["m2","⚖️ Bias",2],["m3","🛡️ Responsible use",0],["m4","🌀 Hallucination",1]];
+const MATCH_OPTS = ["🔎 checking outputs and protecting data","🗞️ stating something false as if it were true","🗂️ an unfair output from one-sided data","⚠️ the chance an output causes harm"];
+const CASE1 = ["The input stage – a confident output is never wrong.","No stage at all – a confident output is always right.","The output stage – a person reads it and acts on it.","The screen, because bright screens change the facts."];
+const BIAS_WHY = ["The training data had far fewer Class B examples, so the model learned Class B poorly","The computer itself does not like Class B","Class B items are always harder to photograph","The model was tested too many times"];
+const BIAS_FIX = ["Add balanced examples of Class B, retrain and re-test","Delete Class B so it can never be wrong","Test it on fewer items so the score looks better","Add even more Class A photos"];
+const PCT = ["25%","50%","75%","100%"];
+const SAFESORT = [
+  ["ss1","📊 A statistic given with no source at all","V"],
+  ["ss2","🗃️ An output that includes a classmate's full name","N"],
+  ["ss3","🌀 A made-up date stated as a fact","N"],
+  ["ss4","🧭 A translated sign you confirmed with your teacher","S"],
+  ["ss5","🧾 A fact that matches a trusted source you already checked","S"],
+  ["ss6","⚖️ A claim that fits an unfair stereotype","N"],
+  ["ss7","❓ A confident answer you cannot verify anywhere","V"]
+];
+const CASE2 = ["Yes, because confident outputs are always right here.","No – verify it against a trusted source before trusting.","No, because AI tools are always wrong every time.","Yes – a clear, confident tool must have already checked it."];
+const PDATA = ["De-identification","Data minimisation","Retention and deletion"];
+const PDATA_OPTS = ["Removing anything that could name a person before data is used","Collecting only what the task truly needs, and nothing more","Keeping data only as long as it is needed, then deleting it","Sharing the data with as many tools as possible"];
+const LAW = ["The Personal Data Protection Law (PDPL) and ADEK's data-protection rules","A law about road safety","No law – it is only a suggestion"];
+const PICKS = [
+  ["pk1","🛡️","Remove names before using the data – de-identify it.",1],
+  ["pk2","📸","Enter a classmate's photo to test the tool.",0],
+  ["pk3","🔎","Verify each output against a trusted source.",1],
+  ["pk4","🏆","Trust a confident answer without checking it.",0],
+  ["pk5","🧷","Collect only the data the task really needs.",1],
+  ["pk6","🗃️","Keep all the data forever, just in case.",0]
+];
+const CASE3 = ["Paste it all in, because names help the tool work better.","Just turn the screen off and hope for the best here.","Paste it all in – the tool keeps the data private.","Remove the personal details first – names never go in."];
+const RTYPE = ["Error (hallucination)","Bias","Misuse and over-reliance"];
+const STAGE = ["Input","Process","Output"];
+const WHO = ["The student – they lose marks and learn a wrong fact","The classmate – their name and face are shared without permission","The tool's makers – they get fewer users","Nobody – it is only a school task"];
+const MEASURE = ["Check every fact against a trusted source, such as the textbook or the teacher, before using it – because a confident output can still be wrong.","Ask the tool to sound less sure – because a quieter answer is always correct.","Copy the date but add a smiley face – because then nobody will mind if it is wrong.","Stop using all computers for ever – because AI is always wrong."];
+const VERIFY = [
+  ["vf1","","Look the date up in the Social Studies textbook",1],
+  ["vf2","","Ask the same tool again – if it repeats the date, it must be true",0],
+  ["vf3","","Ask the teacher, or check an official UAE government website",1],
+  ["vf4","","Trust it because it is written neatly",0],
+  ["vf5","","See whether a second trusted source agrees",1]
+];
+const EXIT = ["Bias – I would never skip deleting the tool, because all AI is unfair.","Error – I would never skip checking an output against a trusted source, because a confident answer can still be made up.","Misuse – I would never skip pasting names in, because the tool works better with them.","Hallucination – I would never skip trusting the tool, because it sounds sure."];
+const CH = [
+  ["chb","⚖️ Bias – it learned mostly from one-sided examples, so its answers about some cultures are weaker",1],
+  ["chm","🚦 Misuse – a student once pasted a classmate's full name and school report into it",0],
+  ["chl","🧱 Tool limitation – it often states made-up dates as if they were facts",2]
+];
+const CH_FIRST = ["The made-up dates at the output – they happen often and go straight into students' work, so they do the most harm","Whichever one is quickest to fix, because speed matters most","The bias, because it is the most interesting word","None of them – the tool sounds confident, so it is fine"];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["audit","A careful check that lists risks and rates how serious each one is."],
+  ["likelihood","How often a risk is expected to happen."],
+  ["impact","How much harm a risk would cause when it happens."],
+  ["mitigation","A specific change to a workflow that lowers a risk's likelihood or impact."],
+  ["residual risk","The risk that is left over even after a mitigation is added."]
+];
+const LDEF_ORDER = [3,0,4,2,1];
+const LSTEPS = ["📋 List every risk you can find in the outputs","📈 Rate how likely each risk is","💥 Rate how much harm each one would do","🗺️ Plot each risk on the likelihood-and-impact grid","🏁 Fix the top-corner risk first"];
+const LSTEP_ORDER = [4,2,0,3,1];
+const LCASE1 = ["The likely, harmful one – it sits in the top corner.","The rare, minor one that hardly ever causes any harm.","Neither – fix them in the order they were written.","Whichever one happens to be the quickest to fix here."];
+const LRATE = [
+  ["lr1","🗃️ Personal data often leaking into the tool","F"],
+  ["lr2","🧾 A rare typo in a draft heading","W"],
+  ["lr3","⚖️ A biased word choice that appears in some replies","K"],
+  ["lr4","🔖 An odd word in one image caption","W"],
+  ["lr5","📉 An unfair result that affects many students","F"],
+  ["lr6","🕒 A wrong opening time shown sometimes","K"],
+  ["lr7","🚑 A made-up medical dose stated as fact","F"]
+];
+const LTHINK = ["The rarer one, because rare risks are more surprising.","The far more likely one – with the same impact, it will cause harm more often.","Neither – risks with the same impact never need fixing.","Toss a coin – the same impact means the same priority."];
+const LCASE2 = ["Yes, mitigations remove risks completely and for good.","No, because mitigations never actually help at all.","No – some residual risk remains, so keep watching it.","Yes – one mitigation makes every trace of risk vanish."];
+const LMATCH = [["lm1","🗒️ Write down the limits",1],["lm2","🔎 Human-review checkpoint",0],["lm3","⚖️ Name who keeps watch",2],["lm4","🛡️ Block personal data",3]];
+const LMATCH_OPTS = ["📤 at the output stage","🧭 so users know what to distrust","👀 governance for the residual risk","📥 at the input stage"];
+const LCASE3 = ["Yes – a small warning label fully lowers the risk.","No – a real mitigation changes the workflow itself.","Yes, a warning label on its own simply fixes it all.","No, because nothing can ever reduce a risk at all."];
+/* audit: key, label, type, likelihood, impact, stage, type-option order */
+const AUDIT = [
+  ["aa","Risk A · wrong event dates",0,"H","H",2,[1,2,0]],
+  ["ab","Risk B · names and health details pasted in",2,"L","H",0,[2,0,1]],
+  ["ac","Risk C · ‘leaders’ and ‘helpful’ wording",1,"M","M",1,[0,2,1]]
+];
+const MIT_A = ["A teacher checks every date against the school calendar before the newsletter is sent","Add a line at the bottom saying ‘dates may be wrong’","Send the newsletter twice as often","Ask families to guess which dates are right"];
+const MIT_B = ["A checklist removes names and health details from notes before they go into the tool","Keep pasting the notes in, but promise not to read them","Ask teachers to type the names in capital letters","Add students' photos too, so the tool knows who is who"];
+const FIRST = ["Risk A – high likelihood and high impact, so it sits in the top corner","Risk B – it happened once, so it beats a risk that happens all the time","Risk C – it is the easiest one to talk about","All three at once, with equal effort on each"];
+const OWNER = ["A named person – such as the Grade 7 newsletter editor – who checks each draft and keeps watching the residual risk","Nobody – once the fix is in, the risk has gone for good","Each family, who should spot wrong dates themselves","The AI tool itself, which can be trusted to check its own dates"];
+const TWHO = ["Students – they could copy a wrong fact into homework and get an unfair, narrow picture of who does science","Only the school computer, which might slow down","Nobody – science facts can never cause harm","The chatbot's makers, who might get fewer users"];
+const TRULE = ["Verify before trust – check every output against a trusted source","Share passwords so everyone can log in","Upload photos so the tool knows who we are","Trust any answer that sounds confident"];
+const TNEW = ["Ask for scientists from many countries, and check the list includes both women and men","Ask the chatbot to use bigger letters","Never ask about scientists again","Add a sticker saying ‘use responsibly’ and change nothing"];
+const LSAFE = [
+  ["sf1","","Use only the pre-curated output cards – no live AI",1],
+  ["sf2","","Add a classmate's real name to a scenario card to make it realistic",0],
+  ["sf3","","Use no personal data – no faces, voices or names",1],
+  ["sf4","","Photograph your group to put on the risk record",0],
+  ["sf5","","Work account-free – no logins and no devices needed",1],
+  ["sf6","","Paste real student records into a chatbot to test it",0]
+];
+const LCH = [
+  ["lchb","⚖️ Bias – its ‘Student of the week’ wording praises boys as ‘leaders’ and girls as ‘helpful’",1],
+  ["lchm","🚦 Misuse – a teacher pastes a student's name and health details into it",0],
+  ["lchl","🧱 Tool limitation – it cannot check the school calendar, so it states wrong dates as facts",2]
+];
+const LCH_RULE = ["The checking fixed it for good, so no rule is needed after the mitigation.","Families must report any wrong date themselves if they ever notice one.","The Grade 7 newsletter editor owns the residual risk: each week they check every draft against the school calendar, and pause the tool if wrong dates get through.","Add a warning to the newsletter and stop checking the dates."];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+GE_E,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"A risk is the chance an output causes harm; bias is an unfair output from one-sided data; a hallucination is something false stated as if it were true; responsible use is checking outputs, protecting personal data and following the rules; governance is the rules and roles that keep AI use safe."},
+ {id:"match",mount:"a-match",section:"Core · Part 1",title:"Match the word to its meaning",sub:"Objective 1 · name the risks · "+GE_E,ico:"🧷",
+  fields:MATCH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Risk = the chance an output causes harm. Bias = an unfair output from one-sided data. Responsible use = checking outputs and protecting data. Hallucination = stating something false as if it were true. Naming a risk is the first step to reducing it."},
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"Case 1 · The Sure-Sounding Fact",sub:"Systems Detectives · "+GE_E,ico:"🕵️",cls:"case",
+  fields:[{k:"c1",radio:1,ok:v=>eq(v,2)}],
+  explain:"The output stage is where an error reaches a real person, so that is where the risk is most dangerous. A confident output can still be wrong – sounding sure does not make it correct – and screen brightness does not change what the process returns."},
+ {id:"bias",mount:"a-bias",section:"Core · Part 1",title:"See bias in the data – and fix it",sub:"Teachable Machine demo · "+GE_P,ico:"⚖️",
+  fields:[{k:"bd1",ok:v=>eq(v,0)},{k:"bd2",ok:v=>eq(v,0)},{k:"bd3",ok:v=>eq(v,0)},{k:"bd4",ok:v=>eq(v,2)}],
+  explain:"The training data under-represented Class B (only 3 photos against 15), so the model learned it poorly – the bias is in the data, not in ‘the computer’. Adding balanced examples of Class B, retraining and re-testing makes it fairer: 1 of 4 correct is 25%, and 3 of 4 correct is 75%."},
+ {id:"safesort",mount:"a-safesort",section:"Core · Part 2",title:"Safe, verify, or do not use?",sub:"Objective 2 · judge each output · "+GE_E,ico:"🩺",
+  fields:SAFESORT.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Safe to use: a translated sign you confirmed with your teacher, and a fact that matches a trusted source you already checked. Verify first: a statistic with no source, and a confident answer you cannot verify. Do not use: an output with a classmate's full name (personal data), a made-up date stated as fact, and a claim that fits an unfair stereotype. Verify what you can check, and never act on what you cannot."},
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"Case 2 · The Fact You Cannot Check",sub:"Systems Detectives · "+CE_P,ico:"🔬",cls:"case",
+  fields:[{k:"c2",radio:1,ok:v=>eq(v,1)}],
+  explain:"An output you cannot verify is a draft, not a fact – check it against a trusted source before you trust it. Confident outputs can still be wrong, the tool does not verify facts for you (that habit is your job), and AI is not always wrong – the point is to verify, not to reject everything."},
+ {id:"pdata",mount:"a-pdata",section:"Core · Part 3",title:"Protecting people: the technical side",sub:"Keep personal data out · "+GE_A,ico:"🔐",
+  fields:[{k:"pd0",ok:v=>eq(v,0)},{k:"pd1",ok:v=>eq(v,1)},{k:"pd2",ok:v=>eq(v,2)},{k:"pd3",ok:v=>eq(v,0)}],
+  explain:"De-identification removes anything that could name a person before data is used. Data minimisation collects only what the task truly needs. Retention and deletion keep data only as long as it is needed, then delete it. In the UAE these ideas are backed by the Personal Data Protection Law (PDPL) and ADEK's data-protection rules."},
+ {id:"picks",mount:"a-picks",section:"Core · Part 3",title:"Choose the responsible measures",sub:"Objective 2 · propose a responsible measure · "+GE_A,ico:"🧩",
+  fields:PICKS.map(([k,,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"De-identify, minimise and verify – that is responsible use. Removing names, verifying each output against a trusted source and collecting only the data the task needs all reduce risk. Trusting confident answers, entering a classmate's photo and keeping all data for ever all add risk."},
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"Case 3 · The Name in the Box",sub:"Systems Detectives · "+GE_A,ico:"⚖️",cls:"case",
+  fields:[{k:"c3",radio:1,ok:v=>eq(v,3)}],
+  explain:"De-identify first: personal data does not go into the tool. A name is personal data and should never be entered; hoping does not protect anyone; and you cannot assume a tool keeps data private – protecting people is your responsibility, not the tool's."},
+ {id:"analysis",mount:"a-analysis",section:"Core worksheet",title:"Scenario risk analysis",sub:"Worksheet · risk type, who is affected, stage · "+GE_P,ico:"📝",cls:"ws",
+  fields:[{k:"s1t",ok:v=>eq(v,0)},{k:"s1w",ok:v=>eq(v,0)},{k:"s1s",ok:v=>eq(v,2)},{k:"s2t",ok:v=>eq(v,2)},{k:"s2w",ok:v=>eq(v,1)},{k:"s2s",ok:v=>eq(v,0)}],
+  explain:"Card 1 is an error (a hallucination – the UAE was formed in 1971, not 1981). It sits at the output stage, and the student who copies it loses marks and learns a wrong fact. Card 2 is misuse: a classmate's name and photo are put into a tool without permission. It sits at the input stage – the personal data goes in – and the classmate is the person affected."},
+ {id:"measure",mount:"a-measure",section:"Core worksheet",title:"Propose a measure + verify-before-trust check",sub:"Worksheet · "+GE_A,ico:"🔎",cls:"ws",
+  fields:[{k:"ms",ok:v=>eq(v,0)},...VERIFY.map(([k,,,c])=>({k,box:1,ok:v=>v===!!c}))],
+  explain:"A real measure changes what you do, and its ‘because’ names the risk: check every fact against a trusted source, because a confident output can still be wrong. To verify the date, use the textbook, the teacher or an official UAE website, and see whether a second trusted source agrees. Asking the same tool again only repeats its guess, and neat writing proves nothing."},
+ {id:"exit",mount:"a-exit",section:"Core worksheet",title:"Exit ticket",sub:"Explain it · "+GE_A,ico:"🎫",
+  fields:[{k:"ex",radio:1,ok:v=>eq(v,1)}],
+  explain:"Only the error answer pairs a real risk with a measure that reduces it and a sound reason: checking against a trusted source catches a confident but made-up answer. Deleting tools, pasting names in, or trusting a tool because it sounds sure do not reduce any risk."},
+ {id:"chal",mount:"a-chal",section:"Core challenge",title:"Challenge ⭐ One workflow, three risks",sub:"Stretch · "+GE_A,ico:"⭐",
+  fields:[...CH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"chf",ok:v=>eq(v,0)}],
+  explain:"Bias comes from one-sided examples the model learned from, so it sits in the process. Misuse starts at the input, when personal details are pasted in. The tool's limitation shows up at the output, as made-up dates. Fix the made-up dates first: they happen often and go straight into students' work, so they do the most harm – speed or how interesting a risk sounds does not set the priority."},
+ {id:"lvocab",mount:"a-lvocab",section:"Lab",title:"Match each Lab word to its meaning",sub:"Lab · words to know · "+GE_P,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"Audit = a careful check that lists risks and rates them. Likelihood = how often a risk is expected. Impact = how much harm it does when it happens. Mitigation = a specific change that lowers likelihood or impact. Residual risk = what is left over after the mitigation."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 1",title:"Order the audit steps",sub:"Objective 1 · audit a scenario · "+GE_P,ico:"🧭",
+  fields:LSTEPS.map((_,i)=>({k:"lo"+i,ok:v=>eq(v,i)})),
+  explain:"List every risk in the outputs, rate how likely each is, rate how much harm each would do, plot each on the likelihood-and-impact grid, then fix the top-corner risk first. An audit turns a list of risks into a clear plan of action."},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"Case 1 · Two Risks, One Team",sub:"Systems Detectives · "+GE_P,ico:"🕵️",cls:"case",
+  fields:[{k:"lc1",radio:1,ok:v=>eq(v,0)}],
+  explain:"High likelihood and high impact means fix it first – it sits in the top corner. A rare, minor risk is the lowest priority, not the highest; the order risks were written does not set priority, the grid does; and speed is not the rule – likelihood and impact are."},
+ {id:"lrate",mount:"a-lrate",section:"Lab · Part 2",title:"How urgent is each risk?",sub:"Objective 2 · rate likelihood and impact · "+GE_P,ico:"🩺",
+  fields:LRATE.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Fix first: personal data often leaking, an unfair result that affects many students, and a made-up medical dose – likely or harmful, or both. Keep watching: a biased word choice in some replies and a wrong opening time shown sometimes. Can wait: a rare typo in a draft heading and an odd word in one caption. Urgent risks go first; the rest are watched or wait."},
+ {id:"lthink",mount:"a-lthink",section:"Lab · Part 2",title:"Think about it: same impact, different odds",sub:"Prioritise · "+GE_P,ico:"🎲",
+  fields:[{k:"lth",radio:1,ok:v=>eq(v,1)}],
+  explain:"When the impact is the same, likelihood decides: the far more likely risk will cause that harm more often, so mitigate it first. Being rare is not a reason to go first, and an equal impact does not make the choice random."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"Case 2 · The Leftover Risk",sub:"Systems Detectives · "+GE_A,ico:"🔬",cls:"case",
+  fields:[{k:"lc2",radio:1,ok:v=>eq(v,2)}],
+  explain:"A mitigation lowers a risk but rarely removes it completely, so some residual risk remains and someone keeps watching it. Mitigations do help – they lower likelihood or impact – but residual risk almost always remains after a fix."},
+ {id:"lmatch",mount:"a-lmatch",section:"Lab · Part 3",title:"Match the mitigation to where it works",sub:"Objective 2 · propose a mitigation · "+GE_A,ico:"🧷",
+  fields:LMATCH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Writing down the limits helps users know what to distrust. A human-review checkpoint lowers risk at the output stage. Naming who keeps watch is governance for the residual risk. Blocking personal data lowers risk at the input stage. A real mitigation changes the workflow at a chosen stage."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"Case 3 · The Warning Label",sub:"Systems Detectives · "+GE_A,ico:"⚖️",cls:"case",
+  fields:[{k:"lc3",radio:1,ok:v=>eq(v,1)}],
+  explain:"A label does not change how the workflow runs; a mitigation does. A warning note does not lower likelihood or impact, so the risk stays – but mitigations do reduce risk: a review step at the output stage would help here."},
+ {id:"laudit",mount:"a-laudit",section:"Lab worksheet",title:"Risk-and-impact audit",sub:"Worksheet · "+GE_P,ico:"📊",cls:"ws",
+  fields:AUDIT.flatMap(([k,,t,l,i,s])=>[{k:k+"t",ok:v=>eq(v,t)},{k:k+"l",ok:v=>eq(v,l)},{k:k+"i",ok:v=>eq(v,i)},{k:k+"s",ok:v=>eq(v,s)}]),
+  explain:"A is an error (hallucination): it happens in 3 of every 5 drafts (high likelihood), families could miss trips or tests (high impact), and it shows up at the output – top corner. B is misuse: it has happened once (low likelihood), but private health details are exposed (high impact), and it starts at the input. C is bias from one-sided examples the model learned from (process): it happens sometimes (medium) and is real but fixable harm (medium)."},
+ {id:"lplan",mount:"a-lplan",section:"Lab worksheet",title:"Mitigation plan, priority and owner",sub:"Worksheet · "+GE_A,ico:"🗺️",cls:"ws",
+  fields:[{k:"pam",ok:v=>eq(v,0)},{k:"pas",ok:v=>eq(v,2)},{k:"pbm",ok:v=>eq(v,0)},{k:"pbs",ok:v=>eq(v,0)},{k:"pfirst",ok:v=>eq(v,0)},{k:"powner",ok:v=>eq(v,0)}],
+  explain:"For A, a teacher checking every date against the school calendar is a human-review checkpoint at the output stage. For B, a checklist that removes names and health details blocks personal data at the input stage. Build A in first – likely and harmful, so it sits in the top corner. Governance names a person who checks each draft and keeps watching the residual risk; no tool can be trusted to watch itself."},
+ {id:"ltool",mount:"a-ltool",section:"Lab worksheet",title:"Risk-spotting record from the card deck",sub:"Worksheet · tool log · "+GE_E,ico:"🃏",cls:"ws",
+  fields:[{k:"tw",ok:v=>eq(v,0)},{k:"t1",ok:v=>eq(v,0)},{k:"t2",ok:v=>eq(v,1)},{k:"trule",ok:v=>eq(v,0)},{k:"tnew",ok:v=>eq(v,0)}],
+  explain:"Students are affected: they could copy a wrong fact and get an unfair, narrow picture of who does science. Output 1 is an error (water boils at 100 °C at sea level, not 50 °C) – the charter rule ‘verify before trust’ catches it. Output 2 is bias from one-sided examples – asking for scientists from many countries and checking for both women and men reduces it."},
+ {id:"lsafe",mount:"a-lsafe",section:"Lab worksheet",title:"Safety check",sub:"Safety check · "+GE_E,ico:"🛡️",
+  fields:LSAFE.map(([k,,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"This lab is unplugged: use only the pre-curated cards, work account-free, and use no personal data. Real names, group photos and real student records are personal data – they never go on a card or into a chatbot."},
+ {id:"lexit",mount:"a-lexit",section:"Lab worksheet",title:"Exit ticket",sub:"Explain it · "+GE_A,ico:"🎫",
+  fields:[{k:"lx1",ok:v=>eq(v,0)},{k:"lx2",ok:v=>eq(v,1)},{k:"lx3",ok:v=>eq(v,0)}],
+  explain:"A teacher checking every date reduces the error risk. The tool still writes wrong dates, but they are caught before families act on them – so it lowers impact. A checklist that strips names and health details stops private data going in at all – so it lowers likelihood."},
+ {id:"lchal",mount:"a-lchal",section:"Lab challenge",title:"Challenge ⭐ Three stages and a governance rule",sub:"Stretch · "+GE_A,ico:"⭐",
+  fields:[...LCH.map(([k,,c])=>({k,ok:v=>eq(v,c)})),{k:"lchr",ok:v=>eq(v,2)}],
+  explain:"Bias comes from the one-sided examples the model learned from (process). Misuse starts when a teacher pastes personal details in (input). The tool's limitation shows up as wrong dates in the draft (output). A good governance rule names who owns the residual risk, what they check and how often, and what happens if the problem returns – ‘fixed for good’, leaving it to families, or a warning label leave the risk unwatched."}
+];
+
+/* ---------- state ---------- */
+const KEY="g7-mw5-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#biasdemo").innerHTML=`<header><small>Teacher demo · Teachable Machine · illustrative numbers</small><b>A classifier trained on a skewed set</b></header>
+<div class="in">
+  <p class="task"><b>Step 1 – see the skew.</b> Test on fresh items and count how many each class gets right. <b>Step 2 – name the cause.</b> <b>Step 3 – fix it:</b> add balanced examples, retrain and re-test.</p>
+  <table class="t"><thead><tr><th>Training set</th><th>Class B test result</th></tr></thead>
+  <tbody><tr><td>Before: 15 photos of Class A, only 3 of Class B</td><td>1 of 4 fresh items correct</td></tr>
+  <tr><td>After: balanced examples of Class B added, then retrained</td><td>3 of 4 fresh items correct</td></tr></tbody></table>
+  <p class="note">No personal data – use objects, drawings or gestures only.</p>
+</div>`;
+$("#offline").innerHTML=`<header><small>If the tool is offline · sample outputs</small><b>Simulated Teachable Machine results</b></header>
+<div class="in">
+  <p class="task">No live tool? Use this example results panel. These are sample outputs – live results may differ.</p>
+  <table class="t"><thead><tr><th>Item shown</th><th>Model label</th><th>Confidence</th></tr></thead>
+  <tbody><tr><td>Recyclable</td><td>Recyclable</td><td>0.92</td></tr><tr><td>Organic</td><td>Organic</td><td>0.88</td></tr><tr><td>General waste</td><td>General waste</td><td>0.79</td></tr><tr><td>Greasy item</td><td>General waste</td><td>0.55 (low – check it)</td></tr></tbody></table>
+  <p class="note">Notice the low-confidence row: a confident label is not always right, so low-confidence items should be checked by a person.</p>
+</div>`;
+$("#scards").innerHTML=`<header><small>Scenario cards · simulated-AI · illustrative</small><b>Two AI scenarios to analyse</b></header>
+<div class="in">
+  <p class="task">Underline the AI output or AI use on each card, then name the risk it shows.</p>
+  <table class="t"><thead><tr><th>Card</th><th>What happens</th></tr></thead>
+  <tbody><tr><td>1 · 📚 Homework helper</td><td>A homework-helper tool tells a student that the UAE was formed in <b>1981</b>. It sounds completely sure, and the student is about to copy the date into a Social Studies project.</td></tr>
+  <tr><td>2 · 🎨 Poster maker</td><td>A student pastes a classmate's <b>full name and school photo</b> into a free online poster tool to make a ‘funny’ poster – without asking the classmate.</td></tr></tbody></table>
+</div>`;
+$("#pack").innerHTML=`<header><small>Scenario pack · pre-curated · illustrative</small><b>An AI newsletter helper for a Grade 7 year group</b></header>
+<div class="in">
+  <p class="task"><b>The AI workflow:</b> teachers type their notes for the week (input); the helper drafts the families' newsletter (process); a staff member copies the draft into an email to families (output).</p>
+  <table class="t"><thead><tr><th>Risk</th><th>What the audit found</th></tr></thead>
+  <tbody><tr><td>A</td><td>It gets event dates wrong <b>often</b> – in a trial, <b>3 of every 5</b> drafts had a wrong date for a trip or a test. Families could miss trips or tests.</td></tr>
+  <tr><td>B</td><td>Teachers' notes sometimes include a student's <b>full name and health details</b>, which get pasted straight into the tool. This has happened <b>once</b> this term – but it exposes private health information.</td></tr>
+  <tr><td>C</td><td>Its ‘Student of the week’ wording <b>sometimes</b> praises boys as ‘leaders’ and girls as ‘helpful’, because it learned from one-sided examples. It is unfair, but easy to put right before sending.</td></tr></tbody></table>
+  <p class="note"><b>Rating key.</b> Likelihood: <b>Low</b> = rarely or never seen · <b>Medium</b> = sometimes · <b>High</b> = often. Impact: <b>Low</b> = minor and easily put right · <b>Medium</b> = real harm that can be put right · <b>High</b> = serious harm, such as missed tests or exposed private data. Stage: <b>Input</b> = what goes in · <b>Process</b> = what the model learned and does · <b>Output</b> = what people read and act on.</p>
+</div>`;
+$("#cards").innerHTML=`<header><small>Risk-scenario card · two flawed outputs · pre-generated</small><b>A homework-help chatbot in a Grade 7 Science class</b></header>
+<div class="in">
+  <p class="task"><b>The AI use:</b> students ask the chatbot questions while they do their Science homework.</p>
+  <table class="t"><thead><tr><th>Flawed output</th><th>What it did</th></tr></thead>
+  <tbody><tr><td>Output 1</td><td>It says, very confidently, that water boils at <b>50 °C</b> at sea level.</td></tr>
+  <tr><td>Output 2</td><td>Asked for five famous scientists, it lists <b>only men from one country</b>, because most of its examples came from there.</td></tr></tbody></table>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,e,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${e?e+" ":""}${esc(t)}</span></label>`).join("")+`</div>`;
+const pair=(k,label,opts,order)=>`<div class="pair" data-item="${k}"><span class="t">${label}</span>${sel(k,opts,"Choose…",order)}</div>`;
+const LOWERS=["Likelihood","Impact","Both"];
+const LMH=["Low","Medium","High"],LMHv=["L","M","H"];
+function caseBody(key,quote,clues,q,opts){
+  return `<div class="quote">“${esc(quote)}”</div><div class="clues" aria-hidden="true">${clues.map(([e,t])=>`<div class="clue">${e}<span>${esc(t)}</span></div>`).join("")}</div>
+    <p class="q" id="q-${key}">${esc(q)}</p>${radios(key,opts)}`;
+}
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "match":
+    return `<p class="how">Match each word to what it means.</p>`+
+      MATCH.map(([k,t])=>pair(k,esc(t),MATCH_OPTS,[1,3,0,2])).join("");
+  case "case1":
+    return caseBody("c1","A homework helper returns a fact about the UAE that sounds completely sure, but the date looks wrong. Detective, where in the workflow is this risk most dangerous?",
+      [["📥","Question in"],["⚙️","Predicts"],["📤","Confident fact"]],"Which is the riskiest moment?",CASE1);
+  case "bias":
+    return `<p class="how">Use the demo results above.</p>
+      ${pair("bd1","Why does Class B score so much lower?",BIAS_WHY,[1,0,3,2])}
+      ${pair("bd2","What makes the model fairer?",BIAS_FIX,[2,3,0,1])}
+      <div class="row" data-item="bd3"><span class="t">Class B before the fix: 1 of 4 correct =</span>${seg("bd3",PCT,null,"Class B before the fix")}</div>
+      <div class="row" data-item="bd4"><span class="t">Class B after the fix: 3 of 4 correct =</span>${seg("bd4",PCT,null,"Class B after the fix")}</div>`;
+  case "safesort":
+    return `<p class="how">Sort each output by what a responsible user should do with it.</p>`+
+      SAFESORT.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🛡️ Safe to use","🔎 Verify first","⛔ Do not use"],["S","V","N"],t)}</div>`).join("");
+  case "case2":
+    return caseBody("c2","An AI returns a neat, confident claim, but you cannot find it in any source you trust. Detective, should you act on it?",
+      [["📤","Confident claim"],["🔎","No source"],["🏁","Decide"]],"Should you act on it?",CASE2);
+  case "pdata":
+    return `<p class="how">Match each way of protecting people to what it means, then name the UAE law behind it.</p>`+
+      PDATA.map((t,i)=>pair("pd"+i,esc(t),PDATA_OPTS,[2,0,3,1])).join("")+
+      pair("pd3","Which law and rules back these ideas in the UAE?",LAW,[1,0,2]);
+  case "picks":
+    return boxes(PICKS,"Tick the THREE responsible-use measures. Leave the others unticked.");
+  case "case3":
+    return caseBody("c3","A student wants to paste a classmate's name and photo into a tool to get a faster answer. Detective, what is the responsible choice?",
+      [["🗃️","Personal data"],["🛡️","De-identify"],["🏁","Decide"]],"What is the responsible choice?",CASE3);
+  case "analysis":
+    return `<p class="how">Use the two scenario cards above. For each, name the main risk type, say who is affected, and mark the workflow stage where the risk sits.</p>
+      <div class="scen"><p>Card 1 · 📚 Homework helper</p>
+        ${pair("s1t","Main risk type",RTYPE,[1,2,0])}${pair("s1w","Who is affected",WHO,[2,0,3,1])}
+        <div class="row" data-item="s1s"><span class="t">Workflow stage</span>${seg("s1s",STAGE,null,"Card 1 workflow stage")}</div></div>
+      <div class="scen"><p>Card 2 · 🎨 Poster maker</p>
+        ${pair("s2t","Main risk type",RTYPE,[0,2,1])}${pair("s2w","Who is affected",WHO,[3,2,1,0])}
+        <div class="row" data-item="s2s"><span class="t">Workflow stage</span>${seg("s2s",STAGE,null,"Card 2 workflow stage")}</div></div>`;
+  case "measure":
+    return `<p class="how">Card 1 · 📚 Homework helper.</p>
+      ${pair("ms","A responsible measure is … because …",MEASURE,[1,3,0,2])}`+
+      boxes(VERIFY,"Verify-before-trust check: tick every way you could verify the date in Card 1 against a trusted source. Leave the others unticked.");
+  case "exit":
+    return `<p class="q" id="q-ex">Which answer names one risk, the responsible-use measure you would never skip, and a sound reason in one sentence?</p>${radios("ex",EXIT)}`;
+  case "chal":
+    return `<p class="how">Think about the homework helper from Card 1 across its whole workflow. Where does each risk appear – and which would you fix first? <span class="illus">(Illustrative details.)</span></p>`+
+      CH.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,STAGE,null,t)}</div>`).join("")+
+      pair("chf","Fix first, because…",CH_FIRST,[2,0,3,1]);
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lorder":
+    return `<p class="how">Put the audit steps into the order a real auditor works through them, from first to last.</p>`+
+      LSTEPS.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">Step ${i+1}</span>${sel("lo"+i,LSTEPS,"Choose the step…",LSTEP_ORDER)}</div>`).join("");
+  case "lcase1":
+    return caseBody("lc1","An auditor finds two risks: one is likely and very harmful, the other is rare and minor. Detective, which one should the team fix first?",
+      [["📋","Two risks"],["🗺️","Plotted"],["🏁","Prioritise"]],"Which risk gets fixed first?",LCASE1);
+  case "lrate":
+    return `<p class="how">Sort each risk by how urgent it is to mitigate.</p>`+
+      LRATE.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,["🌱 Can wait","👀 Keep watching","🚑 Fix first"],["W","K","F"],t)}</div>`).join("");
+  case "lthink":
+    return `<p class="q" id="q-lth">Two risks have the same impact, but one is far more likely. Which should the team mitigate first?</p>${radios("lth",LTHINK)}`;
+  case "lcase2":
+    return caseBody("lc2","A team adds a human-review step to catch a risk. A junior auditor says the risk is now completely gone. Detective, is that true?",
+      [["🚩","Risk"],["🔧","Mitigation"],["👀","Watch"]],"Is the risk fully gone now?",LCASE2);
+  case "lmatch":
+    return `<p class="how">Match each mitigation to where in the workflow it works.</p>`+
+      LMATCH.map(([k,t])=>pair(k,esc(t),LMATCH_OPTS,[3,1,0,2])).join("");
+  case "lcase3":
+    return caseBody("lc3","A pair proposes fixing a serious risk by adding a small note that says the output may be wrong. Detective, is that a real mitigation?",
+      [["🚩","Risk"],["🖊️","Just a note"],["🏁","Decide"]],"Is that a real mitigation?",LCASE3);
+  case "laudit":
+    return `<p class="how">Use the scenario pack and its rating key above. For each risk, choose its type, rate its likelihood and impact, and mark the workflow stage it sits at.</p>`+
+      AUDIT.map(([k,t,,,,,o])=>`<div class="scen"><p>${esc(t)}</p><div class="two">
+        <div class="cell" data-item="${k}t"><span>Risk type</span>${sel(k+"t",RTYPE,"Choose…",o)}</div>
+        <div class="cell" data-item="${k}s"><span>Workflow stage</span>${seg(k+"s",STAGE,null,t+" stage")}</div>
+        <div class="cell" data-item="${k}l"><span>Likelihood</span>${seg(k+"l",LMH,LMHv,t+" likelihood")}</div>
+        <div class="cell" data-item="${k}i"><span>Impact</span>${seg(k+"i",LMH,LMHv,t+" impact")}</div></div></div>`).join("");
+  case "lplan":
+    return `<p class="how">Mitigation plan for the two highest-priority risks, A and B: choose a specific mitigation and the stage it changes. Then decide what to build in first and who is responsible for it.</p>
+      <div class="scen"><p>Risk A · wrong event dates</p><div class="two">
+        <div data-item="pam"><span>Mitigation</span>${sel("pam",MIT_A,"Choose…",[1,3,0,2])}</div>
+        <div class="cell" data-item="pas"><span>Stage it changes</span>${seg("pas",STAGE,null,"Risk A stage it changes")}</div></div></div>
+      <div class="scen"><p>Risk B · names and health details pasted in</p><div class="two">
+        <div data-item="pbm"><span>Mitigation</span>${sel("pbm",MIT_B,"Choose…",[3,1,0,2])}</div>
+        <div class="cell" data-item="pbs"><span>Stage it changes</span>${seg("pbs",STAGE,null,"Risk B stage it changes")}</div></div></div>
+      ${pair("pfirst","Build in first … because …",FIRST,[1,3,0,2])}${pair("powner","Who is responsible for it?",OWNER,[2,0,3,1])}`;
+  case "ltool":
+    return `<p class="how">Use the risk-scenario card above to complete your risk-spotting record.</p>
+      ${pair("tw","Who could be affected, and how?",TWHO,[1,3,0,2])}
+      <div class="scen"><p>Label the risk each flawed output shows</p><div class="two">
+        <div data-item="t1"><span>Output 1 · water boils at 50 °C</span>${sel("t1",RTYPE,"Choose…",[2,0,1])}</div>
+        <div data-item="t2"><span>Output 2 · only men from one country</span>${sel("t2",RTYPE,"Choose…",[0,2,1])}</div></div></div>
+      ${pair("trule","Class-charter rule that matches Output 1",TRULE,[2,0,3,1])}
+      ${pair("tnew","One rule that would reduce the risk in Output 2",TNEW,[3,0,2,1])}`;
+  case "lsafe":
+    return boxes(LSAFE,"Safety check: tick every rule that keeps today's risk audit safe. Leave the others unticked.");
+  case "lexit":
+    return `<p class="how">Two mitigations for the newsletter helper. Name the risk the first one reduces, then decide whether each lowers likelihood, impact or both.</p>
+      <div class="scen"><p>Mitigation 1 · a teacher checks every date before the newsletter goes out</p><div class="two">
+        <div data-item="lx1"><span>Risk it reduces</span>${sel("lx1",RTYPE,"Choose…",[2,0,1])}</div>
+        <div data-item="lx2"><span>It lowers…</span>${sel("lx2",LOWERS,"Choose…",[1,0,2])}</div></div></div>
+      <div class="scen"><p>Mitigation 2 · a checklist strips names and health details before notes go in</p>
+        ${pair("lx3","It lowers…",LOWERS,[2,1,0])}</div>`;
+  case "lchal":
+    return `<p class="how">Look at the newsletter workflow again. At which stage does each risk appear? Then choose the governance rule that names who monitors the residual risk after your top mitigation is in place.</p>`+
+      LCH.map(([k,t])=>`<div class="row" data-item="${k}"><span class="t">${esc(t)}</span>${seg(k,STAGE,null,t)}</div>`).join("")+
+      pair("lchr","Governance rule",LCH_RULE,[1,3,2,0]);
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 7 Main Course · Term 1 Week 5 (2 – 6 Nov 2026) · Core + Lab · Spotting the Risks + The Risk Audit</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
