@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="site.css?v=6">
+<link rel="stylesheet" href="site.css?v=4">
 <style>
 .hero{display:grid;grid-template-columns:1.25fr .75fr;gap:16px;margin:24px 0 26px}
 @media (max-width:820px){.hero{grid-template-columns:1fr}}
@@ -71,17 +71,6 @@ table.grid[data-show]:not([data-show="all"]){min-width:0}
 .grid td.none{color:#B9B4C8;text-align:center;padding:12px 6px}
 .grid a.ls{display:block;height:100%;padding:10px;text-decoration:none;color:var(--ink);font-size:13.5px;line-height:1.35}
 .grid a.ls b{font-weight:600}
-.grid td .share{padding:0 10px 10px}
-.grid a.ls+.share{margin-top:-2px}
-/* All grades: a small, still Share button in the same corner of every cell (one grade: the full button) */
-table.grid[data-show="all"] td.g{position:relative}
-table.grid[data-show="all"] td.g a.ls{padding-bottom:40px}
-table.grid[data-show="all"] td .share{position:absolute;inset-inline-end:8px;bottom:8px;padding:0}
-table.grid[data-show="all"] .crs{padding:2px 6px 2px 3px;gap:3px;border-width:1px}
-table.grid[data-show="all"] .crs img{width:21px;height:18px}
-table.grid[data-show="all"] .crs svg{width:11px;height:11px}
-table.grid[data-show="all"] .crs .crl{display:none}
-table.grid[data-show="all"] .crs:hover,table.grid[data-show="all"] .crs:focus-visible{transform:scale(1.2);box-shadow:0 3px 8px rgba(19,115,51,.25)}
 .grid a.ls:hover b{text-decoration:underline}
 table.grid[data-show="6"] .g:not(.g6){display:none}table.grid[data-show="7"] .g:not(.g7){display:none}table.grid[data-show="8"] .g:not(.g8){display:none}table.grid[data-show="9"] .g:not(.g9){display:none}table.grid[data-show="10"] .g:not(.g10){display:none}table.grid[data-show="11"] .g:not(.g11){display:none}table.grid[data-show="12"] .g:not(.g12){display:none}
 .grid tr.bridge>*{border-bottom:2px solid var(--line)}
@@ -167,11 +156,6 @@ const STAFF = APP && ROLE !== 'student';
 const link = id => APP ? APP.base + '?p=' + encodeURIComponent(id) : id + '.html';
 const appPage = p => APP ? APP.base + '?p=' + p : p + '.html';
 const tgt = APP ? ' target="_top"' : '';
-/* Classroom posts always point at the signed-in app (on the public site via the short link app/, which forwards there) */
-const shareUrl = id => APP ? link(id) : new URL('app/?p=' + encodeURIComponent(id), location.href).href;
-/* Google Classroom share button: the Classroom icon, a share symbol and the word Share */
-const crButton = (url, title, label, cls = '') => `<a class="crs ${cls}" href="${esc('https://classroom.google.com/share?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title))}" target="_blank" rel="noopener" title="${esc(T('Share to Google Classroom'))}" aria-label="${esc(label)}"><img src="assets/classroom.png" alt="" width="30" height="26"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg><span class="crl">${esc(T('Share'))}</span></a>`;
-
 let LANG = (() => { try { return localStorage.getItem('aisa-lang') === 'ar' ? 'ar' : 'en'; } catch (e) { return 'en'; } })();
 let GRADE = null, PROG = null;
 /* ---------- words (English / العربية). Lesson titles stay in English. ---------- */
@@ -180,7 +164,7 @@ const AR = {
   'Choose your grade': 'اختر صفّك', 'All grades': 'جميع الصفوف', 'All AI lessons': 'جميع دروس الذكاء الاصطناعي', 'Every lesson, by grade': 'جميع الدروس حسب الصف',
   '{n} lessons for Grades 6–12. Each class has its AI lesson on its own day – the teaching calendar has every date.': '{n} درسًا للصفوف 6–12. لكل شعبة يوم خاص لدرس الذكاء الاصطناعي – وفي تقويم التدريس جميع المواعيد.',
   'Main course lessons by week, then foundation lessons.': 'دروس البرنامج الرئيسي حسب الأسبوع، ثم الدروس التمهيدية.', 'Grade {g}': 'الصف {g}', '{n} lessons': '{n} دروس', '1 lesson': 'درس واحد',
-  'Grade {g} only': 'الصف {g} فقط', 'No lessons on the site yet.': 'لا توجد دروس على الموقع بعد.', 'Teaching calendar →': 'تقويم التدريس ←', 'Share': 'مشاركة', 'Share to Google Classroom': 'شارك في Google Classroom', 'AI Literacy – Grade {g}: {t}': 'الثقافة في الذكاء الاصطناعي – الصف {g}: {t}', 'This week in every grade': 'هذا الأسبوع في جميع الصفوف', 'Grade': 'الصف', 'Week {n}': 'الأسبوع {n}', 'All Grade {g} lessons': 'جميع دروس الصف {g}', 'American International School in Abu Dhabi': 'المدرسة الأمريكية الدولية في أبوظبي', 'AI Literacy · Grades 6–12': 'محو أمية الذكاء الاصطناعي · الصفوف 6–12',
+  'Grade {g} only': 'الصف {g} فقط', 'No lessons on the site yet.': 'لا توجد دروس على الموقع بعد.', 'Teaching calendar →': 'تقويم التدريس ←', 'This week in every grade': 'هذا الأسبوع في جميع الصفوف', 'Grade': 'الصف', 'Week {n}': 'الأسبوع {n}', 'All Grade {g} lessons': 'جميع دروس الصف {g}', 'American International School in Abu Dhabi': 'المدرسة الأمريكية الدولية في أبوظبي', 'AI Literacy · Grades 6–12': 'محو أمية الذكاء الاصطناعي · الصفوف 6–12',
   'Scan to open AI Lessons': 'امسح الرمز لفتح دروس الذكاء الاصطناعي', 'Close': 'إغلاق',
   'Teaching week {n} · {a} – {b}': 'الأسبوع الدراسي {n} · {a} – {b}', 'Before the AI timetable starts': 'قبل بدء جدول الذكاء الاصطناعي',
   'Hi {name} – here is your lesson this week': 'مرحبًا {name} – هذا درسك لهذا الأسبوع', 'Hi {name} – no AI lesson this week': 'مرحبًا {name} – لا يوجد درس ذكاء اصطناعي هذا الأسبوع',
@@ -316,8 +300,7 @@ function tableView() {
     if (!l) return `<td class="g g${g} none">–</td>`;
     const short = bridging ? l.title : l.title.split(' + ')[0], lock = !bridging && lockedPublic(g, l.week), d = lock && AICAL.opensOnGrade(g, l.week);
     return `<td class="g g${g}"><a class="ls${lock ? ' locked' : ''}"${lock ? ' aria-disabled="true"' : ` href="${esc(link(l.id))}"${tgt}`} title="${esc(l.title)}">` +
-      `<b lang="en" dir="ltr">${esc(short)}</b>${lock ? `<small class="opens">🔒 ${esc(T('Opens {d}', { d: d ? fdm(d) : '–' }))}</small>` : ''}</a>` +
-      (lock ? '' : `<div class="share">${crButton(shareUrl(l.id), T('AI Literacy – Grade {g}: {t}', { g, t: l.title }), T('Share to Google Classroom') + ': ' + T('Grade {g}', { g }) + ', ' + short)}</div>`) + '</td>';
+      `<b lang="en" dir="ltr">${esc(short)}</b>${lock ? `<small class="opens">🔒 ${esc(T('Opens {d}', { d: d ? fdm(d) : '–' }))}</small>` : ''}</a></td>`;
   };
   let h = `<table class="grid" data-show="${esc(show)}"><thead><tr><th scope="col">${esc(T('Term 1'))}</th>` +
     GRADES.map(g => `<th scope="col" class="g g${g}" style="--gc:var(--g${g})">${esc(T('Grade {g}', { g }))}</th>`).join('') + '</tr></thead><tbody>';
