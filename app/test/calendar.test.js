@@ -24,4 +24,11 @@ ok(A.releasedFor('Boys 8', d('2026-10-14')) === 2, 'nothing new opens during a b
 ok(A.iso(A.opensOn('Boys 8', 10)) === '2027-01-04' && A.iso(A.opensOn('Girls 12', 10)) === '2026-12-07', 'opening dates per section');
 ok(A.releasedForGrade(8, d('2026-10-06')) === 2 && A.iso(A.opensOnGrade(8, 3)) === '2026-10-19', 'grade-wide release for the public site');
 ok(A.releasedFor('Boys 8', d('2026-09-01')) === 1, 'Week 1 is always open');
+ok(A.dayNumber(d('2026-09-28')) === 1 && A.dayNumber(d('2026-10-02')) === 5 && A.dayNumber(d('2026-10-05')) === 6 && A.dayNumber(d('2026-10-07')) === 8, 'timetable days: Week 1 is Days 1–5, Week 2 is Days 6–10');
+ok(A.dayNumber(d('2026-10-21')) === 3 && A.dayNumber(d('2026-10-10')) === 0 && A.dayNumber(d('2026-10-14')) === 0 && A.dayNumber(d('2026-09-25')) === 0, 'day numbers follow the cycle after a break; none at weekends, in breaks or before the start');
+ok(A.iso(A.lessonDate('Boys 8', 1)) === '2026-09-30' && A.iso(A.lessonDate('Boys 8', 2)) === '2026-10-05' && A.iso(A.lessonDate('Boys 8', 9)) === '2026-12-07', 'lesson dates for a section');
+ok(A.lessonDates('Boys 8').length === A.taughtCount('Boys 8', d(A.YEAR_END)) && A.lessonDate('Boys 8', 999) === null, 'one date per lesson, none past the end');
+const nx = A.nextLesson('Girls 8', d('2026-10-09')); ok(nx && A.iso(nx.date) === '2026-10-21' && nx.n === 3, 'next lesson after the Mid-Term Break');
+const lost = A.lostPeriods('Boys 8', d('2026-12-08')); ok(lost.length === 1 && A.iso(lost[0].date) === '2026-12-02' && lost[0].why === 'UAE National Day', 'the period lost to UAE National Day is found');
+ok(A.lostPeriods('Girls 12', d('2026-12-11')).length === 0, 'sections not hit by a holiday lose no periods');
 console.log('All ' + n + ' calendar checks passed');

@@ -125,6 +125,38 @@ var AICAL = (function () {
     for (var i = 0; i < 5; i++) { var n = lessonOn(section, addDays(mon, i)); if (n) return n; }
     return taughtCount(section, d) + 1;
   }
+  /** Day of the two-week timetable: Days 1–5 are Week 1 and Days 6–10 are Week 2
+      (0 at weekends, in weeks with no school and before the timetable starts). */
+  function dayNumber(d) {
+    var c = cycleOf(d), wd = day0(d).getDay();
+    return !c || wd === 0 || wd === 6 ? 0 : (c - 1) * 5 + wd;
+  }
+  var datesCache = {};
+  /** Every date (yyyy-mm-dd) this section has an AI lesson on, in order: the n-th is Main course Week n. */
+  function lessonDates(section) {
+    if (datesCache[section]) return datesCache[section];
+    var out = [], end = parse(YEAR_END);
+    for (var x = parse(TERM_START); x <= end; x = addDays(x, 1))
+      if (slotsOn(x).some(function (r) { return r[0] === section; })) out.push(iso(x));
+    return (datesCache[section] = out);
+  }
+  /** The date of a section's n-th AI lesson (Main course Week n), or null if there is none. */
+  function lessonDate(section, n) { var s = lessonDates(section)[n - 1]; return s ? parse(s) : null; }
+  /** The section's first AI lesson after a date: { date, n }, or null. */
+  function nextLesson(section, after) {
+    var a = iso(day0(after)), L = lessonDates(section);
+    for (var i = 0; i < L.length; i++) if (L[i] > a) return { date: parse(L[i]), n: i + 1 };
+    return null;
+  }
+  /** AI periods this section lost to a holiday, PD day or other no-school day before a date: [{ date, why }]. */
+  function lostPeriods(section, before) {
+    var out = [], end = day0(before || parse(YEAR_END));
+    for (var x = parse(TERM_START); x < end; x = addDays(x, 1)) {
+      var why = noSchool(x), c = why && why !== 'Weekend' ? cycleOf(x) : 0, dn = DAYS[x.getDay()];
+      if (c && SCHEDULE.some(function (r) { return r[0] === section && r[3] === c && r[4] === dn; })) out.push({ date: new Date(x), why: why });
+    }
+    return out;
+  }
   /** Lessons taught so far to a section; for an unknown section, the teaching weeks so far. */
   function taughtSoFar(section, d) {
     d = d || new Date();
@@ -183,7 +215,8 @@ var AICAL = (function () {
   return { TERM_START: TERM_START, YEAR_END: YEAR_END, SCHEDULE: SCHEDULE, NO_SCHOOL: NO_SCHOOL, EVENTS: EVENTS, DAYS: DAYS,
            iso: iso, parse: parse, monday: monday, noSchool: noSchool, eventOn: eventOn, teachingWeek: teachingWeek,
            cycleOf: cycleOf, slotsOn: slotsOn, taughtCount: taughtCount, lessonOn: lessonOn, currentLesson: currentLesson,
-           taughtSoFar: taughtSoFar, weekLabel: weekLabel, label: label,
+           taughtSoFar: taughtSoFar, weekLabel: weekLabel, label: label, dayNumber: dayNumber, lessonDates: lessonDates,
+           lessonDate: lessonDate, nextLesson: nextLesson, lostPeriods: lostPeriods,
            releasedFor: releasedFor, releasedForGrade: releasedForGrade, opensOn: opensOn, opensOnGrade: opensOnGrade };
 })();
 if (typeof module !== 'undefined') module.exports = AICAL;

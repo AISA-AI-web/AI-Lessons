@@ -37,9 +37,10 @@ function doGet(e) {
   var me = currentUser_();
   if (!me) return page_('<h1>Sign in with your AISA account</h1><p>This site is only available to <b>@' + DOMAIN +
     '</b> Google accounts. Sign out of any personal account and open the link again with your school account.</p>', 'Access denied');
-  // Staff land on today's teaching calendar; students on the grade selector.
+  // Staff land on today's teaching calendar; students on their home page (their own lessons and dates).
   var p = String((e && e.parameter && e.parameter.p) || (me.role === 'student' ? 'index' : 'calendar'));
   if (p === 'dashboard') return dashboardPage_(me);
+  if (p === 'calendar' && me.role === 'student') p = 'index';   // the calendar is for staff; students see their own dates at home
   if (!/^(index|calendar|grade-(6|7|8|9|10|11|12)\/(main|bridging)-w\d+-[a-z0-9-]+)$/.test(p)) p = 'index';
   // Students only get Main course lessons their class has reached (see releasedWeeks_).
   var rel = me.role === 'student' ? releasedWeeks_(me.email) : null, lm = /^grade-(\d+)\/main-w(\d+)-/.exec(p);
@@ -49,7 +50,8 @@ function doGet(e) {
   catch (err) { html = HtmlService.createHtmlOutputFromFile('site/index').getContent(); p = 'index'; }
   var bridge = HtmlService.createTemplateFromFile('bridge');
   bridge.cfg = JSON.stringify({ email: me.email, name: me.name, role: me.role, page: p, base: ScriptApp.getService().getUrl(),
-    sections: me.role === 'teacher' ? visibleSections_(me) : [], locked: rel ? lockedLinks_(rel, me.email) : {} });
+    sections: me.role === 'teacher' ? visibleSections_(me) : [], section: me.section || '', grade: me.grade || '',
+    locked: rel ? lockedLinks_(rel, me.email) : {} });
   html = html.replace(/<head>/i, '<head>' + bridge.evaluate().getContent());
   return HtmlService.createHtmlOutput(html)
     .setTitle(titleOf_(html))
@@ -116,14 +118,18 @@ function currentUser_() {
   rows_('Roles').forEach(function (r) {
     if (lc_(r.email) === email) { role = r.role === 'owner' ? 'owner' : (r.role === 'slt' ? 'slt' : role); name = r.name || name; }
   });
+  var section = '', grade = '';
   if (role === 'student') {
     rows_('Roster').forEach(function (r) {
       if (lc_(r.email) !== email) return;
       if (r.role === 'teacher') role = 'teacher';
+      if (r.role === 'student' && !section) { section = String(r.section || ''); grade = Number(r.grade) || gradeOf_(section); }
       name = name || r.name;
     });
   }
-  return { email: email, name: name || email.split('@')[0], role: role };
+  var me = { email: email, name: name || email.split('@')[0], role: role };
+  if (role === 'student') { me.section = section; me.grade = grade; }
+  return me;
 }
 
 function requireUser_() {
@@ -157,6 +163,19 @@ function getLessonState(lessonId) {
   rows_('Scores').forEach(function (r) { if (lc_(r.email) === me.email && r.lessonId === lessonId) done[r.activityId] = Number(r.firstScore); });
   rows_('Retries').forEach(function (r) { if (lc_(r.email) === me.email && r.lessonId === lessonId) latest[r.activityId] = Number(r.score); });
   return { done: done, latest: latest };
+}
+
+/** The signed-in user's own work, lesson by lesson, for the home page:
+    { lessons: { lessonId: { done, score, max } } } – first tries only. */
+function getMyProgress() {
+  var me = requireUser_(), out = {}, seen = {};
+  rows_('Scores').forEach(function (r) {
+    if (lc_(r.email) !== me.email) return;
+    var k = r.lessonId + '|' + r.activityId; if (seen[k]) return; seen[k] = 1;   // the earliest first try only
+    var o = out[r.lessonId] || (out[r.lessonId] = { done: 0, score: 0, max: 0 });
+    o.done++; o.score += Number(r.firstScore) || 0; o.max += Number(r.max) || 0;
+  });
+  return { lessons: out };
 }
 
 /**
@@ -652,4 +671,4 @@ function cleanId_(v) {
 function safe_(v) { return typeof v === 'string' && /^[=+\-@]/.test(v) ? "'" + v : v; }
 
 /* exported for the local test harness only */
-if (typeof module !== 'undefined') module.exports = { doGet: doGet, getLessonState: getLessonState, recordScores: recordScores, recordTime: recordTime, recordLatest: recordLatest, setJudgement: setJudgement, getDashboard: getDashboard, syncClassroom: syncClassroom, importRoster: importRoster, transferStudent: transferStudent, addStudent: addStudent, decideRequest: decideRequest, confirmRoster: confirmRoster, setup: setup, currentUser_: currentUser_ };
+if (typeof module !== 'undefined') module.exports = { doGet: doGet, getMyProgress: getMyProgress, getLessonState: getLessonState, recordScores: recordScores, recordTime: recordTime, recordLatest: recordLatest, setJudgement: setJudgement, getDashboard: getDashboard, syncClassroom: syncClassroom, importRoster: importRoster, transferStudent: transferStudent, addStudent: addStudent, decideRequest: decideRequest, confirmRoster: confirmRoster, setup: setup, currentUser_: currentUser_ };

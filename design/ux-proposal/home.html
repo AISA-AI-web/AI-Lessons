@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Lessons – home (proposal)</title>
+<link rel="icon" href="../../assets/aisa/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="ui.css">
+<style>
+.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:16px;margin:24px 0 26px}
+@media (max-width:820px){.hero{grid-template-columns:1fr}}
+.now{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 24px 22px 28px;position:relative;overflow:hidden}
+.now::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--gold)}
+.now h1{font-size:clamp(22px,3.2vw,30px);margin:6px 0 12px}
+.now .title{font-size:clamp(19px,2.6vw,23px);color:var(--ink);margin:8px 0 6px;font-weight:700;line-height:1.25}
+.now p{margin:0 0 6px;color:var(--muted);font-size:15px}
+.bar{height:10px;background:var(--tint);border-radius:6px;overflow:hidden;margin:10px 0 4px}
+.bar i{display:block;height:100%;width:74%;background:var(--purple);border-radius:6px}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.side{display:grid;gap:10px;align-content:start}
+.side .card{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:14px 16px}
+.side .ico{font-size:20px;background:var(--tint);width:38px;height:38px;border-radius:10px;display:grid;place-items:center}
+.side .card>div>b{display:block;color:var(--purple)}
+.side small{color:var(--muted);font-size:13.5px;line-height:1.45;display:block}
+.listhead{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin:0 0 12px}
+.listhead h2{font-size:20px}
+.listhead span{color:var(--muted);font-size:14px}
+.grades{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 16px}
+.grades .lab{font-size:14px;color:var(--muted);margin-right:2px}
+.gp{font:inherit;font-weight:700;font-size:14px;border:1.5px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;padding:5px 13px;cursor:pointer}
+.gp[aria-pressed="true"]{background:var(--gc);border-color:var(--gc);color:#fff}
+.lessons{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.lessons li{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;background:#fff;border:1px solid var(--line-2);border-radius:14px;padding:12px 16px 12px 12px}
+.lessons li.cur{border-color:var(--purple);box-shadow:0 0 0 3px var(--tint)}
+.lessons li.done .dt{background:#fff;border:1.5px solid var(--line-2)}
+.lessons b.t{display:block;font-size:16.5px;color:var(--ink);line-height:1.3}
+.lessons .meta{font-size:13.5px;color:var(--muted);margin-top:2px}
+.lessons .st{margin-top:7px}
+.lessons li.off{background:var(--tint);border-color:var(--tint);padding:9px 16px;grid-template-columns:auto 1fr;gap:12px;color:var(--purple);font-size:14px}
+.lessons li.off b{font-weight:700}
+.lessons li.later{background:#fff}
+.wk{display:grid;place-items:center;align-content:center;width:62px;min-height:62px;border-radius:12px;background:var(--tint);color:var(--purple);line-height:1.1;text-align:center}
+.wk small{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+.wk b{font-size:20px}
+li.later .wk{background:#fff;border:1.5px dashed var(--line)}
+@media (max-width:560px){.lessons li{grid-template-columns:auto 1fr;gap:8px 12px}.lessons li>.btn{grid-column:2;justify-self:start}.dt,.wk{width:54px;min-height:56px}.dt b{font-size:19px}}
+body.visitor .stu, body:not(.visitor) .vis{display:none!important}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="home.html" aria-label="AI Lessons home"><img class="lockup" src="../../assets/aisa/lockup-white.png" alt="American International School in Abu Dhabi" width="233" height="40"><img class="mono" src="../../assets/aisa/monogram-white.png" alt="AISA" width="34" height="34"><span class="product">AI Lessons</span></a>
+  <nav class="main">
+    <a href="#" aria-current="page"><span class="stu">My lessons</span><span class="vis">Lessons</span></a>
+    <a href="#" class="stu" title="The student progress page is unchanged in this round">My progress</a>
+    <a href="calendar.html" class="vis">Teaching calendar</a>
+  </nav>
+  <div class="right"><span class="me stu">Yousef Rahman · Boys 8</span><button class="langbtn" type="button" lang="ar">العربية</button></div>
+</div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="now">
+      <span class="eyebrow" id="wk">Teaching week</span>
+      <h1 id="h1"></h1>
+      <span class="chip purple" id="gchip"></span>
+      <div class="title" id="ltitle"></div>
+      <p id="when"></p>
+      <div class="stu"><div class="bar"><i></i></div><p style="font-size:13.5px">14 of 19 activities checked · 59% first try</p></div>
+      <div class="acts"><a class="btn primary" href="#" id="cta"></a><a class="btn quiet stu" href="#" title="The student progress page is unchanged in this round">See my progress</a></div>
+    </div>
+    <div class="side">
+      <div class="card"><span class="ico" aria-hidden="true">📅</span><div><b id="offT">No school next week</b><small id="offS"></small></div></div>
+      <div class="card stu"><span class="ico" aria-hidden="true">🏅</span><div><b>4 of 10 badges</b><small>Latest: ⚖️ Fair Judge. Next up: 🏁 Finisher – finish this week's lesson.</small></div></div>
+      <div class="card vis"><span class="ico" aria-hidden="true">🧑‍🏫</span><div><b>Teachers</b><small>The <a href="calendar.html">teaching calendar</a> shows each class's lessons for the week, with the page to open.</small></div></div>
+    </div>
+  </section>
+
+  <div class="listhead"><h2 id="listH"></h2><span id="listS"></span></div>
+  <div class="grades vis" id="grades"><span class="lab">Choose your grade</span></div>
+  <ol class="lessons" id="list"></ol>
+</main>
+
+<footer class="site"><div class="wrap">
+  <img src="../../assets/aisa/seal-white.png" alt="" width="64" height="64">
+  <div><b>American International School in Abu Dhabi</b><span>AI Literacy · Grades 6–12</span></div>
+  <p class="note stu">Your answers save to your school account as you go. Only you, your teachers and school leaders can see your progress.</p>
+  <p class="note vis">Lessons work on any device. Sign in with your school account to save your answers.</p>
+</div></footer>
+
+<div class="mockbar">Preview as <button type="button" id="mStu" aria-pressed="true">Signed-in student</button><button type="button" id="mVis" aria-pressed="false">Visitor (not signed in)</button></div>
+
+<script src="../../school-calendar.js"></script>
+<script>
+/* Proposal mock. Dates come from the real school calendar (school-calendar.js); the student's progress is made up. */
+if (/clean/.test(location.search)) document.documentElement.classList.add('clean');
+const NOW = new Date(2026, 9, 7), SEC = 'Boys 8', SECS = ['Boys 8', 'Girls 8'];
+const TITLES = { 1: 'From ‘It Works’ to ‘How Well’ + Two Outputs, One Verdict', 2: 'Inside the Pipeline + Change One Factor' };
+const $ = s => document.querySelector(s), add = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; }, iso = AICAL.iso;
+const DAY = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], DAYL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'], MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], MONL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+/* one date style everywhere: 'Wed 30 Sep'; o.long → 'Wednesday 30 September'; o.d → '30'; o.dm → '30 Sep' */
+const fmt = (d, o = {}) => o.long ? `${DAYL[d.getDay()]} ${d.getDate()} ${MONL[d.getMonth()]}` : o.d ? String(d.getDate()) : o.dm ? `${d.getDate()} ${MON[d.getMonth()]}` : o.wd ? DAY[d.getDay()] : o.m ? MON[d.getMonth()] : `${DAY[d.getDay()]} ${d.getDate()} ${MON[d.getMonth()]}`;
+const short = s => s.replace(/ – no school for students/, '');
+function dateOf(sec, n) { for (let d = AICAL.parse(AICAL.TERM_START), i = 0; i < 420; i++, d = add(d, 1)) if (AICAL.lessonOn(sec, d) === n) return d; return null; }
+function rowFor(sec, d) { return AICAL.SCHEDULE.find(r => r[0] === sec && r[4] === AICAL.DAYS[d.getDay()] && r[3] === AICAL.cycleOf(d)); }
+/* no-school spans (weekdays only) between two dates, merged across weekends */
+function spans(from, to) { const out = []; for (let d = new Date(from); d <= to; d = add(d, 1)) { if (d.getDay() === 0 || d.getDay() === 6) continue; const why = AICAL.noSchool(d); if (!why) continue;
+  const l = out[out.length - 1]; if (l && l.why === why && d - l.to <= 3 * 864e5) l.to = new Date(d); else out.push({ why, from: new Date(d), to: new Date(d) }); } return out; }
+const spanText = s => short(s.why) + ' ' + (iso(s.from) === iso(s.to) ? fmt(s.from) : fmt(s.from, { d: 1 }) + ' – ' + fmt(s.to, { dm: 1 }));
+const tw = AICAL.teachingWeek(NOW), mon = AICAL.monday(NOW), fri = add(mon, 4), cur = AICAL.currentLesson(SEC, NOW);
+$('#wk').textContent = `Teaching week ${tw} · ${fmt(mon, { dm: 1 })} – ${fmt(fri, { dm: 1 })}`;
+$('#ltitle').textContent = TITLES[cur];
+$('#gchip').textContent = `Grade 8 · Week ${cur}`;
+const cd = dateOf(SEC, cur), cr = rowFor(SEC, cd), past = cd < NOW;
+const WHEN_STU = `Your class ${past ? 'had' : 'has'} it on <b>${fmt(cd, { long: 1 })}</b>, period ${cr[5]} (${cr[2]} Studies).${past ? ' Finish it before your next AI lesson.' : ''}`;
+const WHEN_VIS = SECS.map(s => { const d = dateOf(s, cur), r = rowFor(s, d); return `<b>${s}</b>: ${fmt(d)}, period ${r[5]}`; }).join(' · ');
+const sp = spans(add(fri, 3), add(fri, 21));
+const nextFor = s => { for (let d = add(fri, 1), i = 0; i < 200; i++, d = add(d, 1)) { const n = AICAL.lessonOn(s, d); if (n) return { d, n }; } };
+const nx = nextFor(SEC);
+$('#offT').textContent = sp.length ? 'No school next week' : 'Next AI lesson';
+const OFF = sp.map(spanText).join(', then ');
+const OFF_STU = (OFF ? OFF + '. ' : '') + `Your next AI lesson is <b>${fmt(nx.d, { long: 1 })}</b>.`;
+const OFF_VIS = (OFF ? OFF + '. ' : '') + 'Next Grade 8 lessons: ' + SECS.map(s => `<b>${s}</b> ${fmt(nextFor(s).d)}`).join(' · ') + '.';
+
+/* student: my lessons with dates (no grade picker – the app knows the grade) */
+const ST = { 1: ['done', '<span class="chip ok">✓ Finished · 78% first try</span>', 'Review', ''], 2: ['cur', '<span class="chip warn">In progress · 14 of 19 activities</span>', 'Continue', 'primary'] };
+function studentList() {
+  const rows = [], weeks = [1, 2, 3, 4, 5];
+  let prev = null;
+  weeks.forEach(n => {
+    const d = dateOf(SEC, n), r = rowFor(SEC, d), live = !!TITLES[n], st = ST[n];
+    if (prev) { const gap = spans(add(prev, 1), add(d, -1)); if (gap.length) rows.push(`<li class="off"><span aria-hidden="true">🏖️</span><span><b>No school</b> · ${gap.map(spanText).join(' · ')}</span></li>`); }
+    prev = d;
+    const isCur = n === cur, isPast = d < mon && !isCur, later = d > fri;
+    const meta = `${live ? `Week ${n} · ` : ''}Period ${r[5]} · ${r[2]} Studies${isCur ? ' · this week' : ''}`;
+    const chip = st ? st[1] : (live ? '' : '<span class="chip muted">Lesson page coming</span>');
+    const btn = st ? `<a class="btn small ${st[3]}" href="#">${st[2]}</a>` : (live ? '<a class="btn small quiet" href="#">Preview</a>' : '');
+    rows.push(`<li class="${isCur ? 'cur' : isPast ? 'done' : 'later'}"><div class="dt${later ? ' later' : ''}"><small>${fmt(d, { wd: 1 })}</small><b>${d.getDate()}</b><small>${fmt(d, { m: 1 })}</small></div>` +
+      `<div><b class="t">${live ? TITLES[n] : `Week ${n} lesson`}</b><div class="meta">${meta}</div>${chip ? `<div class="st">${chip}</div>` : ''}</div>${btn}</li>`);
+  });
+  rows.push(`<li class="later"><div class="wk"><small>Later</small><b>–</b></div><div><b class="t">Foundation lessons</b><div class="meta">Extra Grade 8 lessons · dates to be announced</div></div></li>`);
+  return rows.join('');
+}
+/* visitor: choose a grade, then that grade's lessons with both classes' days */
+function visitorList(g) {
+  if (g !== 8) return `<li class="later"><div class="wk"><small>Grade</small><b>${g}</b></div><div><b class="t">Grade ${g} lessons</b><div class="meta">Shown the same way as Grade 8 in the full build.</div></div></li>`;
+  return [1, 2, 3, 4].map(n => {
+    const live = !!TITLES[n], ds = SECS.map(s => `${s}: ${fmt(dateOf(s, n))}`).join(' · '), isCur = n === cur, later = dateOf(SEC, n) > fri;
+    return `<li class="${isCur ? 'cur' : later ? 'later' : ''}"><div class="wk"><small>Week</small><b>${n}</b></div><div><b class="t">${live ? TITLES[n] : `Week ${n} lesson`}</b><div class="meta">${ds}${isCur ? ' · this week' : ''}</div>${live ? '' : '<div class="st"><span class="chip muted">Lesson page coming</span></div>'}</div>${live ? '<a class="btn small" href="#">Open</a>' : ''}</li>`;
+  }).join('');
+}
+for (let g = 6; g <= 12; g++) $('#grades').insertAdjacentHTML('beforeend', `<button type="button" class="gp" style="--gc:var(--g${g})" aria-pressed="${g === 8}" data-g="${g}">${g}</button>`);
+$('#grades').onclick = e => { const b = e.target.closest('.gp'); if (!b) return; document.querySelectorAll('.gp').forEach(x => x.setAttribute('aria-pressed', x === b)); const g = +b.dataset.g; $('#listH').textContent = `Grade ${g} lessons`; $('#list').innerHTML = visitorList(g); };
+
+function mode(v) {
+  document.body.classList.toggle('visitor', v); $('#mStu').setAttribute('aria-pressed', !v); $('#mVis').setAttribute('aria-pressed', v);
+  $('#h1').textContent = v ? 'This week\'s lesson for Grade 8' : 'Hi Yousef – here is your lesson this week';
+  $('#cta').textContent = v ? 'Open lesson →' : 'Continue lesson →';
+  $('#when').innerHTML = v ? WHEN_VIS : WHEN_STU; $('#offS').innerHTML = v ? OFF_VIS : OFF_STU;
+  $('#listH').textContent = v ? 'Grade 8 lessons' : 'My AI lessons';
+  $('#listS').textContent = v ? 'Boys 8 and Girls 8 have AI on different days' : 'Boys 8 · one AI lesson a week · dates move if a holiday falls on your lesson';
+  $('#list').innerHTML = v ? visitorList(8) : studentList();
+  document.querySelectorAll('.gp').forEach(x => x.setAttribute('aria-pressed', x.dataset.g === '8'));
+}
+$('#mStu').onclick = () => mode(false); $('#mVis').onclick = () => mode(true);
+mode(/visitor/.test(location.search));
+</script>
+</body>
+</html>

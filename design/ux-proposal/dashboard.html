@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Curriculum Dashboard (proposal)</title>
+<link rel="icon" href="../../assets/aisa/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="ui.css">
+<style>
+.titlebar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin:22px 0 16px}
+.titlebar h1{font-size:clamp(22px,3vw,28px)}
+.titlebar .spacer{flex:1}
+.badge{display:inline-block;min-width:18px;padding:0 5px;border-radius:999px;background:var(--crit);color:#fff;font-size:12px;line-height:18px;text-align:center;margin-left:6px}
+details.menu{position:relative}
+details.menu summary{list-style:none;cursor:pointer}
+details.menu summary::-webkit-details-marker{display:none}
+details.menu .popm{position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px;display:grid;min-width:230px;z-index:5;box-shadow:0 10px 30px rgba(33,7,108,.14)}
+details.menu .popm button{font:inherit;text-align:left;border:0;background:none;padding:8px 10px;border-radius:8px;cursor:pointer;font-weight:600;color:var(--ink)}
+details.menu .popm button:hover{background:var(--tint)}
+/* stat tiles */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 14px}
+@media (max-width:900px){.tiles{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:480px){.tiles{grid-template-columns:1fr}}
+.tile{background:#fff;border:1px solid var(--line-2);border-top:4px solid var(--gold);border-radius:12px;padding:12px 14px;min-width:0}
+.tile>small{display:block;color:var(--muted);font-size:13px;font-weight:700}
+.tile>b{display:block;font-size:30px;line-height:1.15;color:var(--purple);letter-spacing:-.01em;margin:2px 0}
+.tile>b.t{font-size:16px;line-height:1.3;color:var(--ink);margin:4px 0 6px}
+.tile span{color:var(--muted);font-size:13px;display:block;line-height:1.45}
+.tile span b{color:var(--ink)}
+.tile .val{display:flex;align-items:center;gap:12px}
+.tile .val b{font-size:30px;line-height:1.15;color:var(--purple)}
+.tile a{font-weight:700}
+/* chart cards */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 22px}
+@media (max-width:860px){.grid2{grid-template-columns:1fr}}
+.card .hd{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.mini-seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:2px;flex:none}
+.mini-seg button{font:inherit;font-size:12.5px;font-weight:600;border:0;background:none;border-radius:999px;padding:3px 10px;color:var(--muted);cursor:pointer}
+.mini-seg button[aria-pressed="true"]{background:var(--tint);color:var(--purple)}
+.rows{display:grid;gap:12px}
+.row{display:grid;grid-template-columns:minmax(110px,32%) 1fr 48px;gap:10px;align-items:center;font-size:13px}
+.row .lab b{display:block;color:var(--ink);font-size:13.5px}
+.row .lab small{display:block;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .lab .now{color:var(--purple);font-weight:700}
+.stack{display:flex;height:22px;gap:2px;background:#fff;direction:ltr}
+.seg2{display:grid;place-items:center;font-size:12px;font-weight:700;min-width:2px;cursor:default}
+.seg2:first-child{border-radius:4px 0 0 4px}.seg2:last-child{border-radius:0 4px 4px 0}.seg2:only-child{border-radius:4px}
+.seg2:hover,.seg2:focus-visible{filter:brightness(1.08)}
+.s-done{background:var(--good);color:#1A1A1A}.s-doing{background:var(--warn);color:#1A1A1A}.s-todo{background:var(--crit);color:#fff}.s-later{background:var(--none);color:var(--muted)}
+.tN{background:var(--t0);color:var(--muted)}.tW{background:var(--t1);color:#1A1A1A}.tO{background:var(--t2);color:#1A1A1A}.tE{background:var(--t3);color:#fff}.tP{background:var(--t4);color:#fff}.tA{background:var(--t5);color:#fff}
+.row .num{font-weight:700;color:var(--ink);text-align:right;font-size:14.5px;font-variant-numeric:tabular-nums}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted);margin:12px 0 0}
+.legend i{display:inline-block;width:14px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:5px}
+.morelink{font:inherit;font-size:13px;font-weight:700;color:var(--purple);background:none;border:0;padding:0;margin-top:10px;cursor:pointer;text-decoration:underline}
+table.mini{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+table.mini th,table.mini td{padding:5px 6px;border-bottom:1px solid var(--line-2);text-align:right}
+table.mini th:first-child,table.mini td:first-child{text-align:left}
+table.mini th{font-size:11.5px;color:var(--muted);font-weight:700}
+/* students */
+.stuhead{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin:0 0 10px}
+.stuhead h2{font-size:19px;margin-right:auto}
+.stuhead h2 small{color:var(--muted);font-weight:500;font-size:14px}
+.stuhead input[type=search]{min-width:180px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+.chips button{font:inherit;font-size:13px;font-weight:600;border:1.5px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;padding:4px 11px;cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--tint);border-color:var(--purple);color:var(--purple)}
+.chips button i{font-style:normal;font-weight:700;color:var(--purple);margin-left:5px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line-2);border-radius:12px;background:#fff}
+table.stu{border-collapse:separate;border-spacing:0;width:100%;table-layout:fixed;font-size:13.5px}
+table.stu col.c-name{width:170px} table.stu col.c-les{width:152px} table.stu col.c-sofar{width:170px} table.stu col.c-str{width:118px} table.stu col.c-bdg{width:68px}
+table.stu th,table.stu td{padding:8px 10px;border-bottom:1px solid var(--line-2);text-align:left;vertical-align:middle}
+table.stu th{position:sticky;top:0;background:var(--tint);color:var(--purple);font-size:12px;font-weight:700;line-height:1.25;z-index:2}
+table.stu th small{display:block;font-weight:500;color:var(--muted);font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+table.stu th.str,table.stu td.str{text-align:center;padding-left:6px;padding-right:6px}
+table.stu th.grp{text-align:center;border-bottom:0;padding-bottom:0;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+table.stu .name{position:sticky;left:0;background:#fff;z-index:1;box-shadow:1px 0 0 var(--line-2)}
+table.stu th.name{background:var(--tint);z-index:3}
+table.stu tr:last-child td{border-bottom:0}
+table.stu tbody tr:hover td{background:#FBFAFE}
+td.name a{font-weight:700;text-decoration:none;color:var(--ink);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+td.name a:hover{text-decoration:underline}
+td.name small{display:block;color:var(--muted);font-size:12px}
+.ls{display:inline-flex;align-items:center;gap:6px;font-weight:700;border-radius:999px;padding:2px 10px 2px 8px;line-height:1.5;font-variant-numeric:tabular-nums}
+.ls i{width:10px;height:10px;border-radius:50%;flex:none;box-sizing:border-box}
+.ls.done{background:#E9F6E9}.ls.done i{background:var(--good)}
+.ls.doing{background:#FFF4D6}.ls.doing i{border:2px solid var(--warn);background:linear-gradient(90deg,var(--warn) 50%,#fff 50%)}
+.ls.todo{background:#FBE9E9}.ls.todo i{border:2px solid var(--crit);background:#fff}
+.ls.later{background:none;border:1.5px dashed var(--line);color:var(--muted);font-weight:500}
+td .sm{display:block;font-size:12px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sofar b{color:var(--ink)}
+.strip{display:flex;gap:3px;margin:5px 0 3px;direction:ltr}
+.strip i{width:11px;height:11px;border-radius:3px;box-sizing:border-box}
+.strip i.done{background:var(--good)}
+.strip i.doing{border:2px solid var(--warn);background:linear-gradient(90deg,var(--warn) 50%,#fff 50%)}
+.strip i.todo{border:2px solid var(--crit);background:#fff}
+.strip i.sel{outline:2px solid var(--purple);outline-offset:1px}
+.tchip{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:34px;border:0;border-radius:8px;font:inherit;font-size:12px;font-weight:700;line-height:1.1;text-align:center;padding:0 6px;cursor:pointer}
+.tchip:hover{filter:brightness(1.07)}
+.tchip .pen{position:absolute;top:2px;right:4px;font-size:10px;opacity:.9}
+.bc{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.note{color:var(--muted-2);font-size:12.5px;margin:10px 0 0}
+/* tier menu */
+.tmenu{position:absolute;z-index:35;width:250px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 40px rgba(33,7,108,.18);padding:10px}
+.tmenu p{margin:2px 4px 8px;font-size:13px;color:var(--muted)}
+.tmenu p b{color:var(--ink);font-size:14px}
+.tmenu button{display:flex;align-items:center;gap:8px;width:100%;font:inherit;font-size:14px;text-align:left;border:0;background:none;border-radius:8px;padding:7px 8px;cursor:pointer;color:var(--ink)}
+.tmenu button:hover{background:var(--tint)}
+.tmenu button i{width:14px;height:14px;border-radius:4px;flex:none}
+.tmenu button[aria-checked="true"]{font-weight:700}
+.tmenu button[aria-checked="true"]::after{content:"✓";margin-left:auto;color:var(--purple)}
+.tmenu hr{border:0;border-top:1px solid var(--line-2);margin:6px 0}
+/* phones: one card per student, strands as four equal boxes */
+@media (max-width:720px){
+  .tablewrap{border:0;background:none;overflow:visible}
+  table.stu,table.stu tbody,table.stu tr,table.stu td{display:block} table.stu thead,table.stu colgroup{display:none}
+  table.stu tr{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 8px;background:#fff;border:1px solid var(--line-2);border-radius:12px;padding:12px;margin:0 0 8px}
+  table.stu td{border:0;padding:0} table.stu td.name{position:static;box-shadow:none}
+  table.stu tbody tr:hover td{background:none}
+  td.name{grid-column:1/-1} td.les,td.sofar{grid-column:span 2} td.bdg{grid-column:1/-1}
+  .tchip{font-size:11px;padding:0 3px;height:36px}
+  td[data-l]::before{content:attr(data-l);display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;margin-bottom:4px;text-align:left}
+}
+/* print: the report header with the school logo */
+.printhead{display:none}
+@page{size:A4 landscape;margin:10mm}
+@media print{
+  .titlebar,.stuhead,.chips,.mini-seg,.morelink,.mockbar,.tile a{display:none!important}
+  .printhead{display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:3px solid var(--purple);padding:0 0 8px;margin:0 0 12px}
+  .printhead img{height:40px}.printhead h1{font-size:18px}.printhead p{margin:2px 0 0;font-size:12px;color:var(--muted)}
+  .wrap{max-width:none}.tablewrap{overflow:visible}table.stu th{position:static}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="home.html" aria-label="AI Lessons home"><img class="lockup" src="../../assets/aisa/lockup-white.png" alt="American International School in Abu Dhabi" width="233" height="40"><img class="mono" src="../../assets/aisa/monogram-white.png" alt="AISA" width="34" height="34"><span class="product">AI Lessons</span></a>
+  <nav class="main"><a href="home.html?visitor">Lessons</a><a href="calendar.html">Calendar</a><a href="#" aria-current="page">Dashboard</a></nav>
+  <div class="right"><span class="me">Amani Hussain</span><button class="langbtn" type="button" lang="ar">العربية</button></div>
+</div></header>
+
+<main class="wrap">
+  <div class="printhead"><img src="../../assets/aisa/lockup-purple.png" alt="American International School in Abu Dhabi"><div><h1>AI Literacy progress report</h1><p id="phScope"></p></div><div style="text-align:right"><p>Prepared by a.hussain@aisa.sch.ae</p><p>Confidential – contains student data</p></div></div>
+  <div class="titlebar">
+    <h1>Dashboard</h1>
+    <div class="seg" id="tabs" role="group" aria-label="Class"></div>
+    <span class="spacer"></span>
+    <button class="btn small" type="button">👥 Class lists<span class="badge" title="1 request is waiting for you">1</span></button>
+    <details class="menu"><summary class="btn small quiet">More ▾</summary><div class="popm"><button type="button">👁 See a student's view…</button><button type="button" onclick="print()">🖨 Save as PDF</button><button type="button">⬇ Download data (CSV)</button></div></details>
+  </div>
+  <div class="tiles" id="tiles"></div>
+  <div class="grid2"><section class="card" id="lessonsCard"></section><section class="card" id="strandCard"></section></div>
+
+  <section aria-labelledby="stuH">
+    <div class="stuhead">
+      <h2 id="stuH">Students <small id="count"></small></h2>
+      <label class="sr" for="q">Find a student</label><input type="search" id="q" placeholder="Find a student…">
+      <label class="sr" for="lsel">Lesson shown in the table</label><select id="lsel"></select>
+      <label class="sr" for="sort">Sort students</label><select id="sort"><option value="name">Sort: class, then name</option><option value="low">Sort: lowest first try</option><option value="behind">Sort: most behind</option></select>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="tablewrap"><table class="stu"><colgroup><col class="c-name"><col class="c-les"><col class="c-sofar"><col class="c-str"><col class="c-str"><col class="c-str"><col class="c-str"><col class="c-bdg"></colgroup><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
+    <div class="legend" id="tlegend"></div>
+    <p class="note">Click a name to see that student's own view. Click a strand to record a tier – it replaces the automatic tier (marked ✎) until you set it back to Automatic. First-try scores never change; retries are for learning.</p>
+  </section>
+</main>
+
+<footer class="site"><div class="wrap">
+  <img src="../../assets/aisa/seal-white.png" alt="" width="64" height="64">
+  <div><b>American International School in Abu Dhabi</b><span>AI Literacy · Grades 6–12</span></div>
+  <p class="note" style="color:#fff">Only your classes are shown. Student data stays in the school's protected sheet.</p>
+</div></footer>
+
+<div class="tip" id="tip" role="tooltip"></div>
+<div class="tmenu" id="tmenu" role="menu" hidden></div>
+<div class="mockbar">Data as of <button type="button" data-asof="early">Wed 7 Oct · 2 lessons</button><button type="button" data-asof="later">Wed 25 Nov · 8 lessons</button><span class="sep"></span>fictional students · lessons after Week 2 are placeholders</div>
+
+<script src="../../school-calendar.js"></script>
+<script src="dashboard-data.js"></script>
+<script>
+if (/clean/.test(location.search)) document.documentElement.classList.add('clean');
+const Q = new URLSearchParams(location.search);
+const $ = s => document.querySelector(s), esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const pct = (a, b) => b ? Math.round(a / b * 100) : 0, add = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const DAY = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const fd = d => `${DAY[d.getDay()]} ${d.getDate()} ${MON[d.getMonth()]}`;
+/* ---- the rules below are the same as app/src/dashboard.html ---- */
+const TIER_RULES = { emergingPct: 70, minActs: 3, proficientPct: 85, proficientMinActs: 5, stretchPct: 70 };
+const TIERS = { '': 'Not yet evidenced', W: 'Working towards Emerging', O: 'On track – needs more evidence', E: 'Emerging', P: 'Proficient', A: 'Advanced' };
+const SHORTT = { '': 'Not yet', W: 'Working towards', O: 'On track', E: 'Emerging', P: 'Proficient', A: 'Advanced' };
+const RANK = { '': 0, W: 1, O: 1, E: 2, P: 3, A: 4 }, ORDER = ['CU', 'SD', 'CE', 'GE'], TKEYS = ['', 'W', 'O', 'E', 'P', 'A'];
+const SHORT = { CU: 'How AI works', SD: 'Design & build', CE: 'Judgement', GE: 'Ethics' };
+const NAME = { CU: 'AI Conceptual Understanding', SD: 'AI Solution Design & Development', CE: 'Critical Evaluation & Informed Interaction', GE: 'Ethics & Governance' };
+const isStretch = a => /challenge|⭐/i.test(a[2] + ' ' + a[3]);
+function autoTier(o) { if (!o.n) return ''; const p = pct(o.p, o.m); if (p < TIER_RULES.emergingPct) return 'W'; if (o.n < TIER_RULES.minActs) return 'O';
+  if ((o.n >= TIER_RULES.proficientMinActs && p >= TIER_RULES.proficientPct) || (o.sn && pct(o.sp, o.sm) >= TIER_RULES.stretchPct)) return 'P'; return 'E'; }
+const sumMax = r => Object.keys(r.acts).reduce((n, k) => n + r.acts[k][1], 0);
+
+let ASOF = Q.get('asof') === 'later' ? 'later' : 'early', D, NOW, SHOWN, CURW, SEL, R, ST, DATE = {};
+let TAB = Q.get('tab') || '', FILTER = 'all', SORT = 'name', QUERY = '', SHOWALL = false, VIEWS = { les: 'chart', str: 'chart' };
+function dateOf(sec, n) { const k = sec + n; if (k in DATE) return DATE[k]; for (let d = AICAL.parse(AICAL.TERM_START), i = 0; i < 420; i++, d = add(d, 1)) if (AICAL.lessonOn(sec, d) === n) return (DATE[k] = d); return (DATE[k] = null); }
+function load() {
+  D = JSON.parse(JSON.stringify(window.__MOCKS[ASOF])); NOW = AICAL.parse(D.asOf);
+  const all = D.catalog.filter(l => l.grade === 8 && l.course === 'main').sort((a, b) => a.week - b.week);
+  CURW = Math.max.apply(null, D.sections.map(s => AICAL.currentLesson(s, NOW)));
+  SHOWN = all.filter(l => l.week <= CURW); SEL = CURW;
+  R = {}; D.results.forEach(r => R[r.email + '|' + r.lessonId] = r);
+  ST = {}; D.students.forEach(s => ST[s.email] = stat(s));
+  if (TAB && !D.sections.includes(TAB)) TAB = '';
+}
+function stat(s) {
+  const taught = AICAL.taughtSoFar(s.section, NOW), mon = AICAL.monday(NOW), by = {}, strands = {};
+  ORDER.forEach(c => strands[c] = { p: 0, m: 0, n: 0, sp: 0, sm: 0, sn: 0 });
+  let p = 0, m = 0, fixer = false, stretch = false, bull = false;
+  const map = D.strandMap;
+  SHOWN.forEach(l => {
+    const r = R[s.email + '|' + l.id], mx = r ? sumMax(r) : 0;
+    const st = r && r.done >= l.activities ? 'done' : r ? 'doing' : l.week <= taught ? 'todo' : 'later';
+    by[l.week] = { l, r, st, pct: r ? pct(r.score, mx) : null, date: dateOf(s.section, l.week), mins: r ? Math.round(r.seconds / 60) : 0 };
+    if (!r) return;
+    let wrong = 0, mended = 0;
+    Object.keys(r.acts).forEach(k => { const a = r.acts[k], o = strands[(map[l.id] || {})[k] || 'CU'];
+      o.p += a[0]; o.m += a[1]; o.n++; p += a[0]; m += a[1];
+      if (isStretch(a)) { o.sp += a[0]; o.sm += a[1]; o.sn++; stretch = true; }
+      if (a[0] < a[1]) { wrong++; if (a[4] === a[1]) mended++; } });
+    if (wrong && mended === wrong) fixer = true;
+    if (st === 'done' && pct(r.score, mx) >= 90) bull = true;
+  });
+  ORDER.forEach(c => { const o = strands[c], j = D.judgements[s.email + '|' + c]; o.pct = o.m ? pct(o.p, o.m) : null; o.auto = autoTier(o); o.judged = j || null; o.tier = j ? j.tier : o.auto; });
+  const taughtL = SHOWN.filter(l => l.week <= taught), fin = taughtL.filter(l => by[l.week].st === 'done');
+  const earlier = taughtL.filter(l => by[l.week].date < mon);
+  let run = 0, best = 0; taughtL.forEach(l => { run = by[l.week].st === 'done' ? run + 1 : 0; best = Math.max(best, run); });
+  const badges = [];
+  if (fin.length) badges.push('🚀 First Steps'); if (taughtL.length && fin.length === taughtL.length) badges.push('🏁 Finisher'); if (best >= 3) badges.push('🔥 Week Streak');
+  if (fixer) badges.push('🛠️ Fixer'); if (stretch) badges.push('⭐ Stretch'); if (bull) badges.push('🎯 Bullseye');
+  ORDER.forEach(c => { if (RANK[strands[c].tier] >= 2) badges.push({ CU: '🔎 AI Detective', SD: '🛠️ Solution Builder', CE: '⚖️ Fair Judge', GE: '🛡️ Responsible User' }[c]); });
+  const last = earlier[earlier.length - 1];
+  return { taught, by, strands, taughtL, fin, avg: m ? pct(p, m) : null, badges, last: last ? last.week : null,
+    nudge: !!last && by[last.week].st !== 'done', lastNotStarted: !!last && by[last.week].st === 'todo',
+    behind: earlier.filter(l => by[l.week].st !== 'done').length, notStarted: earlier.filter(l => by[l.week].st === 'todo').length };
+}
+const pool = () => D.students.filter(s => !TAB || s.section === TAB);
+
+/* ---------- tooltip (hover and keyboard focus) ---------- */
+const tip = $('#tip');
+function showTip(el, x, y) { tip.innerHTML = el.getAttribute('data-tip'); tip.style.display = 'block'; const w = tip.offsetWidth; tip.style.left = Math.min(x + 14, innerWidth - w - 8) + 'px'; tip.style.top = (y + 16) + 'px'; }
+document.addEventListener('pointermove', e => { const el = e.target.closest('[data-tip]'); if (el) showTip(el, e.clientX, e.clientY); else tip.style.display = 'none'; });
+document.addEventListener('focusin', e => { const el = e.target.closest('[data-tip]'); if (el) { const b = el.getBoundingClientRect(); showTip(el, b.left, b.bottom); } });
+document.addEventListener('focusout', () => tip.style.display = 'none');
+
+/* ---------- tiles ---------- */
+function spark(vals) {
+  if (vals.length < 2) return '';
+  const W = 96, H = 30, lo = Math.min(...vals) - 5, hi = Math.max(...vals) + 5, x = i => 4 + i * (W - 8) / (vals.length - 1), y = v => H - 4 - (v - lo) / (hi - lo || 1) * (H - 8);
+  const pts = vals.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' '), l = vals.length - 1;
+  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true"><polyline points="${pts}" fill="none" stroke="var(--t2)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${x(l)}" cy="${y(vals[l])}" r="4" fill="var(--purple)" stroke="#fff" stroke-width="2"/></svg>`;
+}
+function lessonAvg(l, P) { let p = 0, m = 0; P.forEach(s => { const r = ST[s.email].by[l.week].r; if (r) { p += r.score; m += sumMax(r); } }); return m ? pct(p, m) : null; }
+function renderTiles() {
+  const P = pool(), cur = SHOWN[SHOWN.length - 1], secs = TAB ? [TAB] : D.sections;
+  const lines = secs.map(sec => { const ps = P.filter(s => s.section === sec), d = dateOf(sec, cur.week);
+    if (d && d <= NOW) { const started = ps.filter(s => ST[s.email].by[cur.week].r).length, fin = ps.filter(s => ST[s.email].by[cur.week].st === 'done').length;
+      return `<b>${esc(sec)}</b> · taught ${fd(d)} · ${started} of ${ps.length} started, ${fin} finished`; }
+    return `<b>${esc(sec)}</b> · teaching it ${d ? fd(d) : 'soon'}`; }).join('<br>');
+  const nudge = P.filter(s => ST[s.email].nudge), ns = nudge.filter(s => ST[s.email].lastNotStarted).length, lastW = [...new Set(nudge.map(s => ST[s.email].last))].sort((a, b) => a - b);
+  const avgs = SHOWN.map(l => lessonAvg(l, P)).filter(v => v !== null);
+  let p = 0, m = 0; P.forEach(s => Object.values(ST[s.email].by).forEach(x => { if (x.r) { p += x.r.score; m += sumMax(x.r); } }));
+  let eplus = 0, all4 = 0; P.forEach(s => { let k = 0; ORDER.forEach(c => { if (RANK[ST[s.email].strands[c].tier] >= 2) { eplus++; k++; } }); if (k === 4) all4++; });
+  $('#tiles').innerHTML =
+    `<div class="tile"><small>This week · Week ${cur.week}</small><b class="t">${esc(cur.title)}</b><span>${lines}</span></div>` +
+    `<div class="tile"><small>Need a nudge</small><b>${nudge.length}</b><span>${nudge.length ? `haven't finished their last lesson (Week ${lastW.join(', ')}) · ${ns} haven't started it · <a href="#stuH" data-f="nudge">Show them</a>` : 'everyone has finished their last lesson'}</span></div>` +
+    `<div class="tile"><small>Average first try</small><div class="val"><b>${m ? pct(p, m) + '%' : '–'}</b>${spark(avgs)}</div><span>${avgs.length > 1 ? `Week ${SHOWN[0].week} ${avgs[0]}% → Week ${cur.week} ${avgs[avgs.length - 1]}%` : 'across every activity checked'}</span></div>` +
+    `<div class="tile"><small>At Emerging or above</small><b>${pct(eplus, P.length * 4)}%</b><span>of strand ratings · ${all4} of ${P.length} students in all four strands (the Term 1 goal)</span></div>`;
+}
+/* ---------- chart cards ---------- */
+function stackBar(parts, total, label) {
+  return `<div class="stack" role="img" aria-label="${esc(label)}">` + parts.filter(x => x.n).map(x => { const w = x.n / total * 100;
+    return `<span class="seg2 ${x.cls}" style="width:${w}%" tabindex="0" data-tip="${esc(`<b>${x.n}</b> ${x.name}<br>${label}`)}">${w >= 9 ? x.n : ''}</span>`; }).join('') + '</div>';
+}
+function toggle(key) { return `<div class="mini-seg" role="group" aria-label="Show as"><button type="button" data-view="${key}|chart" aria-pressed="${VIEWS[key] === 'chart'}">Chart</button><button type="button" data-view="${key}|table" aria-pressed="${VIEWS[key] === 'table'}">Table</button></div>`; }
+const LSTATES = [['done', 's-done', 'finished'], ['doing', 's-doing', 'in progress'], ['todo', 's-todo', 'not started'], ['later', 's-later', 'not taught yet']];
+function renderLessonCard() {
+  const P = pool(), list = SHOWN.slice().reverse(), rows = list.map(l => { const c = { done: 0, doing: 0, todo: 0, later: 0 }; P.forEach(s => c[ST[s.email].by[l.week].st]++); return { l, c, avg: lessonAvg(l, P) }; });
+  const vis = SHOWALL ? rows : rows.slice(0, 4);
+  let body;
+  if (VIEWS.les === 'table') body = `<table class="mini"><thead><tr><th>Lesson</th><th>Finished</th><th>In progress</th><th>Not started</th><th>Not taught</th><th>Avg first try</th></tr></thead><tbody>` +
+    rows.map(x => `<tr><td>Week ${x.l.week}</td><td>${x.c.done}</td><td>${x.c.doing}</td><td>${x.c.todo}</td><td>${x.c.later}</td><td>${x.avg === null ? '–' : x.avg + '%'}</td></tr>`).join('') + '</tbody></table>';
+  else body = `<div class="rows">` + vis.map(x => `<div class="row"><div class="lab"><b>Week ${x.l.week}${x.l.week === CURW ? ' <span class="now">· this week</span>' : ''}</b><small title="${esc(x.l.title)}">${esc(x.l.title)}</small></div>` +
+      stackBar(LSTATES.map(s => ({ n: x.c[s[0]], cls: s[1], name: s[2] })), P.length, `Week ${x.l.week}, ${P.length} students`) + `<div class="num">${x.avg === null ? '–' : x.avg + '%'}</div></div>`).join('') + '</div>' +
+    (rows.length > 4 ? `<button type="button" class="morelink" id="allL">${SHOWALL ? 'Show the latest 4 only' : `Show all ${rows.length} lessons`}</button>` : '') +
+    `<div class="legend"><span><i class="s-done"></i>Finished</span><span><i class="s-doing"></i>In progress</span><span><i class="s-todo"></i>Not started</span><span><i class="s-later"></i>Not taught yet</span><span>Number = average first try</span></div>`;
+  $('#lessonsCard').innerHTML = `<div class="hd"><div><h2>Lesson overview</h2><p class="sub">Newest first. Every student in ${TAB ? esc(TAB) : 'your classes'}, by where they are in each lesson.</p></div>${toggle('les')}</div>` + body;
+  if ($('#allL')) $('#allL').onclick = () => { SHOWALL = !SHOWALL; renderLessonCard(); };
+}
+function renderStrandCard() {
+  const P = pool(), rows = ORDER.map(c => { const n = {}; TKEYS.forEach(k => n[k] = 0); P.forEach(s => n[ST[s.email].strands[c].tier]++); return { c, n }; });
+  let body;
+  if (VIEWS.str === 'table') body = `<table class="mini"><thead><tr><th>Strand</th>${TKEYS.map(k => `<th>${SHORTT[k]}</th>`).join('')}<th>Emerging+</th></tr></thead><tbody>` +
+    rows.map(x => `<tr><td>${x.c} · ${SHORT[x.c]}</td>${TKEYS.map(k => `<td>${x.n[k]}</td>`).join('')}<td>${pct(x.n.E + x.n.P + x.n.A, P.length)}%</td></tr>`).join('') + '</tbody></table>';
+  else body = `<div class="rows">` + rows.map(x => `<div class="row"><div class="lab"><b>${x.c} · ${SHORT[x.c]}</b><small title="${esc(NAME[x.c])}">${esc(NAME[x.c])}</small></div>` +
+      stackBar(TKEYS.map(k => ({ n: x.n[k], cls: 't' + (k || 'N'), name: SHORTT[k].toLowerCase() })), P.length, `${x.c} · ${SHORT[x.c]}`) + `<div class="num">${pct(x.n.E + x.n.P + x.n.A, P.length)}%</div></div>`).join('') + '</div>' +
+    `<div class="legend">${TKEYS.map(k => `<span><i class="t${k || 'N'}"></i>${SHORTT[k]}</span>`).join('')}<span>Number = at Emerging or above</span></div>`;
+  $('#strandCard').innerHTML = `<div class="hd"><div><h2>Attainment by strand</h2><p class="sub">Each student's current tier (Grade 8). Emerging is the Term 1 expected standard.</p></div>${toggle('str')}</div>` + body;
+}
+/* ---------- students table: the same eight columns however many lessons there are ---------- */
+function lessonCell(x) {
+  if (x.st === 'done') return `<span class="ls done"><i></i>${x.pct}%</span><span class="sm">Finished · ${x.mins} min</span>`;
+  if (x.st === 'doing') return `<span class="ls doing"><i></i>${x.pct}%</span><span class="sm">${x.r.done} of ${x.l.activities} activities</span>`;
+  if (x.st === 'todo') return `<span class="ls todo"><i></i>Not started</span><span class="sm">taught ${fd(x.date)}</span>`;
+  return `<span class="ls later">Not taught yet</span><span class="sm">${x.date ? 'on ' + fd(x.date) : ''}</span>`;
+}
+function sofarCell(s, st) {
+  const L = st.taughtL, show = L.slice(-10), name = { done: 'finished', doing: 'in progress', todo: 'not started' };
+  const strip = show.map(l => { const x = st.by[l.week]; return `<i class="${x.st}${l.week === SEL ? ' sel' : ''}" tabindex="0" data-tip="${esc(`<b>Week ${l.week}</b> · ${name[x.st]}${x.pct !== null ? ` · ${x.pct}% first try` : ''}`)}"></i>`; }).join('');
+  return `<span class="sofar"><b>${st.fin.length} of ${L.length}</b> finished</span><span class="strip" aria-label="${esc(L.map(l => `Week ${l.week} ${name[st.by[l.week].st]}`).join(', '))}">${L.length > 10 ? '<small style="font-size:11px;color:var(--muted)">+' + (L.length - 10) + '</small>' : ''}${strip}</span><span class="sm">${st.avg === null ? 'no activities yet' : `${st.avg}% first try overall`}</span>`;
+}
+function tierChip(s, c, o) {
+  const tipT = `<b>${esc(s.name)} · ${c} ${SHORT[c]}</b><br>${TIERS[o.tier]}${o.pct === null ? '<br>No activities yet' : `<br>First try ${o.pct}% on ${o.n} activities`}${o.judged ? `<br>✎ Set by your teacher (automatic: ${SHORTT[o.auto]})` : ''}<br><i>Click to record a tier</i>`;
+  return `<button type="button" class="tchip t${o.tier || 'N'}" data-j="${esc(s.email)}|${c}" data-tip="${esc(tipT)}" aria-haspopup="menu" aria-label="${esc(`${s.name}, ${NAME[c]}: ${TIERS[o.tier]}${o.judged ? ', set by teacher' : ''}`)}">${SHORTT[o.tier]}${o.judged ? '<span class="pen" aria-hidden="true">✎</span>' : ''}</button>`;
+}
+function renderTable() {
+  const P = pool(), selL = SHOWN.find(l => l.week === SEL);
+  $('#lsel').innerHTML = SHOWN.slice().reverse().map(l => `<option value="${l.week}"${l.week === SEL ? ' selected' : ''}>Lesson: Week ${l.week}${l.week === CURW ? ' · this week' : ''}</option>`).join('');
+  const nNudge = P.filter(s => ST[s.email].nudge).length, nNot = P.filter(s => ST[s.email].by[SEL].st === 'todo').length, nFin = P.filter(s => ST[s.email].by[SEL].st === 'done').length;
+  $('#chips').innerHTML = [['all', 'All', P.length], ['nudge', 'Need a nudge', nNudge], ['todo', `Not started Week ${SEL}`, nNot], ['done', `Finished Week ${SEL}`, nFin]]
+    .map(c => `<button type="button" data-f="${c[0]}" aria-pressed="${FILTER === c[0]}">${c[1]}<i>${c[2]}</i></button>`).join('');
+  let rows = P.filter(s => !QUERY || s.name.toLowerCase().includes(QUERY));
+  if (FILTER === 'nudge') rows = rows.filter(s => ST[s.email].nudge);
+  if (FILTER === 'todo') rows = rows.filter(s => ST[s.email].by[SEL].st === 'todo');
+  if (FILTER === 'done') rows = rows.filter(s => ST[s.email].by[SEL].st === 'done');
+  const key = s => { const x = ST[s.email].by[SEL]; return x.pct === null ? (x.st === 'todo' ? -1 : 101) : x.pct; };
+  rows.sort((a, b) => SORT === 'low' ? key(a) - key(b) || a.name.localeCompare(b.name)
+    : SORT === 'behind' ? ST[b.email].behind - ST[a.email].behind || ST[b.email].notStarted - ST[a.email].notStarted || a.name.localeCompare(b.name)
+    : a.section.localeCompare(b.section, undefined, { numeric: true }) || a.name.localeCompare(b.name));
+  $('#count').textContent = rows.length === P.length ? `· ${P.length}` : `· ${rows.length} of ${P.length}`;
+  $('#thead').innerHTML = `<tr><th class="name" rowspan="2">Student</th><th rowspan="2">Week ${SEL}${SEL === CURW ? ' · this week' : ''}<small title="${esc(selL.title)}">${esc(selL.title)}</small></th><th rowspan="2">Lessons so far<small>finished, oldest → newest</small></th>` +
+    `<th class="grp" colspan="4">Strand tier</th><th rowspan="2">Badges</th></tr><tr>${ORDER.map(c => `<th class="str" title="${esc(NAME[c])}">${c}<small>${SHORT[c]}</small></th>`).join('')}</tr>`;
+  $('#tbody').innerHTML = rows.map(s => { const st = ST[s.email];
+    return `<tr><td class="name"><a href="home.html" title="See ${esc(s.name)}'s own view">${esc(s.name)}</a>${TAB ? '' : `<small>${esc(s.section)}</small>`}</td>` +
+      `<td class="les" data-l="Week ${SEL}">${lessonCell(st.by[SEL])}</td><td class="sofar" data-l="Lessons so far">${sofarCell(s, st)}</td>` +
+      ORDER.map(c => `<td class="str" data-l="${c}">${tierChip(s, c, st.strands[c])}</td>`).join('') +
+      `<td class="bdg" data-l="Badges"><span class="bc" tabindex="0" data-tip="${esc(st.badges.length ? `<b>${esc(s.name)}</b><br>` + st.badges.join('<br>') : `${esc(s.name)} has no badges yet`)}">${st.badges.length} <span aria-hidden="true">🏅</span></span></td></tr>`; }).join('') ||
+    `<tr><td colspan="8" style="color:var(--muted);padding:18px">No students match.</td></tr>`;
+  $('#tlegend').innerHTML = `<span><span class="ls done" style="padding:0 8px 0 6px"><i></i>78%</span> finished</span><span><span class="ls doing" style="padding:0 8px 0 6px"><i></i>59%</span> in progress</span><span><span class="ls todo" style="padding:0 8px 0 6px"><i></i>Not started</span> after it was taught</span><span>% = first-try score</span>` +
+    `<span style="margin-left:auto">Tiers:</span>${TKEYS.map(k => `<span><i class="t${k || 'N'}"></i>${SHORTT[k]}</span>`).join('')}`;
+  $('#phScope').textContent = `${TAB || 'All my classes'} · Grade 8 · data as of ${fd(NOW)}`;
+}
+/* tier menu: record a teacher judgement (replaces the dropdowns) */
+const menu = $('#tmenu');
+function openMenu(btn) {
+  const [email, c] = btn.dataset.j.split('|'), s = D.students.find(x => x.email === email), o = ST[email].strands[c], cur = o.judged ? o.judged.tier : '';
+  menu.innerHTML = `<p><b>${esc(s.name)} · ${c}</b><br>${esc(NAME[c])}${o.pct === null ? '' : ` · first try ${o.pct}% on ${o.n} activities`}</p>` +
+    `<button type="button" role="menuitemradio" data-t="" aria-checked="${cur === ''}"><i class="t${o.auto || 'N'}"></i>Automatic: ${SHORTT[o.auto]}</button><hr>` +
+    ['W', 'E', 'P', 'A'].map(t => `<button type="button" role="menuitemradio" data-t="${t}" aria-checked="${cur === t}"><i class="t${t}"></i>✎ ${TIERS[t]}</button>`).join('');
+  menu.hidden = false; tip.style.display = 'none';
+  const b = btn.getBoundingClientRect(), w = menu.offsetWidth;
+  menu.style.left = Math.max(8, Math.min(innerWidth - w - 8, b.left + scrollX + b.width / 2 - w / 2)) + 'px'; menu.style.top = (b.bottom + scrollY + 6) + 'px';
+  menu.querySelectorAll('button').forEach(x => x.onclick = () => {
+    const k = email + '|' + c; if (x.dataset.t) D.judgements[k] = { tier: x.dataset.t, by: D.me.email, note: '' }; else delete D.judgements[k];
+    ST[email] = stat(s); menu.hidden = true; renderAll(); const again = document.querySelector(`[data-j="${CSS.escape(k)}"]`); if (again) again.focus({ preventScroll: true }); });
+  (menu.querySelector('[aria-checked="true"]') || menu.querySelector('button')).focus({ preventScroll: true });
+}
+document.addEventListener('click', e => {
+  const j = e.target.closest('[data-j]'); if (j) { e.stopPropagation(); openMenu(j); return; }
+  if (!e.target.closest('#tmenu')) menu.hidden = true;
+  const v = e.target.closest('[data-view]'); if (v) { const [k, m] = v.dataset.view.split('|'); VIEWS[k] = m; k === 'les' ? renderLessonCard() : renderStrandCard(); }
+  const f = e.target.closest('[data-f]'); if (f) { if (f.tagName === 'A') e.preventDefault(); FILTER = f.dataset.f; renderTable(); if (f.tagName === 'A') $('#stuH').scrollIntoView({ behavior: 'smooth' }); }
+  const t = e.target.closest('[data-tab]'); if (t) { TAB = t.dataset.tab; renderAll(); }
+  const a = e.target.closest('[data-asof]'); if (a) { ASOF = a.dataset.asof; FILTER = 'all'; SHOWALL = false; load(); renderAll(); }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') menu.hidden = true; });
+$('#q').oninput = () => { QUERY = $('#q').value.trim().toLowerCase(); renderTable(); };
+$('#sort').onchange = () => { SORT = $('#sort').value; renderTable(); };
+$('#lsel').onchange = () => { SEL = +$('#lsel').value; renderTable(); };
+function renderAll() {
+  $('#tabs').innerHTML = [['', 'All my classes', D.students.length]].concat(D.sections.map(s => [s, s, D.students.filter(x => x.section === s).length]))
+    .map(t => `<button type="button" data-tab="${esc(t[0])}" aria-pressed="${TAB === t[0]}">${esc(t[1])} <span style="opacity:.75;font-weight:500">${t[2]}</span></button>`).join('');
+  document.querySelectorAll('[data-asof]').forEach(b => b.setAttribute('aria-pressed', b.dataset.asof === ASOF));
+  renderTiles(); renderLessonCard(); renderStrandCard(); renderTable();
+}
+load(); renderAll();
+</script>
+</body>
+</html>

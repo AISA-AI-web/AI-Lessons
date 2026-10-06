@@ -29,7 +29,7 @@
   /* The top bar follows the language chosen on the dashboard / calendar (stored per user). */
   var AR = { 'Signed in as': 'تم تسجيل الدخول باسم', 'My progress': 'تقدّمي', 'Dashboard': 'لوحة المتابعة', 'Saving…': 'جارٍ الحفظ…',
              '✓ Saved to your school account': '✓ تم الحفظ في حسابك المدرسي', 'Not saved yet – check your connection. It will retry.': 'لم يُحفَظ بعد – تحقّق من الاتصال. ستُعاد المحاولة.',
-             '🔒 Opens': '🔒 يُفتح', 'This lesson is not open yet. It opens for your class on': 'هذا الدرس غير متاح بعد. يُفتح لصفّك في' };
+             '🔒 Opens': '🔒 يُفتح', 'AI Lessons': 'دروس الذكاء الاصطناعي', 'Lessons': 'الدروس', 'Calendar': 'التقويم', 'My lessons': 'دروسي', 'This lesson is not open yet. It opens for your class on': 'هذا الدرس غير متاح بعد. يُفتح لصفّك في' };
   var ar = false; try { ar = localStorage.getItem('aisa-lang') === 'ar'; } catch (e) {}
   function T(s) { return ar && AR[s] ? AR[s] : s; }
   function setStatus(t, bad){ if (status) { status.textContent = t; status.className = 'app-save' + (bad ? ' bad' : ''); } }
@@ -99,28 +99,45 @@
     var nm = document.getElementById('nm');
     if (nm) { nm.value = CFG.name; nm.readOnly = true; nm.title = 'Filled in from your school account';
       try { nm.dispatchEvent(new Event('input', { bubbles: true })); } catch (e) {} }
+    if (document.querySelector('[data-shell]')) {   // home page and calendar have their own top bar with the user's name
+      ['qrBtn','qrTop'].forEach(function(id){ var b = document.getElementById(id); if (b) b.onclick = qrOpen; });
+      return;
+    }
     var bar = document.createElement('div');
     bar.className = 'app-bar';
-    bar.innerHTML = '<span>' + T('Signed in as') + ' <b dir="ltr"></b></span>' + (lessonId ? '<span class="app-save" aria-live="polite"></span>' : '') +
-      '<a target="_top">' + (CFG.role === 'student' ? T('My progress') : T('Dashboard')) + '</a>';
+    /* the same AISA top bar and menu as the home page, calendar and dashboard, in a slimmer form */
+    var links = CFG.role === 'student' ? [['My lessons', 'index'], ['My progress', 'dashboard']] : [['Lessons', 'index'], ['Calendar', 'calendar'], ['Dashboard', 'dashboard']];
+    bar.innerHTML = '<a class="app-brand" target="_top"><img src="__AISA_MONOGRAM__" alt="AISA" width="28" height="28"><span>' + T('AI Lessons') + '</span></a>' +
+      '<nav class="app-nav">' + links.map(function(l){ return '<a target="_top" data-p="' + l[1] + '">' + T(l[0]) + '</a>'; }).join('') + '</nav>' +
+      '<span class="app-right">' + (lessonId ? '<span class="app-save" aria-live="polite"></span>' : '') + '<span class="app-me" dir="ltr"></span></span>';
     if (ar) { bar.dir = 'rtl'; bar.lang = 'ar'; }
-    bar.querySelector('b').textContent = CFG.email;
-    bar.querySelector('a').href = appUrl('dashboard');
+    bar.querySelector('.app-me').textContent = CFG.name || CFG.email; bar.querySelector('.app-me').title = CFG.email;
+    bar.querySelector('.app-brand').href = appUrl('index');
+    [].forEach.call(bar.querySelectorAll('[data-p]'), function(a){ a.href = appUrl(a.getAttribute('data-p')); });
     document.body.insertBefore(bar, document.body.firstChild);
     status = bar.querySelector('.app-save');
-    var qr = function(){ var url = appUrl(CFG.page), ov = document.getElementById('ov'); if (!ov) return;
+    var qr = qrOpen;
+    ['qrBtn','qrTop'].forEach(function(id){ var b = document.getElementById(id); if (b) b.onclick = qr; });
+  });
+  /* QR code for the app address of this page (lesson pages and the home page) */
+  function qrOpen(){ var url = appUrl(CFG.page), ov = document.getElementById('ov'); if (!ov) return;
       document.getElementById('qrUrl').textContent = url; ov.classList.add('on');
       var draw = function(){ var el = document.getElementById('qr'); el.innerHTML = ''; new QRCode(el, { text: url, width: 320, height: 320, correctLevel: QRCode.CorrectLevel.M }); };
       if (window.QRCode) return draw();
-      var sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; sc.onload = draw; document.head.appendChild(sc); };
-    ['qrBtn','qrTop'].forEach(function(id){ var b = document.getElementById(id); if (b) b.onclick = qr; });
-  });
+      var sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; sc.onload = draw; document.head.appendChild(sc); }
 })();
 </script>
 <style>
-.app-bar{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;justify-content:flex-end;padding:6px 16px;background:#0b0b0b;color:#fff;font:13px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
-.app-bar b{font-weight:600}
-.app-bar a{color:#fff;font-weight:700;text-decoration:underline}
+.app-bar{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;padding:7px 16px;background:#21076C;color:#fff;font:14px/1.4 "DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;border-bottom:3px solid #D8B664}
+.app-bar a{color:#fff;text-decoration:none}
+.app-brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px}
+.app-brand img{display:block}
+.app-nav{display:flex;gap:2px;flex-wrap:wrap}
+.app-nav a{font-weight:600;padding:4px 11px;border-radius:999px;opacity:.85}
+.app-nav a:hover{opacity:1;background:rgba(255,255,255,.12)}
+.app-right{margin-inline-start:auto;display:flex;align-items:center;gap:12px;font-size:13px}
+.app-me{opacity:.9;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:560px){.app-me{display:none}.app-brand span{display:none}}
 .app-save{color:#9be59b}.app-save.bad{color:#ffb3b3}
 a.app-locked{opacity:.6;cursor:not-allowed}
 .app-lock{display:block;font-size:12px;font-weight:600;margin-top:2px}

@@ -4,206 +4,417 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AI Lessons</title>
+<link rel="icon" href="assets/aisa/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css?v=3">
 <style>
-:root{--ink:#1B1F2A;--muted:#5C6475;--paper:#F6F7FA;--card:#fff;--line:#E1E5EE;--accent:#3B4CCA;--focus:#1C64F2;--now:#FFF4D6;--now-line:#E0A100}
-*,*::before,*::after{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:16px;line-height:1.5}
-:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
-header.wrap{padding-top:28px;padding-bottom:14px}
-.toprow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.nav{display:flex;gap:8px;flex-wrap:wrap}
-.navlink{color:var(--muted);text-decoration:none;font-weight:600;font-size:14px;padding:5px 0}
-.navlink:hover{text-decoration:underline}
-.pillbtn{font:inherit;font-size:14px;font-weight:700;padding:5px 14px;border-radius:999px;border:1.5px solid var(--accent);color:var(--accent);background:#fff;cursor:pointer}
-.pillbtn:hover{background:var(--accent);color:#fff}
-h1{margin:8px 0 4px;font-size:clamp(28px,5.5vw,40px);letter-spacing:-.02em;line-height:1.1}
-header p{margin:0;color:var(--muted)}
-.banner{background:var(--ink);color:#fff;border-radius:16px;padding:14px 18px;margin:16px 0 14px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
-.banner h2{margin:0;font-size:20px}
-.banner p{margin:2px 0 0;opacity:.9;font-size:14.5px}
-.banner a{color:#fff;font-weight:700}
-.banner.off{background:#5C3D00}
-.banner[hidden]{display:none}
-.banner .err{font-size:12.5px;opacity:.85;margin-top:4px}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
-.chips button{font:inherit;font-size:14px;font-weight:700;min-width:44px;padding:6px 12px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
-.chips button[aria-pressed="true"]{background:var(--c,var(--ink));border-color:var(--c,var(--ink));color:#fff}
-.tablewrap{background:var(--card);border:1.5px solid var(--line);border-radius:16px;overflow-x:auto}
-table{border-collapse:separate;border-spacing:0;width:100%;table-layout:fixed;min-width:900px}
-table[data-show]:not([data-show="all"]){min-width:0}
-th,td{border-bottom:1px solid var(--line);padding:0;vertical-align:top;text-align:left}
-tr:last-child>*{border-bottom:0}
-thead th{background:var(--c,var(--ink));color:#fff;font-size:14px;font-weight:700;padding:10px 10px;text-align:center;position:sticky;top:0}
-thead th:first-child{background:var(--ink);width:118px}
-tbody th{width:118px;padding:10px 12px;background:#FAFBFD;border-right:1px solid var(--line);position:sticky;left:0;z-index:1}
-tbody th b{display:block;font-size:15px}
-tbody th small{display:block;font-size:12.5px;color:var(--muted);line-height:1.35}
-tbody th small.focus{font-weight:600;color:var(--ink);opacity:.75}
-td+td{border-left:1px solid var(--line)}
-td.none{color:#B6BCC9;text-align:center;padding:12px 6px}
-a.ls{display:block;height:100%;padding:10px 10px;text-decoration:none;color:var(--ink);font-size:13.5px;line-height:1.35}
-a.ls b{font-weight:600}
-a.ls:hover{background:#F1F3F9}
-a.ls:hover b{text-decoration:underline}
-tr.bridge th{background:#FBFBFD}
-tr.bridge a.ls b{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-tr.bridge th{border-bottom:2px solid var(--line)}
-tr.bridge td{border-bottom:2px solid var(--line)}
-tr.now th{background:var(--now);box-shadow:inset 4px 0 0 var(--now-line)}
-tr.now td{background:var(--now)}
-tr.now th b::after{content:attr(data-now);display:inline-block;margin-left:6px;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:var(--now-line);color:#fff;border-radius:999px;padding:1px 7px;vertical-align:2px}
-tr.done a.ls{color:var(--ink)}
-a.ls.locked,a.ls.app-locked{color:var(--muted);cursor:not-allowed;background:repeating-linear-gradient(135deg,transparent 0 8px,#F4F5F8 8px 9px)}
-a.ls.locked b,a.ls.app-locked b{font-weight:500}
-a.ls .opens,a.ls .app-lock{display:block;margin-top:4px;font-size:11.5px;font-weight:700;color:var(--muted)}
-.star{font-style:normal;color:#8A5A00;font-weight:800;cursor:help}
-.note{font-size:13.5px;color:var(--muted);margin:12px 0 40px}
-table[data-show="6"] .g:not(.g6){display:none}table[data-show="7"] .g:not(.g7){display:none}table[data-show="8"] .g:not(.g8){display:none}table[data-show="9"] .g:not(.g9){display:none}table[data-show="10"] .g:not(.g10){display:none}table[data-show="11"] .g:not(.g11){display:none}table[data-show="12"] .g:not(.g12){display:none}
-td.g6{background:#FCF1E9}td.g6 a.ls:hover{background:#FAE6D8}td.g7{background:#EBF1FD}td.g7 a.ls:hover{background:#DCE6FC}td.g8{background:#EAF4EE}td.g8 a.ls:hover{background:#DAEBE0}td.g9{background:#FBEBEE}td.g9 a.ls:hover{background:#F9DCE0}td.g10{background:#E9F3F2}td.g10 a.ls:hover{background:#D9E9E8}td.g11{background:#EFEEFD}td.g11 a.ls:hover{background:#E3E1FB}td.g12{background:#F7EBEF}td.g12 a.ls:hover{background:#F1DBE3}
-@media (max-width:720px){table{min-width:760px} tbody th,thead th:first-child{width:96px}}
-@media print{.nav,.pillbtn,.chips,.overlay{display:none!important}body{background:#fff}.tablewrap{overflow:visible;border:0}table{min-width:0}a.ls{font-size:11px;padding:6px}}
-html[dir="rtl"] body{font-family:"Segoe UI",Tahoma,"Noto Sans Arabic","Geeza Pro",system-ui,sans-serif}
-html[dir="rtl"] th,html[dir="rtl"] td{text-align:right}
-html[dir="rtl"] tbody th{border-right:0;border-left:1px solid var(--line)}
-html[dir="rtl"] td+td{border-left:0;border-right:1px solid var(--line)}
-html[dir="rtl"] [dir="ltr"]{text-align:right}
-html[dir="rtl"] tr.now th{box-shadow:inset -4px 0 0 var(--now-line)}
-.overlay{position:fixed;inset:0;background:rgba(27,31,42,.8);display:none;place-items:center;z-index:50;padding:20px}
-.overlay.on{display:grid}
-.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
-.qrbox #qr{display:grid;place-items:center;margin:14px auto}
-.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
-.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
-.btn{border:0;border-radius:12px;padding:11px 18px;font:inherit;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:16px;margin:24px 0 26px}
+@media (max-width:820px){.hero{grid-template-columns:1fr}}
+.now{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 24px 22px 28px;position:relative;overflow:hidden}
+.now::before{content:"";position:absolute;inset-inline-start:0;top:0;bottom:0;width:6px;background:var(--gold)}
+.now h1{font-size:clamp(22px,3.2vw,30px);margin:6px 0 12px}
+.now .title{font-size:clamp(19px,2.6vw,23px);color:var(--ink);margin:8px 0 6px;font-weight:700;line-height:1.25}
+.now p{margin:0 0 6px;color:var(--muted);font-size:15px}
+.bar{height:10px;background:var(--tint);border-radius:6px;overflow:hidden;margin:10px 0 4px}
+.bar i{display:block;height:100%;background:var(--purple);border-radius:6px}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.side{display:grid;gap:10px;align-content:start}
+.side .card{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:14px 16px}
+.side .ico{font-size:20px;background:var(--tint);width:38px;height:38px;border-radius:10px;display:grid;place-items:center}
+.side .card>div>b{display:block;color:var(--purple)}
+.side small{color:var(--muted);font-size:13.5px;line-height:1.45;display:block}
+.side button.lnk{font:inherit;font-size:13.5px;font-weight:700;color:var(--purple);background:none;border:0;padding:0;margin-top:4px;cursor:pointer;text-decoration:underline}
+.listhead{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin:0 0 12px}
+.listhead h2{font-size:20px}
+.listhead span{color:var(--muted);font-size:14px}
+.grades{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 16px}
+.grades .lab{font-size:14px;color:var(--muted);margin-inline-end:2px}
+.gp{font:inherit;font-weight:700;font-size:14px;border:1.5px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;padding:5px 13px;cursor:pointer}
+.gp[aria-pressed="true"]{background:var(--gc);border-color:var(--gc);color:#fff}
+.bigrades{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.bigrades .gp{font-size:18px;padding:10px 18px;border-color:var(--gc);color:var(--gc)}
+.bigrades .gp:hover{background:var(--gc);color:#fff}
+.lessons{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.lessons li{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;background:#fff;border:1px solid var(--line-2);border-radius:14px;padding:12px 16px;padding-inline-start:12px}
+.lessons li.cur{border-color:var(--purple);box-shadow:0 0 0 3px var(--tint)}
+.lessons li.done .dt{background:#fff;border:1.5px solid var(--line-2)}
+.lessons b.t{display:block;font-size:16.5px;color:var(--ink);line-height:1.3}
+.lessons .meta{font-size:13.5px;color:var(--muted);margin-top:2px}
+.lessons .st{margin-top:7px}
+.lessons li.off{background:var(--tint);border-color:var(--tint);padding:9px 16px;grid-template-columns:auto 1fr;gap:12px;color:var(--purple);font-size:14px}
+.lessons li.off b{font-weight:700}
+.wk{display:grid;place-items:center;align-content:center;width:62px;min-height:62px;border-radius:12px;background:var(--tint);color:var(--purple);line-height:1.1;text-align:center}
+.wk small{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+.wk b{font-size:20px}
+li.later .wk{background:#fff;border:1.5px dashed var(--line)}
+.lessons li.ghead{background:transparent;border:0;padding:16px 2px 0;grid-template-columns:auto 1fr auto;gap:10px}
+.lessons li.ghead:first-child{padding-top:0}
+.gbadge{display:inline-block;color:#fff;font-weight:700;border-radius:999px;padding:3px 12px;font-size:14px}
+.lessons li.ghead .n{color:var(--muted);font-size:14px}
+.empty{background:#fff;border:1.5px dashed var(--line);border-radius:14px;padding:22px;text-align:center;color:var(--muted)}
+/* ---- lessons table: weeks down the side, grades across ---- */
+:root{--gt6:#FCF1E9;--gt7:#EBF1FD;--gt8:#EAF4EE;--gt9:#FBEBEE;--gt10:#E9F3F2;--gt11:#EFEEFD;--gt12:#F7EBEF;}
+.tablewrap{background:#fff;border:1px solid var(--line);border-radius:16px;overflow-x:auto;margin:0 0 8px}
+table.grid{border-collapse:separate;border-spacing:0;width:100%;table-layout:fixed;min-width:920px}
+table.grid[data-show]:not([data-show="all"]){min-width:0}
+.grid th,.grid td{border-bottom:1px solid var(--line-2);padding:0;vertical-align:top;text-align:start}
+.grid tr:last-child>*{border-bottom:0}
+.grid thead th{background:var(--gc,var(--purple));color:#fff;font-size:14px;font-weight:700;padding:10px;text-align:center}
+.grid thead th:first-child{background:var(--purple);width:122px}
+.grid tbody th{width:122px;padding:10px 12px;background:#fff;border-inline-end:1px solid var(--line-2);position:sticky;inset-inline-start:0;z-index:1}
+.grid tbody th b{display:block;font-size:15px;color:var(--purple)}
+.grid tbody th small{display:block;font-size:12.5px;color:var(--muted);line-height:1.35}
+.grid tbody th small.focus{font-weight:700;color:var(--muted-2)}
+.grid td+td{border-inline-start:1px solid var(--line-2)}
+.grid td.none{color:#B9B4C8;text-align:center;padding:12px 6px}
+.grid a.ls{display:block;height:100%;padding:10px;text-decoration:none;color:var(--ink);font-size:13.5px;line-height:1.35}
+.grid a.ls b{font-weight:600}
+.grid a.ls:hover b{text-decoration:underline}
+table.grid[data-show="6"] .g:not(.g6){display:none}table.grid[data-show="7"] .g:not(.g7){display:none}table.grid[data-show="8"] .g:not(.g8){display:none}table.grid[data-show="9"] .g:not(.g9){display:none}table.grid[data-show="10"] .g:not(.g10){display:none}table.grid[data-show="11"] .g:not(.g11){display:none}table.grid[data-show="12"] .g:not(.g12){display:none}
+.grid tr.bridge>*{border-bottom:2px solid var(--line)}
+.grid tr.bridge a.ls b{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.grid tr.thisweek th{background:#FBF3DD;box-shadow:inset 4px 0 0 var(--gold)}
+html[dir="rtl"] .grid tr.thisweek th{box-shadow:inset -4px 0 0 var(--gold)}
+.grid tr.thisweek td{background:#FBF3DD!important}
+.grid .tw{display:inline-block;margin-top:3px;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:var(--gold);color:var(--purple);border-radius:999px;padding:1px 7px}
+.grid a.ls.locked,.grid a.ls.app-locked{color:var(--muted);cursor:not-allowed}
+.grid a.ls.locked b,.grid a.ls.app-locked b{font-weight:500}
+.grid a.ls .opens,.grid a.ls .app-lock{display:block;margin-top:4px;font-size:11.5px;font-weight:700;color:var(--muted)}
+.grid .star{font-style:normal;color:#8A5A00;font-weight:800;cursor:help}
+.tnote{font-size:13px;color:var(--muted);margin:8px 0 0}
+@media (max-width:720px){table.grid{min-width:780px}.grid tbody th,.grid thead th:first-child{width:98px}}
+@media print{.tablewrap{overflow:visible;border:0}table.grid{min-width:0}.grid a.ls{font-size:11px;padding:6px}}
+@media (max-width:560px){.lessons li{grid-template-columns:auto 1fr;gap:8px 12px}.lessons li>.btn{grid-column:2;justify-self:start}.dt,.wk{width:54px;min-height:56px}.dt b{font-size:19px}}
 </style>
 </head>
 <body>
-<header class="wrap">
-  <div class="toprow">
-    <a class="navlink" href="calendar.html" data-i18n="📅 Teaching calendar →">📅 Teaching calendar →</a>
-    <div class="nav"><button class="pillbtn" id="qrBtn" type="button" data-i18n="QR code">QR code</button><button type="button" class="pillbtn" id="langBtn" lang="ar">العربية</button></div>
-  </div>
-  <h1 data-i18n="AI Lessons">AI Lessons</h1>
-  <p data-i18n="Every AI Literacy lesson for Grades 6 to 12, week by week. Each Main course lesson is a Core lesson and its Lab, taught together.">Every AI Literacy lesson for Grades 6 to 12, week by week. Each Main course lesson is a Core lesson and its Lab, taught together.</p>
-</header>
+<header class="top" data-shell><div class="wrap">
+  <a class="brand" id="homeLink" href="index.html" aria-label="AI Lessons home"><img class="lockup" src="assets/aisa/lockup-white.png" alt="American International School in Abu Dhabi" width="233" height="40"><img class="mono" src="assets/aisa/monogram-white.png" alt="AISA" width="34" height="34"><span class="product" data-i18n="AI Lessons">AI Lessons</span></a>
+  <nav class="main" id="nav" aria-label="Main"></nav>
+  <div class="right"><span class="me" id="me" dir="ltr"></span><button class="langbtn" type="button" id="langBtn" lang="ar">العربية</button></div>
+</div></header>
+
 <main class="wrap">
-  <div class="banner" id="banner" hidden></div>
-  <div class="chips" id="chips" role="group" aria-label="Show grade"><button type="button" data-show="all" aria-pressed="true" data-i18n="All grades">All grades</button><button type="button" data-show="6" aria-pressed="false" style="--c:#E0600A">6</button><button type="button" data-show="7" aria-pressed="false" style="--c:#2563EB">7</button><button type="button" data-show="8" aria-pressed="false" style="--c:#15803D">8</button><button type="button" data-show="9" aria-pressed="false" style="--c:#D7263D">9</button><button type="button" data-show="10" aria-pressed="false" style="--c:#0F766E">10</button><button type="button" data-show="11" aria-pressed="false" style="--c:#4F46E5">11</button><button type="button" data-show="12" aria-pressed="false" style="--c:#A61E4D">12</button></div>
-  <!-- The lesson list comes from calendar.html (LESSONS). To add a lesson, add it there and here. -->
-  <div class="tablewrap">
-  <table id="lessons" data-show="all">
-    <thead><tr><th scope="col" data-i18n="Term 1">Term 1</th><th scope="col" class="g g6" style="--c:#E0600A" data-i18n-grade="6">Grade 6</th><th scope="col" class="g g7" style="--c:#2563EB" data-i18n-grade="7">Grade 7</th><th scope="col" class="g g8" style="--c:#15803D" data-i18n-grade="8">Grade 8</th><th scope="col" class="g g9" style="--c:#D7263D" data-i18n-grade="9">Grade 9</th><th scope="col" class="g g10" style="--c:#0F766E" data-i18n-grade="10">Grade 10</th><th scope="col" class="g g11" style="--c:#4F46E5" data-i18n-grade="11">Grade 11</th><th scope="col" class="g g12" style="--c:#A61E4D" data-i18n-grade="12">Grade 12</th></tr></thead>
-    <tbody>
-    <tr class="bridge"><th scope="row"><b data-i18n="Bridging">Bridging</b><small data-i18n="Foundation">Foundation</small></th><td class="g g6"><a class="ls" href="grade-6/bridging-w1-l1.html" title="Data Quality and AI Outputs"><b dir="ltr" lang="en">Data Quality and AI Outputs</b></a></td><td class="g g7 none">–</td><td class="g g8 none">–</td><td class="g g9"><a class="ls" href="grade-9/bridging-w1-l1.html" title="Comparing Approaches"><b dir="ltr" lang="en">Comparing Approaches</b></a></td><td class="g g10"><a class="ls" href="grade-10/bridging-w1-l1.html" title="Design Choices Shape the Output"><b dir="ltr" lang="en">Design Choices Shape the Output</b></a></td><td class="g g11"><a class="ls" href="grade-11/bridging-w1-l1.html" title="Evaluating How Design Shapes Performance and Reliability"><b dir="ltr" lang="en">Evaluating How Design Shapes Performance and Reliability</b></a></td><td class="g g12"><a class="ls" href="grade-12/bridging-w1-l1.html" title="Evaluating Trade-offs Across Accuracy, Efficiency, Usability and Reliability"><b dir="ltr" lang="en">Evaluating Trade-offs Across Accuracy, Efficiency, Usability and Reliability</b></a></td></tr>
-    <tr data-week="1" data-from="2026-09-28" data-to="2026-10-02"><th scope="row"><b><span data-i18n="Week">Week</span> 1</b><small class="dates"><bdi dir="ltr">28 Sep – 2 Oct</bdi></small><small class="focus" data-i18n="Launch">Launch</small></th><td class="g g6"><a class="ls" href="grade-6/main-w1-l1.html" title="Rule-Based vs Learning Systems + Hands-On Exploration"><b dir="ltr" lang="en">Rule-Based vs Learning Systems</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w1-l1.html" title="How Models Learn + AI as a Workflow"><b dir="ltr" lang="en">How Models Learn</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w1-l1.html" title="From ‘It Works’ to ‘How Well’ + Two Outputs, One Verdict"><b dir="ltr" lang="en">From ‘It Works’ to ‘How Well’</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w1-l1.html" title="Open the Black Box + Change One Thing"><b dir="ltr" lang="en">Open the Black Box</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w1-l1.html" title="See the Whole System + Compare, Map, and Stress-Test"><b dir="ltr" lang="en">See the Whole System</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w1-l1.html" title="Optimising AI Solutions for Performance + Compare Two Versions"><b dir="ltr" lang="en">Optimising AI Solutions for Performance</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w1-l1.html" title="Designing AI Systems for Strategic Use + Compare and Map the System"><b dir="ltr" lang="en">Designing AI Systems for Strategic Use</b></a></td></tr>
-    <tr data-week="2" data-from="2026-10-05" data-to="2026-10-09"><th scope="row"><b><span data-i18n="Week">Week</span> 2</b><small class="dates"><bdi dir="ltr">5 – 9 Oct</bdi></small><small class="focus" data-i18n="Understand">Understand</small></th><td class="g g6"><a class="ls" href="grade-6/main-w2-l1.html" title="Rules vs Learning: How Each System Works + Train a Simple Model"><b dir="ltr" lang="en">Rules vs Learning: How Each System Works</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w2-l1.html" title="The Three-Stage Shape + Build, Trace and Test a Workflow"><b dir="ltr" lang="en">The Three-Stage Shape</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w2-l1.html" title="Inside the Pipeline + Change One Factor"><b dir="ltr" lang="en">Inside the Pipeline</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w2-l1.html" title="Understanding the System + Test the System"><b dir="ltr" lang="en">Understanding the System</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w2-l1.html" title="Understanding the System + Trace, Change, Compare"><b dir="ltr" lang="en">Understanding the System</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w2-l1.html" title="Understanding the System + Trace, Change, Compare"><b dir="ltr" lang="en">Understanding the System</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w2-l1.html" title="Understanding the System + Trace the Divergence"><b dir="ltr" lang="en">Understanding the System</b></a></td></tr>
-    <tr data-week="3" data-from="2026-10-19" data-to="2026-10-23"><th scope="row"><b><span data-i18n="Week">Week</span> 3</b><small class="dates"><bdi dir="ltr">19 – 23 Oct</bdi></small><small class="focus" data-i18n="Design">Design</small></th><td class="g g6"><a class="ls" href="grade-6/main-w3-l1.html" title="Structured Prompts to Complete a Task + Prompt-to-Task Workshop"><b dir="ltr" lang="en">Structured Prompts to Complete a Task</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w3-l1.html" title="Building a Workflow + Test, Fix and Chain"><b dir="ltr" lang="en">Building a Workflow</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w3-l1.html" title="Design the Workflow + Build, Test, Improve"><b dir="ltr" lang="en">Design the Workflow</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w3-l1.html" title="Designing a Solution + Build, Test, Chain"><b dir="ltr" lang="en">Designing a Solution</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w3-l1.html" title="Designing a Solution + Build, Test, Improve"><b dir="ltr" lang="en">Designing a Solution</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w3-l1.html" title="Designing a Solution + Build, Test, Improve"><b dir="ltr" lang="en">Designing a Solution</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w3-l1.html" title="Designing a Solution + Refine Toward Complexity"><b dir="ltr" lang="en">Designing a Solution</b></a></td></tr>
-    <tr data-week="4" data-from="2026-10-26" data-to="2026-10-30"><th scope="row"><b><span data-i18n="Week">Week</span> 4</b><small class="dates"><bdi dir="ltr">26 – 30 Oct</bdi></small><small class="focus" data-i18n="Evaluate">Evaluate</small></th><td class="g g6"><a class="ls" href="grade-6/main-w4-l1.html" title="Judging Outputs: Correct, Incorrect, Unclear + Output Triage Clinic"><b dir="ltr" lang="en">Judging Outputs: Correct, Incorrect, Unclear</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w4-l1.html" title="Judging Outputs + The Evaluation Clinic"><b dir="ltr" lang="en">Judging Outputs</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w4-l1.html" title="Judge with Criteria + The Evaluation Clinic"><b dir="ltr" lang="en">Judge with Criteria</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w4-l1.html" title="Judging Outputs + The Evaluation Clinic"><b dir="ltr" lang="en">Judging Outputs</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w4-l1.html" title="Judging &amp; Improving Outputs + The Evaluation Clinic"><b dir="ltr" lang="en">Judging &amp; Improving Outputs</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w4-l1.html" title="Judging Outputs + Rank and Defend"><b dir="ltr" lang="en">Judging Outputs</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w4-l1.html" title="Judging Outputs + Rank and Defend"><b dir="ltr" lang="en">Judging Outputs</b></a></td></tr>
-    <tr data-week="5" data-from="2026-11-02" data-to="2026-11-06"><th scope="row"><b><span data-i18n="Week">Week</span> 5</b><small class="dates"><bdi dir="ltr">2 – 6 Nov</bdi></small><small class="focus" data-i18n="Ethics">Ethics</small></th><td class="g g6"><a class="ls" href="grade-6/main-w5-l1.html" title="Risks and Responsible Use + Class AI Risk Audit"><b dir="ltr" lang="en">Risks and Responsible Use</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w5-l1.html" title="Spotting the Risks + The Risk Audit"><b dir="ltr" lang="en">Spotting the Risks</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w5-l1.html" title="Accurate Is Not Ethical + The Ethics Audit"><b dir="ltr" lang="en">Accurate Is Not Ethical</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w5-l1.html" title="Risk Is a System Property + Auditing the Risks"><b dir="ltr" lang="en">Risk Is a System Property</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w5-l1.html" title="Locate the Risk in the System + Measure the Risk and Govern It"><b dir="ltr" lang="en">Locate the Risk in the System</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w5-l1.html" title="Risks, Ethics &amp; Responsible Use + Audit, Rate, Mitigate"><b dir="ltr" lang="en">Risks, Ethics &amp; Responsible Use</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w5-l1.html" title="Risks, Ethics &amp; Societal Impact + Measure Fairness and Govern"><b dir="ltr" lang="en">Risks, Ethics &amp; Societal Impact</b></a></td></tr>
-    <tr data-week="6" data-from="2026-11-09" data-to="2026-11-13"><th scope="row"><b><span data-i18n="Week">Week</span> 6</b><small class="dates"><bdi dir="ltr">9 – 13 Nov</bdi></small><small class="focus" data-i18n="Integrate">Integrate</small></th><td class="g g6"><a class="ls" href="grade-6/main-w6-l1.html" title="Bringing the Strands Together + Integrated Build-and-Check"><b dir="ltr" lang="en">Bringing the Strands Together</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w6-l1.html" title="Four Strands, One Task + The Full Run"><b dir="ltr" lang="en">Four Strands, One Task</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w6-l1.html" title="One Model, Four Strands + Run It End to End"><b dir="ltr" lang="en">One Model, Four Strands</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w6-l1.html" title="Four Strands, One Workflow + Running It End-to-End"><b dir="ltr" lang="en">Four Strands, One Workflow</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w6-l1.html" title="Bringing the Strands Together + Run It End-to-End"><b dir="ltr" lang="en">Bringing the Strands Together</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w6-l1.html" title="Bringing the Strands Together + Run It End-to-End"><b dir="ltr" lang="en">Bringing the Strands Together</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w6-l1.html" title="Bringing the Strands Together + Run End-to-End and Measure"><b dir="ltr" lang="en">Bringing the Strands Together</b></a></td></tr>
-    <tr data-week="7" data-from="2026-11-16" data-to="2026-11-20"><th scope="row"><b><span data-i18n="Week">Week</span> 7</b><small class="dates"><bdi dir="ltr">16 – 20 Nov</bdi></small><small class="focus" data-i18n="Plan">Plan</small></th><td class="g g6"><a class="ls" href="grade-6/main-w7-l1.html" title="Signature Solution: Planning + Prototype and Pressure-Test the Plan"><b dir="ltr" lang="en">Signature Solution: Planning</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w7-l1.html" title="Architect First, Build Second + Run It, Break It, Make It Safer"><b dir="ltr" lang="en">Architect First, Build Second</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w7-l1.html" title="Architect the Plan + Prototype and Pressure-Test"><b dir="ltr" lang="en">Architect the Plan</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w7-l1.html" title="Designing the System + Prototype and Pressure-Test"><b dir="ltr" lang="en">Designing the System</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w7-l1.html" title="Architect Your Signature Solution + Prototype and Pressure-Test"><b dir="ltr" lang="en">Architect Your Signature Solution</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w7-l1.html" title="Architect Your Signature Solution + Prototype and Pressure-Test"><b dir="ltr" lang="en">Architect Your Signature Solution</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w7-l1.html" title="Architect Your Signature System + Prototype and Pressure-Test"><b dir="ltr" lang="en">Architect Your Signature System</b></a></td></tr>
-    <tr data-week="8" data-from="2026-11-23" data-to="2026-11-27"><th scope="row"><b><span data-i18n="Week">Week</span> 8</b><small class="dates"><bdi dir="ltr">23 – 27 Nov</bdi></small><small class="focus" data-i18n="Build">Build</small></th><td class="g g6"><a class="ls" href="grade-6/main-w8-l1.html" title="Signature Solution: Building + Extended Build and Evaluation"><b dir="ltr" lang="en">Signature Solution: Building</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w8-l1.html" title="Build, Evaluate, Improve + Finish It, Then Prove It"><b dir="ltr" lang="en">Build, Evaluate, Improve</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w8-l1.html" title="The Build Loop + The Evaluation Log"><b dir="ltr" lang="en">The Build Loop</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w8-l1.html" title="Assemble, Evaluate, Refine + Test, Log, Iterate"><b dir="ltr" lang="en">Assemble, Evaluate, Refine</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w8-l1.html" title="Build, Evaluate, Improve + Finish It, Then Prove It"><b dir="ltr" lang="en">Build, Evaluate, Improve</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w8-l1.html" title="Build, Evaluate, Improve + Finish It, Then Prove It"><b dir="ltr" lang="en">Build, Evaluate, Improve</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w8-l1.html" title="Build to Your Plan + Finish It and Handle Edge Cases"><b dir="ltr" lang="en">Build to Your Plan</b></a></td></tr>
-    <tr data-week="9" data-from="2026-11-30" data-to="2026-12-04"><th scope="row"><b><span data-i18n="Week">Week</span> 9</b><small class="dates"><bdi dir="ltr">30 Nov – 4 Dec</bdi> <i class="star" title="Some sections are taught this lesson a week later – see the teaching calendar">*</i></small><small class="focus" data-i18n="Refine">Refine</small></th><td class="g g6"><a class="ls" href="grade-6/main-w9-l1.html" title="Signature Solution: Refining &amp; Finishing + Final Iteration and Risk Review"><b dir="ltr" lang="en">Signature Solution: Refining &amp; Finishing</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w9-l1.html" title="Refining &amp; Finishing + Lock It &amp; Rehearse"><b dir="ltr" lang="en">Refining &amp; Finishing</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w9-l1.html" title="Refining and Finishing + Lock It and Show It"><b dir="ltr" lang="en">Refining and Finishing</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w9-l1.html" title="Refining &amp; Finishing the System + Lock It &amp; Rehearse the Demo"><b dir="ltr" lang="en">Refining &amp; Finishing the System</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w9-l1.html" title="Refining &amp; Finishing the System + Lock It and Rehearse the Demo"><b dir="ltr" lang="en">Refining &amp; Finishing the System</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w9-l1.html" title="Refining and Finishing + Lock It and Rehearse"><b dir="ltr" lang="en">Refining and Finishing</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w9-l1.html" title="Refining and Explainability + Lock the Architecture and Rehearse"><b dir="ltr" lang="en">Refining and Explainability</b></a></td></tr>
-    <tr data-week="10" data-from="2026-12-07" data-to="2026-12-11"><th scope="row"><b><span data-i18n="Week">Week</span> 10</b><small class="dates"><bdi dir="ltr">7 – 11 Dec</bdi> <i class="star" title="Some sections are taught this lesson a week later – see the teaching calendar">*</i></small><small class="focus" data-i18n="Showcase">Showcase</small></th><td class="g g6"><a class="ls" href="grade-6/main-w10-l1.html" title="Showcase, Assessment &amp; Reflection + Showcase Carousel and Reflection"><b dir="ltr" lang="en">Showcase, Assessment &amp; Reflection</b></a></td><td class="g g7"><a class="ls" href="grade-7/main-w10-l1.html" title="Showcase &amp; Reflection + Peer Review &amp; Stress-Test"><b dir="ltr" lang="en">Showcase &amp; Reflection</b></a></td><td class="g g8"><a class="ls" href="grade-8/main-w10-l1.html" title="Showcase and Reflect + Review, Measure, Aim"><b dir="ltr" lang="en">Showcase and Reflect</b></a></td><td class="g g9"><a class="ls" href="grade-9/main-w10-l1.html" title="Showcase, Assess &amp; Reflect + Peer Review &amp; Aim Higher"><b dir="ltr" lang="en">Showcase, Assess &amp; Reflect</b></a></td><td class="g g10"><a class="ls" href="grade-10/main-w10-l1.html" title="Showcase &amp; Reflection + Peer Review &amp; Aim Higher"><b dir="ltr" lang="en">Showcase &amp; Reflection</b></a></td><td class="g g11"><a class="ls" href="grade-11/main-w10-l1.html" title="Showcase and Reflection + Peer Review and Aim Higher"><b dir="ltr" lang="en">Showcase and Reflection</b></a></td><td class="g g12"><a class="ls" href="grade-12/main-w10-l1.html" title="Showcase and Reflection + Peer Review and Aim Higher"><b dir="ltr" lang="en">Showcase and Reflection</b></a></td></tr>
-    </tbody>
-  </table>
-  </div>
-  <p class="note" id="note">Dates are the AISA 2026–27 teaching weeks (Mid-Term Break 12–16 Oct, PD days 19–20 Oct). * UAE National Day moves the Week 9 and Week 10 lessons of some sections a week later – the teaching calendar shows each section's exact day. A lesson opens to students in the week their class is taught it.</p>
+  <section class="hero"><div class="now" id="now"></div><div class="side" id="side"></div></section>
+  <div class="listhead"><h2 id="listH"></h2><span id="listS"></span></div>
+  <div class="grades" id="grades" hidden><span class="lab" data-i18n="Choose your grade">Choose your grade</span></div>
+  <ol class="lessons" id="list"></ol>
+  <div id="table" hidden></div>
+  <noscript><p class="empty">Turn on JavaScript to see the lessons.</p></noscript>
 </main>
+
+<footer class="site"><div class="wrap">
+  <img src="assets/aisa/seal-white.png" alt="" width="64" height="64">
+  <div><b data-i18n="American International School in Abu Dhabi">American International School in Abu Dhabi</b><span data-i18n="AI Literacy · Grades 6–12">AI Literacy · Grades 6–12</span></div>
+  <p class="note" id="footNote"></p>
+</div></footer>
 
 <div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
   <div class="qrbox">
-    <h2 id="qrT" style="margin:0">Scan to open AI Lessons</h2>
+    <h2 id="qrT" style="margin:0" data-i18n="Scan to open AI Lessons">Scan to open AI Lessons</h2>
     <div id="qr"></div>
     <div class="url" id="qrUrl"></div>
-    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+    <p><button class="btn primary" id="qrClose" type="button" data-i18n="Close">Close</button></p>
   </div>
 </div>
+<button type="button" id="qrBtn" hidden></button>
 
 <script>
-/* If anything on this page fails, say so in the banner instead of failing silently. */
-window.onerror=function(m,src,l,c){var b=document.getElementById("banner");if(!b)return;
-  var esc=function(x){return String(x).replace(/[&<>]/g,function(ch){return ch==="&"?"&amp;":ch==="<"?"&lt;":"&gt;"})}, where=String(src||"").split("/").pop().split("?")[0]||"inline", snip=[];
-  try{[].forEach.call(document.scripts,function(sc,i){if(sc.src||!sc.text)return;var ln=sc.text.split(String.fromCharCode(10))[l-1];if(ln)snip.push("script "+i+": "+ln.slice(Math.max(0,(c||1)-60),(c||1)+60))})}catch(e){}
-  b.hidden=false;b.className="banner off";
-  b.innerHTML="<div><h2>Something on this page did not load.</h2><p class=\"err\">"+esc(m)+" – "+esc(location.host+" · "+where+" · line "+l+":"+c)+"</p><pre class=\"err\" style=\"white-space:pre-wrap;margin:6px 0 0\">"+esc(snip.join(String.fromCharCode(10)))+"</pre></div>"};
+/* If anything on this page fails, say so at the top of the page instead of failing silently. */
+window.onerror = function (m, src, l, c) { var n = document.getElementById('now'); if (!n) return;
+  n.insertAdjacentHTML('afterbegin', '<p class="notice">Something on this page did not load: ' + String(m).replace(/</g, '&lt;') + ' (' + String(src || '').split('/').pop().split('?')[0] + ' line ' + l + ':' + c + ')</p>'); };
 </script>
-<script src="school-calendar.js?v=2"></script>
+<script src="school-calendar.js?v=3"></script>
+<script src="lessons.js?v=3"></script>
 <script>
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-/* ---------- English / العربية (lesson titles stay in English) ---------- */
-let LANG=(()=>{try{return localStorage.getItem("aisa-lang")==="ar"?"ar":"en"}catch(e){return "en"}})();
-const NOTE_EN=$("#note").textContent;
-const AR={"AI Lessons":"دروس الذكاء الاصطناعي","📅 Teaching calendar →":"📅 تقويم التدريس ←","QR code":"رمز QR",
-  "Every AI Literacy lesson for Grades 6 to 12, week by week. Each Main course lesson is a Core lesson and its Lab, taught together.":"جميع دروس محو أمية الذكاء الاصطناعي للصفوف من 6 إلى 12، أسبوعًا بأسبوع. كل درس في البرنامج الرئيسي يتكوّن من درس أساسي ومختبره، يُدرَّسان معًا.",
-  "All grades":"جميع الصفوف","Grade":"الصف","Term 1":"الفصل الأول","Week":"الأسبوع","Bridging":"تمهيدي","Foundation":"تأسيسي",
-  "Launch":"انطلاق","Understand":"الفهم","Design":"التصميم","Evaluate":"التقييم","Ethics":"الأخلاقيات","Integrate":"الدمج","Plan":"التخطيط","Build":"البناء","Refine":"التحسين","Showcase":"العرض",
-  "This week":"هذا الأسبوع","Teaching week {n} · {d}":"الأسبوع الدراسي {n} · {d}","This week's lessons are highlighted below.":"دروس هذا الأسبوع مظلّلة أدناه.",
-  "Open today's calendar":"افتح تقويم اليوم","No AI lessons this week – {why}.":"لا توجد دروس ذكاء اصطناعي هذا الأسبوع – {why}.",
-  "Lessons start again with Week {n} on {d}.":"تُستأنف الدروس بالأسبوع {n} في {d}.","Term 1 lessons are finished. See the teaching calendar for what comes next.":"انتهت دروس الفصل الأول. راجع تقويم التدريس لمعرفة ما يلي.",
-  "Before the AI Literacy timetable starts (Monday 28 September 2026).":"قبل بدء جدول محو أمية الذكاء الاصطناعي (الإثنين 28 سبتمبر 2026).",
-  "🔒 Opens {d}":"🔒 يُفتح {d}","Scan to open AI Lessons":"امسح لفتح دروس الذكاء الاصطناعي","Close":"إغلاق","Show grade":"عرض الصف",
-  [NOTE_EN]:"التواريخ هي أسابيع التدريس في تقويم المدرسة 2026–27 (إجازة منتصف الفصل 12–16 أكتوبر، أيام التطوير المهني 19–20 أكتوبر). * يؤخّر اليوم الوطني دروس الأسبوعين 9 و10 لبعض الشعب أسبوعًا – يعرض تقويم التدريس اليوم الدقيق لكل شعبة. يُفتح الدرس للطلاب في الأسبوع الذي يُدرَّس فيه لصفّهم."};
-function T(s,v){let t=LANG==="ar"&&AR[s]?AR[s]:s;if(v)Object.keys(v).forEach(k=>{t=t.split("{"+k+"}").join(v[k])});return t}
-const fmt=(d,o)=>d.toLocaleDateString(LANG==="ar"?"ar-AE-u-nu-latn":"en-GB",o);
-
-/* ---------- This week: hard-coded Term 1 teaching weeks (same dates as the table) ---------- */
-const WEEKS=[[1, "2026-09-28", "2026-10-02", "28 Sep \u2013 2 Oct"], [2, "2026-10-05", "2026-10-09", "5 \u2013 9 Oct"], [3, "2026-10-19", "2026-10-23", "19 \u2013 23 Oct"], [4, "2026-10-26", "2026-10-30", "26 \u2013 30 Oct"], [5, "2026-11-02", "2026-11-06", "2 \u2013 6 Nov"], [6, "2026-11-09", "2026-11-13", "9 \u2013 13 Nov"], [7, "2026-11-16", "2026-11-20", "16 \u2013 20 Nov"], [8, "2026-11-23", "2026-11-27", "23 \u2013 27 Nov"], [9, "2026-11-30", "2026-12-04", "30 Nov \u2013 4 Dec"], [10, "2026-12-07", "2026-12-11", "7 \u2013 11 Dec"]];
-const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-function thisWeek(today){const t=iso(today);return WEEKS.find(w=>t>=w[1]&&t<=w[2])||null}
-function nextWeek(today){const t=iso(today);return WEEKS.find(w=>w[1]>t)||null}
-function render(){
-  const today=new Date(), w=thisWeek(today), b=$("#banner");
-  $$("tbody tr[data-week]").forEach(tr=>{const n=+tr.dataset.week;tr.classList.toggle("now",!!w&&n===w[0]);tr.classList.toggle("done",!!w?n<w[0]:false);
-    tr.querySelector("th b").dataset.now=T("This week")});
-  const cal=window.APP?APP.base+"?p=calendar":"calendar.html", calLink=`<a href="${cal}"${window.APP?' target="_top"':""}>${T("Open today's calendar")}</a>`;
-  b.hidden=false;b.className="banner";
-  if(w) b.innerHTML=`<div><h2>${T("Teaching week {n} · {d}",{n:w[0],d:'<bdi dir="ltr">'+w[3]+'</bdi>'})}</h2><p>${T("This week's lessons are highlighted below.")}</p></div>${calLink}`;
-  else{const nx=nextWeek(today),off=window.AICAL&&AICAL.noSchool(today);b.className="banner off";
-    b.innerHTML=nx&&nx[0]===1?`<div><h2>${T("Before the AI Literacy timetable starts (Monday 28 September 2026).")}</h2></div>`:
-      nx?`<div><h2>${T("No AI lessons this week – {why}.",{why:window.AICAL?AICAL.label(AICAL.noSchool(AICAL.monday(today))||off||"No school",LANG):"No school"})}</h2><p>${T("Lessons start again with Week {n} on {d}.",{n:nx[0],d:fmt(new Date(nx[1]+"T00:00:00"),{weekday:"long",day:"numeric",month:"long"})})}</p></div>${calLink}`:
-      `<div><h2>${T("Term 1 lessons are finished. See the teaching calendar for what comes next.")}</h2></div>${calLink}`}
-}
-/* ---------- Public site: weeks no class in the grade has reached yet stay locked.
-   (Signed-in students get the same rule for their own class from the app; staff see everything.) ---------- */
-function lockPublic(){
-  if(window.APP||!window.AICAL||typeof AICAL.releasedForGrade!=="function")return;
-  $$("a.ls[href*='/main-w']").forEach(a=>{const m=/grade-(\d+)\/main-w(\d+)-/.exec(a.getAttribute("href"));if(!m)return;
-    const g=+m[1],n=+m[2];if(n<=AICAL.releasedForGrade(g,new Date()))return;
-    const d=AICAL.opensOnGrade(g,n);a.dataset.href=a.getAttribute("href");a.removeAttribute("href");a.classList.add("locked");a.setAttribute("aria-disabled","true");
-    const s=document.createElement("small");s.className="opens";s.dataset.date=d?iso(d):"";a.appendChild(s)});
-}
-function paintLocks(){$$("a.ls.locked .opens").forEach(s=>{s.textContent=T("🔒 Opens {d}",{d:s.dataset.date?fmt(new Date(s.dataset.date+"T00:00:00"),{day:"numeric",month:"short"}):"–"})})}
-/* ---------- Grade filter (remembered on this device) ---------- */
-function show(g){$("#lessons").dataset.show=g;$$("#chips button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.show===g)));try{localStorage.setItem("lessons-grade",g)}catch(e){}}
-$("#chips").onclick=e=>{const b=e.target.closest("button");if(b)show(b.dataset.show)};
-try{const g=localStorage.getItem("lessons-grade");if(g)show(g)}catch(e){}
-function applyLang(){
-  document.documentElement.lang=LANG;document.documentElement.dir=LANG==="ar"?"rtl":"ltr";document.title=T("AI Lessons");
-  $$("[data-i18n]").forEach(el=>{el.textContent=T(el.dataset.i18n)});
-  $$("[data-i18n-grade]").forEach(el=>{el.textContent=T("Grade")+" "+el.dataset.i18nGrade});
-  $("#note").textContent=T(NOTE_EN);$("#chips").setAttribute("aria-label",T("Show grade"));
-  $("#langBtn").textContent=LANG==="ar"?"English":"العربية";$("#langBtn").lang=LANG==="ar"?"en":"ar";
-  render();paintLocks();
-}
-$("#langBtn").onclick=()=>{LANG=LANG==="ar"?"en":"ar";try{localStorage.setItem("aisa-lang",LANG)}catch(e){}applyLang()};
-[lockPublic,applyLang].forEach(f=>{try{f()}catch(e){window.onerror(e.message,'',0)}});
-/* ---------- QR code for this page ---------- */
-$("#qrBtn").onclick=()=>{
-  const url=window.APP?APP.base:location.href.split("#")[0];
-  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
-  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
-  if(window.QRCode)return draw();
-  const sc=document.createElement("script");sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
-  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};document.head.appendChild(sc);
+/* Home page. Three ways in:
+   - signed-in student (app): this week's lesson and their own AI lessons with dates – no grade picker;
+   - staff (app) and visitors (public site): choose a grade, then that grade's lessons with each class's days.
+   Dates, periods and breaks come from school-calendar.js; lessons from lessons.js (generated by app/build.py). */
+const $ = s => document.querySelector(s), esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const add = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; }, iso = AICAL.iso;
+const APP = window.APP || null, ROLE = APP ? APP.role : 'visitor';
+const NOW = (() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; })();
+const inSchedule = s => AICAL.SCHEDULE.some(r => r[0] === s);
+const STUDENT = ROLE === 'student' && APP.section && inSchedule(APP.section) ? APP.section : '';
+const STAFF = APP && ROLE !== 'student';
+const link = id => APP ? APP.base + '?p=' + encodeURIComponent(id) : id + '.html';
+const appPage = p => APP ? APP.base + '?p=' + p : p + '.html';
+const tgt = APP ? ' target="_top"' : '';
+let LANG = (() => { try { return localStorage.getItem('aisa-lang') === 'ar' ? 'ar' : 'en'; } catch (e) { return 'en'; } })();
+let GRADE = null, PROG = null;
+/* ---------- words (English / العربية). Lesson titles stay in English. ---------- */
+const AR = {
+  'AI Lessons': 'دروس الذكاء الاصطناعي', 'Lessons': 'الدروس', 'My lessons': 'دروسي', 'My progress': 'تقدّمي', 'Teaching calendar': 'تقويم التدريس', 'Calendar': 'التقويم', 'Dashboard': 'لوحة المتابعة',
+  'Choose your grade': 'اختر صفّك', 'All grades': 'جميع الصفوف', 'All AI lessons': 'جميع دروس الذكاء الاصطناعي', 'Every lesson, by grade': 'جميع الدروس حسب الصف',
+  '{n} lessons for Grades 6–12. Each class has its AI lesson on its own day – the teaching calendar has every date.': '{n} درسًا للصفوف 6–12. لكل شعبة يوم خاص لدرس الذكاء الاصطناعي – وفي تقويم التدريس جميع المواعيد.',
+  'Main course lessons by week, then foundation lessons.': 'دروس البرنامج الرئيسي حسب الأسبوع، ثم الدروس التمهيدية.', 'Grade {g}': 'الصف {g}', '{n} lessons': '{n} دروس', '1 lesson': 'درس واحد',
+  'Grade {g} only': 'الصف {g} فقط', 'No lessons on the site yet.': 'لا توجد دروس على الموقع بعد.', 'Teaching calendar →': 'تقويم التدريس ←', 'This week in every grade': 'هذا الأسبوع في جميع الصفوف', 'Grade': 'الصف', 'Week {n}': 'الأسبوع {n}', 'All Grade {g} lessons': 'جميع دروس الصف {g}', 'American International School in Abu Dhabi': 'المدرسة الأمريكية الدولية في أبوظبي', 'AI Literacy · Grades 6–12': 'محو أمية الذكاء الاصطناعي · الصفوف 6–12',
+  'Scan to open AI Lessons': 'امسح الرمز لفتح دروس الذكاء الاصطناعي', 'Close': 'إغلاق',
+  'Teaching week {n} · {a} – {b}': 'الأسبوع الدراسي {n} · {a} – {b}', 'Before the AI timetable starts': 'قبل بدء جدول الذكاء الاصطناعي',
+  'Hi {name} – here is your lesson this week': 'مرحبًا {name} – هذا درسك لهذا الأسبوع', 'Hi {name} – no AI lesson this week': 'مرحبًا {name} – لا يوجد درس ذكاء اصطناعي هذا الأسبوع',
+  'Grade {g} · Week {n}': 'الصف {g} · الأسبوع {n}', 'Week {n} lesson': 'درس الأسبوع {n}', 'Lesson page coming': 'صفحة الدرس قيد الإعداد',
+  'Your class has it on {d}, period {p} ({s}).': 'يدرس صفّك هذا الدرس يوم {d}، الحصة {p} ({s}).', 'Your class had it on {d}, period {p} ({s}). Finish it before your next AI lesson.': 'درس صفّك هذا الدرس يوم {d}، الحصة {p} ({s}). أكمله قبل درس الذكاء الاصطناعي التالي.',
+  'Arabic Studies': 'اللغة العربية', 'Islamic Studies': 'التربية الإسلامية',
+  '{d} of {a} activities checked · {p}% first try': 'تم تصحيح {d} من {a} أنشطة · {p}% في المحاولة الأولى', '✓ Finished · {p}% first try': '✓ مكتمل · {p}% في المحاولة الأولى', 'Not started yet': 'لم تبدأ بعد',
+  'Start lesson →': 'ابدأ الدرس ←', 'Continue lesson →': 'تابع الدرس ←', 'Review lesson →': 'راجع الدرس ←', 'Open lesson →': 'افتح الدرس ←', 'See my progress': 'اعرض تقدّمي',
+  'No school next week': 'لا دوام الأسبوع القادم', 'No school coming up': 'عطلة قادمة', 'Next AI lesson': 'درس الذكاء الاصطناعي التالي',
+  'Your next AI lesson is {d}.': 'درس الذكاء الاصطناعي التالي يوم {d}.', '{d} · period {p}': '{d} · الحصة {p}',
+  '{a} of {b} lessons finished · {p}% first try': 'أكملت {a} من {b} دروس · {p}% في المحاولة الأولى', '{a} of {b} lessons finished': 'أكملت {a} من {b} دروس', 'See my strands and badges': 'اعرض مجالاتي وأوسمتي',
+  'Teachers': 'المعلمون', 'The teaching calendar shows each class\'s lessons, with links to share with students.': 'يعرض تقويم التدريس دروس كل شعبة، مع روابط لمشاركتها مع الطلاب.', 'Show a QR code for this page': 'اعرض رمز QR لهذه الصفحة',
+  'My AI lessons': 'دروس الذكاء الاصطناعي الخاصة بي', '{s} · one AI lesson a week · dates move if a holiday falls on your lesson': '{s} · درس واحد أسبوعيًا · يتغيّر الموعد إذا صادف درسك عطلة',
+  'Week {n} · Period {p} · {s}': 'الأسبوع {n} · الحصة {p} · {s}', 'Period {p} · {s}': 'الحصة {p} · {s}', ' · this week': ' · هذا الأسبوع',
+  'In progress · {d} of {a} activities': 'قيد التنفيذ · {d} من {a} أنشطة', 'Not started': 'لم يبدأ', 'Review': 'مراجعة', 'Continue': 'متابعة', 'Start': 'ابدأ', 'Preview': 'معاينة', 'Open': 'افتح',
+  'No school': 'لا دوام', 'Foundation lessons': 'الدروس التمهيدية', 'Extra lessons for Grade {g} · dates to be announced': 'دروس إضافية للصف {g} · تُعلن المواعيد لاحقًا', 'Later': 'لاحقًا', 'Week': 'الأسبوع',
+  'This week\'s lesson for Grade {g}': 'درس هذا الأسبوع للصف {g}', 'No AI lessons for Grade {g} this week': 'لا توجد دروس ذكاء اصطناعي للصف {g} هذا الأسبوع', 'Grade {g} lessons': 'دروس الصف {g}',
+  'Each class has its AI lesson on its own day.': 'لكل شعبة يوم خاص لدرس الذكاء الاصطناعي.', 'Pick your grade to see this week\'s AI lesson and every lesson for your grade.': 'اختر صفّك لعرض درس هذا الأسبوع وجميع دروس صفّك.',
+  'Next lessons: {list}.': 'الدروس التالية: {list}.', 'Your answers save to your school account as you go. Only you, your teachers and school leaders can see your progress.': 'تُحفظ إجاباتك في حسابك المدرسي أولًا بأول. لا يرى تقدّمك إلا أنت ومعلموك وقيادة المدرسة.',
+  'Lessons work on any device. Sign in with your school account to save your answers.': 'تعمل الدروس على أي جهاز. سجّل الدخول بحسابك المدرسي لحفظ إجاباتك.',
+  'Every lesson, by week': 'جميع الدروس حسب الأسبوع', 'Each Main course lesson is a Core lesson and its Lab, taught together.': 'كل درس في البرنامج الرئيسي يتكوّن من درس أساسي ومختبره، يُدرَّسان معًا.',
+  'Show': 'عرض', 'This week\'s lessons are highlighted in the table below.': 'دروس هذا الأسبوع مظلّلة في الجدول أدناه.', 'Term 1': 'الفصل الأول', 'Bridging': 'تمهيدي', 'This week': 'هذا الأسبوع',
+  'Opens {d}': 'يُفتح {d}', 'Some classes have this lesson a week later – see the teaching calendar.': 'لبعض الشعب هذا الدرس بعد أسبوع – راجع تقويم التدريس.',
+  'Launch': 'انطلاق', 'Understand': 'الفهم', 'Design': 'التصميم', 'Evaluate': 'التقييم', 'Ethics': 'الأخلاقيات', 'Integrate': 'الدمج', 'Plan': 'التخطيط', 'Build': 'البناء', 'Refine': 'التحسين', 'Showcase': 'العرض',
+  '* UAE National Day moves the Week 9 and Week 10 lessons of some classes a week later – the teaching calendar shows each class\'s exact day. A lesson opens to students in the week their class is taught it.': '* يؤخّر اليوم الوطني دروس الأسبوعين 9 و10 لبعض الشعب أسبوعًا – يعرض تقويم التدريس اليوم الدقيق لكل شعبة. يُفتح الدرس للطلاب في الأسبوع الذي يُدرَّس فيه لصفّهم.',
+  'We could not find your class on the AI Literacy lists yet – ask your teacher. Meanwhile, choose your grade.': 'لم نجد صفّك في قوائم محو أمية الذكاء الاصطناعي بعد – اسأل معلمك. وفي الأثناء اختر صفّك.'
 };
-$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
-$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
-document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+const T = (s, v) => { let o = LANG === 'ar' && AR[s] !== undefined ? AR[s] : s; if (v) o = o.replace(/\{(\w+)\}/g, (m, k) => v[k] !== undefined ? v[k] : m); return o; };
+const DAY = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], DAYL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'], MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], MONL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const LOC = () => LANG === 'ar' ? 'ar-AE-u-nu-latn' : 'en-GB';
+const fd = d => LANG === 'ar' ? d.toLocaleDateString(LOC(), { weekday: 'short', day: 'numeric', month: 'short' }) : `${DAY[d.getDay()]} ${d.getDate()} ${MON[d.getMonth()]}`;
+const fdl = d => LANG === 'ar' ? d.toLocaleDateString(LOC(), { weekday: 'long', day: 'numeric', month: 'long' }) : `${DAYL[d.getDay()]} ${d.getDate()} ${MONL[d.getMonth()]}`;
+const fdm = d => LANG === 'ar' ? d.toLocaleDateString(LOC(), { day: 'numeric', month: 'short' }) : `${d.getDate()} ${MON[d.getMonth()]}`;
+const wd = d => LANG === 'ar' ? d.toLocaleDateString(LOC(), { weekday: 'short' }) : DAY[d.getDay()];
+const mo = d => LANG === 'ar' ? d.toLocaleDateString(LOC(), { month: 'short' }) : MON[d.getMonth()];
+const secName = s => LANG === 'ar' ? String(s).replace(/^Boys\b/, 'بنين').replace(/^Girls\b/, 'بنات') : s;
+const subj = s => T(s + ' Studies');
+const why = w => LANG === 'ar' ? AICAL.label(w, 'ar') : String(w).replace(/ – no school for students/, '');
+const en = s => `<span lang="en" dir="ltr">${esc(s)}</span>`;
+/* ---------- calendar helpers ---------- */
+const mainLesson = (g, n) => LESSON_LIST.find(l => l.grade === g && l.course === 'main' && l.week === n) || null;
+const sectionsOf = g => ['Boys ' + g, 'Girls ' + g].filter(inSchedule);
+const rowFor = (sec, d) => AICAL.SCHEDULE.find(r => r[0] === sec && r[4] === AICAL.DAYS[d.getDay()] && r[3] === AICAL.cycleOf(d));
+function spans(from, to) { const out = []; for (let d = new Date(from); d <= to; d = add(d, 1)) { if (d.getDay() === 0 || d.getDay() === 6) continue; const w = AICAL.noSchool(d); if (!w || /After the last/.test(w)) continue;
+  const l = out[out.length - 1]; if (l && l.why === w && d - l.to <= 3 * 864e5) l.to = new Date(d); else out.push({ why: w, from: new Date(d), to: new Date(d) }); } return out; }
+const spanText = s => why(s.why) + ' ' + (iso(s.from) === iso(s.to) ? fd(s.from) : fdm(s.from) + ' – ' + fdm(s.to));
+const mon = AICAL.monday(NOW), fri = add(mon, 4), TW = AICAL.teachingWeek(NOW);
+function weekLabel() {
+  if (TW === 0) return T('Before the AI timetable starts');
+  if (TW === null) return why(AICAL.noSchool(mon) || 'No school') + ' · ' + fdm(mon) + ' – ' + fdm(fri);
+  return T('Teaching week {n} · {a} – {b}', { n: TW, a: fdm(mon), b: fdm(fri) });
+}
+const progOf = l => { if (!PROG || !l) return null; const p = PROG[l.id]; if (!p) return { state: 'none' }; const pct = p.max ? Math.round(p.score / p.max * 100) : 0;
+  return { state: l.activities && p.done >= l.activities ? 'done' : 'doing', done: p.done, pct }; };
+function breakCard(sections) {
+  const sp = spans(add(fri, 3), add(fri, 21)), next = sections.map(s => ({ s, nx: AICAL.nextLesson(s, fri) })).filter(x => x.nx);
+  const title = sp.length ? (iso(sp[0].from) <= iso(add(fri, 7)) ? T('No school next week') : T('No school coming up')) : T('Next AI lesson');
+  let body = sp.map(spanText).join(', ') + (sp.length ? '. ' : '');
+  if (STUDENT && next[0]) body += T('Your next AI lesson is {d}.', { d: `<b>${esc(fdl(next[0].nx.date))}</b>` });
+  else if (next.length) body += T('Next lessons: {list}.', { list: next.map(x => `<b>${esc(secName(x.s))}</b> ${esc(fd(x.nx.date))}`).join(' · ') });
+  return next.length || sp.length ? `<div class="card"><span class="ico" aria-hidden="true">📅</span><div><b>${esc(title)}</b><small>${body}</small></div></div>` : '';
+}
+/* ---------- student: this week's lesson and my AI lessons ---------- */
+function studentView() {
+  const sec = STUDENT, g = Number(APP.grade) || Number(sec.replace(/\D/g, '')), n = AICAL.currentLesson(sec, NOW), d = AICAL.lessonDate(sec, n);
+  /* a lesson opens on the Monday of the week the class is taught it (the server enforces this too) */
+  const REL = typeof AICAL.releasedFor === 'function' ? AICAL.releasedFor(sec, NOW) : 99, opens = w => { const o = AICAL.opensOn && AICAL.opensOn(sec, w); return o ? fdl(o) : '–'; };
+  const L = n <= REL ? mainLesson(g, n) : null;
+  const first = String(APP.name || '').split(' ')[0] || '', inWeek = d && d >= mon && d <= fri, r = d && rowFor(sec, d), pr = progOf(L);
+  let h = `<span class="eyebrow">${esc(weekLabel())}</span><h1>${esc(T(inWeek ? 'Hi {name} – here is your lesson this week' : 'Hi {name} – no AI lesson this week', { name: first }))}</h1>` +
+    `<span class="chip purple">${esc(T('Grade {g} · Week {n}', { g, n }))}</span><div class="title">${L ? en(L.title) : esc(T('Week {n} lesson', { n }))}</div>`;
+  if (d && r) h += `<p>${T(d < NOW ? 'Your class had it on {d}, period {p} ({s}). Finish it before your next AI lesson.' : 'Your class has it on {d}, period {p} ({s}).', { d: `<b>${esc(fdl(d))}</b>`, p: r[5], s: esc(subj(r[2])) })}</p>`;
+  if (L && pr && pr.state !== 'none') h += pr.state === 'done' ? `<p><span class="chip ok">${esc(T('✓ Finished · {p}% first try', { p: pr.pct }))}</span></p>` :
+    `<div class="bar"><i style="width:${Math.round(pr.done / L.activities * 100)}%"></i></div><p style="font-size:13.5px">${esc(T('{d} of {a} activities checked · {p}% first try', { d: pr.done, a: L.activities, p: pr.pct }))}</p>`;
+  else if (L && pr) h += `<p style="font-size:13.5px">${esc(T('Not started yet'))}</p>`;
+  if (!L) h += `<p><span class="chip muted">${esc(n > REL ? '🔒 ' + T('Opens {d}', { d: opens(n) }) : T('Lesson page coming'))}</span></p>`;
+  h += `<div class="acts">${L ? `<a class="btn primary" href="${esc(link(L.id))}"${tgt}>${esc(T(!pr || pr.state === 'none' ? 'Start lesson →' : pr.state === 'done' ? 'Review lesson →' : 'Continue lesson →'))}</a>` : ''}<a class="btn quiet" href="${esc(appPage('dashboard'))}"${tgt}>${esc(T('See my progress'))}</a></div>`;
+  $('#now').innerHTML = h;
+  /* side: break or next lesson, and my progress so far */
+  const lessons = LESSON_LIST.filter(l => l.grade === g && l.course === 'main'), taught = AICAL.taughtSoFar(sec, NOW), due = lessons.filter(l => l.week <= taught);
+  let side = breakCard([sec]);
+  if (PROG) { let fin = 0, p = 0, m = 0; due.forEach(l => { const q = progOf(l); if (q.state === 'done') fin++; }); Object.values(PROG).forEach(q => { p += q.score; m += q.max; });
+    side += `<div class="card"><span class="ico" aria-hidden="true">🏅</span><div><b>${esc(T('My progress'))}</b><small>${esc(m ? T('{a} of {b} lessons finished · {p}% first try', { a: fin, b: due.length, p: Math.round(p / m * 100) }) : T('{a} of {b} lessons finished', { a: fin, b: due.length }))}<br><a href="${esc(appPage('dashboard'))}"${tgt}>${esc(T('See my strands and badges'))}</a></small></div></div>`; }
+  $('#side').innerHTML = side;
+  /* list: one row per lesson, with this class's date */
+  $('#listH').textContent = T('My AI lessons'); $('#listS').textContent = T('{s} · one AI lesson a week · dates move if a holiday falls on your lesson', { s: secName(sec) });
+  const last = Math.max(n + 3, ...lessons.map(l => l.week)), rows = []; let prev = null;
+  for (let w = 1; w <= last; w++) {
+    const dd = AICAL.lessonDate(sec, w); if (!dd) break;
+    const rr = rowFor(sec, dd), l = mainLesson(g, w), q = progOf(l), cur = w === n, past = dd < mon && !cur, later = dd > fri;
+    if (prev) { const gap = spans(add(prev, 1), add(dd, -1)); if (gap.length) rows.push(`<li class="off"><span aria-hidden="true">🏖️</span><span><b>${esc(T('No school'))}</b> · ${esc(gap.map(spanText).join(' · '))}</span></li>`); }
+    prev = dd;
+    let chip = '', btn = '';
+    if (l && w > REL) chip = `<span class="chip muted">🔒 ${esc(T('Opens {d}', { d: opens(w) }))}</span>`;
+    else if (!l) chip = `<span class="chip muted">${esc(T('Lesson page coming'))}</span>`;
+    else if (q && q.state === 'done') { chip = `<span class="chip ok">${esc(T('✓ Finished · {p}% first try', { p: q.pct }))}</span>`; btn = T('Review'); }
+    else if (q && q.state === 'doing') { chip = `<span class="chip warn">${esc(T('In progress · {d} of {a} activities', { d: q.done, a: l.activities }))}</span>`; btn = T('Continue'); }
+    else if (q && dd <= NOW) { chip = `<span class="chip muted">${esc(T('Not started'))}</span>`; btn = T('Start'); }
+    else btn = dd <= NOW || cur ? T('Start') : T('Preview');
+    const meta = l ? T('Week {n} · Period {p} · {s}', { n: w, p: rr[5], s: subj(rr[2]) }) : T('Period {p} · {s}', { p: rr[5], s: subj(rr[2]) });
+    rows.push(`<li class="${cur ? 'cur' : past ? 'done' : 'later'}"><div class="dt${later ? ' later' : ''}"><small>${esc(wd(dd))}</small><b>${dd.getDate()}</b><small>${esc(mo(dd))}</small></div>` +
+      `<div><b class="t">${l ? en(l.title) : esc(T('Week {n} lesson', { n: w }))}</b><div class="meta">${esc(meta)}${cur ? esc(T(' · this week')) : ''}</div>${chip ? `<div class="st">${chip}</div>` : ''}</div>` +
+      (l && w <= REL ? `<a class="btn small ${cur ? 'primary' : q && q.state === 'done' ? '' : 'quiet'}" href="${esc(link(l.id))}"${tgt}>${esc(btn)}</a>` : '') + '</li>');
+  }
+  rows.push(...foundationRows(g));
+  $('#list').innerHTML = rows.join('');
+}
+function foundationRows(g) {
+  const fl = LESSON_LIST.filter(l => l.grade === g && l.course === 'bridging');
+  return fl.map(l => `<li class="later"><div class="wk"><small>${esc(T('Later'))}</small><b>–</b></div><div><b class="t">${en(l.title)}</b><div class="meta">${esc(T('Foundation lessons'))} · ${esc(T('Extra lessons for Grade {g} · dates to be announced', { g }))}</div></div><a class="btn small quiet" href="${esc(link(l.id))}"${tgt}>${esc(T('Open'))}</a></li>`);
+}
+/* ---------- staff and visitors: every lesson in one table, weeks down the side, grades across ---------- */
+/* Term 1 teaching weeks (AISA 2026–27 calendar), hard-coded: the row for today's week is highlighted. */
+const WEEKS = [[1, '2026-09-28', '2026-10-02', 'Launch'], [2, '2026-10-05', '2026-10-09', 'Understand'], [3, '2026-10-19', '2026-10-23', 'Design'],
+  [4, '2026-10-26', '2026-10-30', 'Evaluate'], [5, '2026-11-02', '2026-11-06', 'Ethics'], [6, '2026-11-09', '2026-11-13', 'Integrate'],
+  [7, '2026-11-16', '2026-11-20', 'Plan'], [8, '2026-11-23', '2026-11-27', 'Build'], [9, '2026-11-30', '2026-12-04', 'Refine'], [10, '2026-12-07', '2026-12-11', 'Showcase']];
+const THIS_WEEK = (WEEKS.find(w => iso(NOW) >= w[1] && iso(NOW) <= w[2]) || [0])[0];
+const GRADES = [6, 7, 8, 9, 10, 11, 12];
+const pd = s => { const p = s.split('-').map(Number); return new Date(p[0], p[1] - 1, p[2]); };
+/* public site only: a week stays locked until a class in that grade reaches it (signed-in students: the app decides) */
+const lockedPublic = (g, w) => !APP && typeof AICAL.releasedForGrade === 'function' && w > AICAL.releasedForGrade(g, NOW);
+function tableView() {
+  $('#list').innerHTML = ''; $('#listH').textContent = T('Every lesson, by week'); $('#listS').textContent = T('Each Main course lesson is a Core lesson and its Lab, taught together.');
+  const show = GRADE === null ? 'all' : String(GRADE), pills = $('#grades'); pills.hidden = false;
+  pills.querySelector('.lab').textContent = T('Show');
+  pills.querySelectorAll('.gp').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.g === show)));
+  const wk = WEEKS.find(w => w[0] === THIS_WEEK);
+  $('#now').innerHTML = `<span class="eyebrow">${esc(weekLabel())}</span><h1>${esc(T('AI Lessons'))}</h1>` +
+    `<p>${esc(THIS_WEEK ? T('This week\'s lessons are highlighted in the table below.') : T('{n} lessons for Grades 6–12. Each class has its AI lesson on its own day – the teaching calendar has every date.', { n: LESSON_LIST.length }))}</p>` +
+    `<div class="acts"><a class="btn primary" href="${esc(appPage('calendar'))}"${tgt}>${esc(T('Teaching calendar →'))}</a></div>`;
+  $('#side').innerHTML = breakCard([]) + teacherCard();
+  const cell = (g, l, bridging) => {
+    if (!l) return `<td class="g g${g} none" style="background:var(--gt${g})">–</td>`;
+    const short = bridging ? l.title : l.title.split(' + ')[0], lock = !bridging && lockedPublic(g, l.week), d = lock && AICAL.opensOnGrade(g, l.week);
+    return `<td class="g g${g}" style="background:var(--gt${g})"><a class="ls${lock ? ' locked' : ''}"${lock ? ' aria-disabled="true"' : ` href="${esc(link(l.id))}"${tgt}`} title="${esc(l.title)}">` +
+      `<b lang="en" dir="ltr">${esc(short)}</b>${lock ? `<small class="opens">🔒 ${esc(T('Opens {d}', { d: d ? fdm(d) : '–' }))}</small>` : ''}</a></td>`;
+  };
+  let h = `<table class="grid" data-show="${esc(show)}"><thead><tr><th scope="col">${esc(T('Term 1'))}</th>` +
+    GRADES.map(g => `<th scope="col" class="g g${g}" style="--gc:var(--g${g})">${esc(T('Grade {g}', { g }))}</th>`).join('') + '</tr></thead><tbody>';
+  h += `<tr class="bridge"><th scope="row"><b>${esc(T('Bridging'))}</b><small>${esc(T('Foundation lessons'))}</small></th>` +
+    GRADES.map(g => cell(g, LESSON_LIST.find(l => l.grade === g && l.course === 'bridging'), true)).join('') + '</tr>';
+  WEEKS.forEach(([n, a, b, focus]) => {
+    const cur = n === THIS_WEEK;
+    h += `<tr class="${cur ? 'thisweek' : ''}"><th scope="row"><b>${esc(T('Week {n}', { n }))}</b>${cur ? `<span class="tw">${esc(T('This week'))}</span>` : ''}` +
+      `<small dir="ltr">${esc(fdm(pd(a)) + ' – ' + fdm(pd(b)))}${n >= 9 ? ' <i class="star" title="' + esc(T('Some classes have this lesson a week later – see the teaching calendar.')) + '">*</i>' : ''}</small><small class="focus">${esc(T(focus))}</small></th>` +
+      GRADES.map(g => cell(g, mainLesson(g, n), false)).join('') + '</tr>';
+  });
+  h += '</tbody></table>';
+  $('#table').hidden = false;
+  $('#table').innerHTML = `<div class="tablewrap">${h}</div><p class="tnote">${esc(T('* UAE National Day moves the Week 9 and Week 10 lessons of some classes a week later – the teaching calendar shows each class\'s exact day. A lesson opens to students in the week their class is taught it.'))}</p>`;
+}
+/* ---------- (earlier list views, kept for reference) ---------- */
+function allView() {
+  $('#now').innerHTML = `<span class="eyebrow">${esc(weekLabel())}</span><h1>${esc(T('All AI lessons'))}</h1>` +
+    `<p>${esc(T('{n} lessons for Grades 6–12. Each class has its AI lesson on its own day – the teaching calendar has every date.', { n: LESSON_LIST.length }))}</p>` +
+    `<div class="acts"><a class="btn primary" href="${esc(appPage('calendar'))}"${tgt}>${esc(T('Teaching calendar →'))}</a></div>`;
+  $('#side').innerHTML = breakCard([]) + teacherCard();
+  $('#listH').textContent = T('Every lesson, by grade'); $('#listS').textContent = T('Main course lessons by week, then foundation lessons.');
+  const rows = [];
+  for (let g = 6; g <= 12; g++) {
+    const secs = sectionsOf(g), n = Math.max(0, ...secs.map(s => AICAL.currentLesson(s, NOW)));
+    const main = LESSON_LIST.filter(l => l.grade === g && l.course === 'main').sort((a, b) => a.week - b.week), count = LESSON_LIST.filter(l => l.grade === g).length;
+    rows.push(`<li class="ghead"><span class="gbadge" style="background:var(--g${g})">${esc(T('Grade {g}', { g }))}</span><span class="n">${esc(count === 1 ? T('1 lesson') : T('{n} lessons', { n: count }))}</span>` +
+      `<button type="button" class="btn small quiet" data-pick="${g}">${esc(T('Grade {g} only', { g }))}</button></li>`);
+    main.forEach(l => {
+      const ds = secs.map(s => { const d = AICAL.lessonDate(s, l.week); return d ? `${secName(s)}: ${fd(d)}` : ''; }).filter(Boolean), cur = l.week === n;
+      rows.push(`<li class="${cur ? 'cur' : ''}"><div class="wk"><small>${esc(T('Week'))}</small><b>${l.week}</b></div><div><b class="t">${en(l.title)}</b><div class="meta">${esc(ds.join(' · '))}${cur ? esc(T(' · this week')) : ''}</div></div>` +
+        `<a class="btn small" href="${esc(link(l.id))}"${tgt}>${esc(T('Open'))}</a></li>`);
+    });
+    rows.push(...foundationRows(g));
+    if (!count) rows.push(`<li class="later"><div class="wk"><small>${esc(T('Grade'))}</small><b>${g}</b></div><div class="meta">${esc(T('No lessons on the site yet.'))}</div></li>`);
+  }
+  $('#list').innerHTML = rows.join('');
+}
+function gradeView() {
+  const pills = $('#grades'); pills.hidden = GRADE === null;
+  pills.querySelectorAll('.gp').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.g === String(GRADE))));
+  if (GRADE === 'all') return allView();
+  if (GRADE === null) {
+    $('#now').innerHTML = `<span class="eyebrow">${esc(weekLabel())}</span><h1>${esc(T('Choose your grade'))}</h1><p>${esc(T('Pick your grade to see this week\'s AI lesson and every lesson for your grade.'))}</p>` +
+      `<div class="bigrades">${[6, 7, 8, 9, 10, 11, 12].map(g => `<button type="button" class="gp" style="--gc:var(--g${g})" data-g="${g}">${g}</button>`).join('')}` +
+      `<button type="button" class="gp" style="--gc:var(--purple)" data-g="all">${esc(T('All grades'))}</button></div>`;
+    $('#side').innerHTML = breakCard([]) + teacherCard();
+    $('#listH').textContent = T('This week in every grade'); $('#listS').textContent = T('Each class has its AI lesson on its own day.');
+    $('#list').innerHTML = [6, 7, 8, 9, 10, 11, 12].map(g => {
+      const secs = sectionsOf(g), n = Math.max(0, ...secs.map(s => AICAL.currentLesson(s, NOW))), L = mainLesson(g, n);
+      const ds = secs.map(s => { const d = AICAL.lessonDate(s, n); return d ? `${secName(s)}: ${fd(d)}` : ''; }).filter(Boolean);
+      return `<li><div class="wk" style="background:var(--g${g});color:#fff"><small style="color:#fff">${esc(T('Grade'))}</small><b>${g}</b></div><div><b class="t">${L ? en(L.title) : esc(T('Week {n} lesson', { n }))}</b>` +
+        `<div class="meta">${esc(T('Week {n}', { n }))}${ds.length ? ' · ' + esc(ds.join(' · ')) : ''}</div>${L ? '' : `<div class="st"><span class="chip muted">${esc(T('Lesson page coming'))}</span></div>`}</div>` +
+        `<div style="display:flex;gap:8px;flex-wrap:wrap">${L ? `<a class="btn small" href="${esc(link(L.id))}"${tgt}>${esc(T('Open'))}</a>` : ''}<button type="button" class="btn small quiet" data-pick="${g}">${esc(T('All Grade {g} lessons', { g }))}</button></div></li>`;
+    }).join('');
+    return;
+  }
+  const g = GRADE, secs = sectionsOf(g), n = Math.max(0, ...secs.map(s => AICAL.currentLesson(s, NOW))), L = mainLesson(g, n);
+  const days = secs.map(s => { const d = AICAL.lessonDate(s, n), r = d && rowFor(s, d); return d && r && d >= mon && d <= fri ? `<b>${esc(secName(s))}</b>: ${esc(fd(d))}, ${esc(T('Period {p} · {s}', { p: r[5], s: subj(r[2]) }))}` : ''; }).filter(Boolean);
+  $('#now').innerHTML = `<span class="eyebrow">${esc(weekLabel())}</span><h1>${esc(T(days.length ? 'This week\'s lesson for Grade {g}' : 'No AI lessons for Grade {g} this week', { g }))}</h1>` +
+    (n ? `<span class="chip purple">${esc(T('Grade {g} · Week {n}', { g, n }))}</span><div class="title">${L ? en(L.title) : esc(T('Week {n} lesson', { n }))}</div>` : '') +
+    (days.length ? `<p>${days.join(' · ')}</p>` : '') + (n && !L ? `<p><span class="chip muted">${esc(T('Lesson page coming'))}</span></p>` : '') +
+    (L ? `<div class="acts"><a class="btn primary" href="${esc(link(L.id))}"${tgt}>${esc(T('Open lesson →'))}</a></div>` : '');
+  $('#side').innerHTML = breakCard(secs) + teacherCard();
+  $('#listH').textContent = T('Grade {g} lessons', { g }); $('#listS').textContent = T('Each class has its AI lesson on its own day.');
+  const lessons = LESSON_LIST.filter(l => l.grade === g && l.course === 'main'), last = Math.max(n + 2, ...lessons.map(l => l.week)), rows = [];
+  for (let w = 1; w <= last; w++) {
+    const l = mainLesson(g, w), ds = secs.map(s => { const d = AICAL.lessonDate(s, w); return d ? `${secName(s)}: ${fd(d)}` : ''; }).filter(Boolean);
+    if (!ds.length) break;
+    const cur = w === n, later = secs.every(s => { const d = AICAL.lessonDate(s, w); return d && d > fri; });
+    rows.push(`<li class="${cur ? 'cur' : later ? 'later' : ''}"><div class="wk"><small>${esc(T('Week'))}</small><b>${w}</b></div><div><b class="t">${l ? en(l.title) : esc(T('Week {n} lesson', { n: w }))}</b><div class="meta">${esc(ds.join(' · '))}${cur ? esc(T(' · this week')) : ''}</div>` +
+      (l ? '' : `<div class="st"><span class="chip muted">${esc(T('Lesson page coming'))}</span></div>`) + `</div>${l ? `<a class="btn small" href="${esc(link(l.id))}"${tgt}>${esc(T('Open'))}</a>` : ''}</li>`);
+  }
+  rows.push(...foundationRows(g));
+  $('#list').innerHTML = rows.join('');
+}
+function teacherCard() {
+  if (STUDENT) return '';
+  return `<div class="card"><span class="ico" aria-hidden="true">🧑‍🏫</span><div><b>${esc(T('Teachers'))}</b><small>${esc(T('The teaching calendar shows each class\'s lessons, with links to share with students.'))} <a href="${esc(appPage('calendar'))}"${tgt}>${esc(T('Teaching calendar'))}</a></small>` +
+    `<button type="button" class="lnk" data-qr>${esc(T('Show a QR code for this page'))}</button></div></div>`;
+}
+/* ---------- shell ---------- */
+function shell() {
+  document.documentElement.lang = LANG; document.documentElement.dir = LANG === 'ar' ? 'rtl' : 'ltr';
+  document.title = T('AI Lessons');
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = T(el.dataset.i18n); });
+  const items = STUDENT || ROLE === 'student' ? [['My lessons', null], ['My progress', 'dashboard']] : STAFF ? [['Lessons', null], ['Calendar', 'calendar'], ['Dashboard', 'dashboard']] : [['Lessons', null], ['Teaching calendar', 'calendar']];
+  $('#nav').innerHTML = items.map(([t, p]) => p ? `<a href="${esc(appPage(p))}"${tgt}>${esc(T(t))}</a>` : `<a href="${esc(appPage('index'))}"${tgt} aria-current="page">${esc(T(t))}</a>`).join('');
+  $('#homeLink').href = appPage('index'); if (APP) $('#homeLink').target = '_top';
+  $('#me').textContent = APP ? (APP.name || APP.email) + (STUDENT ? ' · ' + secName(STUDENT) : '') : '';
+  $('#langBtn').textContent = LANG === 'ar' ? 'English' : 'العربية'; $('#langBtn').lang = LANG === 'ar' ? 'en' : 'ar';
+  $('#footNote').textContent = T(APP ? 'Your answers save to your school account as you go. Only you, your teachers and school leaders can see your progress.' : 'Lessons work on any device. Sign in with your school account to save your answers.');
+}
+function render() {
+  shell();
+  if (STUDENT) return studentView();
+  tableView();
+  if (ROLE === 'student') $('#now').insertAdjacentHTML('afterbegin', `<p class="notice">${esc(T('We could not find your class on the AI Literacy lists yet – ask your teacher. Meanwhile, choose your grade.'))}</p>`);
+}
+/* grade pills (staff and visitors), remembered on this device */
+$('#grades').insertAdjacentHTML('beforeend', `<button type="button" class="gp" style="--gc:var(--purple)" data-g="all" aria-pressed="false" data-i18n="All grades">All grades</button>`);
+for (let g = 6; g <= 12; g++) $('#grades').insertAdjacentHTML('beforeend', `<button type="button" class="gp" style="--gc:var(--g${g})" data-g="${g}" aria-pressed="false">${g}</button>`);
+document.addEventListener('click', e => {
+  const b = e.target.closest('.gp, [data-pick]'); if (b) { const v = b.dataset.g || b.dataset.pick; GRADE = v === 'all' ? 'all' : Number(v); try { localStorage.setItem('home-grade', GRADE); } catch (x) {} render(); return; }
+  if (e.target.closest('[data-qr]')) $('#qrBtn').click();
+});
+if (!STUDENT) {
+  let saved = null; try { saved = localStorage.getItem('home-grade'); } catch (x) {}
+  /* teachers and admins see every lesson unless they picked a grade before; visitors choose a grade */
+  GRADE = Number(saved) >= 6 && Number(saved) <= 12 ? Number(saved) : 'all';
+}
+$('#langBtn').onclick = () => { LANG = LANG === 'ar' ? 'en' : 'ar'; try { localStorage.setItem('aisa-lang', LANG); } catch (e) {} render(); };
+/* QR code for this page (the sign-in bridge swaps in the app link) */
+$('#qrBtn').onclick = () => {
+  const url = location.href.split('#')[0]; $('#qrUrl').textContent = url; $('#ov').classList.add('on');
+  const draw = () => { $('#qr').innerHTML = ''; new QRCode($('#qr'), { text: url, width: 320, height: 320, correctLevel: QRCode.CorrectLevel.M }); };
+  if (window.QRCode) return draw();
+  const sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+  sc.onload = draw; sc.onerror = () => { $('#qr').textContent = 'QR code could not load. Share the link below instead.'; }; document.head.appendChild(sc);
+};
+$('#qrClose').onclick = () => $('#ov').classList.remove('on');
+$('#ov').addEventListener('click', e => { if (e.target.id === 'ov') $('#ov').classList.remove('on'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') $('#ov').classList.remove('on'); });
+render();
+/* signed-in students: fill in their progress when it arrives */
+if (STUDENT && window.google && google.script && google.script.run)
+  google.script.run.withSuccessHandler(p => { PROG = (p && p.lessons) || {}; render(); }).withFailureHandler(() => {}).getMyProgress();
 </script>
 </body>
 </html>
