@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Signature Solution: Refining &amp; Finishing + Final Iteration and Risk Review – Grade 6 Main Course</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --main:#E8590C; --main2:#F97316; --deep:#9A3412;
+  --ink:#2A1A10; --muted:#6E5847; --paper:#FFF8F1; --card:#FFFFFF;
+  --line:#F0DCC8; --soft:#FFF1E4;
+  --good:#0F8A5F; --goodbg:#E2F5EC; --bad:#C92A4B; --badbg:#FDE7EC;
+  --blue:#2E5AAC; --bluebg:#EEF3FC; --violet:#6B46C1; --violetbg:#F4F0FC;
+  --focus:#1C64F2;
+}
+html{scroll-padding-top:64px}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Lexend",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:17px;line-height:1.55;-webkit-text-size-adjust:100%;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:820px;margin:0 auto;padding:0 16px}
+
+/* Sticky score bar */
+.bar{position:sticky;top:0;z-index:20;background:var(--ink);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-top:9px;padding-bottom:9px;font-size:15px}
+.bar .track{flex:1;height:8px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden;min-width:40px}
+.bar .fill{height:100%;width:0;background:linear-gradient(90deg,#FDBA74,var(--main2));transition:width .4s}
+.bar b{font-weight:700}
+.bar .home{color:#fff;text-decoration:none;font-weight:600;white-space:nowrap}
+.bar .home:hover{text-decoration:underline}
+.bar .qrtop{flex:none;border:1.5px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.bar .qrtop:hover{background:rgba(255,255,255,.25)}
+@media (max-width:520px){#barDone{display:none}}
+
+/* Hero */
+.hero{background:
+  linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--deep),#F59F00);
+  color:#fff;padding:36px 0 30px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.pill{border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.15);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.hero h1{font-size:clamp(32px,7vw,50px);line-height:1.05;margin:0 0 14px;font-weight:800;letter-spacing:-.02em}
+.hero p{margin:0 0 14px;max-width:62ch;font-size:18px}
+.meta{font-size:14.5px;opacity:.95;margin:0 0 20px!important}
+.meta b{font-weight:700}
+.who{display:grid;grid-template-columns:2fr 1fr;gap:10px;background:rgba(255,255,255,.16);border-radius:16px;padding:14px}
+.who label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.who input{width:100%;border:0;border-radius:10px;padding:10px 12px;font-size:17px;color:var(--ink);background:#fff}
+@media (max-width:480px){.who{grid-template-columns:1fr}}
+
+/* Intro */
+.intro{margin:26px 0 8px;display:grid;gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 18px}
+.box h2{font-size:18px;margin:0 0 8px}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:4px 0}
+.box li b{color:var(--main)}
+.route{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.route li{display:flex;gap:12px;align-items:center}
+.route a{color:inherit;text-decoration:none}
+.route a:hover b{text-decoration:underline}
+.num{flex:none;width:34px;height:34px;border-radius:10px;background:var(--main);color:#fff;display:grid;place-items:center;font-weight:700}
+.route small{display:block;color:var(--muted);font-size:14px}
+
+/* Parts */
+.part{margin:34px 0 0}
+.part-head{background:linear-gradient(120deg,var(--deep),var(--main2));color:#fff;border-radius:22px 22px 0 0;padding:22px 22px 20px}
+.part-head.dark{background:linear-gradient(120deg,#2A1A10,#5C3317)}
+.part-head .pill{display:inline-block;margin-bottom:10px}
+.part-head h2{margin:0;font-size:clamp(24px,5vw,32px);line-height:1.15;letter-spacing:-.01em}
+.part-head p{margin:6px 0 0;opacity:.95}
+.part-body{background:var(--card);border:1.5px solid var(--line);border-top:0;border-radius:0 0 22px 22px;padding:20px 18px 24px}
+.part-body>p{max-width:68ch;margin:0 0 12px}
+h3.sub{display:inline-block;font-size:19px;margin:10px 0 6px;background:linear-gradient(transparent 55%,#FFD8B5 55%)}
+
+/* Callouts */
+.call{border-left:5px solid var(--main);background:var(--soft);border-radius:0 14px 14px 0;padding:12px 16px;margin:14px 0}
+.call h4{margin:0 0 4px;font-size:16px;color:var(--main)}
+.call p{margin:0}
+.call.blue{border-color:var(--blue);background:var(--bluebg)}
+.call.blue h4{color:var(--blue)}
+.call.violet{border-color:var(--violet);background:var(--violetbg)}
+.call.violet h4{color:var(--violet)}
+.illus{color:var(--muted);font-size:.92em}
+
+/* Flip cards */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 6px}
+@media (max-width:620px){.flips{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:340px){.flips{grid-template-columns:1fr}}
+.flip{position:relative;min-height:128px;border:1.5px solid var(--line);border-radius:14px;background:#FFFBF8;text-align:left;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column}
+.flip .term{font-weight:700;color:var(--deep);font-size:17px}
+.flip .def{display:none;font-size:15px;line-height:1.4}
+.flip .hint{margin-top:auto;font-size:12.5px;color:var(--muted)}
+.flip[aria-pressed="true"]{background:var(--main);border-color:var(--main);color:#fff}
+.flip[aria-pressed="true"] .term{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.flip[aria-pressed="true"] .def{display:block}
+.flip[aria-pressed="true"] .hint{display:none}
+.tapnote{font-size:14px;color:var(--muted);margin:0}
+
+/* Figure */
+figure{margin:6px 0 16px;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+figure svg{display:block;width:100%;height:auto}
+@media (max-width:560px){figure{overflow-x:auto;-webkit-overflow-scrolling:touch}figure>svg:not(.m):not(.d){min-width:620px}figure:has(>svg:not(.m):not(.d))::before{content:"↔ swipe to see the whole figure";display:block;position:sticky;left:0;font-size:12px;color:var(--muted,#667);padding:6px 10px 0}}/* figure.swipe */
+figcaption{padding:10px 14px;font-size:14.5px;color:var(--muted);border-top:1.5px solid var(--line)}
+figcaption b{color:var(--main)}
+
+/* Steps */
+.steps{margin:0 0 10px;padding-left:22px}
+.steps li{margin:4px 0}
+.safe{border:1.5px dashed var(--line);border-radius:12px;padding:10px 14px;font-size:15px;background:#FFFDFB}
+
+/* Example card */
+.ecard{border:2px solid var(--main);border-radius:18px;overflow:hidden;margin:16px 0 4px}
+.ecard>header{background:var(--main);color:#fff;padding:12px 16px}
+.ecard>header small{display:block;font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.9;font-weight:600}
+.ecard>header b{font-size:18px}
+.ecard .in{padding:14px 16px}
+.ecard .task{margin:0 0 12px}
+table.t{width:100%;border-collapse:collapse;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+table.t th{background:var(--soft);font-size:13.5px}
+.vers{display:grid;gap:14px;margin-top:14px}
+.ver{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.ver h4{margin:0;padding:9px 14px;background:var(--soft);font-size:16px}
+.ver dl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0;padding:12px 14px}
+@media (max-width:640px){.ver dl{grid-template-columns:1fr 1fr}}
+.ver dt{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.ver dd{margin:2px 0 0;font-size:14.5px;line-height:1.35}
+.ver .chg{background:#FFF3C9;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+.ver .chg dt::after{content:" · changed";color:#8A5A00}
+.ver .runs{padding:0 14px 14px}
+@media (max-width:560px){table.t{font-size:13.5px}table.t th,table.t td{padding:6px}}
+
+/* Activities */
+.act{margin:22px 0 0;border:2px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}
+.act-head{display:flex;gap:12px;align-items:center;padding:14px 16px;color:#fff;background:linear-gradient(120deg,var(--main),#F59F00)}
+.act-head.ws{background:linear-gradient(120deg,#2A1A10,#6A3A17)}
+.act-head.quiz{background:linear-gradient(120deg,#2E5AAC,#4F7BD0)}
+.act-head .ico{flex:none;width:44px;height:44px;border-radius:12px;background:#fff;display:grid;place-items:center;font-size:24px}
+.act-head h3{margin:0;font-size:18px;line-height:1.2}
+.act-head small{display:block;font-size:13px;opacity:.95;font-weight:500}
+.act-body{padding:16px}
+.how{margin:0 0 12px;color:var(--muted);font-size:15px}
+.q{font-weight:700;margin:14px 0 8px}
+.q:first-child{margin-top:0}
+
+/* Choice rows */
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .l{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--main)}
+.opt:has(input:checked){border-color:var(--main);background:#FFF4EA}
+.opt:has(input:checked) .l{background:var(--main);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
+/* Segmented buttons */
+.row{display:flex;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+.row .t{flex:1;font-weight:500}
+.seg{display:flex;flex:none;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.seg button{border:0;background:#fff;padding:8px 10px;font-size:14px;font-weight:600;cursor:pointer;min-width:44px}
+.seg button+button{border-left:2px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--main);color:#fff}
+@media (max-width:600px){.row{flex-wrap:wrap}.row .seg{width:100%}.seg button{flex:1}}
+
+/* Dropdowns */
+.pair{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;align-items:center;border:2px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.pair .t{font-weight:600}
+@media (max-width:560px){.pair{grid-template-columns:1fr}}
+select{width:100%;appearance:none;-webkit-appearance:none;border:2px solid #E5C7AC;border-radius:10px;padding:10px 38px 10px 12px;font-size:16px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%23E8590C' stroke-width='2.2' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer;line-height:1.3;text-overflow:ellipsis}
+.sent{line-height:2.2}
+.sent select{display:inline-block;width:auto;max-width:100%;margin:2px 0;vertical-align:middle;white-space:normal}
+
+/* Scenario cards (trace, compare) */
+.scen{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.scen p{margin:0 0 8px;font-weight:500}
+.scen .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.scen .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.scen .cell .seg{width:100%}.scen .cell .seg button{flex:1}
+.scen .two>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+@media (max-width:560px){.scen .two{grid-template-columns:1fr}}
+.worked{border:1.5px dashed #F4B98A;border-radius:12px;padding:10px 14px;background:#FFFBF7;margin:0 0 12px;font-size:15px}
+
+/* Rating table */
+.rate{border:2px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.rate h4{margin:0 0 8px;font-size:16px}
+.rate .grid3{display:grid;grid-template-columns:auto auto;justify-content:start;gap:10px;align-items:end}
+.rate .grid3 .ev{grid-column:1/-1}
+.rate .cell>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.rate .cell{border-radius:12px;padding:4px;border:2px solid transparent}
+.rate .cell .seg{display:inline-flex}
+@media (max-width:420px){.rate .grid3{grid-template-columns:1fr}.rate .seg{width:100%}.rate .seg button{flex:1}}
+
+/* Marking */
+.ok{border-color:var(--good)!important;background:var(--goodbg)!important}
+.no{border-color:var(--bad)!important;background:var(--badbg)!important}
+select.ok,select.no{border-width:2.5px}
+.act-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;font-size:16px}
+.btn.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+.fb{flex-basis:100%;border-radius:12px;padding:0;font-size:15.5px}
+.fb:not(:empty){padding:12px 14px}
+.fb.good{background:var(--goodbg);color:#0A5E41}
+.fb.some{background:#FFF3D6;color:#6B4A00}
+.fb.need{background:var(--badbg);color:#8A1330}
+.fb p{margin:6px 0 0}
+.first{font-size:13.5px;color:var(--muted)}
+
+/* Summary + results */
+.keys{margin:0 0 16px;padding-left:20px}
+.keys li{margin:4px 0}
+.results{margin:34px 0 20px;border-radius:22px;overflow:hidden;border:2px solid var(--ink);background:#fff}
+.results .top{background:var(--ink);color:#fff;padding:20px}
+.results h2{margin:0;font-size:26px}
+.big{font-size:clamp(46px,12vw,72px);font-weight:800;line-height:1;margin:14px 0 4px;letter-spacing:-.03em}
+.results table{width:100%;border-collapse:collapse;font-size:15px}
+.results td,.results th{padding:9px 16px;text-align:left;border-bottom:1px solid var(--line)}
+.results td:last-child,.results th:last-child{text-align:right;white-space:nowrap}
+.results .actions{display:flex;gap:10px;flex-wrap:wrap;padding:16px}
+.warn{color:#FFD7A8;font-size:14.5px;margin:6px 0 0}
+footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:14px}
+footer button{background:none;border:0;text-decoration:underline;cursor:pointer;color:var(--muted);font-size:14px}
+
+/* QR overlay */
+.overlay{position:fixed;inset:0;background:rgba(42,26,16,.82);display:none;place-items:center;z-index:50;padding:20px}
+.overlay.on{display:grid}
+.qrbox{background:#fff;border-radius:22px;padding:26px;text-align:center;max-width:460px;width:100%}
+.qrbox #qr{display:grid;place-items:center;margin:14px auto}
+.qrbox #qr img,.qrbox #qr canvas{width:min(320px,70vw)!important;height:auto!important}
+.qrbox .url{font-size:13px;word-break:break-all;color:var(--muted)}
+
+/* Dossier, pipeline and extra activity styles */
+.call.amber{border-color:#E8890C;background:#FFF7E8}
+.call.amber h4{color:#B45309}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media (max-width:640px){.dos{grid-template-columns:1fr}}
+ol.pipe{list-style:none;margin:0;padding:12px 14px;display:grid;gap:0}
+ol.pipe li{border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;font-size:14.5px;line-height:1.35;background:#fff;position:relative}
+ol.pipe li+li{margin-top:18px}
+ol.pipe li+li::before{content:"↓";position:absolute;top:-19px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:14px}
+ol.pipe li b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--main)}
+ol.pipe li.out{background:var(--soft)}
+.rt{margin:4px 0 8px;font-size:16px}
+.note{margin:10px 0 0;font-size:15px}
+.sample{font-family:ui-monospace,Menlo,Consolas,monospace;background:#2A1A10;color:#fff;border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:15.5px}
+.scen .three{display:grid;grid-template-columns:auto 1fr 1fr;gap:8px;align-items:end}
+.scen .three>div>span{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.scen .three .cell .seg{width:auto}
+@media (max-width:640px){.scen .three{grid-template-columns:1fr}.scen .three .cell .seg{width:100%}}
+.purpose{margin-top:12px;border:2px solid var(--main);border-radius:12px;padding:10px 14px;background:var(--soft);font-size:15.5px}
+.vdesc{margin:0;padding:10px 14px;font-size:15px}
+.opt.box .l{border:2px solid var(--line);background:#fff}
+.opt.box input:checked + .l::after{content:"✓"}
+
+/* four-option button rows become a 2x2 grid on phones */
+@media (max-width:600px){
+  .seg:has(>button:nth-child(4)){display:grid;grid-template-columns:1fr 1fr}
+  .seg:has(>button:nth-child(4)) button{border-left:0;border-top:2px solid var(--line)}
+  .seg:has(>button:nth-child(4)) button:nth-child(-n+2){border-top:0}
+  .seg:has(>button:nth-child(4)) button:nth-child(even){border-left:2px solid var(--line)}
+}
+
+/* Grade 9 additions */
+.act-head.case{background:linear-gradient(120deg,#F28C28,#E8436B 55%,#F29A00)}
+.quote{background:var(--soft);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 12px}
+.clues{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 14px}
+.clue{background:var(--soft);border:1.5px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px;font-size:26px}
+.clue span{display:block;font-size:12px;font-weight:700;color:var(--deep);margin-top:2px}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pn .box{font-size:15px}
+.pn small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--main);margin-bottom:4px}
+@media (max-width:560px){.pn{grid-template-columns:1fr}}
+.ecard+.ecard{margin-top:14px}
+
+.gloss dt{font-weight:700;font-style:italic}
+.gloss dd{margin:0 0 8px}
+.box .note{margin:10px 0 0;font-size:14.5px;color:var(--muted)}
+
+@media (max-width:420px){.row .seg button{padding:8px 3px;font-size:13px;min-width:0}}
+.rh{font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:10px 0 8px}
+.route .num{font-size:14px}
+.lab-goals{margin:0 0 14px}
+table.deck,table.record{margin:10px 0 6px}
+table.record caption{caption-side:bottom;text-align:left;font-size:14px;color:var(--muted);padding-top:8px}
+table.record caption b{color:var(--main)}
+.ecard .ab{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.ecard .ab>div{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff}
+.ecard .ab b{display:block;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:560px){.ecard .ab{grid-template-columns:1fr}}
+
+.hero .who{grid-template-columns:2fr 1fr 1fr}
+@media (max-width:560px){.hero .who{grid-template-columns:1fr 1fr}.hero .who>div:first-child{grid-column:1/-1}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  .bar,footer,.btn,.overlay,.hint,.tapnote{display:none!important}
+  body{background:#fff;font-size:14px}
+  .hero{padding:18px 0}
+  .flip{min-height:0;background:#fff!important;color:var(--ink)!important;border-color:var(--line)!important}
+  .flip .def{display:block}
+  .flip .term{color:var(--deep)!important;font-size:15px!important;text-transform:none!important;letter-spacing:0!important}
+  .act,.ver,.rate,.scen,figure,.results{break-inside:avoid-page}
+  body.print-results .hero,body.print-results main>*:not(.results){display:none!important}
+  body.print-results .results td,body.print-results .results th{padding:3px 14px;font-size:12px}
+  body.print-results .results .big{font-size:44px;margin:6px 0 2px}
+  body.print-results .results .top{padding:12px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="bar" role="status" aria-live="polite">
+  <div class="wrap">
+    <a class="home" href="../index.html">&larr; All grades</a>
+    <span id="barDone">0 checked</span>
+    <div class="track" aria-hidden="true"><div class="fill" id="barFill"></div></div>
+    <span>Score <b id="barScore">0</b></span>
+    <button class="qrtop" id="qrTop" type="button" aria-label="Show a QR code for this page">QR code</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="pills"><span class="pill">Grade 6 Main Course, Term 1</span><span class="pill">Week 9 Core + Week 9 Lab</span><span class="pill">📅 Teach: Girls Fri 4 Dec · Boys Wed 9 Dec 2026</span></div>
+    <h1>Signature Solution: Refining &amp; Finishing + Final Iteration and Risk Review</h1>
+    <p>You are almost there. This week you become the judge of your own work: you check it for accuracy, usefulness and risk, then make one smart change you can prove made it better. Then, in the Lab, you make your last improvement and act like a safety checker – a full risk review, so you can promise your solution is safe and fair before the showcase.</p>
+    <p class="meta"><b>Strand focus:</b> Refine – all four strands, mostly Critical Evaluation &nbsp;·&nbsp; <b>Tool:</b> rubric, known-answer test cards and a paper risk matrix</p>
+    <div class="who">
+      <div><label for="nm">Your name</label><input id="nm" autocomplete="off" placeholder="First name and last initial"></div>
+      <div><label for="cl">Class</label><input id="cl" autocomplete="off" placeholder="e.g. 6B"></div>
+      <div><label for="dt">Date</label><input id="dt" type="date"></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<div class="intro">
+  <div class="pn">
+    <div class="box"><small>📅 When to teach</small><b>Week 9 of Term 1 – week of 30 Nov – 4 Dec 2026.</b> Girls 6: Friday 4 December. Boys 6: Wednesday 9 December – their 2 December period falls on UAE National Day, so it is pushed back a week. Core lesson first, then the Lab period.</div>
+    <div class="box"><small>Two lessons in one</small>Start with the <a href="#p1">Core: Refining &amp; Finishing</a>, then move on to the <a href="#lab">Lab: Final Iteration and Risk Review</a>.</div>
+  </div>
+  <div class="pn">
+    <div class="box"><small>◀ Previously</small>Week 8 – Signature Solution: Building + Extended Build and Evaluation. You built your solution and tested it.</div>
+    <div class="box"><small>Next ▶</small>Week 10 – Showcase, Assessment &amp; Reflection: present your finished solution, explain your choices, and reflect on the whole term.</div>
+  </div>
+  <div class="box">
+    <h2>What you will learn</h2>
+    <ul>
+      <li>I can finish my solution so it meets the success criteria our class agreed on.</li>
+      <li>I can judge my solution for accuracy, usefulness and risk using the rubric.</li>
+      <li>I can explain one change I made and say why it made the solution better.</li>
+      <li>Lab: I can run a final evaluation and act on one improvement, complete a risk review to confirm my solution is safe and fair, and record my final iteration with clear before-and-after evidence.</li>
+    </ul>
+  </div>
+  <div class="box">
+    <h2>Lesson route</h2>
+    <h3 class="rh">Week 9 Core · Signature Solution: Refining &amp; Finishing</h3>
+    <ol class="route">
+      <li><span class="num">1</span><a href="#p1"><b>Judge three ways</b><small>Accuracy, usefulness and risk</small></a></li>
+      <li><span class="num">2</span><a href="#p2"><b>Real quality checks</b><small>What a true check looks like</small></a></li>
+      <li><span class="num">3</span><a href="#p3"><b>One change, proven</b><small>Make it, then prove it helped</small></a></li>
+      <li><span class="num">4</span><a href="#p4"><b>Hands-on mission and worksheet</b><small>Judge, improve, and prove it</small></a></li>
+    </ol>
+    <h3 class="rh">Week 9 Lab · Final Iteration and Risk Review</h3>
+    <ol class="route">
+      <li><span class="num">L1</span><a href="#l1"><b>Finish, then freeze</b><small>Final change, re-test, freeze</small></a></li>
+      <li><span class="num">L2</span><a href="#l2"><b>Sort the risks</b><small>How likely × how serious</small></a></li>
+      <li><span class="num">L3</span><a href="#l3"><b>Safe and fair</b><small>Match each risk to its fix</small></a></li>
+      <li><span class="num">L4</span><a href="#l4"><b>Lab mission and worksheet</b><small>Final change, full risk review, freeze</small></a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CORE PART 1 -->
+<section class="part" id="p1">
+  <div class="part-head"><span class="pill">Core · Part 1 of 3</span><h2>Judge three ways</h2><p>How do you measure your own work?</p></div>
+  <div class="part-body">
+    <div class="call"><h4>Previously</h4><p>Last week (Week 8) you built your signature solution and tested it. Now you finish it – by <b>measuring</b> it, not by how you feel about it.</p></div>
+    <h3 class="sub">Words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flips"></div>
+    <figure>
+      <svg viewBox="0 0 760 290" role="img" aria-labelledby="f1T">
+        <title id="f1T">Judging a solution three ways. Your solution is checked through three lenses – accuracy (test on known answers), usefulness (really helps your real user) and risk (harm, fairness, privacy) – and measured against the criteria card the class agreed. It is finished only when all three pass. ‘Do I like it?’ is a feeling, not evidence.</title>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2A1A10"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1A10">
+          <rect x="16" y="86" width="176" height="104" rx="14" fill="#FFF1E4" stroke="#E8590C" stroke-width="2"/>
+          <text x="104" y="130" font-size="30" text-anchor="middle">🖊️</text>
+          <text x="104" y="166" font-size="16" font-weight="700" text-anchor="middle">Your solution</text>
+          <g stroke="#2A1A10" stroke-width="2.2" fill="none" marker-end="url(#ah)"><path d="M192 120L244 54"/><path d="M192 138H244"/><path d="M192 156L244 222"/></g>
+          <g stroke-width="2">
+            <rect x="250" y="20" width="270" height="66" rx="12" fill="#EEF3FC" stroke="#2E5AAC"/>
+            <rect x="250" y="105" width="270" height="66" rx="12" fill="#ECF8F0" stroke="#15803D"/>
+            <rect x="250" y="190" width="270" height="66" rx="12" fill="#FDE7EC" stroke="#C92A4B"/>
+          </g>
+          <g font-size="16" font-weight="700" text-anchor="middle"><text x="385" y="47" fill="#2E5AAC">🎯 Accuracy</text><text x="385" y="132" fill="#15803D">🧭 Usefulness</text><text x="385" y="217" fill="#C92A4B">🚩 Risk</text></g>
+          <g font-size="13.5" text-anchor="middle"><text x="385" y="71">test on known answers</text><text x="385" y="156">really helps your real user</text><text x="385" y="241">harm, fairness, privacy</text></g>
+          <g stroke="#2A1A10" stroke-width="2.2" fill="none" marker-end="url(#ah)"><path d="M520 54L556 112"/><path d="M520 138H556"/><path d="M520 222L556 164"/></g>
+          <rect x="560" y="64" width="184" height="148" rx="14" fill="#fff" stroke="#E8590C" stroke-width="2.4"/>
+          <text x="652" y="94" font-size="15" font-weight="700" text-anchor="middle" fill="#9A3412">📑 Criteria card</text>
+          <g font-size="13.5" text-anchor="middle"><text x="652" y="120">the checklist the</text><text x="652" y="138">class agreed</text></g>
+          <rect x="574" y="152" width="156" height="46" rx="10" fill="#E8590C"/>
+          <g font-size="13.5" font-weight="700" fill="#fff" text-anchor="middle"><text x="652" y="171">✅ finished when</text><text x="652" y="189">all three pass</text></g>
+          <text x="380" y="280" font-size="14" text-anchor="middle" fill="#6E5847">🤷 ‘Do I like it?’ is a feeling, not evidence – measure, don’t guess</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 1.</b> A good builder measures the solution against agreed criteria, not just a feeling.</figcaption>
+    </figure>
+    <h3 class="sub">Judging your solution three ways</h3>
+    <p>A good builder does not just ask ‘do I like it?’. You measure your work against the criteria the class agreed.</p>
+    <p><b>Accuracy</b> means testing with examples where you already know the right answer. <b>Usefulness</b> means checking it really helps your real user. <b>Risk</b> means asking what could go wrong and whether any private data is exposed.</p>
+    <div id="a-vocab"></div>
+    <div id="a-lens"></div>
+    <div id="a-case1"></div>
+  </div>
+</section>
+
+<!-- CORE PART 2 -->
+<section class="part" id="p2">
+  <div class="part-head"><span class="pill">Core · Part 2 of 3</span><h2>Real quality checks</h2><p>What does a true check look like?</p></div>
+  <div class="part-body">
+    <div class="call violet"><h4>Figure 2 · A real check gives evidence</h4><p>✅ <b>Real checks:</b> 🧪 test on known answers (accuracy) · 🙋 ask your real user (usefulness) · 🔒 look for exposed private data (risk).<br>❌ <b>Not checks:</b> 🤷 ‘Do I like it?’ · 🎨 ‘Is the colour nice?’ – they tell you nothing about how the solution decides.</p></div>
+    <h3 class="sub">Genuine checks, not opinions</h3>
+    <p>A quality check gives you evidence. Testing on known answers gives evidence about accuracy. Asking your real user gives evidence about usefulness. Looking for exposed data gives evidence about risk.</p>
+    <p>Asking ‘do I like it?’ or ‘is the colour nice?’ tells you nothing about how the solution decides – so it is not a real check.</p>
+    <div id="a-checks"></div>
+    <div id="a-case2"></div>
+  </div>
+</section>
+
+<!-- CORE PART 3 -->
+<section class="part" id="p3">
+  <div class="part-head"><span class="pill">Core · Part 3 of 3</span><h2>One change, proven</h2><p>Make it, then prove it helped.</p></div>
+  <div class="part-body">
+    <figure>
+      <svg viewBox="0 0 760 270" role="img" aria-labelledby="f3T">
+        <title id="f3T">One change, proven: judge against the three lenses, choose the one improvement that matters most, make that single change, re-test on known answers and all the old cases, then write the change and its evidence in a refinement note. Illustrative example: before 6 of 10 right, after 9 of 10 right, and nothing else broke. Warning: a fix for one case can quietly break another, so re-test every case.</title>
+        <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2A1A10"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1A10">
+          <g stroke-width="2" fill="#fff" stroke="#E8590C">
+            <rect x="16" y="20" width="128" height="96" rx="12"/><rect x="164" y="20" width="128" height="96" rx="12"/>
+            <rect x="312" y="20" width="128" height="96" rx="12" fill="#FFF1E4" stroke-width="2.8"/>
+            <rect x="460" y="20" width="128" height="96" rx="12"/><rect x="608" y="20" width="136" height="96" rx="12"/>
+          </g>
+          <g stroke="#2A1A10" stroke-width="2.2" fill="none" marker-end="url(#ah3)"><path d="M144 68H160"/><path d="M292 68H308"/><path d="M440 68H456"/><path d="M588 68H604"/></g>
+          <g font-size="14.5" font-weight="700" text-anchor="middle"><text x="80" y="46">📑 Judge</text><text x="228" y="46">🖊️ Choose</text><text x="376" y="46" fill="#9A3412">🔧 Make it</text><text x="524" y="46">🧪 Re-test</text><text x="676" y="46">📝 Note it</text></g>
+          <g font-size="13" text-anchor="middle" fill="#6E5847">
+            <text x="80" y="74">three lenses</text>
+            <text x="228" y="74">the one that</text><text x="228" y="92">matters most</text>
+            <text x="376" y="74">ONE single</text><text x="376" y="92">change</text>
+            <text x="524" y="74">known answers</text><text x="524" y="92">+ old cases</text>
+            <text x="676" y="74">change and</text><text x="676" y="92">evidence</text>
+          </g>
+          <rect x="16" y="140" width="360" height="56" rx="12" fill="#ECF8F0" stroke="#15803D" stroke-width="2"/>
+          <text x="196" y="164" font-size="14.5" font-weight="700" text-anchor="middle" fill="#15803D">Before 6/10 → After 9/10 ✔</text>
+          <text x="196" y="185" font-size="13" text-anchor="middle">and the old cases still pass (illustrative)</text>
+          <rect x="390" y="140" width="354" height="56" rx="12" fill="#FDE7EC" stroke="#C92A4B" stroke-width="2"/>
+          <text x="567" y="164" font-size="14.5" font-weight="700" text-anchor="middle" fill="#C92A4B">⚠️ A fix can break another case</text>
+          <text x="567" y="185" font-size="13" text-anchor="middle">so re-test every case, not just one</text>
+          <text x="380" y="236" font-size="14" text-anchor="middle" fill="#6E5847">One well-chosen change + a re-test = proof it helped.</text>
+          <text x="380" y="258" font-size="14" text-anchor="middle" fill="#6E5847">Many random changes = no idea which one worked.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure 3.</b> One well-chosen change, backed by a re-test, beats many random changes.</figcaption>
+    </figure>
+    <h3 class="sub">One change, proven</h3>
+    <p>You do not need many changes. Choose the one improvement that matters most to your user.</p>
+    <p>Make the change, then re-test. If accuracy went up and nothing else broke, you have evidence it worked. A change that fixes one case can quietly break another, so always re-test before you call it done.</p>
+    <div id="a-order"></div>
+    <div id="a-case3"></div>
+  </div>
+</section>
+
+<!-- CORE MISSION + WORKSHEET -->
+<section class="part" id="p4">
+  <div class="part-head dark"><span class="pill">Core mission · Worksheet</span><h2>Judge, improve, and prove it</h2><p>Work with your partner. Judge your solution against the rubric, choose one improvement, make it, and prove it helped.</p></div>
+  <div class="part-body">
+    <h3 class="sub">Let's try it</h3>
+    <p><b>What you need:</b> printed rubric and criteria card · refinement-note sheet · known-answer test cases · a pencil.</p>
+    <ol class="steps">
+      <li>Read the three lenses on the criteria card.</li>
+      <li>Run one accuracy test with known answers and record the score.</li>
+      <li>Check usefulness against your real user’s task.</li>
+      <li>Do a basic risk check for harm, fairness and privacy.</li>
+      <li>Pick one improvement, make it, and re-test to confirm it helped.</li>
+      <li>Swap with another pair for ‘two stars and a wish’ feedback.</li>
+    </ol>
+    <div class="call amber"><h4>Tool for this week: your rubric, criteria card and known-answer test cards</h4><p>Judge your own signature solution with the printed rubric. Test it only with known-answer cases and made-up examples – <b>never put a real person’s name or personal details into a prompt or your example data.</b> No tool or board? Use the simulated-AI cards: judge printed curated outputs against the rubric and plan the improvement on paper – exactly the same thinking, no device.</p></div>
+    <p>The worksheet below uses one pair’s solution as a worked example. Read the card, then answer.</p>
+    <div class="ecard" id="audit"></div>
+    <div id="a-wslens"></div>
+    <div id="a-wschange"></div>
+    <div id="a-wslog"></div>
+    <div id="a-exit"></div>
+    <div id="a-chal"></div>
+  </div>
+</section>
+
+<!-- ===================== LAB ===================== -->
+<section class="part" id="lab">
+  <div class="part-head dark"><span class="pill">Week 9 Lab</span><h2>Final Iteration and Risk Review</h2><p>Time for the final polish. In this Lab you make your last improvement, then act like a safety checker, running a full risk review so you can promise your solution is safe and fair before showcase.</p></div>
+  <div class="part-body">
+    <div class="box lab-goals"><h2>Lab: I can…</h2><ul>
+      <li>I can run a final evaluation across accuracy, usefulness and risk and act on one improvement.</li>
+      <li>I can complete a risk review and confirm my solution is safe and fair.</li>
+      <li>I can record my final iteration with clear before-and-after evidence.</li></ul></div>
+    <div class="call"><h4>Previously</h4><p>In the Core you judged your solution three ways and proved one change helped. Today you make the final change, check every risk, and freeze the version you will show.</p></div>
+    <h3 class="sub">Lab words to know</h3>
+    <p class="tapnote">Tap a card to flip it and reveal the meaning.</p>
+    <div class="flips" id="flipsL"></div>
+    <div id="a-lvocab"></div>
+  </div>
+</section>
+
+<section class="part" id="l1">
+  <div class="part-head"><span class="pill">Lab · Part 1 of 3</span><h2>Finish, then freeze</h2><p>How do you lock in your best version?</p></div>
+  <div class="part-body">
+    <figure>
+      <svg viewBox="0 0 760 250" role="img" aria-labelledby="fL1T">
+        <title id="fL1T">The final iteration: set your Lab goal from the refinement log, make the final change, re-test with at least five known-answer cases, record before and after, then freeze the version. After freezing, no more edits – the version you show is the exact one you tested.</title>
+        <defs><marker id="ahl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#2A1A10"/></marker></defs>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1A10">
+          <g stroke-width="2" fill="#fff" stroke="#E8590C">
+            <rect x="16" y="20" width="128" height="96" rx="12"/><rect x="164" y="20" width="128" height="96" rx="12"/>
+            <rect x="312" y="20" width="128" height="96" rx="12"/><rect x="460" y="20" width="128" height="96" rx="12"/>
+            <rect x="608" y="20" width="136" height="96" rx="12" fill="#EEF3FC" stroke="#2E5AAC" stroke-width="2.8"/>
+          </g>
+          <g stroke="#2A1A10" stroke-width="2.2" fill="none" marker-end="url(#ahl)"><path d="M144 68H160"/><path d="M292 68H308"/><path d="M440 68H456"/><path d="M588 68H604"/></g>
+          <g font-size="14.5" font-weight="700" text-anchor="middle"><text x="80" y="46">🎯 Goal</text><text x="228" y="46">🔧 Change</text><text x="376" y="46">🧪 Re-test</text><text x="524" y="46">📊 Record</text><text x="676" y="46" fill="#2E5AAC">🧊 Freeze</text></g>
+          <g font-size="13" text-anchor="middle" fill="#6E5847">
+            <text x="80" y="74">from your</text><text x="80" y="92">refinement log</text>
+            <text x="228" y="74">your final</text><text x="228" y="92">planned one</text>
+            <text x="376" y="74">at least five</text><text x="376" y="92">known answers</text>
+            <text x="524" y="74">before and</text><text x="524" y="92">after</text>
+            <text x="676" y="74">lock the</text><text x="676" y="92">tested version</text>
+          </g>
+          <rect x="16" y="144" width="572" height="56" rx="12" fill="#ECF8F0" stroke="#15803D" stroke-width="2"/>
+          <text x="302" y="168" font-size="14.5" font-weight="700" text-anchor="middle" fill="#15803D">✅ Show at the carousel = the version you tested</text>
+          <text x="302" y="189" font-size="13" text-anchor="middle">so others can trust your evidence</text>
+          <rect x="608" y="144" width="136" height="56" rx="12" fill="#FDE7EC" stroke="#C92A4B" stroke-width="2"/>
+          <text x="676" y="168" font-size="14" font-weight="700" text-anchor="middle" fill="#C92A4B">✋ No edits</text>
+          <text x="676" y="189" font-size="13" text-anchor="middle">after freezing</text>
+          <text x="380" y="236" font-size="14" text-anchor="middle" fill="#6E5847">A last-minute edit means the version you show was never tested.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure L1.</b> You make the final change, re-test with known answers, then freeze the exact version you will show.</figcaption>
+    </figure>
+    <h3 class="sub">Finish, then freeze</h3>
+    <p>Make your final planned change and re-test with known answers. Record before and after so others can trust your evidence.</p>
+    <p>Then <b>freeze</b> the version. The solution you show at the carousel must be the exact one you tested and judged safe.</p>
+    <div id="a-lorder"></div>
+    <div id="a-lcase1"></div>
+  </div>
+</section>
+
+<section class="part" id="l2">
+  <div class="part-head"><span class="pill">Lab · Part 2 of 3</span><h2>Sort the risks</h2><p>How likely, and how serious?</p></div>
+  <div class="part-body">
+    <figure>
+      <svg viewBox="0 0 760 300" role="img" aria-labelledby="fL2T">
+        <title id="fL2T">A risk matrix. Across: how likely – rare, possible, likely. Up: how serious – small, medium, serious. Small risks: just watch. Medium risks: make a plan. Serious risks: make a plan if rare, fix now if possible or likely.</title>
+        <g font-family="Lexend, system-ui, sans-serif" fill="#2A1A10">
+          <text x="16" y="26" font-size="14" font-weight="700" fill="#9A3412">How serious? ↑</text>
+          <g font-size="14" font-weight="700" text-anchor="end"><text x="186" y="74">Serious</text><text x="186" y="142">Medium</text><text x="186" y="210">Small</text></g>
+          <g stroke="#fff" stroke-width="3">
+            <rect x="200" y="36" width="180" height="68" fill="#FFF4D6"/><rect x="380" y="36" width="180" height="68" fill="#FDE7EC"/><rect x="560" y="36" width="180" height="68" fill="#FDE7EC"/>
+            <rect x="200" y="104" width="180" height="68" fill="#FFF4D6"/><rect x="380" y="104" width="180" height="68" fill="#FFF4D6"/><rect x="560" y="104" width="180" height="68" fill="#FFF4D6"/>
+            <rect x="200" y="172" width="180" height="68" fill="#E2F5EC"/><rect x="380" y="172" width="180" height="68" fill="#E2F5EC"/><rect x="560" y="172" width="180" height="68" fill="#E2F5EC"/>
+          </g>
+          <rect x="200" y="36" width="540" height="204" fill="none" stroke="#F0DCC8" stroke-width="2"/>
+          <g font-size="15" font-weight="700" text-anchor="middle">
+            <text x="290" y="75" fill="#B45309">🚧 Make a plan</text><text x="470" y="75" fill="#C92A4B">🚨 Fix now</text><text x="650" y="75" fill="#C92A4B">🚨 Fix now</text>
+            <text x="290" y="143" fill="#B45309">🚧 Make a plan</text><text x="470" y="143" fill="#B45309">🚧 Make a plan</text><text x="650" y="143" fill="#B45309">🚧 Make a plan</text>
+            <text x="290" y="211" fill="#0F8A5F">🌱 Just watch</text><text x="470" y="211" fill="#0F8A5F">🌱 Just watch</text><text x="650" y="211" fill="#0F8A5F">🌱 Just watch</text>
+          </g>
+          <g font-size="14" font-weight="700" text-anchor="middle"><text x="290" y="262">Rare</text><text x="470" y="262">Possible</text><text x="650" y="262">Likely</text></g>
+          <text x="740" y="290" font-size="14" font-weight="700" text-anchor="end" fill="#9A3412">How likely? →</text>
+          <text x="16" y="290" font-size="13" fill="#6E5847">Always: no personal data anywhere.</text>
+        </g>
+      </svg>
+      <figcaption><b>Figure L2.</b> A risk matrix weighs how likely a risk is against how serious it would be.</figcaption>
+    </figure>
+    <h3 class="sub">Sorting risks the smart way</h3>
+    <p>Not every risk is equal. A risk that is both likely and serious needs action now. A rare but very serious risk still needs a plan.</p>
+    <p>Place each risk on the matrix, then decide: fix it now, or watch it. Always confirm no personal data is anywhere in your solution.</p>
+    <div id="a-lrisk"></div>
+    <div id="a-lcase2"></div>
+  </div>
+</section>
+
+<section class="part" id="l3">
+  <div class="part-head"><span class="pill">Lab · Part 3 of 3</span><h2>Safe and fair</h2><p>Match each risk to its fix.</p></div>
+  <div class="part-body">
+    <div class="call violet"><h4>Figure L3 · Every common AI risk has a matching fix</h4><p>🎯 <b>Wrong answer</b> → re-test on known answers · ⚖️ <b>Unfair result</b> → balance the example data · 🔒 <b>Private data exposed</b> → remove it · 🔧 <b>Broke after a change</b> → re-test every case.</p></div>
+    <h3 class="sub">From risk to fix</h3>
+    <p>Common risks for AI-supported solutions include a wrong answer that misleads a user, unfair treatment of one group because the example data was unbalanced, and exposure of private information.</p>
+    <p>Each risk has a fix. A wrong answer means re-test on known answers; unfairness means balance the data; exposed data means remove it. Then you can write your safe-and-fair statement with confidence.</p>
+    <div id="a-lfix"></div>
+    <div id="a-lcase3"></div>
+  </div>
+</section>
+
+<section class="part" id="l4">
+  <div class="part-head dark"><span class="pill">Lab mission · Worksheet</span><h2>Final change, full risk review, freeze</h2><p>With your partner, make the final change, re-test, run the full risk review, and freeze your solution ready for showcase.</p></div>
+  <div class="part-body">
+    <h3 class="sub">Let's try it</h3>
+    <p><b>What you need:</b> printed risk matrix · final-iteration log · five known-answer test cases · sticky notes · a pencil.</p>
+    <ol class="steps">
+      <li>Set your Lab goal from the refinement log.</li>
+      <li>Make the final planned improvement.</li>
+      <li>Re-test with at least five known-answer cases and record before and after.</li>
+      <li>List possible risks and place each one on the matrix.</li>
+      <li>Decide actions and confirm no personal data is used anywhere.</li>
+      <li>Write a safe-and-fair statement and freeze the version.</li>
+      <li>Swap matrices with another pair to sense-check placements.</li>
+    </ol>
+    <div class="call amber"><h4>Tool for this week: your frozen solution, the paper risk matrix and the final-iteration log</h4><p>Re-test only with known-answer cases and made-up examples. <b>Never put personal or identifying data into a prompt or training set</b> – if you find any, remove it before you freeze. Freeze the exact version you tested, and do not edit it after that. No device or board? Use the simulated-AI cards and the paper matrix: judge curated outputs, plan the final change on paper, and complete the whole risk review unplugged.</p></div>
+    <p>The worksheet below continues the same pair’s worked example. Read the card, then answer.</p>
+    <div class="ecard" id="pack"></div>
+    <div id="a-lmatrix"></div>
+    <div id="a-lwsevid"></div>
+    <div id="a-lprivacy"></div>
+    <div id="a-lexit"></div>
+    <div id="a-lchal"></div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section class="part" id="p9">
+  <div class="part-head"><span class="pill">Lesson summary</span><h2>You judged your own work like a detective, proved one change made it better, and showed your solution is safe and fair before freezing it</h2></div>
+  <div class="part-body">
+    <h3 class="sub">Key ideas to remember</h3>
+    <ul class="keys">
+      <li>Refining means measuring your solution against the agreed criteria, not against how you feel about it.</li>
+      <li>Judge three ways: accuracy (test on known answers), usefulness (help the real user), and risk (harm, fairness, privacy).</li>
+      <li>One well-chosen improvement, backed by evidence, beats many random changes.</li>
+      <li>Always re-test after a change, because a fix for one case can quietly break another.</li>
+      <li>A risk review weighs how likely a risk is against how serious it would be: likely-and-serious risks need fixing now; rare-but-serious risks still need a plan; small risks can be watched.</li>
+      <li>Never put personal or identifying data into a prompt or training set, and freeze the exact version you tested.</li>
+    </ul>
+    <h3 class="sub">Glossary</h3>
+    <dl class="gloss">
+      <dt>Accuracy</dt><dd>how often the solution gives the right or sensible answer, checked on known examples.</dd>
+      <dt>Usefulness</dt><dd>how well the solution really helps the real user do their task.</dd>
+      <dt>Risk</dt><dd>what could go wrong, who could be harmed, and whether private data is exposed.</dd>
+      <dt>Refinement note</dt><dd>a short record of the change you made and the evidence it helped.</dd>
+      <dt>Risk review</dt><dd>a structured check of what could go wrong before people rely on a solution.</dd>
+      <dt>Risk matrix</dt><dd>a grid that weighs how likely a risk is against how serious it would be.</dd>
+      <dt>Final iteration</dt><dd>your last planned change, re-tested and recorded with before-and-after evidence.</dd>
+      <dt>Freeze</dt><dd>to stop changing a solution so the version shown is the one you tested.</dd>
+    </dl>
+    <p><b>What to do next:</b> Week 10 – the showcase, where you present your finished solution, explain your choices, and reflect on the whole term.</p>
+  </div>
+</section>
+
+<section class="results" id="results" aria-live="polite"></section>
+
+</main>
+
+<footer>
+  <button id="qrBtn" type="button">Teacher: show a QR code for this page</button>
+  &nbsp;|&nbsp;
+  <button id="resetBtn" type="button">Clear answers for the next student</button>
+  <div style="margin-top:8px">National AI Curriculum · ADEK K-12 AI Fluency · Grade 6 · Main Course W9 Core + W9 Lab</div>
+</footer>
+
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="qrT">
+  <div class="qrbox">
+    <h2 id="qrT" style="margin:0">Scan to open the lesson</h2>
+    <div id="qr"></div>
+    <div class="url" id="qrUrl"></div>
+    <p><button class="btn" id="qrClose" type="button">Close</button></p>
+  </div>
+</div>
+
+<script>
+/* ---------- strand + concept tags ---------- */
+const CE_P="CE · evaluates outputs for accuracy and relevance";
+const CE_A="CE · explains how changes to inputs or data improve outputs";
+const SD_A="SD · builds structured AI-assisted solutions with guided inputs and data";
+const GE_P="GE · bias, privacy and responsible use";
+const GE_A="GE · spots biased outputs and suggests fairer, safer use";
+
+/* ---------- content: Core ---------- */
+const WORDS = [
+  ["accuracy","How often the solution gives the right or sensible answer, checked on known examples."],
+  ["usefulness","How well the solution really helps the real user do their task."],
+  ["risk","What could go wrong, who could be harmed, and whether private data is exposed."],
+  ["refinement note","A short record of the change you made and the evidence it helped."],
+  ["success criteria","The checklist the class agreed that says when a solution is finished."]
+];
+const DEF_ORDER = [2,4,0,3,1];
+const LENS = [
+  ["ln0","🎯","Accuracy",2],
+  ["ln1","🧭","Usefulness",3],
+  ["ln2","🚩","Risk",0],
+  ["ln3","📑","Success criteria",1]
+];
+const LENS_CHECKS = ["Ask what could go wrong and if private data is exposed","Compare it to the checklist the class agreed","Test with examples where you know the right answer","Check it really helps your real user’s task"];
+const CHECKS = [
+  ["k1","🏷️","Think of a catchier name for it",0],
+  ["k2","🔒","Check whether any private data could be exposed",1],
+  ["k3","🧪","Test it on cases where you know the correct answer",1],
+  ["k4","🤷","Just ask yourself, ‘Do I like it?’",0],
+  ["k5","🙋","Ask whether it really helps your real user’s task",1],
+  ["k6","🎨","Pick a prettier colour for the buttons",0]
+];
+const STEPS = ["Choose the one improvement that matters most to your user","Write the change and its evidence in your refinement note","Make that single change","Judge your solution against the three lenses","Re-test to check accuracy went up and nothing else broke"];
+const ORDER_KEY = [3,0,2,4,1];
+const CASES = {
+  case1:{quote:"A pair says their homework helper is finished because they both like the way it looks. As the class judge, you know a feeling is not the same as evidence. What should they do instead?",
+    clues:[["🖊️","Solution"],["📑","Criteria"],["🏁","Judged"]],q:"What is the best way to judge whether the solution is finished?",
+    opts:["Ask a different class to rebuild it from scratch.","Only check if the colours look nice.","Keep it exactly as it is, because if both partners already like the look of it then the whole job must be completely finished.","Measure it against the agreed criteria – accuracy, usefulness and risk."]},
+  case2:{quote:"Maya wants to prove her spelling helper is accurate. She already has a list of words with their correct spellings written down. Detective, how should she run the check?",
+    clues:[["🧾","Known words"],["🧪","Test"],["📈","Score"]],q:"How should Maya check her helper’s accuracy?",
+    opts:["Guess whether it feels accurate.","Ask her best friend whether the helper looks clever and trustworthy enough to be used by the whole entire school.","Change the app’s icon to a book.","Test it on words whose correct spelling she already knows."]},
+  case3:{quote:"Sami adds a new rule that fixes one wrong answer, then closes his laptop without checking the other cases. As his review partner, you feel uneasy. Why should he re-test first?",
+    clues:[["🔧","Change"],["🧪","Re-test"],["🏁","Proof"]],q:"Why must Sami re-test after making his change?",
+    opts:["There is no reason; one change never affects anything else.","A change can fix one case but quietly break another.","Because re-testing is only ever needed when you have made a very large number of different changes all at the same time.","So the app looks busier on screen."]},
+  lcase1:{quote:"Just before the carousel, a pair opens their solution and starts changing it again – even though they already tested it and judged it safe. As the safety checker, you raise a hand. Why is this a problem?",
+    clues:[["🧪","Tested"],["🧊","Frozen"],["🖊️","Edited?"]],q:"Why should they not change the solution after freezing?",
+    opts:["Because new changes always look worse than old ones.","Because making any change at all, even a tiny one, is completely forbidden for the whole rest of the school year.","The version they show must be the exact one they tested.","There is no problem; testing does not matter at all."]},
+  lcase2:{quote:"A pair finds a risk that is very likely to happen and would badly mislead their user. They place it in the top corner of the matrix. Detective, what should they do next?",
+    clues:[["📶","Likely"],["🚨","Serious"],["🔧","Action"]],q:"What should the pair do with a risk that is both likely and serious?",
+    opts:["Move it onto another pair’s matrix.","Fix it now, before showcase.","Just write it on a sticky note and calmly watch it for a while, since every single risk can safely wait until much later.","Ignore it because it is only one risk."]},
+  lcase3:{quote:"While freezing their solution, a pair notices it stores a real pupil’s full name inside a prompt. They are about to write their safe-and-fair statement. As the safety checker, what must they do first?",
+    clues:[["🔒","Private data"],["🧹","Remove"],["🏁","Safe & fair"]],q:"What must they do about the name in the prompt?",
+    opts:["Add even more names to make it fair.","Remove the personal data straight away.","Leave it in the prompt for now, because a single real name could not possibly cause any harm to anybody at all.","Change the font of the name."]}
+};
+/* worksheet (Core) – worked example data is illustrative */
+const WS_ACC = ["it on my friend, who said it looked clever","10 words with known spellings and got 9 of 10 right","whether the buttons look nice and got a yes"];
+const WS_USE = ["it has a bright orange logo","it took us a long time to build","a Grade 6 pupil used it to check 3 homework words and finished the task"];
+const WS_RISK = ["nothing, so it must be fine","for personal data – it uses only made-up example words, so no private data is exposed","the spelling of its name, so it is safe"];
+const CH_WHAT = ["We changed the colours, the font and the prompt all at once","We picked a new name for the helper","We added 10 extra example words with ‘ie’ and ‘ei’ – the kind it got wrong"];
+const CH_SCORE = ["6 of 10 right","9 of 10 right","10 of 10 right"];
+const CH_SAFE = ["we liked the new version better","the 6 words it got right before were still right on the re-test","we only tested the one word we fixed"];
+const LOG_ROWS = [
+  ["g1","🎯 Accuracy","Right due date for 7 of 10 test homework tasks (our criterion: at least 9 of 10)","N",0],
+  ["g2","🧭 Usefulness","A Grade 6 user set 3 reminders in under a minute and said it helped","M",1],
+  ["g3","🚩 Risk","One saved reminder showed a classmate’s full name","N",2]
+];
+const LOG_ACT = ["Add clearer examples of how dates are written, then re-test all 10","Keep it – no change needed","Remove the name and use made-up examples only","Change the button colour"];
+const LOG_ORDER = [3,1,0,2];
+const EX_CH = ["changing lots of things at once","making the app look nicer","adding more examples of the kind of word it got wrong"];
+const EX_HOW = ["I like it more now","the re-test on known answers went up and the old cases still passed","my partner said it was better"];
+const CH_PICK = ["Idea A – the new rule","Idea B – the extra examples","Both ideas at once"];
+const CH_WHY = ["Idea A is quicker to type","Idea B raised the score to 10 of 10 and broke nothing, but Idea A broke 3 words that were right before","Idea B sounds cleverer"];
+
+/* ---------- content: Lab ---------- */
+const LWORDS = [
+  ["risk review","A structured check of what could go wrong before people rely on a solution."],
+  ["risk matrix","A grid that weighs how likely a risk is against how serious it would be."],
+  ["final iteration","Your last planned change, re-tested and recorded with before-and-after evidence."],
+  ["freeze","To stop changing a solution so the version shown is the one you tested."]
+];
+const LDEF_ORDER = [3,1,0,2];
+const LSTEPS = ["Make your final planned improvement","Freeze the version you will showcase","Re-test with at least five known-answer cases","Set your Lab goal from the refinement log","Record the before and after evidence"];
+const LORDER_KEY = [3,0,2,4,1];
+const LRISK = [
+  ["r1","🎯","A wrong answer that often misleads the user","C"],
+  ["r2","🔒","A real pupil’s full name typed into the prompt","C"],
+  ["r3","⚖️","One group is served a little worse than others","B"],
+  ["r4","🌀","A rare crash when the input is very unusual","B"],
+  ["r5","🔤","A tiny spelling slip in a button label","A"],
+  ["r6","🐢","It loads one second slower than you hoped","A"]
+];
+const LFIX = [
+  ["f0","🎯","Wrong answer",1],
+  ["f1","⚖️","Unfair result",0],
+  ["f2","🔒","Private data exposed",3],
+  ["f3","🔧","Broke after a change",2]
+];
+const LFIX_OPTS = ["Balance the example data so no group is left out","Re-test with cases where you know the right answer","Re-test every case, not just the one you fixed","Remove any personal or identifying details"];
+const MATRIX = [
+  ["mr1","It often gives the wrong spelling for ‘ie’ and ‘ei’ words, and pupils copy it straight into their homework.","L","S",0],
+  ["mr2","Very rarely, a very long word makes it suggest a completely different word, which a pupil might copy into a test.","R","S",1],
+  ["mr3","Its ‘Check’ button is always a slightly different shade of orange from the other buttons.","L","m",2]
+];
+const MX_ACT = ["🚨 Fix it now","🚧 Make a plan","🌱 Just watch it"];
+const EV_CHANGE = ["Changed the whole design on carousel morning","Added 5 extra example words with double letters","Added a classmate’s name to make it friendlier"];
+const EV_SCORE = ["3 of 5 right","4 of 5 right","5 of 5 right"];
+const EV_STMT = ["It is safe because it looks finished and tidy.","We re-tested on known answers (5 of 5), checked the examples cover every kind of word, and removed all personal data – so it is safe and fair to show.","It is fair because we worked really hard on it."];
+const PRIV = [
+  ["p1","🔤","Made-up example words like ‘friend’ and ‘receive’",1],
+  ["p2","📛","A classmate’s full name inside a test prompt",0],
+  ["p3","🧪","Five known-answer test cases from the class spelling list",1],
+  ["p4","🏠","A pupil’s home address in the example data",0],
+  ["p5","📑","The class criteria card and rubric scores",1],
+  ["p6","📷","A photo of a pupil’s face as a ‘sample input’",0]
+];
+const LEX_SAFE = ["it looks finished and tidy","nobody has complained yet","we re-tested on known answers, balanced the examples and removed all personal data"];
+const LEX_RISK = ["wrong ‘ie’ and ‘ei’ spellings – the re-test went from 6 to 9 of 10 right","the button colour – we like it now","none – we did not need to look"];
+const LCH_RE = ["Make the shared list a nicer colour","Stop saving typed words at all – it checks each word, then forgets it","Keep saving everything, but sort the list into alphabetical order"];
+const LCH_BOX = ["🚨 It stays in ‘Fix now’","🌱 It moves down to ‘Just watch’","It does not move at all"];
+const LCH_WHY = ["The list looks tidier","Fewer people will open the app","Nothing private is stored any more, so both the chance of harm and how bad it would be drop"];
+
+/* ---------- activities ---------- */
+const eq=(a,b)=>String(a)===String(b);
+const ACTS = [
+ {id:"vocab",mount:"a-vocab",section:"Core · Part 1",title:"Match each word to its meaning",sub:"Words to know · "+CE_P,ico:"📖",
+  fields:WORDS.map((w,i)=>({k:"v"+i,ok:v=>eq(v,i)})),
+  explain:"Accuracy is checked on known examples; usefulness is about helping the real user; risk asks what could go wrong and whether private data is exposed. A refinement note records your change and its evidence, and the success criteria are the checklist the class agreed."},
+ {id:"lens",mount:"a-lens",section:"Core · Part 1",title:"Match each lens to how you check it",sub:"Objective 2 · judge accuracy, usefulness and risk · "+CE_P,ico:"🧷",
+  fields:LENS.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Accuracy: test with examples where you know the right answer. Usefulness: check it really helps your real user’s task. Risk: ask what could go wrong and if private data is exposed. Success criteria: compare it to the checklist the class agreed."},
+ {id:"case1",mount:"a-case1",section:"Core · Part 1",title:"Do I Like It?",sub:"System Detectives · Case 1 · "+CE_P,ico:"🕵️",cls:"case",
+  fields:[{k:"case1",radio:1,ok:v=>eq(v,3)}],
+  explain:"Liking the look is not evidence. You judge by measuring against the agreed criteria – accuracy, usefulness and risk – not by how it feels. No rebuild is needed, and colour is not one of the three lenses."},
+ {id:"checks",mount:"a-checks",section:"Core · Part 2",title:"Which are genuine quality checks?",sub:"Objective 2 · judge accuracy, usefulness and risk · "+CE_P,ico:"🧩",
+  fields:CHECKS.map(([k,,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Real checks give evidence about accuracy (test on known answers), usefulness (does it help your real user’s task?) or risk (could private data be exposed?). A catchier name, a prettier colour or ‘do I like it?’ tell you nothing about how the solution decides."},
+ {id:"case2",mount:"a-case2",section:"Core · Part 2",title:"The Accuracy Test",sub:"System Detectives · Case 2 · "+CE_P,ico:"🔬",cls:"case",
+  fields:[{k:"case2",radio:1,ok:v=>eq(v,3)}],
+  explain:"Testing on words whose correct spelling she already knows gives real evidence of accuracy. A guess or a friend’s impression is not evidence, and the icon has nothing to do with accuracy."},
+ {id:"order",mount:"a-order",section:"Core · Part 3",title:"Order the ‘one change, proven’ steps",sub:"Objective 3 · explain one change that improved it · "+CE_A,ico:"🧭",
+  fields:ORDER_KEY.map((c,i)=>({k:"o"+i,ok:v=>eq(v,c)})),
+  explain:"Judge your solution against the three lenses; choose the one improvement that matters most to your user; make that single change; re-test to check accuracy went up and nothing else broke; then write the change and its evidence in your refinement note."},
+ {id:"case3",mount:"a-case3",section:"Core · Part 3",title:"The Change That Broke Something",sub:"System Detectives · Case 3 · "+CE_A,ico:"🗝️",cls:"case",
+  fields:[{k:"case3",radio:1,ok:v=>eq(v,1)}],
+  explain:"A change can fix one case but quietly break another. Even one change can affect other cases, so you re-test after any change – it is about evidence, not how busy the app looks."},
+ {id:"wslens",mount:"a-wslens",section:"Core worksheet",title:"Task 1 · Three-lens evaluation",sub:"Worksheet · score and evidence for each lens · "+CE_P,ico:"📝",cls:"ws",
+  fields:[{k:"wa",ok:v=>eq(v,1)},{k:"wu",ok:v=>eq(v,2)},{k:"wr",ok:v=>eq(v,1)}],
+  explain:"Each lens needs evidence: accuracy from a test on words with known spellings (9 of 10 right); usefulness from a real Grade 6 user finishing their task; risk from checking for personal data. A friend’s opinion, button looks, a logo or ‘nothing’ are not evidence."},
+ {id:"wschange",mount:"a-wschange",section:"Core worksheet",title:"Task 2 · One improvement, proven",sub:"Worksheet · before and after evidence · "+CE_A,ico:"🔧",cls:"ws",
+  fields:[{k:"wc1",ok:v=>eq(v,2)},{k:"wc2",ok:v=>eq(v,0)},{k:"wc3",ok:v=>eq(v,1)},{k:"wc4",ok:v=>eq(v,1)}],
+  explain:"The pair made ONE change – extra ‘ie’ and ‘ei’ example words, the kind it got wrong. Before: 6 of 10 right. After: 9 of 10 right. Nothing else broke because the 6 words it got right before were still right on the re-test."},
+ {id:"wslog",mount:"a-wslog",section:"Core worksheet",title:"Task 3 · Refinement log",sub:"Worksheet · judgement and action for each lens · "+CE_P,ico:"📓",cls:"ws",
+  fields:LOG_ROWS.flatMap(([k,,,j,a])=>[{k:k+"a",ok:v=>eq(v,j)},{k:k+"b",ok:v=>eq(v,a)}]),
+  explain:"Accuracy (7 of 10, but the criterion is 9 of 10) needs work: add clearer date examples and re-test all 10. Usefulness meets the criteria, so keep it. The risk needs work: a real name is personal data – remove it and use made-up examples only. Button colour never fixes any lens."},
+ {id:"exit",mount:"a-exit",section:"Core exit ticket",title:"Exit ticket",sub:"Show what you know · "+CE_A,ico:"🎟️",
+  fields:[{k:"x1",ok:v=>eq(v,2)},{k:"x2",ok:v=>eq(v,1)}],
+  explain:"One well-chosen change – more examples of the kind of word it got wrong – beats many random changes. You know it worked because the re-test on known answers went up and the old cases still passed. Feelings and opinions are not evidence."},
+ {id:"chal",mount:"a-chal",section:"Core challenge",title:"Challenge ⭐ Compare two improvements",sub:"Stretch · justify a choice with evidence · "+CE_A,ico:"⭐",
+  fields:[{k:"c1",ok:v=>eq(v,1)},{k:"c2",ok:v=>eq(v,1)}],
+  explain:"Choose Idea B. Its re-test gave 10 of 10 and nothing broke. Idea A fixed ‘necessary’ but broke 3 words that were right before – a fix for one case quietly broke others. Doing both at once would hide which change helped."},
+ /* ---------- Lab ---------- */
+ {id:"lvocab",mount:"a-lvocab",section:"Lab · Words",title:"Match each Lab word to its meaning",sub:"Words to know · "+GE_A,ico:"📖",
+  fields:LWORDS.map((w,i)=>({k:"lv"+i,ok:v=>eq(v,i)})),
+  explain:"A risk review checks what could go wrong before people rely on a solution. A risk matrix weighs how likely against how serious. Your final iteration is the last planned change, re-tested and recorded. To freeze is to stop changing it, so the version shown is the one you tested."},
+ {id:"lorder",mount:"a-lorder",section:"Lab · Part 1",title:"Order the final-iteration steps",sub:"Objective 1 · run a final evaluation and act on one improvement · "+SD_A,ico:"🧭",
+  fields:LORDER_KEY.map((c,i)=>({k:"lo"+i,ok:v=>eq(v,c)})),
+  explain:"Set your Lab goal from the refinement log; make your final planned improvement; re-test with at least five known-answer cases; record the before and after evidence; then freeze the version you will showcase."},
+ {id:"lcase1",mount:"a-lcase1",section:"Lab · Part 1",title:"The Last-Minute Edit",sub:"System Detectives · Lab Case 1 · "+CE_A,ico:"🕵️",cls:"case",
+  fields:[{k:"lcase1",radio:1,ok:v=>eq(v,2)}],
+  explain:"Freezing keeps the showcased version the same as the one you evaluated. Changes are fine earlier – but a change after freezing means the version shown was never tested. Testing is exactly what makes the evidence trustworthy."},
+ {id:"lrisk",mount:"a-lrisk",section:"Lab · Part 2",title:"Sort each risk by severity",sub:"Objective 2 · complete a risk review · "+GE_A,ico:"🩺",
+  fields:LRISK.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"High – fix now: a wrong answer that often misleads the user, and a real pupil’s full name in the prompt. Medium – make a plan: one group served a little worse, and a rare crash on very unusual input. Low – just watch: a tiny spelling slip in a label, and loading one second slower."},
+ {id:"lcase2",mount:"a-lcase2",section:"Lab · Part 2",title:"Likely and Serious",sub:"System Detectives · Lab Case 2 · "+GE_A,ico:"🔬",cls:"case",
+  fields:[{k:"lcase2",radio:1,ok:v=>eq(v,1)}],
+  explain:"A likely-and-serious risk needs action straight away – fix it now, before showcase. Only low risks are watched, one serious likely risk is enough to act on, and it is their own solution, so they must fix it themselves."},
+ {id:"lfix",mount:"a-lfix",section:"Lab · Part 3",title:"Match each risk to how you handle it",sub:"Objective 2 · confirm the solution is safe and fair · "+GE_A,ico:"🧷",
+  fields:LFIX.map(([k,,,c])=>({k,ok:v=>eq(v,c)})),
+  explain:"Wrong answer: re-test with cases where you know the right answer. Unfair result: balance the example data so no group is left out. Private data exposed: remove any personal or identifying details. Broke after a change: re-test every case, not just the one you fixed."},
+ {id:"lcase3",mount:"a-lcase3",section:"Lab · Part 3",title:"The Name in the Prompt",sub:"System Detectives · Lab Case 3 · "+GE_P,ico:"🗝️",cls:"case",
+  fields:[{k:"lcase3",radio:1,ok:v=>eq(v,1)}],
+  explain:"Personal data must never stay in a prompt or training set – remove it straight away. Even one real name is personal data; more names make it worse, and changing the font does not remove it."},
+ {id:"lmatrix",mount:"a-lmatrix",section:"Lab worksheet",title:"Task 1 · Risk matrix",sub:"Worksheet · likelihood, seriousness and action · "+GE_A,ico:"🗺️",cls:"ws",
+  fields:MATRIX.flatMap(([k,,l,s,a])=>[{k:k+"l",ok:v=>eq(v,l)},{k:k+"s",ok:v=>eq(v,s)},{k:k+"a",ok:v=>eq(v,a)}]),
+  explain:"Risk 1 happens often and misleads pupils’ homework: likely and serious – fix it now. Risk 2 is rare but a wrong word in a test is serious – make a plan. Risk 3 is always there but tiny – likely but small, so just watch it."},
+ {id:"lwsevid",mount:"a-lwsevid",section:"Lab worksheet",title:"Task 2 · Final iteration evidence",sub:"Worksheet · before, after and safe-and-fair statement · "+CE_A,ico:"📊",cls:"ws",
+  fields:[{k:"e1",ok:v=>eq(v,1)},{k:"e2",ok:v=>eq(v,0)},{k:"e3",ok:v=>eq(v,2)},{k:"e4",ok:v=>eq(v,1)}],
+  explain:"The final change was 5 extra double-letter example words. Before: 3 of 5 right. After: 5 of 5 right. A strong safe-and-fair statement names the evidence – known-answer re-test, balanced examples, no personal data – not how tidy it looks or how hard you worked."},
+ {id:"lprivacy",mount:"a-lprivacy",section:"Lab worksheet",title:"Task 3 · Final iteration log: privacy check",sub:"Worksheet · what is safe to keep in the frozen version · "+GE_P,ico:"🔒",cls:"ws",
+  fields:PRIV.map(([k,,,c])=>({k,box:1,ok:v=>v===!!c})),
+  explain:"Made-up example words, known-answer test cases and the criteria card are safe to keep. A classmate’s full name, a home address and a photo of a face are personal or identifying data – remove them before you freeze."},
+ {id:"lexit",mount:"a-lexit",section:"Lab exit ticket",title:"Lab exit ticket",sub:"Show what you know · "+GE_A,ico:"🎟️",
+  fields:[{k:"y1",ok:v=>eq(v,2)},{k:"y2",ok:v=>eq(v,0)}],
+  explain:"A safe-and-fair statement stands on evidence: re-testing on known answers, balanced examples and no personal data. The risk you managed should come with its evidence – for example, the re-test went from 6 to 9 of 10 right."},
+ {id:"lchal",mount:"a-lchal",section:"Lab challenge",title:"Challenge ⭐ Move a high risk down",sub:"Stretch · redesign to lower a risk · "+GE_A,ico:"⭐",
+  fields:[{k:"z1",ok:v=>eq(v,1)},{k:"z2",ok:v=>eq(v,1)},{k:"z3",ok:v=>eq(v,2)}],
+  explain:"If the helper stops saving typed words, nothing private is stored, so a leak becomes both rare and small – the risk moves from ‘Fix now’ down to ‘Just watch’. A nicer colour or sorted list changes nothing about the risk."}
+];
+
+/* ---------- state ---------- */
+const KEY="g6-mw9-core-lab-v1";
+let S={name:"",cls:"",ans:{},first:{},last:{},flip:{}};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=s=>document.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+function sel(key,opts,ph="Choose…",order){
+  const v=S.ans[key],idx=order||opts.map((_,i)=>i);
+  return `<select data-key="${key}" aria-label="${esc(ph)}"><option value="">${esc(ph)}</option>${idx.map(i=>`<option value="${i}"${eq(v,i)?" selected":""}>${esc(opts[i])}</option>`).join("")}</select>`;
+}
+function seg(key,labels,vals,label){
+  vals=vals||labels.map((_,i)=>i);
+  return `<div class="seg" role="group" aria-label="${esc(label||"")}">${labels.map((l,i)=>`<button type="button" data-set="${key}" data-val="${vals[i]}" aria-pressed="${eq(S.ans[key],vals[i])}">${esc(l)}</button>`).join("")}</div>`;
+}
+function radios(key,opts){
+  return `<div class="opts" role="radiogroup" aria-labelledby="q-${key}">`+opts.map((o,i)=>`<label class="opt" data-item="${key}-${i}"><input type="radio" name="${key}" data-key="${key}" value="${i}"${eq(S.ans[key],i)?" checked":""}><span class="l">${"ABCD"[i]}</span><span>${esc(o)}</span></label>`).join("")+`</div>`;
+}
+
+/* ---------- lesson date (defaults to today) ---------- */
+(function(){
+  const t=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  if(!S.date){S.date=t;save()}
+  const el=$("#dt");el.value=S.date;
+  el.addEventListener("change",()=>{S.date=el.value||t;save();update()});
+})();
+
+/* ---------- static blocks ---------- */
+const flipCards=(list,pre)=>list.map(([t,d],i)=>`<button type="button" class="flip" data-flip="${pre}${i}" aria-pressed="${!!S.flip[pre+i]}"><span class="term">${esc(t)}</span><span class="def">${esc(d)}</span><span class="hint">↻ tap to flip</span></button>`).join("");
+$("#flips").innerHTML=flipCards(WORDS,"");
+$("#flipsL").innerHTML=flipCards(LWORDS,"L");
+$("#audit").innerHTML=`<header><small>Worked example · illustrative</small><b>Spell Check Buddy: before and after one change</b></header>
+<div class="in">
+  <p class="task"><b>The solution:</b> a pair’s signature solution helps Grade 6 pupils check their spelling. A pupil types a word, and it suggests the correct spelling with a short tip. The pair tested it on 10 words whose correct spelling they already knew (from the class spelling list), then made <b>one</b> change and ran the same test again. Only made-up example words are used – no names.</p>
+  <table class="t"><thead><tr><th>Lens</th><th>Before</th><th>After</th></tr></thead>
+  <tbody><tr><td>🎯 Accuracy – 10 known-answer words</td><td>6 of 10 right</td><td>9 of 10 right (the same 6 still right)</td></tr>
+  <tr><td>🧭 Usefulness – a Grade 6 pupil checks 3 homework words</td><td>Finished the task</td><td>Finished the task</td></tr>
+  <tr><td>🚩 Risk – any personal data?</td><td>None – made-up words only</td><td>None – made-up words only</td></tr></tbody></table>
+  <div class="ab"><div><b>The one change</b>Added 10 extra example words with ‘ie’ and ‘ei’ (like ‘friend’ and ‘receive’) – the kind it got wrong.</div><div><b>What stayed the same</b>The same 10 test words, the same prompt, the same steps.</div></div>
+</div>`;
+$("#pack").innerHTML=`<header><small>Final-iteration log · illustrative</small><b>Spell Check Buddy: the last change, then freeze</b></header>
+<div class="in">
+  <p class="task"><b>Lab goal (from the refinement log):</b> it still misspells words with double letters, like ‘necessary’ and ‘tomorrow’. The pair made one final change and re-tested on 5 known-answer double-letter words.</p>
+  <table class="t"><thead><tr><th>Step</th><th>What happened</th></tr></thead>
+  <tbody><tr><td>🔧 Final change</td><td>Added 5 extra example words with double letters – nothing else changed</td></tr>
+  <tr><td>🧪 Re-test – 5 double-letter words</td><td>Before: 3 of 5 right · After: 5 of 5 right</td></tr>
+  <tr><td>🔁 Old test – the 10 words from the Core</td><td>Still 9 of 10 right – nothing broke</td></tr>
+  <tr><td>⚖️ Fair?</td><td>Examples now cover short, long, ‘ie’/‘ei’ and double-letter words</td></tr>
+  <tr><td>🔒 Personal data?</td><td>None – made-up words only</td></tr>
+  <tr><td>🧊 Freeze</td><td>Version 3 frozen at the end of the Lab – no edits before the carousel</td></tr></tbody></table>
+</div>`;
+
+/* ---------- activity bodies ---------- */
+function caseBody(id){
+  const c=CASES[id];
+  return `<div class="quote">“${esc(c.quote)}”</div><div class="clues" aria-hidden="true">${c.clues.map(([e,t])=>`<div class="clue">${e}<span>${esc(t)}</span></div>`).join("")}</div>
+    <p class="q" id="q-${id}">${esc(c.q)}</p>${radios(id,c.opts)}`;
+}
+const boxes=(list,how)=>`<p class="how">${how}</p><div class="opts">`+
+  list.map(([k,e,t])=>`<label class="opt box" data-item="${k}"><input type="checkbox" data-key="${k}"${S.ans[k]?" checked":""}><span class="l" aria-hidden="true"></span><span>${e?e+" ":""}${esc(t)}</span></label>`).join("")+`</div>`;
+function body(a){
+  switch(a.id){
+  case "vocab":
+    return `<p class="how">Choose the meaning of each word. Flip the cards above if you need a reminder.</p>`+
+      WORDS.map(([t],i)=>`<div class="pair" data-item="v${i}"><span class="t">${esc(t)}</span>${sel("v"+i,WORDS.map(w=>w[1]),"Choose the meaning…",DEF_ORDER)}</div>`).join("");
+  case "lvocab":
+    return `<p class="how">Choose the meaning of each Lab word. Flip the cards above if you need a reminder.</p>`+
+      LWORDS.map(([t],i)=>`<div class="pair" data-item="lv${i}"><span class="t">${esc(t)}</span>${sel("lv"+i,LWORDS.map(w=>w[1]),"Choose the meaning…",LDEF_ORDER)}</div>`).join("");
+  case "lens":
+    return `<p class="how">For each lens, choose how you check it.</p>`+
+      LENS.map(([k,e,t])=>`<div class="pair" data-item="${k}"><span class="t">${e} ${esc(t)}</span>${sel(k,LENS_CHECKS,"Choose the check…")}</div>`).join("");
+  case "case1": case "case2": case "case3": case "lcase1": case "lcase2": case "lcase3":
+    return caseBody(a.id);
+  case "checks":
+    return boxes(CHECKS,"Tick the THREE cards that are real quality checks on your solution. Leave the others unticked.");
+  case "order":
+    return `<p class="how">Put the steps in order, from judging your solution to writing the evidence.</p>`+
+      ORDER_KEY.map((_,i)=>`<div class="pair" data-item="o${i}"><span class="t">Step ${i+1}</span>${sel("o"+i,STEPS,"Choose the step…")}</div>`).join("");
+  case "wslens":
+    return `<p class="how">Use the Spell Check Buddy card. Judge it on each lens – choose the evidence that belongs on the worksheet line.</p>
+      <p class="sent">🎯 Accuracy: I tested <span data-item="wa">${sel("wa",WS_ACC,"choose…")}</span>.</p>
+      <p class="sent">🧭 Usefulness: it helps my user because <span data-item="wu">${sel("wu",WS_USE,"choose…")}</span>.</p>
+      <p class="sent">🚩 Risk: I checked <span data-item="wr">${sel("wr",WS_RISK,"choose…",[2,1,0])}</span>.</p>`;
+  case "wschange":
+    return `<p class="how">Use the Spell Check Buddy card. Describe the single change and show the before and after evidence.</p>
+      <div class="pair" data-item="wc1"><span class="t">The change I made was</span>${sel("wc1",CH_WHAT,"Choose…")}</div>
+      <div class="pair" data-item="wc2"><span class="t">Before</span>${sel("wc2",CH_SCORE,"Choose…",[1,0,2])}</div>
+      <div class="pair" data-item="wc3"><span class="t">After</span>${sel("wc3",CH_SCORE,"Choose…",[2,0,1])}</div>
+      <div class="pair" data-item="wc4"><span class="t">Nothing else broke because</span>${sel("wc4",CH_SAFE,"Choose…",[2,1,0])}</div>`;
+  case "wslog":
+    return `<p class="how">A different pair logged their homework-reminder helper (illustrative). For each check, judge it against the criteria and choose the action.</p>`+
+      LOG_ROWS.map(([k,l,ev])=>`<div class="scen"><p><b>${esc(l)}</b> – ${esc(ev)}</p><div class="two">
+        <div class="cell" data-item="${k}a"><span>Judgement</span>${seg(k+"a",["Meets the criteria","Needs work"],["M","N"],l)}</div>
+        <div data-item="${k}b"><span>Action taken</span>${sel(k+"b",LOG_ACT,"Choose…",LOG_ORDER)}</div></div></div>`).join("");
+  case "exit":
+    return `<p class="how">What one change improved your solution most, and how do you know? Build the answer for Spell Check Buddy.</p>
+      <p class="sent">The change that helped most was <span data-item="x1">${sel("x1",EX_CH,"choose…")}</span>, and I know it worked because <span data-item="x2">${sel("x2",EX_HOW,"choose…",[2,0,1])}</span>.</p>`;
+  case "chal":
+    return `<div class="quote"><b>Two possible improvements (illustrative).</b> Spell Check Buddy still gets ‘necessary’ wrong. The pair try two ideas on a copy and re-test all 10 known-answer words each time.<br>💡 <b>Idea A:</b> add a rule ‘always double the last letter’ → ‘necessary’ is fixed, but 3 words that were right before are now wrong (7 of 10).<br>💡 <b>Idea B:</b> add 5 extra example words with double letters → 10 of 10 right, and all the old words are still right.</div>
+      <div class="pair" data-item="c1"><span class="t">Which idea should they keep?</span>${sel("c1",CH_PICK,"Choose…",[2,0,1])}</div>
+      <div class="pair" data-item="c2"><span class="t">Because…</span>${sel("c2",CH_WHY,"Choose…")}</div>`;
+  case "lorder":
+    return `<p class="how">Put the final-iteration steps in order, from setting your goal to freezing the version.</p>`+
+      LORDER_KEY.map((_,i)=>`<div class="pair" data-item="lo${i}"><span class="t">Step ${i+1}</span>${sel("lo"+i,LSTEPS,"Choose the step…")}</div>`).join("");
+  case "lrisk":
+    return `<p class="how">How much action does each risk need? Use the matrix in Figure L2.</p>`+
+      LRISK.map(([k,e,t])=>`<div class="row" data-item="${k}"><span class="t">${e} ${esc(t)}</span>${seg(k,["🌱 Low – watch","🚧 Medium – plan","🚨 High – fix now"],["A","B","C"],t)}</div>`).join("");
+  case "lfix":
+    return `<p class="how">For each risk, choose the check or fix that handles it.</p>`+
+      LFIX.map(([k,e,t])=>`<div class="pair" data-item="${k}"><span class="t">${e} ${esc(t)}</span>${sel(k,LFIX_OPTS,"Choose the fix…")}</div>`).join("");
+  case "lmatrix":
+    return `<p class="how">Three risks the pair listed for Spell Check Buddy (illustrative). Place each one by likelihood and seriousness, then decide an action. Remember: likely and serious – fix now; rare but serious – make a plan; small – just watch.</p>`+
+      MATRIX.map(([k,t],i)=>`<div class="scen"><p>Risk ${i+1}: ${esc(t)}</p><div class="two">
+        <div class="cell" data-item="${k}l"><span>Likelihood</span>${seg(k+"l",["Rare","Likely"],["R","L"],"Risk "+(i+1)+" likelihood")}</div>
+        <div class="cell" data-item="${k}s"><span>Seriousness</span>${seg(k+"s",["Small","Serious"],["m","S"],"Risk "+(i+1)+" seriousness")}</div></div>
+        <div class="two" style="margin-top:8px"><div data-item="${k}a"><span>Action</span>${sel(k+"a",MX_ACT,"Choose…",[1,2,0])}</div></div></div>`).join("");
+  case "lwsevid":
+    return `<p class="how">Use the final-iteration log card. Record the last change and the before-and-after results.</p>
+      <div class="pair" data-item="e1"><span class="t">Final change</span>${sel("e1",EV_CHANGE,"Choose…",[0,2,1])}</div>
+      <div class="pair" data-item="e2"><span class="t">Before</span>${sel("e2",EV_SCORE,"Choose…",[2,0,1])}</div>
+      <div class="pair" data-item="e3"><span class="t">After</span>${sel("e3",EV_SCORE,"Choose…",[1,2,0])}</div>
+      <div class="pair" data-item="e4"><span class="t">Safe-and-fair statement</span>${sel("e4",EV_STMT,"Choose…",[0,2,1])}</div>`;
+  case "lprivacy":
+    return boxes(PRIV,"Privacy check before you freeze: tick every item that is SAFE to keep in the frozen solution. Leave the others unticked.");
+  case "lexit":
+    return `<p class="how">Write your safe-and-fair statement and one risk you managed with evidence – for Spell Check Buddy.</p>
+      <p class="sent">Our solution is safe and fair because <span data-item="y1">${sel("y1",LEX_SAFE,"choose…")}</span>, and one risk we managed was <span data-item="y2">${sel("y2",LEX_RISK,"choose…",[1,0,2])}</span>.</p>`;
+  case "lchal":
+    return `<div class="quote"><b>A high risk (illustrative).</b> Another pair’s helper saves every word a pupil types – including any names – in a shared list that everyone can see. On their matrix this sits in 🚨 ‘Fix now’: it is likely to happen and serious. Redesign one part so the risk moves to a lower box.</div>
+      <div class="pair" data-item="z1"><span class="t">My redesign</span>${sel("z1",LCH_RE,"Choose…",[0,2,1])}</div>
+      <div class="pair" data-item="z2"><span class="t">Where the risk moves</span>${sel("z2",LCH_BOX,"Choose…",[1,0,2])}</div>
+      <div class="pair" data-item="z3"><span class="t">Why the change is justified</span>${sel("z3",LCH_WHY,"Choose…",[1,2,0])}</div>`;
+  }
+}
+function head(a){return `<div class="act-head ${a.cls||""}"><div class="ico" aria-hidden="true">${a.ico}</div><div><small>${esc(a.sub)}</small><h3>${esc(a.title)}</h3></div></div>`}
+function build(a){
+  return `<div class="act">${head(a)}<div class="act-body">${body(a)}<div class="act-foot"><button class="btn" data-check="${a.id}" type="button">Check my answers</button><span class="first" id="first-${a.id}"></span><div class="fb" id="fb-${a.id}"></div></div></div></div>`;
+}
+
+/* ---------- grading ---------- */
+const maxOf=a=>a.fields.length;
+function grade(a){
+  const A=S.ans,r={};let need=0;
+  a.fields.forEach(f=>{if(f.box){r[f.k]=f.ok(!!A[f.k]);return}const v=A[f.k];if(v===undefined||v==="")need++;r[f.k]=v!==undefined&&v!==""&&f.ok(v,A)});
+  if(need)return{err:`Answer all the questions first – ${need} still to do.`};
+  return{r,score:Object.values(r).filter(Boolean).length,max:a.fields.length};
+}
+function mark(a,g){
+  const box=document.getElementById(a.mount);
+  a.fields.forEach(f=>{
+    if(f.radio){
+      $$(`[data-item^="${f.k}-"]`,box).forEach(el=>el.classList.remove("ok","no"));
+      const el=box.querySelector(`[data-item="${f.k}-${S.ans[f.k]}"]`);if(el)el.classList.add(g.r[f.k]?"ok":"no");
+      return;
+    }
+    const el=box.querySelector(`[data-item="${f.k}"]`);if(!el)return;
+    const t=el.querySelector("select")||el;
+    t.classList.remove("ok","no");t.classList.add(g.r[f.k]?"ok":"no");
+  });
+}
+function check(id){
+  const a=ACTS.find(x=>x.id===id),g=grade(a),fb=$("#fb-"+id);
+  if(g.err){fb.className="fb need";fb.textContent=g.err;return}
+  if(S.first[id]===undefined)S.first[id]=g.score;
+  S.last[id]=g.score;save();
+  mark(a,g);
+  const full=g.score===g.max;
+  fb.className="fb "+(full?"good":g.score>=g.max/2?"some":"need");
+  fb.innerHTML=`<b>${g.score} out of ${g.max} correct.</b> ${full?"Excellent analysis.":"Red answers need fixing – change them and check again."}<p>${esc(a.explain)}</p>`;
+  showFirst(id);update();
+}
+function showFirst(id){const a=ACTS.find(x=>x.id===id),el=$("#first-"+id);if(el&&S.first[id]!==undefined)el.textContent=`First try: ${S.first[id]}/${maxOf(a)} (this is the score your teacher sees)`}
+
+/* ---------- results ---------- */
+function update(){
+  if(window.LessonHooks)try{LessonHooks.state(S,ACTS.map(a=>({id:a.id,section:a.section,title:a.title,max:maxOf(a)})))}catch(e){}
+  const done=ACTS.filter(a=>S.first[a.id]!==undefined);
+  const tot=ACTS.reduce((n,a)=>n+maxOf(a),0);
+  const sc=done.reduce((n,a)=>n+S.first[a.id],0);
+  $("#barDone").textContent=`${done.length} of ${ACTS.length} checked`;
+  $("#barScore").textContent=`${sc}/${tot}`;
+  $("#barFill").style.width=(done.length/ACTS.length*100)+"%";
+  const pct=Math.round(sc/tot*100);
+  const d=(S.date?new Date(S.date+"T12:00"):new Date()).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+  $("#results").innerHTML=`<div class="top"><h2>Show your teacher</h2>
+    <div>${esc(S.name||"Name not entered")}${S.cls?`, class ${esc(S.cls)}`:""} – ${d}</div>
+    <div>Grade 6 Main Course · Week 9 Core + Lab · Signature Solution: Refining &amp; Finishing + Final Iteration and Risk Review</div>
+    <div class="big">${sc}/${tot}</div><div>${pct}% on first tries, ${done.length} of ${ACTS.length} activities checked</div>
+    ${!S.name?'<p class="warn">Type your name at the top of the page before you show or print this.</p>':""}
+    ${done.length<ACTS.length?'<p class="warn">Some activities are not checked yet. They count as 0.</p>':""}</div>
+    <table><thead><tr><th>Activity</th><th>First try</th></tr></thead><tbody>${ACTS.map(a=>`<tr><td>${esc(a.section)}: ${esc(a.title)}</td><td>${S.first[a.id]===undefined?"–":S.first[a.id]}/${maxOf(a)}</td></tr>`).join("")}</tbody></table>
+    <div class="actions"><button class="btn" type="button" id="printRes">Print my results</button><button class="btn alt" type="button" id="printAll">Print whole lesson with my answers</button></div>`;
+  $("#printRes").onclick=()=>{document.body.classList.add("print-results");window.print();setTimeout(()=>document.body.classList.remove("print-results"),500)};
+  $("#printAll").onclick=()=>window.print();
+}
+
+/* ---------- mount + events ---------- */
+ACTS.forEach(a=>{document.getElementById(a.mount).innerHTML=build(a);showFirst(a.id)});
+// re-apply marks for activities already checked, so a reload (or print) still shows them
+ACTS.forEach(a=>{if(S.last[a.id]!==undefined){const g=grade(a);if(!g.err)mark(a,g)}});
+$("#nm").value=S.name;$("#cl").value=S.cls;
+$("#nm").addEventListener("input",e=>{S.name=e.target.value.trim();save();update()});
+$("#cl").addEventListener("input",e=>{S.cls=e.target.value.trim();save();update()});
+
+function clearMark(el){const it=el.closest("[data-item]");if(it){it.classList.remove("ok","no");$$(".ok,.no",it).forEach(x=>x.classList.remove("ok","no"))}}
+document.addEventListener("change",e=>{
+  const t=e.target,k=t.dataset.key;if(!k)return;
+  if(t.type==="checkbox")S.ans[k]=t.checked;
+  else if(t.type==="radio"){S.ans[k]=t.value;$$(`[name="${t.name}"]`).forEach(r=>r.closest(".opt").classList.remove("ok","no"))}
+  else S.ans[k]=t.value;
+  clearMark(t);save();
+});
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){S.ans[s.dataset.set]=s.dataset.val;$$(`[data-set="${s.dataset.set}"]`).forEach(b=>b.setAttribute("aria-pressed",b===s));clearMark(s);save()}
+  const f=e.target.closest("[data-flip]");
+  if(f){const i=f.dataset.flip;S.flip[i]=!S.flip[i];f.setAttribute("aria-pressed",!!S.flip[i]);save()}
+  const c=e.target.closest("[data-check]");if(c)check(c.dataset.check);
+});
+$("#resetBtn").onclick=()=>{if(confirm("Clear every answer on this device so the next student can start?")){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
+
+/* QR code for the teacher */
+$("#qrBtn").onclick=$("#qrTop").onclick=()=>{
+  const url=location.href.split("#")[0];
+  $("#qrUrl").textContent=url;$("#ov").classList.add("on");
+  const draw=()=>{$("#qr").innerHTML="";new QRCode($("#qr"),{text:url,width:320,height:320,correctLevel:QRCode.CorrectLevel.M})};
+  if(window.QRCode)return draw();
+  const sc=document.createElement("script");
+  sc.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  sc.onload=draw;sc.onerror=()=>{$("#qr").textContent="QR code could not load. Share the link below instead."};
+  document.head.appendChild(sc);
+};
+$("#qrClose").onclick=()=>$("#ov").classList.remove("on");
+$("#ov").addEventListener("click",e=>{if(e.target.id==="ov")$("#ov").classList.remove("on")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#ov").classList.remove("on")});
+update();
+</script>
+</body>
+</html>
