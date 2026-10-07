@@ -260,6 +260,27 @@ strand, any strand that dropped since the week before, the biggest gain and any
 week that fewer than 70% of students finished. Students (and teachers viewing a
 student) see **My progress over time**.
 
+## Absences and lessons not taught
+
+**Mark absent.** Under a lesson a student has not started, teachers (for their own
+students), SLT and owners can click **Mark absent** (and **Undo absent**). It is
+logged in the **Absences** tab. An absent lesson shows as *Absent* and is left out
+of *Not started*, *Need a nudge*, the progress chart's finish rate, the awards'
+completion and the not-taught check. The student can still do the lesson later.
+
+**Lessons not taught (owners).** The **📭 Not taught** button lists lessons whose
+date has passed but which fewer than 25% of a teacher's students (at least 3,
+leaving out absences) have opened. The teacher is the one of that period's subject
+(Arabic or Islamic) for those students. Tick the lessons, fill in **Cc** (school
+usernames such as `head1, head2` – remembered for next time, kept in the script
+properties, not in this public repository) and **Send**: each teacher gets one
+email listing their lessons, saying the AI lessons are mandatory and offering
+support; replies come to the owner who sent it. Sends are logged in **Reminders**.
+
+Sending email needs Google's permission once: after updating, open the script
+(`clasp open`), choose **authorizeEmail** in the function menu, click **Run** and
+**Allow**.
+
 ## AI & Innovation Student and Teacher of the Month (owners)
 
 Owners get a **🏆 Awards** button on the dashboard. Pick a month to see:

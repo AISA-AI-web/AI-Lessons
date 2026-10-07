@@ -21,7 +21,9 @@ var TABS = {
   Changes:   ['timestamp', 'type', 'student', 'name', 'fromSection', 'toSection', 'by', 'status', 'decidedBy', 'decidedAt', 'note', 'fromClass', 'toClass'],
   Confirmations: ['timestamp', 'section', 'teacher', 'students', 'note'],
   Retakes:   ['timestamp', 'student', 'lessonId', 'teacher', 'note'],
-  Awards:    ['timestamp', 'month', 'type', 'email', 'name', 'by', 'note']
+  Awards:    ['timestamp', 'month', 'type', 'email', 'name', 'by', 'note'],
+  Absences:  ['timestamp', 'student', 'lessonId', 'teacher', 'status', 'note'],
+  Reminders: ['timestamp', 'teacher', 'section', 'lessonId', 'by', 'cc']
 };
 /* Every AI Literacy section, e.g. Boys 6 … Girls 12. */
 var SECTIONS = (function () { var a = []; for (var g = 6; g <= 12; g++) a.push('Boys ' + g, 'Girls ' + g); return a; })();
@@ -606,6 +608,7 @@ function getDashboard() {
     students: outStudents,
     results: results,
     retakes: retakes,
+    absences: (function () { var a = absences_(), o = {}; Object.keys(a).forEach(function (k) { if (keep[k.split('|')[0]]) o[k] = a[k]; }); return o; })(),
     judgements: judgementsFor_(keep),
     framework: typeof FRAMEWORK === 'undefined' ? null : FRAMEWORK,
     canJudge: me.role !== 'student',
@@ -629,6 +632,111 @@ function judgementsFor_(keep) {
   });
   return out;
 }
+
+/* ===================== absences ===================== */
+
+/* A teacher marks a student absent for a lesson, so a lesson not started is explained: it is shown as
+   Absent, and left out of 'Not started', 'Need a nudge', completion, the awards and the not-taught check. */
+function absences_() {
+  var out = {};
+  rows_('Absences').forEach(function (r) {             // in time order: the latest mark wins
+    var k = lc_(r.student) + '|' + r.lessonId;
+    if (r.status === 'absent') out[k] = { by: lc_(r.teacher), at: new Date(r.timestamp).toISOString(), note: r.note };
+    else delete out[k];
+  });
+  return out;
+}
+/** Marks (absent = true) or clears a student's absence for a lesson. Own students; owners and SLT: anyone. */
+function setAbsent(studentEmail, lessonId, absent, note) {
+  var me = requireUser_(), email = checkEmail_(studentEmail);
+  lessonId = cleanId_(lessonId);
+  if (me.role === 'student') throw new Error('Only teachers can mark absences.');
+  var vis = visibleSections_(me);
+  if (vis !== null) {
+    var cm = classMap_(), st = cm.students[email];
+    if (!st || !isMine_(me, vis, cm, email, st.section)) throw new Error('You can only mark your own students absent.');
+  }
+  append_('Absences', [[new Date(), email, lessonId, me.email, absent ? 'absent' : 'cleared', cleanText_(note, 200)]]);
+  return { absent: !!absent };
+}
+
+/* ===================== lessons not taught: reminders to teachers (owners) ===================== */
+
+/* A lesson counts as not taught when its date has passed and fewer than a quarter of a teacher's
+   students (in that period's subject group, leaving out absences) have opened it – at least 3 students. */
+var NOT_TAUGHT_SHARE = 0.25, NOT_TAUGHT_MIN = 3;
+function notTaught_() {
+  var LC = lessonCells_(), cm = classMap_(), tbs = teachersBySection_(), ab = absences_(), cat = typeof CATALOG === 'undefined' ? [] : CATALOG;
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var bySec = {}, temail = {};
+  rows_('Roster').forEach(function (r) { if (r.role === 'student' && r.section) { var e = lc_(r.email); if (!bySec[r.section]) bySec[r.section] = []; if (bySec[r.section].indexOf(e) < 0) bySec[r.section].push(e); } });
+  Object.keys(tbs).forEach(function (sec) { tbs[sec].forEach(function (t) { temail[sec + '|' + t.name] = t.email; }); });
+  var rem = {}; rows_('Reminders').forEach(function (r) { rem[lc_(r.teacher) + '|' + r.lessonId + '|' + r.section] = new Date(r.timestamp).toISOString(); });
+  var out = [];
+  Object.keys(bySec).forEach(function (sec) {
+    if (!AICAL.SCHEDULE.some(function (r) { return r[0] === sec; })) return;
+    var grade = gradeOf_(sec), to = {};
+    bySec[sec].forEach(function (e) { to[e] = teachersOf_(cm, tbs, e, sec); });
+    cat.forEach(function (l) {
+      if (l.grade !== grade || l.course !== 'main') return;
+      var d = AICAL.lessonDate(sec, l.week); if (!d || d >= today) return;
+      var slot = AICAL.SCHEDULE.filter(function (x) { return x[0] === sec && x[3] === AICAL.cycleOf(d) && x[4] === AICAL.DAYS[d.getDay()]; })[0], sub = slot ? slot[2] : '';
+      var groups = {};
+      bySec[sec].forEach(function (e) {
+        if (ab[e + '|' + l.id]) return;
+        var k = e + '|' + l.id, started = !!(LC.per[k] || LC.prev[k]);
+        var names = (to[e].bySub[sub] && to[e].bySub[sub].length) ? to[e].bySub[sub] : (to[e].bySub[''] && to[e].bySub[''].length ? to[e].bySub[''] : to[e].names);
+        (names.length ? names : ['']).forEach(function (n) { var g = groups[n] || (groups[n] = { n: 0, started: 0 }); g.n++; if (started) g.started++; });
+      });
+      Object.keys(groups).forEach(function (n) {
+        var g = groups[n]; if (g.n < NOT_TAUGHT_MIN || g.started / g.n >= NOT_TAUGHT_SHARE) return;
+        var em = temail[sec + '|' + n] || '';
+        out.push({ teacher: n, email: em, section: sec, lessonId: l.id, week: l.week, title: l.title, date: AICAL.iso(d), subject: sub, period: slot ? slot[5] : '',
+          students: g.n, started: g.started, reminded: em ? (rem[em + '|' + l.id + '|' + sec] || '') : '' });
+      });
+    });
+  });
+  return out.sort(function (a, b) { return b.date.localeCompare(a.date) || a.section.localeCompare(b.section) || a.teacher.localeCompare(b.teacher); });
+}
+function reminderCc_() { return PropertiesService.getScriptProperties().getProperty('REMINDER_CC') || ''; }
+/** Owners: lessons whose date has passed but which a teacher's students have not started. */
+function getNotTaught() {
+  requireOwner_();
+  return { items: notTaught_(), cc: reminderCc_(), share: Math.round(NOT_TAUGHT_SHARE * 100), min: NOT_TAUGHT_MIN };
+}
+/** Owners: one email per teacher listing their untaught lessons, with the CC list (remembered). */
+function sendReminders(keys, cc) {
+  var me = requireOwner_();
+  if (!Array.isArray(keys) || !keys.length || keys.length > 200) throw new Error('Choose the lessons to send reminders for.');
+  var ccl = String(cc || '').split(/[\s,;]+/).filter(String).map(function (x) { x = lc_(x); return x.indexOf('@') < 0 ? x + '@' + DOMAIN : x; });
+  ccl.forEach(function (x) { checkEmail_(x); });
+  PropertiesService.getScriptProperties().setProperty('REMINDER_CC', ccl.map(function (x) { return x.split('@')[0]; }).join(', '));
+  var want = {}; keys.forEach(function (k) { want[String(k)] = 1; });
+  var items = notTaught_().filter(function (x) { return x.email && want[x.email + '|' + x.lessonId + '|' + x.section]; });
+  if (!items.length) throw new Error('Those lessons no longer need a reminder.');
+  var byT = {}; items.forEach(function (x) { (byT[x.email] = byT[x.email] || []).push(x); });
+  var url = ScriptApp.getService().getUrl() + '?p=calendar', sent = 0, now = new Date(), log = [];
+  var fd = function (iso) { var p = iso.split('-'); return Utilities.formatDate(new Date(+p[0], +p[1] - 1, +p[2]), 'Asia/Dubai', 'EEE d MMM'); };
+  Object.keys(byT).forEach(function (em) {
+    var L = byT[em], first = String(L[0].teacher).split(' ')[0], many = L.length > 1;
+    var lines = L.map(function (x) { return x.section + ' – Week ' + x.week + ': ' + x.title + ' (planned for ' + fd(x.date) + (x.subject ? ', ' + x.subject + ' period' + (x.period ? ' P' + x.period : '') : '') + ') – ' + x.started + ' of ' + x.students + ' students have started it'; });
+    var subject = many ? 'AI Lessons – lessons not yet taught' : 'AI Lessons – ' + L[0].section + ' Week ' + L[0].week + ' not yet taught';
+    var text = 'Dear ' + first + ',\n\nOur AI Lessons records show that ' + (many ? 'these AI Literacy lessons' : 'this AI Literacy lesson') + ' planned for your class' + (many ? 'es have' : ' has') + ' not been taught yet:\n\n' +
+      lines.map(function (x) { return '• ' + x; }).join('\n') + '\n\nA reminder that the AI lessons are mandatory for every class. Please teach ' + (many ? 'them' : 'it') + ' as soon as you can – students can still complete ' + (many ? 'them' : 'it') + ' in the app: ' + url +
+      '\n\nIf you need any support – with the lesson, the app or finding the time – please reply to this email and we will help.\n\nThank you,\n' + me.name;
+    var html = '<p>Dear ' + esc_(first) + ',</p><p>Our AI Lessons records show that ' + (many ? 'these AI Literacy lessons' : 'this AI Literacy lesson') + ' planned for your class' + (many ? 'es have' : ' has') + ' not been taught yet:</p><ul>' +
+      lines.map(function (x) { return '<li>' + esc_(x) + '</li>'; }).join('') + '</ul><p>A reminder that <b>the AI lessons are mandatory</b> for every class. Please teach ' + (many ? 'them' : 'it') + ' as soon as you can – students can still complete ' + (many ? 'them' : 'it') +
+      ' in the <a href="' + url + '">AI Lessons app</a>.</p><p>If you need any support – with the lesson, the app or finding the time – please reply to this email and we will help.</p><p>Thank you,<br>' + esc_(me.name) + '</p>';
+    MailApp.sendEmail({ to: em, cc: ccl.join(','), replyTo: me.email, name: 'AISA AI Lessons', subject: subject, body: text, htmlBody: html });
+    sent++;
+    L.forEach(function (x) { log.push([now, em, x.section, x.lessonId, me.email, ccl.join(', ')]); });
+  });
+  append_('Reminders', log);
+  return { sent: sent, lessons: items.length };
+}
+/** Run once from the script editor after updating, so the app may send the reminder emails (Google asks you to allow it). */
+function authorizeEmail() { return 'Email is allowed. Reminders left today: ' + MailApp.getRemainingDailyQuota(); }
+function esc_(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
 /* ===================== AI & Innovation Student / Teacher of the Month (owners) ===================== */
 
@@ -654,7 +762,7 @@ function weighted_(parts) {
   return w ? Math.round(s / w * 100) : 0;
 }
 /** One student's month: lessons due and finished, first-try quality, care, growth and fixes. */
-function studentMonth_(email, section, grade, per, rt, M, now) {
+function studentMonth_(email, section, grade, per, rt, M, now, ab) {
   var cat = typeof CATALOG === 'undefined' ? [] : CATALOG, known = AICAL.SCHEDULE.some(function (r) { return r[0] === section; });
   var o = { due: 0, doneDue: 0, fin: 0, sc: 0, mx: 0, secs: 0, rushed: 0, wrong: 0, fixed: 0, bsc: 0, bmx: 0, active: false };
   cat.forEach(function (l) {
@@ -663,7 +771,7 @@ function studentMonth_(email, section, grade, per, rt, M, now) {
     if (c && c.lastAt >= M.from && c.lastAt < M.to) o.active = true;
     if (l.course === 'main' && known) {
       var d = AICAL.lessonDate(section, l.week), t = d ? d.getTime() : 0;
-      if (t >= M.from && t < M.to && t <= now) { o.due++; if (finished) o.doneDue++; }
+      if (t >= M.from && t < M.to && t <= now && !(ab && ab[email + '|' + l.id] && !finished)) { o.due++; if (finished) o.doneDue++; }
     }
     if (!finished) return;
     var mx = Object.keys(c.acts).reduce(function (n, k) { return n + c.acts[k][1]; }, 0);
@@ -699,7 +807,8 @@ function getAwards(month) {
     if (r.role === 'teacher') { names[e] = names[e] || r.name || e.split('@')[0]; (teachers[e] = teachers[e] || {})[r.section] = 1; }
   });
   var stats = {};
-  Object.keys(studs).forEach(function (e) { var s = studs[e]; stats[e] = studentMonth_(e, s.section, s.grade, per, rt, M, now); });
+  var ab = absences_();
+  Object.keys(studs).forEach(function (e) { var s = studs[e]; stats[e] = studentMonth_(e, s.section, s.grade, per, rt, M, now, ab); });
   var students = Object.keys(studs).map(function (e) {
     var s = studs[e], o = stats[e], why = [];
     if (o.fin < 2) why.push('fewer than 2 lessons finished this month');

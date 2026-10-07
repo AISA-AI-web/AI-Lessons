@@ -111,6 +111,11 @@ td.name small{display:block;color:var(--muted);font-size:12px}
 .ls.doing{background:#FFF4D6}.ls.doing i{border:2px solid var(--warn);background:linear-gradient(90deg,var(--warn) 50%,#fff 50%)}
 .ls.todo{background:#FBE9E9}.ls.todo i{border:2px solid var(--crit);background:#fff}
 .ls.later{background:none;border:1.5px dashed var(--line);color:var(--muted);font-weight:500}
+.ls.absent{background:#ECEEF2;color:#3f4652}.ls.absent i{background:#8a93a3;border-radius:2px}
+.strip i.absent{background:#b9c0cc}
+.abs{display:inline-block;margin-top:5px;font:inherit;font-size:12px;font-weight:700;color:#3f4652;background:#fff;border:1.5px solid #b9c0cc;border-radius:999px;padding:2px 10px;cursor:pointer}
+.abs:hover{border-color:#3f4652}.abs.on{color:var(--muted)}.abs:disabled{opacity:.6;cursor:wait}
+@media print{.abs{display:none}}
 .ls.rushed{background:#FBE0E0;color:#8f1d1d}.ls.rushed i{background:var(--crit)}
 td.name small.tch{color:var(--purple);font-weight:600}
 td .sm.tchl{color:var(--purple);font-weight:600}
@@ -231,6 +236,10 @@ table.awt td.sc{font-weight:800;color:var(--purple);font-size:14px}
 table.awt tr.inel td{color:var(--muted)}
 .nbtn{font:inherit;font-size:12.5px;font-weight:700;border:1.5px solid var(--purple);color:var(--purple);background:#fff;border-radius:999px;padding:3px 11px;cursor:pointer}
 .nbtn:hover{background:var(--purple);color:#fff}
+table.awt.nt td{text-align:start}table.awt.nt small{display:block;color:var(--muted);font-size:12px}table.awt.nt small.blk{display:block}
+table.awt.nt input{width:17px;height:17px;accent-color:var(--purple)}
+.ntsel{display:flex;gap:6px;flex-wrap:wrap}
+.mailprev{border:1px solid var(--line-2);border-radius:10px;padding:10px 14px;margin:8px 0 0;font-size:14px;background:#FCFBFE}.mailprev p{margin:6px 0}
 details.inelig{margin:12px 0 0}details.inelig summary{cursor:pointer;font-weight:700;color:var(--muted)}
 details.how summary{cursor:pointer}details.how p{font-size:14px;color:var(--ink);margin:8px 0 0}
 @media (max-width:700px){.noms{grid-template-columns:1fr}}
@@ -454,6 +463,8 @@ var AR = {
   'Choose class…': 'اختر الشعبة…',
   'Move': 'نقل',
   'All teachers': 'كل المعلمين',
+  'Not taught': 'لم تُدرَّس', 'Lessons not taught': 'دروس لم تُدرَّس', 'Send reminders': 'إرسال تذكيرات', 'Planned for': 'المخطط له', 'Started': 'بدأ', 'Reminded': 'تم التذكير', 'Arabic': 'عربي', 'Islamic': 'إسلامية',
+  'Absent': 'غائب', 'absent': 'غائب', 'Mark absent': 'تسجيل غياب', 'Undo absent': 'إلغاء الغياب', 'marked by {who}': 'سجّله {who}', 'marked absent by the teacher': 'سجّل المعلم غيابه',
   'Teacher of that period': 'معلم تلك الحصة',
   'Awards': 'الجوائز',
   'AI & Innovation Awards': 'جوائز الذكاء الاصطناعي والابتكار',
@@ -675,6 +686,8 @@ function statusOf(s, l, R, taught){
   if (r && l.activities && r.done >= l.activities) { var p = pct(r.score, max);
     return { st: 'done', r: r, pct: p, date: d, rushed: p < RUSH_PCT && activeSecs(r) < RUSH_MIN * 60 }; }
   if (r) return { st: 'doing', r: r, pct: pct(r.score, max), date: d };
+  var ab = (D.absences || {})[s.email + '|' + l.id];
+  if (ab && l.course === 'main' && l.week <= taught) return { st: 'absent', ab: ab, date: d };
   if (l.course !== 'main') return { st: 'sched' };
   return { st: l.week <= taught ? 'todo' : 'later', date: d };
 }
@@ -691,7 +704,7 @@ function rowFor(s, R){
   return { s: s, st: st, by: by, cur: cur, curL: main.filter(function(l){ return l.week === cur; })[0] || null, taughtL: taughtL,
     fin: taughtL.filter(function(l){ return by[l.id].st === 'done'; }).length, last: last,
     rushed: lessons.filter(function(l){ return by[l.id].rushed; }),
-    nudge: !!last && by[last.id].st !== 'done', behind: taughtL.filter(function(l){ return by[l.id].st !== 'done'; }).length };
+    nudge: !!last && by[last.id].st !== 'done' && by[last.id].st !== 'absent', behind: taughtL.filter(function(l){ return by[l.id].st !== 'done' && by[l.id].st !== 'absent'; }).length };
 }
 /* the lesson shown in the table: each class's lesson this week, or the one picked */
 function colLesson(row){ if (!F.lesson) return row.curL; var l = lessonInfo(F.lesson); return l.grade === row.s.grade ? l : 'na'; }
@@ -701,6 +714,7 @@ function render(){
   if (VIEW) return studentView(VIEW);
   if (MANAGE && D.roster) return manageView();
   if (AWARDS && D.canAward) return awardsView();
+  if (NOTTAUGHT && D.canAward) return notTaughtView();
   var secs = D.sections.slice().sort(numSort), reqs = D.roster ? D.roster.requests.filter(function(r){ return r.canDecide; }).length : 0;
   var allLabel = D.scope === 'school' ? T('All classes') : T('All my classes');
   var count = function(sec){ return D.students.filter(function(x){ return (!sec || x.section === sec) && shown(x); }).length; };
@@ -718,7 +732,7 @@ function render(){
   var tsel = tn.length ? '<label class="sr" for="fTeach">' + esc(T('Teacher')) + '</label><select id="fTeach"><option value="">' + esc(T('All teachers')) + '</option>' +
     tn.map(function(t){ return '<option value="' + esc(t) + '"' + (F.teacher === t ? ' selected' : '') + '>' + esc(t) + '</option>'; }).join('') + '</select>' : '';
   $('#app').innerHTML = '<div class="titlebar"><h1>' + esc(T('Dashboard')) + '</h1>' + picker + tsel + sw + '<span class="spacer"></span>' +
-    (D.canAward ? '<button type="button" class="btn small" id="awardsBtn">🏆 ' + esc(T('Awards')) + '</button>' : '') +
+    (D.canAward ? '<button type="button" class="btn small" id="ntBtn">📭 ' + esc(T('Not taught')) + '</button><button type="button" class="btn small" id="awardsBtn">🏆 ' + esc(T('Awards')) + '</button>' : '') +
     (D.roster ? '<button type="button" class="btn small" id="rosterBtn">👥 ' + esc(T('Class lists')) + (reqs ? '<span class="badge" title="' + esc(T('Requests')) + '">' + reqs + '</span>' : '') + '</button>' : '') +
     '<details class="menu"><summary class="btn small quiet">' + esc(T('More')) + ' ▾</summary><div class="popm">' +
       '<label for="fView">' + esc(T('Student view')) + '</label><select id="fView"><option value="">' + esc(T('See a student\'s dashboard…')) + '</option>' +
@@ -733,6 +747,7 @@ function render(){
   $('#pdfBtn').onclick = function(){ savePdf(); };
   $('#exportBtn').onclick = exportCsv;
   if ($('#rosterBtn')) $('#rosterBtn').onclick = function(){ MANAGE = true; render(); window.scrollTo(0, 0); };
+  if ($('#ntBtn')) $('#ntBtn').onclick = function(){ NOTTAUGHT = true; NT.data = null; render(); window.scrollTo(0, 0); };
   if ($('#awardsBtn')) $('#awardsBtn').onclick = function(){ AWARDS = true; AW.data = null; render(); window.scrollTo(0, 0); };
   draw();
 }
@@ -844,6 +859,7 @@ function trendData(res, rows){
     Object.keys(r.acts).forEach(function(k){ var a = r.acts[k], c = strandOf(r.lessonId, k, a[2], a[3]); w[c][0] += a[0]; w[c][1] += a[1]; w.all[0] += a[0]; w.all[1] += a[1]; });
   });
   (rows || []).forEach(function(row){ row.taughtL.forEach(function(l){ var w = by[l.week] || (by[l.week] = { all: [0, 0], CU: [0, 0], SD: [0, 0], CE: [0, 0], GE: [0, 0], fin: 0, due: 0 });
+    if (row.by[l.id] && row.by[l.id].st === 'absent') return;
     w.due++; if (row.by[l.id] && row.by[l.id].st === 'done') w.fin++; }); });
   var weeks = Object.keys(by).map(Number).filter(function(w){ return by[w].all[1] || by[w].due; }).sort(function(a, b){ return a - b; });
   var val = function(w, c){ var x = by[w][c]; return x[1] ? pct(x[0], x[1]) : null; };
@@ -972,7 +988,13 @@ function retakeNote(s, l, x){
   var p = k.prev, was = p && p.max ? T('first attempt {p}% in {m} min', { p: pct(p.score, p.max), m: mins(p.seconds) }) : '';
   return '<span class="sm rnote">↻ ' + esc((x.st === 'todo' || !x.r ? T('Retake set by {who}', { who: String(k.by || '').split('@')[0] }) : T('Retake {n}', { n: k.n })) + (was ? ' · ' + was : '')) + '</span>';
 }
+function absentBtn(s, l, on){
+  if (!D.canJudge) return '';
+  return '<button type="button" class="abs' + (on ? ' on' : '') + '" data-abs="' + esc(s.email + '|' + l.id) + '" data-on="' + (on ? '1' : '') + '">' + esc(on ? T('Undo absent') : T('Mark absent')) + '</button>';
+}
 function lessonCellMain(row, l, x, wk){
+  if (x.st === 'absent') return '<span class="ls absent"><i></i>' + esc(T('Absent')) + '</span><span class="sm">' + esc(wk + (x.date ? T('taught {d}', { d: fd(x.date) }) : '') + ' · ' + T('marked by {who}', { who: who(x.ab.by) })) + '</span>' + absentBtn(row.s, l, true);
+  if (x.st === 'todo' && l.course === 'main') return '<span class="ls todo"><i></i>' + esc(T('Not started')) + '</span><span class="sm">' + esc(wk + (x.date ? T('taught {d}', { d: fd(x.date) }) : '')) + '</span>' + absentBtn(row.s, l, false);
   if (x.st === 'done' && x.rushed) return '<span class="ls rushed"><i></i>' + x.pct + '%</span><span class="sm rush">⚡ ' + esc(wk + T('Rushed: finished in {n} min', { n: mins(activeSecs(x.r)) })) + '</span>' + retakeBtn(row.s, l);
   if (x.st === 'done') return '<span class="ls done"><i></i>' + x.pct + '%</span><span class="sm">' + esc(wk + T('Finished · {n} min', { n: mins(x.r.seconds) })) + '</span>';
   if (x.st === 'doing') return '<span class="ls doing"><i></i>' + x.pct + '%</span><span class="sm">' + esc(wk + T('{d} of {a} activities', { d: x.r.done, a: l.activities })) + '</span>';
@@ -981,7 +1003,7 @@ function lessonCellMain(row, l, x, wk){
   return '<span class="ls later">' + esc(T('Not taught yet')) + '</span><span class="sm">' + esc(wk + (x.date ? T('on {d}', { d: fd(x.date) }) : '')) + '</span>';
 }
 function sofarCell(row){
-  var L = row.taughtL, show = L.slice(-10), name = { done: T('finished'), doing: T('in progress'), todo: T('not started'), later: T('not started') };
+  var L = row.taughtL, show = L.slice(-10), name = { done: T('finished'), doing: T('in progress'), todo: T('not started'), later: T('not started'), absent: T('absent') };
   var strip = show.map(function(l){ var x = row.by[l.id];
     return '<i class="' + x.st + '" tabindex="0" data-tip="' + esc('<b>' + esc(T('Week {n}', { n: l.week })) + '</b> · ' + esc(name[x.st]) + (x.pct != null ? ' · ' + esc(T('{p}% first try', { p: x.pct })) : '')) + '"></i>'; }).join('');
   return '<span class="sofar">' + T('{a} of {b} finished', { a: '<b>' + row.fin + '</b>', b: '<b>' + L.length + '</b>' }) + '</span>' +
@@ -1035,11 +1057,19 @@ function drawTable(){
       '<tr><td colspan="7" class="empty" style="padding:18px">' + esc(T('No students match.')) + '</td></tr>') + '</tbody></table></div>';
   var pill = function(cls, txt){ return '<span class="ls ' + cls + '" style="padding:0 8px 0 6px"><i></i>' + esc(txt) + '</span>'; };
   $('#tlegend').innerHTML = '<span>' + pill('done', '78%') + ' ' + esc(T('finished')) + '</span><span>' + pill('doing', '59%') + ' ' + esc(T('in progress')) + '</span><span>' + pill('todo', T('Not started')) + ' ' + esc(T('after it was taught')) + '</span>' +
-    '<span>' + esc(T('% = first-try score')) + '</span><span>' + pill('rushed', '31%') + ' ' + esc(T('rushed: under {m} min and under {p}%', { m: RUSH_MIN, p: RUSH_PCT })) + '</span><span style="margin-inline-start:auto">' + esc(T('Tiers:')) + '</span>' + TKEYS.map(function(k){ return '<span><i class="t' + (k || 'N') + '"></i>' + esc(TIER_SHORT[k]) + '</span>'; }).join('');
+    '<span>' + pill('absent', T('Absent')) + ' ' + esc(T('marked absent by the teacher')) + '</span><span>' + esc(T('% = first-try score')) + '</span><span>' + pill('rushed', '31%') + ' ' + esc(T('rushed: under {m} min and under {p}%', { m: RUSH_MIN, p: RUSH_PCT })) + '</span><span style="margin-inline-start:auto">' + esc(T('Tiers:')) + '</span>' + TKEYS.map(function(k){ return '<span><i class="t' + (k || 'N') + '"></i>' + esc(TIER_SHORT[k]) + '</span>'; }).join('');
   var rid = F.lesson;
   if (!rid) { var ids = {}; all.forEach(function(r){ if (r.curL) ids[r.curL.id] = 1; }); var ks = Object.keys(ids); if (ks.length === 1) rid = ks[0]; }
   $('#reteach').innerHTML = rid && FACTS.res.some(function(r){ return r.lessonId === rid; }) ? activityChart(FACTS, rid) : '';
   document.querySelectorAll('#tbl .stu').forEach(function(b){ b.onclick = function(){ viewAs(b.getAttribute('data-e')); }; });
+  document.querySelectorAll('#tbl [data-abs]').forEach(function(b){ b.onclick = function(){
+    var k = b.getAttribute('data-abs'), p = k.split('|'), on = !b.getAttribute('data-on');
+    b.disabled = true;
+    var done = function(){ D.absences = D.absences || {}; if (on) D.absences[k] = { by: (D.me && D.me.email) || '', at: new Date().toISOString() }; else delete D.absences[k]; refresh(p[0]); };
+    if (window.google && google.script && google.script.run)
+      google.script.run.withSuccessHandler(done).withFailureHandler(function(e){ b.disabled = false; alert(errT(e.message || String(e))); }).setAbsent(p[0], p[1], on, '');
+    else done();
+  }; });
   document.querySelectorAll('#tbl [data-rtk]').forEach(function(b){ b.onclick = function(){
     var k = b.getAttribute('data-rtk').split('|'), nm = b.getAttribute('data-name'), ls = b.getAttribute('data-les');
     if (!confirm(T('Ask {name} to redo {l}? Their answers are cleared and their next attempt is recorded as new. You will still see the first attempt.', { name: nm, l: ls }))) return;
@@ -1183,6 +1213,50 @@ function wireTips(){            // one listener for every tooltip on the page (h
   addEventListener('scroll', function(){ tip.style.display = 'none'; }, { passive: true });
 }
 
+/* ===================== lessons not taught: reminders to teachers (owners) ===================== */
+var NOTTAUGHT = false, NT = { data: null, sel: null };
+function notTaughtView(){
+  var bar = '<div class="viewbar"><span>📭 <b>' + esc(T('Lessons not taught')) + '</b> – ' + esc(T('lessons whose date has passed but which almost none of a teacher\'s students have opened. Send the teachers a reminder.')) + '</span><div><button type="button" id="backBtn">' + esc(T('← Back to dashboard')) + '</button></div></div>';
+  var back = function(){ $('#backBtn').onclick = function(){ NOTTAUGHT = false; render(); }; };
+  if (!NT.data) {
+    $('#app').innerHTML = bar + '<div class="card"><div class="empty">' + esc(T('Checking every class\'s lessons…')) + '</div></div>'; back();
+    if (window.google && google.script && google.script.run)
+      google.script.run.withSuccessHandler(function(d){ NT.data = d; NT.sel = {}; d.items.forEach(function(x){ if (x.email && !x.reminded) NT.sel[x.email + '|' + x.lessonId + '|' + x.section] = 1; }); if (NOTTAUGHT) notTaughtView(); })
+        .withFailureHandler(function(e){ $('#app').innerHTML = bar + '<div class="err">' + esc(errT(e.message || String(e))) + '</div>'; back(); }).getNotTaught();
+    return;
+  }
+  var A = NT.data, key = function(x){ return x.email + '|' + x.lessonId + '|' + x.section; };
+  var dd = function(iso){ var p = iso.split('-'); return fd(new Date(+p[0], +p[1] - 1, +p[2])); };
+  var chosen = A.items.filter(function(x){ return x.email && NT.sel[key(x)]; }), tset = {}; chosen.forEach(function(x){ tset[x.email] = 1; });
+  var h = bar + '<p id="rmsg" class="rmsg" role="status" aria-live="polite"></p>';
+  if (!A.items.length) h += '<div class="card"><div class="empty">✓ ' + esc(T('Every lesson so far has been taught – nothing to remind.')) + '</div></div>';
+  else {
+    h += '<section class="card"><div class="hd"><div><h2>' + esc(A.items.length === 1 ? T('1 lesson not taught') : T('{n} lessons not taught', { n: A.items.length })) + '</h2><p class="sub">' + esc(T('Not taught = the lesson date has passed and fewer than {p}% of the teacher\'s students (at least {m}) have opened it. Students marked absent are left out.', { p: A.share, m: A.min })) + '</p></div>' +
+      '<div class="ntsel"><button type="button" class="nbtn" id="ntAll">' + esc(T('Select all not yet reminded')) + '</button> <button type="button" class="nbtn" id="ntNone">' + esc(T('Clear')) + '</button></div></div>' +
+      '<div class="awwrap"><table class="awt nt"><thead><tr><th></th><th>' + esc(T('Teacher')) + '</th><th>' + esc(T('Class')) + '</th><th>' + esc(T('Lesson')) + '</th><th>' + esc(T('Planned for')) + '</th><th>' + esc(T('Started')) + '</th><th>' + esc(T('Reminded')) + '</th></tr></thead><tbody>' +
+      A.items.map(function(x){ var k = key(x);
+        return '<tr' + (x.reminded ? ' class="inel"' : '') + '><td>' + (x.email ? '<input type="checkbox" data-k="' + esc(k) + '"' + (NT.sel[k] ? ' checked' : '') + ' aria-label="' + esc(T('Remind {name}', { name: x.teacher })) + '">' : '') + '</td>' +
+          '<td class="nm"><b>' + esc(x.teacher || T('No teacher on the class lists')) + '</b></td><td>' + esc(secName(x.section)) + '</td><td class="nm">' + esc(T('Week {n}', { n: x.week })) + '<small>' + esc(x.title) + '</small></td>' +
+          '<td>' + esc(dd(x.date)) + (x.subject ? '<small class="blk">' + esc(T(x.subject)) + (x.period ? ' · P' + x.period : '') + '</small>' : '') + '</td><td>' + x.started + ' / ' + x.students + '</td><td>' + (x.reminded ? esc(fmtDate(x.reminded)) : '–') + '</td></tr>'; }).join('') +
+      '</tbody></table></div></section>';
+    h += '<section class="card"><h2>' + esc(T('Send reminders')) + '</h2><p class="sub">' + esc(T('Each teacher gets one email listing their lessons. It says the AI lessons are mandatory, offers support, and replies come to you.')) + '</p>' +
+      '<div class="form"><div style="flex:1 1 320px"><label for="ntCc">' + esc(T('Cc (school usernames or emails, separated by commas)')) + '</label><input id="ntCc" dir="ltr" autocomplete="off" value="' + esc(A.cc) + '" placeholder="e.g. head1, head2, head3"></div>' +
+      '<div><button type="button" id="ntSend"' + (chosen.length ? '' : ' disabled') + '>✉ ' + esc(Object.keys(tset).length === 1 ? T('Send to 1 teacher') : T('Send to {n} teachers', { n: Object.keys(tset).length })) + '</button></div></div>' +
+      '<details class="how"><summary>' + esc(T('See the email')) + '</summary><div class="mailprev"><p><b>' + esc(T('Subject')) + ':</b> AI Lessons – Boys 6 Week 2 not yet taught</p><p>Dear [first name],</p><p>Our AI Lessons records show that this AI Literacy lesson planned for your class has not been taught yet:</p><ul><li>Boys 6 – Week 2: [lesson title] (planned for Wed 7 Oct, Islamic period P6) – 2 of 18 students have started it</li></ul>' +
+      '<p>A reminder that <b>the AI lessons are mandatory</b> for every class. Please teach it as soon as you can – students can still complete it in the AI Lessons app.</p><p>If you need any support – with the lesson, the app or finding the time – please reply to this email and we will help.</p><p>Thank you,<br>' + esc((D.me && D.me.name) || '') + '</p></div></details></section>';
+  }
+  $('#app').innerHTML = h; back();
+  document.querySelectorAll('input[data-k]').forEach(function(c){ c.onchange = function(){ if (this.checked) NT.sel[this.getAttribute('data-k')] = 1; else delete NT.sel[this.getAttribute('data-k')]; var y = scrollY; notTaughtView(); scrollTo(0, y); }; });
+  if ($('#ntAll')) $('#ntAll').onclick = function(){ A.items.forEach(function(x){ if (x.email && !x.reminded) NT.sel[key(x)] = 1; }); notTaughtView(); };
+  if ($('#ntNone')) $('#ntNone').onclick = function(){ NT.sel = {}; notTaughtView(); };
+  if ($('#ntCc')) $('#ntCc').oninput = function(){ A.cc = this.value; };
+  if ($('#ntSend')) $('#ntSend').onclick = function(){
+    var n = Object.keys(tset).length, cc = $('#ntCc').value.trim();
+    if (!confirm((n === 1 ? T('Send a reminder email to 1 teacher{cc}?', { cc: cc ? ' (cc ' + cc + ')' : '' }) : T('Send a reminder email to {n} teachers{cc}?', { n: n, cc: cc ? ' (cc ' + cc + ')' : '' })))) return;
+    call('sendReminders', [chosen.map(key), cc], function(r){ NT.data = null; LASTMSG = T('Reminders sent: {n} email(s) covering {l} lesson(s).', { n: r.sent, l: r.lessons }); notTaughtView(); });
+  };
+  if (LASTMSG) { msg(LASTMSG); LASTMSG = null; }
+}
 /* ===================== AI & Innovation Student / Teacher of the Month (owners) ===================== */
 var AWARDS = false, AW = { month: '', grade: '', data: null };
 function monthName(m){ var p = String(m).split('-'); return new Date(Number(p[0]), Number(p[1]) - 1, 1).toLocaleDateString(LOC, { month: 'long', year: 'numeric' }); }

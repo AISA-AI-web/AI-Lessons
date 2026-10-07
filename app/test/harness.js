@@ -32,7 +32,9 @@ function makeEnv() {
       createTemplateFromFile: n => { const t = { evaluate: () => { const c = fs.readFileSync(path.join(BUILD, n + '.html'), 'utf8').replace('<?!= cfg ?>', t.cfg); const o = { getContent: () => c, setTitle: () => o, addMetaTag: () => o }; return o; } }; return t; },
       createHtmlOutput: c => { const o = { content: c, setTitle: t => { o.title = t; return o; }, addMetaTag: () => o, getContent: () => c }; return o; }
     },
-    Classroom: null
+    Classroom: null,
+    MailApp: { sent: [], sendEmail(o) { this.sent.push(o); } },
+    Utilities: { formatDate: (d) => d.toDateString() }
   };
   vm.createContext(ctx);
   vm.runInContext(fs.readFileSync(path.join(BUILD, 'Catalog.js'), 'utf8').replace('var CATALOG', 'CATALOG'), ctx);

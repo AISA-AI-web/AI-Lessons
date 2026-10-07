@@ -372,6 +372,40 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   ok(/"name":"Belal Tantawi","email":"belal@aisa.sch.ae","subjects":\["Arabic"\]/.test(cal) && /"name":"Abdel Alroz","email":"alroz@aisa.sch.ae","subjects":\["Islamic"\]/.test(cal), 'the calendar gets each teacher\'s subject');
   ok(!/BO6ISA1|AI timetable – teacher/.test(cal.slice(cal.indexOf('"teachers"'), cal.indexOf('"teachers"') + 2000)), 'and no class codes or notes');
 }
+/* absences and reminders for lessons not taught (fresh environment) */
+{
+  const E = makeEnv(), sh = E.sheets;
+  E.as('bbaki@aisa.sch.ae'); E.call('setup');
+  const CAT = require('../../lessons.js');
+  sh.Roster.push(['isl@aisa.sch.ae', 'Islam Teacher', 'teacher', 'Boys 6', 6, 'sis', 'BO6ISA1', ''], ['ara@aisa.sch.ae', 'Arabic Teacher', 'teacher', 'Boys 6', 6, 'sis', 'BO6AFL1', ''],
+    ['oth@aisa.sch.ae', 'Other Teacher', 'teacher', 'Boys 7', 7, 'sis', 'BO7AFL1', '']);
+  for (let i = 1; i <= 6; i++) sh.Roster.push(['60' + i + '@aisa.sch.ae', 'Student ' + i, 'student', 'Boys 6', 6, 'sis', 'BO6AFL1, BO6ISA1', '']);
+  const RD = Date; let clock = new RD('2026-09-30T15:00:00').getTime();
+  E.ctx.Date = class extends RD { constructor(...a) { a.length ? super(...a) : super(clock); } static now() { return clock; } };
+  const L1 = CAT.find(l => l.id === 'grade-6/main-w1-l1'), L2 = CAT.find(l => l.id === 'grade-6/main-w2-l1');
+  [1, 2, 3, 4].forEach(i => { E.as('60' + i + '@aisa.sch.ae'); E.call('recordScores', L1.id, { title: 'T', activities: L1.activities, maxPoints: 4 }, [{ id: 'a', title: 'A', part: 'Core', score: 4, max: 4 }]); });
+  clock = new RD('2026-10-12T09:00:00').getTime();
+  E.as('oth@aisa.sch.ae'); throws(() => E.call('setAbsent', '602@aisa.sch.ae', L2.id, true, ''), /your own students/, 'a teacher cannot mark another class\'s student absent');
+  E.as('602@aisa.sch.ae'); throws(() => E.call('setAbsent', '602@aisa.sch.ae', L2.id, true, ''), /Only teachers/, 'students cannot mark absences');
+  E.as('isl@aisa.sch.ae'); ok(E.call('setAbsent', '602@aisa.sch.ae', L2.id, true, 'sick').absent, 'a teacher marks their student absent');
+  let d = E.call('getDashboard'); ok(d.absences['602@aisa.sch.ae|' + L2.id] && d.absences['602@aisa.sch.ae|' + L2.id].by === 'isl@aisa.sch.ae', 'the dashboard gets the absence');
+  E.call('setAbsent', '603@aisa.sch.ae', L2.id, true, ''); E.call('setAbsent', '603@aisa.sch.ae', L2.id, false, '');
+  ok(!E.call('getDashboard').absences['603@aisa.sch.ae|' + L2.id], 'an absence can be cleared');
+  E.as('isl@aisa.sch.ae'); throws(() => E.call('getNotTaught'), /owners/, 'only owners see lessons not taught');
+  E.as('bbaki@aisa.sch.ae'); let nt = E.call('getNotTaught');
+  const w2 = nt.items.find(x => x.lessonId === L2.id);
+  ok(w2 && w2.email === 'isl@aisa.sch.ae' && w2.subject === 'Islamic' && w2.students === 5 && w2.started === 0, 'Week 2 (an Islamic period) is not taught: matched to the Islamic teacher, absent student left out');
+  ok(!nt.items.some(x => x.lessonId === L1.id), 'Week 1, which most students started, is not flagged');
+  ok(nt.cc === '', 'no CC list until one is saved');
+  throws(() => E.call('sendReminders', [w2.email + '|' + w2.lessonId + '|' + w2.section], 'someone@gmail.com'), /aisa\.sch\.ae/, 'CC must be school addresses');
+  let r = E.call('sendReminders', [w2.email + '|' + w2.lessonId + '|' + w2.section], 'head1, head2@aisa.sch.ae; head3');
+  const m = E.ctx.MailApp.sent[0];
+  ok(r.sent === 1 && m.to === 'isl@aisa.sch.ae' && m.cc === 'head1@aisa.sch.ae,head2@aisa.sch.ae,head3@aisa.sch.ae' && m.replyTo === 'bbaki@aisa.sch.ae', 'one email to the teacher, with the CC list');
+  ok(/mandatory/.test(m.body) && /support/.test(m.body) && /Boys 6 – Week 2/.test(m.body) && /0 of 5 students/.test(m.body), 'the email names the lesson, says the lessons are mandatory and offers support');
+  nt = E.call('getNotTaught');
+  ok(nt.items.find(x => x.lessonId === L2.id).reminded && nt.cc === 'head1, head2, head3', 'the reminder is logged and the CC list remembered');
+  E.as('isl@aisa.sch.ae'); throws(() => E.call('sendReminders', ['x'], ''), /owners/, 'teachers cannot send reminders');
+}
 /* Google's HtmlService cuts script lines at '//', even inside a quoted web address, so no
    inline script the app serves may contain '://' (build.py writes it as ':\/\/'). */
 {
