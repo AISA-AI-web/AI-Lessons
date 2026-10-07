@@ -734,7 +734,15 @@ function periodModel_() {
     var sc = {}; students.forEach(function (x) { x.c.forEach(function (c) { sc[c] = (sc[c] || 0) + 1; }); });
     var why = { teachers: (tbs[sec] || []).map(function (t) { return t.name + ' (' + (t.subjects.join('/') || 'subject unknown') + (t.raw.length ? ': ' + t.raw.join(', ') : '') + ')'; }),
       codes: Object.keys(sc).sort(function (a, b) { return sc[b] - sc[a]; }).slice(0, 8).map(function (c) { return c + ' ×' + sc[c]; }), noCodes: students.filter(function (x) { return !x.c.length; }).length };
-    sections.push({ name: sec, grade: grade, why: why, students: students.map(function (x) { return { e: x.e, n: x.n }; }), groups: groups, lessons: lessons.map(function (l) { return l.id; }),
+    /* Students whose class codes include none of a subject that others in the class are coded for (e.g. no
+       Islamic group) are elsewhere in that subject's periods: not anyone's missing class. */
+    var away = {};
+    ['Islamic', 'Arabic'].forEach(function (sub) {
+      if (!Object.keys(sc).some(function (c) { return subjectOf_(c) === sub; })) return;
+      var l = students.map(function (x, i) { return x.c.length && !x.c.some(function (c) { return subjectOf_(c) === sub; }) ? i : -1; }).filter(function (i) { return i >= 0; });
+      if (l.length) away[sub] = l;
+    });
+    sections.push({ name: sec, grade: grade, why: why, away: away, students: students.map(function (x) { return { e: x.e, n: x.n }; }), groups: groups, lessons: lessons.map(function (l) { return l.id; }),
       teachers: (tbs[sec] || []).map(function (t) { return { email: t.email, name: t.name, subjects: t.subjects }; }) });
     lessons.forEach(function (l) {
       var d = AICAL.lessonDate(sec, l.week); if (!d) return;
@@ -754,13 +762,15 @@ function periodModel_() {
   return { sections: sections, cells: cells, from: AICAL.iso(from), now: now.getTime() };
 }
 /** The teacher groups for one class period: the teachers of that period's subject (or, if none, of no known
-    subject), each with their students; students no such teacher has are grouped as 'no teacher' (email ''). */
+    subject), each with their students; students no such teacher has are grouped as 'no teacher' (email ''), except those
+    not in that subject at all (sec.away). */
 function slotGroups_(sec, subject) {
   var keys = Object.keys(sec.groups), pick = keys.filter(function (k) { return k.split('|')[0] === subject; }), tn = {};
   if (!pick.length) pick = keys.filter(function (k) { return k.split('|')[0] === ''; });
   sec.teachers.forEach(function (t) { tn[t.email] = t.name; });
   var out = pick.map(function (k) { var em = k.slice(k.indexOf('|') + 1); return { email: em, name: tn[em] || em, idx: sec.groups[k] }; }), covered = {};
   out.forEach(function (g) { g.idx.forEach(function (i) { covered[i] = 1; }); });
+  ((sec.away || {})[subject] || []).forEach(function (i) { covered[i] = 1; });
   var rest = sec.students.map(function (x, i) { return i; }).filter(function (i) { return !covered[i]; });
   if (rest.length) out.push({ email: '', name: '', idx: rest });
   return out;
