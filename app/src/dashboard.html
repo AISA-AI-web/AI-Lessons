@@ -303,6 +303,7 @@ table.awt tr.inel td{color:var(--muted)}
 .nbtn{font:inherit;font-size:12.5px;font-weight:700;border:1.5px solid var(--purple);color:var(--purple);background:#fff;border-radius:999px;padding:3px 11px;cursor:pointer}
 .nbtn:hover{background:var(--purple);color:#fff}
 table.awt.nt td{text-align:start}table.awt.nt small{display:block;color:var(--muted);font-size:12px}table.awt.nt small.blk{display:block}
+table.awt.nt small.why2{display:block;font-size:11.5px;color:#7a4a00;max-width:340px;font-weight:400;margin-top:3px}
 table.awt.nt input{width:17px;height:17px;accent-color:var(--purple)}
 .ntsel{display:flex;gap:6px;flex-wrap:wrap}
 .mailframe{display:block;width:100%;height:760px;border:1px solid var(--line-2);border-radius:10px;margin:8px 0 0;background:#F2EFFA}
@@ -1708,7 +1709,7 @@ function notTaughtView(){
       '<div class="awwrap"><table class="awt nt"><thead><tr><th></th><th>' + esc(T('Teacher')) + '</th><th>' + esc(T('Class')) + '</th><th>' + esc(T('Lesson')) + '</th><th>' + esc(T('Planned for')) + '</th><th>' + esc(T('Started')) + '</th><th>' + esc(T('Reminded')) + '</th></tr></thead><tbody>' +
       A.items.map(function(x){ var k = key(x);
         return '<tr' + (x.reminded ? ' class="inel"' : '') + '><td>' + (x.email ? '<input type="checkbox" data-k="' + esc(k) + '"' + (NT.sel[k] ? ' checked' : '') + ' aria-label="' + esc(T('Remind {name}', { name: x.teacher })) + '">' : '') + '</td>' +
-          '<td class="nm"><b>' + esc(x.teacher || T('No teacher on the class lists')) + '</b></td><td>' + esc(secName(x.section)) + '</td><td class="nm">' + esc(T('Week {n}', { n: x.week })) + '<small>' + esc(x.title) + '</small></td>' +
+          '<td class="nm"><b>' + esc(x.teacher || T('No teacher on the class lists')) + '</b>' + (x.why ? '<small class="why2">' + esc(T('Teachers listed for this class: {t}. Students\' class codes: {c}{n}.', { t: x.why.teachers.join('; ') || T('none'), c: x.why.codes.join(', ') || T('none'), n: x.why.noCodes ? ' · ' + x.why.noCodes + ' ' + T('with no code') : '' })) + '</small>' : '') + '</td><td>' + esc(secName(x.section)) + '</td><td class="nm">' + esc(T('Week {n}', { n: x.week })) + '<small>' + esc(x.title) + '</small></td>' +
           '<td>' + esc(dd(x.date)) + (x.subject ? '<small class="blk">' + esc(T(x.subject)) + (x.period ? ' · P' + x.period : '') + (x.time ? ' · ' + x.time : '') + '</small>' : '') + '</td><td>' + x.started + ' / ' + x.students + '</td><td>' + (x.reminded ? esc(fmtDate(x.reminded)) : '–') + '</td></tr>'; }).join('') +
       '</tbody></table></div></section>';
     h += '<section class="card"><h2>' + esc(T('Send reminders')) + '</h2><p class="sub">' + esc(T('Each teacher gets one email listing their lessons. It says the AI lessons are mandatory, offers support, and replies come to you.')) + '</p>' +

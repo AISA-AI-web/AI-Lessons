@@ -228,7 +228,8 @@ function teachersBySection_() {
   rows_('Roster').forEach(function (r) {
     if (r.role !== 'teacher' || !r.section) return;
     var e = lc_(r.email), k = r.section + '|' + e, t = idx[k];
-    if (!t) { t = idx[k] = { name: cleanText_(r.name, 80) || e.split('@')[0], email: e, classes: [], subjects: [] }; (out[r.section] = out[r.section] || []).push(t); }
+    if (!t) { t = idx[k] = { name: cleanText_(r.name, 80) || e.split('@')[0], email: e, classes: [], subjects: [], raw: [] }; (out[r.section] = out[r.section] || []).push(t); }
+    splitClasses_(r.courseName).forEach(function (c) { if (t.raw.indexOf(c) < 0) t.raw.push(c); });
     var cls = classesOf_(r);
     cls.forEach(function (c) { if (t.classes.indexOf(c) < 0) t.classes.push(c); });
     (cls.length ? cls : splitClasses_(r.courseName).concat([String(r.courseName || '')])).forEach(function (c) { var s = subjectOf_(c); if (s && t.subjects.indexOf(s) < 0) t.subjects.push(s); });
@@ -730,7 +731,10 @@ function periodModel_() {
       });
     });
     var lessons = cat.filter(function (l) { return l.grade === grade && l.course === 'main'; }).sort(function (a, b) { return a.week - b.week; });
-    sections.push({ name: sec, grade: grade, students: students.map(function (x) { return { e: x.e, n: x.n }; }), groups: groups, lessons: lessons.map(function (l) { return l.id; }),
+    var sc = {}; students.forEach(function (x) { x.c.forEach(function (c) { sc[c] = (sc[c] || 0) + 1; }); });
+    var why = { teachers: (tbs[sec] || []).map(function (t) { return t.name + ' (' + (t.subjects.join('/') || 'subject unknown') + (t.raw.length ? ': ' + t.raw.join(', ') : '') + ')'; }),
+      codes: Object.keys(sc).sort(function (a, b) { return sc[b] - sc[a]; }).slice(0, 8).map(function (c) { return c + ' ×' + sc[c]; }), noCodes: students.filter(function (x) { return !x.c.length; }).length };
+    sections.push({ name: sec, grade: grade, why: why, students: students.map(function (x) { return { e: x.e, n: x.n }; }), groups: groups, lessons: lessons.map(function (l) { return l.id; }),
       teachers: (tbs[sec] || []).map(function (t) { return { email: t.email, name: t.name, subjects: t.subjects }; }) });
     lessons.forEach(function (l) {
       var d = AICAL.lessonDate(sec, l.week); if (!d) return;
@@ -776,7 +780,7 @@ function notTaught_(M) {
       slotGroups_(sec, cell.subject).forEach(function (g) {
         var k = groupCounts_(cell, g.idx); if (k.n < NOT_TAUGHT_MIN || k.started / k.n >= NOT_TAUGHT_SHARE) return;
         out.push({ teacher: g.name, email: g.email, section: sec.name, lessonId: id, week: cell.week, title: cell.title, date: cell.date, subject: cell.subject, period: cell.period,
-          time: cell.time, students: k.n, started: k.started, reminded: g.email ? (rem[g.email + '|' + id + '|' + sec.name] || '') : '' });
+          time: cell.time, students: k.n, started: k.started, reminded: g.email ? (rem[g.email + '|' + id + '|' + sec.name] || '') : '', why: g.email ? null : sec.why });
       });
     });
   });
