@@ -242,6 +242,34 @@ saved answers on their device are cleared and a note says their teacher asked
 them to redo it. Teachers can set retakes for their own students; owners and SLT
 for anyone.
 
+## Progress over time
+
+The dashboard's **Progress over time** card plots the average first-try score in
+each strand (CU, SD, CE, GE), teaching week by teaching week, for the classes on
+screen (hover a week for the values and the share of students who finished it;
+**Table** shows the numbers). Under it, **What to focus on** lists the weakest
+strand, any strand that dropped since the week before, the biggest gain and any
+week that fewer than 70% of students finished. Students (and teachers viewing a
+student) see **My progress over time**.
+
+## AI & Innovation Student and Teacher of the Month (owners)
+
+Owners get a **🏆 Awards** button on the dashboard. Pick a month to see:
+
+- **Students**, ranked by a score out of 100: first-try score 40%, finishing the
+  lessons taught that month 25%, care (active minutes per lesson, full marks at
+  30) 15%, growth against their earlier lessons 10%, fixing wrong answers 10%.
+  Only students with at least 2 lessons finished that month, no rushed lessons
+  and at least 75% of the month's lessons finished are ranked.
+- **Teachers**, ranked on their own students: completion 35%, first-try score
+  25%, growth 15%, active students 15%, rushed lessons followed up with a retake
+  10% (tiers recorded and confirmed class lists are shown, not scored). Teachers
+  with fewer than 5 students are not ranked.
+
+**Nominate** records the winner (and an optional reason) in the **Awards** tab;
+a later nomination for the same month replaces it. Winners see a 🏆 banner on
+their own dashboard. The rankings are a guide – the choice is the owner's.
+
 ## Where the data lives
 
 One Google Sheet, kept in an AISA **Shared Drive** that only the system owners

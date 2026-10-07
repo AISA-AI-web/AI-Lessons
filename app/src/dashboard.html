@@ -209,6 +209,29 @@ button.tchip:hover{filter:brightness(1.07)}
 .badges.plain li.got .ico{background:var(--good);box-shadow:none;color:#fff;filter:none}
 .viewbar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;background:#fff;border:1.5px solid var(--purple);border-radius:12px;padding:10px 14px;margin:14px 0}
 .viewbar div{display:flex;gap:8px;flex-wrap:wrap}
+.award-banner{display:flex;gap:14px;align-items:center;background:linear-gradient(100deg,#FFF6DA,#FBEFC8);border:2px solid var(--gold,#D8B664);border-radius:14px;padding:14px 18px;margin:0 0 18px}
+.award-banner .cup{font-size:34px;line-height:1}.award-banner small{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7a5200}
+.award-banner b{display:block;font-size:18px;color:var(--purple)}.award-banner span{display:block;font-size:14px;color:var(--ink)}
+.awbar{display:flex;gap:10px;align-items:center;margin:0 0 12px;font-weight:600}
+.noms{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 18px}
+.nom{border:1.5px dashed var(--line);border-radius:12px;padding:12px 14px;background:#fff}
+.nom.set{border:2px solid var(--gold,#D8B664);background:#FFF9E8}
+.nom small{display:block;font-size:12px;font-weight:700;color:var(--muted)}.nom b{display:block;font-size:17px;color:var(--purple);margin:3px 0}.nom span{font-size:13px;color:var(--muted)}
+div.awwrap{overflow-x:auto;border:1px solid var(--line-2);border-radius:12px;background:#fff}
+table.awt{border-collapse:collapse;width:100%;min-width:640px;font-size:13px;font-variant-numeric:tabular-nums}
+table.awt th,table.awt td{padding:7px 6px;border-bottom:1px solid var(--line-2);text-align:center;vertical-align:middle}
+table.awt th{font-size:11.5px;color:var(--muted);font-weight:700}
+table.awt td.nm,table.awt th:nth-child(2){text-align:start}
+table.awt td.nm small{display:block;color:var(--muted);font-size:12px}table.awt td.nm small.why{color:#a85b00}
+table.awt .rk{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--tint);color:var(--purple);font-size:12.5px}
+table.awt tr:first-child .rk{background:var(--gold,#D8B664)}
+table.awt td.sc{font-weight:800;color:var(--purple);font-size:14px}
+table.awt tr.inel td{color:var(--muted)}
+.nbtn{font:inherit;font-size:12.5px;font-weight:700;border:1.5px solid var(--purple);color:var(--purple);background:#fff;border-radius:999px;padding:3px 11px;cursor:pointer}
+.nbtn:hover{background:var(--purple);color:#fff}
+details.inelig{margin:12px 0 0}details.inelig summary{cursor:pointer;font-weight:700;color:var(--muted)}
+details.how summary{cursor:pointer}details.how p{font-size:14px;color:var(--ink);margin:8px 0 0}
+@media (max-width:700px){.noms{grid-template-columns:1fr}}
 .off{opacity:.55;cursor:default}
 .tools{display:flex;justify-content:flex-end;gap:8px;margin:12px 0 0}
 #app>.tools+.printhead+.hello{margin-top:8px}
@@ -428,6 +451,32 @@ var AR = {
   'Move {name} to': 'انقل {name} إلى',
   'Choose class…': 'اختر الشعبة…',
   'Move': 'نقل',
+  'Awards': 'الجوائز',
+  'AI & Innovation Awards': 'جوائز الذكاء الاصطناعي والابتكار',
+  'AI & Innovation Student of the Month': 'طالب الشهر في الذكاء الاصطناعي والابتكار',
+  'AI & Innovation Teacher of the Month': 'معلم الشهر في الذكاء الاصطناعي والابتكار',
+  'Nominate': 'ترشيح',
+  'Chosen': 'تم الاختيار',
+  'Not chosen yet': 'لم يتم الاختيار بعد',
+  'Pick from the rankings below.': 'اختر من الترتيب أدناه.',
+  'Month': 'الشهر',
+  'Student of the Month – rankings': 'طالب الشهر – الترتيب',
+  'Teacher of the Month – rankings': 'معلم الشهر – الترتيب',
+  'How the scores work': 'كيف تُحسب النقاط',
+  'Past winners': 'الفائزون السابقون',
+  'Congratulations – thank you for your outstanding work in AI and innovation.': 'تهانينا – شكرًا لعملك المتميز في الذكاء الاصطناعي والابتكار.',
+  'Progress over time': 'التقدّم عبر الوقت',
+  'My progress over time': 'تقدّمي عبر الوقت',
+  'What to focus on': 'ما يجب التركيز عليه',
+  'Average first-try score in each strand, teaching week by teaching week.': 'متوسط درجة المحاولة الأولى في كل مجال، أسبوعًا بعد أسبوع.',
+  'Hover a week for details': 'مرّر فوق أسبوع لعرض التفاصيل',
+  'W{n}': 'أ{n}',
+  'Finished: {p}%': 'أنهى: {p}%',
+  'Week': 'الأسبوع',
+  'Finished': 'أنهى',
+  'No results yet – the chart fills in as lessons are completed.': 'لا نتائج بعد – يمتلئ الرسم مع إكمال الدروس.',
+  'No problem areas: every strand is at 60% or above and holding steady.': 'لا توجد نقاط ضعف: كل المجالات عند 60% أو أعلى ومستقرة.',
+  'Working out this month\'s rankings…': 'جارٍ حساب ترتيب هذا الشهر…',
   'Retake': 'إعادة',
   'Rushed': 'متسرّع',
   'Rushed: finished in {n} min': 'متسرّع: أنهى في {n} دقيقة',
@@ -646,6 +695,7 @@ function render(){
   if (D.scope === 'self') return studentView();
   if (VIEW) return studentView(VIEW);
   if (MANAGE && D.roster) return manageView();
+  if (AWARDS && D.canAward) return awardsView();
   var secs = D.sections.slice().sort(numSort), reqs = D.roster ? D.roster.requests.filter(function(r){ return r.canDecide; }).length : 0;
   var allLabel = D.scope === 'school' ? T('All classes') : T('All my classes');
   var count = function(sec){ return D.students.filter(function(x){ return (!sec || x.section === sec) && shown(x); }).length; };
@@ -659,12 +709,13 @@ function render(){
   var sw = swSecs.length ? '<label class="allsw"><input type="checkbox" id="showAll"' + (SHOWALL ? ' checked' : '') + '> ' +
     esc(swSecs.length === 1 ? T('Show all of {section}', { section: secName(swSecs[0]) }) : T('Show all students in my sections')) + '</label>' : '';
   $('#app').innerHTML = '<div class="titlebar"><h1>' + esc(T('Dashboard')) + '</h1>' + picker + sw + '<span class="spacer"></span>' +
+    (D.canAward ? '<button type="button" class="btn small" id="awardsBtn">🏆 ' + esc(T('Awards')) + '</button>' : '') +
     (D.roster ? '<button type="button" class="btn small" id="rosterBtn">👥 ' + esc(T('Class lists')) + (reqs ? '<span class="badge" title="' + esc(T('Requests')) + '">' + reqs + '</span>' : '') + '</button>' : '') +
     '<details class="menu"><summary class="btn small quiet">' + esc(T('More')) + ' ▾</summary><div class="popm">' +
       '<label for="fView">' + esc(T('Student view')) + '</label><select id="fView"><option value="">' + esc(T('See a student\'s dashboard…')) + '</option>' +
       pool.map(function(s){ return '<option value="' + esc(s.email) + '">' + esc(s.name + ' · ' + secName(s.section)) + '</option>'; }).join('') + '</select>' +
       '<button type="button" id="pdfBtn">🖨 ' + esc(T('Save as PDF')) + '</button><button type="button" id="exportBtn" title="' + esc(T('Raw data for spreadsheets')) + '">⬇ ' + esc(T('Download data (CSV)')) + '</button></div></details></div>' +
-    '<div id="body"></div>';
+    awardBanner() + '<div id="body"></div>';
   document.querySelectorAll('[data-tab]').forEach(function(b){ b.onclick = function(){ F.section = b.getAttribute('data-tab'); F.lesson = ''; UI.filter = 'all'; render(); }; });
   if ($('#fSec')) $('#fSec').onchange = function(){ F.section = this.value; F.lesson = ''; UI.filter = 'all'; render(); };
   $('#fView').onchange = function(){ if (this.value) viewAs(this.value); };
@@ -672,6 +723,7 @@ function render(){
   $('#pdfBtn').onclick = function(){ savePdf(); };
   $('#exportBtn').onclick = exportCsv;
   if ($('#rosterBtn')) $('#rosterBtn').onclick = function(){ MANAGE = true; render(); window.scrollTo(0, 0); };
+  if ($('#awardsBtn')) $('#awardsBtn').onclick = function(){ AWARDS = true; AW.data = null; render(); window.scrollTo(0, 0); };
   draw();
 }
 
@@ -1099,6 +1151,65 @@ function wireTips(){            // one listener for every tooltip on the page (h
   addEventListener('scroll', function(){ tip.style.display = 'none'; }, { passive: true });
 }
 
+/* ===================== AI & Innovation Student / Teacher of the Month (owners) ===================== */
+var AWARDS = false, AW = { month: '', grade: '', data: null };
+function monthName(m){ var p = String(m).split('-'); return new Date(Number(p[0]), Number(p[1]) - 1, 1).toLocaleDateString(LOC, { month: 'long', year: 'numeric' }); }
+function awardTitle(type){ return type === 'teacher' ? T('AI & Innovation Teacher of the Month') : T('AI & Innovation Student of the Month'); }
+function awardBanner(){
+  var a = (D.myAwards || [])[0]; if (!a) return '';
+  return '<section class="award-banner"><span class="cup" aria-hidden="true">🏆</span><div><small>' + esc(monthName(a.month)) + '</small><b>' + esc(awardTitle(a.type)) + '</b>' +
+    (a.note ? '<span>“' + esc(a.note) + '”</span>' : '<span>' + esc(T('Congratulations – thank you for your outstanding work in AI and innovation.')) + '</span>') + '</div></section>';
+}
+function awardsView(){
+  var bar = '<div class="viewbar"><span>🏆 <b>' + esc(T('AI & Innovation Awards')) + '</b> – ' + esc(T('choose a Student and a Teacher of the Month. The rankings come from the month\'s work; the choice is yours.')) + '</span><div><button type="button" id="backBtn">' + esc(T('← Back to dashboard')) + '</button></div></div>';
+  if (!AW.data || (AW.month && AW.data.month !== AW.month)) {
+    $('#app').innerHTML = bar + '<div class="card"><div class="empty">' + esc(T('Working out this month\'s rankings…')) + '</div></div>';
+    $('#backBtn').onclick = function(){ AWARDS = false; render(); };
+    if (window.google && google.script && google.script.run)
+      google.script.run.withSuccessHandler(function(d){ AW.data = d; AW.month = d.month; if (AWARDS) awardsView(); })
+        .withFailureHandler(function(e){ $('#app').innerHTML = bar + '<div class="err">' + esc(errT(e.message || String(e))) + '</div>'; $('#backBtn').onclick = function(){ AWARDS = false; render(); }; }).getAwards(AW.month);
+    return;
+  }
+  var A = AW.data, f = function(v, suf){ return v === null || v === undefined ? '–' : v + (suf || ''); }, sg = function(v){ return v === null || v === undefined ? '–' : (v > 0 ? '+' : '') + v; };
+  var grades = {}; A.students.forEach(function(x){ if (x.grade) grades[x.grade] = 1; });
+  var studs = A.students.filter(function(x){ return !AW.grade || String(x.grade) === AW.grade; }), el = studs.filter(function(x){ return x.eligible; }), no = studs.filter(function(x){ return !x.eligible; });
+  var nomCard = function(type){ var n = A.nominees[type];
+    return '<div class="nom' + (n ? ' set' : '') + '"><small>' + esc(awardTitle(type)) + ' · ' + esc(monthName(A.month)) + '</small>' +
+      (n ? '<b>🏆 ' + esc(n.name) + '</b><span>' + esc(T('Chosen by {who} on {d}', { who: who(n.by), d: fmtDate(n.at) })) + (n.note ? ' · “' + esc(n.note) + '”' : '') + '</span>' : '<b>' + esc(T('Not chosen yet')) + '</b><span>' + esc(T('Pick from the rankings below.')) + '</span>') + '</div>'; };
+  var nomBtn = function(type, x){ var n = A.nominees[type], is = n && n.email === x.email;
+    return is ? '<span class="chip ok">🏆 ' + esc(T('Chosen')) + '</span>' : '<button type="button" class="nbtn" data-nom="' + type + '|' + esc(x.email) + '" data-name="' + esc(x.name) + '">' + esc(T('Nominate')) + '</button>'; };
+  var srow = function(x, i){ return '<tr' + (x.eligible ? '' : ' class="inel"') + '><td>' + (x.eligible ? '<b class="rk">' + (i + 1) + '</b>' : '') + '</td><td class="nm"><b>' + esc(x.name) + '</b><small>' + esc(secName(x.section) + (x.classes.length ? ' · ' + x.classes.join(', ') : '')) + '</small>' + (x.why ? '<small class="why">' + esc(x.why) + '</small>' : '') + '</td>' +
+    '<td>' + x.fin + '</td><td>' + f(x.quality, '%') + '</td><td>' + f(x.completion, '%') + '</td><td>' + f(x.care, ' min') + '</td><td>' + sg(x.growth) + '</td><td>' + f(x.fixRate, '%') + '</td><td class="sc">' + x.score + '</td><td>' + (x.eligible ? nomBtn('student', x) : '') + '</td></tr>'; };
+  var shead = '<thead><tr><th></th><th>' + esc(T('Student')) + '</th><th title="' + esc(T('Lessons finished this month')) + '">' + esc(T('Lessons')) + '</th><th>' + esc(T('First try')) + '</th><th title="' + esc(T('Lessons taught this month that they finished')) + '">' + esc(T('Completion')) + '</th><th title="' + esc(T('Active minutes per finished lesson')) + '">' + esc(T('Care')) + '</th><th title="' + esc(T('First-try points compared with their earlier lessons')) + '">' + esc(T('Growth')) + '</th><th title="' + esc(T('Wrong first time, then corrected')) + '">' + esc(T('Fixes')) + '</th><th>' + esc(T('Score')) + '</th><th></th></tr></thead>';
+  var trow = function(x, i){ return '<tr' + (x.eligible ? '' : ' class="inel"') + '><td>' + (x.eligible ? '<b class="rk">' + (i + 1) + '</b>' : '') + '</td><td class="nm"><b>' + esc(x.name) + '</b><small>' + esc(x.sections.map(secName).join(', ')) + '</small>' + (x.why ? '<small class="why">' + esc(x.why) + '</small>' : '') + '</td>' +
+    '<td>' + x.students + '</td><td>' + f(x.completion, '%') + '</td><td>' + f(x.quality, '%') + '</td><td>' + sg(x.growth) + '</td><td>' + f(x.engagement, '%') + '</td><td>' + (x.rushed ? x.followed + ' / ' + x.rushed : '–') + '</td><td>' + x.tiers + '</td><td>' + (x.listsConfirmed ? '✓' : '–') + '</td><td class="sc">' + x.score + '</td><td>' + (x.eligible ? nomBtn('teacher', x) : '') + '</td></tr>'; };
+  var tel = A.teachers.filter(function(x){ return x.eligible; });
+  var h = bar + '<p id="rmsg" class="rmsg" role="status" aria-live="polite"></p>' +
+    '<div class="awbar"><label for="awMonth">' + esc(T('Month')) + '</label><select id="awMonth">' + A.months.map(function(m){ return '<option value="' + m + '"' + (m === A.month ? ' selected' : '') + '>' + esc(monthName(m)) + '</option>'; }).join('') + '</select></div>' +
+    '<div class="noms">' + nomCard('student') + nomCard('teacher') + '</div>';
+  h += '<section class="card"><div class="hd"><div><h2>' + esc(T('Student of the Month – rankings')) + '</h2><p class="sub">' + esc(T('Only students with at least 2 lessons finished this month, no rushed lessons and at least 75% of the month\'s lessons finished can be ranked.')) + '</p></div>' +
+    '<div><label class="sr" for="awGrade">' + esc(T('Grade')) + '</label><select id="awGrade"><option value="">' + esc(T('All grades')) + '</option>' + Object.keys(grades).sort(numSort).map(function(g){ return '<option value="' + g + '"' + (AW.grade === g ? ' selected' : '') + '>' + esc(T('Grade {g}', { g: g })) + '</option>'; }).join('') + '</select></div></div>' +
+    (el.length ? '<div class="awwrap"><table class="awt">' + shead + '<tbody>' + el.slice(0, 15).map(srow).join('') + '</tbody></table></div>' : '<div class="empty">' + esc(T('No student qualifies yet this month.')) + '</div>') +
+    (no.length ? '<details class="inelig"><summary>' + esc(T('Not eligible this month ({n})', { n: no.length })) + '</summary><div class="awwrap"><table class="awt">' + shead + '<tbody>' + no.map(srow).join('') + '</tbody></table></div></details>' : '') + '</section>';
+  h += '<section class="card"><div class="hd"><div><h2>' + esc(T('Teacher of the Month – rankings')) + '</h2><p class="sub">' + esc(T('Based on each teacher\'s own students this month. Teachers with fewer than 5 students are not ranked.')) + '</p></div></div>' +
+    (A.teachers.length ? '<div class="awwrap"><table class="awt"><thead><tr><th></th><th>' + esc(T('Teacher')) + '</th><th>' + esc(T('Students')) + '</th><th title="' + esc(T('Lessons taught this month that their students finished')) + '">' + esc(T('Completion')) + '</th><th>' + esc(T('First try')) + '</th><th title="' + esc(T('Their students\' first try compared with earlier lessons')) + '">' + esc(T('Growth')) + '</th><th title="' + esc(T('Students who worked on a lesson this month')) + '">' + esc(T('Active')) + '</th><th title="' + esc(T('Rushed lessons followed up with a retake')) + '">' + esc(T('Retakes')) + '</th><th title="' + esc(T('Strand tiers recorded this month')) + '">' + esc(T('Tiers')) + '</th><th title="' + esc(T('Has confirmed a class list')) + '">' + esc(T('Lists')) + '</th><th>' + esc(T('Score')) + '</th><th></th></tr></thead><tbody>' +
+      tel.map(trow).join('') + A.teachers.filter(function(x){ return !x.eligible; }).map(trow).join('') + '</tbody></table></div>' : '<div class="empty">' + esc(T('No teachers on the class lists yet.')) + '</div>') + '</section>';
+  h += '<details class="card how"><summary><b>' + esc(T('How the scores work')) + '</b></summary>' +
+    '<p><b>' + esc(T('Student score (out of 100)')) + '</b> – ' + esc(T('first-try score 40% · completion of the month\'s lessons 25% · care (active minutes per lesson, full marks at 30) 15% · growth against their earlier lessons 10% · fixing wrong answers 10%. A part with no data yet is left out and the rest re-weighted.')) + '</p>' +
+    '<p><b>' + esc(T('Teacher score (out of 100)')) + '</b> – ' + esc(T('their students\' completion 35% · first-try score 25% · growth 15% · active students 15% · rushed lessons followed up with a retake 10%. Tiers recorded and confirmed class lists are shown but not scored.')) + '</p>' +
+    '<p>' + esc(T('Rushed = finished in under {m} minutes with under {p}% – a rushed lesson rules a student out for that month. The rankings are a guide: please also use your own knowledge of the students and teachers.', { m: A.rules.rushMin, p: A.rules.rushPct })) + '</p></details>';
+  if (A.history.length) h += '<section class="card"><h2>' + esc(T('Past winners')) + '</h2><ul class="log">' + A.history.map(function(n){ return '<li><b>' + esc(monthName(n.month)) + '</b> · ' + esc(awardTitle(n.type)) + ': ' + esc(n.name) + (n.note ? ' – “' + esc(n.note) + '”' : '') + '</li>'; }).join('') + '</ul></section>';
+  $('#app').innerHTML = h;
+  $('#backBtn').onclick = function(){ AWARDS = false; render(); };
+  $('#awMonth').onchange = function(){ AW.month = this.value; AW.data = null; awardsView(); };
+  $('#awGrade').onchange = function(){ AW.grade = this.value; awardsView(); };
+  document.querySelectorAll('[data-nom]').forEach(function(b){ b.onclick = function(){
+    var p = b.getAttribute('data-nom').split('|'), nm = b.getAttribute('data-name');
+    var note = prompt(T('Nominate {name} as {award} for {m}? Add a short reason (optional) – it is shown to the winner.', { name: nm, award: awardTitle(p[0]), m: monthName(A.month) }), '');
+    if (note === null) return;
+    call('nominate', [A.month, p[0], p[1], note], function(){ AW.data = null; awardsView(); });
+  }; });
+}
 /* ===================== class lists (teachers, SLT, owners) ===================== */
 function call(fn, args, done){
   var fail = function(e){ msg(e && e.message ? e.message : String(e), true); busy(false); };
@@ -1455,6 +1566,7 @@ function studentView(who){
     tile(T('First-try score'), st.firstPct === null ? '–' : st.firstPct + '%', T('across {n} activities', { n: st.acts })) +
     tile(T('Answers fixed'), st.fixed, T('wrong first time, then corrected')) +
     tile(older ? T('Milestones reached') : T('Badges earned'), st.earned.length + ' / ' + st.badges.length, older ? T('see below') : T('collect them all')) + '</div>';
+  if (!preview) h += awardBanner();
   h += '<section class="card trendcard" id="mytrend">' + trendCard(st.res, null, true) + '</section>';
   h += '<section class="card"><h2>' + T('My strands') + '</h2><p class="sub">' + T('The four parts of AI literacy for Grade {g}. Emerging is the goal for this term; Proficient is the goal for the year.', { g: esc(me.grade) }) + '</p><div class="strands">' +
     STRAND_ORDER.map(function(c){

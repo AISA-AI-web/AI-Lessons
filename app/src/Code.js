@@ -20,7 +20,8 @@ var TABS = {
   Judgements:['timestamp', 'student', 'strand', 'tier', 'teacher', 'note'],
   Changes:   ['timestamp', 'type', 'student', 'name', 'fromSection', 'toSection', 'by', 'status', 'decidedBy', 'decidedAt', 'note', 'fromClass', 'toClass'],
   Confirmations: ['timestamp', 'section', 'teacher', 'students', 'note'],
-  Retakes:   ['timestamp', 'student', 'lessonId', 'teacher', 'note']
+  Retakes:   ['timestamp', 'student', 'lessonId', 'teacher', 'note'],
+  Awards:    ['timestamp', 'month', 'type', 'email', 'name', 'by', 'note']
 };
 /* Every AI Literacy section, e.g. Boys 6 … Girls 12. */
 var SECTIONS = (function () { var a = []; for (var g = 6; g <= 12; g++) a.push('Boys ' + g, 'Girls ' + g); return a; })();
@@ -481,19 +482,9 @@ function rosterInfo_(me, vis) {
 
 /* ===================== dashboard data ===================== */
 
-/** Role-filtered progress data for the dashboard. */
-function getDashboard() {
-  var me = requireUser_();
-  var vis = visibleSections_(me);
-  var roster = rows_('Roster').filter(function (r) { return r.role === 'student'; });
-  var students = {};
-  roster.forEach(function (r) {
-    var e = lc_(r.email);
-    if (!students[e]) students[e] = { email: e, name: r.name || e.split('@')[0], section: r.section || 'Unassigned', grade: Number(r.grade) || '' };
-  });
-  var lessons = {};
-  rows_('Lessons').forEach(function (l) { lessons[l.lessonId] = { id: l.lessonId, grade: Number(l.grade), course: l.course, week: Number(l.week), title: l.title, activities: Number(l.activities), maxPoints: Number(l.maxPoints) }; });
-
+/** Every student's current attempt at every lesson (first tries, time, fixes), plus the attempt
+    before the latest retake. Shared by the dashboard and the awards. */
+function lessonCells_() {
   var per = {};   // email|lesson -> {score, done, firstAt, lastAt, seconds, acts:{id:[score,max]}}
   function cell(e, l) { var k = e + '|' + l; return per[k] || (per[k] = { email: e, lessonId: l, score: 0, done: 0, seconds: 0, firstAt: null, lastAt: null, acts: {} }); }
   var rt = retakes_(), prev = {};                    // prev: email|lesson -> the attempt before the latest retake
@@ -521,6 +512,23 @@ function getDashboard() {
     var a = cell(e, r.lessonId).acts[r.activityId];
     if (a) a[4] = Number(r.score);
   });
+  return { per: per, prev: prev, rt: rt };
+}
+
+/** Role-filtered progress data for the dashboard. */
+function getDashboard() {
+  var me = requireUser_();
+  var vis = visibleSections_(me);
+  var roster = rows_('Roster').filter(function (r) { return r.role === 'student'; });
+  var students = {};
+  roster.forEach(function (r) {
+    var e = lc_(r.email);
+    if (!students[e]) students[e] = { email: e, name: r.name || e.split('@')[0], section: r.section || 'Unassigned', grade: Number(r.grade) || '' };
+  });
+  var lessons = {};
+  rows_('Lessons').forEach(function (l) { lessons[l.lessonId] = { id: l.lessonId, grade: Number(l.grade), course: l.course, week: Number(l.week), title: l.title, activities: Number(l.activities), maxPoints: Number(l.maxPoints) }; });
+
+  var LC = lessonCells_(), per = LC.per, prev = LC.prev, rt = LC.rt;
 
   Object.keys(per).forEach(function (k) {             // people who worked but are not on the roster
     var e = per[k].email;
@@ -552,6 +560,8 @@ function getDashboard() {
     framework: typeof FRAMEWORK === 'undefined' ? null : FRAMEWORK,
     canJudge: me.role !== 'student',
     myClasses: myClasses,
+    canAward: me.role === 'owner',
+    myAwards: myAwards_(me.email),
     roster: rosterInfo_(me, vis),
     catalog: typeof CATALOG === 'undefined' ? [] : CATALOG,
     termStart: TERM_START,
@@ -568,6 +578,128 @@ function judgementsFor_(keep) {
     else out[k] = { tier: r.tier, by: r.teacher, at: new Date(r.timestamp).toISOString(), note: r.note };
   });
   return out;
+}
+
+/* ===================== AI & Innovation Student / Teacher of the Month (owners) ===================== */
+
+/* The same rules as the dashboard: a lesson is rushed when finished in under 10 minutes of active
+   time with a first-try score under 50%. */
+var RUSH_MIN = 10, RUSH_PCT = 50, AWARD_TYPES = ['student', 'teacher'];
+function month_(m) {
+  var x = /^(\d{4})-(\d{2})$/.exec(String(m || ''));
+  var now = new Date(), y = x ? Number(x[1]) : now.getFullYear(), mo = x ? Number(x[2]) - 1 : now.getMonth();
+  return { key: y + '-' + ('0' + (mo + 1)).slice(-2), from: new Date(y, mo, 1).getTime(), to: new Date(y, mo + 1, 1).getTime() };
+}
+function awardMonths_() {
+  var out = [], d = new Date(TERM_START + 'T00:00:00'), now = new Date();
+  d = new Date(d.getFullYear(), d.getMonth(), 1);
+  while (d <= now) { out.push(d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2)); d = new Date(d.getFullYear(), d.getMonth() + 1, 1); }
+  return out.reverse();
+}
+function clamp01_(v) { return Math.max(0, Math.min(1, v)); }
+/** Weighted score out of 100; parts without data (null) are left out and the rest re-weighted. */
+function weighted_(parts) {
+  var w = 0, s = 0;
+  parts.forEach(function (p) { if (p[0] !== null && p[0] !== undefined) { w += p[1]; s += p[0] * p[1]; } });
+  return w ? Math.round(s / w * 100) : 0;
+}
+/** One student's month: lessons due and finished, first-try quality, care, growth and fixes. */
+function studentMonth_(email, section, grade, per, rt, M, now) {
+  var cat = typeof CATALOG === 'undefined' ? [] : CATALOG, known = AICAL.SCHEDULE.some(function (r) { return r[0] === section; });
+  var o = { due: 0, doneDue: 0, fin: 0, sc: 0, mx: 0, secs: 0, rushed: 0, wrong: 0, fixed: 0, bsc: 0, bmx: 0, active: false };
+  cat.forEach(function (l) {
+    if (l.grade !== grade) return;
+    var c = per[email + '|' + l.id], finished = c && l.activities && c.done >= l.activities;
+    if (c && c.lastAt >= M.from && c.lastAt < M.to) o.active = true;
+    if (l.course === 'main' && known) {
+      var d = AICAL.lessonDate(section, l.week), t = d ? d.getTime() : 0;
+      if (t >= M.from && t < M.to && t <= now) { o.due++; if (finished) o.doneDue++; }
+    }
+    if (!finished) return;
+    var mx = Object.keys(c.acts).reduce(function (n, k) { return n + c.acts[k][1]; }, 0);
+    if (c.lastAt < M.from) { o.bsc += c.score; o.bmx += mx; return; }
+    if (c.lastAt >= M.to) return;
+    o.fin++; o.sc += c.score; o.mx += mx; o.secs += c.seconds;
+    var secs = c.seconds > 0 ? c.seconds : (c.lastAt - c.firstAt) / 1000;
+    if (mx && c.score / mx * 100 < RUSH_PCT && secs < RUSH_MIN * 60) o.rushed++;
+    Object.keys(c.acts).forEach(function (k) { var a = c.acts[k]; if (a[0] < a[1]) { o.wrong++; if (a[4] === a[1]) o.fixed++; } });
+  });
+  o.quality = o.mx ? Math.round(o.sc / o.mx * 100) : null;
+  o.completion = o.due ? Math.round(o.doneDue / o.due * 100) : null;
+  o.care = o.fin ? Math.round(o.secs / o.fin / 60) : null;                       // active minutes per finished lesson
+  o.growth = o.quality !== null && o.bmx ? o.quality - Math.round(o.bsc / o.bmx * 100) : null;
+  o.fixRate = o.wrong ? Math.round(o.fixed / o.wrong * 100) : null;
+  return o;
+}
+function studentScore_(o) {
+  return weighted_([[o.quality === null ? null : o.quality / 100, 40], [o.completion === null ? null : o.completion / 100, 25],
+    [o.care === null ? null : clamp01_(o.care / 30), 15], [o.growth === null ? null : clamp01_((o.growth + 20) / 40), 10],
+    [o.fin ? (o.fixRate === null ? 1 : o.fixRate / 100) : null, 10]]);
+}
+
+/** Rankings for a month, owners only. Students: at least 2 lessons finished that month, none rushed,
+    and at least 75% of the lessons taught that month finished. Teachers: at least 5 students. */
+function getAwards(month) {
+  var me = requireOwner_(), M = month_(month), now = Math.min(Date.now(), M.to);
+  var LC = lessonCells_(), per = LC.per, rt = LC.rt, cm = classMap_();
+  var studs = {}, names = {}, teachers = {};
+  rows_('Roster').forEach(function (r) {
+    var e = lc_(r.email);
+    if (r.role === 'student' && !studs[e]) studs[e] = { email: e, name: r.name || e.split('@')[0], section: r.section, grade: Number(r.grade) || gradeOf_(r.section) };
+    if (r.role === 'teacher') { names[e] = names[e] || r.name || e.split('@')[0]; (teachers[e] = teachers[e] || {})[r.section] = 1; }
+  });
+  var stats = {};
+  Object.keys(studs).forEach(function (e) { var s = studs[e]; stats[e] = studentMonth_(e, s.section, s.grade, per, rt, M, now); });
+  var students = Object.keys(studs).map(function (e) {
+    var s = studs[e], o = stats[e], why = [];
+    if (o.fin < 2) why.push('fewer than 2 lessons finished this month');
+    if (o.rushed) why.push(o.rushed + ' rushed lesson' + (o.rushed > 1 ? 's' : ''));
+    if (o.completion !== null && o.completion < 75) why.push('finished ' + o.completion + '% of the lessons taught');
+    return { email: e, name: s.name, section: s.section, grade: s.grade, classes: (cm.students[e] || {}).classes || [], fin: o.fin, due: o.due, doneDue: o.doneDue,
+      quality: o.quality, completion: o.completion, care: o.care, growth: o.growth, fixRate: o.fixRate, rushed: o.rushed, score: studentScore_(o), eligible: !why.length, why: why.join('; ') };
+  }).filter(function (x) { return x.fin || x.due; }).sort(function (a, b) { return (b.eligible - a.eligible) || b.score - a.score; });
+  var judged = {}; rows_('Judgements').forEach(function (j) { var t = new Date(j.timestamp).getTime(); if (t >= M.from && t < M.to) judged[lc_(j.teacher)] = (judged[lc_(j.teacher)] || 0) + 1; });
+  var confirmed = {}; rows_('Confirmations').forEach(function (c) { confirmed[lc_(c.teacher)] = (confirmed[lc_(c.teacher)] || 0) + 1; });
+  var tlist = Object.keys(teachers).map(function (t) {
+    var tme = { email: t, role: 'teacher' }, vis = Object.keys(teachers[t]);
+    var mine = Object.keys(studs).filter(function (e) { return isMine_(tme, vis, cm, e, studs[e].section); });
+    var a = { due: 0, doneDue: 0, sc: 0, mx: 0, bsc: 0, bmx: 0, active: 0, rushed: 0, followed: 0 };
+    mine.forEach(function (e) { var o = stats[e]; a.due += o.due; a.doneDue += o.doneDue; a.sc += o.sc; a.mx += o.mx; a.bsc += o.bsc; a.bmx += o.bmx; if (o.active) a.active++;
+      a.rushed += o.rushed;
+      if (o.rushed) Object.keys(rt).forEach(function (k) { if (k.split('|')[0] === e && rt[k].at >= M.from) a.followed++; }); });
+    var q = a.mx ? Math.round(a.sc / a.mx * 100) : null, comp = a.due ? Math.round(a.doneDue / a.due * 100) : null;
+    var growth = q !== null && a.bmx ? q - Math.round(a.bsc / a.bmx * 100) : null, eng = mine.length ? Math.round(a.active / mine.length * 100) : null;
+    var follow = a.rushed ? Math.min(100, Math.round(a.followed / a.rushed * 100)) : null;
+    var score = weighted_([[comp === null ? null : comp / 100, 35], [q === null ? null : q / 100, 25], [growth === null ? null : clamp01_((growth + 20) / 40), 15],
+      [eng === null ? null : eng / 100, 15], [follow === null ? 1 : follow / 100, 10]]);
+    var why = [];
+    if (mine.length < 5) why.push('fewer than 5 students');
+    if (!a.mx) why.push('no finished lessons this month');
+    return { email: t, name: names[t], sections: vis, students: mine.length, completion: comp, quality: q, growth: growth, engagement: eng, rushed: a.rushed, followed: a.followed,
+      tiers: judged[t] || 0, listsConfirmed: confirmed[t] || 0, score: score, eligible: !why.length, why: why.join('; ') };
+  }).sort(function (a, b) { return (b.eligible - a.eligible) || b.score - a.score; });
+  var noms = {}, history = [];
+  rows_('Awards').forEach(function (r) { noms[r.month + '|' + r.type] = { month: String(r.month), type: r.type, email: lc_(r.email), name: r.name, by: r.by, note: r.note, at: new Date(r.timestamp).toISOString() }; });
+  Object.keys(noms).forEach(function (k) { history.push(noms[k]); });
+  history.sort(function (a, b) { return b.month.localeCompare(a.month) || a.type.localeCompare(b.type); });
+  return { month: M.key, months: awardMonths_(), students: students.slice(0, 40), teachers: tlist, nominees: { student: noms[M.key + '|student'] || null, teacher: noms[M.key + '|teacher'] || null }, history: history,
+    rules: { rushMin: RUSH_MIN, rushPct: RUSH_PCT } };
+}
+
+/** Owners name the AI & Innovation Student or Teacher of the Month (a later nomination replaces it). */
+function nominate(month, type, email, note) {
+  var me = requireOwner_(), M = month_(month), e = lc_(email);
+  if (AWARD_TYPES.indexOf(type) < 0) throw new Error('Unknown award.');
+  var row = rows_('Roster').filter(function (r) { return lc_(r.email) === e && r.role === type; })[0];
+  if (!row) throw new Error('That ' + type + ' is not on the class lists.');
+  append_('Awards', [[new Date(), M.key, type, e, cleanText_(row.name, 80) || e.split('@')[0], me.email, cleanText_(note, 300)]]);
+  return { saved: true, month: M.key, type: type, name: row.name };
+}
+/** Awards won by this user (shown as a banner on their own dashboard). */
+function myAwards_(email) {
+  var noms = {};
+  rows_('Awards').forEach(function (r) { noms[r.month + '|' + r.type] = { month: String(r.month), type: r.type, email: lc_(r.email), note: r.note }; });
+  return Object.keys(noms).map(function (k) { return noms[k]; }).filter(function (a) { return a.email === email; }).sort(function (a, b) { return b.month.localeCompare(a.month); });
 }
 
 /* ===================== Google Classroom roster sync ===================== */

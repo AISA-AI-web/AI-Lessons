@@ -301,6 +301,50 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   ok(E.call('setRetake', '801@aisa.sch.ae', L, '').attempt === 3 && sh.Retakes.length === 3, 'a second retake is possible once they have worked again');
   E.as('801@aisa.sch.ae'); throws(() => E.call('setRetake', '801@aisa.sch.ae', L, ''), /Only teachers/, 'students cannot set retakes');
 }
+/* Student and Teacher of the Month: rankings from the month's work, owners nominate (fresh environment) */
+{
+  const E = makeEnv(), sh = E.sheets;
+  E.as('bbaki@aisa.sch.ae'); E.call('setup');
+  const CAT = require('../../lessons.js');
+  sh.Roster.push(['t1@aisa.sch.ae', 'Teacher One', 'teacher', 'Boys 8', 8, 'sis', '8B1', ''], ['t2@aisa.sch.ae', 'Teacher Two', 'teacher', 'Boys 8', 8, 'sis', '8B2', '']);
+  const kids = [['801', '8B1'], ['802', '8B1'], ['803', '8B1'], ['804', '8B1'], ['805', '8B1'], ['806', '8B2']];
+  kids.forEach(([id, c]) => sh.Roster.push([id + '@aisa.sch.ae', 'Student ' + id, 'student', 'Boys 8', 8, 'sis', c, '']));
+  const RD = Date; let clock = new RD('2026-10-01T10:00:00').getTime();
+  E.ctx.Date = class extends RD { constructor(...a) { a.length ? super(...a) : super(clock); } static now() { return clock; } };
+  const lesson = w => CAT.find(l => l.id === 'grade-8/main-w' + w + '-l1');
+  const work = (id, w, pctRight, secs, day) => {
+    clock = new RD(day + 'T10:00:00').getTime(); E.as(id + '@aisa.sch.ae'); const l = lesson(w);
+    E.call('recordScores', l.id, { title: l.title, activities: l.activities, maxPoints: l.activities * 4 },
+      Array.from({ length: l.activities }, (_, i) => ({ id: 'x' + i, title: 'A' + i, part: 'Core', score: i < Math.round(l.activities * pctRight / 100) ? 4 : 0, max: 4 })));
+    for (let s = secs; s > 0; s -= 300) E.call('recordTime', l.id, Math.min(300, s));
+  };
+  // September (before): 801 at 50%; October: 801 85%, 802 90% but rushed one lesson, 803 only one lesson, 804 70%, 805 60%
+  work('801', 1, 50, 1800, '2026-09-30');
+  [1, 2, 3, 4].forEach((w, i) => { const d = ['2026-10-01', '2026-10-08', '2026-10-22', '2026-10-29'][i];
+    if (w > 1) work('801', w, 85, 1800, d); work('802', w, w === 3 ? 30 : 90, w === 3 ? 240 : 1500, d); work('804', w, 70, 1500, d); work('805', w, 60, 1200, d); work('806', w, 80, 1500, d); });
+  work('803', 2, 95, 1800, '2026-10-08');
+  clock = new RD('2026-10-30T12:00:00').getTime();
+  E.as('t1@aisa.sch.ae'); throws(() => E.call('getAwards', '2026-10'), /owners/, 'only owners see the awards');
+  E.as('bbaki@aisa.sch.ae'); const A = E.call('getAwards', '2026-10');
+  const S = id => A.students.find(x => x.email === id + '@aisa.sch.ae');
+  ok(A.month === '2026-10' && A.months[0] === '2026-10', 'month list runs back from this month');
+  ok(!S('802').eligible && /rushed/.test(S('802').why), 'a student with a rushed lesson is not eligible');
+  ok(!S('803').eligible && /fewer than 2/.test(S('803').why), 'one lesson is not enough');
+  ok(S('801').quality >= 82 && S('801').quality <= 88 && S('801').growth >= 28 && S('801').growth <= 38 && S('804').growth === null, 'growth compares the month with earlier lessons (none without earlier work)');
+  ok(A.students[0].email === '801@aisa.sch.ae' && S('801').score > S('804').score && S('804').score > S('805').score, 'eligible students are ranked by the weighted score');
+  const T1 = A.teachers.find(t => t.email === 't1@aisa.sch.ae'), T2 = A.teachers.find(t => t.email === 't2@aisa.sch.ae');
+  ok(T1.students === 5 && T1.eligible && !T2.eligible && /fewer than 5/.test(T2.why), 'teachers are measured on their own students; small classes are not ranked');
+  ok(T1.rushed === 1 && T1.followed === 0, 'rushed lessons without a retake count against follow-up');
+  ok(E.call('nominate', '2026-10', 'student', '801@aisa.sch.ae', 'Big improvement').saved, 'an owner nominates a student');
+  E.call('nominate', '2026-10', 'teacher', 't1@aisa.sch.ae', '');
+  throws(() => E.call('nominate', '2026-10', 'student', 't1@aisa.sch.ae', ''), /not on the class lists/, 'a student award must go to a student');
+  throws(() => E.call('nominate', '2026-10', 'prize', '801@aisa.sch.ae', ''), /Unknown award/, 'only the two awards exist');
+  const A2 = E.call('getAwards', '2026-10');
+  ok(A2.nominees.student.email === '801@aisa.sch.ae' && A2.nominees.teacher.email === 't1@aisa.sch.ae' && A2.history.length === 2, 'nominees and history come back');
+  E.as('801@aisa.sch.ae'); ok(E.call('getDashboard').myAwards.some(a => a.month === '2026-10' && a.type === 'student'), 'the winner sees their award');
+  E.as('802@aisa.sch.ae'); ok(!E.call('getDashboard').myAwards.length && !E.call('getDashboard').canAward, 'others do not');
+  E.as('t1@aisa.sch.ae'); throws(() => E.call('nominate', '2026-10', 'student', '804@aisa.sch.ae', ''), /owners/, 'teachers cannot nominate');
+}
 /* Google's HtmlService cuts script lines at '//', even inside a quoted web address, so no
    inline script the app serves may contain '://' (build.py writes it as ':\/\/'). */
 {
