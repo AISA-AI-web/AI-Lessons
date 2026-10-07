@@ -238,16 +238,38 @@ function teachersBySection_() {
   Object.keys(out).forEach(function (sec) { out[sec].forEach(function (t) { t.classes = t.classes.filter(function (c) { return (codes[sec] || {})[c]; }); }); });
   return out;
 }
-/** For the owners' and SLT's calendar: names and subjects only (no class codes). */
+/* Students not in a subject's classes (no Islamic code, or no Arabic code, while classmates have one) spend
+   that subject's periods in a separate room with their tutor, who teaches them the AI lesson there. */
+var TUTOR_SUBJECTS = ['Islamic', 'Arabic'];
+/** The subjects whose periods this student spends with their tutor. */
+function withTutorIn_(cm, section, theirs) {
+  var sc = Object.keys(cm.codes[section] || {});
+  if (!theirs.length) return [];
+  return TUTOR_SUBJECTS.filter(function (sub) {
+    return sc.some(function (c) { return subjectOf_(c) === sub; }) && !theirs.some(function (c) { return subjectOf_(c) === sub; });
+  });
+}
+/** A student's tutors: those sharing their tutor-group code, else every tutor of the section. */
+function tutorsFor_(tbs, section, theirs) {
+  var all = (tbs[section] || []).filter(function (t) { return t.subjects.indexOf('Tutor') >= 0; });
+  var own = all.filter(function (t) { return t.classes.some(function (c) { return theirs.indexOf(c) >= 0; }); });
+  return own.length ? own : all;
+}
+/** For the owners' and SLT's calendar: names and subjects only (no class codes); tutors list the
+    subjects whose periods they spend with students not in those classes (also). */
 function calendarTeachers_() {
-  var tbs = teachersBySection_(), out = {};
-  Object.keys(tbs).forEach(function (sec) { out[sec] = tbs[sec].map(function (t) { return { name: t.name, email: t.email, subjects: t.subjects }; }); });
+  var tbs = teachersBySection_(), cm = classMap_(), out = {}, also = {};
+  Object.keys(cm.students).forEach(function (e) {
+    var s = cm.students[e], subs = withTutorIn_(cm, s.section, s.classes || []); if (!subs.length) return;
+    tutorsFor_(tbs, s.section, s.classes || []).forEach(function (t) { var a = also[s.section + '|' + t.email] || (also[s.section + '|' + t.email] = []); subs.forEach(function (x) { if (a.indexOf(x) < 0) a.push(x); }); });
+  });
+  Object.keys(tbs).forEach(function (sec) { out[sec] = tbs[sec].map(function (t) { return { name: t.name, email: t.email, subjects: t.subjects, also: also[sec + '|' + t.email] || [] }; }); });
   return out;
 }
 /** The teachers who teach this student (sharing one of their classes, or the whole section when either
     has no class names), by subject – so a lesson can be matched to the teacher of that day's period.
-    names: their Arabic and Islamic teachers (a tutor only when no one else is listed); a student with
-    no Islamic teacher has their tutor in Islamic periods. */
+    names: their Arabic and Islamic teachers (a tutor only when no one else is listed); a student not in
+    a subject's classes has their tutor in that subject's periods. */
 function teachersOf_(cm, tbs, email, section) {
   var theirs = (cm.students[email] || {}).classes || [], bySub = {}, lesson = [], tutors = [];
   (tbs[section] || []).forEach(function (t) {
@@ -257,7 +279,10 @@ function teachersOf_(cm, tbs, email, section) {
     if (subs.some(function (sb) { return sb !== 'Tutor'; })) { if (lesson.indexOf(t.name) < 0) lesson.push(t.name); }
     else if (tutors.indexOf(t.name) < 0) tutors.push(t.name);
   });
-  if (!bySub.Islamic && bySub.Tutor && theirs.length) bySub.Islamic = bySub.Tutor.slice();   // the tutor group in Islamic periods
+  withTutorIn_(cm, section, theirs).forEach(function (sub) {
+    var l = bySub[sub] || (bySub[sub] = []);
+    tutorsFor_(tbs, section, theirs).forEach(function (t) { if (l.indexOf(t.name) < 0) l.push(t.name); });
+  });
   return { names: lesson.length ? lesson : tutors, bySub: bySub };
 }
 /** True if this student is one of the teacher's own (owners and SLT: everyone). */
@@ -266,7 +291,10 @@ function isMine_(me, vis, cm, email, section) {
   if (vis.indexOf(section) < 0) return false;
   var mine = ((cm.teachers[me.email] || {})[section]) || [], theirs = (cm.students[email] || {}).classes || [];
   if (!mine.length || !theirs.length) return true;
-  return theirs.some(function (c) { return mine.indexOf(c) >= 0; });
+  if (theirs.some(function (c) { return mine.indexOf(c) >= 0; })) return true;
+  /* a tutor also has the students who spend Islamic or Arabic periods with them */
+  return withTutorIn_(cm, section, theirs).length > 0 && mine.some(function (c) { return subjectOf_(c) === 'Tutor'; }) &&
+    tutorsFor_(teachersBySection_(), section, theirs).some(function (t) { return t.email === me.email; });
 }
 
 /* ===================== retakes ===================== */
@@ -736,7 +764,13 @@ function periodModel_() {
     var sc = {}; students.forEach(function (x) { x.c.forEach(function (c) { sc[c] = (sc[c] || 0) + 1; }); });
     var why = { teachers: (tbs[sec] || []).map(function (t) { return t.name + ' (' + (t.subjects.join('/') || 'subject unknown') + (t.raw.length ? ': ' + t.raw.join(', ') : '') + ')'; }),
       codes: Object.keys(sc).sort(function (a, b) { return sc[b] - sc[a]; }).slice(0, 8).map(function (c) { return c + ' ×' + sc[c]; }), noCodes: students.filter(function (x) { return !x.c.length; }).length };
-    sections.push({ name: sec, grade: grade, why: why, students: students.map(function (x) { return { e: x.e, n: x.n }; }), groups: groups, lessons: lessons.map(function (l) { return l.id; }),
+    var tut = {};
+    students.forEach(function (x, i) {
+      withTutorIn_(cm, sec, x.c).forEach(function (sub) {
+        tutorsFor_(tbs, sec, x.c).forEach(function (t) { var o = tut[sub] || (tut[sub] = {}); (o[t.email] = o[t.email] || []).push(i); });
+      });
+    });
+    sections.push({ name: sec, grade: grade, why: why, tut: tut, students: students.map(function (x) { return { e: x.e, n: x.n }; }), groups: groups, lessons: lessons.map(function (l) { return l.id; }),
       teachers: (tbs[sec] || []).map(function (t) { return { email: t.email, name: t.name, subjects: t.subjects }; }) });
     lessons.forEach(function (l) {
       var d = AICAL.lessonDate(sec, l.week); if (!d) return;
@@ -756,14 +790,19 @@ function periodModel_() {
   return { sections: sections, cells: cells, from: AICAL.iso(from), now: now.getTime() };
 }
 /** The teacher groups for one class period: the teachers of that period's subject (or, if none, of no known
-    subject; in Islamic periods also the tutor for the tutor group), each with their students; students no such teacher has are grouped as 'no teacher' (email ''). */
+    subject), each with their students, plus the tutors with the students not in that subject's classes
+    (sec.tut); students no one has are grouped as 'no teacher' (email ''). */
 function slotGroups_(sec, subject) {
   var keys = Object.keys(sec.groups), pick = keys.filter(function (k) { return k.split('|')[0] === subject; }), tn = {};
-  /* In Islamic periods the tutor group (students not in Islamic classes) is in a separate room with the class tutor. */
-  if (subject === 'Islamic' && pick.length) pick = pick.concat(keys.filter(function (k) { return k.split('|')[0] === 'Tutor' && sec.groups[k].length < sec.students.length; }));
   if (!pick.length) pick = keys.filter(function (k) { return k.split('|')[0] === ''; });
   sec.teachers.forEach(function (t) { tn[t.email] = t.name; });
-  var out = pick.map(function (k) { var em = k.slice(k.indexOf('|') + 1); return { email: em, name: tn[em] || em, idx: sec.groups[k] }; }), covered = {};
+  var out = pick.map(function (k) { var em = k.slice(k.indexOf('|') + 1); return { email: em, name: tn[em] || em, idx: sec.groups[k].slice() }; }), covered = {};
+  var tg = (sec.tut || {})[subject] || {};
+  Object.keys(tg).forEach(function (em) {
+    var g = out.filter(function (x) { return x.email === em; })[0];
+    if (!g) out.push(g = { email: em, name: tn[em] || em, idx: [] });
+    tg[em].forEach(function (i) { if (g.idx.indexOf(i) < 0) g.idx.push(i); });
+  });
   out.forEach(function (g) { g.idx.forEach(function (i) { covered[i] = 1; }); });
   var rest = sec.students.map(function (x, i) { return i; }).filter(function (i) { return !covered[i]; });
   if (rest.length) out.push({ email: '', name: '', idx: rest });

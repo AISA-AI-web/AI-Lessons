@@ -1447,10 +1447,15 @@ function mgState(c){ if (c.state === 'before') return 'pre'; var t = mgTimes(c),
 function mgStatus(c, k){ if (c.cst !== 'due') return c.cst; if (!k.n) return 'none'; return k.n >= MG.data.min && k.s / k.n < MG.data.share / 100 ? 'not' : 'taught'; }
 function mgSlotGroups(sec, subject){
   var keys = Object.keys(sec.groups), pick = keys.filter(function(k){ return k.split('|')[0] === subject; }), tn = {};
-  if (subject === 'Islamic' && pick.length) pick = pick.concat(keys.filter(function(k){ return k.split('|')[0] === 'Tutor' && sec.groups[k].length < sec.students.length; }));
   if (!pick.length) pick = keys.filter(function(k){ return k.split('|')[0] === ''; });
   sec.teachers.forEach(function(t){ tn[t.email] = t.name; });
-  var out = pick.map(function(k){ var em = k.slice(k.indexOf('|') + 1); return { email: em, name: tn[em] || em, idx: sec.groups[k] }; }), cov = {};
+  var out = pick.map(function(k){ var em = k.slice(k.indexOf('|') + 1); return { email: em, name: tn[em] || em, idx: sec.groups[k].slice() }; }), cov = {};
+  var tg = (sec.tut || {})[subject] || {};   // tutors with the students not in this subject's classes
+  Object.keys(tg).forEach(function(em){
+    var g = out.filter(function(x){ return x.email === em; })[0];
+    if (!g) out.push(g = { email: em, name: tn[em] || em, idx: [] });
+    tg[em].forEach(function(i){ if (g.idx.indexOf(i) < 0) g.idx.push(i); });
+  });
   out.forEach(function(g){ g.idx.forEach(function(i){ cov[i] = 1; }); });
   var rest = sec.students.map(function(x, i){ return i; }).filter(function(i){ return !cov[i]; });
   if (rest.length) out.push({ email: '', name: '', idx: rest });
@@ -1479,9 +1484,11 @@ function mgPrep(){
     S.avg = S.pn ? Math.round(S.ps / S.pn) : null; S.fin = S.n ? pct(S.f, S.n) : null;
     var last = due.slice().sort(function(a, b){ return b.c.end - a.c.end; })[0]; S.last = last || null; S.lastOpen = last ? last.g.k.n - last.g.k.f : null;
     var stu = {};
-    o.t.sections.forEach(function(sn){ var sec = P.sec[sn]; if (!sec) return; Object.keys(sec.groups).forEach(function(k){ if (k.slice(k.indexOf('|') + 1) === e && k.split('|')[0] !== 'Tutor') sec.groups[k].forEach(function(i){ stu[sn + '#' + i] = 1; }); }); });
+    o.t.sections.forEach(function(sn){ var sec = P.sec[sn]; if (!sec) return; Object.keys(sec.groups).forEach(function(k){ if (k.slice(k.indexOf('|') + 1) === e && k.split('|')[0] !== 'Tutor') sec.groups[k].forEach(function(i){ stu[sn + '#' + i] = 1; }); });
+      Object.keys(sec.tut || {}).forEach(function(sub){ (sec.tut[sub][e] || []).forEach(function(i){ stu[sn + '#' + i] = 1; }); }); });
     S.students = Object.keys(stu).length;
-    S.tutor = o.t.subjects.length > 0 && o.t.subjects.every(function(x){ return x === 'Tutor'; });
+    // a tutor with no AI periods (tutors who have students in Islamic or Arabic periods count as teachers)
+    S.tutor = o.t.subjects.length > 0 && o.t.subjects.every(function(x){ return x === 'Tutor'; }) && !o.recs.length;
     o.sum = S;
   });
   MG.prep = P;

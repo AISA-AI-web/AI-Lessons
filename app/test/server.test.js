@@ -478,11 +478,25 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   const RD = Date; E.ctx.Date = class extends RD { constructor(...a) { a.length ? super(...a) : super('2026-10-12T09:00:00'); } static now() { return new RD('2026-10-12T09:00:00').getTime(); } };
   const nt = E.call('getNotTaught').items.filter(x => x.lessonId === 'grade-7/main-w2-l1');
   const by = Object.fromEntries(nt.map(x => [x.email, x.students]));
-  ok(by['tut@aisa.sch.ae'] === 2 && by['isl@aisa.sch.ae'] === 1 && by['isl2@aisa.sch.ae'] === 1, 'in an Islamic period the tutor has the tutor group');
-  ok(by[''] === 1 && nt.length === 4, 'a student in neither an Islamic class nor the tutor group still shows as having no teacher');
+  ok(by['tut@aisa.sch.ae'] === 3 && by['isl@aisa.sch.ae'] === 1 && by['isl2@aisa.sch.ae'] === 1 && nt.length === 3, 'in an Islamic period the tutor has the students not in Islamic classes (tutor-group code or not)');
+  ok(!nt.some(x => !x.email), 'so no one is left without a teacher');
   const st = E.call('getDashboard').students, S = id => st.find(x => x.email === id + '@aisa.sch.ae');
   ok(S('703').tsub.Islamic.join() === 'Tutor T' && S('701').tsub.Islamic.join() === 'Islam One', "a tutor-group student's Islamic-period teacher is the tutor");
-  E.as('tut@aisa.sch.ae'); ok(E.call('getDashboard').students.filter(x => x.mine).length === 2, 'the tutor sees the tutor group as theirs');
+  E.as('tut@aisa.sch.ae'); ok(E.call('getDashboard').students.filter(x => x.mine).length === 3, 'the tutor sees those students as theirs');
+}
+/* Grade 11–12: students with no Arabic code spend Arabic periods with their tutor (fresh environment) */
+{
+  const E = makeEnv(), sh = E.sheets;
+  E.as('bbaki@aisa.sch.ae'); E.call('setup');
+  sh.Roster.push(['ara@aisa.sch.ae', 'Arabic One', 'teacher', 'Girls 11', 11, 'sis', 'G11AFL1', ''], ['isl@aisa.sch.ae', 'Islam One', 'teacher', 'Girls 11', 11, 'sis', 'G11ISA1', ''],
+    ['tut@aisa.sch.ae', 'Tutor G', 'teacher', 'Girls 11', 11, 'sis', 'G11TUT', '']);
+  [['1101', 'G11AFL1, G11ISA1'], ['1102', 'G11AFL1, G11ISA1'], ['1103', 'G11ISA1'], ['1104', 'G11TUT, G11AFL1']].forEach(([id, c]) => sh.Roster.push([id + '@aisa.sch.ae', 'S' + id, 'student', 'Girls 11', 11, 'sis', c, '']));
+  const RD = Date; E.ctx.Date = class extends RD { constructor(...a) { a.length ? super(...a) : super('2026-10-12T09:00:00'); } static now() { return new RD('2026-10-12T09:00:00').getTime(); } };
+  const nt = E.call('getNotTaught').items.filter(x => x.lessonId === 'grade-11/main-w2-l1');
+  const by = Object.fromEntries(nt.map(x => [x.email, x.students]));
+  ok(nt[0] && nt[0].subject === 'Arabic' && by['ara@aisa.sch.ae'] === 3 && by['tut@aisa.sch.ae'] === 1 && nt.length === 2, 'in an Arabic period the tutor has the students not in Arabic classes');
+  const st = E.call('getDashboard').students, S = id => st.find(x => x.email === id + '@aisa.sch.ae');
+  ok(S('1103').tsub.Arabic.join() === 'Tutor G' && S('1104').tsub.Islamic.join() === 'Tutor G' && S('1101').tsub.Arabic.join() === 'Arabic One', "each student's period teacher follows their classes");
 }
 /* Google's HtmlService cuts script lines at '//', even inside a quoted web address, so no
    inline script the app serves may contain '://' (build.py writes it as ':\/\/'). */

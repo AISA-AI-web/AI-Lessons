@@ -224,10 +224,11 @@ their lists are right:
   `BO6ASL` = Arabic, `BO6TUT` = tutor) or from a Classroom course name. Owners and
   SLT see, in the calendar pop-up, the teachers of that subject for that class –
   names only – and on the dashboard the teacher of the period each lesson fell in.
-  In Islamic periods the tutor group (the `…TUT` code – students not in an Islamic
-  class) is in a separate classroom with the class tutor, who teaches them the AI
-  lesson (the timetable lists the tutor for every Islamic AI lesson), so those
-  students count as the tutor's own group (Not taught list and reminders included).
+  Students not in a subject's classes (no Islamic code – the `…TUT` tutor group –
+  or, mostly in Grades 11–12, no Arabic code) spend that subject's periods in a
+  separate classroom with their tutor, who teaches them the AI lesson. They count as
+  the tutor's group in those periods (Not taught list and reminders included); the
+  tutor is the one sharing their tutor-group code, else the section's tutor.
   Rows added by hand (blank `courseId`) hold notes such as "AI timetable –
   teacher", which are never treated as class names.
 - **✓ This list is correct** records who confirmed each class and when; the

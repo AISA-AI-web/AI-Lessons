@@ -271,8 +271,8 @@ function teachersLine(sec, sub) {
   let ts = all.filter(t => t.subjects.includes(sub));
   if (!ts.length) ts = all.filter(t => !t.subjects.length);
   if (!ts.length) ts = lesson;
-  // The class tutor is with the tutor group (students not in Islamic classes) in Islamic periods.
-  const tut = sub === 'Islamic' && ts.length ? all.filter(t => t.subjects.includes('Tutor') && !ts.includes(t)) : [];
+  // Tutors teach the students not in this subject's classes in a separate room during its periods.
+  const tut = ts.length ? all.filter(t => (t.also || []).includes(sub) && !ts.includes(t)) : [];
   return `<p class="tch">👩‍🏫 <b>${esc(T(ts.length + tut.length > 1 ? 'Teachers' : 'Teacher'))}:</b> ${ts.length ? ts.concat(tut).map(t => `<span title="${esc(t.email)}">${esc(t.name)}${tut.includes(t) ? ` (${esc(T('tutor'))})` : ''}</span>`).join(' · ') : `<i>${esc(T('none on the class lists yet'))}</i>`}</p>`;
 }
 function openPop(btn) {
