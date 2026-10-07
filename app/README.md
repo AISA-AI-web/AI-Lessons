@@ -227,6 +227,21 @@ Every change is logged in the **Changes** tab (who, when, from, to), and
 corrections. Owners and SLT can **Download changes for IT (CSV)** so the school
 information system gets fixed at the source too.
 
+## Rushed work and retakes
+
+The dashboard flags a lesson as **⚡ Rushed** when a student finished it in under
+10 minutes of active time with a first-try score under 50% (`RUSH_MIN` and
+`RUSH_PCT` at the top of `dashboard.html`). The student's row turns red, the
+**⚡ Rushed** chip lists them, and a **↻ Retake** button asks them to redo it.
+
+A retake is a row in the **Retakes** tab (who, which lesson, which teacher, when).
+From then on only work after the retake counts as that lesson's first tries; the
+earlier attempt stays in the sheet and the teacher sees it next to the new one
+("first attempt 26% in 5 min"). The next time the student opens the lesson, its
+saved answers on their device are cleared and a note says their teacher asked
+them to redo it. Teachers can set retakes for their own students; owners and SLT
+for anyone.
+
 ## Where the data lives
 
 One Google Sheet, kept in an AISA **Shared Drive** that only the system owners

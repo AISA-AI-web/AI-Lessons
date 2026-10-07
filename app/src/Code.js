@@ -19,7 +19,8 @@ var TABS = {
   Retries:   ['timestamp', 'email', 'lessonId', 'activityId', 'score', 'max'],
   Judgements:['timestamp', 'student', 'strand', 'tier', 'teacher', 'note'],
   Changes:   ['timestamp', 'type', 'student', 'name', 'fromSection', 'toSection', 'by', 'status', 'decidedBy', 'decidedAt', 'note', 'fromClass', 'toClass'],
-  Confirmations: ['timestamp', 'section', 'teacher', 'students', 'note']
+  Confirmations: ['timestamp', 'section', 'teacher', 'students', 'note'],
+  Retakes:   ['timestamp', 'student', 'lessonId', 'teacher', 'note']
 };
 /* Every AI Literacy section, e.g. Boys 6 … Girls 12. */
 var SECTIONS = (function () { var a = []; for (var g = 6; g <= 12; g++) a.push('Boys ' + g, 'Girls ' + g); return a; })();
@@ -186,24 +187,60 @@ function isMine_(me, vis, cm, email, section) {
   return theirs.some(function (c) { return mine.indexOf(c) >= 0; });
 }
 
+/* ===================== retakes ===================== */
+
+/* A teacher can ask a student to redo a lesson (e.g. finished in a few minutes with a low score).
+   The new attempt starts at the retake's time: only work after it counts as the lesson's first
+   tries; the earlier attempt stays in the sheet and is shown to the teacher for comparison. */
+function retakes_() {
+  var out = {};
+  rows_('Retakes').forEach(function (r) {             // in time order: the latest retake wins
+    var k = lc_(r.student) + '|' + r.lessonId, o = out[k] || (out[k] = { n: 0 });
+    o.n++; o.at = new Date(r.timestamp).getTime(); o.by = r.teacher;
+  });
+  return out;
+}
+function since_(rt, email, lessonId) { var o = rt[email + '|' + lessonId]; return o ? o.at : 0; }
+function after_(r, start) { return !start || new Date(r.timestamp).getTime() > start; }
+
+/** Asks a student to redo a lesson: their answers are cleared and the next attempt is recorded afresh. */
+function setRetake(studentEmail, lessonId, note) {
+  var me = requireUser_(), email = checkEmail_(studentEmail);
+  lessonId = cleanId_(lessonId);
+  if (me.role === 'student') throw new Error('Only teachers can ask for a retake.');
+  var vis = visibleSections_(me);
+  if (vis !== null) {
+    var cm = classMap_(), st = cm.students[email];
+    if (!st || !isMine_(me, vis, cm, email, st.section)) throw new Error('You can only ask your own students to retake a lesson.');
+  }
+  return withLock_(function () {
+    var start = since_(retakes_(), email, lessonId);
+    var any = rows_('Scores').some(function (r) { return lc_(r.email) === email && r.lessonId === lessonId && after_(r, start); });
+    if (!any) throw new Error(start ? 'A retake is already set – the student has not started it yet.' : 'This student has not started this lesson yet.');
+    append_('Retakes', [[new Date(), email, lessonId, me.email, cleanText_(note, 200)]]);
+    return { retake: true, attempt: (retakes_()[email + '|' + lessonId] || {}).n + 1 };
+  });
+}
+
 /* ===================== called from lesson pages ===================== */
 
-/** Activity ids this student already has a first-try score for in a lesson. */
+/** Activity ids this student already has a first-try score for in a lesson (current attempt),
+    and how many retakes their teacher has set (the page clears old answers when this goes up). */
 function getLessonState(lessonId) {
   var me = requireUser_();
   lessonId = cleanId_(lessonId);
-  var done = {}, latest = {};
-  rows_('Scores').forEach(function (r) { if (lc_(r.email) === me.email && r.lessonId === lessonId) done[r.activityId] = Number(r.firstScore); });
-  rows_('Retries').forEach(function (r) { if (lc_(r.email) === me.email && r.lessonId === lessonId) latest[r.activityId] = Number(r.score); });
-  return { done: done, latest: latest };
+  var done = {}, latest = {}, rt = retakes_(), start = since_(rt, me.email, lessonId);
+  rows_('Scores').forEach(function (r) { if (lc_(r.email) === me.email && r.lessonId === lessonId && after_(r, start)) done[r.activityId] = Number(r.firstScore); });
+  rows_('Retries').forEach(function (r) { if (lc_(r.email) === me.email && r.lessonId === lessonId && after_(r, start)) latest[r.activityId] = Number(r.score); });
+  return { done: done, latest: latest, attempt: (rt[me.email + '|' + lessonId] || {}).n || 0 };
 }
 
 /** The signed-in user's own work, lesson by lesson, for the home page:
     { lessons: { lessonId: { done, score, max } } } – first tries only. */
 function getMyProgress() {
-  var me = requireUser_(), out = {}, seen = {};
+  var me = requireUser_(), out = {}, seen = {}, rt = retakes_();
   rows_('Scores').forEach(function (r) {
-    if (lc_(r.email) !== me.email) return;
+    if (lc_(r.email) !== me.email || !after_(r, since_(rt, me.email, r.lessonId))) return;
     var k = r.lessonId + '|' + r.activityId; if (seen[k]) return; seen[k] = 1;   // the earliest first try only
     var o = out[r.lessonId] || (out[r.lessonId] = { done: 0, score: 0, max: 0 });
     o.done++; o.score += Number(r.firstScore) || 0; o.max += Number(r.max) || 0;
@@ -222,8 +259,8 @@ function recordScores(lessonId, meta, items) {
   var lock = LockService.getScriptLock();
   lock.waitLock(20000);
   try {
-    var have = {};
-    rows_('Scores').forEach(function (r) { if (lc_(r.email) === me.email && r.lessonId === lessonId) have[r.activityId] = 1; });
+    var have = {}, start = since_(retakes_(), me.email, lessonId);
+    rows_('Scores').forEach(function (r) { if (lc_(r.email) === me.email && r.lessonId === lessonId && after_(r, start)) have[r.activityId] = 1; });
     var now = new Date(), out = [];
     items.forEach(function (it) {
       var id = cleanText_(it.id, 40), max = num_(it.max, 0, 200), score = num_(it.score, 0, max);
@@ -459,17 +496,29 @@ function getDashboard() {
 
   var per = {};   // email|lesson -> {score, done, firstAt, lastAt, seconds, acts:{id:[score,max]}}
   function cell(e, l) { var k = e + '|' + l; return per[k] || (per[k] = { email: e, lessonId: l, score: 0, done: 0, seconds: 0, firstAt: null, lastAt: null, acts: {} }); }
+  var rt = retakes_(), prev = {};                    // prev: email|lesson -> the attempt before the latest retake
   rows_('Scores').forEach(function (r) {
-    var e = lc_(r.email), c = cell(e, r.lessonId);
+    var e = lc_(r.email), k = e + '|' + r.lessonId, start = since_(rt, e, r.lessonId);
+    if (!after_(r, start)) {
+      var p = prev[k] || (prev[k] = { score: 0, max: 0, done: 0, seconds: 0, seen: {} });
+      if (!p.seen[r.activityId]) { p.seen[r.activityId] = 1; p.score += Number(r.firstScore) || 0; p.max += Number(r.max) || 0; p.done++; }
+      return;
+    }
+    var c = cell(e, r.lessonId);
     if (c.acts[r.activityId]) return;                // keep the earliest first try only
     c.acts[r.activityId] = [Number(r.firstScore), Number(r.max), r.activityTitle, r.part];
     c.score += Number(r.firstScore); c.done += 1;
     var t = new Date(r.timestamp).getTime();
     c.firstAt = c.firstAt === null ? t : Math.min(c.firstAt, t); c.lastAt = Math.max(c.lastAt || 0, t);
   });
-  rows_('Time').forEach(function (r) { cell(lc_(r.email), r.lessonId).seconds += Number(r.seconds) || 0; });
+  rows_('Time').forEach(function (r) {
+    var e = lc_(r.email), k = e + '|' + r.lessonId;
+    if (after_(r, since_(rt, e, r.lessonId))) cell(e, r.lessonId).seconds += Number(r.seconds) || 0;
+    else if (prev[k]) prev[k].seconds += Number(r.seconds) || 0;
+  });
   rows_('Retries').forEach(function (r) {           // rows are in time order, so the last one wins
-    var a = cell(lc_(r.email), r.lessonId).acts[r.activityId];
+    var e = lc_(r.email); if (!after_(r, since_(rt, e, r.lessonId))) return;
+    var a = cell(e, r.lessonId).acts[r.activityId];
     if (a) a[4] = Number(r.score);
   });
 
@@ -488,6 +537,9 @@ function getDashboard() {
   outStudents.forEach(function (s) { s.classes = (cm.students[s.email] || {}).classes || []; s.mine = me.role === 'student' || isMine_(me, vis, cm, s.email, s.section); });
   var keep = {}; outStudents.forEach(function (s) { keep[s.email] = 1; });
   var results = Object.keys(per).map(function (k) { return per[k]; }).filter(function (c) { return keep[c.email]; });
+  var retakes = {};                                   // email|lesson -> { n, at, by, prev: {score, max, done, seconds} }
+  Object.keys(rt).forEach(function (k) { if (!keep[k.split('|')[0]]) return; var p = prev[k];
+    retakes[k] = { n: rt[k].n, at: new Date(rt[k].at).toISOString(), by: rt[k].by, prev: p ? { score: p.score, max: p.max, done: p.done, seconds: p.seconds } : null }; });
   return {
     me: me,
     scope: vis === null ? 'school' : (vis.length ? 'sections' : 'self'),
@@ -495,6 +547,7 @@ function getDashboard() {
     lessons: Object.keys(lessons).map(function (k) { return lessons[k]; }),
     students: outStudents,
     results: results,
+    retakes: retakes,
     judgements: judgementsFor_(keep),
     framework: typeof FRAMEWORK === 'undefined' ? null : FRAMEWORK,
     canJudge: me.role !== 'student',

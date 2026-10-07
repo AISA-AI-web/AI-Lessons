@@ -55,7 +55,19 @@
     }, function(){ busy = false; setStatus(T('Not saved yet – check your connection. It will retry.'), true); setTimeout(flushScores, 15000); });
   }
   window.LessonHooks = { state: function(S, acts){ if (lessonId) { latest = { S: S, acts: acts }; flushScores(); } } };
-  if (lessonId) run('getLessonState', lessonId).then(function(st){ sent = st.done || {}; lastSent = st.latest || {}; ready = true; flushScores(); }, function(){ ready = true; });
+  /* A teacher can set a retake: when the attempt number goes up, this device's saved answers for the
+     lesson are cleared (the page's KEY) and the page reloads clean, with a note saying why. */
+  var AK = 'retake-attempt|' + lessonId;
+  if (lessonId) run('getLessonState', lessonId).then(function(st){
+    var n = Number(st.attempt) || 0, seen = 0;
+    try { seen = Number(localStorage.getItem(AK)) || 0; } catch (e) {}
+    if (n > seen) {
+      try { if (typeof KEY !== 'undefined') localStorage.removeItem(KEY); localStorage.setItem(AK, String(n)); sessionStorage.setItem('retake-note', lessonId); } catch (e) {}
+      try { history.scrollRestoration = 'manual'; } catch (e) {}
+      location.reload(); return;                       // never send the old answers as the new attempt
+    }
+    sent = st.done || {}; lastSent = st.latest || {}; ready = true; flushScores();
+  }, function(){ ready = true; });
 
   /* 3. Active time: counts only while the page is visible and the student has
         interacted in the last 2 minutes; sent about once a minute */
@@ -96,6 +108,14 @@
         var t = document.createElement('small'); t.className = 'app-lock'; t.textContent = T('🔒 Opens') + ' ' + LOCK[m[1]]; a.appendChild(t);
       }
     });
+    var note = ''; try { note = sessionStorage.getItem('retake-note'); sessionStorage.removeItem('retake-note'); } catch (e) {}
+    if (lessonId && note === lessonId) {
+      var rb = document.createElement('div'); rb.className = 'app-retake'; rb.setAttribute('role', 'status');
+      rb.innerHTML = ar ? '↻ <b>طلب منك معلمك إعادة هذا الدرس.</b> بدأت محاولة جديدة – خذ وقتك واقرأ كل جزء بعناية. محاولتك الجديدة هي التي تُحتسب.'
+        : '↻ <b>Your teacher has asked you to redo this lesson.</b> You are starting a fresh attempt – take your time and read each part carefully. Your new attempt is the one that counts.';
+      document.body.insertBefore(rb, document.body.firstChild);
+      setTimeout(function(){ window.scrollTo(0, 0); }, 0);
+    }
     var nm = document.getElementById('nm');
     if (nm) { nm.value = CFG.name; nm.readOnly = true; nm.title = 'Filled in from your school account';
       try { nm.dispatchEvent(new Event('input', { bubbles: true })); } catch (e) {} }
@@ -156,6 +176,7 @@
   .app-me{display:none}
 }
 .app-save{color:#9be59b}.app-save.bad{color:#ffb3b3}
+.app-retake{background:#FFF3C9;color:#5c3d00;border-bottom:2px solid #D8B664;padding:12px 16px;font:15px/1.45 "DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;text-align:center}
 a.app-locked{opacity:.6;cursor:not-allowed}
 .app-lock{display:block;font-size:12px;font-weight:600;margin-top:2px}
 @media print{.app-bar{display:none}}

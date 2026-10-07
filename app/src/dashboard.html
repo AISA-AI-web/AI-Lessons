@@ -100,6 +100,15 @@ td.name small{display:block;color:var(--muted);font-size:12px}
 .ls.doing{background:#FFF4D6}.ls.doing i{border:2px solid var(--warn);background:linear-gradient(90deg,var(--warn) 50%,#fff 50%)}
 .ls.todo{background:#FBE9E9}.ls.todo i{border:2px solid var(--crit);background:#fff}
 .ls.later{background:none;border:1.5px dashed var(--line);color:var(--muted);font-weight:500}
+.ls.rushed{background:#FBE0E0;color:#8f1d1d}.ls.rushed i{background:var(--crit)}
+td .sm.rush,td .sm.rnote{white-space:normal;overflow:visible}
+.sm.rush{color:#b3261e;font-weight:700}
+.sm.rnote{color:#5c3d00}
+.rtk{display:inline-block;margin-top:5px;font:inherit;font-size:12.5px;font-weight:700;color:#fff;background:#b3261e;border:0;border-radius:999px;padding:4px 11px;cursor:pointer}
+.rtk:hover{background:#8f1d1d}.rtk:disabled{opacity:.6;cursor:wait}
+table.stable tr.rushrow td{background:#FDF0F0}
+table.stable tr.rushrow td.name{box-shadow:inset 4px 0 0 var(--crit)}
+@media print{.rtk{display:none}}
 td .sm{display:block;font-size:12px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sofar b{color:var(--ink)}
 .strip{display:flex;gap:3px;margin:5px 0 3px;direction:ltr;align-items:center}
@@ -259,6 +268,11 @@ var $ = function(s){ return document.querySelector(s); };
 var esc = function(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]; }); };
 var pct = function(a, b){ return b ? Math.round(a / b * 100) : 0; };
 var mins = function(s){ return Math.round(s / 60); };
+/* Rushed: finished a lesson in under RUSH_MIN minutes of active time with a first-try score under
+   RUSH_PCT %. The teacher sees the student in red with a Retake button. */
+var RUSH_MIN = 10, RUSH_PCT = 50;
+function activeSecs(r){ return r.seconds > 0 ? r.seconds : (r.lastAt && r.firstAt ? (r.lastAt - r.firstAt) / 1000 : 0); }
+function retakeOf(email, id){ return (D.retakes || {})[email + '|' + id] || null; }
 var home = CFG.base + '?p=index';
 
 /* ===================== language: English / العربية ===================== */
@@ -297,6 +311,9 @@ var AR_ERRORS = [
   [/^Only (.+)'s teacher, an owner or SLT can decide this request\.$/, function(m){ return 'يبتّ في هذا الطلب معلم شعبة ' + secName(m[1]) + ' أو مسؤول النظام أو فريق القيادة فقط.'; }],
   [/^You can only record judgements for students you teach\./, 'يمكنك تسجيل المستويات لطلاب صفّك فقط. إن كان الطالب يتبع صفّك فانقله إليه من «قوائم الشعب».'],
   [/^You can only move students into your own classes\.(?: .+ is in (.+) – )?/, function(m){ return 'يمكنك نقل الطلاب إلى صفوفك فقط.' + (m[1] ? ' الطالب في ' + secName(m[1]) + ' – لإحضاره من شعبة أخرى استخدم «إضافة طالب أو طلب نقله».' : ''); }],
+  [/^You can only ask your own students to retake a lesson\.$/, 'يمكنك طلب الإعادة من طلاب صفّك فقط.'],
+  [/^A retake is already set/, 'طُلبت الإعادة بالفعل – لم يبدأ الطالب المحاولة الجديدة بعد.'],
+  [/^This student has not started this lesson yet\.$/, 'لم يبدأ هذا الطالب هذا الدرس بعد.'],
   [/^Only @.+ accounts can use this site\.$/, 'هذا الموقع متاح لحسابات المدرسة (@aisa.sch.ae) فقط.']
 ];
 function errT(t){
@@ -400,6 +417,15 @@ var AR = {
   'Move {name} to': 'انقل {name} إلى',
   'Choose class…': 'اختر الشعبة…',
   'Move': 'نقل',
+  'Retake': 'إعادة',
+  'Rushed': 'متسرّع',
+  'Rushed: finished in {n} min': 'متسرّع: أنهى في {n} دقيقة',
+  'Rushed {l}: {p}% in {m} min': 'تسرّع في {l}: {p}% في {m} دقيقة',
+  'Retake set by {who}': 'طُلبت الإعادة من {who}',
+  'Retake {n}': 'الإعادة {n}',
+  'first attempt {p}% in {m} min': 'المحاولة الأولى {p}% في {m} دقيقة',
+  'rushed: under {m} min and under {p}%': 'متسرّع: أقل من {m} دقيقة وأقل من {p}%',
+  'Ask {name} to redo {l}? Their answers are cleared and their next attempt is recorded as new. You will still see the first attempt.': 'هل تطلب من {name} إعادة {l}؟ تُمحى إجاباته وتُسجَّل محاولته التالية كمحاولة جديدة. ستبقى المحاولة الأولى ظاهرة لك.',
   'Show all of {section}': 'عرض كل طلاب {section}',
   'Show all students in my sections': 'عرض كل الطلاب في شعبي',
   'not your class': 'ليس في صفّك',
@@ -581,7 +607,8 @@ function multiGrade(){ var g = {}; FACTS.students.forEach(function(s){ if (s.gra
 function statusOf(s, l, R, taught){
   var r = R[s.email + '|' + l.id], max = r ? sumMax(r) : 0;
   var d = l.course === 'main' && inSchedule(s.section) ? AICAL.lessonDate(s.section, l.week) : null;
-  if (r && l.activities && r.done >= l.activities) return { st: 'done', r: r, pct: pct(r.score, max), date: d };
+  if (r && l.activities && r.done >= l.activities) { var p = pct(r.score, max);
+    return { st: 'done', r: r, pct: p, date: d, rushed: p < RUSH_PCT && activeSecs(r) < RUSH_MIN * 60 }; }
   if (r) return { st: 'doing', r: r, pct: pct(r.score, max), date: d };
   if (l.course !== 'main') return { st: 'sched' };
   return { st: l.week <= taught ? 'todo' : 'later', date: d };
@@ -598,6 +625,7 @@ function rowFor(s, R){
   var last = earlier[earlier.length - 1] || null;
   return { s: s, st: st, by: by, cur: cur, curL: main.filter(function(l){ return l.week === cur; })[0] || null, taughtL: taughtL,
     fin: taughtL.filter(function(l){ return by[l.id].st === 'done'; }).length, last: last,
+    rushed: lessons.filter(function(l){ return by[l.id].rushed; }),
     nudge: !!last && by[last.id].st !== 'done', behind: taughtL.filter(function(l){ return by[l.id].st !== 'done'; }).length };
 }
 /* the lesson shown in the table: each class's lesson this week, or the one picked */
@@ -777,6 +805,17 @@ function lessonCell(row){
   if (l === 'na') return '<span class="ls later">' + esc(T('n/a')) + '</span>';
   if (!l) return '<span class="ls later">' + esc(T('Week {n}', { n: row.cur })) + '</span><span class="sm">' + esc(T('Lesson page not on the site yet')) + '</span>';
   var x = row.by[l.id] || statusOf(row.s, l, RES, row.st.taught);
+  var other = row.rushed.filter(function(o){ return o.id !== l.id; })[0];
+  return lessonCellMain(row, l, x, wk) + retakeNote(row.s, l, x) + (other ? '<span class="rush sm">⚡ ' + esc(T('Rushed {l}: {p}% in {m} min', { l: lessonShort(other), p: row.by[other.id].pct, m: mins(activeSecs(row.by[other.id].r)) })) + '</span>' + retakeBtn(row.s, other) : '');
+}
+function retakeBtn(s, l){ return '<button type="button" class="rtk" data-rtk="' + esc(s.email + '|' + l.id) + '" data-name="' + esc(s.name) + '" data-les="' + esc(lessonShort(l)) + '">↻ ' + esc(T('Retake')) + '</button>'; }
+function retakeNote(s, l, x){
+  var k = retakeOf(s.email, l.id); if (!k) return '';
+  var p = k.prev, was = p && p.max ? T('first attempt {p}% in {m} min', { p: pct(p.score, p.max), m: mins(p.seconds) }) : '';
+  return '<span class="sm rnote">↻ ' + esc((x.st === 'todo' || !x.r ? T('Retake set by {who}', { who: String(k.by || '').split('@')[0] }) : T('Retake {n}', { n: k.n })) + (was ? ' · ' + was : '')) + '</span>';
+}
+function lessonCellMain(row, l, x, wk){
+  if (x.st === 'done' && x.rushed) return '<span class="ls rushed"><i></i>' + x.pct + '%</span><span class="sm rush">⚡ ' + esc(wk + T('Rushed: finished in {n} min', { n: mins(activeSecs(x.r)) })) + '</span>' + retakeBtn(row.s, l);
   if (x.st === 'done') return '<span class="ls done"><i></i>' + x.pct + '%</span><span class="sm">' + esc(wk + T('Finished · {n} min', { n: mins(x.r.seconds) })) + '</span>';
   if (x.st === 'doing') return '<span class="ls doing"><i></i>' + x.pct + '%</span><span class="sm">' + esc(wk + T('{d} of {a} activities', { d: x.r.done, a: l.activities })) + '</span>';
   if (x.st === 'todo') return '<span class="ls todo"><i></i>' + esc(T('Not started')) + '</span><span class="sm">' + esc(wk + (x.date ? T('taught {d}', { d: fd(x.date) }) : '')) + '</span>';
@@ -805,12 +844,13 @@ function drawTable(){
   var stOf = function(r){ var l = colLesson(r); return l && l !== 'na' ? (r.by[l.id] || {}).st : null; };
   var what = colL ? lessonShort(colL) : T('this week\'s lesson');
   $('#chips').innerHTML = [['all', T('All'), all.length], ['nudge', T('Need a nudge'), all.filter(function(r){ return r.nudge; }).length],
-    ['todo', T('Not started {l}', { l: what }), all.filter(function(r){ return stOf(r) === 'todo'; }).length], ['done', T('Finished {l}', { l: what }), all.filter(function(r){ return stOf(r) === 'done'; }).length]]
+    ['todo', T('Not started {l}', { l: what }), all.filter(function(r){ return stOf(r) === 'todo'; }).length], ['done', T('Finished {l}', { l: what }), all.filter(function(r){ return stOf(r) === 'done'; }).length], ['rushed', '⚡ ' + T('Rushed'), all.filter(function(r){ return r.rushed.length; }).length]]
     .map(function(c){ return '<button type="button" data-f="' + c[0] + '" aria-pressed="' + (UI.filter === c[0]) + '">' + esc(c[1]) + '<i>' + c[2] + '</i></button>'; }).join('');
   var rows = all.filter(function(r){ return !UI.q || r.s.name.toLowerCase().indexOf(UI.q) >= 0 || r.s.email.indexOf(UI.q) >= 0; });
   if (UI.filter === 'nudge') rows = rows.filter(function(r){ return r.nudge; });
   if (UI.filter === 'todo') rows = rows.filter(function(r){ return stOf(r) === 'todo'; });
   if (UI.filter === 'done') rows = rows.filter(function(r){ return stOf(r) === 'done'; });
+  if (UI.filter === 'rushed') rows = rows.filter(function(r){ return r.rushed.length; });
   var key = function(r){ var l = colLesson(r), x = l && l !== 'na' ? r.by[l.id] : null; return !x ? 102 : x.pct != null ? x.pct : (x.st === 'todo' ? -1 : 101); };
   rows.sort(function(a, b){ return UI.sort === 'low' ? key(a) - key(b) || a.s.name.localeCompare(b.s.name)
     : UI.sort === 'behind' ? b.behind - a.behind || a.s.name.localeCompare(b.s.name) : numSort(a.s.section, b.s.section) || a.s.name.localeCompare(b.s.name); });
@@ -822,17 +862,24 @@ function drawTable(){
     '<tr><th class="name" rowspan="2">' + esc(T('Student')) + '</th><th rowspan="2">' + head + '</th><th rowspan="2">' + esc(T('Lessons so far')) + '<small>' + esc(T('finished, oldest → newest')) + '</small></th><th class="grp" colspan="4">' + esc(T('Strand tier')) + '</th></tr>' +
     '<tr>' + STRAND_ORDER.map(function(c){ return '<th class="str">' + c + '<small>' + esc(strandShort(c)) + '</small></th>'; }).join('') + '</tr></thead><tbody>' +
     (rows.map(function(r){ var s = r.s;
-      return '<tr><td class="name"><button type="button" class="stu" data-e="' + esc(s.email) + '" title="' + esc(T('See {name}\'s dashboard', { name: s.name })) + '">' + esc(s.name) + '</button>' + ((F.section ? '' : secName(s.section)) + (clsOf(s) && splitSecs().length ? (F.section ? '' : ' · ') + clsOf(s) : '') ? '<small>' + esc((F.section ? '' : secName(s.section)) + (clsOf(s) && splitSecs().length ? (F.section ? '' : ' · ') + clsOf(s) : '')) + (s.mine === false ? ' · ' + esc(T('not your class')) : '') + '</small>' : '') + '</td>' +
+      return '<tr' + (r.rushed.length ? ' class="rushrow"' : '') + '><td class="name"><button type="button" class="stu" data-e="' + esc(s.email) + '" title="' + esc(T('See {name}\'s dashboard', { name: s.name })) + '">' + esc(s.name) + '</button>' + ((F.section ? '' : secName(s.section)) + (clsOf(s) && splitSecs().length ? (F.section ? '' : ' · ') + clsOf(s) : '') ? '<small>' + esc((F.section ? '' : secName(s.section)) + (clsOf(s) && splitSecs().length ? (F.section ? '' : ' · ') + clsOf(s) : '')) + (s.mine === false ? ' · ' + esc(T('not your class')) : '') + '</small>' : '') + '</td>' +
         '<td class="les" data-l="' + esc(colL ? lessonShort(colL) : T('This week')) + '">' + lessonCell(r) + '</td><td class="sofar" data-l="' + esc(T('Lessons so far')) + '">' + sofarCell(r) + '</td>' +
         STRAND_ORDER.map(function(c){ return '<td class="str" data-l="' + c + '">' + tierCell(r, c) + '</td>'; }).join('') + '</tr>'; }).join('') ||
       '<tr><td colspan="7" class="empty" style="padding:18px">' + esc(T('No students match.')) + '</td></tr>') + '</tbody></table></div>';
   var pill = function(cls, txt){ return '<span class="ls ' + cls + '" style="padding:0 8px 0 6px"><i></i>' + esc(txt) + '</span>'; };
   $('#tlegend').innerHTML = '<span>' + pill('done', '78%') + ' ' + esc(T('finished')) + '</span><span>' + pill('doing', '59%') + ' ' + esc(T('in progress')) + '</span><span>' + pill('todo', T('Not started')) + ' ' + esc(T('after it was taught')) + '</span>' +
-    '<span>' + esc(T('% = first-try score')) + '</span><span style="margin-inline-start:auto">' + esc(T('Tiers:')) + '</span>' + TKEYS.map(function(k){ return '<span><i class="t' + (k || 'N') + '"></i>' + esc(TIER_SHORT[k]) + '</span>'; }).join('');
+    '<span>' + esc(T('% = first-try score')) + '</span><span>' + pill('rushed', '31%') + ' ' + esc(T('rushed: under {m} min and under {p}%', { m: RUSH_MIN, p: RUSH_PCT })) + '</span><span style="margin-inline-start:auto">' + esc(T('Tiers:')) + '</span>' + TKEYS.map(function(k){ return '<span><i class="t' + (k || 'N') + '"></i>' + esc(TIER_SHORT[k]) + '</span>'; }).join('');
   var rid = F.lesson;
   if (!rid) { var ids = {}; all.forEach(function(r){ if (r.curL) ids[r.curL.id] = 1; }); var ks = Object.keys(ids); if (ks.length === 1) rid = ks[0]; }
   $('#reteach').innerHTML = rid && FACTS.res.some(function(r){ return r.lessonId === rid; }) ? activityChart(FACTS, rid) : '';
   document.querySelectorAll('#tbl .stu').forEach(function(b){ b.onclick = function(){ viewAs(b.getAttribute('data-e')); }; });
+  document.querySelectorAll('#tbl [data-rtk]').forEach(function(b){ b.onclick = function(){
+    var k = b.getAttribute('data-rtk').split('|'), nm = b.getAttribute('data-name'), ls = b.getAttribute('data-les');
+    if (!confirm(T('Ask {name} to redo {l}? Their answers are cleared and their next attempt is recorded as new. You will still see the first attempt.', { name: nm, l: ls }))) return;
+    b.disabled = true;
+    if (window.google && google.script && google.script.run)
+      google.script.run.withSuccessHandler(function(){ load(); }).withFailureHandler(function(e){ b.disabled = false; alert(errT(e.message || String(e))); }).setRetake(k[0], k[1], '');
+  }; });
   wireTips();
 }
 

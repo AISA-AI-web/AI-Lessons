@@ -267,6 +267,40 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   sh.Roster.push(['bbaki@aisa.sch.ae', '', 'teacher', 'Boys 8', 8, '', '', '']);
   E.as('bbaki@aisa.sch.ae'); ok(E.call('getDashboard').students.every(s => s.mine), 'owners see everyone as theirs');
 }
+/* retakes: a teacher asks a student to redo a lesson; the new attempt is recorded afresh (fresh environment) */
+{
+  const E = makeEnv(), sh = E.sheets;
+  E.as('bbaki@aisa.sch.ae'); E.call('setup');
+  sh.Roster.push(['t1@aisa.sch.ae', 'Teacher One', 'teacher', 'Boys 8', 8, 'sis', '8B1', ''], ['t2@aisa.sch.ae', 'Teacher Two', 'teacher', 'Boys 8', 8, 'sis', '8B2', ''],
+    ['801@aisa.sch.ae', 'Ali A', 'student', 'Boys 8', 8, 'sis', '8B1', ''], ['803@aisa.sch.ae', 'Fahad F', 'student', 'Boys 8', 8, 'sis', '8B2', '']);
+  const L = 'grade-8/main-w2-l1', meta = { title: 'T', activities: 2, maxPoints: 8 };
+  const RD = Date; let clock = new RD('2026-10-07T09:00:00').getTime();
+  E.ctx.Date = class extends RD { constructor(...a) { a.length ? super(...a) : super(clock); } static now() { return clock; } };
+  const tick = (m = 1) => { clock += m * 60000; };
+  E.as('801@aisa.sch.ae');
+  E.call('recordScores', L, meta, [{ id: 'a', title: 'A', part: 'Core', score: 1, max: 4 }, { id: 'b', title: 'B', part: 'Core', score: 0, max: 4 }]);
+  E.call('recordTime', L, 240); tick();
+  E.as('t1@aisa.sch.ae');
+  throws(() => E.call('setRetake', '803@aisa.sch.ae', L, ''), /your own students/, 'no retake for another teacher\'s student');
+  throws(() => E.call('setRetake', '801@aisa.sch.ae', 'grade-8/main-w3-l1', ''), /not started this lesson/, 'no retake for a lesson not started');
+  ok(E.call('setRetake', '801@aisa.sch.ae', L, 'rushed').retake, 'a teacher sets a retake for their own student');
+  throws(() => E.call('setRetake', '801@aisa.sch.ae', L, ''), /already set/, 'no second retake before the student starts again');
+  let d = E.call('getDashboard'), rk = d.retakes['801@aisa.sch.ae|' + L];
+  ok(rk && rk.n === 1 && rk.prev.score === 1 && rk.prev.max === 8 && rk.prev.seconds === 240, 'the dashboard keeps the first attempt for comparison');
+  ok(!d.results.some(r => r.email === '801@aisa.sch.ae' && r.lessonId === L), 'the lesson shows as not started again');
+  E.as('801@aisa.sch.ae'); tick();
+  let st = E.call('getLessonState', L);
+  ok(st.attempt === 1 && Object.keys(st.done).length === 0, 'the lesson page sees the retake and no first tries yet');
+  ok(!E.call('getMyProgress').lessons[L], 'the student\'s own progress starts again');
+  E.call('recordScores', L, meta, [{ id: 'a', title: 'A', part: 'Core', score: 4, max: 4 }, { id: 'b', title: 'B', part: 'Core', score: 3, max: 4 }]);
+  E.call('recordScores', L, meta, [{ id: 'a', title: 'A', part: 'Core', score: 0, max: 4 }]);
+  E.call('recordTime', L, 300);
+  E.as('t1@aisa.sch.ae'); d = E.call('getDashboard');
+  const r = d.results.find(x => x.email === '801@aisa.sch.ae' && x.lessonId === L);
+  ok(r && r.score === 7 && r.done === 2 && r.seconds === 300, 'the new attempt\'s first tries and time count');
+  ok(E.call('setRetake', '801@aisa.sch.ae', L, '').attempt === 3 && sh.Retakes.length === 3, 'a second retake is possible once they have worked again');
+  E.as('801@aisa.sch.ae'); throws(() => E.call('setRetake', '801@aisa.sch.ae', L, ''), /Only teachers/, 'students cannot set retakes');
+}
 /* Google's HtmlService cuts script lines at '//', even inside a quoted web address, so no
    inline script the app serves may contain '://' (build.py writes it as ':\/\/'). */
 {
