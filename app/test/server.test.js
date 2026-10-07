@@ -408,6 +408,9 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   const m = E.ctx.MailApp.sent[0];
   ok(r.sent === 1 && m.to === 'isl@aisa.sch.ae' && m.cc === 'head1@aisa.sch.ae,head2@aisa.sch.ae,head3@aisa.sch.ae' && m.replyTo === 'bbaki@aisa.sch.ae', 'one email to the teacher, with the CC list');
   ok(/mandatory/.test(m.body) && /support/.test(m.body) && /Boys 6 – Week 2/.test(m.body) && /0 of 5 students/.test(m.body), 'the email names the lesson, says the lessons are mandatory and offers support');
+  ok(m.name === 'AISA AI Web' && m.htmlBody.indexOf('?p=' + encodeURIComponent(L2.id)) > 0 && /classroom\.google\.com\/share/.test(m.htmlBody), 'from AISA AI Web, with a link to the lesson and a Classroom share link');
+  ok(/إلزامية/.test(m.htmlBody) && /dir="rtl"/.test(m.htmlBody) && /\| تذكير/.test(m.subject), 'English and Arabic side by side');
+  ok(/<iframe|<html/.test(E.call('getNotTaught').preview), 'the owner gets a preview of the email');
   nt = E.call('getNotTaught');
   ok(nt.items.find(x => x.lessonId === L2.id).reminded && nt.cc === 'head1, head2, head3', 'the reminder is logged and the CC list remembered');
   E.as('isl@aisa.sch.ae'); throws(() => E.call('sendReminders', ['x'], ''), /owners/, 'teachers cannot send reminders');

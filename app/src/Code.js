@@ -715,8 +715,10 @@ function notTaught_() {
 function reminderCc_() { return PropertiesService.getScriptProperties().getProperty('REMINDER_CC') || ''; }
 /** Owners: lessons whose date has passed but which a teacher's students have not started. */
 function getNotTaught() {
-  requireOwner_();
-  return { items: notTaught_(), cc: reminderCc_(), share: Math.round(NOT_TAUGHT_SHARE * 100), min: NOT_TAUGHT_MIN,
+  var me = requireOwner_();
+  var items = notTaught_(), ex = items.filter(function (x) { return x.email; });
+  var sample = ex.length ? ex.filter(function (x) { return x.email === ex[0].email; }) : [{ teacher: 'Teacher Name', section: 'Boys 6', week: 2, title: 'Example lesson', lessonId: 'grade-6/main-w2-l1', date: AICAL.iso(new Date()), subject: 'Islamic', period: 6, time: '1:10–2:00', students: 18, started: 2 }];
+  return { items: items, preview: reminderEmail_(sample[0].teacher, sample, me.name).html, cc: reminderCc_(), share: Math.round(NOT_TAUGHT_SHARE * 100), min: NOT_TAUGHT_MIN,
     from: PropertiesService.getScriptProperties().getProperty('NOT_TAUGHT_FROM') || NOT_TAUGHT_FROM };
 }
 /** Owners: one email per teacher listing their untaught lessons, with the CC list (remembered). */
@@ -730,19 +732,10 @@ function sendReminders(keys, cc) {
   var items = notTaught_().filter(function (x) { return x.email && want[x.email + '|' + x.lessonId + '|' + x.section]; });
   if (!items.length) throw new Error('Those lessons no longer need a reminder.');
   var byT = {}; items.forEach(function (x) { (byT[x.email] = byT[x.email] || []).push(x); });
-  var url = ScriptApp.getService().getUrl() + '?p=calendar', sent = 0, now = new Date(), log = [];
-  var fd = function (iso) { var p = iso.split('-'); return Utilities.formatDate(new Date(+p[0], +p[1] - 1, +p[2]), 'Asia/Dubai', 'EEE d MMM'); };
+  var sent = 0, now = new Date(), log = [];
   Object.keys(byT).forEach(function (em) {
-    var L = byT[em], first = String(L[0].teacher).split(' ')[0], many = L.length > 1;
-    var lines = L.map(function (x) { return x.section + ' – Week ' + x.week + ': ' + x.title + ' (planned for ' + fd(x.date) + (x.subject ? ', ' + x.subject + ' period' + (x.period ? ' P' + x.period : '') : '') + ') – ' + x.started + ' of ' + x.students + ' students have started it'; });
-    var subject = many ? 'AI Lessons – lessons not yet taught' : 'AI Lessons – ' + L[0].section + ' Week ' + L[0].week + ' not yet taught';
-    var text = 'Dear ' + first + ',\n\nOur AI Lessons records show that ' + (many ? 'these AI Literacy lessons' : 'this AI Literacy lesson') + ' planned for your class' + (many ? 'es have' : ' has') + ' not been taught yet:\n\n' +
-      lines.map(function (x) { return '• ' + x; }).join('\n') + '\n\nA reminder that the AI lessons are mandatory for every class. Please teach ' + (many ? 'them' : 'it') + ' as soon as you can – students can still complete ' + (many ? 'them' : 'it') + ' in the app: ' + url +
-      '\n\nIf you need any support – with the lesson, the app or finding the time – please reply to this email and we will help.\n\nThank you,\n' + me.name;
-    var html = '<p>Dear ' + esc_(first) + ',</p><p>Our AI Lessons records show that ' + (many ? 'these AI Literacy lessons' : 'this AI Literacy lesson') + ' planned for your class' + (many ? 'es have' : ' has') + ' not been taught yet:</p><ul>' +
-      lines.map(function (x) { return '<li>' + esc_(x) + '</li>'; }).join('') + '</ul><p>A reminder that <b>the AI lessons are mandatory</b> for every class. Please teach ' + (many ? 'them' : 'it') + ' as soon as you can – students can still complete ' + (many ? 'them' : 'it') +
-      ' in the <a href="' + url + '">AI Lessons app</a>.</p><p>If you need any support – with the lesson, the app or finding the time – please reply to this email and we will help.</p><p>Thank you,<br>' + esc_(me.name) + '</p>';
-    try { MailApp.sendEmail({ to: em, cc: ccl.join(','), replyTo: me.email, name: 'AISA AI Lessons', subject: subject, body: text, htmlBody: html }); }
+    var L = byT[em], m = reminderEmail_(L[0].teacher, L, me.name);
+    try { MailApp.sendEmail({ to: em, cc: ccl.join(','), replyTo: me.email, name: 'AISA AI Web', subject: m.subject, body: m.text, htmlBody: m.html }); }
     catch (err) {
       if (/permission|authori/i.test(String(err && err.message))) throw new Error('The app is not allowed to send email yet. In the script editor, choose authorizeEmail, click Run and then Allow – then send again.' + (sent ? ' (' + sent + ' email(s) were already sent.)' : ''));
       throw err;
@@ -752,6 +745,68 @@ function sendReminders(keys, cc) {
   });
   append_('Reminders', log);
   return { sent: sent, lessons: items.length };
+}
+/* ---------- the reminder email: AISA-branded, English and Arabic side by side, a link to each lesson ---------- */
+var EMAIL_ASSETS = 'https://aisa-ai-web.github.io/AI-Lessons/assets/';    // public images (logo, Classroom icon)
+var DAY_EN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], MON_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+var DAY_AR = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'], MON_AR = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+function reminderEmail_(teacher, L, owner) {
+  var base = ScriptApp.getService().getUrl(), first = String(teacher || '').split(' ')[0] || 'colleague', many = L.length > 1;
+  var link = function (p) { return base + '?p=' + encodeURIComponent(p); };
+  var dEn = function (iso) { var p = iso.split('-'), d = new Date(+p[0], +p[1] - 1, +p[2]); return DAY_EN[d.getDay()] + ' ' + d.getDate() + ' ' + MON_EN[d.getMonth()]; };
+  var dAr = function (iso) { var p = iso.split('-'), d = new Date(+p[0], +p[1] - 1, +p[2]); return DAY_AR[d.getDay()] + ' ' + d.getDate() + ' ' + MON_AR[d.getMonth()]; };
+  var secAr = function (s) { return String(s).replace(/^Boys/, 'بنين').replace(/^Girls/, 'بنات'); };
+  var subAr = { Arabic: 'حصة اللغة العربية', Islamic: 'حصة التربية الإسلامية' };
+  var share = function (x) { return 'https://classroom.google.com/share?url=' + encodeURIComponent(link(x.lessonId)) + '&title=' + encodeURIComponent('AI Literacy – ' + x.section + ', Week ' + x.week + ': ' + x.title); };
+  var subject = (many ? 'AI Lessons – ' + L.length + ' lessons not yet taught' : 'AI Lessons – ' + L[0].section + ' Week ' + L[0].week + ' not yet taught') + ' | تذكير بدروس الذكاء الاصطناعي';
+  var F = 'font-family:\'DM Sans\',Arial,Helvetica,sans-serif;', FA = 'font-family:Tahoma,\'Segoe UI\',Arial,sans-serif;';
+  var btn = function (href, label, solid, ar) { return '<a href="' + href + '" style="display:inline-block;margin:4px 0;padding:9px 16px;border-radius:999px;font-weight:700;font-size:13px;text-decoration:none;' + (ar ? FA : F) +
+    (solid ? 'background:#21076C;color:#ffffff;border:2px solid #21076C;' : 'background:#ffffff;color:#137333;border:2px solid #F4B400;') + '">' + label + '</a>'; };
+  var card = function (x, ar) {
+    var when = ar ? dAr(x.date) + (x.subject ? ' · ' + (subAr[x.subject] || x.subject) : '') + (x.period ? ' · الحصة ' + x.period : '') + (x.time ? ' · <span dir="ltr">' + esc_(x.time) + '</span>' : '')
+      : dEn(x.date) + (x.subject ? ' · ' + x.subject + ' period' : '') + (x.period ? ' P' + x.period : '') + (x.time ? ' · ' + esc_(x.time) : '');
+    return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 12px;border-collapse:separate;background:#FBF8EE;border:1px solid #EADFBF;border-' + (ar ? 'right' : 'left') + ':5px solid #D8B664;border-radius:10px"><tr><td style="padding:12px 14px;' + (ar ? FA + 'text-align:right' : F) + '" dir="' + (ar ? 'rtl' : 'ltr') + '">' +
+      '<div style="font-size:12px;font-weight:700;letter-spacing:.04em;color:#7a5200;text-transform:uppercase">' + (ar ? esc_(secAr(x.section)) + ' · الأسبوع ' + x.week : esc_(x.section) + ' · Week ' + x.week) + '</div>' +
+      '<div style="font-size:15px;font-weight:700;color:#21076C;margin:3px 0 4px" dir="ltr">' + esc_(x.title) + '</div>' +
+      '<div style="font-size:13px;color:#555555;margin:0 0 6px">' + (ar ? 'المخطط له: ' : 'Planned for ') + when + '</div>' +
+      '<div style="font-size:13px;color:#b3261e;font-weight:700;margin:0 0 8px">' + (ar ? 'بدأه ' + x.started + ' من ' + x.students + ' طلاب' : x.started + ' of ' + x.students + ' students have started it') + '</div>' +
+      btn(link(x.lessonId), ar ? 'افتح الدرس ←' : 'Open the lesson →', true, ar) + ' &nbsp;' + btn(share(x), (ar ? 'شارك في Google Classroom' : 'Share to Google Classroom'), false, ar) + '</td></tr></table>';
+  };
+  var en = '<p style="margin:0 0 12px;font-size:15px;color:#1A1A1A">Dear ' + esc_(first) + ',</p>' +
+    '<p style="margin:0 0 14px;font-size:14px;line-height:1.55;color:#1A1A1A">Our AI Lessons records show that ' + (many ? 'these AI Literacy lessons' : 'this AI Literacy lesson') + ' planned for your class' + (many ? 'es have' : ' has') + ' not been taught yet:</p>' +
+    L.map(function (x) { return card(x, false); }).join('') +
+    '<p style="margin:14px 0;padding:10px 12px;background:#F2EFFA;border-radius:8px;font-size:14px;line-height:1.5;color:#21076C"><b>The AI lessons are mandatory</b> for every class. Please teach ' + (many ? 'them' : 'it') + ' as soon as you can – students can still complete ' + (many ? 'them' : 'it') + ' in the app.</p>' +
+    '<p style="margin:0 0 14px;font-size:14px;line-height:1.55;color:#1A1A1A">If you need any support – with the lesson, the app or finding the time – just <b>reply to this email</b> and we will help.</p>' +
+    '<p style="margin:0;font-size:14px;color:#1A1A1A">Thank you,<br><b>' + esc_(owner) + '</b></p>';
+  var ar = '<p style="margin:0 0 12px;font-size:15px;color:#1A1A1A">الأستاذ/ة ' + esc_(first) + ' المحترم/ة،</p>' +
+    '<p style="margin:0 0 14px;font-size:14px;line-height:1.7;color:#1A1A1A">تُظهر سجلات تطبيق دروس الذكاء الاصطناعي أن ' + (many ? 'الدروس التالية المخطط لها لصفوفك لم تُدرَّس بعد:' : 'الدرس التالي المخطط له لصفّك لم يُدرَّس بعد:') + '</p>' +
+    L.map(function (x) { return card(x, true); }).join('') +
+    '<p style="margin:14px 0;padding:10px 12px;background:#F2EFFA;border-radius:8px;font-size:14px;line-height:1.7;color:#21076C"><b>دروس الذكاء الاصطناعي إلزامية</b> لجميع الصفوف. يُرجى ' + (many ? 'تدريسها' : 'تدريسه') + ' في أقرب وقت ممكن – ولا يزال بإمكان الطلاب ' + (many ? 'إكمالها' : 'إكماله') + ' في التطبيق.</p>' +
+    '<p style="margin:0 0 14px;font-size:14px;line-height:1.7;color:#1A1A1A">إذا احتجت إلى أي دعم – في الدرس أو التطبيق أو إيجاد الوقت – <b>ردّ على هذه الرسالة</b> وسنساعدك.</p>' +
+    '<p style="margin:0;font-size:14px;color:#1A1A1A">مع الشكر،<br><b>' + esc_(owner) + '</b></p>';
+  var html = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<style>@media only screen and (max-width:620px){.col{display:block!important;width:100%!important;border:0!important;box-sizing:border-box}.colar{border-top:1px solid #E6E1F5!important}}</style></head>' +
+    '<body style="margin:0;padding:0;background:#F2EFFA">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F2EFFA"><tr><td align="center" style="padding:24px 10px">' +
+    '<table role="presentation" width="680" cellpadding="0" cellspacing="0" style="width:100%;max-width:680px;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #E6E1F5">' +
+    '<tr><td style="background:#21076C;padding:18px 22px;border-bottom:4px solid #D8B664"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>' +
+      '<td style="vertical-align:middle"><img src="' + EMAIL_ASSETS + 'aisa/lockup-white.png" alt="American International School in Abu Dhabi" height="40" style="display:block;height:40px;width:auto;border:0"></td>' +
+      '<td align="right" style="vertical-align:middle;' + F + 'color:#ffffff;font-size:13px;font-weight:700">AI Lessons<br><span style="' + FA + 'color:#D8B664;font-weight:400">دروس الذكاء الاصطناعي</span></td></tr></table></td></tr>' +
+    '<tr><td style="padding:18px 22px 6px;' + F + '"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>' +
+      '<td style="' + F + 'font-size:20px;font-weight:700;color:#21076C">⏰ Lesson reminder</td><td align="right" dir="rtl" style="' + FA + 'font-size:20px;font-weight:700;color:#21076C">⏰ تذكير بالدروس</td></tr></table></td></tr>' +
+    '<tr><td style="padding:6px 10px 10px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>' +
+      '<td class="col" width="50%" valign="top" dir="ltr" style="width:50%;padding:12px 14px;border-right:1px solid #E6E1F5;' + F + '">' + en + '</td>' +
+      '<td class="col colar" width="50%" valign="top" dir="rtl" style="width:50%;padding:12px 14px;text-align:right;' + FA + '">' + ar + '</td></tr></table></td></tr>' +
+    '<tr><td style="padding:14px 22px;background:#FBFAFE;border-top:1px solid #E6E1F5;text-align:center;' + F + 'font-size:13px">' +
+      '<a href="' + link('calendar') + '" style="color:#21076C;font-weight:700;text-decoration:none">📅 Teaching calendar · تقويم التدريس</a> &nbsp;&nbsp;|&nbsp;&nbsp; ' +
+      '<a href="' + link('dashboard') + '" style="color:#21076C;font-weight:700;text-decoration:none">📊 Dashboard · لوحة المتابعة</a></td></tr>' +
+    '<tr><td style="background:#21076C;padding:14px 22px;text-align:center;' + F + 'color:#ffffff;font-size:12px">American International School in Abu Dhabi · AI Literacy, Grades 6–12<br><span style="' + FA + 'color:#D8B664">المدرسة الأمريكية الدولية في أبوظبي · الثقافة في الذكاء الاصطناعي</span></td></tr>' +
+    '</table></td></tr></table></body></html>';
+  var text = 'Dear ' + first + ',\n\nOur AI Lessons records show that ' + (many ? 'these AI Literacy lessons' : 'this AI Literacy lesson') + ' planned for your class' + (many ? 'es have' : ' has') + ' not been taught yet:\n\n' +
+    L.map(function (x) { return '• ' + x.section + ' – Week ' + x.week + ': ' + x.title + ' (planned for ' + dEn(x.date) + (x.subject ? ', ' + x.subject + ' period' + (x.period ? ' P' + x.period : '') : '') + ') – ' + x.started + ' of ' + x.students + ' students have started it\n  Open the lesson: ' + link(x.lessonId); }).join('\n') +
+    '\n\nThe AI lessons are mandatory for every class. Please teach ' + (many ? 'them' : 'it') + ' as soon as you can – students can still complete ' + (many ? 'them' : 'it') + ' in the app.\n\nIf you need any support – with the lesson, the app or finding the time – just reply to this email and we will help.\n\nThank you,\n' + owner +
+    '\n\n— — —\n\nالأستاذ/ة ' + first + ' المحترم/ة،\nتُظهر سجلات تطبيق دروس الذكاء الاصطناعي أن ' + (many ? 'الدروس المخطط لها لصفوفك لم تُدرَّس بعد.' : 'الدرس المخطط له لصفّك لم يُدرَّس بعد.') + ' دروس الذكاء الاصطناعي إلزامية لجميع الصفوف. إذا احتجت إلى أي دعم، ردّ على هذه الرسالة.\n\nTeaching calendar: ' + link('calendar');
+  return { subject: subject, html: html, text: text };
 }
 function esc_(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
