@@ -451,6 +451,21 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   ok(E.call('getManager').teachers.find(t => t.email === 'isl@aisa.sch.ae').absences === 1, 'absences marked are counted per teacher');
   ok(E.call('getManager').cells['Boys 6|grade-6/main-w3-l1'].st.charAt(2) === 'A', 'an absent student shows as A');
 }
+/* teachers' codes the students do not carry (e.g. the export lists students only under their Arabic group):
+   those teachers teach the whole section instead of nobody (fresh environment) */
+{
+  const E = makeEnv(), sh = E.sheets;
+  E.as('bbaki@aisa.sch.ae'); E.call('setup');
+  sh.Roster.push(['isl@aisa.sch.ae', 'Islam One', 'teacher', 'Boys 7', 7, 'sis', 'BO7ISA1', ''], ['ara@aisa.sch.ae', 'Arabic One', 'teacher', 'Boys 7', 7, 'sis', 'BO7AFL1', ''],
+    ['ara2@aisa.sch.ae', 'Arabic Two', 'teacher', 'Boys 7', 7, 'sis', 'BO7AFL2', '']);
+  ['701', '702', '703'].forEach((id, i) => sh.Roster.push([id + '@aisa.sch.ae', 'S' + id, 'student', 'Boys 7', 7, 'sis', i < 2 ? 'BO7AFL1' : 'BO7AFL2', '']));
+  const RD = Date; E.ctx.Date = class extends RD { constructor(...a) { a.length ? super(...a) : super('2026-10-12T09:00:00'); } static now() { return new RD('2026-10-12T09:00:00').getTime(); } };
+  const nt = E.call('getNotTaught').items.filter(x => x.lessonId === 'grade-7/main-w2-l1');
+  ok(nt.length === 1 && nt[0].email === 'isl@aisa.sch.ae' && nt[0].students === 3, 'an Islamic period is matched to the Islamic teacher even when students carry only Arabic codes');
+  const sec = E.call('getManager').sections.find(x => x.name === 'Boys 7');
+  ok(sec.groups['Islamic|isl@aisa.sch.ae'].length === 3 && sec.groups['Arabic|ara@aisa.sch.ae'].join() === '0,1' && sec.groups['Arabic|ara2@aisa.sch.ae'].join() === '2', 'Arabic groups still split by code');
+  E.as('isl@aisa.sch.ae'); ok(E.call('getDashboard').students.every(x => x.mine), 'the Islamic teacher sees the whole section as theirs');
+}
 /* Google's HtmlService cuts script lines at '//', even inside a quoted web address, so no
    inline script the app serves may contain '://' (build.py writes it as ':\/\/'). */
 {

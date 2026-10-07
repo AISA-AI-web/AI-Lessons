@@ -183,6 +183,11 @@ function visibleSections_(me) {
 function splitClasses_(s) { return String(s || '').split(/\s*,\s*/).filter(String); }
 /* Only imported rows (school export 'sis' or a Classroom course) carry class names; rows added by hand
    (blank courseId) hold a note such as "AI timetable – teacher" or "Added by …", which is not a class. */
+function sectionCodes_(stu) {
+  var out = {};
+  Object.keys(stu).forEach(function (e) { var s = stu[e]; (s.classes || []).forEach(function (c) { (out[s.section] = out[s.section] || {})[c] = 1; }); });
+  return out;
+}
 function classesOf_(r) { return String(r.courseId || '').trim() ? splitClasses_(r.courseName) : []; }
 /* The subject of a class: the school's codes put it after the grade (BO6ISA1 = Boys 6 Islamic,
    GI9AFL2 = Girls 9 Arabic first language, BO6ASL = Arabic second language, BO6TUT = tutor group);
@@ -210,8 +215,12 @@ function classMap_() {
       cls.forEach(function (c) { if (l.indexOf(c) < 0) l.push(c); });
     }
   });
+  var codes = sectionCodes_(stu);                     // codes the school export gives students (before teachers' moves)
   Object.keys(moved).forEach(function (e) { if (stu[e] && stu[e].section === moved[e].section) stu[e].classes = [moved[e].cls]; });
-  return { students: stu, teachers: tea };
+  /* A teacher's codes only separate students when the students carry them too: if the school export lists
+     students under other codes (e.g. only their Arabic group), the teacher teaches the whole section. */
+  Object.keys(tea).forEach(function (e) { Object.keys(tea[e]).forEach(function (sec) { tea[e][sec] = tea[e][sec].filter(function (c) { return (codes[sec] || {})[c]; }); }); });
+  return { students: stu, teachers: tea, codes: codes };
 }
 /** section -> [{name, email, classes, subjects}] for every teacher on the class lists. */
 function teachersBySection_() {
@@ -222,8 +231,10 @@ function teachersBySection_() {
     if (!t) { t = idx[k] = { name: cleanText_(r.name, 80) || e.split('@')[0], email: e, classes: [], subjects: [] }; (out[r.section] = out[r.section] || []).push(t); }
     var cls = classesOf_(r);
     cls.forEach(function (c) { if (t.classes.indexOf(c) < 0) t.classes.push(c); });
-    (cls.length ? cls : [String(r.courseName || '')]).forEach(function (c) { var s = subjectOf_(c); if (s && t.subjects.indexOf(s) < 0) t.subjects.push(s); });
+    (cls.length ? cls : splitClasses_(r.courseName).concat([String(r.courseName || '')])).forEach(function (c) { var s = subjectOf_(c); if (s && t.subjects.indexOf(s) < 0) t.subjects.push(s); });
   });
+  var codes = classMap_().codes;
+  Object.keys(out).forEach(function (sec) { out[sec].forEach(function (t) { t.classes = t.classes.filter(function (c) { return (codes[sec] || {})[c]; }); }); });
   return out;
 }
 /** For the owners' and SLT's calendar: names and subjects only (no class codes). */
