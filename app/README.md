@@ -355,6 +355,30 @@ student data is ever stored in this GitHub repository**, which is public.
 | Confirmations | Teachers confirming a class list is correct |
 | Retries | A student's later score on an activity they corrected (for "answers fixed"); first tries are never changed |
 
+## Speed: reading less, and a cache that knows when data changed
+
+- **One read per sheet per request.** Each click reads every sheet it needs once.
+- **Results are reused until something changes.** The dashboard, the manager hub,
+  the Not taught list and the awards are kept in Google's script cache (on Google's
+  servers – nothing is stored in the browser) under a *data version*. Every write
+  made through the app (an answer, time on a lesson, an absence, a retake, a tier,
+  a class move, a roster import, a reminder, a nomination, a staff visit) starts a
+  new version, so a cached result is only used while nothing has changed. In the
+  evening, when no one is working, clicks are answered straight from the cache;
+  during lessons, students' answers keep the data changing, so it is worked out
+  fresh each time (as before, but with fewer reads).
+- **Time counts too.** The key includes the date and how many of today's AI
+  periods have ended, so the Not taught list updates as each period ends.
+- **Each person's view is kept apart.** A dashboard is cached under the person's
+  email, role and sections, which are always checked fresh – a role change is never
+  answered from an older view.
+- **Edits made by hand in the spreadsheet** (Roles, Roster) are not seen by the data
+  version. Click **↻ Refresh** (dashboard footer or manager hub) to work everything
+  out again; otherwise they show within 6 hours (Google's cache limit) or after the
+  next change made through the app.
+- In the page, the manager hub keeps its data while you switch tabs; marking an
+  absence or a tier updates the dashboard in place.
+
 ## One-time setup (about 30 minutes)
 
 You need a computer with Node.js installed, signed in to Chrome with an

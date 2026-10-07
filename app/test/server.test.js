@@ -498,6 +498,39 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   const st = E.call('getDashboard').students, S = id => st.find(x => x.email === id + '@aisa.sch.ae');
   ok(S('1103').tsub.Arabic.join() === 'Tutor G' && S('1104').tsub.Islamic.join() === 'Tutor G' && S('1101').tsub.Arabic.join() === 'Arabic One', "each student's period teacher follows their classes");
 }
+/* speed: results are reused from the cache while nothing has changed, and never after a change made through
+   the app, a period ending, or a forced refresh; each person's view is kept apart (fresh environment) */
+{
+  const E = makeEnv(), sh = E.sheets;
+  E.as('bbaki@aisa.sch.ae'); E.call('setup');
+  sh.Roster.push(['isl@aisa.sch.ae', 'Islam One', 'teacher', 'Boys 7', 7, 'sis', 'BO7ISA1', ''],
+    ['701@aisa.sch.ae', 'S701', 'student', 'Boys 7', 7, 'sis', 'BO7ISA1', ''], ['702@aisa.sch.ae', 'S702', 'student', 'Boys 7', 7, 'sis', 'BO7ISA1', '']);
+  let now = '2026-10-07T09:30:00';
+  const RD = Date; E.ctx.Date = class extends RD { constructor(...a) { a.length ? super(...a) : super(now); } static now() { return new RD(now).getTime(); } };
+  E.realCache = true;
+  let reads = 0; const orig = E.ctx.SpreadsheetApp.openById;
+  E.ctx.SpreadsheetApp.openById = (...a) => { const ss = orig(...a); return Object.assign({}, ss, { getSheetByName: n => { const o = ss.getSheetByName(n); if (o && n === 'Scores') reads++; return o; } }); };
+  const d1 = E.call('getDashboard'); reads = 0;
+  sh.Absences.push([new RD(), '701@aisa.sch.ae', 'grade-7/main-w2-l1', 'bbaki@aisa.sch.ae', 'absent', '']);   // a hand edit
+  const d2 = E.call('getDashboard');
+  ok(reads === 0 && !Object.keys(d2.absences).length && d2.generatedAt === d1.generatedAt, 'nothing changed through the app: the dashboard comes from the cache without reading the scores');
+  ok(Object.keys(E.call('getDashboard', true).absences).length === 1, '↻ Refresh (force) works it out again and shows hand edits');
+  E.call('setAbsent', '702@aisa.sch.ae', 'grade-7/main-w2-l1', true, '');
+  ok(Object.keys(E.call('getDashboard').absences).length === 2, 'a change made through the app shows straight away');
+  E.as('isl@aisa.sch.ae'); const t = E.call('getDashboard');
+  ok(t.scope === 'sections' && t.me.email === 'isl@aisa.sch.ae', "a teacher never gets the owner's cached view");
+  E.as('bbaki@aisa.sch.ae');
+  const m1 = E.call('getManager'), m2 = E.call('getManager');
+  ok(m1.now === m2.now && m2.canRemind === true && m2.sections.length === m1.sections.length, 'the manager view is reused while nothing changes');
+  E.call('setAbsent', '701@aisa.sch.ae', 'grade-7/main-w2-l1', false, '');
+  const st = m => m.cells['Boys 7|grade-7/main-w2-l1'].st;
+  ok(st(m1) === 'AA' && st(E.call('getManager')) === 'NA', 'and worked out again after a change');
+  const before = E.call('getNotTaught').items.filter(x => x.lessonId === 'grade-7/main-w2-l2' || x.lessonId === 'grade-7/main-w2-l1').length;
+  now = '2026-10-07T09:45:00';
+  const after = E.call('getNotTaught').items.filter(x => x.lessonId === 'grade-7/main-w2-l1').length;
+  ok(before === 0 && after === 1, 'a period ending updates the not-taught list without any change to the data');
+  ok(Object.keys(E.ctx.__cache).some(k => /^r:/.test(k)), 'results are kept in the server cache');
+}
 /* Google's HtmlService cuts script lines at '//', even inside a quoted web address, so no
    inline script the app serves may contain '://' (build.py writes it as ':\/\/'). */
 {

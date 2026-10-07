@@ -1,6 +1,8 @@
 /* Minimal in-memory stand-ins for the Google services Code.js uses, so the
    server logic can be tested locally. Not deployed. */
-const fs = require('fs'), path = require('path'), vm = require('vm');
+const fs = require('fs'), path = require('path'), vm = require('vm'), zlib = require('zlib'), crypto = require('crypto');
+const toBuf = d => Buffer.isBuffer(d) ? d : Array.isArray(d) ? Buffer.from(d.map(x => x & 255)) : Buffer.from(String(d), 'utf8');
+const blob = d => { const b = toBuf(d); return { _b: b, getBytes: () => [...b].map(x => x > 127 ? x - 256 : x), getDataAsString: () => b.toString('utf8') }; };
 const BUILD = path.join(__dirname, '..', 'build');
 
 function makeEnv() {
@@ -34,8 +36,11 @@ function makeEnv() {
     },
     Classroom: null,
     MailApp: { sent: [], sendEmail(o) { this.sent.push(o); } },
-    Utilities: { formatDate: (d) => d.toDateString() },
-    CacheService: { getScriptCache: () => ({ get: k => ctx.__cache[k] || null, put: (k, v) => { ctx.__cache[k] = v; } }) },
+    Utilities: { formatDate: (d) => d.toDateString(), newBlob: d => blob(d), gzip: b => blob(zlib.gzipSync(b._b)), ungzip: b => blob(zlib.gunzipSync(b._b)),
+      base64Encode: x => toBuf(x).toString('base64'), base64EncodeWebSafe: x => toBuf(x).toString('base64url'), base64Decode: s => [...Buffer.from(s, 'base64')].map(x => x > 127 ? x - 256 : x),
+      computeDigest: (a, s) => [...crypto.createHash('sha256').update(String(s)).digest()].map(x => x > 127 ? x - 256 : x), DigestAlgorithm: { SHA_256: 'sha256' } },
+    CacheService: { getScriptCache: () => ({ get: k => ctx.__cache[k] || null, put: (k, v) => { ctx.__cache[k] = v; },
+      getAll: ks => { const o = {}; ks.forEach(k => { if (k in ctx.__cache) o[k] = ctx.__cache[k]; }); return o; }, putAll: o => { Object.assign(ctx.__cache, o); } }) },
     __cache: {}
   };
   vm.createContext(ctx);
@@ -43,6 +48,10 @@ function makeEnv() {
   vm.runInContext(fs.readFileSync(path.join(BUILD, 'Framework.js'), 'utf8').replace('var FRAMEWORK', 'FRAMEWORK'), ctx);
   vm.runInContext(fs.readFileSync(path.join(BUILD, 'SchoolCalendar.js'), 'utf8').replace('var AICAL', 'AICAL'), ctx);
   vm.runInContext(fs.readFileSync(path.join(BUILD, 'Code.js'), 'utf8'), ctx);
-  return { ctx, sheets, as: e => { activeEmail = e; }, call: (fn, ...a) => ctx[fn](...a) };
+  /* Tests edit the sheets directly, as a person editing the spreadsheet by hand would – which the app's data
+     version cannot see – so cached results are dropped before each call unless a test checks the cache itself. */
+  const env = { ctx, sheets, realCache: false, as: e => { activeEmail = e; },
+    call: (fn, ...a) => { if (!env.realCache) Object.keys(ctx.__cache).forEach(k => { if (/^(r:|dv$)/.test(k)) delete ctx.__cache[k]; }); return ctx[fn](...a); } };
+  return env;
 }
 module.exports = { makeEnv };

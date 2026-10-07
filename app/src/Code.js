@@ -155,6 +155,7 @@ function currentUser_() {
 }
 
 function requireUser_() {
+  MEMO_ = {};                                       // each request reads the sheets afresh (once)
   var me = currentUser_();
   if (!me) throw new Error('Only @' + DOMAIN + ' accounts can use this site.');
   return me;
@@ -437,7 +438,7 @@ function registerLesson_(lessonId, meta) {
              num_(meta.activities, 0, 200), num_(meta.maxPoints, 0, 2000), new Date()];
   var sh = sheet_('Lessons'), data = sh.getDataRange().getValues();
   for (var i = 1; i < data.length; i++) if (data[i][0] === lessonId) {
-    if (data[i][6] !== row[6] || data[i][4] !== row[4]) sh.getRange(i + 1, 1, 1, row.length).setValues([row]);
+    if (data[i][6] !== row[6] || data[i][4] !== row[4]) { sh.getRange(i + 1, 1, 1, row.length).setValues([row]); dirty_('Lessons'); }
     return;
   }
   append_('Lessons', [row]);
@@ -459,7 +460,7 @@ function checkEmail_(e) {
 function studentRows_(email) { return rows_('Roster').filter(function (r) { return r.role === 'student' && lc_(r.email) === email; }); }
 function logChange_(type, email, name, from, to, by, status, note, fromClass, toClass) {
   var sh = sheet_('Changes'), head = sh.getDataRange().getValues()[0] || [];
-  if (head.length < TABS.Changes.length) sh.getRange(1, 1, 1, TABS.Changes.length).setValues([TABS.Changes]);   // sheets made before class moves
+  if (head.length < TABS.Changes.length) { sh.getRange(1, 1, 1, TABS.Changes.length).setValues([TABS.Changes]); dirty_('Changes'); }   // sheets made before class moves
   append_('Changes', [[new Date(), type, email, cleanText_(name, 80), from || '', to || '', by, status, '', '', cleanText_(note, 200), fromClass || '', toClass || '']]);
   return sheet_('Changes').getLastRow();
 }
@@ -471,6 +472,7 @@ function moveStudent_(email, to, name) {
     v[i][is] = to; v[i][ig] = gradeOf_(to); moved++;
     sh.getRange(i + 1, 1, 1, v[i].length).setValues([v[i].map(safe_)]);
   }
+  if (moved) dirty_('Roster');
   if (!moved) append_('Roster', [[email, cleanText_(name, 80) || email.split('@')[0], 'student', to, gradeOf_(to), '', 'Added from the dashboard', new Date()]]);
 }
 function withLock_(fn) { var l = LockService.getScriptLock(); l.waitLock(20000); try { return fn(); } finally { l.releaseLock(); } }
@@ -545,7 +547,7 @@ function decideRequest(id, approve, note) {
     if (approve) moveStudent_(email, r.toSection, r.name);
     r.status = approve ? 'approved' : 'declined'; r.decidedBy = me.email; r.decidedAt = new Date();
     if (note) r.note = cleanText_((r.note ? r.note + ' · ' : '') + note, 200);
-    sh.getRange(row, 1, 1, h.length).setValues([h.map(function (k) { return safe_(r[k]); })]);
+    sh.getRange(row, 1, 1, h.length).setValues([h.map(function (k) { return safe_(r[k]); })]); dirty_('Changes');
     return { decided: r.status };
   });
 }
@@ -565,7 +567,7 @@ function rosterInfo_(me, vis) {
   if (me.role === 'student') return null;
   var all = vis === null, mine = function (s) { return all || vis.indexOf(s) >= 0; };
   var current = {}; rows_('Roster').forEach(function (r) { if (r.role === 'student' && !current[lc_(r.email)]) current[lc_(r.email)] = r.section; });
-  var ch = sheet_('Changes').getDataRange().getValues(), h = ch[0], requests = [], recent = [], lastChange = {};
+  var ch = rawRows_('Changes') || [[]], h = ch[0] || TABS.Changes, requests = [], recent = [], lastChange = {};
   ch.slice(1).forEach(function (row, i) {
     var c = {}; h.forEach(function (k, j) { c[k] = row[j]; });
     if (!c.type) return;
@@ -624,10 +626,13 @@ function lessonCells_() {
   return { per: per, prev: prev, rt: rt };
 }
 
-/** Role-filtered progress data for the dashboard. */
-function getDashboard() {
-  var me = requireUser_();
-  var vis = visibleSections_(me);
+/** Role-filtered progress data for the dashboard (force: skip the cache). The key holds the person, their
+    role and their sections, so a role change is never answered from someone else's view. */
+function getDashboard(force) {
+  var me = requireUser_(), vis = visibleSections_(me);
+  return cached_('dash:' + me.email + ':' + me.role + ':' + (vis === null ? '*' : vis.join(',')), force === true, function () { return dashboard_(me, vis); });
+}
+function dashboard_(me, vis) {
   var roster = rows_('Roster').filter(function (r) { return r.role === 'student'; });
   var students = {};
   roster.forEach(function (r) {
@@ -832,9 +837,14 @@ function notTaught_(M) {
 
 /** Owners and SLT: the manager view – every class's AI periods with each teacher's students, and what
     each teacher has done in the app. Counting happens in the page from the per-student letters. */
-function getManager() {
+function getManager(force) {
   var me = requireUser_();
   if (me.role !== 'owner' && me.role !== 'slt') throw new Error('Only owners and SLT can open the manager view.');
+  var out = cached_('mgr', force === true, manager_);
+  out.canRemind = me.role === 'owner';
+  return out;
+}
+function manager_() {
   var M = periodModel_(), T = {};
   M.sections.forEach(function (sec) {
     sec.teachers.forEach(function (t) {
@@ -853,13 +863,13 @@ function getManager() {
   var conf = {};
   rows_('Confirmations').forEach(function (r) { conf[r.section] = { by: lc_(r.teacher), at: iso(r.timestamp), students: Number(r.students) || 0 }; var o = T[lc_(r.teacher)]; if (o) o.confirmed = later(o.confirmed, r.timestamp); });
   return { from: M.from, now: M.now, sections: M.sections, cells: M.cells, teachers: Object.keys(T).map(function (k) { return T[k]; }).sort(function (a, b) { return a.name.localeCompare(b.name); }),
-    confirmations: conf, share: Math.round(NOT_TAUGHT_SHARE * 100), min: NOT_TAUGHT_MIN, rush: { min: RUSH_MIN, pct: RUSH_PCT }, canRemind: me.role === 'owner' };
+    confirmations: conf, share: Math.round(NOT_TAUGHT_SHARE * 100), min: NOT_TAUGHT_MIN, rush: { min: RUSH_MIN, pct: RUSH_PCT } };
 }
 function reminderCc_() { return PropertiesService.getScriptProperties().getProperty('REMINDER_CC') || ''; }
 /** Owners: lessons whose date has passed but which a teacher's students have not started. */
-function getNotTaught() {
+function getNotTaught(force) {
   var me = requireOwner_();
-  var items = notTaught_(), ex = items.filter(function (x) { return x.email; });
+  var items = cached_('nt', force === true, function () { return notTaught_(); }), ex = items.filter(function (x) { return x.email; });
   var sample = ex.length ? ex.filter(function (x) { return x.email === ex[0].email; }) : [{ teacher: 'Teacher Name', section: 'Boys 6', week: 2, title: 'Example lesson', lessonId: 'grade-6/main-w2-l1', date: AICAL.iso(new Date()), subject: 'Islamic', period: 6, time: '1:10–2:00', students: 18, started: 2 }];
   return { items: items, preview: reminderEmail_(sample[0].teacher, sample, me.name).html, cc: reminderCc_(), share: Math.round(NOT_TAUGHT_SHARE * 100), min: NOT_TAUGHT_MIN,
     from: PropertiesService.getScriptProperties().getProperty('NOT_TAUGHT_FROM') || NOT_TAUGHT_FROM };
@@ -1012,8 +1022,12 @@ function studentScore_(o) {
 
 /** Rankings for a month, owners only. Students: at least 2 lessons finished that month, none rushed,
     and at least 75% of the lessons taught that month finished. Teachers: at least 5 students. */
-function getAwards(month) {
-  var me = requireOwner_(), M = month_(month), now = Math.min(Date.now(), M.to);
+function getAwards(month, force) {
+  var me = requireOwner_(), M = month_(month);
+  return cached_('aw:' + M.key, force === true, function () { return awards_(M); });
+}
+function awards_(M) {
+  var now = Math.min(Date.now(), M.to);
   var LC = lessonCells_(), per = LC.per, rt = LC.rt, cm = classMap_();
   var studs = {}, names = {}, teachers = {};
   rows_('Roster').forEach(function (r) {
@@ -1130,6 +1144,7 @@ function syncClassroom() {
   var rs = sheet_('Roster');
   if (rs.getLastRow() > 1) rs.getRange(2, 1, rs.getLastRow() - 1, TABS.Roster.length).clearContent();
   if (out.length) rs.getRange(2, 1, out.length, TABS.Roster.length).setValues(out.map(function (r) { return r.map(safe_); }));
+  dirty_('Roster');
   return { courses: courses.length, rosterRows: out.length - manual.length, keptManualRows: manual.length };
 }
 
@@ -1211,6 +1226,7 @@ function importRoster() {
   var all = keep.concat(out), rs = sheet_('Roster');
   if (rs.getLastRow() > 1) rs.getRange(2, 1, rs.getLastRow() - 1, TABS.Roster.length).clearContent();
   if (all.length) rs.getRange(2, 1, all.length, TABS.Roster.length).setValues(all.map(function (r) { return r.map(safe_); }));
+  dirty_('Roster');
   return { students: Object.keys(students).length, teachers: Object.keys(teachers).length, rows: out.length, keptOtherRows: keep.length, skipped: skipped, classListFixesKept: fixed };
 }
 
@@ -1237,6 +1253,7 @@ function setup() {
     sh.getRange(1, 1, 1, TABS[name].length).setValues([TABS[name]]).setFontWeight('bold');
     sh.setFrozenRows(1);
   });
+  MEMO_ = {}; dirty_('Roles');
   var first = ss.getSheetByName('Sheet1'); if (first && ss.getSheets().length > 1) ss.deleteSheet(first);
   var owner = lc_(Session.getEffectiveUser().getEmail());
   if (!rows_('Roles').some(function (r) { return lc_(r.email) === owner; })) append_('Roles', [[owner, 'owner', '', 'added by setup']]);
@@ -1255,13 +1272,71 @@ function sheet_(name) {
   if (!sh && TABS[name]) {                       // tabs added after setup() was first run
     sh = ss.insertSheet(name);
     sh.getRange(1, 1, 1, TABS[name].length).setValues([TABS[name]]).setFontWeight('bold');
-    sh.setFrozenRows(1);
+    sh.setFrozenRows(1); dirty_(name);
   }
   return sh;
 }
+/* ===================== speed: one read per sheet, and a cache that knows when data changed =====================
+   1. Within one request each sheet is read once (MEMO_); a write to a sheet drops its copy.
+   2. Results the dashboard asks for are kept in Google's script cache (on Google's servers, never in the
+      browser) under the current data version. Every write through the app starts a new version, so a cached
+      result is only reused while nothing has changed – in the evening, when no one is working, every click
+      is answered from the cache. Time also counts: the key includes how many of today's periods have ended.
+      Edits made by hand in the spreadsheet are not seen by the version: use ↻ Refresh, or wait (6 hours at most). */
+var MEMO_ = {};
+var CACHE_TTL = 21600;                             // seconds (Google's maximum: 6 hours)
+function rawRows_(name) {
+  if (MEMO_[name]) return MEMO_[name];
+  var sh = sheet_(name); if (!sh) return null;
+  return (MEMO_[name] = sh.getDataRange().getValues());
+}
+/** Call after writing to a sheet: drops this request's copy and starts a new data version. */
+function dirty_(name) {
+  delete MEMO_[name];
+  try { CacheService.getScriptCache().put('dv', String(Date.now()) + Math.random().toString(36).slice(2, 6), CACHE_TTL); } catch (e) {}
+}
+function dataVersion_() {
+  var c = CacheService.getScriptCache(), v = c.get('dv');
+  if (!v) { v = String(Date.now()) + Math.random().toString(36).slice(2, 6); c.put('dv', v, CACHE_TTL); }
+  return v;
+}
+/** Today's date and how many of today's AI periods have ended (lists like 'not taught' change when one ends). */
+function timeTick_() {
+  var now = new Date(), d = new Date(now.getFullYear(), now.getMonth(), now.getDate()), n = 0;
+  if (typeof AICAL !== 'undefined' && AICAL.SCHEDULE) {
+    var cy = AICAL.cycleOf ? AICAL.cycleOf(d) : null, day = AICAL.DAYS ? AICAL.DAYS[d.getDay()] : null;
+    AICAL.SCHEDULE.forEach(function (r) { if (r[3] === cy && r[4] === day && periodEnd_(d, r[6]) <= now) n++; });
+  }
+  return AICAL.iso(d) + '#' + n;
+}
+/** Returns fn()'s result from the cache when nothing has changed since it was worked out (force: always fresh). */
+function cached_(key, force, fn) {
+  var c = CacheService.getScriptCache(), full = 'r:' + key + '|' + dataVersion_() + '|' + timeTick_();
+  if (full.length > 200) full = 'r:' + Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, full));
+  if (!force) {
+    try {
+      var n = Number(c.get(full));
+      if (n > 0) {
+        var keys = []; for (var i = 0; i < n; i++) keys.push(full + ':' + i);
+        var got = c.getAll(keys), parts = keys.map(function (k) { return got[k]; });
+        if (parts.every(function (x) { return typeof x === 'string'; })) {
+          var bytes = Utilities.base64Decode(parts.join(''));
+          return JSON.parse(Utilities.ungzip(Utilities.newBlob(bytes, 'application/x-gzip')).getDataAsString());
+        }
+      }
+    } catch (e) {}                                 // a damaged or missing entry is simply worked out again
+  }
+  var out = fn();
+  try {
+    var z = Utilities.base64Encode(Utilities.gzip(Utilities.newBlob(JSON.stringify(out), 'application/json')).getBytes()), put = {}, size = 90000, k = 0;
+    for (var j = 0; j < z.length; j += size) put[full + ':' + (k++)] = z.slice(j, j + size);
+    if (k <= 50) { c.putAll(put, CACHE_TTL); c.put(full, String(k), CACHE_TTL); }
+  } catch (e) {}
+  return out;
+}
 function rows_(name) {
-  var sh = sheet_(name); if (!sh) return [];
-  var v = sh.getDataRange().getValues(), h = v[0] || TABS[name];
+  var v = rawRows_(name); if (!v) return [];
+  var h = v[0] || TABS[name];
   return v.slice(1).filter(function (r) { return r.join('') !== ''; }).map(function (r) {
     var o = {}; h.forEach(function (k, i) { o[k] = r[i]; }); return o;
   });
@@ -1269,6 +1344,7 @@ function rows_(name) {
 function append_(name, rows) {
   var sh = sheet_(name);
   sh.getRange(sh.getLastRow() + 1, 1, rows.length, rows[0].length).setValues(rows.map(function (r) { return r.map(safe_); }));
+  dirty_(name);
 }
 
 /* ===================== input cleaning ===================== */

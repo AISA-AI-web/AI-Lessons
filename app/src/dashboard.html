@@ -357,6 +357,8 @@ details.sec .in{padding:0 16px 14px;overflow-x:auto}
   table.stable th{position:static}
   .note{margin-bottom:0}
 }
+  .linkbtn{background:none;border:0;padding:0 2px;font:inherit;color:var(--purple,#21076C);text-decoration:underline;cursor:pointer}
+  .linkbtn:disabled{opacity:.6;cursor:default;text-decoration:none}
 </style>
 </head>
 <body>
@@ -553,7 +555,7 @@ var AR = {
   'Manager': 'لوحة الإدارة',
   'Overview': 'نظرة عامة',
   'Teachers': 'المعلمون',
-  'Refresh': 'تحديث',
+  'Refresh': 'تحديث', 'Refreshing…': 'جارٍ التحديث…',
   '← Dashboard': '← لوحة المتابعة',
   'AI periods across the school': 'حصص الذكاء الاصطناعي في المدرسة',
   'AI periods since the app started on {d} · data from {t}': 'حصص الذكاء الاصطناعي منذ بدء التطبيق في {d} · البيانات من {t}',
@@ -939,8 +941,9 @@ function draw(){
         return '<option value="' + o[0] + '"' + (UI.sort === o[0] ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select></div>' +
       '<div class="chips" id="chips"></div><div id="tbl"></div><div class="legend" id="tlegend"></div></section><div id="reteach" style="margin-top:16px"></div>' +
     '<p class="note">' + T('First-try scores are kept exactly as first checked; retries are for learning and don\'t change them. Time counts only while the lesson page is open, visible and in use (it pauses after 2 minutes without activity).') + ' ' +
-      (D.scope === 'school' ? T('Your role can see the whole school.') : splitSecs().length && !SHOWALL ? T('Only your own classes are shown – tick “Show all” to see the whole section.') : T('Only the sections you teach are shown.')) + ' ' + T('Data refreshed {d}.', { d: new Date(D.generatedAt).toLocaleString(LOC) }) + '</p>';
+      (D.scope === 'school' ? T('Your role can see the whole school.') : splitSecs().length && !SHOWALL ? T('Only your own classes are shown – tick “Show all” to see the whole section.') : T('Only the sections you teach are shown.')) + ' ' + T('Data refreshed {d}.', { d: new Date(D.generatedAt).toLocaleString(LOC) }) + ' <button type="button" class="linkbtn" id="dashRefresh">↻ ' + esc(T('Refresh')) + '</button></p>';
   $('#q').oninput = function(){ UI.q = this.value.trim().toLowerCase(); drawTable(); };
+  $('#dashRefresh').onclick = function(){ this.disabled = true; this.textContent = '↻ ' + T('Refreshing…'); load(true); };
   $('#fLes').onchange = function(){ F.lesson = this.value; if (UI.filter !== 'nudge') UI.filter = 'all'; drawTable(); };
   $('#fSort').onchange = function(){ UI.sort = this.value; drawTable(); };
   drawTop(); drawTable();
@@ -1241,7 +1244,7 @@ function drawTable(){
   document.querySelectorAll('#tbl [data-abs]').forEach(function(b){ b.onclick = function(){
     var k = b.getAttribute('data-abs'), p = k.split('|'), on = !b.getAttribute('data-on');
     b.disabled = true;
-    var done = function(){ D.absences = D.absences || {}; if (on) D.absences[k] = { by: (D.me && D.me.email) || '', at: new Date().toISOString() }; else delete D.absences[k]; refresh(p[0]); };
+    var done = function(){ hubStale(); D.absences = D.absences || {}; if (on) D.absences[k] = { by: (D.me && D.me.email) || '', at: new Date().toISOString() }; else delete D.absences[k]; refresh(p[0]); };
     if (window.google && google.script && google.script.run)
       google.script.run.withSuccessHandler(done).withFailureHandler(function(e){ b.disabled = false; alert(errT(e.message || String(e))); }).setAbsent(p[0], p[1], on, '');
     else done();
@@ -1276,6 +1279,7 @@ function setTier(email, c, t){
   var key = email + '|' + c;
   MENU.querySelectorAll('button').forEach(function(x){ x.disabled = true; });
   var done = function(){
+    hubStale();
     if (t) D.judgements[key] = { tier: t, by: CFG.email, at: new Date().toISOString(), note: '' }; else delete D.judgements[key];
     MENU.hidden = true; refresh(email);
     var again = document.querySelector('[data-j="' + key.replace(/"/g, '') + '"]'); if (again) again.focus({ preventScroll: true });
@@ -1298,10 +1302,13 @@ document.addEventListener('keydown', function(e){ if (e.key === 'Escape') { MENU
 var VIEW = null;   // staff: the student whose view is being previewed
 var MANAGE = false; // staff: the class-lists screen
 
-function load(){
+/* The server keeps results until the data changes (see Code.js), so loading again is quick when nothing
+   has changed. force: work everything out afresh (↻ Refresh – e.g. after editing the spreadsheet by hand). */
+function load(force){
+  hubStale();
   if (window.google && google.script && google.script.run)
     google.script.run.withSuccessHandler(function(d){ D = d; addCatalog(); render(); })
-      .withFailureHandler(function(e){ $('#app').innerHTML = '<div class="err">' + esc(e.message || e) + '</div>'; }).getDashboard();
+      .withFailureHandler(function(e){ $('#app').innerHTML = '<div class="err">' + esc(e.message || e) + '</div>'; }).getDashboard(force === true);
   else if (window.__MOCK) { D = window.__MOCK; addCatalog(); render(); }
 }
 
@@ -1393,7 +1400,9 @@ function wireTips(){            // one listener for every tooltip on the page (h
 /* One server call (getManager) returns each class's AI periods with one letter per student (F finished,
    R finished but rushed, S started, N not started, A absent); everything here is counted from those, so
    the overview, the teachers table, a teacher's page and the Not taught list always agree. */
-var MGR = null, MG = { data: null, prep: null, loading: false, q: '', sort: 'not', tutors: false, open: {} };
+var MGR = null, MG = { data: null, prep: null, loading: false, q: '', sort: 'not', tutors: false, open: {}, force: false };
+/** After a change on the dashboard the manager hub's copies are out of date: fetch them again when next shown. */
+function hubStale(){ MG.data = null; MG.prep = null; if (window.NT) NT.data = null; if (window.AW) AW.data = null; }
 function isoFd(iso){ var p = String(iso).split('-'); return fd(new Date(+p[0], +p[1] - 1, +p[2])); }
 function ago(iso){
   if (!iso) return T('not yet');
@@ -1414,17 +1423,18 @@ function hubBar(tab){
     hubTabs().map(function(x){ return '<button type="button" role="tab" data-hub="' + x[0] + '" aria-selected="' + (tab === x[0]) + '">' + esc(x[1]) + (x[0] === 'nottaught' && nNot ? ' <span class="badge">' + nNot + '</span>' : '') + '</button>'; }).join('') + '</div></div>';
 }
 function wireHub(){
-  document.querySelectorAll('[data-hub]').forEach(function(b){ b.onclick = function(){ MGR = { tab: b.getAttribute('data-hub') }; if (MGR.tab === 'nottaught') NT.data = null; render(); window.scrollTo(0, 0); }; });
+  document.querySelectorAll('[data-hub]').forEach(function(b){ b.onclick = function(){ MGR = { tab: b.getAttribute('data-hub') }; render(); window.scrollTo(0, 0); }; });
   if ($('#hubBack')) $('#hubBack').onclick = function(){ MGR = null; render(); window.scrollTo(0, 0); };
-  if ($('#hubRefresh')) $('#hubRefresh').onclick = function(){ MG.data = null; MG.prep = null; NT.data = null; AW.data = null; render(); };
+  if ($('#hubRefresh')) $('#hubRefresh').onclick = function(){ hubStale(); MG.force = NT.force = AW.force = true; render(); };
 }
 function managerView(){
   if (!MG.data) {
     $('#app').innerHTML = hubBar(MGR.tab) + '<div class="card"><div class="empty">' + esc(T('Gathering every class\'s AI periods…')) + '</div></div>'; wireHub();
     if (!MG.loading && window.google && google.script && google.script.run) {
       MG.loading = true;
+      var f = MG.force; MG.force = false;
       google.script.run.withSuccessHandler(function(d){ MG.loading = false; MG.data = d; mgPrep(); if (MGR) render(); })
-        .withFailureHandler(function(e){ MG.loading = false; $('#app').innerHTML = hubBar(MGR ? MGR.tab : 'overview') + '<div class="err">' + esc(errT(e.message || String(e))) + '</div>'; wireHub(); }).getManager();
+        .withFailureHandler(function(e){ MG.loading = false; $('#app').innerHTML = hubBar(MGR ? MGR.tab : 'overview') + '<div class="err">' + esc(errT(e.message || String(e))) + '</div>'; wireHub(); }).getManager(f);
     }
     return;
   }
@@ -1692,7 +1702,7 @@ function teacherView(){
     r.onclick = go; r.onkeydown = function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } }; });
 }
 /* ===================== lessons not taught: reminders to teachers (owners) ===================== */
-var NT = { data: null, sel: null, only: null };
+var NT = { data: null, sel: null, only: null, force: false };
 function notTaughtView(){
   var bar = hubBar('nottaught') + '<p class="hubnote">📭 ' + esc(T('Lessons whose period has ended but which almost none of a teacher\'s students have opened. Tick them and send the teachers a reminder.')) + '</p>';
   var back = wireHub;
@@ -1703,7 +1713,7 @@ function notTaughtView(){
         if (NT.only) { NT.only.forEach(function(k){ NT.sel[k] = 1; }); NT.only = null; }
         else d.items.forEach(function(x){ if (x.email && !x.reminded) NT.sel[x.email + '|' + x.lessonId + '|' + x.section] = 1; });
         if (MGR && MGR.tab === 'nottaught') notTaughtView(); })
-        .withFailureHandler(function(e){ $('#app').innerHTML = bar + '<div class="err">' + esc(errT(e.message || String(e))) + '</div>'; back(); }).getNotTaught();
+        .withFailureHandler(function(e){ $('#app').innerHTML = bar + '<div class="err">' + esc(errT(e.message || String(e))) + '</div>'; back(); }).getNotTaught((function(){ var f = NT.force; NT.force = false; return f; })());
     return;
   }
   var A = NT.data, key = function(x){ return x.email + '|' + x.lessonId + '|' + x.section; };
@@ -1739,7 +1749,7 @@ function notTaughtView(){
   if (LASTMSG) { msg(LASTMSG); LASTMSG = null; }
 }
 /* ===================== AI & Innovation Student / Teacher of the Month (owners) ===================== */
-var AW = { month: '', grade: '', data: null };
+var AW = { month: '', grade: '', data: null, force: false };
 function monthName(m){ var p = String(m).split('-'); return new Date(Number(p[0]), Number(p[1]) - 1, 1).toLocaleDateString(LOC, { month: 'long', year: 'numeric' }); }
 function awardTitle(type){ return type === 'teacher' ? T('AI & Innovation Teacher of the Month') : T('AI & Innovation Student of the Month'); }
 function awardBanner(){
@@ -1754,7 +1764,7 @@ function awardsView(){
     wireHub();
     if (window.google && google.script && google.script.run)
       google.script.run.withSuccessHandler(function(d){ AW.data = d; AW.month = d.month; if (MGR && MGR.tab === 'awards') awardsView(); })
-        .withFailureHandler(function(e){ $('#app').innerHTML = bar + '<div class="err">' + esc(errT(e.message || String(e))) + '</div>'; wireHub(); }).getAwards(AW.month);
+        .withFailureHandler(function(e){ $('#app').innerHTML = bar + '<div class="err">' + esc(errT(e.message || String(e))) + '</div>'; wireHub(); }).getAwards(AW.month, (function(){ var f = AW.force; AW.force = false; return f; })());
     return;
   }
   var A = AW.data, f = function(v, suf){ return v === null || v === undefined ? '–' : v + (suf || ''); }, sg = function(v){ return v === null || v === undefined ? '–' : (v > 0 ? '+' : '') + v; };
