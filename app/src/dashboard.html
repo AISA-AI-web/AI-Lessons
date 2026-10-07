@@ -63,6 +63,17 @@ details.menu .popm button:hover{background:var(--tint)}
 .s-done{background:var(--good);color:#1A1A1A}.s-doing{background:var(--warn);color:#1A1A1A}.s-todo{background:var(--crit);color:#fff}.s-later{background:var(--none);color:var(--muted)}
 .tN{background:var(--t0);color:var(--muted)}.tW{background:var(--t1);color:#1A1A1A}.tO{background:var(--t2);color:#1A1A1A}.tE{background:var(--t3);color:#fff}.tP{background:var(--t4);color:#fff}.tA{background:var(--t5);color:#fff}
 .row .num{font-weight:700;color:var(--ink);text-align:end;font-size:14.5px;font-variant-numeric:tabular-nums}
+.trendcard{margin:0 0 22px}
+.trendwrap{overflow-x:auto;margin:8px 0 0}
+svg.trend{display:block;max-width:none;overflow:visible}svg.trend .ew{font-weight:500;fill:var(--muted)}
+svg.trend .gl{stroke:var(--grid,#ECEAF2);stroke-width:1}svg.trend .gl.mid{stroke:#d8d4e6;stroke-dasharray:3 3}
+svg.trend .ax{font-size:12px;fill:var(--muted)}svg.trend .el{font-size:12.5px;font-weight:700;fill:var(--ink)}
+svg.trend .hit{fill:transparent;cursor:crosshair}svg.trend .hit:hover,svg.trend .hit:focus{fill:rgba(33,7,108,.06);outline:none}
+.fh{font-size:15px;margin:16px 0 6px;color:var(--purple)}
+ul.focus{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+ul.focus li{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.4;padding:8px 12px;border-radius:10px;background:#F7F5FC}
+ul.focus li i{font-style:normal;font-weight:800;width:18px;text-align:center;flex:none}
+ul.focus li.warn{background:#FFF4E5}ul.focus li.warn i{color:#a85b00}ul.focus li.good{background:#EAF6EA}ul.focus li.good i{color:#0a6b0a}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:12.5px;color:var(--muted);margin:12px 0 0}
 .legend i{display:inline-block;width:14px;height:12px;border-radius:3px;vertical-align:-1px;margin-inline-end:5px}
 .morelink{font:inherit;font-size:13px;font-weight:700;color:var(--purple);background:none;border:0;padding:0;margin-top:10px;text-decoration:underline}
@@ -586,7 +597,7 @@ function shell(){
 $('#langBtn').onclick = function(){ setLang(LANG === 'ar' ? 'en' : 'ar'); shell(); if (D) render(); else $('#app').innerHTML = '<div class="loading">' + T('Loading progress…') + '</div>'; };
 
 /* ===================== staff view: tiles, overview, one table with the same columns all year ===================== */
-var UI = { filter: 'all', sort: 'name', q: '', all: false, les: 'chart', str: 'chart' }, ROWS = {}, FACTS = null, RES = {};
+var UI = { filter: 'all', sort: 'name', q: '', all: false, les: 'chart', str: 'chart', trend: 'chart' }, ROWS = {}, FACTS = null, RES = {};
 /* A section can be split between teachers (classes such as 8B1, 8B2): teachers see their own students
    first and can switch to the whole section. Remembered on this device. */
 var SHOWALL = (function(){ try { return localStorage.getItem('dash-show-all') === '1'; } catch (e) { return false; } })();
@@ -709,7 +720,8 @@ function drawTop(){
   var rows = FACTS.students.map(function(s){ return ROWS[s.email]; });
   var les = F.lesson && lessonInfo(F.lesson);
   $('#ph').innerHTML = printHead(T('AI Literacy progress report'), (F.section ? secName(F.section) : (D.scope === 'school' ? T('Whole school') : T('All my classes'))) + ' · ' + (les ? lessonName(les) + ' – ' + lessonTitle(les) : T('This week\'s lesson')));
-  $('#top').innerHTML = tilesHtml(rows) + '<div class="grid2"><section class="card">' + lessonCard(rows) + '</section><section class="card">' + strandCard(rows) + '</section></div>';
+  $('#top').innerHTML = tilesHtml(rows) + '<div class="grid2"><section class="card">' + lessonCard(rows) + '</section><section class="card">' + strandCard(rows) + '</section></div>' +
+    '<section class="card trendcard">' + trendCard(FACTS.res, rows) + '</section>';
 }
 function tilesHtml(rows){
   var now = new Date(), secs = {};
@@ -757,6 +769,77 @@ function stack(parts, total, label){
   return '<div class="stack" role="img" aria-label="' + esc(label + ': ' + shown.map(function(x){ return x.n + ' ' + x.name; }).join(', ')) + '">' + shown.map(function(x){
     var w = x.n / (total || 1) * 100;
     return '<span class="seg2 ' + x.cls + '" style="width:' + w + '%" tabindex="0" data-tip="' + esc('<b>' + x.n + '</b> · ' + esc(x.name) + '<br>' + esc(label)) + '">' + (w >= 9 ? x.n : '') + '</span>'; }).join('') + '</div>';
+}
+/* ---------- progress over time: average first try per strand, teaching week by teaching week ---------- */
+/* Strand colours: one fixed hue per strand (checked for colour-blind separation); amber and teal are
+   light on white, so every line is also named at its end and the card has a table view. */
+var STRAND_COL = { CU: '#5b3fd1', SD: '#eb6834', CE: '#1baf7a', GE: '#eda100' };
+function trendData(res, rows){
+  var L = {}; (D.catalog || []).forEach(function(l){ L[l.id] = l; }); (D.lessons || []).forEach(function(l){ if (!L[l.id]) L[l.id] = l; });
+  var by = {};
+  res.forEach(function(r){ var l = L[r.lessonId]; if (!l || l.course !== 'main') return;
+    var w = by[l.week] || (by[l.week] = { all: [0, 0], CU: [0, 0], SD: [0, 0], CE: [0, 0], GE: [0, 0], fin: 0, due: 0 });
+    Object.keys(r.acts).forEach(function(k){ var a = r.acts[k], c = strandOf(r.lessonId, k, a[2], a[3]); w[c][0] += a[0]; w[c][1] += a[1]; w.all[0] += a[0]; w.all[1] += a[1]; });
+  });
+  (rows || []).forEach(function(row){ row.taughtL.forEach(function(l){ var w = by[l.week] || (by[l.week] = { all: [0, 0], CU: [0, 0], SD: [0, 0], CE: [0, 0], GE: [0, 0], fin: 0, due: 0 });
+    w.due++; if (row.by[l.id] && row.by[l.id].st === 'done') w.fin++; }); });
+  var weeks = Object.keys(by).map(Number).filter(function(w){ return by[w].all[1] || by[w].due; }).sort(function(a, b){ return a - b; });
+  var val = function(w, c){ var x = by[w][c]; return x[1] ? pct(x[0], x[1]) : null; };
+  return { weeks: weeks, val: val, fin: function(w){ return by[w].due ? pct(by[w].fin, by[w].due) : null; }, n: function(w, c){ return by[w][c][1]; } };
+}
+function trendSvg(T0){
+  /* drawn at the real pixel width of the card, so text stays 12–13px; phones scroll sideways */
+  var W = Math.max(520, Math.min(1100, ((document.getElementById('app') || document.body).clientWidth || 900) - 44)), H = 250, l = 44, r = 130, t = 14, b = 30, ws = T0.weeks, n = ws.length;
+  var x = function(i){ return n === 1 ? l + (W - l - r) / 2 : l + i * (W - l - r) / (n - 1); }, y = function(v){ return t + (100 - v) * (H - t - b) / 100; };
+  var h = '<div class="trendwrap"><svg class="trend" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(T('Average first try by strand, week by week')) + '">';
+  [0, 25, 50, 75, 100].forEach(function(v){ h += '<line x1="' + l + '" x2="' + (W - r + 8) + '" y1="' + y(v) + '" y2="' + y(v) + '" class="gl' + (v === 50 ? ' mid' : '') + '"/><text x="' + (l - 8) + '" y="' + (y(v) + 4) + '" class="ax" text-anchor="end">' + v + '%</text>'; });
+  ws.forEach(function(w, i){ h += '<text x="' + x(i) + '" y="' + (H - 8) + '" class="ax" text-anchor="middle">' + esc(T('W{n}', { n: w })) + '</text>'; });
+  var ends = [];
+  STRAND_ORDER.forEach(function(c){
+    var pts = ws.map(function(w, i){ var v = T0.val(w, c); return v === null ? null : [x(i), y(v), v]; }), seg = '', last = null;
+    pts.forEach(function(p){ if (!p) return; seg += (seg ? ' L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); last = p; });
+    if (!last) return;
+    h += '<path d="' + seg + '" fill="none" stroke="' + STRAND_COL[c] + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+    pts.forEach(function(p){ if (p) h += '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="4" fill="' + STRAND_COL[c] + '" stroke="#fff" stroke-width="2"/>'; });
+    ends.push({ c: c, y: last[1], v: last[2], x: last[0], w: ws[pts.lastIndexOf(last)] });
+  });
+  ends.sort(function(a, b){ return a.y - b.y; });                 // nudge end labels apart so they never overlap
+  for (var i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 15) ends[i].y = ends[i - 1].y + 15;
+  ends.forEach(function(e){ h += '<text x="' + (W - r + 14) + '" y="' + (e.y + 4) + '" class="el"><tspan class="sw" fill="' + STRAND_COL[e.c] + '">●</tspan> ' + e.c + ' ' + e.v + '%' + (e.w !== ws[n - 1] ? ' <tspan class="ew">(' + esc(T('W{n}', { n: e.w })) + ')</tspan>' : '') + '</text>'; });
+  ws.forEach(function(w, i){                                       // hover / focus: everything for that week
+    var tip = '<b>' + esc(T('Week {n}', { n: w })) + '</b>' + STRAND_ORDER.map(function(c){ var v = T0.val(w, c); return '<br>' + c + ' · ' + esc(strandShort(c)) + ': ' + (v === null ? '–' : v + '%'); }).join('') +
+      (T0.fin(w) !== null ? '<br>' + esc(T('Finished: {p}%', { p: T0.fin(w) })) : '');
+    var x0 = n === 1 ? l : x(i) - (i ? (x(i) - x(i - 1)) / 2 : 0), x1 = n === 1 ? W - r : x(i) + (i < n - 1 ? (x(i + 1) - x(i)) / 2 : 0);
+    h += '<rect class="hit" x="' + x0 + '" y="' + t + '" width="' + Math.max(1, x1 - x0) + '" height="' + (H - t - b) + '" tabindex="0" data-tip="' + esc(tip) + '"/>';
+  });
+  return h + '</svg></div>';
+}
+/* What to act on: the weakest strand, strands that dropped, the biggest gain, weeks few students finished. */
+function focusList(T0){
+  var ws = T0.weeks, out = [], last = ws[ws.length - 1], first = ws[0];
+  var recent = function(c){ var v = ws.slice(-2).map(function(w){ return T0.val(w, c); }).filter(function(v){ return v !== null; }); return v.length ? Math.round(v.reduce(function(a, b){ return a + b; }, 0) / v.length) : null; };
+  var cur = STRAND_ORDER.map(function(c){ return { c: c, v: recent(c) }; }).filter(function(o){ return o.v !== null; }).sort(function(a, b){ return a.v - b.v; });
+  if (cur.length && cur[0].v < 60) out.push(['⚠', 'warn', T('{c} · {s} is the weakest strand: {p}% first try in the latest lessons. Plan a short reteach.', { c: cur[0].c, s: strandShort(cur[0].c), p: cur[0].v })]);
+  if (ws.length > 1) {
+    var prev = ws[ws.length - 2];
+    STRAND_ORDER.forEach(function(c){ var a = T0.val(prev, c), b2 = T0.val(last, c);
+      if (a !== null && b2 !== null && b2 - a <= -10) out.push(['↓', 'warn', T('{c} · {s} dropped from {a}% (Week {w1}) to {b}% (Week {w2}).', { c: c, s: strandShort(c), a: a, b: b2, w1: prev, w2: last })]); });
+    var gains = STRAND_ORDER.map(function(c){ var a = T0.val(first, c), b2 = T0.val(last, c); return { c: c, d: a !== null && b2 !== null ? b2 - a : null }; }).filter(function(o){ return o.d !== null && o.d >= 5; }).sort(function(a, b){ return b.d - a.d; });
+    if (gains.length) out.push(['↑', 'good', T('{c} · {s} improved by {d} points since Week {w}.', { c: gains[0].c, s: strandShort(gains[0].c), d: gains[0].d, w: first })]);
+  }
+  ws.forEach(function(w){ var f = T0.fin(w); if (f !== null && f < 70 && w !== last) out.push(['⚠', 'warn', T('Only {p}% finished Week {w} – remind the rest (Need a nudge).', { p: f, w: w })]); });
+  if (!out.length) out.push(['✓', 'good', T('No problem areas: every strand is at 60% or above and holding steady.')]);
+  return '<ul class="focus">' + out.slice(0, 5).map(function(o){ return '<li class="' + o[1] + '"><i aria-hidden="true">' + o[0] + '</i>' + esc(o[2]) + '</li>'; }).join('') + '</ul>';
+}
+function trendCard(res, rows, mine){
+  var T0 = trendData(res, rows), body;
+  if (!T0.weeks.some(function(w){ return T0.n(w, 'all'); })) body = '<div class="empty">' + esc(T('No results yet – the chart fills in as lessons are completed.')) + '</div>';
+  else if (UI.trend === 'table') body = '<table class="mini"><thead><tr><th>' + esc(T('Week')) + '</th>' + STRAND_ORDER.map(function(c){ return '<th>' + c + '</th>'; }).join('') + '<th>' + esc(T('All')) + '</th>' + (rows ? '<th>' + esc(T('Finished')) + '</th>' : '') + '</tr></thead><tbody>' +
+    T0.weeks.map(function(w){ var f = function(v){ return v === null ? '–' : v + '%'; };
+      return '<tr><td>' + esc(T('Week {n}', { n: w })) + '</td>' + STRAND_ORDER.map(function(c){ return '<td>' + f(T0.val(w, c)) + '</td>'; }).join('') + '<td>' + f(T0.val(w, 'all')) + '</td>' + (rows ? '<td>' + f(T0.fin(w)) + '</td>' : '') + '</tr>'; }).join('') + '</tbody></table>';
+  else body = trendSvg(T0) + '<div class="legend">' + STRAND_ORDER.map(function(c){ return '<span><i style="background:' + STRAND_COL[c] + '"></i>' + c + ' · ' + esc(strandShort(c)) + '</span>'; }).join('') + '<span>' + esc(T('Hover a week for details')) + '</span></div>';
+  return '<div class="hd"><div><h2>' + esc(mine ? T('My progress over time') : T('Progress over time')) + '</h2><p class="sub">' + esc(T('Average first-try score in each strand, teaching week by teaching week.')) + '</p></div>' + viewToggle('trend') + '</div>' + body +
+    (T0.weeks.length && !mine ? '<h3 class="fh">' + esc(T('What to focus on')) + '</h3>' + focusList(T0) : '');
 }
 function viewToggle(k){
   return '<div class="mini-seg" role="group" aria-label="' + esc(T('Show as')) + '"><button type="button" data-view="' + k + '|chart" aria-pressed="' + (UI[k] === 'chart') + '">' + esc(T('Chart')) + '</button>' +
@@ -916,7 +999,7 @@ document.addEventListener('click', function(e){
   var j = e.target.closest('[data-j]'); if (j) { e.stopPropagation(); openTierMenu(j); return; }
   if (!e.target.closest('#tmenu')) MENU.hidden = true;
   var f = e.target.closest('[data-f]'); if (f && $('#tbl')) { if (f.tagName === 'A') e.preventDefault(); UI.filter = f.getAttribute('data-f'); drawTable(); if (f.tagName === 'A') $('#stuH').scrollIntoView({ behavior: 'smooth' }); return; }
-  var v = e.target.closest('[data-view]'); if (v) { var p = v.getAttribute('data-view').split('|'); UI[p[0]] = p[1]; drawTop(); return; }
+  var v = e.target.closest('[data-view]'); if (v) { var p = v.getAttribute('data-view').split('|'); UI[p[0]] = p[1]; if ($('#top')) drawTop(); else { var y = scrollY; render(); scrollTo(0, y); } return; }
   if (e.target.closest('[data-all]')) { UI.all = !UI.all; drawTop(); return; }
   var open = document.querySelector('details.menu[open]'); if (open && !e.target.closest('details.menu')) open.removeAttribute('open');
 });
@@ -1372,6 +1455,7 @@ function studentView(who){
     tile(T('First-try score'), st.firstPct === null ? '–' : st.firstPct + '%', T('across {n} activities', { n: st.acts })) +
     tile(T('Answers fixed'), st.fixed, T('wrong first time, then corrected')) +
     tile(older ? T('Milestones reached') : T('Badges earned'), st.earned.length + ' / ' + st.badges.length, older ? T('see below') : T('collect them all')) + '</div>';
+  h += '<section class="card trendcard" id="mytrend">' + trendCard(st.res, null, true) + '</section>';
   h += '<section class="card"><h2>' + T('My strands') + '</h2><p class="sub">' + T('The four parts of AI literacy for Grade {g}. Emerging is the goal for this term; Proficient is the goal for the year.', { g: esc(me.grade) }) + '</p><div class="strands">' +
     STRAND_ORDER.map(function(c){
       var o = st.strands[c], next = o.tier === 'A' ? '' : (TIER_RANK[o.tier] >= 3 ? 'A' : (TIER_RANK[o.tier] >= 2 ? 'P' : 'E'));
