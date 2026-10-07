@@ -294,7 +294,7 @@ function isMine_(me, vis, cm, email, section) {
   if (theirs.some(function (c) { return mine.indexOf(c) >= 0; })) return true;
   /* a tutor also has the students who spend Islamic or Arabic periods with them */
   return withTutorIn_(cm, section, theirs).length > 0 && mine.some(function (c) { return subjectOf_(c) === 'Tutor'; }) &&
-    tutorsFor_(teachersBySection_(), section, theirs).some(function (t) { return t.email === me.email; });
+    tutorsFor_(cm.tbs || (cm.tbs = teachersBySection_()), section, theirs).some(function (t) { return t.email === me.email; });   // read the lists once per request
 }
 
 /* ===================== retakes ===================== */
