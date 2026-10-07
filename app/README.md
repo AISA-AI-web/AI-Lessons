@@ -280,8 +280,9 @@ email listing their lessons, saying the AI lessons are mandatory and offering
 support; replies come to the owner who sent it. Sends are logged in **Reminders**.
 
 Sending email needs Google's permission once: after updating, open the script
-(`clasp open`), choose **authorizeEmail** in the function menu, click **Run** and
-**Allow**.
+(`clasp open`), choose **authorizeEmail** – the first entry in the function menu –
+click **Run** and **Allow**. (`clasp push -f` pushes without stopping to ask about the
+changed manifest; without `-f`, answer **y** to that question.)
 
 ## AI & Innovation Student and Teacher of the Month (owners)
 
@@ -409,7 +410,7 @@ You need a computer with Node.js installed, signed in to Chrome with an
 Add or change lessons in the repository as usual, then:
 ```
 python3 app/build.py
-clasp push
+clasp push -f
 clasp deploy -i AKfycbyxIhdUxnImhZOsjjFX3E0kWRcVJN2_XgwUKSkmxt-8qha9COPqqK1bdYORnjt8cbBL4w -d "Update"
 ```
 The last line makes a new version and points the existing web app deployment at

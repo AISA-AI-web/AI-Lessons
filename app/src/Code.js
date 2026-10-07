@@ -37,6 +37,10 @@ var TERM_START = '2026-09-28';           // Monday of curriculum Week 1 (two-wee
 
 /* ===================== entry point ===================== */
 
+/** ▶ RUN THIS ONCE from the script editor (pick it in the function menu next to Run / Debug), then click
+    Allow: it lets the app send the reminder emails. The log shows "Email is allowed" when it worked. */
+function authorizeEmail() { var msg = 'Email is allowed. Reminders left today: ' + MailApp.getRemainingDailyQuota(); console.log(msg); return msg; }
+
 function doGet(e) {
   var me = currentUser_();
   if (!me) return page_('<h1>Sign in with your AISA account</h1><p>This site is only available to <b>@' + DOMAIN +
@@ -749,8 +753,6 @@ function sendReminders(keys, cc) {
   append_('Reminders', log);
   return { sent: sent, lessons: items.length };
 }
-/** Run once from the script editor after updating, so the app may send the reminder emails (Google asks you to allow it). */
-function authorizeEmail() { return 'Email is allowed. Reminders left today: ' + MailApp.getRemainingDailyQuota(); }
 function esc_(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
 /* ===================== AI & Innovation Student / Teacher of the Month (owners) ===================== */
