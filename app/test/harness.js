@@ -34,7 +34,9 @@ function makeEnv() {
     },
     Classroom: null,
     MailApp: { sent: [], sendEmail(o) { this.sent.push(o); } },
-    Utilities: { formatDate: (d) => d.toDateString() }
+    Utilities: { formatDate: (d) => d.toDateString() },
+    CacheService: { getScriptCache: () => ({ get: k => ctx.__cache[k] || null, put: (k, v) => { ctx.__cache[k] = v; } }) },
+    __cache: {}
   };
   vm.createContext(ctx);
   vm.runInContext(fs.readFileSync(path.join(BUILD, 'Catalog.js'), 'utf8').replace('var CATALOG', 'CATALOG'), ctx);

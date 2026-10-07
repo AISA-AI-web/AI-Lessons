@@ -216,6 +216,72 @@ button.tchip:hover{filter:brightness(1.07)}
 .badges.plain li.got .ico{background:var(--good);box-shadow:none;color:#fff;filter:none}
 .viewbar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;background:#fff;border:1.5px solid var(--purple);border-radius:12px;padding:10px 14px;margin:14px 0}
 .viewbar div{display:flex;gap:8px;flex-wrap:wrap}
+/* ---------- Manager hub ---------- */
+.mgrbtn{border-color:var(--purple)}
+.hub{margin:18px 0 16px}
+.hubtop{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end;justify-content:space-between}
+.hubtop h1{font-size:clamp(22px,3vw,28px)}.hubtop .sub{margin:2px 0 0}
+.hubbtns{display:flex;gap:8px}
+.htabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:2px solid var(--line-2);margin:14px 0 0}
+.htabs button{font:inherit;font-weight:700;font-size:14.5px;background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:9px 14px;color:var(--muted);cursor:pointer;border-radius:8px 8px 0 0}
+.htabs button:hover{color:var(--purple);background:var(--tint)}
+.htabs button[aria-selected="true"]{color:var(--purple);border-bottom-color:var(--gold,#D8B664)}
+.htabs .badge{display:inline-block;min-width:20px;padding:0 6px;border-radius:999px;background:#b3261e;color:#fff;font-size:12px;text-align:center}
+.hubnote{margin:0 0 14px;color:var(--muted)}
+.mtiles{margin:0 0 16px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+ul.today{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px}
+.trow{display:grid;grid-template-columns:78px minmax(110px,1fr) minmax(120px,1.4fr) minmax(130px,1fr);gap:8px 12px;align-items:center;width:100%;text-align:start;font:inherit;background:#fff;border:1px solid var(--line-2);border-radius:10px;padding:8px 12px;cursor:pointer;color:var(--ink)}
+.trow:hover{border-color:var(--purple);background:var(--tint)}
+.trow .tm{font-weight:800;color:var(--purple)}.trow .tm small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.trow .cl{border-inline-start:4px solid var(--gc);padding-inline-start:8px}.trow .cl b{display:block}.trow .cl small{color:var(--muted);font-size:12px}
+.trow .who{font-size:13px;color:var(--ink)}
+.stt{display:inline-block;font-weight:700;font-size:12.5px;border-radius:999px;padding:2px 9px;white-space:nowrap}
+.stt small{display:block;font-weight:500;color:var(--muted);font-size:11.5px;white-space:normal}
+.trow .stt{white-space:normal;border-radius:10px}
+.st-taught{background:#E3F4E3;color:#0a5d0a}.st-not{background:#FBE0E0;color:#8f1d1d}.st-part{background:#FFF0D1;color:#7a4a00}.st-live{background:#EDE7FF;color:var(--purple)}
+.st-up,.st-pre,.st-none{background:#F1F0F5;color:var(--muted)}
+ul.att li{align-items:center}ul.att li span{flex:1}ul.att li .nbtn{flex:none}
+table.mx{border-collapse:separate;border-spacing:3px;width:100%;min-width:880px;font-variant-numeric:tabular-nums}
+table.mx thead th{font-size:12px;color:var(--muted);font-weight:700;padding:4px}
+table.mx tbody th{text-align:start;padding:6px 8px;border-inline-start:4px solid var(--gc);background:#fff;white-space:nowrap}
+table.mx tbody th b{display:block;font-size:14px;color:var(--purple)}table.mx tbody th small{font-size:11.5px;color:var(--muted)}
+table.mx td{padding:0}table.mx td.mxna{text-align:center;color:#c7c3d3}
+.mxc{display:block;width:100%;min-height:52px;font:inherit;border:1.5px solid transparent;border-radius:8px;padding:5px 4px;cursor:pointer;text-align:center;line-height:1.15;background:#F1F0F5;color:var(--muted)}
+.mxc b{display:block;font-size:14.5px}.mxc small{display:block;font-size:10.5px;font-weight:600;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mxc:hover{border-color:var(--purple)}.mxc.sel{border-color:var(--purple);box-shadow:0 0 0 2px var(--purple)}
+.mxc.st-up{background:#fff;border:1.5px dashed #d6d2e3}
+.mxc.f0{background:#FFF4D6;color:#7a4a00}.mxc.f1{background:#FFF4D6;color:#7a4a00}.mxc.f2{background:#DDF1DD;color:#0a5d0a}.mxc.f3{background:#B9E3B9;color:#064d06}
+.mxc.st-not{background:#F9D4D4;color:#8f1d1d}
+.mxc.st-part{box-shadow:inset 0 0 0 2px #e2a72e}
+.mxc.st-live{outline:2px solid var(--purple)}
+.lg{display:inline-block;width:14px;height:12px;border-radius:3px;vertical-align:-1px;margin-inline-end:5px}
+.lg.f3{background:#B9E3B9}.lg.f2{background:#DDF1DD}.lg.f1{background:#FFF4D6}.lg.not{background:#F9D4D4}.lg.part{background:#fff;box-shadow:inset 0 0 0 2px #e2a72e}.lg.up{background:#fff;border:1.5px dashed #d6d2e3}.lg.pre{background:#F1F0F5}
+.cdet{margin-top:16px;border:2px solid var(--purple)}
+.cdet .ctitle{margin:2px 0 4px;font-weight:700;color:var(--ink)}
+.cdet .x{border:0;background:none;font-size:24px;line-height:1;cursor:pointer;color:var(--muted);padding:2px 8px}
+.slists{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0 4px}
+.slist{border:1px solid var(--line-2);border-radius:10px;padding:8px 10px;background:#fff}
+.slist h4{margin:0 0 6px;font-size:13px;color:var(--muted)}.slist h4 span{display:inline-block;min-width:22px;text-align:center;border-radius:999px;background:var(--tint);color:var(--purple);font-size:12px;padding:0 6px}
+.slist.n h4 span{background:#FBE0E0;color:#8f1d1d}.slist.f h4 span{background:#E3F4E3;color:#0a5d0a}.slist.s h4 span{background:#FFF0D1;color:#7a4a00}
+.slist ul{list-style:none;margin:0;padding:0;font-size:13px;line-height:1.5;max-height:220px;overflow:auto}.slist small{color:var(--muted)}.slist .none{margin:0;color:var(--muted)}
+.tname{font:inherit;font-weight:700;color:var(--purple);background:none;border:0;padding:0;cursor:pointer;text-align:start;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.ttools{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin:10px 0 12px}.ttools .spacer{flex:1}
+.ttools input[type=search]{min-width:220px}
+table.tt2 td,table.tt2 th,table.tp td,table.tp th{text-align:start;vertical-align:top}
+table.tt2 tr.trow2{cursor:pointer}table.tt2 tr.trow2:hover td{background:var(--tint)}
+table.tt2 small,table.tp small{color:var(--muted);font-size:12px}table.tt2 td.nm small,table.tp td.nm small{display:block}small.blk{display:block}
+tr.hasnot td:first-child{box-shadow:inset 4px 0 0 #d03b3b}
+.mbar{display:block;height:5px;border-radius:3px;background:#ECEAF2;margin-top:4px;max-width:110px;overflow:hidden}.mbar i{display:block;height:100%;background:var(--purple);border-radius:3px}
+.chip.bad{background:#FBE0E0;color:#8f1d1d}.chip.warn{background:#FFF0D1;color:#7a4a00}
+table.tp tr.prow{cursor:pointer}table.tp tr.prow:hover td,table.tp tr.prow[aria-expanded="true"] td{background:var(--tint)}
+table.tp tr.pdet td{background:#FCFBFE;padding:4px 8px 10px;text-align:start}
+.slist,.slist ul,.slist h4{text-align:start}
+.tback{margin:0 0 10px}
+.thead2{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-start;justify-content:space-between}
+.kv{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:8px}.kv div{background:#F7F5FC;border-radius:10px;padding:8px 12px}.kv small{display:block;font-size:12px;color:var(--muted)}.kv b{font-size:16px;color:var(--purple)}
+@media (max-width:800px){.trow{grid-template-columns:64px 1fr}.trow .who,.trow .stt{grid-column:span 2}.slists{grid-template-columns:1fr 1fr}.kv{grid-template-columns:1fr 1fr}}
+@media print{.htabs,.hubbtns,.ttools,.tback{display:none!important}}
+
 .award-banner{display:flex;gap:14px;align-items:center;background:linear-gradient(100deg,#FFF6DA,#FBEFC8);border:2px solid var(--gold,#D8B664);border-radius:14px;padding:14px 18px;margin:0 0 18px}
 .award-banner .cup{font-size:34px;line-height:1}.award-banner small{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7a5200}
 .award-banner b{display:block;font-size:18px;color:var(--purple)}.award-banner span{display:block;font-size:14px;color:var(--ink)}
@@ -463,6 +529,112 @@ var AR = {
   'Move {name} to': 'انقل {name} إلى',
   'Choose class…': 'اختر الشعبة…',
   'Move': 'نقل',
+  'Day {n}': 'اليوم {n}',
+  'Period {p}': 'الحصة {p}',
+  'lessons due since {d}': 'الدروس المستحقة منذ {d}',
+  'teacher periods since {d}': 'حصص المعلمين منذ {d}',
+  'since {d}': 'منذ {d}',
+  '1 teacher period has not been taught since {d}.': 'حصة معلم واحدة لم تُدرَّس منذ {d}.',
+  '{n} teacher periods have not been taught since {d}.': '{n} حصص للمعلمين لم تُدرَّس منذ {d}.',
+  '{n} teachers have not opened the app in the last 7 days: {list}': '{n} معلمين لم يفتحوا التطبيق في آخر 7 أيام: {list}',
+  'No teacher on the class lists for: {list}': 'لا يوجد معلم في قوائم الشعب لـ: {list}',
+  'Students with no teacher on the class lists (their class code matches no teacher) – {list}': 'طلاب بلا معلم في قوائم الشعب (رمز صفّهم لا يطابق أي معلم) – {list}',
+  'Class lists not confirmed yet: {list}': 'قوائم شعب لم تُؤكَّد بعد: {list}',
+  '1 lesson was rushed in the last 7 days.': 'درس واحد أُنجز بتسرّع في آخر 7 أيام.',
+  '{n} lessons were rushed in the last 7 days.': '{n} دروس أُنجزت بتسرّع في آخر 7 أيام.',
+  'Each teacher\'s AI periods since {d}: taught or not, and how many of their own students finished. Click a teacher for every period.': 'حصص كل معلم منذ {d}: هل دُرِّست، وكم من طلابه أنهوا. انقر على معلم لعرض كل حصصه.',
+  'Newest first, with the next two weeks. Each row counts only this teacher\'s own students. Click a row for the names.': 'الأحدث أولًا، مع الأسبوعين القادمين. كل صف يحسب طلاب هذا المعلم فقط. انقر على صف لعرض الأسماء.',
+  '{f} of {n} across their periods': '{f} من {n} في كل حصصه',
+  'Remind about 1 period not taught': 'تذكير بحصة واحدة لم تُدرَّس',
+  'Remind about {n} periods not taught': 'تذكير بـ {n} حصص لم تُدرَّس',
+  'subject not known': 'المادة غير معروفة',
+  'no periods yet': 'لا حصص بعد',
+  'Manager': 'لوحة الإدارة',
+  'Overview': 'نظرة عامة',
+  'Teachers': 'المعلمون',
+  'Refresh': 'تحديث',
+  '← Dashboard': '← لوحة المتابعة',
+  'AI periods across the school': 'حصص الذكاء الاصطناعي في المدرسة',
+  'AI periods since the app started on {d} · data from {t}': 'حصص الذكاء الاصطناعي منذ بدء التطبيق في {d} · البيانات من {t}',
+  'Gathering every class\'s AI periods…': 'جارٍ جمع حصص كل الشعب…',
+  'Today': 'اليوم',
+  'Next AI periods': 'حصص الذكاء الاصطناعي القادمة',
+  'Every AI period that day, with who teaches it and how far the students got.': 'كل حصة ذكاء اصطناعي في ذلك اليوم، ومن يدرّسها، وإلى أين وصل الطلاب.',
+  'No AI periods in the next three weeks.': 'لا توجد حصص ذكاء اصطناعي في الأسابيع الثلاثة القادمة.',
+  'Needs attention': 'يحتاج إلى متابعة',
+  'Worked out from the class lists and every period since the app started.': 'مستخرج من قوائم الشعب ومن كل حصة منذ بدء التطبيق.',
+  'Nothing needs attention right now.': 'لا شيء يحتاج إلى متابعة الآن.',
+  'Send reminders': 'إرسال تذكيرات',
+  'See teachers': 'عرض المعلمين',
+  'See them': 'عرضها',
+  'Every class, every week': 'كل شعبة، كل أسبوع',
+  'How many students finished each lesson, and whether every teacher taught it. Click a cell for the teachers and the students.': 'عدد الطلاب الذين أنهوا كل درس، وهل درّسه كل معلم. انقر على خانة لعرض المعلمين والطلاب.',
+  'AI periods taught': 'حصص الذكاء الاصطناعي المنفّذة',
+  'Students finished': 'الطلاب الذين أنهوا',
+  'Teachers using the app': 'المعلمون الذين يستخدمون التطبيق',
+  'opened it in the last 7 days': 'فتحوه في آخر 7 أيام',
+  'not taught': 'لم يُدرَّس',
+  'upcoming': 'قادم',
+  'in progress': 'جارٍ الآن',
+  'before the app': 'قبل التطبيق',
+  'no students': 'لا طلاب',
+  '{n} not taught': '{n} لم تُدرَّس',
+  '{f} of {n} lessons due': '{f} من {n} دروس مستحقة',
+  '{f} of {n} finished': 'أنهى {f} من {n}',
+  '{s} of {n} started': 'بدأ {s} من {n}',
+  'started': 'بدأ',
+  '1 group not taught': 'مجموعة واحدة لم تُدرَّس',
+  '{n} groups not taught': '{n} مجموعات لم تُدرَّس',
+  'no teacher on the class lists': 'لا يوجد معلم في قوائم الشعب',
+  'No teacher on the class lists': 'لا يوجد معلم في قوائم الشعب',
+  'Started, not finished': 'بدأ ولم يُنهِ',
+  'Show these students on the dashboard': 'عرض هؤلاء الطلاب في لوحة المتابعة',
+  'Remind': 'تذكير',
+  'Status': 'الحالة',
+  'Date': 'التاريخ',
+  'Period': 'الحصة',
+  'Periods taught': 'الحصص المنفّذة',
+  'Not finished last lesson': 'لم يُنهِ الدرس الأخير',
+  'Last opened the app': 'آخر فتح للتطبيق',
+  'today': 'اليوم',
+  'yesterday': 'أمس',
+  '{n} days ago': 'منذ {n} أيام',
+  'not yet': 'ليس بعد',
+  'Find a teacher or class…': 'ابحث عن معلم أو شعبة…',
+  'Sort: most not taught': 'الترتيب: الأكثر حصصًا غير منفّذة',
+  'Sort: lowest finished': 'الترتيب: الأقل إنجازًا',
+  'Sort: longest since opened': 'الترتيب: الأطول منذ آخر فتح',
+  'Sort: name': 'الترتيب: الاسم',
+  'Show tutors ({n})': 'عرض المرشدين ({n})',
+  'tutor – no AI periods': 'مرشد – لا حصص ذكاء اصطناعي',
+  'Teachers (CSV)': 'المعلمون (CSV)',
+  'All periods (CSV)': 'كل الحصص (CSV)',
+  'No teachers match.': 'لا يوجد معلمون مطابقون.',
+  '← All teachers': '← كل المعلمين',
+  'Their students on the dashboard': 'طلابه في لوحة المتابعة',
+  'Email': 'البريد الإلكتروني',
+  'What they have done in the app': 'ما قام به في التطبيق',
+  'Every AI period': 'كل حصص الذكاء الاصطناعي',
+  'Absences marked': 'الغيابات المسجّلة',
+  'Retakes set': 'طلبات الإعادة',
+  'Tiers recorded': 'المستويات المسجّلة',
+  'Class-list changes': 'تعديلات قوائم الشعب',
+  'Class list confirmed': 'تأكيد قائمة الشعبة',
+  'Reminders received': 'التذكيرات المستلمة',
+  'Rushed lessons': 'دروس متسرّعة',
+  'their students': 'طلابه',
+  'tracked from today': 'يُتتبّع من اليوم',
+  'No AI periods yet.': 'لا توجد حصص ذكاء اصطناعي بعد.',
+  'Tutors have no AI periods.': 'ليس للمرشدين حصص ذكاء اصطناعي.',
+  '80%+ finished': 'أنهى 80% فأكثر',
+  '50–79%': '50–79%',
+  'under 50%': 'أقل من 50%',
+  'some groups not taught': 'بعض المجموعات لم تُدرَّس',
+  'Number = finished / students (absent left out)': 'الرقم = من أنهوا / الطلاب (دون الغائبين)',
+  '{n} students': '{n} طلاب',
+  '1 teacher': 'معلم واحد',
+  '{n} teachers': '{n} معلمين',
+  'No students on the class lists yet.': 'لا يوجد طلاب في قوائم الشعب بعد.',
   'All teachers': 'كل المعلمين',
   'Not taught': 'لم تُدرَّس', 'Lessons not taught': 'دروس لم تُدرَّس', 'Send reminders': 'إرسال تذكيرات', 'Planned for': 'المخطط له', 'Started': 'بدأ', 'Reminded': 'تم التذكير', 'Arabic': 'عربي', 'Islamic': 'إسلامية',
   'Absent': 'غائب', 'absent': 'غائب', 'Mark absent': 'تسجيل غياب', 'Undo absent': 'إلغاء الغياب', 'marked by {who}': 'سجّله {who}', 'marked absent by the teacher': 'سجّل المعلم غيابه',
@@ -714,8 +886,11 @@ function render(){
   if (D.scope === 'self') return studentView();
   if (VIEW) return studentView(VIEW);
   if (MANAGE && D.roster) return manageView();
-  if (AWARDS && D.canAward) return awardsView();
-  if (NOTTAUGHT && D.canAward) return notTaughtView();
+  if (MGR && D.canManage) {
+    if (MGR.tab === 'nottaught' && D.canAward) return notTaughtView();
+    if (MGR.tab === 'awards' && D.canAward) return awardsView();
+    return managerView();
+  }
   var secs = D.sections.slice().sort(numSort), reqs = D.roster ? D.roster.requests.filter(function(r){ return r.canDecide; }).length : 0;
   var allLabel = D.scope === 'school' ? T('All classes') : T('All my classes');
   var count = function(sec){ return D.students.filter(function(x){ return (!sec || x.section === sec) && shown(x); }).length; };
@@ -733,7 +908,7 @@ function render(){
   var tsel = tn.length ? '<label class="sr" for="fTeach">' + esc(T('Teacher')) + '</label><select id="fTeach"><option value="">' + esc(T('All teachers')) + '</option>' +
     tn.map(function(t){ return '<option value="' + esc(t) + '"' + (F.teacher === t ? ' selected' : '') + '>' + esc(t) + '</option>'; }).join('') + '</select>' : '';
   $('#app').innerHTML = '<div class="titlebar"><h1>' + esc(T('Dashboard')) + '</h1>' + picker + tsel + sw + '<span class="spacer"></span>' +
-    (D.canAward ? '<button type="button" class="btn small" id="ntBtn">📭 ' + esc(T('Not taught')) + '</button><button type="button" class="btn small" id="awardsBtn">🏆 ' + esc(T('Awards')) + '</button>' : '') +
+    (D.canManage ? '<button type="button" class="btn small mgrbtn" id="mgrBtn">🧭 ' + esc(T('Manager')) + '</button>' : '') +
     (D.roster ? '<button type="button" class="btn small" id="rosterBtn">👥 ' + esc(T('Class lists')) + (reqs ? '<span class="badge" title="' + esc(T('Requests')) + '">' + reqs + '</span>' : '') + '</button>' : '') +
     '<details class="menu"><summary class="btn small quiet">' + esc(T('More')) + ' ▾</summary><div class="popm">' +
       '<label for="fView">' + esc(T('Student view')) + '</label><select id="fView"><option value="">' + esc(T('See a student\'s dashboard…')) + '</option>' +
@@ -748,8 +923,7 @@ function render(){
   $('#pdfBtn').onclick = function(){ savePdf(); };
   $('#exportBtn').onclick = exportCsv;
   if ($('#rosterBtn')) $('#rosterBtn').onclick = function(){ MANAGE = true; render(); window.scrollTo(0, 0); };
-  if ($('#ntBtn')) $('#ntBtn').onclick = function(){ NOTTAUGHT = true; NT.data = null; render(); window.scrollTo(0, 0); };
-  if ($('#awardsBtn')) $('#awardsBtn').onclick = function(){ AWARDS = true; AW.data = null; render(); window.scrollTo(0, 0); };
+  if ($('#mgrBtn')) $('#mgrBtn').onclick = function(){ MGR = { tab: 'overview' }; render(); window.scrollTo(0, 0); };
   draw();
 }
 
@@ -1214,15 +1388,312 @@ function wireTips(){            // one listener for every tooltip on the page (h
   addEventListener('scroll', function(){ tip.style.display = 'none'; }, { passive: true });
 }
 
+/* ===================== Manager hub (owners and SLT): every class, every AI period, every teacher ===================== */
+/* One server call (getManager) returns each class's AI periods with one letter per student (F finished,
+   R finished but rushed, S started, N not started, A absent); everything here is counted from those, so
+   the overview, the teachers table, a teacher's page and the Not taught list always agree. */
+var MGR = null, MG = { data: null, prep: null, loading: false, q: '', sort: 'not', tutors: false, open: {} };
+function isoFd(iso){ var p = String(iso).split('-'); return fd(new Date(+p[0], +p[1] - 1, +p[2])); }
+function ago(iso){
+  if (!iso) return T('not yet');
+  var d = new Date(iso), t = new Date(); d.setHours(0, 0, 0, 0); t.setHours(0, 0, 0, 0);
+  var n = Math.round((t - d) / 864e5);
+  return n <= 0 ? T('today') : n === 1 ? T('yesterday') : T('{n} days ago', { n: n });
+}
+function hubTabs(){
+  var t = [['overview', '🧭 ' + T('Overview')], ['teachers', '👩‍🏫 ' + T('Teachers')]];
+  if (D.canAward) t.push(['nottaught', '📭 ' + T('Not taught')], ['awards', '🏆 ' + T('Awards')]);
+  return t;
+}
+function hubBar(tab){
+  var sub = MG.data ? T('AI periods since the app started on {d} · data from {t}', { d: isoFd(MG.data.from), t: new Date(MG.data.now).toLocaleTimeString(LOC, { hour: '2-digit', minute: '2-digit' }) }) : T('AI periods across the school');
+  var nNot = MG.prep ? mgTotals().notAll : 0;
+  return '<div class="hub"><div class="hubtop"><div><h1>🧭 ' + esc(T('Manager')) + '</h1><p class="sub">' + esc(sub) + '</p></div><div class="hubbtns"><button type="button" class="btn small quiet" id="hubRefresh">↻ ' + esc(T('Refresh')) + '</button>' +
+    '<button type="button" class="btn small" id="hubBack">' + esc(T('← Dashboard')) + '</button></div></div><div class="htabs" role="tablist">' +
+    hubTabs().map(function(x){ return '<button type="button" role="tab" data-hub="' + x[0] + '" aria-selected="' + (tab === x[0]) + '">' + esc(x[1]) + (x[0] === 'nottaught' && nNot ? ' <span class="badge">' + nNot + '</span>' : '') + '</button>'; }).join('') + '</div></div>';
+}
+function wireHub(){
+  document.querySelectorAll('[data-hub]').forEach(function(b){ b.onclick = function(){ MGR = { tab: b.getAttribute('data-hub') }; if (MGR.tab === 'nottaught') NT.data = null; render(); window.scrollTo(0, 0); }; });
+  if ($('#hubBack')) $('#hubBack').onclick = function(){ MGR = null; render(); window.scrollTo(0, 0); };
+  if ($('#hubRefresh')) $('#hubRefresh').onclick = function(){ MG.data = null; MG.prep = null; NT.data = null; AW.data = null; render(); };
+}
+function managerView(){
+  if (!MG.data) {
+    $('#app').innerHTML = hubBar(MGR.tab) + '<div class="card"><div class="empty">' + esc(T('Gathering every class\'s AI periods…')) + '</div></div>'; wireHub();
+    if (!MG.loading && window.google && google.script && google.script.run) {
+      MG.loading = true;
+      google.script.run.withSuccessHandler(function(d){ MG.loading = false; MG.data = d; mgPrep(); if (MGR) render(); })
+        .withFailureHandler(function(e){ MG.loading = false; $('#app').innerHTML = hubBar(MGR ? MGR.tab : 'overview') + '<div class="err">' + esc(errT(e.message || String(e))) + '</div>'; wireHub(); }).getManager();
+    }
+    return;
+  }
+  if (!MG.prep) mgPrep();
+  if (MGR.tab === 'teachers') return MGR.teacher ? teacherView() : teachersView();
+  return overviewView();
+}
+/* ---------- counting ---------- */
+function mgCount(c, idx){
+  var o = { n: 0, a: 0, s: 0, f: 0, r: 0, ps: 0, pn: 0 };
+  idx.forEach(function(i){ var x = c.st.charAt(i); if (x === 'A') { o.a++; return; } o.n++; if (x !== 'N') o.s++; if (x === 'F' || x === 'R') o.f++; if (x === 'R') o.r++; if (c.pc[i] >= 0) { o.ps += c.pc[i]; o.pn++; } });
+  o.avg = o.pn ? Math.round(o.ps / o.pn) : null; return o;
+}
+function mgTimes(c){
+  var p = c.date.split('-'), m = /^(\d{1,2}):(\d{2})/.exec(c.time || ''), h = m ? +m[1] : 0;
+  if (m && h < 7) h += 12;
+  return { start: m ? new Date(+p[0], +p[1] - 1, +p[2], h, +m[2]).getTime() : c.end - 3e6, end: c.end };
+}
+function mgState(c){ if (c.state === 'before') return 'pre'; var t = mgTimes(c), now = Date.now(); return now >= t.end ? 'due' : now >= t.start ? 'live' : 'up'; }
+function mgStatus(c, k){ if (c.cst !== 'due') return c.cst; if (!k.n) return 'none'; return k.n >= MG.data.min && k.s / k.n < MG.data.share / 100 ? 'not' : 'taught'; }
+function mgSlotGroups(sec, subject){
+  var keys = Object.keys(sec.groups), pick = keys.filter(function(k){ return k.split('|')[0] === subject; }), tn = {};
+  if (!pick.length) pick = keys.filter(function(k){ return k.split('|')[0] === ''; });
+  sec.teachers.forEach(function(t){ tn[t.email] = t.name; });
+  var out = pick.map(function(k){ var em = k.slice(k.indexOf('|') + 1); return { email: em, name: tn[em] || em, idx: sec.groups[k] }; }), cov = {};
+  out.forEach(function(g){ g.idx.forEach(function(i){ cov[i] = 1; }); });
+  var rest = sec.students.map(function(x, i){ return i; }).filter(function(i){ return !cov[i]; });
+  if (rest.length) out.push({ email: '', name: '', idx: rest });
+  return out;
+}
+function mgPrep(){
+  var A = MG.data, P = { sec: {}, cells: [], teachers: {} };
+  A.teachers.forEach(function(t){ P.teachers[t.email] = { t: t, recs: [] }; });
+  A.sections.forEach(function(sec){
+    P.sec[sec.name] = sec; sec.byWeek = {};
+    sec.lessons.forEach(function(id){
+      var c = A.cells[sec.name + '|' + id]; if (!c) return;
+      sec.byWeek[c.week] = c; c.sec = sec.name; c.key = sec.name + '|' + id; c.grade = sec.grade; c.cst = mgState(c);
+      c.groups = mgSlotGroups(sec, c.subject).map(function(g){ var k = mgCount(c, g.idx); return { email: g.email, name: g.name, idx: g.idx, k: k, status: mgStatus(c, k) }; });
+      c.all = mgCount(c, sec.students.map(function(x, i){ return i; }));
+      var real = c.groups.filter(function(g){ return g.k.n; }), nots = real.filter(function(g){ return g.status === 'not'; }).length;
+      c.status = c.cst !== 'due' ? c.cst : !c.all.n ? 'none' : nots && nots === real.length ? 'not' : nots ? 'part' : 'taught';
+      c.nots = nots;
+      P.cells.push(c);
+      c.groups.forEach(function(g){ if (g.email && P.teachers[g.email]) P.teachers[g.email].recs.push({ c: c, g: g }); });
+    });
+  });
+  Object.keys(P.teachers).forEach(function(e){
+    var o = P.teachers[e], due = o.recs.filter(function(r){ return r.c.cst === 'due'; }), S = { due: due.length, taught: 0, not: 0, n: 0, f: 0, s: 0, r: 0, ps: 0, pn: 0 };
+    due.forEach(function(r){ if (r.g.status === 'taught') S.taught++; if (r.g.status === 'not') S.not++; ['n', 'f', 's', 'r', 'ps', 'pn'].forEach(function(k){ S[k] += r.g.k[k]; }); });
+    S.avg = S.pn ? Math.round(S.ps / S.pn) : null; S.fin = S.n ? pct(S.f, S.n) : null;
+    var last = due.slice().sort(function(a, b){ return b.c.end - a.c.end; })[0]; S.last = last || null; S.lastOpen = last ? last.g.k.n - last.g.k.f : null;
+    var stu = {};
+    o.t.sections.forEach(function(sn){ var sec = P.sec[sn]; if (!sec) return; Object.keys(sec.groups).forEach(function(k){ if (k.slice(k.indexOf('|') + 1) === e && k.split('|')[0] !== 'Tutor') sec.groups[k].forEach(function(i){ stu[sn + '#' + i] = 1; }); }); });
+    S.students = Object.keys(stu).length;
+    S.tutor = o.t.subjects.length > 0 && o.t.subjects.every(function(x){ return x === 'Tutor'; });
+    o.sum = S;
+  });
+  MG.prep = P;
+}
+function mgTotals(){
+  var P = MG.prep, K = { due: 0, taught: 0, not: 0, notAll: 0, n: 0, f: 0, ps: 0, pn: 0, r: 0, teachers: 0, active: 0 };
+  P.cells.forEach(function(c){ if (c.cst !== 'due') return; K.n += c.all.n; K.f += c.all.f; K.ps += c.all.ps; K.pn += c.all.pn; K.r += c.all.r;
+    c.groups.forEach(function(g){ if (!g.k.n) return; if (g.status === 'not') K.notAll++; if (!g.email) return; K.due++; if (g.status === 'taught') K.taught++; else if (g.status === 'not') K.not++; }); });
+  var wk = Date.now() - 7 * 864e5;
+  Object.keys(P.teachers).forEach(function(e){ var o = P.teachers[e]; if (o.sum.tutor || !o.recs.length) return; K.teachers++; if (o.t.lastSeen && new Date(o.t.lastSeen).getTime() >= wk) K.active++; });
+  K.avg = K.pn ? Math.round(K.ps / K.pn) : null;
+  return K;
+}
+/* ---------- labels ---------- */
+function stLabel(c, k, status){
+  if (status === 'pre') return T('before the app');
+  if (status === 'up') return T('upcoming');
+  if (status === 'live') return '● ' + T('in progress');
+  if (status === 'none') return T('no students');
+  if (status === 'not') return '✗ ' + T('not taught');
+  if (status === 'part') return '⚠ ' + (c.nots === 1 ? T('1 group not taught') : T('{n} groups not taught', { n: c.nots }));
+  return '✓ ' + T('{s} of {n} started', { s: k.s, n: k.n });
+}
+function names(list){ return list.length ? list.map(function(t){ return esc(t); }).join(', ') : '<i>' + esc(T('no teacher on the class lists')) + '</i>'; }
+function cellTeachers(c){ return c.groups.filter(function(g){ return g.email; }).map(function(g){ return g.name; }); }
+/* ---------- Overview ---------- */
+function mgSlots(d){ if (AICAL.noSchool(d)) return []; return AICAL.slotsOn(d).filter(function(r){ return MG.prep.sec[r[0]] && MG.prep.sec[r[0]].students.length; }).sort(function(a, b){ return a[5] - b[5] || a[0].localeCompare(b[0]); }); }
+function todayCard(){
+  var d = new Date(); d.setHours(0, 0, 0, 0);
+  var slots = mgSlots(d), label = T('Today'), x = new Date(d), n = 0;
+  while (!slots.length && n++ < 21) { x = new Date(x.getFullYear(), x.getMonth(), x.getDate() + 1); slots = mgSlots(x); if (slots.length) { d = x; label = T('Next AI periods'); } }
+  var h = '<div class="hd"><div><h2>' + esc(label) + ' · ' + esc(fd(d)) + (slots.length ? ' · ' + esc(T('Day {n}', { n: AICAL.dayNumber(d) })) : '') + '</h2><p class="sub">' + esc(T('Every AI period that day, with who teaches it and how far the students got.')) + '</p></div></div>';
+  if (!slots.length) return h + '<div class="empty">' + esc(T('No AI periods in the next three weeks.')) + '</div>';
+  return h + '<ul class="today">' + slots.map(function(r){
+    var sec = MG.prep.sec[r[0]], c = sec.byWeek[AICAL.lessonOn(r[0], d)];
+    var st = c ? c.status : 'up', k = c ? c.all : { s: 0, n: sec.students.length, f: 0 };
+    return '<li><button type="button" class="trow"' + (c ? ' data-cell="' + esc(c.key) + '"' : '') + '><span class="tm">P' + r[5] + '<small dir="ltr">' + esc(String(r[6]).replace(' - ', '–')) + '</small></span>' +
+      '<span class="cl" style="--gc:var(--g' + sec.grade + ')"><b>' + esc(secName(sec.name)) + '</b><small>' + esc(T(r[2])) + (c ? ' · ' + esc(T('Week {n}', { n: c.week })) : '') + '</small></span>' +
+      '<span class="who">' + (c ? names(cellTeachers(c)) : '') + '</span><span class="stt st-' + st + '">' + esc(c ? stLabel(c, k, st) : T('upcoming')) + (c && st !== 'up' && st !== 'pre' ? '<small>' + esc(T('{f} of {n} finished', { f: k.f, n: k.n })) + '</small>' : '') + '</span></button></li>'; }).join('') + '</ul>';
+}
+function attentionCard(K){
+  var A = MG.data, P = MG.prep, items = [], wk = Date.now() - 7 * 864e5;
+  if (K.notAll) items.push(['✗', 'bad', K.notAll === 1 ? T('1 teacher period has not been taught since {d}.', { d: isoFd(A.from) }) : T('{n} teacher periods have not been taught since {d}.', { n: K.notAll, d: isoFd(A.from) }), A.canRemind ? ['nottaught', T('Send reminders')] : ['teachers', T('See teachers')]]);
+  var quiet = Object.keys(P.teachers).map(function(e){ return P.teachers[e]; }).filter(function(o){ return !o.sum.tutor && o.recs.length && !(o.t.lastSeen && new Date(o.t.lastSeen).getTime() >= wk); });
+  if (quiet.length) items.push(['⚠', 'warn', T('{n} teachers have not opened the app in the last 7 days: {list}', { n: quiet.length, list: quiet.slice(0, 6).map(function(o){ return o.t.name; }).join(', ') + (quiet.length > 6 ? ' +' + (quiet.length - 6) : '') }), ['teachers-seen', T('See teachers')]]);
+  var noT = A.sections.filter(function(sec){ return sec.students.length && !Object.keys(sec.groups).some(function(k){ return k.split('|')[0] !== 'Tutor'; }); });
+  if (noT.length) items.push(['⚠', 'warn', T('No teacher on the class lists for: {list}', { list: noT.map(function(x){ return secName(x.name); }).join(', ') })]);
+  var orphans = [];
+  A.sections.forEach(function(sec){ var keys = Object.keys(sec.groups).filter(function(k){ return k.split('|')[0] !== 'Tutor'; }); if (!keys.length) return; var cov = {};
+    keys.forEach(function(k){ sec.groups[k].forEach(function(i){ cov[i] = 1; }); }); var n = sec.students.filter(function(x, i){ return !cov[i]; }).length; if (n) orphans.push(secName(sec.name) + ': ' + n); });
+  if (orphans.length) items.push(['⚠', 'warn', T('Students with no teacher on the class lists (their class code matches no teacher) – {list}', { list: orphans.join(' · ') })]);
+  var unconf = A.sections.filter(function(sec){ return sec.students.length && !A.confirmations[sec.name]; });
+  if (unconf.length) items.push(['○', 'info', T('Class lists not confirmed yet: {list}', { list: unconf.map(function(x){ return secName(x.name); }).join(', ') })]);
+  var rushed = 0; P.cells.forEach(function(c){ if (c.cst === 'due' && c.end >= wk) rushed += c.all.r; });
+  if (rushed) items.push(['⚡', 'warn', rushed === 1 ? T('1 lesson was rushed in the last 7 days.') : T('{n} lessons were rushed in the last 7 days.', { n: rushed }), ['rushed', T('See them')]]);
+  return '<div class="hd"><div><h2>' + esc(T('Needs attention')) + '</h2><p class="sub">' + esc(T('Worked out from the class lists and every period since the app started.')) + '</p></div></div>' +
+    (items.length ? '<ul class="focus att">' + items.map(function(it){ return '<li class="' + (it[1] === 'bad' || it[1] === 'warn' ? 'warn' : '') + '"><i aria-hidden="true">' + it[0] + '</i><span>' + esc(it[2]) + '</span>' + (it[3] ? '<button type="button" class="nbtn" data-go="' + it[3][0] + '">' + esc(it[3][1]) + '</button>' : '') + '</li>'; }).join('') + '</ul>'
+      : '<ul class="focus"><li class="good"><i>✓</i>' + esc(T('Nothing needs attention right now.')) + '</li></ul>');
+}
+function matrixHtml(){
+  var A = MG.data, maxW = 0;
+  A.sections.forEach(function(sec){ sec.lessons.forEach(function(id){ var c = A.cells[sec.name + '|' + id]; if (c) maxW = Math.max(maxW, c.week); }); });
+  var weeks = []; for (var w = 1; w <= maxW; w++) weeks.push(w);
+  var lvl = function(k){ var f = k.n ? k.f / k.n : 0; return f >= 0.8 ? 'f3' : f >= 0.5 ? 'f2' : f > 0 ? 'f1' : 'f0'; };
+  var shown = A.sections.filter(function(sec){ return sec.students.length; });
+  if (!shown.length) return '<div class="empty">' + esc(T('No students on the class lists yet.')) + '</div>';
+  return '<div class="awwrap"><table class="mx"><thead><tr><th>' + esc(T('Class')) + '</th>' + weeks.map(function(w){ return '<th>' + esc(T('W{n}', { n: w })) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+    shown.map(function(sec){
+      var tn = {}; Object.keys(sec.groups).forEach(function(k){ if (k.split('|')[0] !== 'Tutor') tn[k.slice(k.indexOf('|') + 1)] = 1; });
+      return '<tr><th scope="row" style="--gc:var(--g' + sec.grade + ')"><b>' + esc(secName(sec.name)) + '</b><small>' + esc(T('{n} students', { n: sec.students.length })) + ' · ' + esc(Object.keys(tn).length === 1 ? T('1 teacher') : T('{n} teachers', { n: Object.keys(tn).length })) + '</small></th>' +
+        weeks.map(function(w){ var c = sec.byWeek[w]; if (!c) return '<td class="mxna">–</td>';
+          var k = c.all, dp = c.date.split('-'), big = c.status === 'up' ? esc(new Date(+dp[0], +dp[1] - 1, +dp[2]).toLocaleDateString(LOC, { weekday: 'short', day: 'numeric' })) : c.status === 'pre' ? '–' : k.f + '/' + k.n;
+          var small = c.status === 'up' ? 'P' + c.period : stLabel(c, k, c.status).replace(/ of \d+ started$/, ' ' + T('started'));
+          return '<td><button type="button" class="mxc st-' + c.status + (c.status === 'taught' || c.status === 'part' || c.status === 'live' ? ' ' + lvl(k) : '') + (MGR.cell === c.key ? ' sel' : '') + '" data-cell="' + esc(c.key) + '" title="' + esc(secName(sec.name) + ' · ' + T('Week {n}', { n: c.week }) + ' · ' + isoFd(c.date) + ' · ' + T(c.subject) + ' P' + c.period) + '">' +
+            '<b>' + big + '</b><small>' + esc(small) + '</small></button></td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div>' +
+    '<div class="legend mxleg"><span><i class="lg f3"></i>' + esc(T('80%+ finished')) + '</span><span><i class="lg f2"></i>' + esc(T('50–79%')) + '</span><span><i class="lg f1"></i>' + esc(T('under 50%')) + '</span>' +
+    '<span><i class="lg not"></i>✗ ' + esc(T('not taught')) + '</span><span><i class="lg part"></i>⚠ ' + esc(T('some groups not taught')) + '</span><span><i class="lg up"></i>' + esc(T('upcoming')) + '</span><span><i class="lg pre"></i>' + esc(T('before the app')) + '</span>' +
+    '<span>' + esc(T('Number = finished / students (absent left out)')) + '</span></div>';
+}
+function cellDetail(key){
+  var c = MG.data.cells[key], sec = c && MG.prep.sec[c.sec]; if (!c || !sec) return '';
+  var stu = function(code){ return sec.students.map(function(x, i){ return { x: x, i: i }; }).filter(function(o){ var v = c.st.charAt(o.i); return code === 'F' ? (v === 'F' || v === 'R') : v === code; }); };
+  var list = function(title, arr, cls, showPct){ return '<div class="slist ' + cls + '"><h4>' + esc(title) + ' <span>' + arr.length + '</span></h4>' + (arr.length ? '<ul>' + arr.map(function(o){
+      return '<li>' + esc(o.x.n) + (showPct && c.pc[o.i] >= 0 ? ' <small>' + c.pc[o.i] + '%' + (c.st.charAt(o.i) === 'R' ? ' ⚡' : '') + '</small>' : '') + '</li>'; }).join('') + '</ul>' : '<p class="none">–</p>') + '</div>'; };
+  var lesson = CFG.base + '?p=' + encodeURIComponent(c.id);
+  return '<section class="card cdet" id="cdet"><div class="hd"><div><h2>' + esc(secName(sec.name)) + ' · ' + esc(T('Week {n}', { n: c.week })) + '</h2><p class="ctitle">' + esc(c.title) + '</p>' +
+    '<p class="sub">' + esc(isoFd(c.date) + ' · ' + T('Day {n}', { n: c.day }) + ' · ' + T('Period {p}', { p: c.period }) + ' · ') + '<span dir="ltr">' + esc(c.time) + '</span> · ' + esc(T(c.subject)) + ' · <span class="stt st-' + c.status + '">' + esc(stLabel(c, c.all, c.status)) + '</span></p></div>' +
+    '<button type="button" class="x" id="cdClose" aria-label="' + esc(T('Close')) + '">×</button></div>' +
+    '<div class="awwrap"><table class="awt nt"><thead><tr><th>' + esc(T('Teacher')) + '</th><th>' + esc(T('Students')) + '</th><th>' + esc(T('Started')) + '</th><th>' + esc(T('Finished')) + '</th><th>' + esc(T('First try')) + '</th><th>' + esc(T('Status')) + '</th><th></th></tr></thead><tbody>' +
+      c.groups.map(function(g){ return '<tr><td class="nm"><b>' + (g.email ? '<button type="button" class="tname" data-t="' + esc(g.email) + '">' + esc(g.name) + '</button>' : esc(T('No teacher on the class lists'))) + '</b></td><td>' + g.k.n + (g.k.a ? ' <small>+' + g.k.a + ' ' + esc(T('absent')) + '</small>' : '') + '</td><td>' + g.k.s + '</td><td><b>' + g.k.f + '</b> / ' + g.k.n + '</td><td>' + (g.k.avg === null ? '–' : g.k.avg + '%') + '</td>' +
+        '<td><span class="stt st-' + g.status + '">' + esc(stLabel(c, g.k, g.status)) + '</span></td><td>' + (g.status === 'not' && g.email && MG.data.canRemind ? '<button type="button" class="nbtn" data-remind="' + esc(g.email + '|' + c.id + '|' + sec.name) + '">✉ ' + esc(T('Remind')) + '</button>' : '') + '</td></tr>'; }).join('') + '</tbody></table></div>' +
+    '<div class="slists">' + list(T('Not started'), stu('N'), 'n') + list(T('Absent'), stu('A'), 'a') + list(T('Started, not finished'), stu('S'), 's', true) + list(T('Finished'), stu('F'), 'f', true) + '</div>' +
+    '<div class="act"><a class="btn small primary" href="' + esc(lesson) + '" target="_top">' + esc(T('Open lesson')) + '</a><button type="button" class="btn small quiet" data-dash="' + esc(key) + '">' + esc(T('Show these students on the dashboard')) + '</button></div></section>';
+}
+function overviewView(){
+  var A = MG.data, K = mgTotals();
+  var h = hubBar('overview') + '<div class="tiles mtiles">' +
+    tile(T('AI periods taught'), K.taught + ' / ' + K.due, K.not ? T('{n} not taught', { n: K.not }) : T('teacher periods since {d}', { d: isoFd(A.from) })) +
+    tile(T('Students finished'), K.n ? pct(K.f, K.n) + '%' : '–', T('{f} of {n} lessons due', { f: K.f, n: K.n })) +
+    tile(T('Average first try'), K.avg === null ? '–' : K.avg + '%', T('lessons due since {d}', { d: isoFd(A.from) })) +
+    tile(T('Teachers using the app'), K.active + ' / ' + K.teachers, T('opened it in the last 7 days')) + '</div>' +
+    '<div class="grid2"><section class="card">' + todayCard() + '</section><section class="card">' + attentionCard(K) + '</section></div>' +
+    '<section class="card"><div class="hd"><div><h2>' + esc(T('Every class, every week')) + '</h2><p class="sub">' + esc(T('How many students finished each lesson, and whether every teacher taught it. Click a cell for the teachers and the students.')) + '</p></div></div>' + matrixHtml() + '</section>' +
+    '<div id="mxd">' + (MGR.cell ? cellDetail(MGR.cell) : '') + '</div>';
+  $('#app').innerHTML = h; wireHub(); wireOverview();
+}
+function wireCellDetail(){
+  if ($('#cdClose')) $('#cdClose').onclick = function(){ MGR.cell = null; $('#mxd').innerHTML = ''; document.querySelectorAll('.mxc.sel').forEach(function(b){ b.classList.remove('sel'); }); };
+  document.querySelectorAll('#mxd [data-t]').forEach(function(b){ b.onclick = function(){ MGR = { tab: 'teachers', teacher: b.getAttribute('data-t') }; render(); window.scrollTo(0, 0); }; });
+  document.querySelectorAll('#mxd [data-remind]').forEach(function(b){ b.onclick = function(){ NT.only = [b.getAttribute('data-remind')]; NT.data = null; MGR = { tab: 'nottaught' }; render(); window.scrollTo(0, 0); }; });
+  document.querySelectorAll('#mxd [data-dash]').forEach(function(b){ b.onclick = function(){ var p = b.getAttribute('data-dash').split('|'); F.section = p[0]; F.lesson = p[1]; F.teacher = ''; UI.filter = 'all'; MGR = null; render();
+    setTimeout(function(){ var t = $('#stuH'); if (t) t.scrollIntoView({ behavior: 'smooth' }); }, 50); }; });
+}
+function wireOverview(){
+  document.querySelectorAll('[data-cell]').forEach(function(b){ b.onclick = function(){
+    MGR.cell = b.getAttribute('data-cell'); $('#mxd').innerHTML = cellDetail(MGR.cell); wireCellDetail();
+    document.querySelectorAll('.mxc.sel').forEach(function(x){ x.classList.remove('sel'); }); var m = document.querySelector('.mxc[data-cell="' + MGR.cell.replace(/"/g, '') + '"]'); if (m) m.classList.add('sel');
+    $('#cdet').scrollIntoView({ behavior: 'smooth', block: 'start' }); }; });
+  document.querySelectorAll('[data-go]').forEach(function(b){ b.onclick = function(){ var g = b.getAttribute('data-go');
+    if (g === 'nottaught') { NT.data = null; MGR = { tab: 'nottaught' }; }
+    else if (g === 'rushed') { MGR = null; F.section = ''; F.lesson = ''; F.teacher = ''; UI.filter = 'rushed'; }
+    else { MG.sort = g === 'teachers-seen' ? 'seen' : 'not'; MGR = { tab: 'teachers' }; }
+    render(); window.scrollTo(0, 0); }; });
+  wireCellDetail();
+}
+/* ---------- Teachers ---------- */
+function teachersView(){
+  var P = MG.prep, all = Object.keys(P.teachers).map(function(e){ return P.teachers[e]; }), tutors = all.filter(function(o){ return o.sum.tutor; }).length;
+  var list = all.filter(function(o){ return (MG.tutors || !o.sum.tutor) && (!MG.q || (o.t.name + ' ' + o.t.email + ' ' + o.t.sections.join(' ')).toLowerCase().indexOf(MG.q) >= 0); });
+  var nf = function(v){ return v === null || v === undefined ? 101 : v; };
+  list.sort(function(a, b){ return MG.sort === 'name' ? a.t.name.localeCompare(b.t.name)
+    : MG.sort === 'fin' ? nf(a.sum.fin) - nf(b.sum.fin) || a.t.name.localeCompare(b.t.name)
+    : MG.sort === 'seen' ? String(a.t.lastSeen || '').localeCompare(String(b.t.lastSeen || '')) || a.t.name.localeCompare(b.t.name)
+    : b.sum.not - a.sum.not || nf(a.sum.fin) - nf(b.sum.fin) || a.t.name.localeCompare(b.t.name); });
+  var bar = function(a, b){ return '<span class="mbar"><i style="width:' + (b ? Math.round(a / b * 100) : 0) + '%"></i></span>'; };
+  var h = hubBar('teachers') + '<section class="card"><div class="hd"><div><h2>' + esc(T('Teachers')) + '</h2><p class="sub">' + esc(T('Each teacher\'s AI periods since {d}: taught or not, and how many of their own students finished. Click a teacher for every period.', { d: isoFd(MG.data.from) })) + '</p></div></div>' +
+    '<div class="ttools"><label class="sr" for="mgQ">' + esc(T('Find a teacher')) + '</label><input type="search" id="mgQ" placeholder="' + esc(T('Find a teacher or class…')) + '" value="' + esc(MG.q) + '">' +
+    '<label class="sr" for="mgSort">' + esc(T('Sort')) + '</label><select id="mgSort">' + [['not', T('Sort: most not taught')], ['fin', T('Sort: lowest finished')], ['seen', T('Sort: longest since opened')], ['name', T('Sort: name')]].map(function(o){ return '<option value="' + o[0] + '"' + (MG.sort === o[0] ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select>' +
+    (tutors ? '<label class="allsw"><input type="checkbox" id="mgTut"' + (MG.tutors ? ' checked' : '') + '> ' + esc(T('Show tutors ({n})', { n: tutors })) + '</label>' : '') +
+    '<span class="spacer"></span><button type="button" class="nbtn" id="csvT">⬇ ' + esc(T('Teachers (CSV)')) + '</button><button type="button" class="nbtn" id="csvP">⬇ ' + esc(T('All periods (CSV)')) + '</button></div>' +
+    '<div class="awwrap"><table class="awt tt2"><thead><tr><th>' + esc(T('Teacher')) + '</th><th>' + esc(T('Students')) + '</th><th>' + esc(T('Periods taught')) + '</th><th>' + esc(T('Not taught')) + '</th><th>' + esc(T('Students finished')) + '</th><th>' + esc(T('First try')) + '</th><th title="' + esc(T('Of their students in their most recent period')) + '">' + esc(T('Not finished last lesson')) + '</th><th>' + esc(T('Rushed')) + '</th><th>' + esc(T('Last opened the app')) + '</th></tr></thead><tbody>' +
+    (list.map(function(o){ var S = o.sum, t = o.t;
+      return '<tr class="trow2' + (S.not ? ' hasnot' : '') + '" data-t="' + esc(t.email) + '"><td class="nm"><button type="button" class="tname" data-t="' + esc(t.email) + '">' + esc(t.name) + '</button><small>' + esc(t.subjects.map(function(x){ return T(x); }).join(' · ') + (t.subjects.length ? ' · ' : '') + t.sections.map(secName).join(', ')) + '</small></td>' +
+        '<td>' + S.students + '</td><td>' + (S.tutor ? '<small>' + esc(T('tutor – no AI periods')) + '</small>' : '<b>' + S.taught + '</b> / ' + S.due + bar(S.taught, S.due)) + '</td>' +
+        '<td>' + (S.not ? '<span class="chip bad">✗ ' + S.not + '</span>' : (S.due ? '<span class="chip ok">0</span>' : '–')) + '</td>' +
+        '<td>' + (S.n ? '<b>' + S.f + '</b> / ' + S.n + ' <small>' + S.fin + '%</small>' + bar(S.f, S.n) : '–') + '</td><td>' + (S.avg === null ? '–' : S.avg + '%') + '</td>' +
+        '<td>' + (S.last ? S.lastOpen + ' / ' + S.last.g.k.n + '<small class="blk">' + esc(secName(S.last.c.sec) + ' · ' + T('W{n}', { n: S.last.c.week })) + '</small>' : '–') + '</td>' +
+        '<td>' + (S.r ? '<span class="chip warn">⚡ ' + S.r + '</span>' : '–') + '</td><td>' + esc(ago(t.lastSeen)) + '</td></tr>'; }).join('') ||
+      '<tr><td colspan="9" class="empty">' + esc(T('No teachers match.')) + '</td></tr>') + '</tbody></table></div><p class="note">' + esc(T('Periods taught: a period counts as taught once at least {p}% of the teacher\'s students have opened the lesson. "Last opened the app" is tracked from the day this view was added.', { p: MG.data.share })) + '</p></section>';
+  $('#app').innerHTML = h; wireHub();
+  var q = $('#mgQ'); q.oninput = function(){ MG.q = this.value.trim().toLowerCase(); var pos = this.selectionStart; teachersView(); var n = $('#mgQ'); n.focus(); try { n.setSelectionRange(pos, pos); } catch (e) {} };
+  $('#mgSort').onchange = function(){ MG.sort = this.value; teachersView(); };
+  if ($('#mgTut')) $('#mgTut').onchange = function(){ MG.tutors = this.checked; teachersView(); };
+  document.querySelectorAll('[data-t]').forEach(function(r){ r.onclick = function(e){ e.stopPropagation(); MGR = { tab: 'teachers', teacher: r.getAttribute('data-t') }; render(); window.scrollTo(0, 0); }; });
+  $('#csvT').onclick = function(){ csvDownload([['Teacher', 'Email', 'Subjects', 'Classes', 'Students', 'Periods due', 'Periods taught', 'Not taught', 'Students finished', 'Out of', 'Finished %', 'Average first try %', 'Not finished last lesson', 'Rushed', 'Absences marked', 'Retakes set', 'Tiers recorded', 'Last opened the app']]
+    .concat(all.map(function(o){ var S = o.sum, t = o.t; return [t.name, t.email, t.subjects.join(' '), t.sections.join(', '), S.students, S.due, S.taught, S.not, S.f, S.n, S.fin === null ? '' : S.fin, S.avg === null ? '' : S.avg, S.lastOpen === null ? '' : S.lastOpen, S.r, t.absences, t.retakes, t.tiers, t.lastSeen ? t.lastSeen.slice(0, 10) : '']; })), 'ai-teachers-' + new Date().toISOString().slice(0, 10) + '.csv'); };
+  $('#csvP').onclick = function(){ var rows = [['Date', 'Day', 'Period', 'Time', 'Class', 'Subject', 'Week', 'Lesson', 'Teacher', 'Students', 'Absent', 'Started', 'Finished', 'Average first try %', 'Status']];
+    MG.prep.cells.filter(function(c){ return c.cst === 'due'; }).sort(function(a, b){ return a.end - b.end; }).forEach(function(c){ c.groups.forEach(function(g){ rows.push([c.date, c.day, c.period, c.time, c.sec, c.subject, c.week, c.title, g.name || '(no teacher)', g.k.n, g.k.a, g.k.s, g.k.f, g.k.avg === null ? '' : g.k.avg, g.status === 'not' ? 'Not taught' : g.status === 'taught' ? 'Taught' : g.status]); }); });
+    csvDownload(rows, 'ai-periods-' + new Date().toISOString().slice(0, 10) + '.csv'); };
+}
+function csvDownload(rows, name){
+  var q = function(v){ v = String(v == null ? '' : v); if (/^[=+\-@]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; };
+  var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + rows.map(function(r){ return r.map(q).join(','); }).join('\n')], { type: 'text/csv' }));
+  a.download = name; document.body.appendChild(a); a.click(); a.remove();
+}
+function teacherView(){
+  var o = MG.prep.teachers[MGR.teacher]; if (!o) { MGR.teacher = null; return teachersView(); }
+  var t = o.t, S = o.sum, soon = Date.now() + 14 * 864e5;
+  var recs = o.recs.filter(function(r){ return r.c.cst !== 'pre' && r.c.end <= soon; }).sort(function(a, b){ return b.c.end - a.c.end; });
+  var nots = recs.filter(function(r){ return r.g.status === 'not'; });
+  var stu = function(r, code){ var sec = MG.prep.sec[r.c.sec]; return r.g.idx.filter(function(i){ var v = r.c.st.charAt(i); return code === 'F' ? (v === 'F' || v === 'R') : v === code; }).map(function(i){ return sec.students[i].n + (code !== 'N' && code !== 'A' && r.c.pc[i] >= 0 ? ' (' + r.c.pc[i] + '%' + (r.c.st.charAt(i) === 'R' ? ' ⚡' : '') + ')' : ''); }); };
+  var h = hubBar('teachers') + '<p class="tback"><button type="button" class="nbtn" id="tBack">' + esc(T('← All teachers')) + '</button></p>' +
+    '<section class="card thead2"><div><h2>👩‍🏫 ' + esc(t.name) + '</h2><p class="sub"><a href="mailto:' + esc(t.email) + '">' + esc(t.email) + '</a> · ' + esc(t.subjects.map(function(x){ return T(x); }).join(' · ') || T('subject not known')) + ' · ' + esc(t.sections.map(secName).join(', ')) + '</p></div>' +
+    '<div class="act"><button type="button" class="btn small" id="tDash">' + esc(T('Their students on the dashboard')) + '</button><a class="btn small quiet" href="mailto:' + esc(t.email) + '">✉ ' + esc(T('Email')) + '</a>' +
+      (nots.length && MG.data.canRemind ? '<button type="button" class="btn small primary" id="tRemind">📭 ' + esc(nots.length === 1 ? T('Remind about 1 period not taught') : T('Remind about {n} periods not taught', { n: nots.length })) + '</button>' : '') + '</div></section>' +
+    '<div class="tiles mtiles">' +
+      tile(T('Periods taught'), S.tutor ? '–' : S.taught + ' / ' + S.due, S.not ? T('{n} not taught', { n: S.not }) : T('since {d}', { d: isoFd(MG.data.from) })) +
+      tile(T('Students finished'), S.n ? S.fin + '%' : '–', T('{f} of {n} across their periods', { f: S.f, n: S.n })) +
+      tile(T('Average first try'), S.avg === null ? '–' : S.avg + '%', T('their students')) +
+      tile(T('Not finished last lesson'), S.last ? S.lastOpen + ' / ' + S.last.g.k.n : '–', S.last ? secName(S.last.c.sec) + ' · ' + T('Week {n}', { n: S.last.c.week }) : T('no periods yet')) +
+      tile(T('Last opened the app'), ago(t.lastSeen), t.lastSeen ? fmtDate(t.lastSeen) : T('tracked from today')) + '</div>' +
+    '<section class="card"><h2>' + esc(T('What they have done in the app')) + '</h2><div class="kv">' +
+      [[T('Students'), S.students], [T('Rushed lessons'), S.r], [T('Absences marked'), t.absences], [T('Retakes set'), t.retakes], [T('Tiers recorded'), t.tiers], [T('Class-list changes'), t.fixes],
+       [T('Class list confirmed'), t.confirmed ? fmtDate(t.confirmed) : T('not yet')], [T('Reminders received'), t.reminders + (t.lastReminder ? ' · ' + fmtDate(t.lastReminder) : '')]]
+        .map(function(x){ return '<div><small>' + esc(x[0]) + '</small><b>' + esc(x[1]) + '</b></div>'; }).join('') + '</div></section>' +
+    '<section class="card"><div class="hd"><div><h2>' + esc(T('Every AI period')) + '</h2><p class="sub">' + esc(T('Newest first, with the next two weeks. Each row counts only this teacher\'s own students. Click a row for the names.')) + '</p></div></div>' +
+    (recs.length ? '<div class="awwrap"><table class="awt tp"><thead><tr><th>' + esc(T('Date')) + '</th><th>' + esc(T('Period')) + '</th><th>' + esc(T('Class')) + '</th><th>' + esc(T('Lesson')) + '</th><th>' + esc(T('Students')) + '</th><th>' + esc(T('Started')) + '</th><th>' + esc(T('Finished')) + '</th><th>' + esc(T('First try')) + '</th><th>' + esc(T('Status')) + '</th></tr></thead><tbody>' +
+      recs.map(function(r){ var c = r.c, k = r.g.k, id = c.key + '|' + t.email, open = MG.open[id];
+        return '<tr class="prow' + (r.g.status === 'not' ? ' hasnot' : '') + '" data-open="' + esc(id) + '" tabindex="0" aria-expanded="' + !!open + '"><td>' + esc(isoFd(c.date)) + '<small class="blk">' + esc(T('Day {n}', { n: c.day })) + '</small></td><td>P' + c.period + '<small class="blk" dir="ltr">' + esc(c.time) + '</small></td>' +
+          '<td>' + esc(secName(c.sec)) + '<small class="blk">' + esc(T(c.subject)) + '</small></td><td class="nm">' + esc(T('Week {n}', { n: c.week })) + '<small>' + esc(c.title) + '</small></td>' +
+          '<td>' + k.n + (k.a ? ' <small>+' + k.a + ' ' + esc(T('absent')) + '</small>' : '') + '</td><td>' + (c.cst === 'up' ? '–' : k.s) + '</td><td>' + (c.cst === 'up' ? '–' : '<b>' + k.f + '</b> / ' + k.n) + '</td><td>' + (k.avg === null ? '–' : k.avg + '%') + '</td>' +
+          '<td><span class="stt st-' + r.g.status + '">' + esc(stLabel(c, k, r.g.status)) + '</span></td></tr>' +
+          (open ? '<tr class="pdet"><td colspan="9"><div class="slists">' + [[T('Not started'), stu(r, 'N'), 'n'], [T('Absent'), stu(r, 'A'), 'a'], [T('Started, not finished'), stu(r, 'S'), 's'], [T('Finished'), stu(r, 'F'), 'f']].map(function(L){
+            return '<div class="slist ' + L[2] + '"><h4>' + esc(L[0]) + ' <span>' + L[1].length + '</span></h4>' + (L[1].length ? '<ul>' + L[1].map(function(n){ return '<li>' + esc(n) + '</li>'; }).join('') + '</ul>' : '<p class="none">–</p>') + '</div>'; }).join('') + '</div></td></tr>' : ''); }).join('') + '</tbody></table></div>'
+      : '<div class="empty">' + esc(S.tutor ? T('Tutors have no AI periods.') : T('No AI periods yet.')) + '</div>') + '</section>';
+  $('#app').innerHTML = h; wireHub();
+  $('#tBack').onclick = function(){ MGR.teacher = null; render(); window.scrollTo(0, 0); };
+  $('#tDash').onclick = function(){ F.teacher = t.name; F.section = ''; F.lesson = ''; UI.filter = 'all'; MGR = null; render(); window.scrollTo(0, 0); };
+  if ($('#tRemind')) $('#tRemind').onclick = function(){ NT.only = nots.map(function(r){ return t.email + '|' + r.c.id + '|' + r.c.sec; }); NT.data = null; MGR = { tab: 'nottaught' }; render(); window.scrollTo(0, 0); };
+  document.querySelectorAll('[data-open]').forEach(function(r){ var go = function(){ var id = r.getAttribute('data-open'); MG.open[id] = !MG.open[id]; var y = scrollY; teacherView(); scrollTo(0, y); };
+    r.onclick = go; r.onkeydown = function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } }; });
+}
 /* ===================== lessons not taught: reminders to teachers (owners) ===================== */
-var NOTTAUGHT = false, NT = { data: null, sel: null };
+var NT = { data: null, sel: null, only: null };
 function notTaughtView(){
-  var bar = '<div class="viewbar"><span>📭 <b>' + esc(T('Lessons not taught')) + '</b> – ' + esc(T('lessons whose period has ended but which almost none of a teacher\'s students have opened. Send the teachers a reminder.')) + '</span><div><button type="button" id="backBtn">' + esc(T('← Back to dashboard')) + '</button></div></div>';
-  var back = function(){ $('#backBtn').onclick = function(){ NOTTAUGHT = false; render(); }; };
+  var bar = hubBar('nottaught') + '<p class="hubnote">📭 ' + esc(T('Lessons whose period has ended but which almost none of a teacher\'s students have opened. Tick them and send the teachers a reminder.')) + '</p>';
+  var back = wireHub;
   if (!NT.data) {
     $('#app').innerHTML = bar + '<div class="card"><div class="empty">' + esc(T('Checking every class\'s lessons…')) + '</div></div>'; back();
     if (window.google && google.script && google.script.run)
-      google.script.run.withSuccessHandler(function(d){ NT.data = d; NT.sel = {}; d.items.forEach(function(x){ if (x.email && !x.reminded) NT.sel[x.email + '|' + x.lessonId + '|' + x.section] = 1; }); if (NOTTAUGHT) notTaughtView(); })
+      google.script.run.withSuccessHandler(function(d){ NT.data = d; NT.sel = {};
+        if (NT.only) { NT.only.forEach(function(k){ NT.sel[k] = 1; }); NT.only = null; }
+        else d.items.forEach(function(x){ if (x.email && !x.reminded) NT.sel[x.email + '|' + x.lessonId + '|' + x.section] = 1; });
+        if (MGR && MGR.tab === 'nottaught') notTaughtView(); })
         .withFailureHandler(function(e){ $('#app').innerHTML = bar + '<div class="err">' + esc(errT(e.message || String(e))) + '</div>'; back(); }).getNotTaught();
     return;
   }
@@ -1259,7 +1730,7 @@ function notTaughtView(){
   if (LASTMSG) { msg(LASTMSG); LASTMSG = null; }
 }
 /* ===================== AI & Innovation Student / Teacher of the Month (owners) ===================== */
-var AWARDS = false, AW = { month: '', grade: '', data: null };
+var AW = { month: '', grade: '', data: null };
 function monthName(m){ var p = String(m).split('-'); return new Date(Number(p[0]), Number(p[1]) - 1, 1).toLocaleDateString(LOC, { month: 'long', year: 'numeric' }); }
 function awardTitle(type){ return type === 'teacher' ? T('AI & Innovation Teacher of the Month') : T('AI & Innovation Student of the Month'); }
 function awardBanner(){
@@ -1268,13 +1739,13 @@ function awardBanner(){
     (a.note ? '<span>“' + esc(a.note) + '”</span>' : '<span>' + esc(T('Congratulations – thank you for your outstanding work in AI and innovation.')) + '</span>') + '</div></section>';
 }
 function awardsView(){
-  var bar = '<div class="viewbar"><span>🏆 <b>' + esc(T('AI & Innovation Awards')) + '</b> – ' + esc(T('choose a Student and a Teacher of the Month. The rankings come from the month\'s work; the choice is yours.')) + '</span><div><button type="button" id="backBtn">' + esc(T('← Back to dashboard')) + '</button></div></div>';
+  var bar = hubBar('awards') + '<p class="hubnote">🏆 ' + esc(T('Choose a Student and a Teacher of the Month. The rankings come from the month\'s work; the choice is yours.')) + '</p>';
   if (!AW.data || (AW.month && AW.data.month !== AW.month)) {
     $('#app').innerHTML = bar + '<div class="card"><div class="empty">' + esc(T('Working out this month\'s rankings…')) + '</div></div>';
-    $('#backBtn').onclick = function(){ AWARDS = false; render(); };
+    wireHub();
     if (window.google && google.script && google.script.run)
-      google.script.run.withSuccessHandler(function(d){ AW.data = d; AW.month = d.month; if (AWARDS) awardsView(); })
-        .withFailureHandler(function(e){ $('#app').innerHTML = bar + '<div class="err">' + esc(errT(e.message || String(e))) + '</div>'; $('#backBtn').onclick = function(){ AWARDS = false; render(); }; }).getAwards(AW.month);
+      google.script.run.withSuccessHandler(function(d){ AW.data = d; AW.month = d.month; if (MGR && MGR.tab === 'awards') awardsView(); })
+        .withFailureHandler(function(e){ $('#app').innerHTML = bar + '<div class="err">' + esc(errT(e.message || String(e))) + '</div>'; wireHub(); }).getAwards(AW.month);
     return;
   }
   var A = AW.data, f = function(v, suf){ return v === null || v === undefined ? '–' : v + (suf || ''); }, sg = function(v){ return v === null || v === undefined ? '–' : (v > 0 ? '+' : '') + v; };
@@ -1307,7 +1778,7 @@ function awardsView(){
     '<p>' + esc(T('Rushed = finished in under {m} minutes with under {p}% – a rushed lesson rules a student out for that month. The rankings are a guide: please also use your own knowledge of the students and teachers.', { m: A.rules.rushMin, p: A.rules.rushPct })) + '</p></details>';
   if (A.history.length) h += '<section class="card"><h2>' + esc(T('Past winners')) + '</h2><ul class="log">' + A.history.map(function(n){ return '<li><b>' + esc(monthName(n.month)) + '</b> · ' + esc(awardTitle(n.type)) + ': ' + esc(n.name) + (n.note ? ' – “' + esc(n.note) + '”' : '') + '</li>'; }).join('') + '</ul></section>';
   $('#app').innerHTML = h;
-  $('#backBtn').onclick = function(){ AWARDS = false; render(); };
+  wireHub();
   $('#awMonth').onchange = function(){ AW.month = this.value; AW.data = null; awardsView(); };
   $('#awGrade').onchange = function(){ AW.grade = this.value; awardsView(); };
   document.querySelectorAll('[data-nom]').forEach(function(b){ b.onclick = function(){

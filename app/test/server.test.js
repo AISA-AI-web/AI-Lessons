@@ -415,6 +415,42 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   ok(nt.items.find(x => x.lessonId === L2.id).reminded && nt.cc === 'head1, head2, head3', 'the reminder is logged and the CC list remembered');
   E.as('isl@aisa.sch.ae'); throws(() => E.call('sendReminders', ['x'], ''), /owners/, 'teachers cannot send reminders');
 }
+/* manager view: every class period with each teacher's students; teachers' activity (fresh environment) */
+{
+  const E = makeEnv(), sh = E.sheets;
+  E.as('bbaki@aisa.sch.ae'); E.call('setup');
+  const CAT = require('../../lessons.js');
+  sh.Roles.push(['head@aisa.sch.ae', 'slt', 'Head', '']);
+  sh.Roster.push(['isl@aisa.sch.ae', 'Islam One', 'teacher', 'Boys 6', 6, 'sis', 'BO6ISA1', ''], ['isl2@aisa.sch.ae', 'Islam Two', 'teacher', 'Boys 6', 6, 'sis', 'BO6ISA2', ''],
+    ['ara@aisa.sch.ae', 'Arabic One', 'teacher', 'Boys 6', 6, 'sis', 'BO6AFL1', ''], ['tut@aisa.sch.ae', 'Tutor Six', 'teacher', 'Boys 6', 6, 'sis', 'BO6TUT', '']);
+  [['601', 'Adam', 'BO6ISA1, BO6AFL1'], ['602', 'Bilal', 'BO6ISA1, BO6AFL1'], ['603', 'Celal', 'BO6ISA1, BO6AFL1'], ['604', 'Dawud', 'BO6ISA2, BO6AFL1'], ['605', 'Emad', 'BO6ISA2, BO6AFL1'], ['606', 'Fadi', 'BO6ISA2, BO6AFL1']]
+    .forEach(([id, n, c]) => sh.Roster.push([id + '@aisa.sch.ae', n, 'student', 'Boys 6', 6, 'sis', c, '']));
+  const RD = Date; let clock = new RD('2026-10-07T13:30:00').getTime();
+  E.ctx.Date = class extends RD { constructor(...a) { a.length ? super(...a) : super(clock); } static now() { return clock; } };
+  const L2 = CAT.find(l => l.id === 'grade-6/main-w2-l1'), all = n => Array.from({ length: n }, (_, i) => ({ id: 'a' + i, title: 'A' + i, part: 'Core', score: 4, max: 4 }));
+  ['601', '602'].forEach(id => { E.as(id + '@aisa.sch.ae'); E.call('recordScores', L2.id, { title: 'T', activities: L2.activities, maxPoints: 4 }, all(L2.activities)); E.call('recordTime', L2.id, 300); E.call('recordTime', L2.id, 300); E.call('recordTime', L2.id, 300); });
+  E.as('603@aisa.sch.ae'); E.call('recordScores', L2.id, { title: 'T', activities: L2.activities, maxPoints: 4 }, all(2));
+  E.as('isl@aisa.sch.ae'); E.call('doGet', { parameter: {} }); E.call('doGet', { parameter: { p: 'dashboard' } });
+  ok(sh.Visits.length === 2 && sh.Visits[1][1] === 'isl@aisa.sch.ae', 'a teacher opening the app is logged once a day');
+  E.as('601@aisa.sch.ae'); E.call('doGet', { parameter: {} }); ok(sh.Visits.length === 2, 'students are not logged');
+  E.as('isl@aisa.sch.ae'); throws(() => E.call('getManager'), /owners and SLT/, 'teachers cannot open the manager view');
+  E.as('head@aisa.sch.ae'); let M = E.call('getManager'); ok(!M.canRemind, 'SLT can open it (reminders stay with owners)');
+  E.as('bbaki@aisa.sch.ae'); M = E.call('getManager');
+  const sec = M.sections.find(x => x.name === 'Boys 6'), cell = M.cells['Boys 6|' + L2.id];
+  ok(sec.students.map(x => x.n).join() === 'Adam,Bilal,Celal,Dawud,Emad,Fadi' && sec.lessons[1] === L2.id, 'students in name order, lessons in week order');
+  ok(sec.groups['Islamic|isl@aisa.sch.ae'].join() === '0,1,2' && sec.groups['Islamic|isl2@aisa.sch.ae'].join() === '3,4,5' && sec.groups['Arabic|ara@aisa.sch.ae'].join() === '0,1,2,3,4,5', 'each teacher\'s students, by subject');
+  ok(cell.date === '2026-10-07' && cell.subject === 'Islamic' && cell.period === 6 && cell.time === '1:10–2:00' && cell.state === 'upcoming', 'the Week 2 period: Wed 7 Oct, Islamic, P6 – not over yet at 1:30');
+  ok(cell.st === 'FFSNNN' && cell.pc[0] === 100 && cell.pc[3] === -1, 'per-student letters: finished, started, not started');
+  clock = new RD('2026-10-07T14:05:00').getTime(); M = E.call('getManager');
+  ok(M.cells['Boys 6|' + L2.id].state === 'due', 'due once the period has ended');
+  const nt = E.call('getNotTaught').items.filter(x => x.lessonId === L2.id);
+  ok(nt.length === 1 && nt[0].email === 'isl2@aisa.sch.ae' && nt[0].students === 3 && nt[0].started === 0, 'only the Islamic teacher whose group did not start it is not taught');
+  const t1 = M.teachers.find(t => t.email === 'isl@aisa.sch.ae');
+  ok(t1.lastSeen && t1.sections.join() === 'Boys 6' && t1.subjects.join() === 'Islamic', 'teacher details: last opened, sections, subjects');
+  E.as('isl@aisa.sch.ae'); E.call('setAbsent', '603@aisa.sch.ae', 'grade-6/main-w3-l1', true, ''); E.as('bbaki@aisa.sch.ae');
+  ok(E.call('getManager').teachers.find(t => t.email === 'isl@aisa.sch.ae').absences === 1, 'absences marked are counted per teacher');
+  ok(E.call('getManager').cells['Boys 6|grade-6/main-w3-l1'].st.charAt(2) === 'A', 'an absent student shows as A');
+}
 /* Google's HtmlService cuts script lines at '//', even inside a quoted web address, so no
    inline script the app serves may contain '://' (build.py writes it as ':\/\/'). */
 {

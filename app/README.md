@@ -260,6 +260,35 @@ strand, any strand that dropped since the week before, the biggest gain and any
 week that fewer than 70% of students finished. Students (and teachers viewing a
 student) see **My progress over time**.
 
+## Manager hub (owners and SLT)
+
+The **🧭 Manager** button on the dashboard opens one place to run the programme. It
+counts everything from the day the app was rolled out (`NOT_TAUGHT_FROM`).
+
+- **Overview** – tiles (teacher periods taught, students finished, average first
+  try, teachers who opened the app in the last 7 days); **Today** (every AI period
+  that day with its teachers and progress, or the next AI day); **Needs attention**
+  (periods not taught, teachers who have not opened the app, classes with no
+  teacher, students whose class code matches no teacher, unconfirmed class lists,
+  rushed lessons); and **Every class, every week** – a grid of each class's lessons
+  (finished / students, coloured by how many finished, ✗ not taught, ⚠ some
+  groups not taught). Click a cell for each teacher's group (students, started,
+  finished, first try, status, ✉ Remind) and the names of who has not started,
+  is absent, started or finished.
+- **Teachers** – every teacher's periods taught / due, periods not taught, how
+  many of their own students finished, first try, students who have not finished
+  their latest lesson, rushed lessons and when they last opened the app; search,
+  sort, tutors on/off, and CSV downloads (teachers; every period). Click a teacher
+  for their page: what they have done in the app (absences, retakes, tiers,
+  class-list changes and confirmation, reminders) and **every AI period** with
+  date, Day, period, class, subject, lesson and counts – click a row for names.
+- **Not taught** and **🏆 Awards** (owners) – as described below and above.
+
+A period is *taught* once at least 25% of that teacher's students (in the
+period's subject group, leaving out absences) have opened the lesson – the same
+rule the reminders use, so every screen agrees. *Last opened the app* comes from
+the **Visits** tab: one row per staff member per day (students are not logged).
+
 ## Absences and lessons not taught
 
 **Mark absent.** Under a lesson a student has not started, teachers (for their own

@@ -23,7 +23,8 @@ var TABS = {
   Retakes:   ['timestamp', 'student', 'lessonId', 'teacher', 'note'],
   Awards:    ['timestamp', 'month', 'type', 'email', 'name', 'by', 'note'],
   Absences:  ['timestamp', 'student', 'lessonId', 'teacher', 'status', 'note'],
-  Reminders: ['timestamp', 'teacher', 'section', 'lessonId', 'by', 'cc']
+  Reminders: ['timestamp', 'teacher', 'section', 'lessonId', 'by', 'cc'],
+  Visits:    ['timestamp', 'email', 'role']
 };
 /* Every AI Literacy section, e.g. Boys 6 … Girls 12. */
 var SECTIONS = (function () { var a = []; for (var g = 6; g <= 12; g++) a.push('Boys ' + g, 'Girls ' + g); return a; })();
@@ -46,6 +47,7 @@ function doGet(e) {
   if (!me) return page_('<h1>Sign in with your AISA account</h1><p>This site is only available to <b>@' + DOMAIN +
     '</b> Google accounts. Sign out of any personal account and open the link again with your school account.</p>', 'Access denied');
   // Staff land on today's teaching calendar; students on their home page (their own lessons and dates).
+  logVisit_(me);
   var p = String((e && e.parameter && e.parameter.p) || (me.role === 'student' ? 'index' : 'calendar'));
   if (p === 'dashboard') return dashboardPage_(me);
   if (p === 'calendar' && me.role === 'student') p = 'index';   // the calendar is for staff; students see their own dates at home
@@ -65,6 +67,17 @@ function doGet(e) {
   return HtmlService.createHtmlOutput(html)
     .setTitle(titleOf_(html))
     .addMetaTag('viewport', 'width=device-width, initial-scale=1');
+}
+
+/** Staff only, once a day: when each teacher last opened the app (for the manager view). */
+function logVisit_(me) {
+  if (!me || me.role === 'student') return;
+  try {
+    var key = 'visit:' + me.email + ':' + AICAL.iso(new Date()), cache = CacheService.getScriptCache();
+    if (cache.get(key)) return;
+    append_('Visits', [[new Date(), me.email, me.role]]);
+    cache.put(key, '1', 21600);
+  } catch (err) {}
 }
 
 function dashboardPage_(me) {
@@ -618,6 +631,7 @@ function getDashboard() {
     canJudge: me.role !== 'student',
     myClasses: myClasses,
     canAward: me.role === 'owner',
+    canManage: me.role === 'owner' || me.role === 'slt',
     myAwards: myAwards_(me.email),
     roster: rosterInfo_(me, vis),
     catalog: typeof CATALOG === 'undefined' ? [] : CATALOG,
@@ -668,7 +682,7 @@ function setAbsent(studentEmail, lessonId, absent, note) {
 
 /* A lesson counts as not taught when its date has passed and fewer than a quarter of a teacher's
    students (in that period's subject group, leaving out absences) have opened it – at least 3 students. */
-var NOT_TAUGHT_SHARE = 0.25, NOT_TAUGHT_MIN = 3;
+var NOT_TAUGHT_SHARE = 0.25, NOT_TAUGHT_MIN = 1;
 /* Only lessons from the day the app was rolled out (script property NOT_TAUGHT_FROM overrides it), and
    only once the lesson's period has ended. */
 var NOT_TAUGHT_FROM = '2026-10-07';
@@ -678,39 +692,110 @@ function periodEnd_(d, time) {
   if (m && h < 7) h += 12;
   return new Date(d.getFullYear(), d.getMonth(), d.getDate(), h, mi);
 }
-function notTaught_() {
+function rolloutFrom_() { return AICAL.parse(PropertiesService.getScriptProperties().getProperty('NOT_TAUGHT_FROM') || NOT_TAUGHT_FROM); }
+
+/** One model of every class's AI periods, shared by the manager view and the not-taught reminders.
+    sections: [{ name, grade, students: [{e, n}], lessons: [lessonId by week], teachers: [{email, name, subjects}],
+                 groups: { 'Subject|teacherEmail': [student index] } }]  – who teaches whom, per subject
+    cells: { 'section|lessonId': { id, week, title, date, day, period, time, subject, end, state, st, pc } }
+      state: 'before' (before the app was rolled out) | 'upcoming' (period not over yet) | 'due'
+      st: one letter per student – F finished, R finished but rushed, S started, N not started, A absent
+      pc: each student's first-try % (-1 = no answers yet) */
+function periodModel_() {
   var LC = lessonCells_(), cm = classMap_(), tbs = teachersBySection_(), ab = absences_(), cat = typeof CATALOG === 'undefined' ? [] : CATALOG;
-  var now = new Date(), from = AICAL.parse(PropertiesService.getScriptProperties().getProperty('NOT_TAUGHT_FROM') || NOT_TAUGHT_FROM);
-  var bySec = {}, temail = {};
-  rows_('Roster').forEach(function (r) { if (r.role === 'student' && r.section) { var e = lc_(r.email); if (!bySec[r.section]) bySec[r.section] = []; if (bySec[r.section].indexOf(e) < 0) bySec[r.section].push(e); } });
-  Object.keys(tbs).forEach(function (sec) { tbs[sec].forEach(function (t) { temail[sec + '|' + t.name] = t.email; }); });
+  var now = new Date(), from = rolloutFrom_(), names = {}, bySec = {};
+  rows_('Roster').forEach(function (r) { if (r.role === 'student') { var e = lc_(r.email); if (!names[e]) names[e] = cleanText_(r.name, 80) || e.split('@')[0]; } });
+  Object.keys(cm.students).forEach(function (e) { var sec = cm.students[e].section; if (sec) (bySec[sec] = bySec[sec] || []).push(e); });
+  var sections = [], cells = {};
+  SECTIONS.forEach(function (sec) {
+    if (!AICAL.SCHEDULE.some(function (r) { return r[0] === sec; })) return;
+    var grade = gradeOf_(sec), list = (bySec[sec] || []).slice().sort(function (a, b) { return names[a].localeCompare(names[b]); });
+    var students = list.map(function (e) { return { e: e, n: names[e], c: cm.students[e].classes || [] }; }), groups = {};
+    (tbs[sec] || []).forEach(function (t) {
+      (t.subjects.length ? t.subjects : ['']).forEach(function (sub) {
+        var tc = t.classes.filter(function (c) { return subjectOf_(c) === sub; }); if (!tc.length) tc = t.classes;
+        groups[sub + '|' + t.email] = students.map(function (x, i) { return !tc.length || !x.c.length || x.c.some(function (c) { return tc.indexOf(c) >= 0; }) ? i : -1; })
+          .filter(function (i) { return i >= 0; });
+      });
+    });
+    var lessons = cat.filter(function (l) { return l.grade === grade && l.course === 'main'; }).sort(function (a, b) { return a.week - b.week; });
+    sections.push({ name: sec, grade: grade, students: students.map(function (x) { return { e: x.e, n: x.n }; }), groups: groups, lessons: lessons.map(function (l) { return l.id; }),
+      teachers: (tbs[sec] || []).map(function (t) { return { email: t.email, name: t.name, subjects: t.subjects }; }) });
+    lessons.forEach(function (l) {
+      var d = AICAL.lessonDate(sec, l.week); if (!d) return;
+      var slot = AICAL.SCHEDULE.filter(function (x) { return x[0] === sec && x[3] === AICAL.cycleOf(d) && x[4] === AICAL.DAYS[d.getDay()]; })[0];
+      var end = periodEnd_(d, slot ? slot[6] : ''), st = '', pc = [];
+      students.forEach(function (x) {
+        var k = x.e + '|' + l.id, c = LC.per[k], mx = c ? Object.keys(c.acts).reduce(function (n, a) { return n + c.acts[a][1]; }, 0) : 0, p = c && mx ? Math.round(c.score / mx * 100) : -1, code;
+        if (c && l.activities && c.done >= l.activities) { var secs = c.seconds > 0 ? c.seconds : (c.lastAt - c.firstAt) / 1000; code = p < RUSH_PCT && secs < RUSH_MIN * 60 ? 'R' : 'F'; }
+        else if (c || LC.prev[k]) code = 'S';
+        else code = ab[k] ? 'A' : 'N';
+        st += code; pc.push(p);
+      });
+      cells[sec + '|' + l.id] = { id: l.id, week: l.week, title: l.title, date: AICAL.iso(d), day: AICAL.dayNumber(d), period: slot ? slot[5] : '', time: slot ? String(slot[6]).replace(' - ', '–') : '',
+        subject: slot ? slot[2] : '', end: end.getTime(), state: d < from ? 'before' : end > now ? 'upcoming' : 'due', st: st, pc: pc };
+    });
+  });
+  return { sections: sections, cells: cells, from: AICAL.iso(from), now: now.getTime() };
+}
+/** The teacher groups for one class period: the teachers of that period's subject (or, if none, of no known
+    subject), each with their students; students no such teacher has are grouped as 'no teacher' (email ''). */
+function slotGroups_(sec, subject) {
+  var keys = Object.keys(sec.groups), pick = keys.filter(function (k) { return k.split('|')[0] === subject; }), tn = {};
+  if (!pick.length) pick = keys.filter(function (k) { return k.split('|')[0] === ''; });
+  sec.teachers.forEach(function (t) { tn[t.email] = t.name; });
+  var out = pick.map(function (k) { var em = k.slice(k.indexOf('|') + 1); return { email: em, name: tn[em] || em, idx: sec.groups[k] }; }), covered = {};
+  out.forEach(function (g) { g.idx.forEach(function (i) { covered[i] = 1; }); });
+  var rest = sec.students.map(function (x, i) { return i; }).filter(function (i) { return !covered[i]; });
+  if (rest.length) out.push({ email: '', name: '', idx: rest });
+  return out;
+}
+function groupCounts_(cell, idx) {
+  var o = { n: 0, started: 0, finished: 0 };
+  idx.forEach(function (i) { var c = cell.st.charAt(i); if (c === 'A') return; o.n++; if (c !== 'N') o.started++; if (c === 'F' || c === 'R') o.finished++; });
+  return o;
+}
+function notTaught_(M) {
+  M = M || periodModel_();
   var rem = {}; rows_('Reminders').forEach(function (r) { rem[lc_(r.teacher) + '|' + r.lessonId + '|' + r.section] = new Date(r.timestamp).toISOString(); });
   var out = [];
-  Object.keys(bySec).forEach(function (sec) {
-    if (!AICAL.SCHEDULE.some(function (r) { return r[0] === sec; })) return;
-    var grade = gradeOf_(sec), to = {};
-    bySec[sec].forEach(function (e) { to[e] = teachersOf_(cm, tbs, e, sec); });
-    cat.forEach(function (l) {
-      if (l.grade !== grade || l.course !== 'main') return;
-      var d = AICAL.lessonDate(sec, l.week); if (!d || d < from) return;
-      var slot = AICAL.SCHEDULE.filter(function (x) { return x[0] === sec && x[3] === AICAL.cycleOf(d) && x[4] === AICAL.DAYS[d.getDay()]; })[0], sub = slot ? slot[2] : '';
-      if (periodEnd_(d, slot ? slot[6] : '') > now) return;            // not over yet
-      var groups = {};
-      bySec[sec].forEach(function (e) {
-        if (ab[e + '|' + l.id]) return;
-        var k = e + '|' + l.id, started = !!(LC.per[k] || LC.prev[k]);
-        var names = (to[e].bySub[sub] && to[e].bySub[sub].length) ? to[e].bySub[sub] : (to[e].bySub[''] && to[e].bySub[''].length ? to[e].bySub[''] : to[e].names);
-        (names.length ? names : ['']).forEach(function (n) { var g = groups[n] || (groups[n] = { n: 0, started: 0 }); g.n++; if (started) g.started++; });
-      });
-      Object.keys(groups).forEach(function (n) {
-        var g = groups[n]; if (g.n < NOT_TAUGHT_MIN || g.started / g.n >= NOT_TAUGHT_SHARE) return;
-        var em = temail[sec + '|' + n] || '';
-        out.push({ teacher: n, email: em, section: sec, lessonId: l.id, week: l.week, title: l.title, date: AICAL.iso(d), subject: sub, period: slot ? slot[5] : '',
-          time: slot ? String(slot[6]).replace(' - ', '–') : '', students: g.n, started: g.started, reminded: em ? (rem[em + '|' + l.id + '|' + sec] || '') : '' });
+  M.sections.forEach(function (sec) {
+    sec.lessons.forEach(function (id) {
+      var cell = M.cells[sec.name + '|' + id]; if (!cell || cell.state !== 'due') return;
+      slotGroups_(sec, cell.subject).forEach(function (g) {
+        var k = groupCounts_(cell, g.idx); if (k.n < NOT_TAUGHT_MIN || k.started / k.n >= NOT_TAUGHT_SHARE) return;
+        out.push({ teacher: g.name, email: g.email, section: sec.name, lessonId: id, week: cell.week, title: cell.title, date: cell.date, subject: cell.subject, period: cell.period,
+          time: cell.time, students: k.n, started: k.started, reminded: g.email ? (rem[g.email + '|' + id + '|' + sec.name] || '') : '' });
       });
     });
   });
   return out.sort(function (a, b) { return b.date.localeCompare(a.date) || a.section.localeCompare(b.section) || a.teacher.localeCompare(b.teacher); });
+}
+
+/** Owners and SLT: the manager view – every class's AI periods with each teacher's students, and what
+    each teacher has done in the app. Counting happens in the page from the per-student letters. */
+function getManager() {
+  var me = requireUser_();
+  if (me.role !== 'owner' && me.role !== 'slt') throw new Error('Only owners and SLT can open the manager view.');
+  var M = periodModel_(), T = {};
+  M.sections.forEach(function (sec) {
+    sec.teachers.forEach(function (t) {
+      var o = T[t.email] || (T[t.email] = { email: t.email, name: t.name, subjects: [], sections: [], lastSeen: '', absences: 0, retakes: 0, tiers: 0, fixes: 0, reminders: 0, lastReminder: '', confirmed: '' });
+      t.subjects.forEach(function (x) { if (o.subjects.indexOf(x) < 0) o.subjects.push(x); });
+      if (o.sections.indexOf(sec.name) < 0) o.sections.push(sec.name);
+    });
+  });
+  var iso = function (t) { return new Date(t).toISOString(); }, later = function (a, b) { return !a || new Date(b) > new Date(a) ? iso(b) : a; };
+  rows_('Visits').forEach(function (r) { var o = T[lc_(r.email)]; if (o) o.lastSeen = later(o.lastSeen, r.timestamp); });
+  rows_('Absences').forEach(function (r) { var o = T[lc_(r.teacher)]; if (o && r.status === 'absent') o.absences++; });
+  rows_('Retakes').forEach(function (r) { var o = T[lc_(r.teacher)]; if (o) o.retakes++; });
+  rows_('Judgements').forEach(function (r) { var o = T[lc_(r.teacher)]; if (o) o.tiers++; });
+  rows_('Changes').forEach(function (r) { var o = T[lc_(r.by)]; if (o && (r.status === 'done' || r.status === 'pending')) o.fixes++; });
+  rows_('Reminders').forEach(function (r) { var o = T[lc_(r.teacher)]; if (o) { o.reminders++; o.lastReminder = later(o.lastReminder, r.timestamp); } });
+  var conf = {};
+  rows_('Confirmations').forEach(function (r) { conf[r.section] = { by: lc_(r.teacher), at: iso(r.timestamp), students: Number(r.students) || 0 }; var o = T[lc_(r.teacher)]; if (o) o.confirmed = later(o.confirmed, r.timestamp); });
+  return { from: M.from, now: M.now, sections: M.sections, cells: M.cells, teachers: Object.keys(T).map(function (k) { return T[k]; }).sort(function (a, b) { return a.name.localeCompare(b.name); }),
+    confirmations: conf, share: Math.round(NOT_TAUGHT_SHARE * 100), min: NOT_TAUGHT_MIN, rush: { min: RUSH_MIN, pct: RUSH_PCT }, canRemind: me.role === 'owner' };
 }
 function reminderCc_() { return PropertiesService.getScriptProperties().getProperty('REMINDER_CC') || ''; }
 /** Owners: lessons whose date has passed but which a teacher's students have not started. */
