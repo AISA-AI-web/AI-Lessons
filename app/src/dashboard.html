@@ -113,6 +113,7 @@ td.name small{display:block;color:var(--muted);font-size:12px}
 .ls.later{background:none;border:1.5px dashed var(--line);color:var(--muted);font-weight:500}
 .ls.rushed{background:#FBE0E0;color:#8f1d1d}.ls.rushed i{background:var(--crit)}
 td.name small.tch{color:var(--purple);font-weight:600}
+td .sm.tchl{color:var(--purple);font-weight:600}
 td .sm.rush,td .sm.rnote{white-space:normal;overflow:visible}
 .sm.rush{color:#b3261e;font-weight:700}
 .sm.rnote{color:#5c3d00}
@@ -453,6 +454,7 @@ var AR = {
   'Choose class…': 'اختر الشعبة…',
   'Move': 'نقل',
   'All teachers': 'كل المعلمين',
+  'Teacher of that period': 'معلم تلك الحصة',
   'Awards': 'الجوائز',
   'AI & Innovation Awards': 'جوائز الذكاء الاصطناعي والابتكار',
   'AI & Innovation Student of the Month': 'طالب الشهر في الذكاء الاصطناعي والابتكار',
@@ -949,7 +951,20 @@ function lessonCell(row){
   if (!l) return '<span class="ls later">' + esc(T('Week {n}', { n: row.cur })) + '</span><span class="sm">' + esc(T('Lesson page not on the site yet')) + '</span>';
   var x = row.by[l.id] || statusOf(row.s, l, RES, row.st.taught);
   var other = row.rushed.filter(function(o){ return o.id !== l.id; })[0];
-  return lessonCellMain(row, l, x, wk) + retakeNote(row.s, l, x) + (other ? '<span class="rush sm">⚡ ' + esc(T('Rushed {l}: {p}% in {m} min', { l: lessonShort(other), p: row.by[other.id].pct, m: mins(activeSecs(row.by[other.id].r)) })) + '</span>' + retakeBtn(row.s, other) : '');
+  return lessonCellMain(row, l, x, wk) + teacherLine(row.s, x) + retakeNote(row.s, l, x) + (other ? '<span class="rush sm">⚡ ' + esc(T('Rushed {l}: {p}% in {m} min', { l: lessonShort(other), p: row.by[other.id].pct, m: mins(activeSecs(row.by[other.id].r)) })) + '</span>' + retakeBtn(row.s, other) : '');
+}
+/* who taught this student this lesson: the teachers of the period it fell in (Arabic or Islamic,
+   from the 10-day timetable) – shown to owners and SLT, and for another teacher's student */
+function slotTeachers(s, date){
+  if (!date || !s.tsub) return [];
+  var r = AICAL.SCHEDULE.filter(function(x){ return x[0] === s.section && x[3] === AICAL.cycleOf(date) && x[4] === AICAL.DAYS[date.getDay()]; })[0];
+  var t = r && s.tsub[r[2]] && s.tsub[r[2]].length ? s.tsub[r[2]] : (s.tsub[''] || []);
+  return t.length ? t : (s.teachers || []);
+}
+function teacherLine(s, x){
+  if (!(D.scope === 'school' || s.mine === false) || !x || !x.date) return '';
+  var t = slotTeachers(s, x.date);
+  return t.length ? '<span class="sm tchl" title="' + esc(T('Teacher of that period')) + '">👩‍🏫 ' + esc(t.join(', ')) + '</span>' : '';
 }
 function retakeBtn(s, l){ return '<button type="button" class="rtk" data-rtk="' + esc(s.email + '|' + l.id) + '" data-name="' + esc(s.name) + '" data-les="' + esc(lessonShort(l)) + '">↻ ' + esc(T('Retake')) + '</button>'; }
 function retakeNote(s, l, x){

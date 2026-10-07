@@ -218,6 +218,14 @@ their lists are right:
   class* column) moves them straight away; it is logged (type `class`) and
   wins over later imports while the student stays in that section. Students or
   teachers with no class name fall back to the whole section.
+- **Who teaches a period.** Each AI lesson sits in an Arabic or an Islamic period
+  (the 10-day timetable in `school-calendar.js`). A teacher's subject comes from
+  their class codes in the school export (`BO6ISA1` = Islamic, `BO6AFL1` /
+  `BO6ASL` = Arabic, `BO6TUT` = tutor) or from a Classroom course name. Owners and
+  SLT see, in the calendar pop-up, the teachers of that subject for that class –
+  names only – and on the dashboard the teacher of the period each lesson fell in.
+  Rows added by hand (blank `courseId`) hold notes such as "AI timetable –
+  teacher", which are never treated as class names.
 - **✓ This list is correct** records who confirmed each class and when; the
   stamp turns amber ("changed since …") if the list changes afterwards, so SLT
   can see which lists are checked.

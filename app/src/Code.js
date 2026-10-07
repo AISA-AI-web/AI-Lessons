@@ -54,7 +54,7 @@ function doGet(e) {
   bridge.cfg = JSON.stringify({ email: me.email, name: me.name, role: me.role, page: p, base: ScriptApp.getService().getUrl(),
     sections: me.role === 'teacher' ? visibleSections_(me) : [], section: me.section || '', grade: me.grade || '',
     locked: rel ? lockedLinks_(rel, me.email) : {},
-    teachers: (me.role === 'owner' || me.role === 'slt') && p === 'calendar' ? teachersBySection_() : {} });
+    teachers: (me.role === 'owner' || me.role === 'slt') && p === 'calendar' ? calendarTeachers_() : {} });
   html = html.replace(/<head>/i, '<head>' + bridge.evaluate().getContent());
   return HtmlService.createHtmlOutput(html)
     .setTitle(titleOf_(html))
@@ -162,13 +162,27 @@ function visibleSections_(me) {
    import while the student stays in that section. Anyone without class names falls back to
    the whole section, so nobody is locked out. */
 function splitClasses_(s) { return String(s || '').split(/\s*,\s*/).filter(String); }
+/* Only imported rows (school export 'sis' or a Classroom course) carry class names; rows added by hand
+   (blank courseId) hold a note such as "AI timetable – teacher" or "Added by …", which is not a class. */
+function classesOf_(r) { return String(r.courseId || '').trim() ? splitClasses_(r.courseName) : []; }
+/* The subject of a class: the school's codes put it after the grade (BO6ISA1 = Boys 6 Islamic,
+   GI9AFL2 = Girls 9 Arabic first language, BO6ASL = Arabic second language, BO6TUT = tutor group);
+   Classroom course names and hand-added notes say it in words. AI lessons sit in Arabic or Islamic periods. */
+function subjectOf_(c) {
+  c = String(c || '');
+  var m = /^[A-Za-z]{0,3}\d{1,2}\s*([A-Za-z]+)/.exec(c), k = m ? m[1].toUpperCase() : '';
+  if (/^IS/.test(k) || /islam/i.test(c)) return 'Islamic';
+  if (/^(AFL|ASL|AR)/.test(k) || /arab/i.test(c)) return 'Arabic';
+  if (/^TUT/.test(k) || /tutor/i.test(c)) return 'Tutor';
+  return '';
+}
 function classMap_() {
   var stu = {}, tea = {}, moved = {};
   rows_('Changes').forEach(function (c) {           // in time order: the latest move wins
     if (c.type === 'class' && c.status === 'done' && c.toClass) moved[lc_(c.student)] = { section: c.toSection, cls: String(c.toClass) };
   });
   rows_('Roster').forEach(function (r) {
-    var e = lc_(r.email), cls = splitClasses_(r.courseName);
+    var e = lc_(r.email), cls = classesOf_(r);
     if (r.role === 'student') {
       var s = stu[e] || (stu[e] = { section: r.section, classes: [] });
       if (r.section === s.section) cls.forEach(function (c) { if (s.classes.indexOf(c) < 0) s.classes.push(c); });
@@ -180,23 +194,38 @@ function classMap_() {
   Object.keys(moved).forEach(function (e) { if (stu[e] && stu[e].section === moved[e].section) stu[e].classes = [moved[e].cls]; });
   return { students: stu, teachers: tea };
 }
-/** section -> [{name, email, classes}] for every teacher on the class lists (owners' and SLT's calendar). */
+/** section -> [{name, email, classes, subjects}] for every teacher on the class lists. */
 function teachersBySection_() {
   var out = {}, idx = {};
   rows_('Roster').forEach(function (r) {
     if (r.role !== 'teacher' || !r.section) return;
     var e = lc_(r.email), k = r.section + '|' + e, t = idx[k];
-    if (!t) { t = idx[k] = { name: cleanText_(r.name, 80) || e.split('@')[0], email: e, classes: [] }; (out[r.section] = out[r.section] || []).push(t); }
-    splitClasses_(r.courseName).forEach(function (c) { if (t.classes.indexOf(c) < 0) t.classes.push(c); });
+    if (!t) { t = idx[k] = { name: cleanText_(r.name, 80) || e.split('@')[0], email: e, classes: [], subjects: [] }; (out[r.section] = out[r.section] || []).push(t); }
+    var cls = classesOf_(r);
+    cls.forEach(function (c) { if (t.classes.indexOf(c) < 0) t.classes.push(c); });
+    (cls.length ? cls : [String(r.courseName || '')]).forEach(function (c) { var s = subjectOf_(c); if (s && t.subjects.indexOf(s) < 0) t.subjects.push(s); });
   });
   return out;
 }
-/** The teachers who teach this student: those sharing one of their classes (or the whole section
-    when either has no class names). */
+/** For the owners' and SLT's calendar: names and subjects only (no class codes). */
+function calendarTeachers_() {
+  var tbs = teachersBySection_(), out = {};
+  Object.keys(tbs).forEach(function (sec) { out[sec] = tbs[sec].map(function (t) { return { name: t.name, email: t.email, subjects: t.subjects }; }); });
+  return out;
+}
+/** The teachers who teach this student (sharing one of their classes, or the whole section when either
+    has no class names), by subject – so a lesson can be matched to the teacher of that day's period.
+    names: their Arabic and Islamic teachers (a tutor only when no one else is listed). */
 function teachersOf_(cm, tbs, email, section) {
-  var theirs = (cm.students[email] || {}).classes || [];
-  return (tbs[section] || []).filter(function (t) { return !t.classes.length || !theirs.length || theirs.some(function (c) { return t.classes.indexOf(c) >= 0; }); })
-    .map(function (t) { return t.name; });
+  var theirs = (cm.students[email] || {}).classes || [], bySub = {}, lesson = [], tutors = [];
+  (tbs[section] || []).forEach(function (t) {
+    if (t.classes.length && theirs.length && !theirs.some(function (c) { return t.classes.indexOf(c) >= 0; })) return;
+    var subs = t.subjects.length ? t.subjects : [''];
+    subs.forEach(function (sb) { var l = bySub[sb] || (bySub[sb] = []); if (l.indexOf(t.name) < 0) l.push(t.name); });
+    if (subs.some(function (sb) { return sb !== 'Tutor'; })) { if (lesson.indexOf(t.name) < 0) lesson.push(t.name); }
+    else if (tutors.indexOf(t.name) < 0) tutors.push(t.name);
+  });
+  return { names: lesson.length ? lesson : tutors, bySub: bySub };
 }
 /** True if this student is one of the teacher's own (owners and SLT: everyone). */
 function isMine_(me, vis, cm, email, section) {
@@ -563,7 +592,7 @@ function getDashboard() {
   var outStudents = Object.keys(students).map(function (e) { return students[e]; }).filter(allowed);
   var tbs = me.role === 'student' ? {} : teachersBySection_();
   outStudents.forEach(function (s) { s.classes = (cm.students[s.email] || {}).classes || []; s.mine = me.role === 'student' || isMine_(me, vis, cm, s.email, s.section);
-    if (me.role !== 'student') s.teachers = teachersOf_(cm, tbs, s.email, s.section); });
+    if (me.role !== 'student') { var to = teachersOf_(cm, tbs, s.email, s.section); s.teachers = to.names; s.tsub = to.bySub; } });
   var keep = {}; outStudents.forEach(function (s) { keep[s.email] = 1; });
   var results = Object.keys(per).map(function (k) { return per[k]; }).filter(function (c) { return keep[c.email]; });
   var retakes = {};                                   // email|lesson -> { n, at, by, prev: {score, max, done, seconds} }

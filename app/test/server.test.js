@@ -350,6 +350,28 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   E.as('802@aisa.sch.ae'); ok(!E.call('getDashboard').myAwards.length && !E.call('getDashboard').canAward, 'others do not');
   E.as('t1@aisa.sch.ae'); throws(() => E.call('nominate', '2026-10', 'student', '804@aisa.sch.ae', ''), /owners/, 'teachers cannot nominate');
 }
+/* teachers by subject: the school's class codes (BO6ISA1, BO6AFL1, BO6TUT …) say which subject a teacher
+   teaches, so a lesson period (Arabic or Islamic) is matched to its teachers (fresh environment) */
+{
+  const E = makeEnv(), sh = E.sheets;
+  E.as('bbaki@aisa.sch.ae'); E.call('setup');
+  sh.Roster.push(
+    ['alroz@aisa.sch.ae', 'Abdel Alroz', 'teacher', 'Boys 6', 6, '', 'AI timetable – teacher', ''], ['alroz@aisa.sch.ae', 'Abdel Alroz', 'teacher', 'Boys 6', 6, 'sis', 'BO6ISA1', ''],
+    ['belal@aisa.sch.ae', 'Belal Tantawi', 'teacher', 'Boys 6', 6, 'sis', 'BO6AFL1, BO6AFL11', ''],
+    ['jmatar@aisa.sch.ae', 'Jennifer Matar', 'teacher', 'Boys 6', 6, '', 'AI timetable – tutor', ''], ['jmatar@aisa.sch.ae', 'Jennifer Matar', 'teacher', 'Boys 6', 6, 'sis', 'BO6TUT', ''],
+    ['hand@aisa.sch.ae', 'Hand Only', 'teacher', 'Boys 7', 7, '', 'AI timetable – teacher', ''],
+    ['601@aisa.sch.ae', 'Sami S', 'student', 'Boys 6', 6, 'sis', 'BO6AFL1, BO6ISA1, BO6TUT', ''], ['602@aisa.sch.ae', 'Tariq T', 'student', 'Boys 6', 6, 'sis', 'BO6AFL2, BO6ISA2', ''],
+    ['701@aisa.sch.ae', 'Yusuf Y', 'student', 'Boys 7', 7, 'sis', 'BO7AFL1, BO7ISA1', ''], ['603@aisa.sch.ae', 'New N', 'student', 'Boys 6', 6, '', 'Added by alroz@aisa.sch.ae', '']);
+  let d = E.call('getDashboard'); const S = id => d.students.find(x => x.email === id + '@aisa.sch.ae');
+  ok(S('601').teachers.join() === 'Abdel Alroz,Belal Tantawi', 'a student\'s teachers: their Arabic and Islamic teachers, not the tutor');
+  ok(S('601').tsub.Arabic.join() === 'Belal Tantawi' && S('601').tsub.Islamic.join() === 'Abdel Alroz' && S('601').tsub.Tutor.join() === 'Jennifer Matar', 'teachers are grouped by subject from the class codes');
+  ok(S('602').teachers.join() === '', 'no teacher listed for groups nobody teaches on the lists');
+  ok(S('603').teachers.join() === 'Abdel Alroz,Belal Tantawi', 'a hand-added student (no class) belongs to the whole section');
+  E.as('hand@aisa.sch.ae'); ok(E.call('getDashboard').students.every(x => x.mine), 'a teacher added by hand from the AI timetable sees their section as their own');
+  E.as('bbaki@aisa.sch.ae'); const cal = E.call('doGet', { parameter: { p: 'calendar' } }).getContent();
+  ok(/"name":"Belal Tantawi","email":"belal@aisa.sch.ae","subjects":\["Arabic"\]/.test(cal) && /"name":"Abdel Alroz","email":"alroz@aisa.sch.ae","subjects":\["Islamic"\]/.test(cal), 'the calendar gets each teacher\'s subject');
+  ok(!/BO6ISA1|AI timetable – teacher/.test(cal.slice(cal.indexOf('"teachers"'), cal.indexOf('"teachers"') + 2000)), 'and no class codes or notes');
+}
 /* Google's HtmlService cuts script lines at '//', even inside a quoted web address, so no
    inline script the app serves may contain '://' (build.py writes it as ':\/\/'). */
 {
