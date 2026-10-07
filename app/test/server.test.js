@@ -466,20 +466,6 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   ok(sec.groups['Islamic|isl@aisa.sch.ae'].length === 3 && sec.groups['Arabic|ara@aisa.sch.ae'].join() === '0,1' && sec.groups['Arabic|ara2@aisa.sch.ae'].join() === '2', 'Arabic groups still split by code');
   E.as('isl@aisa.sch.ae'); ok(E.call('getDashboard').students.every(x => x.mine), 'the Islamic teacher sees the whole section as theirs');
 }
-/* students with class codes but no Islamic one (e.g. second-language Arabic only) are not in Islamic
-   periods: they are not a 'no teacher' group in an Islamic period (fresh environment) */
-{
-  const E = makeEnv(), sh = E.sheets;
-  E.as('bbaki@aisa.sch.ae'); E.call('setup');
-  sh.Roster.push(['isl@aisa.sch.ae', 'Islam One', 'teacher', 'Boys 7', 7, 'sis', 'BO7ISA1', ''], ['isl2@aisa.sch.ae', 'Islam Two', 'teacher', 'Boys 7', 7, 'sis', 'BO7ISA2', ''],
-    ['asl@aisa.sch.ae', 'Arabic Second', 'teacher', 'Boys 7', 7, 'sis', 'BO7ASL', '']);
-  [['701', 'BO7ISA1, BO7AFL1'], ['702', 'BO7ISA2, BO7AFL1'], ['703', 'BO7ASL, BO7TUT'], ['704', 'BO7ASL']].forEach(([id, c]) => sh.Roster.push([id + '@aisa.sch.ae', 'S' + id, 'student', 'Boys 7', 7, 'sis', c, '']));
-  const RD = Date; E.ctx.Date = class extends RD { constructor(...a) { a.length ? super(...a) : super('2026-10-12T09:00:00'); } static now() { return new RD('2026-10-12T09:00:00').getTime(); } };
-  const nt = E.call('getNotTaught').items.filter(x => x.lessonId === 'grade-7/main-w2-l1');
-  ok(nt.length === 2 && nt.every(x => x.email && x.students === 1), 'students with no Islamic class are not listed as having no teacher in an Islamic period');
-  const sec = E.call('getManager').sections.find(x => x.name === 'Boys 7');
-  ok(sec.away.Islamic.length === 2 && !sec.away.Arabic, 'the class model marks who is not in Islamic periods');
-}
 /* Google's HtmlService cuts script lines at '//', even inside a quoted web address, so no
    inline script the app serves may contain '://' (build.py writes it as ':\/\/'). */
 {

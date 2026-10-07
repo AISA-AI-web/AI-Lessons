@@ -1451,7 +1451,6 @@ function mgSlotGroups(sec, subject){
   sec.teachers.forEach(function(t){ tn[t.email] = t.name; });
   var out = pick.map(function(k){ var em = k.slice(k.indexOf('|') + 1); return { email: em, name: tn[em] || em, idx: sec.groups[k] }; }), cov = {};
   out.forEach(function(g){ g.idx.forEach(function(i){ cov[i] = 1; }); });
-  ((sec.away || {})[subject] || []).forEach(function(i){ cov[i] = 1; });
   var rest = sec.students.map(function(x, i){ return i; }).filter(function(i){ return !cov[i]; });
   if (rest.length) out.push({ email: '', name: '', idx: rest });
   return out;
