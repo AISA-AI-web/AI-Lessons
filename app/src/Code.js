@@ -246,7 +246,8 @@ function calendarTeachers_() {
 }
 /** The teachers who teach this student (sharing one of their classes, or the whole section when either
     has no class names), by subject – so a lesson can be matched to the teacher of that day's period.
-    names: their Arabic and Islamic teachers (a tutor only when no one else is listed). */
+    names: their Arabic and Islamic teachers (a tutor only when no one else is listed); a student with
+    no Islamic teacher has their tutor in Islamic periods. */
 function teachersOf_(cm, tbs, email, section) {
   var theirs = (cm.students[email] || {}).classes || [], bySub = {}, lesson = [], tutors = [];
   (tbs[section] || []).forEach(function (t) {
@@ -256,6 +257,7 @@ function teachersOf_(cm, tbs, email, section) {
     if (subs.some(function (sb) { return sb !== 'Tutor'; })) { if (lesson.indexOf(t.name) < 0) lesson.push(t.name); }
     else if (tutors.indexOf(t.name) < 0) tutors.push(t.name);
   });
+  if (!bySub.Islamic && bySub.Tutor && theirs.length) bySub.Islamic = bySub.Tutor.slice();   // the tutor group in Islamic periods
   return { names: lesson.length ? lesson : tutors, bySub: bySub };
 }
 /** True if this student is one of the teacher's own (owners and SLT: everyone). */
@@ -754,9 +756,11 @@ function periodModel_() {
   return { sections: sections, cells: cells, from: AICAL.iso(from), now: now.getTime() };
 }
 /** The teacher groups for one class period: the teachers of that period's subject (or, if none, of no known
-    subject), each with their students; students no such teacher has are grouped as 'no teacher' (email ''). */
+    subject; in Islamic periods also the tutor for the tutor group), each with their students; students no such teacher has are grouped as 'no teacher' (email ''). */
 function slotGroups_(sec, subject) {
   var keys = Object.keys(sec.groups), pick = keys.filter(function (k) { return k.split('|')[0] === subject; }), tn = {};
+  /* In Islamic periods the tutor group (students not in Islamic classes) is in a separate room with the class tutor. */
+  if (subject === 'Islamic' && pick.length) pick = pick.concat(keys.filter(function (k) { return k.split('|')[0] === 'Tutor' && sec.groups[k].length < sec.students.length; }));
   if (!pick.length) pick = keys.filter(function (k) { return k.split('|')[0] === ''; });
   sec.teachers.forEach(function (t) { tn[t.email] = t.name; });
   var out = pick.map(function (k) { var em = k.slice(k.indexOf('|') + 1); return { email: em, name: tn[em] || em, idx: sec.groups[k] }; }), covered = {};

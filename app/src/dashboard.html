@@ -1447,6 +1447,7 @@ function mgState(c){ if (c.state === 'before') return 'pre'; var t = mgTimes(c),
 function mgStatus(c, k){ if (c.cst !== 'due') return c.cst; if (!k.n) return 'none'; return k.n >= MG.data.min && k.s / k.n < MG.data.share / 100 ? 'not' : 'taught'; }
 function mgSlotGroups(sec, subject){
   var keys = Object.keys(sec.groups), pick = keys.filter(function(k){ return k.split('|')[0] === subject; }), tn = {};
+  if (subject === 'Islamic' && pick.length) pick = pick.concat(keys.filter(function(k){ return k.split('|')[0] === 'Tutor' && sec.groups[k].length < sec.students.length; }));
   if (!pick.length) pick = keys.filter(function(k){ return k.split('|')[0] === ''; });
   sec.teachers.forEach(function(t){ tn[t.email] = t.name; });
   var out = pick.map(function(k){ var em = k.slice(k.indexOf('|') + 1); return { email: em, name: tn[em] || em, idx: sec.groups[k] }; }), cov = {};
@@ -1530,7 +1531,7 @@ function attentionCard(K){
   if (noT.length) items.push(['⚠', 'warn', T('No teacher on the class lists for: {list}', { list: noT.map(function(x){ return secName(x.name); }).join(', ') })]);
   var orphans = [];
   A.sections.forEach(function(sec){ var keys = Object.keys(sec.groups).filter(function(k){ return k.split('|')[0] !== 'Tutor'; }); if (!keys.length) return; var cov = {};
-    keys.forEach(function(k){ sec.groups[k].forEach(function(i){ cov[i] = 1; }); }); var n = sec.students.filter(function(x, i){ return !cov[i]; }).length; if (n) orphans.push(secName(sec.name) + ': ' + n); });
+    mgSlotGroups(sec, 'Islamic').concat(mgSlotGroups(sec, 'Arabic')).forEach(function(g){ if (g.email) g.idx.forEach(function(i){ cov[i] = 1; }); }); var n = sec.students.filter(function(x, i){ return !cov[i]; }).length; if (n) orphans.push(secName(sec.name) + ': ' + n); });
   if (orphans.length) items.push(['⚠', 'warn', T('Students with no teacher on the class lists (their class code matches no teacher) – {list}', { list: orphans.join(' · ') })]);
   var unconf = A.sections.filter(function(sec){ return sec.students.length && !A.confirmations[sec.name]; });
   if (unconf.length) items.push(['○', 'info', T('Class lists not confirmed yet: {list}', { list: unconf.map(function(x){ return secName(x.name); }).join(', ') })]);

@@ -466,6 +466,24 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   ok(sec.groups['Islamic|isl@aisa.sch.ae'].length === 3 && sec.groups['Arabic|ara@aisa.sch.ae'].join() === '0,1' && sec.groups['Arabic|ara2@aisa.sch.ae'].join() === '2', 'Arabic groups still split by code');
   E.as('isl@aisa.sch.ae'); ok(E.call('getDashboard').students.every(x => x.mine), 'the Islamic teacher sees the whole section as theirs');
 }
+/* the timetable has the class tutor with the tutor group (students not in Islamic classes) in Islamic
+   periods: those students are the tutor's, not a 'no teacher' group (fresh environment) */
+{
+  const E = makeEnv(), sh = E.sheets;
+  E.as('bbaki@aisa.sch.ae'); E.call('setup');
+  sh.Roster.push(['isl@aisa.sch.ae', 'Islam One', 'teacher', 'Boys 7', 7, 'sis', 'BO7ISA1', ''], ['isl2@aisa.sch.ae', 'Islam Two', 'teacher', 'Boys 7', 7, 'sis', 'BO7ISA2', ''],
+    ['tut@aisa.sch.ae', 'Tutor T', 'teacher', 'Boys 7', 7, 'sis', 'BO7TUT3', ''], ['tut@aisa.sch.ae', 'Tutor T', 'teacher', 'Boys 7', 7, '', 'AI timetable – tutor', ''],
+    ['asl@aisa.sch.ae', 'Arabic Second', 'teacher', 'Boys 7', 7, 'sis', 'BO7ASL', '']);
+  [['701', 'BO7ISA1, BO7AFL1'], ['702', 'BO7ISA2, BO7AFL1'], ['703', 'BO7ASL, BO7TUT3'], ['704', 'BO7ASL, BO7TUT3'], ['705', 'BO7ASL']].forEach(([id, c]) => sh.Roster.push([id + '@aisa.sch.ae', 'S' + id, 'student', 'Boys 7', 7, 'sis', c, '']));
+  const RD = Date; E.ctx.Date = class extends RD { constructor(...a) { a.length ? super(...a) : super('2026-10-12T09:00:00'); } static now() { return new RD('2026-10-12T09:00:00').getTime(); } };
+  const nt = E.call('getNotTaught').items.filter(x => x.lessonId === 'grade-7/main-w2-l1');
+  const by = Object.fromEntries(nt.map(x => [x.email, x.students]));
+  ok(by['tut@aisa.sch.ae'] === 2 && by['isl@aisa.sch.ae'] === 1 && by['isl2@aisa.sch.ae'] === 1, 'in an Islamic period the tutor has the tutor group');
+  ok(by[''] === 1 && nt.length === 4, 'a student in neither an Islamic class nor the tutor group still shows as having no teacher');
+  const st = E.call('getDashboard').students, S = id => st.find(x => x.email === id + '@aisa.sch.ae');
+  ok(S('703').tsub.Islamic.join() === 'Tutor T' && S('701').tsub.Islamic.join() === 'Islam One', "a tutor-group student's Islamic-period teacher is the tutor");
+  E.as('tut@aisa.sch.ae'); ok(E.call('getDashboard').students.filter(x => x.mine).length === 2, 'the tutor sees the tutor group as theirs');
+}
 /* Google's HtmlService cuts script lines at '//', even inside a quoted web address, so no
    inline script the app serves may contain '://' (build.py writes it as ':\/\/'). */
 {
