@@ -53,7 +53,8 @@ function doGet(e) {
   var bridge = HtmlService.createTemplateFromFile('bridge');
   bridge.cfg = JSON.stringify({ email: me.email, name: me.name, role: me.role, page: p, base: ScriptApp.getService().getUrl(),
     sections: me.role === 'teacher' ? visibleSections_(me) : [], section: me.section || '', grade: me.grade || '',
-    locked: rel ? lockedLinks_(rel, me.email) : {} });
+    locked: rel ? lockedLinks_(rel, me.email) : {},
+    teachers: (me.role === 'owner' || me.role === 'slt') && p === 'calendar' ? teachersBySection_() : {} });
   html = html.replace(/<head>/i, '<head>' + bridge.evaluate().getContent());
   return HtmlService.createHtmlOutput(html)
     .setTitle(titleOf_(html))
@@ -178,6 +179,24 @@ function classMap_() {
   });
   Object.keys(moved).forEach(function (e) { if (stu[e] && stu[e].section === moved[e].section) stu[e].classes = [moved[e].cls]; });
   return { students: stu, teachers: tea };
+}
+/** section -> [{name, email, classes}] for every teacher on the class lists (owners' and SLT's calendar). */
+function teachersBySection_() {
+  var out = {}, idx = {};
+  rows_('Roster').forEach(function (r) {
+    if (r.role !== 'teacher' || !r.section) return;
+    var e = lc_(r.email), k = r.section + '|' + e, t = idx[k];
+    if (!t) { t = idx[k] = { name: cleanText_(r.name, 80) || e.split('@')[0], email: e, classes: [] }; (out[r.section] = out[r.section] || []).push(t); }
+    splitClasses_(r.courseName).forEach(function (c) { if (t.classes.indexOf(c) < 0) t.classes.push(c); });
+  });
+  return out;
+}
+/** The teachers who teach this student: those sharing one of their classes (or the whole section
+    when either has no class names). */
+function teachersOf_(cm, tbs, email, section) {
+  var theirs = (cm.students[email] || {}).classes || [];
+  return (tbs[section] || []).filter(function (t) { return !t.classes.length || !theirs.length || theirs.some(function (c) { return t.classes.indexOf(c) >= 0; }); })
+    .map(function (t) { return t.name; });
 }
 /** True if this student is one of the teacher's own (owners and SLT: everyone). */
 function isMine_(me, vis, cm, email, section) {
@@ -542,7 +561,9 @@ function getDashboard() {
   };
   var cm = classMap_(), myClasses = vis === null ? {} : (cm.teachers[me.email] || {});
   var outStudents = Object.keys(students).map(function (e) { return students[e]; }).filter(allowed);
-  outStudents.forEach(function (s) { s.classes = (cm.students[s.email] || {}).classes || []; s.mine = me.role === 'student' || isMine_(me, vis, cm, s.email, s.section); });
+  var tbs = me.role === 'student' ? {} : teachersBySection_();
+  outStudents.forEach(function (s) { s.classes = (cm.students[s.email] || {}).classes || []; s.mine = me.role === 'student' || isMine_(me, vis, cm, s.email, s.section);
+    if (me.role !== 'student') s.teachers = teachersOf_(cm, tbs, s.email, s.section); });
   var keep = {}; outStudents.forEach(function (s) { keep[s.email] = 1; });
   var results = Object.keys(per).map(function (k) { return per[k]; }).filter(function (c) { return keep[c.email]; });
   var retakes = {};                                   // email|lesson -> { n, at, by, prev: {score, max, done, seconds} }

@@ -112,6 +112,7 @@ td.name small{display:block;color:var(--muted);font-size:12px}
 .ls.todo{background:#FBE9E9}.ls.todo i{border:2px solid var(--crit);background:#fff}
 .ls.later{background:none;border:1.5px dashed var(--line);color:var(--muted);font-weight:500}
 .ls.rushed{background:#FBE0E0;color:#8f1d1d}.ls.rushed i{background:var(--crit)}
+td.name small.tch{color:var(--purple);font-weight:600}
 td .sm.rush,td .sm.rnote{white-space:normal;overflow:visible}
 .sm.rush{color:#b3261e;font-weight:700}
 .sm.rnote{color:#5c3d00}
@@ -297,7 +298,7 @@ details.sec .in{padding:0 16px 14px;overflow-x:auto}
 <script src="school-calendar.js"></script>
 <script>
 var CFG = <?!= cfg ?>;
-var D = null, F = { section: '', lesson: '' };
+var D = null, F = { section: '', lesson: '', teacher: '' };
 var $ = function(s){ return document.querySelector(s); };
 var esc = function(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]; }); };
 var pct = function(a, b){ return b ? Math.round(a / b * 100) : 0; };
@@ -451,6 +452,7 @@ var AR = {
   'Move {name} to': 'انقل {name} إلى',
   'Choose class…': 'اختر الشعبة…',
   'Move': 'نقل',
+  'All teachers': 'كل المعلمين',
   'Awards': 'الجوائز',
   'AI & Innovation Awards': 'جوائز الذكاء الاصطناعي والابتكار',
   'AI & Innovation Student of the Month': 'طالب الشهر في الذكاء الاصطناعي والابتكار',
@@ -651,7 +653,8 @@ var UI = { filter: 'all', sort: 'name', q: '', all: false, les: 'chart', str: 'c
    first and can switch to the whole section. Remembered on this device. */
 var SHOWALL = (function(){ try { return localStorage.getItem('dash-show-all') === '1'; } catch (e) { return false; } })();
 function splitSecs(){ var o = {}; (D.students || []).forEach(function(s){ if (s.mine === false) o[s.section] = 1; }); return Object.keys(o).sort(numSort); }
-function shown(s){ return SHOWALL || s.mine !== false; }
+function shown(s){ return (SHOWALL || s.mine !== false) && (!F.teacher || (s.teachers || []).indexOf(F.teacher) >= 0); }
+function teacherNames(){ var o = {}; (D.students || []).forEach(function(s){ (s.teachers || []).forEach(function(t){ o[t] = 1; }); }); return Object.keys(o).sort(); }
 function clsOf(s){ return (s.classes || []).join(', '); }
 var DAY3 = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], MON3 = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 var TKEYS = ['', 'W', 'O', 'E', 'P', 'A'];
@@ -708,7 +711,11 @@ function render(){
   var split = splitSecs(), swSecs = F.section ? split.filter(function(x){ return x === F.section; }) : split;
   var sw = swSecs.length ? '<label class="allsw"><input type="checkbox" id="showAll"' + (SHOWALL ? ' checked' : '') + '> ' +
     esc(swSecs.length === 1 ? T('Show all of {section}', { section: secName(swSecs[0]) }) : T('Show all students in my sections')) + '</label>' : '';
-  $('#app').innerHTML = '<div class="titlebar"><h1>' + esc(T('Dashboard')) + '</h1>' + picker + sw + '<span class="spacer"></span>' +
+  var tn = D.scope === 'school' ? teacherNames() : [];
+  if (F.teacher && tn.indexOf(F.teacher) < 0) F.teacher = '';
+  var tsel = tn.length ? '<label class="sr" for="fTeach">' + esc(T('Teacher')) + '</label><select id="fTeach"><option value="">' + esc(T('All teachers')) + '</option>' +
+    tn.map(function(t){ return '<option value="' + esc(t) + '"' + (F.teacher === t ? ' selected' : '') + '>' + esc(t) + '</option>'; }).join('') + '</select>' : '';
+  $('#app').innerHTML = '<div class="titlebar"><h1>' + esc(T('Dashboard')) + '</h1>' + picker + tsel + sw + '<span class="spacer"></span>' +
     (D.canAward ? '<button type="button" class="btn small" id="awardsBtn">🏆 ' + esc(T('Awards')) + '</button>' : '') +
     (D.roster ? '<button type="button" class="btn small" id="rosterBtn">👥 ' + esc(T('Class lists')) + (reqs ? '<span class="badge" title="' + esc(T('Requests')) + '">' + reqs + '</span>' : '') + '</button>' : '') +
     '<details class="menu"><summary class="btn small quiet">' + esc(T('More')) + ' ▾</summary><div class="popm">' +
@@ -719,6 +726,7 @@ function render(){
   document.querySelectorAll('[data-tab]').forEach(function(b){ b.onclick = function(){ F.section = b.getAttribute('data-tab'); F.lesson = ''; UI.filter = 'all'; render(); }; });
   if ($('#fSec')) $('#fSec').onchange = function(){ F.section = this.value; F.lesson = ''; UI.filter = 'all'; render(); };
   $('#fView').onchange = function(){ if (this.value) viewAs(this.value); };
+  if ($('#fTeach')) $('#fTeach').onchange = function(){ F.teacher = this.value; UI.filter = 'all'; render(); };
   if ($('#showAll')) $('#showAll').onchange = function(){ SHOWALL = this.checked; try { localStorage.setItem('dash-show-all', SHOWALL ? '1' : ''); } catch (e) {} UI.filter = 'all'; render(); };
   $('#pdfBtn').onclick = function(){ savePdf(); };
   $('#exportBtn').onclick = exportCsv;
@@ -974,6 +982,15 @@ function tierCell(row, c){
   return D.canJudge ? '<button type="button" class="tchip t' + (o.tier || 'N') + '" data-j="' + esc(s.email + '|' + c) + '" data-tip="' + esc(tip) + '" aria-haspopup="menu" aria-label="' + label + '">' + inner + '</button>'
     : '<span class="tchip t' + (o.tier || 'N') + '" tabindex="0" data-tip="' + esc(tip) + '" aria-label="' + label + '">' + inner + '</span>';
 }
+/* under each name: section (when several are shown), teaching group, and – for owners and SLT, or another
+   teacher's student – who teaches them */
+function nameSub(s){
+  var parts = [];
+  if (!F.section) parts.push(secName(s.section));
+  if (clsOf(s) && splitSecs().length) parts.push(clsOf(s));
+  var t = (D.scope === 'school' || s.mine === false) && (s.teachers || []).length ? '👩‍🏫 ' + s.teachers.join(', ') : '';
+  return parts.length || t || s.mine === false ? '<small>' + esc(parts.join(' · ')) + (s.mine === false ? (parts.length ? ' · ' : '') + esc(T('not your class')) : '') + '</small>' + (t ? '<small class="tch">' + esc(t) + '</small>' : '') : '';
+}
 function drawTable(){
   var all = FACTS.students.map(function(s){ return ROWS[s.email]; }), colL = F.lesson ? lessonInfo(F.lesson) : null;
   var stOf = function(r){ var l = colLesson(r); return l && l !== 'na' ? (r.by[l.id] || {}).st : null; };
@@ -997,7 +1014,7 @@ function drawTable(){
     '<tr><th class="name" rowspan="2">' + esc(T('Student')) + '</th><th rowspan="2">' + head + '</th><th rowspan="2">' + esc(T('Lessons so far')) + '<small>' + esc(T('finished, oldest → newest')) + '</small></th><th class="grp" colspan="4">' + esc(T('Strand tier')) + '</th></tr>' +
     '<tr>' + STRAND_ORDER.map(function(c){ return '<th class="str">' + c + '<small>' + esc(strandShort(c)) + '</small></th>'; }).join('') + '</tr></thead><tbody>' +
     (rows.map(function(r){ var s = r.s;
-      return '<tr' + (r.rushed.length ? ' class="rushrow"' : '') + '><td class="name"><button type="button" class="stu" data-e="' + esc(s.email) + '" title="' + esc(T('See {name}\'s dashboard', { name: s.name })) + '">' + esc(s.name) + '</button>' + ((F.section ? '' : secName(s.section)) + (clsOf(s) && splitSecs().length ? (F.section ? '' : ' · ') + clsOf(s) : '') ? '<small>' + esc((F.section ? '' : secName(s.section)) + (clsOf(s) && splitSecs().length ? (F.section ? '' : ' · ') + clsOf(s) : '')) + (s.mine === false ? ' · ' + esc(T('not your class')) : '') + '</small>' : '') + '</td>' +
+      return '<tr' + (r.rushed.length ? ' class="rushrow"' : '') + '><td class="name"><button type="button" class="stu" data-e="' + esc(s.email) + '" title="' + esc(T('See {name}\'s dashboard', { name: s.name })) + '">' + esc(s.name) + '</button>' + nameSub(s) + '</td>' +
         '<td class="les" data-l="' + esc(colL ? lessonShort(colL) : T('This week')) + '">' + lessonCell(r) + '</td><td class="sofar" data-l="' + esc(T('Lessons so far')) + '">' + sofarCell(r) + '</td>' +
         STRAND_ORDER.map(function(c){ return '<td class="str" data-l="' + c + '">' + tierCell(r, c) + '</td>'; }).join('') + '</tr>'; }).join('') ||
       '<tr><td colspan="7" class="empty" style="padding:18px">' + esc(T('No students match.')) + '</td></tr>') + '</tbody></table></div>';

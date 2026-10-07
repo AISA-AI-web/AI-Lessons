@@ -95,6 +95,7 @@
 .pop h3{font-size:17px;display:flex;align-items:center;gap:8px;padding-inline-end:24px}
 .pop h3 i{width:10px;height:10px;border-radius:50%;background:var(--gc);flex:none}
 .pop p{margin:4px 0;font-size:14px;color:var(--muted)}
+.pop .tch{color:var(--ink);font-size:14px;margin:8px 0 0}.pop .tch small{color:var(--muted)}
 .pop .ln{color:var(--ink);font-size:14.5px;margin:10px 0 0}
 .pop .x{position:absolute;inset-inline-end:8px;top:8px;border:0;background:none;font-size:20px;line-height:1;cursor:pointer;color:var(--muted);padding:4px 8px}
 @media (max-width:760px){.pop{position:fixed;left:8px!important;right:8px;bottom:8px;top:auto!important;width:auto}}
@@ -161,7 +162,7 @@ let GMON = AICAL.monday(NOW);
 /* ---------- words (English / العربية). Lesson titles stay in English. ---------- */
 const AR = {
   'AI Lessons': 'دروس الذكاء الاصطناعي', 'Lessons': 'الدروس', 'Calendar': 'التقويم', 'Teaching calendar': 'تقويم التدريس', 'Dashboard': 'لوحة المتابعة',
-  'AI Teaching Calendar': 'تقويم تدريس الذكاء الاصطناعي', 'My lessons': 'دروسي', 'Whole school': 'المدرسة كلها', 'This week': 'هذا الأسبوع', 'All grades': 'كل الصفوف', 'Jump to': 'انتقل إلى', 'Print': 'طباعة', 'Grade': 'الصف',
+  'AI Teaching Calendar': 'تقويم تدريس الذكاء الاصطناعي', 'My lessons': 'دروسي', 'Whole school': 'المدرسة كلها', 'This week': 'هذا الأسبوع', 'All grades': 'كل الصفوف', 'Teacher': 'المعلم', 'Teachers': 'المعلمون', 'none on the class lists yet': 'لا أحد في قوائم الشعب بعد', 'Jump to': 'انتقل إلى', 'Print': 'طباعة', 'Grade': 'الصف',
   'American International School in Abu Dhabi': 'المدرسة الأمريكية الدولية في أبوظبي', 'AI Literacy · Grades 6–12': 'محو أمية الذكاء الاصطناعي · الصفوف 6–12',
   'Your classes: {list} – every AI lesson in order, with breaks and holidays.': 'شعبك: {list} – جميع دروس الذكاء الاصطناعي بالترتيب، مع العطل والإجازات.',
   'Every class\'s AI period this week. Your classes are bold and outlined – the one you teach today glows.': 'حصة الذكاء الاصطناعي لكل شعبة هذا الأسبوع. شعبك بخط عريض ومحاطة بإطار – ويتوهّج درس اليوم.',
@@ -262,6 +263,12 @@ function grid() {
   $('#gridOut').innerHTML = h + '</div>';
   $('#legend').innerHTML = `<span>${esc(T('● lesson page ready · ○ page coming'))}</span><span>${esc(T('⏪ class is a lesson behind because of a holiday'))}</span>${MINE.length ? `<span>${esc(T('Bold and outlined = your classes'))}</span>` : ''}<span>${esc(T('Click a class for the lesson, a link to copy and Share to Classroom'))}</span>`;
 }
+/* owners and SLT: who teaches this class (from the class lists) */
+function teachersLine(sec) {
+  const ts = APP && APP.teachers && APP.teachers[sec];
+  if (!APP || !APP.teachers || (APP.role !== 'owner' && APP.role !== 'slt')) return '';
+  return `<p class="tch">👩‍🏫 <b>${esc(T(ts && ts.length > 1 ? 'Teachers' : 'Teacher'))}:</b> ${ts && ts.length ? ts.map(t => `<span title="${esc(t.email)}">${esc(t.name)}${t.classes.length ? ` <small>(${esc(t.classes.join(', '))})</small>` : ''}</span>`).join(' · ') : `<i>${esc(T('none on the class lists yet'))}</i>`}</p>`;
+}
 function openPop(btn) {
   const [sec, ds] = btn.dataset.k.split('|'), d = parse(ds), r = AICAL.slotsOn(d).find(x => x[0] === sec); if (!r) return;
   const s = slot(r, d), pop = $('#pop');
@@ -269,7 +276,7 @@ function openPop(btn) {
   pop.innerHTML = `<button class="x" type="button" aria-label="${esc(T('Close'))}">×</button><h3><i></i>${esc(secName(sec))}${s.mine ? ` <span class="chip purple">${esc(T('Your class'))}</span>` : ''}</h3>` +
     `<p>${esc(fd(d))} · ${esc(T('Day {n}', { n: AICAL.dayNumber(d) }))} · ${esc(T('Period {p}', { p: s.per }))} · <span dir="ltr">${esc(s.time.replace(' - ', '–'))}</span> · ${esc(T(s.sub + ' Studies'))}</p>` +
     `<div class="ln"><b style="color:var(--purple)">${esc(T('Week {n}', { n: s.n }))}</b> · ${s.L ? en(s.L.title) : `<span style="color:var(--muted)">${esc(T('lesson page coming'))}</span>`}</div>` +
-    behindNote(sec, d, s.n, s.tw) + `<div class="act">${actions(s)}</div>`;
+    behindNote(sec, d, s.n, s.tw) + teachersLine(sec) + `<div class="act">${actions(s)}</div>`;
   pop.hidden = false;
   const b = btn.getBoundingClientRect(), w = pop.offsetWidth;
   pop.style.left = Math.max(8, Math.min(document.documentElement.clientWidth - w - 8, b.left + scrollX)) + 'px'; pop.style.top = (b.bottom + scrollY + 6) + 'px';

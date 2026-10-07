@@ -251,6 +251,11 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   ok(mine('t2@aisa.sch.ae') === '803,804', 'Teacher Two\'s own students');
   ok(d.myClasses['Boys 8'].join() === '8B1' && d.students.find(s => s.email === '803@aisa.sch.ae').classes.join() === '8B2', 'the dashboard gets class names');
   ok(mine('t0@aisa.sch.ae') === '901', 'a teacher with no class names sees the whole section as their own');
+  E.as('bbaki@aisa.sch.ae'); d = E.call('getDashboard');
+  const tOf = id => d.students.find(s => s.email === id + '@aisa.sch.ae').teachers.join();
+  ok(tOf('801') === 'Teacher One' && tOf('803') === 'Teacher Two' && tOf('804') === 'Teacher One,Teacher Two' && tOf('901') === 'Teacher Zero', 'the dashboard names each student\'s teachers');
+  ok(/"teachers":\{"Boys 8":\[\{"name":"Teacher One"/.test(E.call('doGet', { parameter: { p: 'calendar' } }).getContent()), 'owners\' calendar gets the teachers of every section');
+  E.as('t1@aisa.sch.ae'); ok(/"teachers":\{\}/.test(E.call('doGet', { parameter: { p: 'calendar' } }).getContent()), 'teachers\' calendar does not');
   E.as('t1@aisa.sch.ae');
   throws(() => E.call('setJudgement', '803@aisa.sch.ae', 'CU', 'A', ''), /students you teach/, 'no judgement for another teacher\'s student in the same section');
   ok(E.call('setJudgement', '804@aisa.sch.ae', 'CU', 'A', '').saved, 'judgement for a student with no class name is allowed');
