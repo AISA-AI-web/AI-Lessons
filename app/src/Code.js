@@ -738,7 +738,11 @@ function sendReminders(keys, cc) {
     var html = '<p>Dear ' + esc_(first) + ',</p><p>Our AI Lessons records show that ' + (many ? 'these AI Literacy lessons' : 'this AI Literacy lesson') + ' planned for your class' + (many ? 'es have' : ' has') + ' not been taught yet:</p><ul>' +
       lines.map(function (x) { return '<li>' + esc_(x) + '</li>'; }).join('') + '</ul><p>A reminder that <b>the AI lessons are mandatory</b> for every class. Please teach ' + (many ? 'them' : 'it') + ' as soon as you can – students can still complete ' + (many ? 'them' : 'it') +
       ' in the <a href="' + url + '">AI Lessons app</a>.</p><p>If you need any support – with the lesson, the app or finding the time – please reply to this email and we will help.</p><p>Thank you,<br>' + esc_(me.name) + '</p>';
-    MailApp.sendEmail({ to: em, cc: ccl.join(','), replyTo: me.email, name: 'AISA AI Lessons', subject: subject, body: text, htmlBody: html });
+    try { MailApp.sendEmail({ to: em, cc: ccl.join(','), replyTo: me.email, name: 'AISA AI Lessons', subject: subject, body: text, htmlBody: html }); }
+    catch (err) {
+      if (/permission|authori/i.test(String(err && err.message))) throw new Error('The app is not allowed to send email yet. In the script editor, choose authorizeEmail, click Run and then Allow – then send again.' + (sent ? ' (' + sent + ' email(s) were already sent.)' : ''));
+      throw err;
+    }
     sent++;
     L.forEach(function (x) { log.push([now, em, x.section, x.lessonId, me.email, ccl.join(', ')]); });
   });
