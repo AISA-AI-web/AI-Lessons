@@ -1216,7 +1216,7 @@ function wireTips(){            // one listener for every tooltip on the page (h
 /* ===================== lessons not taught: reminders to teachers (owners) ===================== */
 var NOTTAUGHT = false, NT = { data: null, sel: null };
 function notTaughtView(){
-  var bar = '<div class="viewbar"><span>📭 <b>' + esc(T('Lessons not taught')) + '</b> – ' + esc(T('lessons whose date has passed but which almost none of a teacher\'s students have opened. Send the teachers a reminder.')) + '</span><div><button type="button" id="backBtn">' + esc(T('← Back to dashboard')) + '</button></div></div>';
+  var bar = '<div class="viewbar"><span>📭 <b>' + esc(T('Lessons not taught')) + '</b> – ' + esc(T('lessons whose period has ended but which almost none of a teacher\'s students have opened. Send the teachers a reminder.')) + '</span><div><button type="button" id="backBtn">' + esc(T('← Back to dashboard')) + '</button></div></div>';
   var back = function(){ $('#backBtn').onclick = function(){ NOTTAUGHT = false; render(); }; };
   if (!NT.data) {
     $('#app').innerHTML = bar + '<div class="card"><div class="empty">' + esc(T('Checking every class\'s lessons…')) + '</div></div>'; back();
@@ -1231,13 +1231,13 @@ function notTaughtView(){
   var h = bar + '<p id="rmsg" class="rmsg" role="status" aria-live="polite"></p>';
   if (!A.items.length) h += '<div class="card"><div class="empty">✓ ' + esc(T('Every lesson so far has been taught – nothing to remind.')) + '</div></div>';
   else {
-    h += '<section class="card"><div class="hd"><div><h2>' + esc(A.items.length === 1 ? T('1 lesson not taught') : T('{n} lessons not taught', { n: A.items.length })) + '</h2><p class="sub">' + esc(T('Not taught = the lesson date has passed and fewer than {p}% of the teacher\'s students (at least {m}) have opened it. Students marked absent are left out.', { p: A.share, m: A.min })) + '</p></div>' +
+    h += '<section class="card"><div class="hd"><div><h2>' + esc(A.items.length === 1 ? T('1 lesson not taught') : T('{n} lessons not taught', { n: A.items.length })) + '</h2><p class="sub">' + esc(T('Not taught = the lesson\'s period has ended and fewer than {p}% of the teacher\'s students (at least {m}) have opened it. Lessons from {d} on; students marked absent are left out.', { p: A.share, m: A.min, d: (function(){ var p = String(A.from).split('-'); return fd(new Date(+p[0], +p[1] - 1, +p[2])); })() })) + '</p></div>' +
       '<div class="ntsel"><button type="button" class="nbtn" id="ntAll">' + esc(T('Select all not yet reminded')) + '</button> <button type="button" class="nbtn" id="ntNone">' + esc(T('Clear')) + '</button></div></div>' +
       '<div class="awwrap"><table class="awt nt"><thead><tr><th></th><th>' + esc(T('Teacher')) + '</th><th>' + esc(T('Class')) + '</th><th>' + esc(T('Lesson')) + '</th><th>' + esc(T('Planned for')) + '</th><th>' + esc(T('Started')) + '</th><th>' + esc(T('Reminded')) + '</th></tr></thead><tbody>' +
       A.items.map(function(x){ var k = key(x);
         return '<tr' + (x.reminded ? ' class="inel"' : '') + '><td>' + (x.email ? '<input type="checkbox" data-k="' + esc(k) + '"' + (NT.sel[k] ? ' checked' : '') + ' aria-label="' + esc(T('Remind {name}', { name: x.teacher })) + '">' : '') + '</td>' +
           '<td class="nm"><b>' + esc(x.teacher || T('No teacher on the class lists')) + '</b></td><td>' + esc(secName(x.section)) + '</td><td class="nm">' + esc(T('Week {n}', { n: x.week })) + '<small>' + esc(x.title) + '</small></td>' +
-          '<td>' + esc(dd(x.date)) + (x.subject ? '<small class="blk">' + esc(T(x.subject)) + (x.period ? ' · P' + x.period : '') + '</small>' : '') + '</td><td>' + x.started + ' / ' + x.students + '</td><td>' + (x.reminded ? esc(fmtDate(x.reminded)) : '–') + '</td></tr>'; }).join('') +
+          '<td>' + esc(dd(x.date)) + (x.subject ? '<small class="blk">' + esc(T(x.subject)) + (x.period ? ' · P' + x.period : '') + (x.time ? ' · ' + x.time : '') + '</small>' : '') + '</td><td>' + x.started + ' / ' + x.students + '</td><td>' + (x.reminded ? esc(fmtDate(x.reminded)) : '–') + '</td></tr>'; }).join('') +
       '</tbody></table></div></section>';
     h += '<section class="card"><h2>' + esc(T('Send reminders')) + '</h2><p class="sub">' + esc(T('Each teacher gets one email listing their lessons. It says the AI lessons are mandatory, offers support, and replies come to you.')) + '</p>' +
       '<div class="form"><div style="flex:1 1 320px"><label for="ntCc">' + esc(T('Cc (school usernames or emails, separated by commas)')) + '</label><input id="ntCc" dir="ltr" autocomplete="off" value="' + esc(A.cc) + '" placeholder="e.g. head1, head2, head3"></div>' +

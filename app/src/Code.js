@@ -665,9 +665,18 @@ function setAbsent(studentEmail, lessonId, absent, note) {
 /* A lesson counts as not taught when its date has passed and fewer than a quarter of a teacher's
    students (in that period's subject group, leaving out absences) have opened it – at least 3 students. */
 var NOT_TAUGHT_SHARE = 0.25, NOT_TAUGHT_MIN = 3;
+/* Only lessons from the day the app was rolled out (script property NOT_TAUGHT_FROM overrides it), and
+   only once the lesson's period has ended. */
+var NOT_TAUGHT_FROM = '2026-10-07';
+/** When a slot's period ends on date d: '1:10 - 2:00' ends at 2:00 pm (school hours 7:00–6:59). */
+function periodEnd_(d, time) {
+  var m = /-\s*(\d{1,2}):(\d{2})/.exec(String(time || '')), h = m ? Number(m[1]) : 23, mi = m ? Number(m[2]) : 59;
+  if (m && h < 7) h += 12;
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate(), h, mi);
+}
 function notTaught_() {
   var LC = lessonCells_(), cm = classMap_(), tbs = teachersBySection_(), ab = absences_(), cat = typeof CATALOG === 'undefined' ? [] : CATALOG;
-  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var now = new Date(), from = AICAL.parse(PropertiesService.getScriptProperties().getProperty('NOT_TAUGHT_FROM') || NOT_TAUGHT_FROM);
   var bySec = {}, temail = {};
   rows_('Roster').forEach(function (r) { if (r.role === 'student' && r.section) { var e = lc_(r.email); if (!bySec[r.section]) bySec[r.section] = []; if (bySec[r.section].indexOf(e) < 0) bySec[r.section].push(e); } });
   Object.keys(tbs).forEach(function (sec) { tbs[sec].forEach(function (t) { temail[sec + '|' + t.name] = t.email; }); });
@@ -679,8 +688,9 @@ function notTaught_() {
     bySec[sec].forEach(function (e) { to[e] = teachersOf_(cm, tbs, e, sec); });
     cat.forEach(function (l) {
       if (l.grade !== grade || l.course !== 'main') return;
-      var d = AICAL.lessonDate(sec, l.week); if (!d || d >= today) return;
+      var d = AICAL.lessonDate(sec, l.week); if (!d || d < from) return;
       var slot = AICAL.SCHEDULE.filter(function (x) { return x[0] === sec && x[3] === AICAL.cycleOf(d) && x[4] === AICAL.DAYS[d.getDay()]; })[0], sub = slot ? slot[2] : '';
+      if (periodEnd_(d, slot ? slot[6] : '') > now) return;            // not over yet
       var groups = {};
       bySec[sec].forEach(function (e) {
         if (ab[e + '|' + l.id]) return;
@@ -692,7 +702,7 @@ function notTaught_() {
         var g = groups[n]; if (g.n < NOT_TAUGHT_MIN || g.started / g.n >= NOT_TAUGHT_SHARE) return;
         var em = temail[sec + '|' + n] || '';
         out.push({ teacher: n, email: em, section: sec, lessonId: l.id, week: l.week, title: l.title, date: AICAL.iso(d), subject: sub, period: slot ? slot[5] : '',
-          students: g.n, started: g.started, reminded: em ? (rem[em + '|' + l.id + '|' + sec] || '') : '' });
+          time: slot ? String(slot[6]).replace(' - ', '–') : '', students: g.n, started: g.started, reminded: em ? (rem[em + '|' + l.id + '|' + sec] || '') : '' });
       });
     });
   });
@@ -702,7 +712,8 @@ function reminderCc_() { return PropertiesService.getScriptProperties().getPrope
 /** Owners: lessons whose date has passed but which a teacher's students have not started. */
 function getNotTaught() {
   requireOwner_();
-  return { items: notTaught_(), cc: reminderCc_(), share: Math.round(NOT_TAUGHT_SHARE * 100), min: NOT_TAUGHT_MIN };
+  return { items: notTaught_(), cc: reminderCc_(), share: Math.round(NOT_TAUGHT_SHARE * 100), min: NOT_TAUGHT_MIN,
+    from: PropertiesService.getScriptProperties().getProperty('NOT_TAUGHT_FROM') || NOT_TAUGHT_FROM };
 }
 /** Owners: one email per teacher listing their untaught lessons, with the CC list (remembered). */
 function sendReminders(keys, cc) {

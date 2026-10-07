@@ -269,7 +269,9 @@ of *Not started*, *Need a nudge*, the progress chart's finish rate, the awards'
 completion and the not-taught check. The student can still do the lesson later.
 
 **Lessons not taught (owners).** The **📭 Not taught** button lists lessons whose
-date has passed but which fewer than 25% of a teacher's students (at least 3,
+period has ended (the same day – e.g. a 1:10–2:00 lesson from 2:00 pm), from the
+rollout day on (`NOT_TAUGHT_FROM` in `Code.js`, 7 Oct 2026; a script property of the
+same name overrides it), but which fewer than 25% of a teacher's students (at least 3,
 leaving out absences) have opened. The teacher is the one of that period's subject
 (Arabic or Islamic) for those students. Tick the lessons, fill in **Cc** (school
 usernames such as `head1, head2` – remembered for next time, kept in the script

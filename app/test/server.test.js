@@ -392,6 +392,12 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   E.call('setAbsent', '603@aisa.sch.ae', L2.id, true, ''); E.call('setAbsent', '603@aisa.sch.ae', L2.id, false, '');
   ok(!E.call('getDashboard').absences['603@aisa.sch.ae|' + L2.id], 'an absence can be cleared');
   E.as('isl@aisa.sch.ae'); throws(() => E.call('getNotTaught'), /owners/, 'only owners see lessons not taught');
+  E.as('bbaki@aisa.sch.ae');
+  clock = new RD('2026-10-07T13:30:00').getTime();
+  ok(!E.call('getNotTaught').items.some(x => x.lessonId === L2.id), 'a lesson whose period (1:10–2:00) has not ended yet is not listed');
+  clock = new RD('2026-10-07T14:05:00').getTime();
+  ok(E.call('getNotTaught').items.some(x => x.lessonId === L2.id && x.time === '1:10–2:00'), 'it is listed as soon as the period ends, the same day');
+  clock = new RD('2026-10-12T09:00:00').getTime();
   E.as('bbaki@aisa.sch.ae'); let nt = E.call('getNotTaught');
   const w2 = nt.items.find(x => x.lessonId === L2.id);
   ok(w2 && w2.email === 'isl@aisa.sch.ae' && w2.subject === 'Islamic' && w2.students === 5 && w2.started === 0, 'Week 2 (an Islamic period) is not taught: matched to the Islamic teacher, absent student left out');
