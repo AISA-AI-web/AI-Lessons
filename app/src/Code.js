@@ -244,16 +244,27 @@ function teachersBySection_() {
   Object.keys(out).forEach(function (sec) { out[sec].forEach(function (t) { t.classes = t.classes.filter(function (c) { return (codes[sec] || {})[c]; }); }); });
   return out;
 }
-/* Students not in a subject's classes (no Islamic code, or no Arabic code, while classmates have one) spend
-   that subject's periods in a separate room with their tutor, who teaches them the AI lesson there. */
-var TUTOR_SUBJECTS = ['Islamic', 'Arabic'];
-/** The subjects whose periods this student spends with their tutor. */
-function withTutorIn_(cm, section, theirs) {
+/* Students not in a subject's classes (no Islamic code, or no Arabic code, while classmates have one) are
+   elsewhere in that subject's periods. In Islamic periods they are with their class tutor in a separate room,
+   who teaches them the AI lesson (the AI timetable: "the class tutor (TUT) present for Islamic Studies
+   sessions"; it names tutors for Islamic lessons only). In Arabic periods (Grades 11–12) no one on the AI
+   timetable teaches them – their tutor is not there – so they are shown apart, as not in an Arabic class. */
+var TUTOR_SUBJECTS = ['Islamic'];
+/** The subjects (Islamic, Arabic) whose classes this student is not in, while classmates are. */
+function notInSubjects_(cm, section, theirs) {
   var sc = Object.keys(cm.codes[section] || {});
   if (!theirs.length) return [];
-  return TUTOR_SUBJECTS.filter(function (sub) {
+  return ['Islamic', 'Arabic'].filter(function (sub) {
     return sc.some(function (c) { return subjectOf_(c) === sub; }) && !theirs.some(function (c) { return subjectOf_(c) === sub; });
   });
+}
+/** The subjects whose periods this student spends with their tutor (Islamic). */
+function withTutorIn_(cm, section, theirs) {
+  return notInSubjects_(cm, section, theirs).filter(function (sub) { return TUTOR_SUBJECTS.indexOf(sub) >= 0; });
+}
+/** The subjects whose AI lessons no one teaches this student (not in an Arabic class). */
+function awayIn_(cm, section, theirs) {
+  return notInSubjects_(cm, section, theirs).filter(function (sub) { return TUTOR_SUBJECTS.indexOf(sub) < 0; });
 }
 /** A student's tutors: those sharing their tutor-group code, else every tutor of the section. */
 function tutorsFor_(tbs, section, theirs) {
@@ -301,7 +312,7 @@ function teachersOf_(cm, tbs, email, section) {
     var l = bySub[sub] || (bySub[sub] = []);
     tutorsFor_(tbs, section, theirs).forEach(function (t) { if (l.indexOf(t.name) < 0) l.push(t.name); });
   });
-  return { names: lesson.length ? lesson : tutors, bySub: bySub };
+  return { names: lesson.length ? lesson : tutors, bySub: bySub, away: awayIn_(cm, section, theirs) };
 }
 /** True if this student is one of the teacher's own (owners and SLT: everyone). */
 function isMine_(me, vis, cm, email, section) {
@@ -675,7 +686,7 @@ function dashboard_(me, vis, force) {
   var outStudents = Object.keys(students).map(function (e) { return students[e]; }).filter(allowed);
   var tbs = me.role === 'student' ? {} : teachersBySection_();
   outStudents.forEach(function (s) { s.classes = (cm.students[s.email] || {}).classes || []; s.mine = me.role === 'student' || isMine_(me, vis, cm, s.email, s.section);
-    if (me.role !== 'student') { var to = teachersOf_(cm, tbs, s.email, s.section); s.teachers = to.names; s.tsub = to.bySub; } });
+    if (me.role !== 'student') { var to = teachersOf_(cm, tbs, s.email, s.section); s.teachers = to.names; s.tsub = to.bySub; if (to.away.length) s.away = to.away; } });
   var keep = {}; outStudents.forEach(function (s) { keep[s.email] = 1; });
   var TP = me.role === 'student' ? null : teachingPeriods_(force);   // ↻ Refresh also refreshes the calendar's periods
   var results = Object.keys(per).map(function (k) { return per[k]; }).filter(function (c) { return keep[c.email]; });
@@ -785,13 +796,14 @@ function classGroups_(cm, tbs) {
     var sc = {}; students.forEach(function (x) { x.c.forEach(function (c) { sc[c] = (sc[c] || 0) + 1; }); });
     var why = { teachers: (tbs[sec] || []).map(function (t) { return t.name + ' (' + (t.subjects.join('/') || 'subject unknown') + (t.raw.length ? ': ' + t.raw.join(', ') : '') + ')'; }),
       codes: Object.keys(sc).sort(function (a, b) { return sc[b] - sc[a]; }).slice(0, 8).map(function (c) { return c + ' ×' + sc[c]; }), noCodes: students.filter(function (x) { return !x.c.length; }).length };
-    var tut = {};
+    var tut = {}, away = {};
     students.forEach(function (x, i) {
       withTutorIn_(cm, sec, x.c).forEach(function (sub) {
         tutorsFor_(tbs, sec, x.c).forEach(function (t) { var o = tut[sub] || (tut[sub] = {}); (o[t.email] = o[t.email] || []).push(i); });
       });
+      awayIn_(cm, sec, x.c).forEach(function (sub) { (away[sub] = away[sub] || []).push(i); });
     });
-    out.push({ name: sec, grade: grade, why: why, tut: tut, students: students, groups: groups,
+    out.push({ name: sec, grade: grade, why: why, tut: tut, away: away, students: students, groups: groups,
       teachers: (tbs[sec] || []).map(function (t) { return { email: t.email, name: t.name, subjects: t.subjects }; }) });
   });
   return out;
@@ -809,7 +821,7 @@ function periodModel_() {
   classGroups_().forEach(function (G) {
     var sec = G.name, grade = G.grade, students = G.students;
     var lessons = cat.filter(function (l) { return l.grade === grade && l.course === 'main'; }).sort(function (a, b) { return a.week - b.week; });
-    sections.push({ name: sec, grade: grade, why: G.why, tut: G.tut, students: students.map(function (x) { return { e: x.e, n: x.n }; }), groups: G.groups, lessons: lessons.map(function (l) { return l.id; }),
+    sections.push({ name: sec, grade: grade, why: G.why, tut: G.tut, away: G.away, students: students.map(function (x) { return { e: x.e, n: x.n }; }), groups: G.groups, lessons: lessons.map(function (l) { return l.id; }),
       teachers: G.teachers });
     lessons.forEach(function (l) {
       var d = AICAL.lessonDate(sec, l.week); if (!d) return;
@@ -830,7 +842,8 @@ function periodModel_() {
 }
 /** The teacher groups for one class period: the teachers of that period's subject (or, if none, of no known
     subject), each with their students, plus the tutors with the students not in that subject's classes
-    (sec.tut); students no one has are grouped as 'no teacher' (email ''). */
+    (sec.tut); students not in that subject's classes with no tutor there (sec.away: Arabic) are a group of their
+    own (away: true – no one to blame or remind); anyone else no one has is grouped as 'no teacher' (email ''). */
 function slotGroups_(sec, subject) {
   var keys = Object.keys(sec.groups), pick = keys.filter(function (k) { return k.split('|')[0] === subject; }), tn = {};
   if (!pick.length) pick = keys.filter(function (k) { return k.split('|')[0] === ''; });
@@ -843,8 +856,11 @@ function slotGroups_(sec, subject) {
     tg[em].forEach(function (i) { if (g.idx.indexOf(i) < 0) g.idx.push(i); });
   });
   out.forEach(function (g) { g.idx.forEach(function (i) { covered[i] = 1; }); });
+  var away = ((sec.away || {})[subject] || []).filter(function (i) { return !covered[i]; });
+  away.forEach(function (i) { covered[i] = 1; });
   var rest = sec.students.map(function (x, i) { return i; }).filter(function (i) { return !covered[i]; });
   if (rest.length) out.push({ email: '', name: '', idx: rest });
+  if (away.length) out.push({ email: '', name: '', idx: away, away: true });   // not in this subject's classes: no AI teacher here
   return out;
 }
 function groupCounts_(cell, idx) {
@@ -860,6 +876,7 @@ function notTaught_(M) {
     sec.lessons.forEach(function (id) {
       var cell = M.cells[sec.name + '|' + id]; if (!cell || cell.state !== 'due') return;
       slotGroups_(sec, cell.subject).forEach(function (g) {
+        if (g.away) return;                              // not in this subject's classes: no one to remind
         var k = groupCounts_(cell, g.idx); if (k.n < NOT_TAUGHT_MIN || k.started / k.n >= NOT_TAUGHT_SHARE) return;
         out.push({ teacher: g.name, email: g.email, section: sec.name, lessonId: id, week: cell.week, title: cell.title, date: cell.date, subject: cell.subject, period: cell.period,
           time: cell.time, students: k.n, started: k.started, reminded: g.email ? (rem[g.email + '|' + id + '|' + sec.name] || '') : '', why: g.email ? null : sec.why });

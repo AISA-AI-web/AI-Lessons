@@ -488,7 +488,9 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   ok(S('703').tsub.Islamic.join() === 'Tutor T' && S('701').tsub.Islamic.join() === 'Islam One', "a tutor-group student's Islamic-period teacher is the tutor");
   E.as('tut@aisa.sch.ae'); ok(E.call('getDashboard').students.filter(x => x.mine).length === 3, 'the tutor sees those students as theirs');
 }
-/* Grade 11–12: students with no Arabic code spend Arabic periods with their tutor (fresh environment) */
+/* Grades 11–12: students with no Arabic code are not in Arabic periods' AI lessons – their tutor is only with them
+   in Islamic periods (as the AI timetable says) – so they are a group of their own, not a tutor's or a 'no teacher'
+   gap, and no one is reminded about them (fresh environment) */
 {
   const E = makeEnv(), sh = E.sheets;
   E.as('bbaki@aisa.sch.ae'); E.call('setup');
@@ -498,9 +500,12 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   const RD = Date; E.ctx.Date = class extends RD { constructor(...a) { a.length ? super(...a) : super('2026-10-12T09:00:00'); } static now() { return new RD('2026-10-12T09:00:00').getTime(); } };
   const nt = E.call('getNotTaught').items.filter(x => x.lessonId === 'grade-11/main-w2-l1');
   const by = Object.fromEntries(nt.map(x => [x.email, x.students]));
-  ok(nt[0] && nt[0].subject === 'Arabic' && by['ara@aisa.sch.ae'] === 3 && by['tut@aisa.sch.ae'] === 1 && nt.length === 2, 'in an Arabic period the tutor has the students not in Arabic classes');
+  ok(nt.length === 1 && nt[0].subject === 'Arabic' && by['ara@aisa.sch.ae'] === 3, 'in an Arabic period only the Arabic teacher is reminded: the tutor is not there, and no "no teacher" row');
   const st = E.call('getDashboard').students, S = id => st.find(x => x.email === id + '@aisa.sch.ae');
-  ok(S('1103').tsub.Arabic.join() === 'Tutor G' && S('1104').tsub.Islamic.join() === 'Tutor G' && S('1101').tsub.Arabic.join() === 'Arabic One', "each student's period teacher follows their classes");
+  ok(!S('1103').tsub.Arabic && S('1103').away.join() === 'Arabic' && S('1104').tsub.Islamic.join() === 'Tutor G' && S('1101').tsub.Arabic.join() === 'Arabic One' && !S('1101').away, "each student's period teacher follows their classes");
+  const sec = E.call('getManager').sections.find(x => x.name === 'Girls 11'), g = E.ctx.slotGroups_(sec, 'Arabic');
+  ok(g.length === 2 && g[1].away === true && g[1].idx.length === 1 && sec.students[g[1].idx[0]].e === '1103@aisa.sch.ae', 'the manager view shows them as a group of their own (not in an Arabic class)');
+  ok(E.ctx.slotGroups_(sec, 'Islamic').some(x => x.email === 'tut@aisa.sch.ae' && x.idx.length === 1), 'their tutor still has the tutor group in Islamic periods');
 }
 /* speed: results are reused from the cache while nothing has changed, and never after a change made through
    the app, a period ending, or a forced refresh; each person's view is kept apart (fresh environment) */
@@ -552,13 +557,13 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   const per = e => { E.as(e); return JSON.stringify(cfgOf(E.call('doGet', { parameter: { p: 'calendar' } })).periods); };
   ok(per('ara@aisa.sch.ae') === '[["Boys 11","Arabic",0]]' && per('asl@aisa.sch.ae') === '[["Boys 11","Arabic",0]]', 'Arabic teachers: only their class\'s Arabic-period lessons');
   ok(per('isl@aisa.sch.ae') === '[["Boys 11","Islamic",0]]', 'an Islamic teacher: only the Islamic-period lessons');
-  ok(per('tut@aisa.sch.ae') === '[["Boys 11","Arabic",1],["Boys 11","Islamic",1]]', 'the tutor: the periods they spend with students not in that subject');
+  ok(per('tut@aisa.sch.ae') === '[["Boys 11","Islamic",1]]', 'the tutor: only the Islamic periods (with the students not in Islamic classes) – not the Arabic ones');
   ok(per('hand@aisa.sch.ae') === '[]', 'a teacher only added by hand, where the class lists name the teachers, teaches no period');
   ok(per('ara9@aisa.sch.ae') === '[["Boys 9","Arabic",0]]' && per('isl9@aisa.sch.ae') === '[["Boys 9","Islamic",0]]', 'Boys 9: Arabic and Islamic teachers apart');
   E.as('isl@aisa.sch.ae'); const tc = cfgOf(E.call('doGet', { parameter: { p: 'calendar' } }));
-  ok(tc.tut.includes('Boys 11|Islamic') && tc.tut.includes('Boys 11|Arabic') && !tc.tut.includes('Boys 9|Islamic') && JSON.stringify(tc.who) === '{}', 'teachers see which periods have a tutor group (/ TUT), not the names');
+  ok(tc.tut.includes('Boys 11|Islamic') && !tc.tut.includes('Boys 11|Arabic') && !tc.tut.includes('Boys 9|Islamic') && JSON.stringify(tc.who) === '{}', 'teachers see which periods have a tutor group (/ TUT, Islamic periods only), not the names');
   E.as('bbaki@aisa.sch.ae'); const oc = cfgOf(E.call('doGet', { parameter: { p: 'calendar' } }));
-  ok(JSON.stringify(oc.who['Boys 11|Islamic']) === '[["Islam One",0],["Tutor T",1]]' && JSON.stringify(oc.who['Boys 11|Arabic']) === '[["Arabic One",0],["Arabic Second",0],["Tutor T",1]]', 'owners see the teachers of each period, tutors last');
+  ok(JSON.stringify(oc.who['Boys 11|Islamic']) === '[["Islam One",0],["Tutor T",1]]' && JSON.stringify(oc.who['Boys 11|Arabic']) === '[["Arabic One",0],["Arabic Second",0]]', 'owners see the teachers of each period, tutors last (none in Arabic periods)');
   ok(JSON.stringify(oc.periods) === '[]', 'an owner who teaches no class has no periods of their own');
   E.realCache = true; E.as('ara@aisa.sch.ae'); per('ara@aisa.sch.ae');
   sh.Roster.push(['ara@aisa.sch.ae', 'Arabic One', 'teacher', 'Boys 9', 9, 'sis', 'B09ISA1', '']);   // a hand edit of the class lists

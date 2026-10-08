@@ -130,11 +130,12 @@ page**. The public site works the same way without signing in.
   same class-list groups as the manager view (`teachingPeriods_` / `classGroups_` /
   `slotGroups_` in `Code.js`), so the two always agree: class codes give the subject
   (`…ISA…`, `…ISE` = Islamic; `…AFL…`, `…ASL…` = Arabic), and the tutor (`…TUT`) has
-  the periods they spend with students not in that subject's classes. A teacher
+  the **Islamic** periods, with the students not in an Islamic class (the AI
+  timetable names tutors for Islamic lessons only – never Arabic ones). A teacher
   only added by hand ("AI timetable – teacher") teaches a period only when the class
   lists name no teacher of that subject.
-- **/ TUT**: periods in which a tutor teaches part of the class (in a separate room)
-  read e.g. *Islamic / TUT*; a tutor's own lessons say *Your tutor group (TUT)*.
+- **/ TUT**: Islamic periods in which a tutor teaches part of the class (in a separate
+  room) read *Islamic / TUT*; a tutor's own lessons say *Your tutor group (TUT)*.
   Owners and SLT see who teaches each period in the pop-up (tutors marked TUT).
 - **My classes** (teachers): their own lessons only – their classes, in their
   subject's periods; today's glows. Breaks show as one line; a class pushed back by
@@ -235,11 +236,14 @@ their lists are right:
   `BO6ASL` = Arabic, `BO6TUT` = tutor) or from a Classroom course name. Owners and
   SLT see, in the calendar pop-up, the teachers of that subject for that class –
   names only – and on the dashboard the teacher of the period each lesson fell in.
-  Students not in a subject's classes (no Islamic code – the `…TUT` tutor group –
-  or, mostly in Grades 11–12, no Arabic code) spend that subject's periods in a
-  separate classroom with their tutor, who teaches them the AI lesson. They count as
-  the tutor's group in those periods (Not taught list and reminders included); the
-  tutor is the one sharing their tutor-group code, else the section's tutor.
+  Students not in an Islamic class (the `…TUT` tutor group) spend Islamic periods in
+  a separate classroom with their tutor, who teaches them the AI lesson there; they
+  count as the tutor's group in those periods (Not taught list and reminders
+  included); the tutor is the one sharing their tutor-group code, else the section's
+  tutor. Students not in an Arabic class (Grades 11–12 only) have no AI teacher in
+  Arabic periods – their tutor is not with them then – so the manager view shows
+  them as a group of their own, *Not in an Arabic class* (no reminders, not a "no
+  teacher" gap), and *Needs attention* lists how many there are per class.
   Rows added by hand (blank `courseId`) hold notes such as "AI timetable –
   teacher", which are never treated as class names.
 - **✓ This list is correct** records who confirmed each class and when; the

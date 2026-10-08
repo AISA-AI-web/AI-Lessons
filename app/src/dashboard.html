@@ -239,7 +239,7 @@ ul.today{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px}
 .stt small{display:block;font-weight:500;color:var(--muted);font-size:11.5px;white-space:normal}
 .trow .stt{white-space:normal;border-radius:10px}
 .st-taught{background:#E3F4E3;color:#0a5d0a}.st-not{background:#FBE0E0;color:#8f1d1d}.st-part{background:#FFF0D1;color:#7a4a00}.st-live{background:#EDE7FF;color:var(--purple)}
-.st-up,.st-pre,.st-none{background:#F1F0F5;color:var(--muted)}
+.st-up,.st-pre,.st-none,.st-away{background:#F1F0F5;color:var(--muted)}
 ul.att li{align-items:center}ul.att li span{flex:1}ul.att li .nbtn{flex:none}
 table.mx{border-collapse:separate;border-spacing:3px;width:100%;min-width:880px;font-variant-numeric:tabular-nums}
 table.mx thead th{font-size:12px;color:var(--muted);font-weight:700;padding:4px}
@@ -589,7 +589,8 @@ var AR = {
   '1 group not taught': 'مجموعة واحدة لم تُدرَّس',
   '{n} groups not taught': '{n} مجموعات لم تُدرَّس',
   'no teacher on the class lists': 'لا يوجد معلم في قوائم الشعب',
-  'No teacher on the class lists': 'لا يوجد معلم في قوائم الشعب',
+  'No teacher on the class lists': 'لا يوجد معلم في قوائم الشعب', 'Not in an {s} class': 'ليسوا في صف {s}', 'no AI teacher in this period': 'لا يوجد معلم ذكاء اصطناعي في هذه الحصة',
+  'Not in an Arabic class, so no one teaches them the Arabic-period AI lessons (their tutor is only with them in Islamic periods): {list}': 'ليسوا في صف لغة عربية، لذا لا يدرّسهم أحد دروس الذكاء الاصطناعي في حصص اللغة العربية (مشرف الصف معهم في حصص التربية الإسلامية فقط): {list}',
   'Started, not finished': 'بدأ ولم يُنهِ',
   'Show these students on the dashboard': 'عرض هؤلاء الطلاب في لوحة المتابعة',
   'Remind': 'تذكير',
@@ -1159,6 +1160,7 @@ function lessonCell(row){
 function slotTeachers(s, date){
   if (!date || !s.tsub) return [];
   var r = AICAL.SCHEDULE.filter(function(x){ return x[0] === s.section && x[3] === AICAL.cycleOf(date) && x[4] === AICAL.DAYS[date.getDay()]; })[0];
+  if (r && s.away && s.away.indexOf(r[2]) >= 0) return [];   // not in that subject's classes: no teacher in that period
   var t = r && s.tsub[r[2]] && s.tsub[r[2]].length ? s.tsub[r[2]] : (s.tsub[''] || []);
   return t.length ? t : (s.teachers || []);
 }
@@ -1473,8 +1475,11 @@ function mgSlotGroups(sec, subject){
     tg[em].forEach(function(i){ if (g.idx.indexOf(i) < 0) g.idx.push(i); });
   });
   out.forEach(function(g){ g.idx.forEach(function(i){ cov[i] = 1; }); });
+  var away = ((sec.away || {})[subject] || []).filter(function(i){ return !cov[i]; });   // not in this subject's classes (Arabic, Grades 11–12)
+  away.forEach(function(i){ cov[i] = 1; });
   var rest = sec.students.map(function(x, i){ return i; }).filter(function(i){ return !cov[i]; });
   if (rest.length) out.push({ email: '', name: '', idx: rest });
+  if (away.length) out.push({ email: '', name: '', idx: away, away: true });
   return out;
 }
 function mgPrep(){
@@ -1485,9 +1490,9 @@ function mgPrep(){
     sec.lessons.forEach(function(id){
       var c = A.cells[sec.name + '|' + id]; if (!c) return;
       sec.byWeek[c.week] = c; c.sec = sec.name; c.key = sec.name + '|' + id; c.grade = sec.grade; c.cst = mgState(c);
-      c.groups = mgSlotGroups(sec, c.subject).map(function(g){ var k = mgCount(c, g.idx); return { email: g.email, name: g.name, idx: g.idx, k: k, status: mgStatus(c, k) }; });
+      c.groups = mgSlotGroups(sec, c.subject).map(function(g){ var k = mgCount(c, g.idx); return { email: g.email, name: g.name, idx: g.idx, k: k, away: !!g.away, status: g.away ? 'away' : mgStatus(c, k) }; });
       c.all = mgCount(c, sec.students.map(function(x, i){ return i; }));
-      var real = c.groups.filter(function(g){ return g.k.n; }), nots = real.filter(function(g){ return g.status === 'not'; }).length;
+      var real = c.groups.filter(function(g){ return g.k.n && !g.away; }), nots = real.filter(function(g){ return g.status === 'not'; }).length;
       c.status = c.cst !== 'due' ? c.cst : !c.all.n ? 'none' : nots && nots === real.length ? 'not' : nots ? 'part' : 'taught';
       c.nots = nots;
       P.cells.push(c);
@@ -1524,6 +1529,7 @@ function stLabel(c, k, status){
   if (status === 'up') return T('upcoming');
   if (status === 'live') return '● ' + T('in progress');
   if (status === 'none') return T('no students');
+  if (status === 'away') return '– ' + T('no AI teacher in this period');
   if (status === 'not') return '✗ ' + T('not taught');
   if (status === 'part') return '⚠ ' + (c.nots === 1 ? T('1 group not taught') : T('{n} groups not taught', { n: c.nots }));
   return '✓ ' + T('{s} of {n} started', { s: k.s, n: k.n });
@@ -1554,8 +1560,11 @@ function attentionCard(K){
   if (noT.length) items.push(['⚠', 'warn', T('No teacher on the class lists for: {list}', { list: noT.map(function(x){ return secName(x.name); }).join(', ') })]);
   var orphans = [];
   A.sections.forEach(function(sec){ var keys = Object.keys(sec.groups).filter(function(k){ return k.split('|')[0] !== 'Tutor'; }); if (!keys.length) return; var cov = {};
-    mgSlotGroups(sec, 'Islamic').concat(mgSlotGroups(sec, 'Arabic')).forEach(function(g){ if (g.email) g.idx.forEach(function(i){ cov[i] = 1; }); }); var n = sec.students.filter(function(x, i){ return !cov[i]; }).length; if (n) orphans.push(secName(sec.name) + ': ' + n); });
+    mgSlotGroups(sec, 'Islamic').concat(mgSlotGroups(sec, 'Arabic')).forEach(function(g){ if (g.email || g.away) g.idx.forEach(function(i){ cov[i] = 1; }); }); var n = sec.students.filter(function(x, i){ return !cov[i]; }).length; if (n) orphans.push(secName(sec.name) + ': ' + n); });
   if (orphans.length) items.push(['⚠', 'warn', T('Students with no teacher on the class lists (their class code matches no teacher) – {list}', { list: orphans.join(' · ') })]);
+  /* students not in an Arabic class (Grades 11–12): no one on the AI timetable teaches them in Arabic periods */
+  var away = A.sections.filter(function(sec){ return sec.away && sec.away.Arabic && sec.away.Arabic.length; });
+  if (away.length) items.push(['○', 'info', T('Not in an Arabic class, so no one teaches them the Arabic-period AI lessons (their tutor is only with them in Islamic periods): {list}', { list: away.map(function(sec){ return secName(sec.name) + ' ' + sec.away.Arabic.length; }).join(' · ') })]);
   var unconf = A.sections.filter(function(sec){ return sec.students.length && !A.confirmations[sec.name]; });
   if (unconf.length) items.push(['○', 'info', T('Class lists not confirmed yet: {list}', { list: unconf.map(function(x){ return secName(x.name); }).join(', ') })]);
   var rushed = 0; P.cells.forEach(function(c){ if (c.cst === 'due' && c.end >= wk) rushed += c.all.r; });
@@ -1594,7 +1603,7 @@ function cellDetail(key){
     '<p class="sub">' + esc(isoFd(c.date) + ' · ' + T('Day {n}', { n: c.day }) + ' · ' + T('Period {p}', { p: c.period }) + ' · ') + '<span dir="ltr">' + esc(c.time) + '</span> · ' + esc(T(c.subject)) + ' · <span class="stt st-' + c.status + '">' + esc(stLabel(c, c.all, c.status)) + '</span></p></div>' +
     '<button type="button" class="x" id="cdClose" aria-label="' + esc(T('Close')) + '">×</button></div>' +
     '<div class="awwrap"><table class="awt nt"><thead><tr><th>' + esc(T('Teacher')) + '</th><th>' + esc(T('Students')) + '</th><th>' + esc(T('Started')) + '</th><th>' + esc(T('Finished')) + '</th><th>' + esc(T('First try')) + '</th><th>' + esc(T('Status')) + '</th><th></th></tr></thead><tbody>' +
-      c.groups.map(function(g){ return '<tr><td class="nm"><b>' + (g.email ? '<button type="button" class="tname" data-t="' + esc(g.email) + '">' + esc(g.name) + '</button>' : esc(T('No teacher on the class lists'))) + '</b></td><td>' + g.k.n + (g.k.a ? ' <small>+' + g.k.a + ' ' + esc(T('absent')) + '</small>' : '') + '</td><td>' + g.k.s + '</td><td><b>' + g.k.f + '</b> / ' + g.k.n + '</td><td>' + (g.k.avg === null ? '–' : g.k.avg + '%') + '</td>' +
+      c.groups.map(function(g){ return '<tr><td class="nm"><b>' + (g.email ? '<button type="button" class="tname" data-t="' + esc(g.email) + '">' + esc(g.name) + '</button>' : esc(g.away ? T('Not in an {s} class', { s: T(c.subject) }) : T('No teacher on the class lists'))) + '</b></td><td>' + g.k.n + (g.k.a ? ' <small>+' + g.k.a + ' ' + esc(T('absent')) + '</small>' : '') + '</td><td>' + g.k.s + '</td><td><b>' + g.k.f + '</b> / ' + g.k.n + '</td><td>' + (g.k.avg === null ? '–' : g.k.avg + '%') + '</td>' +
         '<td><span class="stt st-' + g.status + '">' + esc(stLabel(c, g.k, g.status)) + '</span></td><td>' + (g.status === 'not' && g.email && MG.data.canRemind ? '<button type="button" class="nbtn" data-remind="' + esc(g.email + '|' + c.id + '|' + sec.name) + '">✉ ' + esc(T('Remind')) + '</button>' : '') + '</td></tr>'; }).join('') + '</tbody></table></div>' +
     '<div class="slists">' + list(T('Not started'), stu('N'), 'n') + list(T('Absent'), stu('A'), 'a') + list(T('Started, not finished'), stu('S'), 's', true) + list(T('Finished'), stu('F'), 'f', true) + '</div>' +
     '<div class="act"><a class="btn small primary" href="' + esc(lesson) + '" target="_top">' + esc(T('Open lesson')) + '</a><button type="button" class="btn small quiet" data-dash="' + esc(key) + '">' + esc(T('Show these students on the dashboard')) + '</button></div></section>';
@@ -1662,7 +1671,7 @@ function teachersView(){
   $('#csvT').onclick = function(){ csvDownload([['Teacher', 'Email', 'Subjects', 'Classes', 'Students', 'Periods due', 'Periods taught', 'Not taught', 'Students finished', 'Out of', 'Finished %', 'Average first try %', 'Not finished last lesson', 'Rushed', 'Absences marked', 'Retakes set', 'Tiers recorded', 'Last opened the app']]
     .concat(all.map(function(o){ var S = o.sum, t = o.t; return [t.name, t.email, t.subjects.join(' '), t.sections.join(', '), S.students, S.due, S.taught, S.not, S.f, S.n, S.fin === null ? '' : S.fin, S.avg === null ? '' : S.avg, S.lastOpen === null ? '' : S.lastOpen, S.r, t.absences, t.retakes, t.tiers, t.lastSeen ? t.lastSeen.slice(0, 10) : '']; })), 'ai-teachers-' + new Date().toISOString().slice(0, 10) + '.csv'); };
   $('#csvP').onclick = function(){ var rows = [['Date', 'Day', 'Period', 'Time', 'Class', 'Subject', 'Week', 'Lesson', 'Teacher', 'Students', 'Absent', 'Started', 'Finished', 'Average first try %', 'Status']];
-    MG.prep.cells.filter(function(c){ return c.cst === 'due'; }).sort(function(a, b){ return a.end - b.end; }).forEach(function(c){ c.groups.forEach(function(g){ rows.push([c.date, c.day, c.period, c.time, c.sec, c.subject, c.week, c.title, g.name || '(no teacher)', g.k.n, g.k.a, g.k.s, g.k.f, g.k.avg === null ? '' : g.k.avg, g.status === 'not' ? 'Not taught' : g.status === 'taught' ? 'Taught' : g.status]); }); });
+    MG.prep.cells.filter(function(c){ return c.cst === 'due'; }).sort(function(a, b){ return a.end - b.end; }).forEach(function(c){ c.groups.forEach(function(g){ rows.push([c.date, c.day, c.period, c.time, c.sec, c.subject, c.week, c.title, g.name || (g.away ? '(not in an ' + c.subject + ' class)' : '(no teacher)'), g.k.n, g.k.a, g.k.s, g.k.f, g.k.avg === null ? '' : g.k.avg, g.status === 'not' ? 'Not taught' : g.status === 'taught' ? 'Taught' : g.status]); }); });
     csvDownload(rows, 'ai-periods-' + new Date().toISOString().slice(0, 10) + '.csv'); };
 }
 function csvDownload(rows, name){
