@@ -244,11 +244,16 @@ function teachersBySection_() {
   Object.keys(out).forEach(function (sec) { out[sec].forEach(function (t) { t.classes = t.classes.filter(function (c) { return (codes[sec] || {})[c]; }); }); });
   return out;
 }
-/* Students not in a subject's classes (no Islamic code, or no Arabic code, while classmates have one) are
-   elsewhere in that subject's periods. In Islamic periods they are with their class tutor in a separate room,
-   who teaches them the AI lesson (the AI timetable: "the class tutor (TUT) present for Islamic Studies
-   sessions"; it names tutors for Islamic lessons only). In Arabic periods (Grades 11–12) no one on the AI
-   timetable teaches them – their tutor is not there – so they are shown apart, as not in an Arabic class. */
+/* A student with no class of a period's subject on the lists (no Islamic code, or no Arabic code, while
+   classmates have one):
+   - Islamic periods: students not in an Islamic class are in the tutor group (their …TUT code) – in a separate
+     room with the class tutor, who teaches them the AI lesson (the AI timetable: "the class tutor (TUT) present
+     for Islamic Studies sessions"; it names tutors for Islamic lessons only).
+   - Arabic periods: every student takes Arabic and there is no tutorial then, so a student with no Arabic code is
+     in an Arabic class the school export left out.
+   Where the lists don't say (no Arabic code; or neither an Islamic nor a tutor-group code) the app does not
+   guess: those students are shown apart as "class not in the school export" (sec.away) – no one's lesson, no
+   reminders – until IT adds the class to the export and it is imported again. */
 var TUTOR_SUBJECTS = ['Islamic'];
 /** The subjects (Islamic, Arabic) whose classes this student is not in, while classmates are. */
 function notInSubjects_(cm, section, theirs) {
@@ -258,15 +263,17 @@ function notInSubjects_(cm, section, theirs) {
     return sc.some(function (c) { return subjectOf_(c) === sub; }) && !theirs.some(function (c) { return subjectOf_(c) === sub; });
   });
 }
-/** The subjects whose periods this student spends with their tutor (Islamic). */
+function inTutorGroup_(theirs) { return theirs.some(function (c) { return subjectOf_(c) === 'Tutor'; }); }
+/** The subjects whose periods this student spends with their tutor: Islamic, for the tutor group. */
 function withTutorIn_(cm, section, theirs) {
-  return notInSubjects_(cm, section, theirs).filter(function (sub) { return TUTOR_SUBJECTS.indexOf(sub) >= 0; });
+  return inTutorGroup_(theirs) ? notInSubjects_(cm, section, theirs).filter(function (sub) { return TUTOR_SUBJECTS.indexOf(sub) >= 0; }) : [];
 }
-/** The subjects whose AI lessons no one teaches this student (not in an Arabic class). */
+/** The subjects whose class for this student is missing from the school export (who teaches them is not known). */
 function awayIn_(cm, section, theirs) {
-  return notInSubjects_(cm, section, theirs).filter(function (sub) { return TUTOR_SUBJECTS.indexOf(sub) < 0; });
+  var tut = withTutorIn_(cm, section, theirs);
+  return notInSubjects_(cm, section, theirs).filter(function (sub) { return tut.indexOf(sub) < 0; });
 }
-/** A student's tutors: those sharing their tutor-group code, else every tutor of the section. */
+/** A student's tutors: those sharing their tutor-group code, else (no tutor listed with that code) every tutor of the section. */
 function tutorsFor_(tbs, section, theirs) {
   var all = (tbs[section] || []).filter(function (t) { return t.subjects.indexOf('Tutor') >= 0; });
   var own = all.filter(function (t) { return t.classes.some(function (c) { return theirs.indexOf(c) >= 0; }); });
@@ -821,7 +828,8 @@ function periodModel_() {
   classGroups_().forEach(function (G) {
     var sec = G.name, grade = G.grade, students = G.students;
     var lessons = cat.filter(function (l) { return l.grade === grade && l.course === 'main'; }).sort(function (a, b) { return a.week - b.week; });
-    sections.push({ name: sec, grade: grade, why: G.why, tut: G.tut, away: G.away, students: students.map(function (x) { return { e: x.e, n: x.n }; }), groups: G.groups, lessons: lessons.map(function (l) { return l.id; }),
+    var gap = {}; Object.keys(G.away).forEach(function (sub) { G.away[sub].forEach(function (i) { gap[i] = 1; }); });   // their codes go to the list for IT
+    sections.push({ name: sec, grade: grade, why: G.why, tut: G.tut, away: G.away, students: students.map(function (x, i) { return gap[i] ? { e: x.e, n: x.n, c: x.c } : { e: x.e, n: x.n }; }), groups: G.groups, lessons: lessons.map(function (l) { return l.id; }),
       teachers: G.teachers });
     lessons.forEach(function (l) {
       var d = AICAL.lessonDate(sec, l.week); if (!d) return;
@@ -842,8 +850,9 @@ function periodModel_() {
 }
 /** The teacher groups for one class period: the teachers of that period's subject (or, if none, of no known
     subject), each with their students, plus the tutors with the students not in that subject's classes
-    (sec.tut); students not in that subject's classes with no tutor there (sec.away: Arabic) are a group of their
-    own (away: true – no one to blame or remind); anyone else no one has is grouped as 'no teacher' (email ''). */
+    (sec.tut); students whose class of that subject is missing from the school export (sec.away) are a group of
+    their own (away: true – who teaches them is not known, so no one is blamed or reminded); anyone else no one
+    has is grouped as 'no teacher' (email ''). */
 function slotGroups_(sec, subject) {
   var keys = Object.keys(sec.groups), pick = keys.filter(function (k) { return k.split('|')[0] === subject; }), tn = {};
   if (!pick.length) pick = keys.filter(function (k) { return k.split('|')[0] === ''; });
@@ -860,7 +869,7 @@ function slotGroups_(sec, subject) {
   away.forEach(function (i) { covered[i] = 1; });
   var rest = sec.students.map(function (x, i) { return i; }).filter(function (i) { return !covered[i]; });
   if (rest.length) out.push({ email: '', name: '', idx: rest });
-  if (away.length) out.push({ email: '', name: '', idx: away, away: true });   // not in this subject's classes: no AI teacher here
+  if (away.length) out.push({ email: '', name: '', idx: away, away: true });   // their class of this subject is not in the export
   return out;
 }
 function groupCounts_(cell, idx) {
@@ -876,7 +885,7 @@ function notTaught_(M) {
     sec.lessons.forEach(function (id) {
       var cell = M.cells[sec.name + '|' + id]; if (!cell || cell.state !== 'due') return;
       slotGroups_(sec, cell.subject).forEach(function (g) {
-        if (g.away) return;                              // not in this subject's classes: no one to remind
+        if (g.away) return;                              // class missing from the school export: no one to remind
         var k = groupCounts_(cell, g.idx); if (k.n < NOT_TAUGHT_MIN || k.started / k.n >= NOT_TAUGHT_SHARE) return;
         out.push({ teacher: g.name, email: g.email, section: sec.name, lessonId: id, week: cell.week, title: cell.title, date: cell.date, subject: cell.subject, period: cell.period,
           time: cell.time, students: k.n, started: k.started, reminded: g.email ? (rem[g.email + '|' + id + '|' + sec.name] || '') : '', why: g.email ? null : sec.why });

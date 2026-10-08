@@ -589,8 +589,10 @@ var AR = {
   '1 group not taught': 'مجموعة واحدة لم تُدرَّس',
   '{n} groups not taught': '{n} مجموعات لم تُدرَّس',
   'no teacher on the class lists': 'لا يوجد معلم في قوائم الشعب',
-  'No teacher on the class lists': 'لا يوجد معلم في قوائم الشعب', 'Not in an {s} class': 'ليسوا في صف {s}', 'no AI teacher in this period': 'لا يوجد معلم ذكاء اصطناعي في هذه الحصة',
-  'Not in an Arabic class, so no one teaches them the Arabic-period AI lessons (their tutor is only with them in Islamic periods): {list}': 'ليسوا في صف لغة عربية، لذا لا يدرّسهم أحد دروس الذكاء الاصطناعي في حصص اللغة العربية (مشرف الصف معهم في حصص التربية الإسلامية فقط): {list}',
+  'No teacher on the class lists': 'لا يوجد معلم في قوائم الشعب', 'teacher not known': 'المعلم غير معروف', 'Arabic class not in the school export': 'صف اللغة العربية غير موجود في ملف المدرسة',
+  'Islamic class or tutor group not in the school export': 'صف التربية الإسلامية أو مجموعة مشرف الصف غير موجودة في ملف المدرسة',
+  'Classes missing from the school export, so the app cannot tell who teaches these students – ask IT to add them to the export, then import it again.': 'صفوف غير موجودة في ملف المدرسة، لذا لا يمكن للتطبيق معرفة من يدرّس هؤلاء الطلاب – اطلب من قسم تقنية المعلومات إضافتها إلى الملف ثم استورده مجددًا.',
+  'Arabic: {list}.': 'اللغة العربية: {list}.', 'Download the list for IT': 'تنزيل القائمة لقسم تقنية المعلومات', 'Islamic class or tutor group: {list}.': 'التربية الإسلامية أو مجموعة مشرف الصف: {list}.',
   'Started, not finished': 'بدأ ولم يُنهِ',
   'Show these students on the dashboard': 'عرض هؤلاء الطلاب في لوحة المتابعة',
   'Remind': 'تذكير',
@@ -1475,7 +1477,7 @@ function mgSlotGroups(sec, subject){
     tg[em].forEach(function(i){ if (g.idx.indexOf(i) < 0) g.idx.push(i); });
   });
   out.forEach(function(g){ g.idx.forEach(function(i){ cov[i] = 1; }); });
-  var away = ((sec.away || {})[subject] || []).filter(function(i){ return !cov[i]; });   // not in this subject's classes (Arabic, Grades 11–12)
+  var away = ((sec.away || {})[subject] || []).filter(function(i){ return !cov[i]; });   // their class of this subject is missing from the school export
   away.forEach(function(i){ cov[i] = 1; });
   var rest = sec.students.map(function(x, i){ return i; }).filter(function(i){ return !cov[i]; });
   if (rest.length) out.push({ email: '', name: '', idx: rest });
@@ -1529,7 +1531,7 @@ function stLabel(c, k, status){
   if (status === 'up') return T('upcoming');
   if (status === 'live') return '● ' + T('in progress');
   if (status === 'none') return T('no students');
-  if (status === 'away') return '– ' + T('no AI teacher in this period');
+  if (status === 'away') return '– ' + T('teacher not known');
   if (status === 'not') return '✗ ' + T('not taught');
   if (status === 'part') return '⚠ ' + (c.nots === 1 ? T('1 group not taught') : T('{n} groups not taught', { n: c.nots }));
   return '✓ ' + T('{s} of {n} started', { s: k.s, n: k.n });
@@ -1562,9 +1564,12 @@ function attentionCard(K){
   A.sections.forEach(function(sec){ var keys = Object.keys(sec.groups).filter(function(k){ return k.split('|')[0] !== 'Tutor'; }); if (!keys.length) return; var cov = {};
     mgSlotGroups(sec, 'Islamic').concat(mgSlotGroups(sec, 'Arabic')).forEach(function(g){ if (g.email || g.away) g.idx.forEach(function(i){ cov[i] = 1; }); }); var n = sec.students.filter(function(x, i){ return !cov[i]; }).length; if (n) orphans.push(secName(sec.name) + ': ' + n); });
   if (orphans.length) items.push(['⚠', 'warn', T('Students with no teacher on the class lists (their class code matches no teacher) – {list}', { list: orphans.join(' · ') })]);
-  /* students not in an Arabic class (Grades 11–12): no one on the AI timetable teaches them in Arabic periods */
-  var away = A.sections.filter(function(sec){ return sec.away && sec.away.Arabic && sec.away.Arabic.length; });
-  if (away.length) items.push(['○', 'info', T('Not in an Arabic class, so no one teaches them the Arabic-period AI lessons (their tutor is only with them in Islamic periods): {list}', { list: away.map(function(sec){ return secName(sec.name) + ' ' + sec.away.Arabic.length; }).join(' · ') })]);
+  /* students whose Arabic class (or Islamic class / tutor group) is missing from the school export: who teaches
+     them in those periods is not known until IT adds the class and the export is imported again */
+  var gap = function(sub){ return A.sections.filter(function(sec){ return sec.away && sec.away[sub] && sec.away[sub].length; }).map(function(sec){ return secName(sec.name) + ' ' + sec.away[sub].length; }).join(' · '); };
+  var gA = gap('Arabic'), gI = gap('Islamic');
+  if (gA || gI) items.push(['⚠', 'warn', T('Classes missing from the school export, so the app cannot tell who teaches these students – ask IT to add them to the export, then import it again.') +
+    (gA ? ' ' + T('Arabic: {list}.', { list: gA }) : '') + (gI ? ' ' + T('Islamic class or tutor group: {list}.', { list: gI }) : ''), ['gap-csv', T('Download the list for IT')]]);
   var unconf = A.sections.filter(function(sec){ return sec.students.length && !A.confirmations[sec.name]; });
   if (unconf.length) items.push(['○', 'info', T('Class lists not confirmed yet: {list}', { list: unconf.map(function(x){ return secName(x.name); }).join(', ') })]);
   var rushed = 0; P.cells.forEach(function(c){ if (c.cst === 'due' && c.end >= wk) rushed += c.all.r; });
@@ -1603,7 +1608,7 @@ function cellDetail(key){
     '<p class="sub">' + esc(isoFd(c.date) + ' · ' + T('Day {n}', { n: c.day }) + ' · ' + T('Period {p}', { p: c.period }) + ' · ') + '<span dir="ltr">' + esc(c.time) + '</span> · ' + esc(T(c.subject)) + ' · <span class="stt st-' + c.status + '">' + esc(stLabel(c, c.all, c.status)) + '</span></p></div>' +
     '<button type="button" class="x" id="cdClose" aria-label="' + esc(T('Close')) + '">×</button></div>' +
     '<div class="awwrap"><table class="awt nt"><thead><tr><th>' + esc(T('Teacher')) + '</th><th>' + esc(T('Students')) + '</th><th>' + esc(T('Started')) + '</th><th>' + esc(T('Finished')) + '</th><th>' + esc(T('First try')) + '</th><th>' + esc(T('Status')) + '</th><th></th></tr></thead><tbody>' +
-      c.groups.map(function(g){ return '<tr><td class="nm"><b>' + (g.email ? '<button type="button" class="tname" data-t="' + esc(g.email) + '">' + esc(g.name) + '</button>' : esc(g.away ? T('Not in an {s} class', { s: T(c.subject) }) : T('No teacher on the class lists'))) + '</b></td><td>' + g.k.n + (g.k.a ? ' <small>+' + g.k.a + ' ' + esc(T('absent')) + '</small>' : '') + '</td><td>' + g.k.s + '</td><td><b>' + g.k.f + '</b> / ' + g.k.n + '</td><td>' + (g.k.avg === null ? '–' : g.k.avg + '%') + '</td>' +
+      c.groups.map(function(g){ return '<tr><td class="nm"><b>' + (g.email ? '<button type="button" class="tname" data-t="' + esc(g.email) + '">' + esc(g.name) + '</button>' : esc(g.away ? T(c.subject === 'Arabic' ? 'Arabic class not in the school export' : 'Islamic class or tutor group not in the school export') : T('No teacher on the class lists'))) + '</b></td><td>' + g.k.n + (g.k.a ? ' <small>+' + g.k.a + ' ' + esc(T('absent')) + '</small>' : '') + '</td><td>' + g.k.s + '</td><td><b>' + g.k.f + '</b> / ' + g.k.n + '</td><td>' + (g.k.avg === null ? '–' : g.k.avg + '%') + '</td>' +
         '<td><span class="stt st-' + g.status + '">' + esc(stLabel(c, g.k, g.status)) + '</span></td><td>' + (g.status === 'not' && g.email && MG.data.canRemind ? '<button type="button" class="nbtn" data-remind="' + esc(g.email + '|' + c.id + '|' + sec.name) + '">✉ ' + esc(T('Remind')) + '</button>' : '') + '</td></tr>'; }).join('') + '</tbody></table></div>' +
     '<div class="slists">' + list(T('Not started'), stu('N'), 'n') + list(T('Absent'), stu('A'), 'a') + list(T('Started, not finished'), stu('S'), 's', true) + list(T('Finished'), stu('F'), 'f', true) + '</div>' +
     '<div class="act"><a class="btn small primary" href="' + esc(lesson) + '" target="_top">' + esc(T('Open lesson')) + '</a><button type="button" class="btn small quiet" data-dash="' + esc(key) + '">' + esc(T('Show these students on the dashboard')) + '</button></div></section>';
@@ -1633,6 +1638,7 @@ function wireOverview(){
     document.querySelectorAll('.mxc.sel').forEach(function(x){ x.classList.remove('sel'); }); var m = document.querySelector('.mxc[data-cell="' + MGR.cell.replace(/"/g, '') + '"]'); if (m) m.classList.add('sel');
     $('#cdet').scrollIntoView({ behavior: 'smooth', block: 'start' }); }; });
   document.querySelectorAll('[data-go]').forEach(function(b){ b.onclick = function(){ var g = b.getAttribute('data-go');
+    if (g === 'gap-csv') { gapCsv(); return; }
     if (g === 'nottaught') { NT.data = null; MGR = { tab: 'nottaught' }; }
     else if (g === 'rushed') { MGR = null; F.section = ''; F.lesson = ''; F.teacher = ''; UI.filter = 'rushed'; }
     else { MG.sort = g === 'teachers-seen' ? 'seen' : 'not'; MGR = { tab: 'teachers' }; }
@@ -1671,8 +1677,16 @@ function teachersView(){
   $('#csvT').onclick = function(){ csvDownload([['Teacher', 'Email', 'Subjects', 'Classes', 'Students', 'Periods due', 'Periods taught', 'Not taught', 'Students finished', 'Out of', 'Finished %', 'Average first try %', 'Not finished last lesson', 'Rushed', 'Absences marked', 'Retakes set', 'Tiers recorded', 'Last opened the app']]
     .concat(all.map(function(o){ var S = o.sum, t = o.t; return [t.name, t.email, t.subjects.join(' '), t.sections.join(', '), S.students, S.due, S.taught, S.not, S.f, S.n, S.fin === null ? '' : S.fin, S.avg === null ? '' : S.avg, S.lastOpen === null ? '' : S.lastOpen, S.r, t.absences, t.retakes, t.tiers, t.lastSeen ? t.lastSeen.slice(0, 10) : '']; })), 'ai-teachers-' + new Date().toISOString().slice(0, 10) + '.csv'); };
   $('#csvP').onclick = function(){ var rows = [['Date', 'Day', 'Period', 'Time', 'Class', 'Subject', 'Week', 'Lesson', 'Teacher', 'Students', 'Absent', 'Started', 'Finished', 'Average first try %', 'Status']];
-    MG.prep.cells.filter(function(c){ return c.cst === 'due'; }).sort(function(a, b){ return a.end - b.end; }).forEach(function(c){ c.groups.forEach(function(g){ rows.push([c.date, c.day, c.period, c.time, c.sec, c.subject, c.week, c.title, g.name || (g.away ? '(not in an ' + c.subject + ' class)' : '(no teacher)'), g.k.n, g.k.a, g.k.s, g.k.f, g.k.avg === null ? '' : g.k.avg, g.status === 'not' ? 'Not taught' : g.status === 'taught' ? 'Taught' : g.status]); }); });
+    MG.prep.cells.filter(function(c){ return c.cst === 'due'; }).sort(function(a, b){ return a.end - b.end; }).forEach(function(c){ c.groups.forEach(function(g){ rows.push([c.date, c.day, c.period, c.time, c.sec, c.subject, c.week, c.title, g.name || (g.away ? '(' + c.subject + ' class not in the school export)' : '(no teacher)'), g.k.n, g.k.a, g.k.s, g.k.f, g.k.avg === null ? '' : g.k.avg, g.status === 'not' ? 'Not taught' : g.status === 'taught' ? 'Taught' : g.status]); }); });
     csvDownload(rows, 'ai-periods-' + new Date().toISOString().slice(0, 10) + '.csv'); };
+}
+/* the students whose class is missing from the school export, for IT (owners and SLT only see this view) */
+function gapCsv(){
+  var rows = [['Class', 'Student', 'Email', 'Class codes on the export', 'Missing from the export']];
+  MG.data.sections.forEach(function(sec){ var miss = {};
+    Object.keys(sec.away || {}).forEach(function(sub){ sec.away[sub].forEach(function(i){ (miss[i] = miss[i] || []).push(sub === 'Arabic' ? 'Arabic class' : 'Islamic class or tutor group'); }); });
+    Object.keys(miss).forEach(function(i){ var x = sec.students[i]; rows.push([sec.name, x.n, x.e, (x.c || []).join(', '), miss[i].join(' and ')]); }); });
+  csvDownload(rows, 'missing-from-school-export-' + new Date().toISOString().slice(0, 10) + '.csv');
 }
 function csvDownload(rows, name){
   var q = function(v){ v = String(v == null ? '' : v); if (/^[=+\-@]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; };

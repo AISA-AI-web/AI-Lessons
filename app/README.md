@@ -239,11 +239,14 @@ their lists are right:
   Students not in an Islamic class (the `…TUT` tutor group) spend Islamic periods in
   a separate classroom with their tutor, who teaches them the AI lesson there; they
   count as the tutor's group in those periods (Not taught list and reminders
-  included); the tutor is the one sharing their tutor-group code, else the section's
-  tutor. Students not in an Arabic class (Grades 11–12 only) have no AI teacher in
-  Arabic periods – their tutor is not with them then – so the manager view shows
-  them as a group of their own, *Not in an Arabic class* (no reminders, not a "no
-  teacher" gap), and *Needs attention* lists how many there are per class.
+  included). There is no tutorial in Arabic periods – every student takes Arabic.
+  When the school export lists no Arabic class for a student (or neither an Islamic
+  class nor a tutor group), the app does not guess who teaches them: the manager
+  view shows them as a group of their own (*Arabic class not in the school export*;
+  no reminders, not a "no teacher" gap), and *Needs attention* counts them per class
+  with **Download the list for IT** (class, name, email, the codes the export does
+  have). Once IT adds the classes and the export is imported again (`importRoster`),
+  they are matched to their teachers everywhere.
   Rows added by hand (blank `courseId`) hold notes such as "AI timetable –
   teacher", which are never treated as class names.
 - **✓ This list is correct** records who confirmed each class and when; the

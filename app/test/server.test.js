@@ -470,8 +470,9 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   ok(sec.groups['Islamic|isl@aisa.sch.ae'].length === 3 && sec.groups['Arabic|ara@aisa.sch.ae'].join() === '0,1' && sec.groups['Arabic|ara2@aisa.sch.ae'].join() === '2', 'Arabic groups still split by code');
   E.as('isl@aisa.sch.ae'); ok(E.call('getDashboard').students.every(x => x.mine), 'the Islamic teacher sees the whole section as theirs');
 }
-/* the timetable has the class tutor with the tutor group (students not in Islamic classes) in Islamic
-   periods: those students are the tutor's, not a 'no teacher' group (fresh environment) */
+/* the timetable has the class tutor with the tutor group (students not in Islamic classes, …TUT code) in Islamic
+   periods: those students are the tutor's, not a 'no teacher' group; a student with neither an Islamic nor a
+   tutor-group code is not guessed to be the tutor's – their class is missing from the export (fresh environment) */
 {
   const E = makeEnv(), sh = E.sheets;
   E.as('bbaki@aisa.sch.ae'); E.call('setup');
@@ -482,15 +483,17 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   const RD = Date; E.ctx.Date = class extends RD { constructor(...a) { a.length ? super(...a) : super('2026-10-12T09:00:00'); } static now() { return new RD('2026-10-12T09:00:00').getTime(); } };
   const nt = E.call('getNotTaught').items.filter(x => x.lessonId === 'grade-7/main-w2-l1');
   const by = Object.fromEntries(nt.map(x => [x.email, x.students]));
-  ok(by['tut@aisa.sch.ae'] === 3 && by['isl@aisa.sch.ae'] === 1 && by['isl2@aisa.sch.ae'] === 1 && nt.length === 3, 'in an Islamic period the tutor has the students not in Islamic classes (tutor-group code or not)');
-  ok(!nt.some(x => !x.email), 'so no one is left without a teacher');
+  ok(by['tut@aisa.sch.ae'] === 2 && by['isl@aisa.sch.ae'] === 1 && by['isl2@aisa.sch.ae'] === 1 && nt.length === 3, 'in an Islamic period the tutor has the tutor group');
+  ok(!nt.some(x => !x.email), 'and no one is reminded about the student whose class is missing from the export');
+  const sec7 = E.call('getManager').sections.find(x => x.name === 'Boys 7'), g7 = E.ctx.slotGroups_(sec7, 'Islamic').find(g => g.away);
+  ok(g7 && g7.idx.length === 1 && sec7.students[g7.idx[0]].e === '705@aisa.sch.ae', 'that student is shown apart (class not in the school export)');
   const st = E.call('getDashboard').students, S = id => st.find(x => x.email === id + '@aisa.sch.ae');
   ok(S('703').tsub.Islamic.join() === 'Tutor T' && S('701').tsub.Islamic.join() === 'Islam One', "a tutor-group student's Islamic-period teacher is the tutor");
-  E.as('tut@aisa.sch.ae'); ok(E.call('getDashboard').students.filter(x => x.mine).length === 3, 'the tutor sees those students as theirs');
+  E.as('tut@aisa.sch.ae'); ok(E.call('getDashboard').students.filter(x => x.mine).length === 2, 'the tutor sees the tutor group as theirs');
 }
-/* Grades 11–12: students with no Arabic code are not in Arabic periods' AI lessons – their tutor is only with them
-   in Islamic periods (as the AI timetable says) – so they are a group of their own, not a tutor's or a 'no teacher'
-   gap, and no one is reminded about them (fresh environment) */
+/* every student takes Arabic and there is no tutorial in Arabic periods: a student with no Arabic code (Grades
+   11–12) is in an Arabic class the school export left out – not the tutor's, not a 'no teacher' gap – so they are
+   shown apart and no one is reminded about them (fresh environment) */
 {
   const E = makeEnv(), sh = E.sheets;
   E.as('bbaki@aisa.sch.ae'); E.call('setup');
@@ -504,7 +507,7 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   const st = E.call('getDashboard').students, S = id => st.find(x => x.email === id + '@aisa.sch.ae');
   ok(!S('1103').tsub.Arabic && S('1103').away.join() === 'Arabic' && S('1104').tsub.Islamic.join() === 'Tutor G' && S('1101').tsub.Arabic.join() === 'Arabic One' && !S('1101').away, "each student's period teacher follows their classes");
   const sec = E.call('getManager').sections.find(x => x.name === 'Girls 11'), g = E.ctx.slotGroups_(sec, 'Arabic');
-  ok(g.length === 2 && g[1].away === true && g[1].idx.length === 1 && sec.students[g[1].idx[0]].e === '1103@aisa.sch.ae', 'the manager view shows them as a group of their own (not in an Arabic class)');
+  ok(g.length === 2 && g[1].away === true && g[1].idx.length === 1 && sec.students[g[1].idx[0]].e === '1103@aisa.sch.ae', 'the manager view shows them as a group of their own (Arabic class not in the school export)');
   ok(E.ctx.slotGroups_(sec, 'Islamic').some(x => x.email === 'tut@aisa.sch.ae' && x.idx.length === 1), 'their tutor still has the tutor group in Islamic periods');
 }
 /* speed: results are reused from the cache while nothing has changed, and never after a change made through
