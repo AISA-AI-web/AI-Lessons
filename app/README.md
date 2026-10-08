@@ -382,6 +382,8 @@ student data is ever stored in this GitHub repository**, which is public.
   evening, when no one is working, clicks are answered straight from the cache;
   during lessons, students' answers keep the data changing, so it is worked out
   fresh each time (as before, but with fewer reads).
+- **Each update starts fresh.** `build.py` stamps the build into the cache keys, so
+  after `clasp push` nothing worked out by the previous version is reused.
 - **Time counts too.** The key includes the date and how many of today's AI
   periods have ended, so the Not taught list updates as each period ends.
 - **Each person's view is kept apart.** A dashboard is cached under the person's

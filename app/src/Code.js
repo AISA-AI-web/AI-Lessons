@@ -1336,6 +1336,7 @@ function sheet_(name) {
       Edits made by hand in the spreadsheet are not seen by the version: use ↻ Refresh, or wait (6 hours at most). */
 var MEMO_ = {};
 var CACHE_TTL = 21600;                             // seconds (Google's maximum: 6 hours)
+var BUILD = '__BUILD__';                           // set by build.py: an update never gets results cached by the last version
 function rawRows_(name) {
   if (MEMO_[name]) return MEMO_[name];
   var sh = sheet_(name); if (!sh) return null;
@@ -1362,7 +1363,7 @@ function timeTick_() {
 }
 /** Returns fn()'s result from the cache when nothing has changed since it was worked out (force: always fresh). */
 function cached_(key, force, fn) {
-  var c = CacheService.getScriptCache(), full = 'r:' + key + '|' + dataVersion_() + '|' + timeTick_();
+  var c = CacheService.getScriptCache(), full = 'r:' + key + '|' + BUILD + '|' + dataVersion_() + '|' + timeTick_();
   if (full.length > 200) full = 'r:' + Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, full));
   if (!force) {
     try {

@@ -539,6 +539,11 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   const after = E.call('getNotTaught').items.filter(x => x.lessonId === 'grade-7/main-w2-l1').length;
   ok(before === 0 && after === 1, 'a period ending updates the not-taught list without any change to the data');
   ok(Object.keys(E.ctx.__cache).some(k => /^r:/.test(k)), 'results are kept in the server cache');
+  ok(/^[0-9a-f]{12}$/.test(E.ctx.BUILD), 'the build stamps the app version into the cache keys');
+  E.call('getManager');                              // the clock moved past a period end above: warm the cache first
+  const keys = () => Object.keys(E.ctx.__cache).filter(k => /^r:mgr\|/.test(k) && !/:\d+$/.test(k)).length, k0 = keys();
+  E.call('getManager'); const k1 = keys(); E.ctx.BUILD = 'next-version'; E.call('getManager');
+  ok(k1 === k0 && keys() === k0 + 1, 'after an update the results are worked out again, not taken from the old version\'s cache');
 }
 /* the calendar marks only the periods each person teaches: the class AND the period's subject, from the same
    class-list groups as the manager view (an Arabic teacher's class also has Islamic-period lessons, which are
