@@ -805,7 +805,7 @@ var AR = {
   'finished': 'مكتمل', 'in progress': 'قيد التنفيذ', 'not started': 'لم يبدأ', 'Finished': 'مكتمل', 'In progress': 'قيد التنفيذ',
   '{p}% first try': '{p}% في المحاولة الأولى', '{a} of {b} finished': 'أكمل {a} من {b}', '{p}% first try overall': '{p}% في المحاولة الأولى إجمالًا',
   'Click to record a tier': 'انقر لتسجيل مستوى', 'Automatic: {t}': 'تلقائي: {t}',
-  '{a} of {b} started, {c} finished': 'بدأ {a} من {b}، وأكمل {c}', 'teaching it {d}': 'يُدرَّس {d}', "This week's lessons": 'دروس هذا الأسبوع',
+  '{a} of {b} started, {c} finished': 'بدأ {a} من {b}، وأكمل {c}', 'teaching it {d}': 'يُدرَّس {d}', '{d} – taught by the {s} teachers': '{d} – يدرّسه معلمو {s}', "This week's lessons": 'دروس هذا الأسبوع',
   "{a} of {b} classes have had this week's lesson": 'درست {a} من {b} شعبة درس هذا الأسبوع', '{p}% of their students have started it': 'بدأه {p}% من طلابها',
   'No AI lessons this week': 'لا توجد دروس ذكاء اصطناعي هذا الأسبوع', 'This week · Week {n}': 'هذا الأسبوع · الأسبوع {n}',
   'Need a nudge': 'بحاجة إلى تذكير', "haven't finished their last lesson ({w})": 'لم يكملوا درسهم الأخير ({w})', "{n} haven't started it": 'لم يبدأه {n}',
@@ -984,14 +984,20 @@ function tilesHtml(rows){
   rows.forEach(function(r){ if (inSchedule(r.s.section)) (secs[r.s.section] = secs[r.s.section] || []).push(r); });
   var names = Object.keys(secs).sort(numSort), ids = {}, lines = '', title;
   names.forEach(function(sec){ var r0 = secs[sec][0]; ids[r0.curL ? r0.curL.id : 'w' + r0.s.grade + '-' + r0.cur] = r0.curL; });
+  /* A class's lesson falls in an Arabic or an Islamic period; a teacher only teaches it in their own subject's
+     periods (D.periods, as on the calendar), so other weeks say who teaches it instead of 'teaching it'. */
+  var mineP = D.me && D.me.role === 'teacher' ? (D.periods || []) : null, tutS = D.tut || [];
+  var subOf = function(sec, d){ var r = d && AICAL.SCHEDULE.filter(function(x){ return x[0] === sec && x[3] === AICAL.cycleOf(d) && x[4] === AICAL.DAYS[d.getDay()]; })[0]; return r ? r[2] : ''; };
   var keys = Object.keys(ids), only = keys.length === 1 ? ids[keys[0]] : null;
   if (names.length && names.length <= 4) {
     lines = names.map(function(sec){
-      var rs = secs[sec], r0 = rs[0], d = AICAL.lessonDate(sec, r0.cur);
-      if (!r0.curL) return '<b>' + esc(secName(sec)) + '</b> · ' + esc(T('Week {n}', { n: r0.cur })) + ' · ' + esc(T('lesson page not on the site yet'));
+      var rs = secs[sec], r0 = rs[0], d = AICAL.lessonDate(sec, r0.cur), sub = subOf(sec, d);
+      var head = '<b>' + esc(secName(sec)) + '</b>' + (sub ? ' · ' + esc(T(sub)) + (tutS.indexOf(sec + '|' + sub) >= 0 ? ' / TUT' : '') : '') + ' · ';
+      var theirs = !mineP || mineP.some(function(p){ return p[0] === sec && p[1] === sub; });
+      if (!r0.curL) return head + esc(T('Week {n}', { n: r0.cur })) + ' · ' + esc(T('lesson page not on the site yet'));
       if (d && d <= now) { var id = r0.curL.id, started = rs.filter(function(r){ return r.by[id] && r.by[id].r; }).length, fin = rs.filter(function(r){ return r.by[id] && r.by[id].st === 'done'; }).length;
-        return '<b>' + esc(secName(sec)) + '</b> · ' + esc(T('taught {d}', { d: fd(d) })) + ' · ' + esc(T('{a} of {b} started, {c} finished', { a: started, b: rs.length, c: fin })); }
-      return '<b>' + esc(secName(sec)) + '</b> · ' + esc(T('teaching it {d}', { d: d ? fd(d) : '' }));
+        return head + esc(T('taught {d}', { d: fd(d) })) + ' · ' + esc(T('{a} of {b} started, {c} finished', { a: started, b: rs.length, c: fin })); }
+      return head + esc(theirs ? T('teaching it {d}', { d: d ? fd(d) : '' }) : T('{d} – taught by the {s} teachers', { d: d ? fd(d) : '', s: T(sub) }));
     }).join('<br>');
     title = only ? esc(lessonTitle(only)) : esc(T('This week\'s lessons'));
   } else if (names.length) {

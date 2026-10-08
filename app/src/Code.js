@@ -59,10 +59,15 @@ function doGet(e) {
   try { html = HtmlService.createHtmlOutputFromFile('site/' + p).getContent(); }
   catch (err) { html = HtmlService.createHtmlOutputFromFile('site/index').getContent(); p = 'index'; }
   var bridge = HtmlService.createTemplateFromFile('bridge');
+  /* The calendar marks only the periods a person teaches – the class AND the subject of that period (an Arabic
+     teacher's class has its Islamic-period lessons too, which are not theirs) – from the same class-list groups
+     as the manager view; '/ TUT' marks periods in which a tutor teaches part of the class. */
+  var P = p === 'calendar' && me.role !== 'student' ? teachingPeriods_() : null;
   bridge.cfg = JSON.stringify({ email: me.email, name: me.name, role: me.role, page: p, base: ScriptApp.getService().getUrl(),
     sections: me.role === 'teacher' ? visibleSections_(me) : [], section: me.section || '', grade: me.grade || '',
     locked: rel ? lockedLinks_(rel, me.email) : {},
-    teachers: (me.role === 'owner' || me.role === 'slt') && p === 'calendar' ? calendarTeachers_() : {} });
+    periods: P ? P.mine[me.email] || [] : [], tut: P ? P.tut : [],
+    who: P && (me.role === 'owner' || me.role === 'slt') ? P.who : {} });
   html = html.replace(/<head>/i, '<head>' + bridge.evaluate().getContent());
   return HtmlService.createHtmlOutput(html)
     .setTitle(titleOf_(html))
@@ -256,16 +261,28 @@ function tutorsFor_(tbs, section, theirs) {
   var own = all.filter(function (t) { return t.classes.some(function (c) { return theirs.indexOf(c) >= 0; }); });
   return own.length ? own : all;
 }
-/** For the owners' and SLT's calendar: names and subjects only (no class codes); tutors list the
-    subjects whose periods they spend with students not in those classes (also). */
-function calendarTeachers_() {
-  var tbs = teachersBySection_(), cm = classMap_(), out = {}, also = {};
-  Object.keys(cm.students).forEach(function (e) {
-    var s = cm.students[e], subs = withTutorIn_(cm, s.section, s.classes || []); if (!subs.length) return;
-    tutorsFor_(tbs, s.section, s.classes || []).forEach(function (t) { var a = also[s.section + '|' + t.email] || (also[s.section + '|' + t.email] = []); subs.forEach(function (x) { if (a.indexOf(x) < 0) a.push(x); }); });
+/** Every class's AI periods with who teaches them, from the same groups as the manager view.
+    mine: { email: [[section, subject, 1 if only as the tutor]] } – the periods each person teaches;
+    tut: ['section|subject'] – periods in which a tutor teaches part of the class (shown as '/ TUT');
+    who: { 'section|subject': [[name, 1 if tutor]] } – names only, for owners and SLT. */
+function teachingPeriods_() {
+  return cached_('periods', false, function () {
+    var mine = {}, tut = [], who = {};
+    classGroups_().forEach(function (sec) {
+      AICAL.SCHEDULE.forEach(function (r) {
+        if (r[0] !== sec.name) return;
+        var k = sec.name + '|' + r[2], list = who[k] = [];
+        slotGroups_(sec, r[2]).forEach(function (g) {
+          if (!g.email || !g.idx.length) return;
+          (mine[g.email] = mine[g.email] || []).push([sec.name, r[2], g.tutor ? 1 : 0]);
+          list.push([g.name, g.tutor ? 1 : 0]);
+          if (g.tutor && tut.indexOf(k) < 0) tut.push(k);
+        });
+        list.sort(function (a, b) { return a[1] - b[1] || String(a[0]).localeCompare(String(b[0])); });
+      });
+    });
+    return { mine: mine, tut: tut, who: who };
   });
-  Object.keys(tbs).forEach(function (sec) { out[sec] = tbs[sec].map(function (t) { return { name: t.name, email: t.email, subjects: t.subjects, also: also[sec + '|' + t.email] || [] }; }); });
-  return out;
 }
 /** The teachers who teach this student (sharing one of their classes, or the whole section when either
     has no class names), by subject – so a lesson can be matched to the teacher of that day's period.
@@ -660,6 +677,7 @@ function dashboard_(me, vis) {
   outStudents.forEach(function (s) { s.classes = (cm.students[s.email] || {}).classes || []; s.mine = me.role === 'student' || isMine_(me, vis, cm, s.email, s.section);
     if (me.role !== 'student') { var to = teachersOf_(cm, tbs, s.email, s.section); s.teachers = to.names; s.tsub = to.bySub; } });
   var keep = {}; outStudents.forEach(function (s) { keep[s.email] = 1; });
+  var TP = me.role === 'student' ? null : teachingPeriods_();
   var results = Object.keys(per).map(function (k) { return per[k]; }).filter(function (c) { return keep[c.email]; });
   var retakes = {};                                   // email|lesson -> { n, at, by, prev: {score, max, done, seconds} }
   Object.keys(rt).forEach(function (k) { if (!keep[k.split('|')[0]]) return; var p = prev[k];
@@ -677,6 +695,9 @@ function dashboard_(me, vis) {
     framework: typeof FRAMEWORK === 'undefined' ? null : FRAMEWORK,
     canJudge: me.role !== 'student',
     myClasses: myClasses,
+    /* the AI periods this person teaches (class and subject) and those with a tutor group, as on the calendar */
+    periods: TP ? TP.mine[me.email] || [] : [],
+    tut: TP ? TP.tut : [],
     canAward: me.role === 'owner',
     canManage: me.role === 'owner' || me.role === 'slt',
     myAwards: myAwards_(me.email),
@@ -741,22 +762,18 @@ function periodEnd_(d, time) {
 }
 function rolloutFrom_() { return AICAL.parse(PropertiesService.getScriptProperties().getProperty('NOT_TAUGHT_FROM') || NOT_TAUGHT_FROM); }
 
-/** One model of every class's AI periods, shared by the manager view and the not-taught reminders.
-    sections: [{ name, grade, students: [{e, n}], lessons: [lessonId by week], teachers: [{email, name, subjects}],
-                 groups: { 'Subject|teacherEmail': [student index] } }]  – who teaches whom, per subject
-    cells: { 'section|lessonId': { id, week, title, date, day, period, time, subject, end, state, st, pc } }
-      state: 'before' (before the app was rolled out) | 'upcoming' (period not over yet) | 'due'
-      st: one letter per student – F finished, R finished but rushed, S started, N not started, A absent
-      pc: each student's first-try % (-1 = no answers yet) */
-function periodModel_() {
-  var LC = lessonCells_(), cm = classMap_(), tbs = teachersBySection_(), ab = absences_(), cat = typeof CATALOG === 'undefined' ? [] : CATALOG;
-  var now = new Date(), from = rolloutFrom_(), names = {}, bySec = {};
+/** Who teaches whom in every class on the AI timetable, from the class lists (no scores): the one model behind
+    the manager view, the not-taught reminders and the teaching calendar, so they always agree.
+    [{ name, grade, students: [{e, n, c}], groups: { 'Subject|teacherEmail': [student index] },
+       tut: { Subject: { tutorEmail: [student index] } }, teachers: [{email, name, subjects}], why }] */
+function classGroups_(cm, tbs) {
+  cm = cm || classMap_(); tbs = tbs || teachersBySection_();
+  var names = {}, bySec = {}, out = [];
   rows_('Roster').forEach(function (r) { if (r.role === 'student') { var e = lc_(r.email); if (!names[e]) names[e] = cleanText_(r.name, 80) || e.split('@')[0]; } });
   Object.keys(cm.students).forEach(function (e) { var sec = cm.students[e].section; if (sec) (bySec[sec] = bySec[sec] || []).push(e); });
-  var sections = [], cells = {};
   SECTIONS.forEach(function (sec) {
     if (!AICAL.SCHEDULE.some(function (r) { return r[0] === sec; })) return;
-    var grade = gradeOf_(sec), list = (bySec[sec] || []).slice().sort(function (a, b) { return names[a].localeCompare(names[b]); });
+    var grade = gradeOf_(sec), list = (bySec[sec] || []).slice().sort(function (a, b) { return String(names[a] || a).localeCompare(String(names[b] || b)); });
     var students = list.map(function (e) { return { e: e, n: names[e], c: cm.students[e].classes || [] }; }), groups = {};
     (tbs[sec] || []).forEach(function (t) {
       (t.subjects.length ? t.subjects : ['']).forEach(function (sub) {
@@ -765,7 +782,6 @@ function periodModel_() {
           .filter(function (i) { return i >= 0; });
       });
     });
-    var lessons = cat.filter(function (l) { return l.grade === grade && l.course === 'main'; }).sort(function (a, b) { return a.week - b.week; });
     var sc = {}; students.forEach(function (x) { x.c.forEach(function (c) { sc[c] = (sc[c] || 0) + 1; }); });
     var why = { teachers: (tbs[sec] || []).map(function (t) { return t.name + ' (' + (t.subjects.join('/') || 'subject unknown') + (t.raw.length ? ': ' + t.raw.join(', ') : '') + ')'; }),
       codes: Object.keys(sc).sort(function (a, b) { return sc[b] - sc[a]; }).slice(0, 8).map(function (c) { return c + ' ×' + sc[c]; }), noCodes: students.filter(function (x) { return !x.c.length; }).length };
@@ -775,8 +791,26 @@ function periodModel_() {
         tutorsFor_(tbs, sec, x.c).forEach(function (t) { var o = tut[sub] || (tut[sub] = {}); (o[t.email] = o[t.email] || []).push(i); });
       });
     });
-    sections.push({ name: sec, grade: grade, why: why, tut: tut, students: students.map(function (x) { return { e: x.e, n: x.n }; }), groups: groups, lessons: lessons.map(function (l) { return l.id; }),
+    out.push({ name: sec, grade: grade, why: why, tut: tut, students: students, groups: groups,
       teachers: (tbs[sec] || []).map(function (t) { return { email: t.email, name: t.name, subjects: t.subjects }; }) });
+  });
+  return out;
+}
+/** One model of every class's AI periods, shared by the manager view and the not-taught reminders.
+    sections: [{ name, grade, students: [{e, n}], lessons: [lessonId by week], teachers: [{email, name, subjects}],
+                 groups: { 'Subject|teacherEmail': [student index] } }]  – who teaches whom, per subject
+    cells: { 'section|lessonId': { id, week, title, date, day, period, time, subject, end, state, st, pc } }
+      state: 'before' (before the app was rolled out) | 'upcoming' (period not over yet) | 'due'
+      st: one letter per student – F finished, R finished but rushed, S started, N not started, A absent
+      pc: each student's first-try % (-1 = no answers yet) */
+function periodModel_() {
+  var LC = lessonCells_(), ab = absences_(), cat = typeof CATALOG === 'undefined' ? [] : CATALOG;
+  var now = new Date(), from = rolloutFrom_(), sections = [], cells = {};
+  classGroups_().forEach(function (G) {
+    var sec = G.name, grade = G.grade, students = G.students;
+    var lessons = cat.filter(function (l) { return l.grade === grade && l.course === 'main'; }).sort(function (a, b) { return a.week - b.week; });
+    sections.push({ name: sec, grade: grade, why: G.why, tut: G.tut, students: students.map(function (x) { return { e: x.e, n: x.n }; }), groups: G.groups, lessons: lessons.map(function (l) { return l.id; }),
+      teachers: G.teachers });
     lessons.forEach(function (l) {
       var d = AICAL.lessonDate(sec, l.week); if (!d) return;
       var slot = AICAL.SCHEDULE.filter(function (x) { return x[0] === sec && x[3] === AICAL.cycleOf(d) && x[4] === AICAL.DAYS[d.getDay()]; })[0];
@@ -805,7 +839,7 @@ function slotGroups_(sec, subject) {
   var tg = (sec.tut || {})[subject] || {};
   Object.keys(tg).forEach(function (em) {
     var g = out.filter(function (x) { return x.email === em; })[0];
-    if (!g) out.push(g = { email: em, name: tn[em] || em, idx: [] });
+    if (!g) out.push(g = { email: em, name: tn[em] || em, idx: [], tutor: true });   // tutor: only here as the tutor
     tg[em].forEach(function (i) { if (g.idx.indexOf(i) < 0) g.idx.push(i); });
   });
   out.forEach(function (g) { g.idx.forEach(function (i) { covered[i] = 1; }); });

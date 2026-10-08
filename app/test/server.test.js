@@ -2,6 +2,8 @@ const assert = require('assert');
 const { makeEnv } = require('./harness');
 const env = makeEnv(), { ctx, sheets } = env;
 let n = 0; const ok = (c, m) => { assert.ok(c, m); n++; };
+/* the config the app puts at the top of a page it serves (window.APP) */
+const cfgOf = page => { const c = page.getContent(), i = c.indexOf('var CFG = ') + 10, j = c.indexOf(';\n  window.APP = CFG;', i); return JSON.parse(c.slice(i, j)); };
 const throws = (f, re, m) => { assert.throws(f, re, m); n++; };
 
 /* setup */
@@ -254,8 +256,10 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   E.as('bbaki@aisa.sch.ae'); d = E.call('getDashboard');
   const tOf = id => d.students.find(s => s.email === id + '@aisa.sch.ae').teachers.join();
   ok(tOf('801') === 'Teacher One' && tOf('803') === 'Teacher Two' && tOf('804') === 'Teacher One,Teacher Two' && tOf('901') === 'Teacher Zero', 'the dashboard names each student\'s teachers');
-  ok(/"teachers":\{"Boys 8":\[\{"name":"Teacher One"/.test(E.call('doGet', { parameter: { p: 'calendar' } }).getContent()), 'owners\' calendar gets the teachers of every section');
-  E.as('t1@aisa.sch.ae'); ok(/"teachers":\{\}/.test(E.call('doGet', { parameter: { p: 'calendar' } }).getContent()), 'teachers\' calendar does not');
+  let cfg = cfgOf(E.call('doGet', { parameter: { p: 'calendar' } }));
+  ok(JSON.stringify(cfg.who['Boys 8|Arabic']) === '[["Teacher One",0],["Teacher Two",0]]' && JSON.stringify(cfg.who['Boys 9|Islamic']) === '[["Teacher Zero",0]]', 'owners\' calendar gets the teachers of every period');
+  E.as('t1@aisa.sch.ae'); cfg = cfgOf(E.call('doGet', { parameter: { p: 'calendar' } }));
+  ok(JSON.stringify(cfg.who) === '{}' && JSON.stringify(cfg.periods) === '[["Boys 8","Arabic",0],["Boys 8","Islamic",0]]', 'teachers\' calendar does not, but gets their own periods (class codes with no subject: both)');
   E.as('t1@aisa.sch.ae');
   throws(() => E.call('setJudgement', '803@aisa.sch.ae', 'CU', 'A', ''), /students you teach/, 'no judgement for another teacher\'s student in the same section');
   ok(E.call('setJudgement', '804@aisa.sch.ae', 'CU', 'A', '').saved, 'judgement for a student with no class name is allowed');
@@ -368,9 +372,9 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   ok(S('602').teachers.join() === '', 'no teacher listed for groups nobody teaches on the lists');
   ok(S('603').teachers.join() === 'Abdel Alroz,Belal Tantawi', 'a hand-added student (no class) belongs to the whole section');
   E.as('hand@aisa.sch.ae'); ok(E.call('getDashboard').students.every(x => x.mine), 'a teacher added by hand from the AI timetable sees their section as their own');
-  E.as('bbaki@aisa.sch.ae'); const cal = E.call('doGet', { parameter: { p: 'calendar' } }).getContent();
-  ok(/"name":"Belal Tantawi","email":"belal@aisa.sch.ae","subjects":\["Arabic"\]/.test(cal) && /"name":"Abdel Alroz","email":"alroz@aisa.sch.ae","subjects":\["Islamic"\]/.test(cal), 'the calendar gets each teacher\'s subject');
-  ok(!/BO6ISA1|AI timetable – teacher/.test(cal.slice(cal.indexOf('"teachers"'), cal.indexOf('"teachers"') + 2000)), 'and no class codes or notes');
+  E.as('bbaki@aisa.sch.ae'); const cal = cfgOf(E.call('doGet', { parameter: { p: 'calendar' } }));
+  ok(JSON.stringify(cal.who['Boys 6|Arabic']) === '[["Belal Tantawi",0]]' && JSON.stringify(cal.who['Boys 6|Islamic']) === '[["Abdel Alroz",0]]', 'the calendar names the teachers of each period by its subject');
+  ok(!/BO6ISA1|AI timetable – teacher|@/.test(JSON.stringify(cal.who)), 'and no class codes, notes or emails');
 }
 /* absences and reminders for lessons not taught (fresh environment) */
 {
@@ -530,6 +534,34 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   const after = E.call('getNotTaught').items.filter(x => x.lessonId === 'grade-7/main-w2-l1').length;
   ok(before === 0 && after === 1, 'a period ending updates the not-taught list without any change to the data');
   ok(Object.keys(E.ctx.__cache).some(k => /^r:/.test(k)), 'results are kept in the server cache');
+}
+/* the calendar marks only the periods each person teaches: the class AND the period's subject, from the same
+   class-list groups as the manager view (an Arabic teacher's class also has Islamic-period lessons, which are
+   not theirs); a tutor's periods are those they spend with students not in that subject; '/ TUT' marks
+   periods in which a tutor teaches part of the class (fresh environment) */
+{
+  const E = makeEnv(), sh = E.sheets;
+  E.as('bbaki@aisa.sch.ae'); E.call('setup');
+  sh.Roster.push(['ara@aisa.sch.ae', 'Arabic One', 'teacher', 'Boys 11', 11, 'sis', 'B11AFL1', ''], ['asl@aisa.sch.ae', 'Arabic Second', 'teacher', 'Boys 11', 11, 'sis', 'B11ASL', ''],
+    ['isl@aisa.sch.ae', 'Islam One', 'teacher', 'Boys 11', 11, 'sis', 'B11ISA1', ''], ['isl@aisa.sch.ae', 'Islam One', 'teacher', 'Boys 11', 11, '', 'AI timetable – teacher', ''],
+    ['tut@aisa.sch.ae', 'Tutor T', 'teacher', 'Boys 11', 11, 'sis', 'B11TUT', ''], ['tut@aisa.sch.ae', 'Tutor T', 'teacher', 'Boys 11', 11, '', 'AI timetable – tutor', ''],
+    ['hand@aisa.sch.ae', 'Hand Only', 'teacher', 'Boys 11', 11, '', 'AI timetable – teacher', ''],
+    ['ara9@aisa.sch.ae', 'Arabic Nine', 'teacher', 'Boys 9', 9, 'sis', 'B09AFL1', ''], ['isl9@aisa.sch.ae', 'Islam Nine', 'teacher', 'Boys 9', 9, 'sis', 'B09ISA1', '']);
+  [['1101', 'B11AFL1, B11ISA1'], ['1102', 'B11ASL, B11ISA1'], ['1103', 'B11TUT, B11AFL1'], ['1104', 'B11ISA1']].forEach(([id, c]) => sh.Roster.push([id + '@aisa.sch.ae', 'S' + id, 'student', 'Boys 11', 11, 'sis', c, '']));
+  sh.Roster.push(['901@aisa.sch.ae', 'S901', 'student', 'Boys 9', 9, 'sis', 'B09AFL1, B09ISA1', '']);
+  const per = e => { E.as(e); return JSON.stringify(cfgOf(E.call('doGet', { parameter: { p: 'calendar' } })).periods); };
+  ok(per('ara@aisa.sch.ae') === '[["Boys 11","Arabic",0]]' && per('asl@aisa.sch.ae') === '[["Boys 11","Arabic",0]]', 'Arabic teachers: only their class\'s Arabic-period lessons');
+  ok(per('isl@aisa.sch.ae') === '[["Boys 11","Islamic",0]]', 'an Islamic teacher: only the Islamic-period lessons');
+  ok(per('tut@aisa.sch.ae') === '[["Boys 11","Arabic",1],["Boys 11","Islamic",1]]', 'the tutor: the periods they spend with students not in that subject');
+  ok(per('hand@aisa.sch.ae') === '[]', 'a teacher only added by hand, where the class lists name the teachers, teaches no period');
+  ok(per('ara9@aisa.sch.ae') === '[["Boys 9","Arabic",0]]' && per('isl9@aisa.sch.ae') === '[["Boys 9","Islamic",0]]', 'Boys 9: Arabic and Islamic teachers apart');
+  E.as('isl@aisa.sch.ae'); const tc = cfgOf(E.call('doGet', { parameter: { p: 'calendar' } }));
+  ok(tc.tut.includes('Boys 11|Islamic') && tc.tut.includes('Boys 11|Arabic') && !tc.tut.includes('Boys 9|Islamic') && JSON.stringify(tc.who) === '{}', 'teachers see which periods have a tutor group (/ TUT), not the names');
+  E.as('bbaki@aisa.sch.ae'); const oc = cfgOf(E.call('doGet', { parameter: { p: 'calendar' } }));
+  ok(JSON.stringify(oc.who['Boys 11|Islamic']) === '[["Islam One",0],["Tutor T",1]]' && JSON.stringify(oc.who['Boys 11|Arabic']) === '[["Arabic One",0],["Arabic Second",0],["Tutor T",1]]', 'owners see the teachers of each period, tutors last');
+  ok(JSON.stringify(oc.periods) === '[]', 'an owner who teaches no class has no periods of their own');
+  const M = E.call('getManager'), sec = M.sections.find(x => x.name === 'Boys 11');
+  ok(E.ctx.slotGroups_(sec, 'Islamic').map(g => g.email).sort().join() === 'isl@aisa.sch.ae,tut@aisa.sch.ae', 'and the manager view has the same teachers for that period');
 }
 /* Google's HtmlService cuts script lines at '//', even inside a quoted web address, so no
    inline script the app serves may contain '://' (build.py writes it as ':\/\/'). */

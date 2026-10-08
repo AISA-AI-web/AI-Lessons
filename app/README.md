@@ -123,11 +123,22 @@ page**. The public site works the same way without signing in.
 
 ## The teaching calendar (staff)
 
-- **My lessons** (teachers): every AI lesson of their own classes in order, week by
-  week – date, period, day number, class, subject and the lesson. Breaks show as
-  one line; a holiday inside a week says which class's lesson moves and to when; a
-  class pushed back by a holiday gets the reason once, then a short "one lesson
-  behind" tag. *Show earlier weeks* and *Show 4 more weeks* page through the year.
+- **Whose lesson is it?** Each class has its AI lesson in an Arabic period one
+  week and an Islamic period the other, so a lesson belongs to the teachers of the
+  class **and** that period's subject – an Arabic teacher of Boys 9 does not teach
+  Boys 9's Islamic-period lessons. The calendar gets each person's periods from the
+  same class-list groups as the manager view (`teachingPeriods_` / `classGroups_` /
+  `slotGroups_` in `Code.js`), so the two always agree: class codes give the subject
+  (`…ISA…`, `…ISE` = Islamic; `…AFL…`, `…ASL…` = Arabic), and the tutor (`…TUT`) has
+  the periods they spend with students not in that subject's classes. A teacher
+  only added by hand ("AI timetable – teacher") teaches a period only when the class
+  lists name no teacher of that subject.
+- **/ TUT**: periods in which a tutor teaches part of the class (in a separate room)
+  read e.g. *Islamic / TUT*; a tutor's own lessons say *Your tutor group (TUT)*.
+  Owners and SLT see who teaches each period in the pop-up (tutors marked TUT).
+- **My classes** (teachers): their own lessons only – their classes, in their
+  subject's periods; today's glows. Breaks show as one line; a class pushed back by
+  a holiday gets the reason once, then a short "one lesson behind" tag.
 - **Whole school** (SLT, owners and the public site; teachers can switch to it):
   one timetable for the week, periods down and days across, each class a small
   chip with its grade colour. Click a class for its lesson and links; filter by
