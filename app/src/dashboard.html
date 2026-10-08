@@ -589,7 +589,7 @@ var AR = {
   '1 group not taught': 'مجموعة واحدة لم تُدرَّس',
   '{n} groups not taught': '{n} مجموعات لم تُدرَّس',
   'no teacher on the class lists': 'لا يوجد معلم في قوائم الشعب',
-  'No teacher on the class lists': 'لا يوجد معلم في قوائم الشعب', 'teacher not known': 'المعلم غير معروف', 'Arabic class not in the school export': 'صف اللغة العربية غير موجود في ملف المدرسة',
+  'No teacher on the class lists': 'لا يوجد معلم في قوائم الشعب', 'teacher not known': 'المعلم غير معروف', 'class not in the school export': 'الصف غير موجود في ملف المدرسة', 'Arabic class not in the school export': 'صف اللغة العربية غير موجود في ملف المدرسة',
   'Islamic class or tutor group not in the school export': 'صف التربية الإسلامية أو مجموعة مشرف الصف غير موجودة في ملف المدرسة',
   'Classes missing from the school export, so the app cannot tell who teaches these students – ask IT to add them to the export, then import it again.': 'صفوف غير موجودة في ملف المدرسة، لذا لا يمكن للتطبيق معرفة من يدرّس هؤلاء الطلاب – اطلب من قسم تقنية المعلومات إضافتها إلى الملف ثم استورده مجددًا.',
   'Arabic: {list}.': 'اللغة العربية: {list}.', 'Download the list for IT': 'تنزيل القائمة لقسم تقنية المعلومات', 'Islamic class or tutor group: {list}.': 'التربية الإسلامية أو مجموعة مشرف الصف: {list}.',
@@ -1162,14 +1162,12 @@ function lessonCell(row){
 function slotTeachers(s, date){
   if (!date || !s.tsub) return [];
   var r = AICAL.SCHEDULE.filter(function(x){ return x[0] === s.section && x[3] === AICAL.cycleOf(date) && x[4] === AICAL.DAYS[date.getDay()]; })[0];
-  if (r && s.away && s.away.indexOf(r[2]) >= 0) return [];   // not in that subject's classes: no teacher in that period
-  var t = r && s.tsub[r[2]] && s.tsub[r[2]].length ? s.tsub[r[2]] : (s.tsub[''] || []);
-  return t.length ? t : (s.teachers || []);
+  return r ? s.tsub[r[2]] || [] : [];                 // the teachers of that period's subject (none if their class is not on the lists)
 }
 function teacherLine(s, x){
   if (!(D.scope === 'school' || s.mine === false) || !x || !x.date) return '';
   var t = slotTeachers(s, x.date);
-  return t.length ? '<span class="sm tchl" title="' + esc(T('Teacher of that period')) + '">👩‍🏫 ' + esc(t.join(', ')) + '</span>' : '';
+  return t.length ? '<span class="sm tchl" title="' + esc(T('Teacher of that period')) + '">👩‍🏫 ' + esc(t.map(function(n){ return n + ((s.tutn || []).indexOf(n) >= 0 ? ' (TUT)' : ''); }).join(', ')) + '</span>' : '';
 }
 function retakeBtn(s, l){ return '<button type="button" class="rtk" data-rtk="' + esc(s.email + '|' + l.id) + '" data-name="' + esc(s.name) + '" data-les="' + esc(lessonShort(l)) + '">↻ ' + esc(T('Retake')) + '</button>'; }
 function retakeNote(s, l, x){
@@ -1214,7 +1212,13 @@ function nameSub(s){
   var parts = [];
   if (!F.section) parts.push(secName(s.section));
   if (clsOf(s) && splitSecs().length) parts.push(clsOf(s));
-  var t = (D.scope === 'school' || s.mine === false) && (s.teachers || []).length ? '👩‍🏫 ' + s.teachers.join(', ') : '';
+  /* who teaches them in each AI period – Arabic and Islamic – as on the calendar and the manager view; a class
+     missing from the school export, or with no teacher on the lists, is said so rather than left out */
+  var by = inSchedule(s.section) ? ['Arabic', 'Islamic'].map(function(sub){
+    var l = (s.tsub || {})[sub];
+    return T(sub) + ': ' + (l && l.length ? l.map(function(n){ return n + ((s.tutn || []).indexOf(n) >= 0 ? ' (TUT)' : ''); }).join(', ') : (s.away || []).indexOf(sub) >= 0 ? T('class not in the school export') : T('no teacher on the class lists'));
+  }).join(' · ') : (s.teachers || []).join(', ');
+  var t = (D.scope === 'school' || s.mine === false) && by ? '👩‍🏫 ' + by : '';
   return parts.length || t || s.mine === false ? '<small>' + esc(parts.join(' · ')) + (s.mine === false ? (parts.length ? ' · ' : '') + esc(T('not your class')) : '') + '</small>' + (t ? '<small class="tch">' + esc(t) + '</small>' : '') : '';
 }
 function drawTable(){

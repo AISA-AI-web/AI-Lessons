@@ -302,11 +302,47 @@ function teachingPeriods_(force) {
     return { mine: mine, tut: tut, who: who };
   });
 }
-/** The teachers who teach this student (sharing one of their classes, or the whole section when either
-    has no class names), by subject – so a lesson can be matched to the teacher of that day's period.
-    names: their Arabic and Islamic teachers (a tutor only when no one else is listed); a student not in
-    a subject's classes has their tutor in that subject's periods. */
+/** Who teaches each student in each of their class's AI periods – the same groups as the manager view and the
+    calendar (classGroups_ / slotGroups_), so the dashboard, the calendar and the manager view always agree.
+    { section: { studentEmail: { Arabic: [{name, email, tutor}], Islamic: [...], away: [subjects whose class is
+    not in the school export] } } } – kept on cm for the rest of the request. */
+function teachMap_(cm, tbs) {
+  if (cm.tm) return cm.tm;
+  var out = {};
+  classGroups_(cm, tbs).forEach(function (sec) {
+    var m = out[sec.name] = {};
+    sec.students.forEach(function (x) { m[x.e] = { away: [] }; });
+    AICAL.SCHEDULE.forEach(function (r) {
+      if (r[0] !== sec.name) return;
+      slotGroups_(sec, r[2]).forEach(function (g) {
+        g.idx.forEach(function (i) {
+          var o = m[sec.students[i].e];
+          if (g.away) { if (o.away.indexOf(r[2]) < 0) o.away.push(r[2]); return; }
+          if (!g.email) return;
+          var l = o[r[2]] || (o[r[2]] = []);
+          if (!l.some(function (t) { return t.email === g.email; })) l.push({ name: g.name, email: g.email, tutor: !!g.tutor });
+        });
+      });
+    });
+  });
+  return (cm.tm = out);
+}
+/** The teachers who teach this student, by the subject of each AI period (bySub), so a lesson can be matched to
+    the teacher of that day's period; names: all of them; away: subjects whose class is missing from the export.
+    A teacher added by hand with no class code only counts where the class lists name no teacher of that
+    subject (as on the calendar). Classes not on the AI timetable: those sharing one of their classes. */
 function teachersOf_(cm, tbs, email, section) {
+  var tm = (teachMap_(cm, tbs)[section] || {})[email];
+  if (tm) {
+    var by = {}, all = [], tut = [];
+    ['Arabic', 'Islamic'].forEach(function (sub) {
+      if (!tm[sub] || !tm[sub].length) return;
+      by[sub] = tm[sub].map(function (t) { return t.name; });
+      by[sub].forEach(function (n) { if (all.indexOf(n) < 0) all.push(n); });
+      tm[sub].forEach(function (t) { if (t.tutor && tut.indexOf(t.name) < 0) tut.push(t.name); });
+    });
+    return { names: all, bySub: by, away: tm.away.slice(), tutors: tut };
+  }
   var theirs = (cm.students[email] || {}).classes || [], bySub = {}, lesson = [], tutors = [];
   (tbs[section] || []).forEach(function (t) {
     if (t.classes.length && theirs.length && !theirs.some(function (c) { return t.classes.indexOf(c) >= 0; })) return;
@@ -321,14 +357,17 @@ function teachersOf_(cm, tbs, email, section) {
   });
   return { names: lesson.length ? lesson : tutors, bySub: bySub, away: awayIn_(cm, section, theirs) };
 }
-/** True if this student is one of the teacher's own (owners and SLT: everyone). */
+/** True if this student is one of the teacher's own (owners and SLT: everyone): the teacher teaches them in one
+    of their class's AI periods (as on the calendar and the manager view). */
 function isMine_(me, vis, cm, email, section) {
   if (vis === null) return true;
   if (vis.indexOf(section) < 0) return false;
+  var tm = (teachMap_(cm, cm.tbs || (cm.tbs = teachersBySection_()))[section] || {})[email];
+  if (tm) return ['Arabic', 'Islamic'].some(function (sub) { return (tm[sub] || []).some(function (t) { return t.email === me.email; }); });
   var mine = ((cm.teachers[me.email] || {})[section]) || [], theirs = (cm.students[email] || {}).classes || [];
   if (!mine.length || !theirs.length) return true;
   if (theirs.some(function (c) { return mine.indexOf(c) >= 0; })) return true;
-  /* a tutor also has the students who spend Islamic or Arabic periods with them */
+  /* (classes not on the AI timetable) a tutor also has the tutor group */
   return withTutorIn_(cm, section, theirs).length > 0 && mine.some(function (c) { return subjectOf_(c) === 'Tutor'; }) &&
     tutorsFor_(cm.tbs || (cm.tbs = teachersBySection_()), section, theirs).some(function (t) { return t.email === me.email; });   // read the lists once per request
 }
@@ -692,8 +731,9 @@ function dashboard_(me, vis, force) {
   var cm = classMap_(), myClasses = vis === null ? {} : (cm.teachers[me.email] || {});
   var outStudents = Object.keys(students).map(function (e) { return students[e]; }).filter(allowed);
   var tbs = me.role === 'student' ? {} : teachersBySection_();
+  if (me.role !== 'student') cm.tbs = tbs;           // read the lists once per request
   outStudents.forEach(function (s) { s.classes = (cm.students[s.email] || {}).classes || []; s.mine = me.role === 'student' || isMine_(me, vis, cm, s.email, s.section);
-    if (me.role !== 'student') { var to = teachersOf_(cm, tbs, s.email, s.section); s.teachers = to.names; s.tsub = to.bySub; if (to.away.length) s.away = to.away; } });
+    if (me.role !== 'student') { var to = teachersOf_(cm, tbs, s.email, s.section); s.teachers = to.names; s.tsub = to.bySub; if (to.away && to.away.length) s.away = to.away; if (to.tutors && to.tutors.length) s.tutn = to.tutors; } });
   var keep = {}; outStudents.forEach(function (s) { keep[s.email] = 1; });
   var TP = me.role === 'student' ? null : teachingPeriods_(force);   // ↻ Refresh also refreshes the calendar's periods
   var results = Object.keys(per).map(function (k) { return per[k]; }).filter(function (c) { return keep[c.email]; });

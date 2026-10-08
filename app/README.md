@@ -228,8 +228,16 @@ their lists are right:
   Tiers can be recorded for their own students only. If the export put a
   student with the wrong teacher, **Move to my class** (Class lists, *Your
   class* column) moves them straight away; it is logged (type `class`) and
-  wins over later imports while the student stays in that section. Students or
-  teachers with no class name fall back to the whole section.
+  wins over later imports while the student stays in that section. A student with
+  no class name belongs to every teacher of the section. A teacher with no class
+  name (only added by hand, e.g. "AI timetable – teacher") teaches a period only
+  where the class lists name no teacher of that subject – as on the calendar and in
+  the manager view – so a hand-added row that the school export contradicts gives
+  no students (they can still see the section with *Show all*).
+- **Each student's teachers** (owners and SLT, or another teacher's student) are
+  shown by subject under their name – *Arabic: … · Islamic: …*, a tutor marked
+  *(TUT)* – from the same groups as the calendar and the manager view; a class the
+  school export left out says *class not in the school export*.
 - **Who teaches a period.** Each AI lesson sits in an Arabic or an Islamic period
   (the 10-day timetable in `school-calendar.js`). A teacher's subject comes from
   their class codes in the school export (`BO6ISA1` = Islamic, `BO6AFL1` /

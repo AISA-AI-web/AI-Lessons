@@ -367,10 +367,10 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
     ['601@aisa.sch.ae', 'Sami S', 'student', 'Boys 6', 6, 'sis', 'BO6AFL1, BO6ISA1, BO6TUT', ''], ['602@aisa.sch.ae', 'Tariq T', 'student', 'Boys 6', 6, 'sis', 'BO6AFL2, BO6ISA2', ''],
     ['701@aisa.sch.ae', 'Yusuf Y', 'student', 'Boys 7', 7, 'sis', 'BO7AFL1, BO7ISA1', ''], ['603@aisa.sch.ae', 'New N', 'student', 'Boys 6', 6, '', 'Added by alroz@aisa.sch.ae', '']);
   let d = E.call('getDashboard'); const S = id => d.students.find(x => x.email === id + '@aisa.sch.ae');
-  ok(S('601').teachers.join() === 'Abdel Alroz,Belal Tantawi', 'a student\'s teachers: their Arabic and Islamic teachers, not the tutor');
-  ok(S('601').tsub.Arabic.join() === 'Belal Tantawi' && S('601').tsub.Islamic.join() === 'Abdel Alroz' && S('601').tsub.Tutor.join() === 'Jennifer Matar', 'teachers are grouped by subject from the class codes');
+  ok(S('601').teachers.join() === 'Belal Tantawi,Abdel Alroz', 'a student\'s teachers: their Arabic and Islamic teachers, not the tutor (they are in an Islamic class)');
+  ok(S('601').tsub.Arabic.join() === 'Belal Tantawi' && S('601').tsub.Islamic.join() === 'Abdel Alroz' && !S('601').tsub.Tutor, 'teachers are grouped by the subject of each AI period, from the class codes');
   ok(S('602').teachers.join() === '', 'no teacher listed for groups nobody teaches on the lists');
-  ok(S('603').teachers.join() === 'Abdel Alroz,Belal Tantawi', 'a hand-added student (no class) belongs to the whole section');
+  ok(S('603').teachers.join() === 'Belal Tantawi,Abdel Alroz', 'a hand-added student (no class) belongs to the whole section');
   E.as('hand@aisa.sch.ae'); ok(E.call('getDashboard').students.every(x => x.mine), 'a teacher added by hand from the AI timetable sees their section as their own');
   E.as('bbaki@aisa.sch.ae'); const cal = cfgOf(E.call('doGet', { parameter: { p: 'calendar' } }));
   ok(JSON.stringify(cal.who['Boys 6|Arabic']) === '[["Belal Tantawi",0]]' && JSON.stringify(cal.who['Boys 6|Islamic']) === '[["Abdel Alroz",0]]', 'the calendar names the teachers of each period by its subject');
@@ -573,6 +573,15 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   E.as('bbaki@aisa.sch.ae'); const oc = cfgOf(E.call('doGet', { parameter: { p: 'calendar' } }));
   ok(JSON.stringify(oc.who['Boys 11|Islamic']) === '[["Islam One",0],["Tutor T",1]]' && JSON.stringify(oc.who['Boys 11|Arabic']) === '[["Arabic One",0],["Arabic Second",0]]', 'owners see the teachers of each period, tutors last (none in Arabic periods)');
   ok(JSON.stringify(oc.periods) === '[]', 'an owner who teaches no class has no periods of their own');
+  /* a teacher only added by hand (no class code) is not anyone's teacher where the class lists name the teachers:
+     not on their teacher line, not their students (so no absences or tiers for them); the line says each subject */
+  E.as('bbaki@aisa.sch.ae'); let ds = E.call('getDashboard').students; const Sx = id => ds.find(x => x.email === id + '@aisa.sch.ae');
+  ok(Sx('1101').teachers.join() === 'Arabic One,Islam One' && !Sx('1101').teachers.includes('Hand Only'), 'the dashboard names only the teachers of the student\'s periods (not a hand-added teacher with no class)');
+  ok(Sx('1104').teachers.join() === 'Islam One' && Sx('1104').away.join() === 'Arabic' && !Sx('1104').tsub.Arabic, 'a student whose Arabic class is not in the export: their Islamic teacher, and Arabic marked missing');
+  E.as('hand@aisa.sch.ae'); ds = E.call('getDashboard').students;
+  ok(ds.length === 4 && ds.every(x => x.mine === false), 'the hand-added teacher can still see the class (Show all) but none of its students are theirs');
+  throws(() => E.call('setAbsent', '1101@aisa.sch.ae', 'grade-11/main-w1-l1', true, ''), /own students/, 'and cannot mark them absent');
+  E.as('ara@aisa.sch.ae'); ok(E.call('getDashboard').students.filter(x => x.mine).map(x => x.email.slice(0, 4)).sort().join() === '1101,1103', 'an Arabic teacher\'s own students are those in their Arabic class');
   E.realCache = true; E.as('ara@aisa.sch.ae'); per('ara@aisa.sch.ae');
   sh.Roster.push(['ara@aisa.sch.ae', 'Arabic One', 'teacher', 'Boys 9', 9, 'sis', 'B09ISA1', '']);   // a hand edit of the class lists
   const stale = per('ara@aisa.sch.ae'); E.call('getDashboard', true);
