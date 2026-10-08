@@ -560,6 +560,11 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   E.as('bbaki@aisa.sch.ae'); const oc = cfgOf(E.call('doGet', { parameter: { p: 'calendar' } }));
   ok(JSON.stringify(oc.who['Boys 11|Islamic']) === '[["Islam One",0],["Tutor T",1]]' && JSON.stringify(oc.who['Boys 11|Arabic']) === '[["Arabic One",0],["Arabic Second",0],["Tutor T",1]]', 'owners see the teachers of each period, tutors last');
   ok(JSON.stringify(oc.periods) === '[]', 'an owner who teaches no class has no periods of their own');
+  E.realCache = true; E.as('ara@aisa.sch.ae'); per('ara@aisa.sch.ae');
+  sh.Roster.push(['ara@aisa.sch.ae', 'Arabic One', 'teacher', 'Boys 9', 9, 'sis', 'B09ISA1', '']);   // a hand edit of the class lists
+  const stale = per('ara@aisa.sch.ae'); E.call('getDashboard', true);
+  ok(stale === '[["Boys 11","Arabic",0]]' && per('ara@aisa.sch.ae') === '[["Boys 9","Islamic",0],["Boys 11","Arabic",0]]', '↻ Refresh on the dashboard also refreshes the calendar after a hand edit');
+  E.realCache = false; E.as('bbaki@aisa.sch.ae');
   const M = E.call('getManager'), sec = M.sections.find(x => x.name === 'Boys 11');
   ok(E.ctx.slotGroups_(sec, 'Islamic').map(g => g.email).sort().join() === 'isl@aisa.sch.ae,tut@aisa.sch.ae', 'and the manager view has the same teachers for that period');
 }

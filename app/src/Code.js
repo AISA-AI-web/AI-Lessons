@@ -265,8 +265,8 @@ function tutorsFor_(tbs, section, theirs) {
     mine: { email: [[section, subject, 1 if only as the tutor]] } – the periods each person teaches;
     tut: ['section|subject'] – periods in which a tutor teaches part of the class (shown as '/ TUT');
     who: { 'section|subject': [[name, 1 if tutor]] } – names only, for owners and SLT. */
-function teachingPeriods_() {
-  return cached_('periods', false, function () {
+function teachingPeriods_(force) {
+  return cached_('periods', force === true, function () {
     var mine = {}, tut = [], who = {};
     classGroups_().forEach(function (sec) {
       AICAL.SCHEDULE.forEach(function (r) {
@@ -647,9 +647,9 @@ function lessonCells_() {
     role and their sections, so a role change is never answered from someone else's view. */
 function getDashboard(force) {
   var me = requireUser_(), vis = visibleSections_(me);
-  return cached_('dash:' + me.email + ':' + me.role + ':' + (vis === null ? '*' : vis.join(',')), force === true, function () { return dashboard_(me, vis); });
+  return cached_('dash:' + me.email + ':' + me.role + ':' + (vis === null ? '*' : vis.join(',')), force === true, function () { return dashboard_(me, vis, force === true); });
 }
-function dashboard_(me, vis) {
+function dashboard_(me, vis, force) {
   var roster = rows_('Roster').filter(function (r) { return r.role === 'student'; });
   var students = {};
   roster.forEach(function (r) {
@@ -677,7 +677,7 @@ function dashboard_(me, vis) {
   outStudents.forEach(function (s) { s.classes = (cm.students[s.email] || {}).classes || []; s.mine = me.role === 'student' || isMine_(me, vis, cm, s.email, s.section);
     if (me.role !== 'student') { var to = teachersOf_(cm, tbs, s.email, s.section); s.teachers = to.names; s.tsub = to.bySub; } });
   var keep = {}; outStudents.forEach(function (s) { keep[s.email] = 1; });
-  var TP = me.role === 'student' ? null : teachingPeriods_();
+  var TP = me.role === 'student' ? null : teachingPeriods_(force);   // ↻ Refresh also refreshes the calendar's periods
   var results = Object.keys(per).map(function (k) { return per[k]; }).filter(function (c) { return keep[c.email]; });
   var retakes = {};                                   // email|lesson -> { n, at, by, prev: {score, max, done, seconds} }
   Object.keys(rt).forEach(function (k) { if (!keep[k.split('|')[0]]) return; var p = prev[k];

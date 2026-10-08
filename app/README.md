@@ -387,6 +387,7 @@ student data is ever stored in this GitHub repository**, which is public.
   version. Click **↻ Refresh** (dashboard footer or manager hub) to work everything
   out again; otherwise they show within 6 hours (Google's cache limit) or after the
   next change made through the app.
+- ↻ Refresh on the dashboard also refreshes the calendar's teachers and periods.
 - In the page, the manager hub keeps its data while you switch tabs; marking an
   absence or a tier updates the dashboard in place.
 
