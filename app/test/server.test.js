@@ -510,6 +510,32 @@ ok(Object.keys(dash('t7@aisa.sch.ae').judgements).every(k => k.startsWith('b1@')
   ok(g.length === 2 && g[1].away === true && g[1].idx.length === 1 && sec.students[g[1].idx[0]].e === '1103@aisa.sch.ae', 'the manager view shows them as a group of their own (Arabic class not in the school export)');
   ok(E.ctx.slotGroups_(sec, 'Islamic').some(x => x.email === 'tut@aisa.sch.ae' && x.idx.length === 1), 'their tutor still has the tutor group in Islamic periods');
 }
+/* IB Diploma students (the IB tab) with no Arabic class take a World Language in Arabic periods and do those AI
+   lessons as homework (agreed with the IBDP): not a teacher's period, not a missing class, no reminders; Islamic
+   periods are unchanged (fresh environment) */
+{
+  const E = makeEnv(), sh = E.sheets;
+  E.as('bbaki@aisa.sch.ae'); E.call('setup');
+  sh.Roster.push(['ara@aisa.sch.ae', 'Arabic One', 'teacher', 'Girls 11', 11, 'sis', 'G11AFL1', ''], ['isl@aisa.sch.ae', 'Islam One', 'teacher', 'Girls 11', 11, 'sis', 'G11ISA1', ''],
+    ['tut@aisa.sch.ae', 'Tutor G', 'teacher', 'Girls 11', 11, 'sis', 'G11TUT', '']);
+  [['1101', 'G11AFL1, G11ISA1'], ['1102', 'G11TUT'], ['1103', 'G11ISA1']].forEach(([id, c]) => sh.Roster.push([id + '@aisa.sch.ae', 'S' + id, 'student', 'Girls 11', 11, 'sis', c, '']));
+  sh.IB.push(['1102@aisa.sch.ae', 'S1102', 'IB1', 'Spanish ab initio', '']);
+  const RD = Date; E.ctx.Date = class extends RD { constructor(...a) { a.length ? super(...a) : super('2026-10-12T09:00:00'); } static now() { return new RD('2026-10-12T09:00:00').getTime(); } };
+  const nt = E.call('getNotTaught').items.filter(x => x.lessonId === 'grade-11/main-w2-l1');
+  ok(nt.length === 1 && nt[0].email === 'ara@aisa.sch.ae' && nt[0].students === 1, 'Arabic period: only the Arabic teacher is reminded – not about the IB student');
+  const sec = E.call('getManager').sections.find(x => x.name === 'Girls 11'), ga = E.ctx.slotGroups_(sec, 'Arabic'), gi = E.ctx.slotGroups_(sec, 'Islamic');
+  const who = g => g.idx.map(i => sec.students[i].e.slice(0, 4)).join();
+  ok(ga.some(g => g.home && who(g) === '1102') && ga.some(g => g.away && who(g) === '1103'), 'the IB student is a homework group of their own; a non-IB student with no Arabic class is still a missing class');
+  ok(gi.some(g => g.email === 'tut@aisa.sch.ae' && who(g) === '1102') && gi.some(g => g.email === 'isl@aisa.sch.ae' && who(g) === '1101,1103'), 'Islamic periods are unchanged (the IB student is in the tutor group)');
+  const st = E.call('getDashboard').students, S = id => st.find(x => x.email === id + '@aisa.sch.ae');
+  ok(S('1102').home.join() === 'Arabic' && S('1102').ib === 'IB1' && !S('1102').tsub.Arabic && S('1102').tsub.Islamic.join() === 'Tutor G' && !S('1102').away, 'the dashboard shows the IB student\'s Arabic lessons as homework');
+  ok(S('1103').away.join() === 'Arabic' && !S('1103').home && !S('1103').ib, 'and keeps a missing Arabic class apart');
+  const oc = cfgOf(E.call('doGet', { parameter: { p: 'calendar' } }));
+  ok(oc.hw['Girls 11|Arabic'] === 1 && !oc.hw['Girls 11|Islamic'], 'the owners\' calendar counts the IB homework of each period');
+  E.as('1102@aisa.sch.ae'); ok(JSON.stringify(cfgOf(E.call('doGet', { parameter: {} })).homework) === '["Arabic"]', 'the IB student\'s home page marks their Arabic-period lessons as homework');
+  E.as('1101@aisa.sch.ae'); ok(JSON.stringify(cfgOf(E.call('doGet', { parameter: {} })).homework) === '[]', 'other students have no homework flag');
+  E.as('ara@aisa.sch.ae'); ok(JSON.stringify(cfgOf(E.call('doGet', { parameter: { p: 'calendar' } })).periods) === '[["Girls 11","Arabic",0]]', 'the Arabic teacher\'s calendar is unchanged');
+}
 /* speed: results are reused from the cache while nothing has changed, and never after a change made through
    the app, a period ending, or a forced refresh; each person's view is kept apart (fresh environment) */
 {

@@ -184,7 +184,7 @@ const AR = {
   '↑ Show earlier weeks': '↑ اعرض الأسابيع السابقة', 'Show 4 more weeks ↓': 'اعرض 4 أسابيع أخرى ↓',
   'Next week: {list}. No AI lessons on those days – each class\'s lesson moves to its next AI period.': 'الأسبوع القادم: {list}. لا توجد دروس ذكاء اصطناعي في تلك الأيام – ينتقل درس كل شعبة إلى حصتها التالية.',
   '● lesson page ready · ○ page coming': '● صفحة الدرس جاهزة · ○ قيد الإعداد', '⏪ class is a lesson behind because of a holiday': '⏪ الشعبة متأخرة درسًا بسبب عطلة', 'Bold and outlined = your classes': 'بخط عريض ومحاطة بإطار = شعبك', 'Bold and outlined = your lessons (your class and subject)': 'بخط عريض ومحاطة بإطار = دروسك (شعبتك ومادتك)',
-  '/ TUT = the class tutor teaches part of the class in this period': '/ TUT = مشرف الصف يدرّس جزءًا من الشعبة في هذه الحصة', 'Your tutor group (TUT)': 'مجموعتك (TUT)',
+  '/ TUT = the class tutor teaches part of the class in this period': '/ TUT = مشرف الصف يدرّس جزءًا من الشعبة في هذه الحصة', 'Your tutor group (TUT)': 'مجموعتك (TUT)', 'IB students in World Languages ({n}): homework': 'طلاب البكالوريا الدولية في اللغات العالمية ({n}): واجب منزلي',
   'Every class\'s AI period this week. Your lessons are bold and outlined – the one you teach today glows.': 'حصة الذكاء الاصطناعي لكل شعبة هذا الأسبوع. دروسك بخط عريض ومحاطة بإطار – ويتوهّج درس اليوم.',
   'Click a class for the lesson, a link to copy and Share to Classroom': 'انقر على شعبة لعرض الدرس ونسخ الرابط والمشاركة في Google Classroom',
   'No AI lessons': 'لا توجد دروس ذكاء اصطناعي', 'Your class': 'شعبتك', 'Period {p}': 'الحصة {p}', 'Arabic Studies': 'اللغة العربية', 'Islamic Studies': 'التربية الإسلامية', 'Arabic': 'عربي', 'Islamic': 'إسلامية',
@@ -279,8 +279,9 @@ function grid() {
    subject picks them from the class lists; a tutor teaching part of the class is marked TUT); names only. */
 function teachersLine(sec, sub) {
   if (!APP || !APP.who || (APP.role !== 'owner' && APP.role !== 'slt')) return '';
-  const ts = APP.who[sec + '|' + sub] || [];
-  return `<p class="tch">👩‍🏫 <b>${esc(T(ts.length > 1 ? 'Teachers' : 'Teacher'))}:</b> ${ts.length ? ts.map(t => `<span>${esc(t[0])}${t[1] ? ' (TUT)' : ''}</span>`).join(' · ') : `<i>${esc(T('none on the class lists yet'))}</i>`}</p>`;
+  const ts = APP.who[sec + '|' + sub] || [], hw = (APP.hw || {})[sec + '|' + sub];
+  return `<p class="tch">👩‍🏫 <b>${esc(T(ts.length > 1 ? 'Teachers' : 'Teacher'))}:</b> ${ts.length ? ts.map(t => `<span>${esc(t[0])}${t[1] ? ' (TUT)' : ''}</span>`).join(' · ') : `<i>${esc(T('none on the class lists yet'))}</i>`}</p>` +
+    (hw ? `<p class="tch">📝 ${esc(T('IB students in World Languages ({n}): homework', { n: hw }))}</p>` : '');
 }
 function openPop(btn) {
   const [sec, ds] = btn.dataset.k.split('|'), d = parse(ds), r = AICAL.slotsOn(d).find(x => x[0] === sec); if (!r) return;

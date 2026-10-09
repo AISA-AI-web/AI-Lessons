@@ -168,6 +168,7 @@ const APP = window.APP || null, ROLE = APP ? APP.role : 'visitor';
 const NOW = (() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; })();
 const inSchedule = s => AICAL.SCHEDULE.some(r => r[0] === s);
 const STUDENT = ROLE === 'student' && APP.section && inSchedule(APP.section) ? APP.section : '';
+const HW = STUDENT && Array.isArray(APP.homework) ? APP.homework : [];   // subjects whose AI lessons are this student's homework (IB)
 const STAFF = APP && ROLE !== 'student';
 const link = id => APP ? APP.base + '?p=' + encodeURIComponent(id) : id + '.html';
 const appPage = p => APP ? APP.base + '?p=' + p : p + '.html';
@@ -199,7 +200,8 @@ const AR = {
   '{a} of {b} lessons finished · {p}% first try': 'أكملت {a} من {b} دروس · {p}% في المحاولة الأولى', '{a} of {b} lessons finished': 'أكملت {a} من {b} دروس', 'See my strands and badges': 'اعرض مجالاتي وأوسمتي',
   'Teachers': 'المعلمون', 'The teaching calendar shows each class\'s lessons, with links to share with students.': 'يعرض تقويم التدريس دروس كل شعبة، مع روابط لمشاركتها مع الطلاب.', 'Show a QR code for this page': 'اعرض رمز QR لهذه الصفحة',
   'My AI lessons': 'دروس الذكاء الاصطناعي الخاصة بي', '{s} · one AI lesson a week · dates move if a holiday falls on your lesson': '{s} · درس واحد أسبوعيًا · يتغيّر الموعد إذا صادف درسك عطلة',
-  'Week {n} · Period {p} · {s}': 'الأسبوع {n} · الحصة {p} · {s}', 'Period {p} · {s}': 'الحصة {p} · {s}', ' · this week': ' · هذا الأسبوع',
+  'Week {n} · Period {p} · {s}': 'الأسبوع {n} · الحصة {p} · {s}', 'Week {n} · homework (IB)': 'الأسبوع {n} · واجب منزلي (البكالوريا الدولية)', 'Homework (IB)': 'واجب منزلي (البكالوريا الدولية)',
+  'IB: your class has this lesson on {d}, period {p}, while you are in your language class – do it as homework and finish it before your next AI lesson.': 'البكالوريا الدولية: يدرس صفّك هذا الدرس يوم {d}، الحصة {p}، بينما تكون في صف اللغة – أنجزه كواجب منزلي قبل درس الذكاء الاصطناعي التالي.', 'Period {p} · {s}': 'الحصة {p} · {s}', ' · this week': ' · هذا الأسبوع',
   'In progress · {d} of {a} activities': 'قيد التنفيذ · {d} من {a} أنشطة', 'Not started': 'لم يبدأ', 'Review': 'مراجعة', 'Continue': 'متابعة', 'Start': 'ابدأ', 'Preview': 'معاينة', 'Open': 'افتح',
   'No school': 'لا دوام', 'Foundation lessons': 'الدروس التمهيدية', 'Extra lessons for Grade {g} · dates to be announced': 'دروس إضافية للصف {g} · تُعلن المواعيد لاحقًا', 'Later': 'لاحقًا', 'Week': 'الأسبوع',
   'This week\'s lesson for Grade {g}': 'درس هذا الأسبوع للصف {g}', 'No AI lessons for Grade {g} this week': 'لا توجد دروس ذكاء اصطناعي للصف {g} هذا الأسبوع', 'Grade {g} lessons': 'دروس الصف {g}',
@@ -257,7 +259,9 @@ function studentView() {
   const first = String(APP.name || '').split(' ')[0] || '', inWeek = d && d >= mon && d <= fri, r = d && rowFor(sec, d), pr = progOf(L);
   let h = `<span class="eyebrow">${esc(weekLabel())}</span><h1>${esc(T(inWeek ? 'Hi {name} – here is your lesson this week' : 'Hi {name} – no AI lesson this week', { name: first }))}</h1>` +
     `<span class="chip purple">${esc(T('Grade {g} · Week {n}', { g, n }))}</span><div class="title">${L ? en(L.title) : esc(T('Week {n} lesson', { n }))}</div>`;
-  if (d && r) h += `<p>${T(d < NOW ? 'Your class had it on {d}, period {p} ({s}). Finish it before your next AI lesson.' : 'Your class has it on {d}, period {p} ({s}).', { d: `<b>${esc(fdl(d))}</b>`, p: r[5], s: esc(subj(r[2])) })}</p>`;
+  /* IB students in World Languages do the lessons of their class's Arabic periods as homework (APP.homework) */
+  if (d && r && HW.includes(r[2])) h += `<p>${T('IB: your class has this lesson on {d}, period {p}, while you are in your language class – do it as homework and finish it before your next AI lesson.', { d: `<b>${esc(fdl(d))}</b>`, p: r[5] })}</p>`;
+  else if (d && r) h += `<p>${T(d < NOW ? 'Your class had it on {d}, period {p} ({s}). Finish it before your next AI lesson.' : 'Your class has it on {d}, period {p} ({s}).', { d: `<b>${esc(fdl(d))}</b>`, p: r[5], s: esc(subj(r[2])) })}</p>`;
   if (L && pr && pr.state !== 'none') h += pr.state === 'done' ? `<p><span class="chip ok">${esc(T('✓ Finished · {p}% first try', { p: pr.pct }))}</span></p>` :
     `<div class="bar"><i style="width:${Math.round(pr.done / L.activities * 100)}%"></i></div><p style="font-size:13.5px">${esc(T('{d} of {a} activities checked · {p}% first try', { d: pr.done, a: L.activities, p: pr.pct }))}</p>`;
   else if (L && pr) h += `<p style="font-size:13.5px">${esc(T('Not started yet'))}</p>`;
@@ -285,7 +289,7 @@ function studentView() {
     else if (q && q.state === 'doing') { chip = `<span class="chip warn">${esc(T('In progress · {d} of {a} activities', { d: q.done, a: l.activities }))}</span>`; btn = T('Continue'); }
     else if (q && dd <= NOW) { chip = `<span class="chip muted">${esc(T('Not started'))}</span>`; btn = T('Start'); }
     else btn = dd <= NOW || cur ? T('Start') : T('Preview');
-    const meta = l ? T('Week {n} · Period {p} · {s}', { n: w, p: rr[5], s: subj(rr[2]) }) : T('Period {p} · {s}', { p: rr[5], s: subj(rr[2]) });
+    const meta = HW.includes(rr[2]) ? (l ? T('Week {n} · homework (IB)', { n: w }) : T('Homework (IB)')) : l ? T('Week {n} · Period {p} · {s}', { n: w, p: rr[5], s: subj(rr[2]) }) : T('Period {p} · {s}', { p: rr[5], s: subj(rr[2]) });
     rows.push(`<li class="${cur ? 'cur' : past ? 'done' : 'later'}"><div class="dt${later ? ' later' : ''}"><small>${esc(wd(dd))}</small><b>${dd.getDate()}</b><small>${esc(mo(dd))}</small></div>` +
       `<div><b class="t">${l ? en(l.title) : esc(T('Week {n} lesson', { n: w }))}</b><div class="meta">${esc(meta)}${cur ? esc(T(' · this week')) : ''}</div>${chip ? `<div class="st">${chip}</div>` : ''}</div>` +
       (l && w <= REL ? `<a class="btn small ${cur ? 'primary' : q && q.state === 'done' ? '' : 'quiet'}" href="${esc(link(l.id))}"${tgt}>${esc(btn)}</a>` : '') + '</li>');

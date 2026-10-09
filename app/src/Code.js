@@ -24,7 +24,8 @@ var TABS = {
   Awards:    ['timestamp', 'month', 'type', 'email', 'name', 'by', 'note'],
   Absences:  ['timestamp', 'student', 'lessonId', 'teacher', 'status', 'note'],
   Reminders: ['timestamp', 'teacher', 'section', 'lessonId', 'by', 'cc'],
-  Visits:    ['timestamp', 'email', 'role']
+  Visits:    ['timestamp', 'email', 'role'],
+  IB:        ['email', 'name', 'year', 'language', 'note']   // IB Diploma students (IB1 = Grade 11, IB2 = Grade 12)
 };
 /* Every AI Literacy section, e.g. Boys 6 … Girls 12. */
 var SECTIONS = (function () { var a = []; for (var g = 6; g <= 12; g++) a.push('Boys ' + g, 'Girls ' + g); return a; })();
@@ -67,7 +68,8 @@ function doGet(e) {
     sections: me.role === 'teacher' ? visibleSections_(me) : [], section: me.section || '', grade: me.grade || '',
     locked: rel ? lockedLinks_(rel, me.email) : {},
     periods: P ? P.mine[me.email] || [] : [], tut: P ? P.tut : [],
-    who: P && (me.role === 'owner' || me.role === 'slt') ? P.who : {} });
+    who: P && (me.role === 'owner' || me.role === 'slt') ? P.who : {}, hw: P && (me.role === 'owner' || me.role === 'slt') ? P.hw : {},
+    homework: me.role === 'student' && p === 'index' ? homeworkFor_(me.email) : [] });
   html = html.replace(/<head>/i, '<head>' + bridge.evaluate().getContent());
   return HtmlService.createHtmlOutput(html)
     .setTitle(titleOf_(html))
@@ -263,6 +265,19 @@ function notInSubjects_(cm, section, theirs) {
     return sc.some(function (c) { return subjectOf_(c) === sub; }) && !theirs.some(function (c) { return subjectOf_(c) === sub; });
   });
 }
+/* IB Diploma students (the IB tab: one row per student, school email first) who are not in an Arabic class take a
+   World Language in Arabic periods; as agreed with the IBDP, they do the Arabic-period AI lessons as homework. */
+function ibSet_() {
+  var o = {};
+  rows_('IB').forEach(function (r) { var e = lc_(r.email); if (/@/.test(e)) o[e] = { year: cleanText_(r.year, 10) || 'IB', language: cleanText_(r.language, 60) }; });
+  return o;
+}
+/** For a student's home page: the subjects whose AI lessons are their homework (IB, no Arabic class). */
+function homeworkFor_(email) {
+  if (!ibSet_()[email]) return [];
+  var cls = []; studentRows_(email).forEach(function (r) { cls = cls.concat(classesOf_(r)); });
+  return cls.some(function (c) { return subjectOf_(c) === 'Arabic'; }) ? [] : ['Arabic'];
+}
 function inTutorGroup_(theirs) { return theirs.some(function (c) { return subjectOf_(c) === 'Tutor'; }); }
 /** The subjects whose periods this student spends with their tutor: Islamic, for the tutor group. */
 function withTutorIn_(cm, section, theirs) {
@@ -282,15 +297,17 @@ function tutorsFor_(tbs, section, theirs) {
 /** Every class's AI periods with who teaches them, from the same groups as the manager view.
     mine: { email: [[section, subject, 1 if only as the tutor]] } – the periods each person teaches;
     tut: ['section|subject'] – periods in which a tutor teaches part of the class (shown as '/ TUT');
-    who: { 'section|subject': [[name, 1 if tutor]] } – names only, for owners and SLT. */
+    who: { 'section|subject': [[name, 1 if tutor]] } – names only, for owners and SLT;
+    hw: { 'section|subject': n } – IB students who do that period's lessons as homework. */
 function teachingPeriods_(force) {
   return cached_('periods', force === true, function () {
-    var mine = {}, tut = [], who = {};
+    var mine = {}, tut = [], who = {}, hw = {};
     classGroups_().forEach(function (sec) {
       AICAL.SCHEDULE.forEach(function (r) {
         if (r[0] !== sec.name) return;
         var k = sec.name + '|' + r[2], list = who[k] = [];
         slotGroups_(sec, r[2]).forEach(function (g) {
+          if (g.home && g.idx.length) hw[k] = g.idx.length;
           if (!g.email || !g.idx.length) return;
           (mine[g.email] = mine[g.email] || []).push([sec.name, r[2], g.tutor ? 1 : 0]);
           list.push([g.name, g.tutor ? 1 : 0]);
@@ -299,7 +316,7 @@ function teachingPeriods_(force) {
         list.sort(function (a, b) { return a[1] - b[1] || String(a[0]).localeCompare(String(b[0])); });
       });
     });
-    return { mine: mine, tut: tut, who: who };
+    return { mine: mine, tut: tut, who: who, hw: hw };
   });
 }
 /** Who teaches each student in each of their class's AI periods – the same groups as the manager view and the
@@ -311,13 +328,14 @@ function teachMap_(cm, tbs) {
   var out = {};
   classGroups_(cm, tbs).forEach(function (sec) {
     var m = out[sec.name] = {};
-    sec.students.forEach(function (x) { m[x.e] = { away: [] }; });
+    sec.students.forEach(function (x) { m[x.e] = { away: [], home: [] }; });
     AICAL.SCHEDULE.forEach(function (r) {
       if (r[0] !== sec.name) return;
       slotGroups_(sec, r[2]).forEach(function (g) {
         g.idx.forEach(function (i) {
           var o = m[sec.students[i].e];
           if (g.away) { if (o.away.indexOf(r[2]) < 0) o.away.push(r[2]); return; }
+          if (g.home) { if (o.home.indexOf(r[2]) < 0) o.home.push(r[2]); return; }
           if (!g.email) return;
           var l = o[r[2]] || (o[r[2]] = []);
           if (!l.some(function (t) { return t.email === g.email; })) l.push({ name: g.name, email: g.email, tutor: !!g.tutor });
@@ -341,7 +359,7 @@ function teachersOf_(cm, tbs, email, section) {
       by[sub].forEach(function (n) { if (all.indexOf(n) < 0) all.push(n); });
       tm[sub].forEach(function (t) { if (t.tutor && tut.indexOf(t.name) < 0) tut.push(t.name); });
     });
-    return { names: all, bySub: by, away: tm.away.slice(), tutors: tut };
+    return { names: all, bySub: by, away: tm.away.slice(), home: tm.home.slice(), tutors: tut };
   }
   var theirs = (cm.students[email] || {}).classes || [], bySub = {}, lesson = [], tutors = [];
   (tbs[section] || []).forEach(function (t) {
@@ -732,8 +750,10 @@ function dashboard_(me, vis, force) {
   var outStudents = Object.keys(students).map(function (e) { return students[e]; }).filter(allowed);
   var tbs = me.role === 'student' ? {} : teachersBySection_();
   if (me.role !== 'student') cm.tbs = tbs;           // read the lists once per request
+  var IB = me.role === 'student' ? {} : ibSet_();
   outStudents.forEach(function (s) { s.classes = (cm.students[s.email] || {}).classes || []; s.mine = me.role === 'student' || isMine_(me, vis, cm, s.email, s.section);
-    if (me.role !== 'student') { var to = teachersOf_(cm, tbs, s.email, s.section); s.teachers = to.names; s.tsub = to.bySub; if (to.away && to.away.length) s.away = to.away; if (to.tutors && to.tutors.length) s.tutn = to.tutors; } });
+    if (me.role !== 'student') { var to = teachersOf_(cm, tbs, s.email, s.section); s.teachers = to.names; s.tsub = to.bySub; if (to.away && to.away.length) s.away = to.away; if (to.home && to.home.length) s.home = to.home; if (to.tutors && to.tutors.length) s.tutn = to.tutors;
+      if (IB[s.email]) s.ib = IB[s.email].year; } });
   var keep = {}; outStudents.forEach(function (s) { keep[s.email] = 1; });
   var TP = me.role === 'student' ? null : teachingPeriods_(force);   // ↻ Refresh also refreshes the calendar's periods
   var results = Object.keys(per).map(function (k) { return per[k]; }).filter(function (c) { return keep[c.email]; });
@@ -826,7 +846,7 @@ function rolloutFrom_() { return AICAL.parse(PropertiesService.getScriptProperti
        tut: { Subject: { tutorEmail: [student index] } }, teachers: [{email, name, subjects}], why }] */
 function classGroups_(cm, tbs) {
   cm = cm || classMap_(); tbs = tbs || teachersBySection_();
-  var names = {}, bySec = {}, out = [];
+  var names = {}, bySec = {}, out = [], ib = ibSet_();
   rows_('Roster').forEach(function (r) { if (r.role === 'student') { var e = lc_(r.email); if (!names[e]) names[e] = cleanText_(r.name, 80) || e.split('@')[0]; } });
   Object.keys(cm.students).forEach(function (e) { var sec = cm.students[e].section; if (sec) (bySec[sec] = bySec[sec] || []).push(e); });
   SECTIONS.forEach(function (sec) {
@@ -843,14 +863,18 @@ function classGroups_(cm, tbs) {
     var sc = {}; students.forEach(function (x) { x.c.forEach(function (c) { sc[c] = (sc[c] || 0) + 1; }); });
     var why = { teachers: (tbs[sec] || []).map(function (t) { return t.name + ' (' + (t.subjects.join('/') || 'subject unknown') + (t.raw.length ? ': ' + t.raw.join(', ') : '') + ')'; }),
       codes: Object.keys(sc).sort(function (a, b) { return sc[b] - sc[a]; }).slice(0, 8).map(function (c) { return c + ' ×' + sc[c]; }), noCodes: students.filter(function (x) { return !x.c.length; }).length };
-    var tut = {}, away = {};
+    var tut = {}, away = {}, home = {};
     students.forEach(function (x, i) {
       withTutorIn_(cm, sec, x.c).forEach(function (sub) {
         tutorsFor_(tbs, sec, x.c).forEach(function (t) { var o = tut[sub] || (tut[sub] = {}); (o[t.email] = o[t.email] || []).push(i); });
       });
-      awayIn_(cm, sec, x.c).forEach(function (sub) { (away[sub] = away[sub] || []).push(i); });
+      awayIn_(cm, sec, x.c).forEach(function (sub) {
+        if (sub === 'Arabic' && ib[x.e]) (home[sub] = home[sub] || []).push(i);   // IB, World Languages: homework
+        else (away[sub] = away[sub] || []).push(i);                              // class missing from the export
+      });
+      if (ib[x.e]) x.ib = ib[x.e].year;
     });
-    out.push({ name: sec, grade: grade, why: why, tut: tut, away: away, students: students, groups: groups,
+    out.push({ name: sec, grade: grade, why: why, tut: tut, away: away, home: home, students: students, groups: groups,
       teachers: (tbs[sec] || []).map(function (t) { return { email: t.email, name: t.name, subjects: t.subjects }; }) });
   });
   return out;
@@ -869,7 +893,7 @@ function periodModel_() {
     var sec = G.name, grade = G.grade, students = G.students;
     var lessons = cat.filter(function (l) { return l.grade === grade && l.course === 'main'; }).sort(function (a, b) { return a.week - b.week; });
     var gap = {}; Object.keys(G.away).forEach(function (sub) { G.away[sub].forEach(function (i) { gap[i] = 1; }); });   // their codes go to the list for IT
-    sections.push({ name: sec, grade: grade, why: G.why, tut: G.tut, away: G.away, students: students.map(function (x, i) { return gap[i] ? { e: x.e, n: x.n, c: x.c } : { e: x.e, n: x.n }; }), groups: G.groups, lessons: lessons.map(function (l) { return l.id; }),
+    sections.push({ name: sec, grade: grade, why: G.why, tut: G.tut, away: G.away, home: G.home, students: students.map(function (x, i) { return gap[i] ? { e: x.e, n: x.n, c: x.c } : { e: x.e, n: x.n }; }), groups: G.groups, lessons: lessons.map(function (l) { return l.id; }),
       teachers: G.teachers });
     lessons.forEach(function (l) {
       var d = AICAL.lessonDate(sec, l.week); if (!d) return;
@@ -890,7 +914,8 @@ function periodModel_() {
 }
 /** The teacher groups for one class period: the teachers of that period's subject (or, if none, of no known
     subject), each with their students, plus the tutors with the students not in that subject's classes
-    (sec.tut); students whose class of that subject is missing from the school export (sec.away) are a group of
+    (sec.tut); IB students in World Languages, who do Arabic-period lessons as homework (sec.home: home: true), and
+    students whose class of that subject is missing from the school export (sec.away) are each a group of
     their own (away: true – who teaches them is not known, so no one is blamed or reminded); anyone else no one
     has is grouped as 'no teacher' (email ''). */
 function slotGroups_(sec, subject) {
@@ -905,10 +930,13 @@ function slotGroups_(sec, subject) {
     tg[em].forEach(function (i) { if (g.idx.indexOf(i) < 0) g.idx.push(i); });
   });
   out.forEach(function (g) { g.idx.forEach(function (i) { covered[i] = 1; }); });
+  var home = ((sec.home || {})[subject] || []).filter(function (i) { return !covered[i]; });
+  home.forEach(function (i) { covered[i] = 1; });
   var away = ((sec.away || {})[subject] || []).filter(function (i) { return !covered[i]; });
   away.forEach(function (i) { covered[i] = 1; });
   var rest = sec.students.map(function (x, i) { return i; }).filter(function (i) { return !covered[i]; });
   if (rest.length) out.push({ email: '', name: '', idx: rest });
+  if (home.length) out.push({ email: '', name: '', idx: home, home: true });   // IB students in World Languages: homework
   if (away.length) out.push({ email: '', name: '', idx: away, away: true });   // their class of this subject is not in the export
   return out;
 }
@@ -925,7 +953,7 @@ function notTaught_(M) {
     sec.lessons.forEach(function (id) {
       var cell = M.cells[sec.name + '|' + id]; if (!cell || cell.state !== 'due') return;
       slotGroups_(sec, cell.subject).forEach(function (g) {
-        if (g.away) return;                              // class missing from the school export: no one to remind
+        if (g.away || g.home) return;                    // homework (IB) or class missing from the export: no one to remind
         var k = groupCounts_(cell, g.idx); if (k.n < NOT_TAUGHT_MIN || k.started / k.n >= NOT_TAUGHT_SHARE) return;
         out.push({ teacher: g.name, email: g.email, section: sec.name, lessonId: id, week: cell.week, title: cell.title, date: cell.date, subject: cell.subject, period: cell.period,
           time: cell.time, students: k.n, started: k.started, reminded: g.email ? (rem[g.email + '|' + id + '|' + sec.name] || '') : '', why: g.email ? null : sec.why });

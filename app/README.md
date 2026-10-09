@@ -255,6 +255,13 @@ their lists are right:
   with **Download the list for IT** (class, name, email, the codes the export does
   have). Once IT adds the classes and the export is imported again (`importRoster`),
   they are matched to their teachers everywhere.
+- **IB students** (the **IB** tab) with no Arabic class take a World Language in
+  Arabic periods; as agreed with the IBDP they do those AI lessons as **homework**.
+  The manager view shows them as *IB students (World Languages) – homework* with how
+  many have started and finished (no teacher, no reminders), *Needs attention* counts
+  the homework done, the dashboard says *Arabic: IB – homework* (and IB1/IB2 under the
+  name), the owners' calendar pop-up counts them, and their own home page marks those
+  lessons *homework (IB)*. Islamic periods are unchanged.
   Rows added by hand (blank `courseId`) hold notes such as "AI timetable –
   teacher", which are never treated as class names.
 - **✓ This list is correct** records who confirmed each class and when; the
@@ -372,6 +379,7 @@ student data is ever stored in this GitHub repository**, which is public.
 |---|---|
 | Roles | Owners and SLT – edit by hand |
 | Roster | Students and teachers by section – from `importRoster` (courseId `sis`), Google Classroom, or added by hand (blank courseId) |
+| IB | IB Diploma students – `email`, `name`, `year` (IB1 = Grade 11, IB2 = Grade 12), `language`, `note`; paste the IBDP list each year (the app makes the tab) |
 | CourseMap | Which Classroom course is which section – check after each sync |
 | Lessons | Lessons that have been used, with their activity count and points |
 | Scores | One row per student per activity: first-try score only |
